@@ -1,0 +1,112 @@
+<div>
+    <div>
+        <div class="myaccount_popup">
+            <div class="clear" />
+
+
+            <div class="popup_bottom">
+
+                <h3>Credit Card Information</h3><div class="cc_icon"></div>
+
+                <form class="stylized myform" name="billing-form" id="billing-form" method="post" action="#">
+                    <label for="firstname">First Name</label>
+                    <input type="text" name="first_name" id="firstname" value="${data.first_name}" /><div class="clear"></div>
+
+                    <label for="lastname">Last Name</label>
+                    <input type="text" name="last_name" id="lastname" value="${data.last_name}" /><div class="clear"></div>
+
+                    <label for="company">Company</label>
+                    <input type="text" name="company" id="company" value="${data.company}" /><div class="clear"></div>
+
+                    <label for="website">Website</label>
+                    <input type="text" name="website" id="website" value="${data.website}" /><div class="clear"></div>
+
+                    <label for="phone">Phone</label>
+                    <input type="text" name="phone" id="phone" value="${data.phone}" /><div class="clear"></div>
+
+                    <label for="fax">Fax</label>
+                    <input type="text" name="fax" id="fax" value="${data.fax}" /><div class="clear"></div>
+
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" value="${data.email}" /><div class="clear"></div>
+
+                    <label for="cardgolder_name">Cardholder Name</label>
+                    <input type="text" name="credit_card.cardholder_name" id="cardholder_name" value="${data.credit_cards[0].cardholder_name}" /><div class="clear"></div>
+
+                    <label for="cardnbr">Card number</label>
+                    {{if data.credit_cards[0].last_four}}
+                        <input type="text" name="credit_card.number" id="cardnbr" value="************${data.credit_cards[0].last_four}" />
+                    {{else}}
+                        <input type="text" name="credit_card.number" id="cardnbr" value="" />
+
+                    {{/if}}
+                    <div class="clear"></div>
+
+                    <label for="expiration_date">Expiration Date</label>
+                    {{if data.credit_cards[0].expiration_month}}
+                        <input type="text" name="credit_card.expiration_date" id="expiration_date" value="${data.credit_cards[0].expiration_month}/${data.credit_cards[0].expiration_year}" />
+                    {{else}}
+                        <input type="text" name="credit_card.expiration_date" id="expiration_date" value="" />
+                    {{/if}}
+                    <div class="clear"></div>
+
+                    <label for="cvv">CVV</label>
+                    <input type="text" name="credit_card.cvv" id="cvv" value="${data.credit_cards[0].cvv}" /><div class="clear"></div>
+
+                    <div id="credit_id_container">
+                    {{if data.credit_cards[0].id}}
+                        <input type="hidden" id="update_existing" name="credit_card.update_existing" value="${data.credit_cards[0].id}" />
+                    {{/if}}
+                    </div>
+
+                <div class="clear"></div>
+
+                <h3>Billing Information</h3><div class="billing_icon"></div>
+
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="credit_card.billing_address.first_name" id="first_name" value="${data.credit_cards[0].billing_address.first_name}" /><div class="clear"></div>
+
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="credit_card.billing_address.last_name" id="last_name" value="${data.credit_cards[0].billing_address.last_name}" /><div class="clear"></div>
+
+                    <label for="company">Company</label>
+                    <input type="text" name="credit_card.billing_address.company" id="company" value="${data.credit_cards[0].billing_address.company}" /><div class="clear"></div>
+
+                    <label for="street_address">Street Address</label>
+                    <input type="text" name="credit_card.billing_address.street_address" id="street_address" value="${data.credit_cards[0].billing_address.street_address}" /><div class="clear"></div>
+
+                    <label for="extended_address">&nbsp;</label>
+                    <input type="text" name="credit_card.billing_address.extended_address" id="extended_address" value="${data.credit_cards[0].billing_address.extended_address}" /><div class="clear"></div>
+
+                    <label for="locality">City</label>
+                    <input type="text" name="credit_card.billing_address.locality" id="locality" value="${data.credit_cards[0].billing_address.locality}" /><div class="clear"></div>
+
+                    <label for="region">State</label>
+                    <input type="text" name="credit_card.billing_address.region" id="region" value="${data.credit_cards[0].billing_address.region}" /><div class="clear"></div>
+
+                    <label for="postal_code">Postal Code</label>
+                    <input type="text" name="credit_card.billing_address.postal_code" id="postal_code" value="${data.credit_cards[0].billing_address.postal_code}" /><div class="clear"></div>
+
+                    <label for="country_code">Country Code</label>
+                    <input type="text" name="credit_card.billing_address.country_code_three" id="country_code" value="${data.credit_cards[0].billing_address.country_code_three}" /><div class="clear"></div>
+
+                    <div id="billing_address_existing">
+                    {{if data.credit_cards[0].billing_address.street_address}}
+                        <input type="hidden" name="credit_card.billing_address.update_existing" id="update_existing" value="true" />
+                    {{/if}}
+                    </div>
+
+                    <p class="note_box">
+                        <span>The charges will appear as VoIP Inc on your bank statement.</span>
+                        You can use the more than one credit card on multiple billing accounts.
+                        We do not allow to use credit cards that do not belong to account owners because of the possibility of serious security issues.
+                    </p>
+                    <div class="clear"></div>
+
+                    <a class="ctr_btn save-btn" id="save-billing" href="#">Save</a>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>

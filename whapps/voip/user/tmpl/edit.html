@@ -1,0 +1,317 @@
+<div>
+    <div class="inner">
+        <form id="user-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit User</h1>
+            {{else}}
+                <h1>Create User</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+                <li><a href="#">Caller-ID</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Username">
+                                    <span class="tooltip"/><label for="username">Username:</label>
+                                </span>
+                                <input id="username" name="username" type="text" value="${data.username}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="First Name">
+                                    <span class="tooltip"/><label for="first_name">First Name:</label>
+                                </span>
+                                <input id="first_name" name="first_name" type="text" value="${data.first_name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Last Name">
+                                    <span class="tooltip"/><label for="last_name">Last Name:</label>
+                                </span>
+                                <input id="last_name" name="last_name" type="text" value="${data.last_name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Email Address like: user@company.com">
+                                    <span class="tooltip"/><label for="email">Email Address:</label>
+                                </span>
+                                <input id="email" name="email" type="text" value="${data.email}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The user privilege level">
+                                    <span class="tooltip"/><label for="priv_level">User privilege level:</label>
+                                </span>
+                                <select id="priv_level" name="priv_level">
+                                    {{if data.priv_level == 'admin'}}
+                                        <option value="admin" selected>Administrator</option>
+                                        <option value="user">User</option>
+                                    {{else}}
+                                        <option value="admin">Administrator</option>
+                                        <option value="user" selected>User</option>
+                                    {{/if}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for In-House Calls.<br/>If not defined, then the Caller ID Name of the account will be used.">
+                                    <span class="tooltip"/><label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Numver of this User for In-House Calls.<br/>If not defined, then the Caller ID Number of the account will be used.">
+                                    <span class="tooltip"/><label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Name of the account will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this User for Outbound Calls.<br/>If not defined, then the Outbound Caller ID Number of the account will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span>
+                    <h2 id="advanced_settings_link">Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span  class="icon fax"/>Options</a></li>
+                        <li><a href="#"><span  class="icon cdr" />Call Forward</a></li>
+                        <li><a href="#"><span  class="icon sip" />Password management</a></li>
+                        <li><a href="#"><span  class="icon phone" />Hot Desking</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="options">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="User has been verified?">
+                                    <span class="tooltip"/>
+                                    <label for="verified">User has been verified?</label>
+                                </span>
+                                {{if data.verified}}
+                                    <input id="verified" name="verified" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="verified" name="verified" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
+                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                </span>
+                                {{if data.vm_to_email_enabled}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the time zone of this user.">
+                                    <span class="tooltip"/><label for="time zone">Time zone:</label>
+                                </span>
+                                <select name="timezone" id="timezone">
+                                </select>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the media file that you want to be played by default when it\'s not set on a device.">
+                                    <span class="tooltip"/>
+                                    <label for="Music on Hold">Music on hold:</label>
+                                </span>
+                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id">
+                                {{each field_data.media}}
+                                    {{if data.music_on_hold.media_id == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"></div>
+
+                </div>
+                <div id="call_forward">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Is the call-forwarding feature enabled for this user?">
+                                    <span class="tooltip"/>
+                                    <label for="call_forward.enabled">Enable Call-Forward ?</label>
+                                </span>
+                                {{if data.call_forward.enabled}}
+                                <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="What is the number to redirect calls to for the call-forwarding feature?">
+                                    <span class="tooltip"/><label for="call_forward_number">Number to redirect calls to:</label>
+                                </span>
+                                <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box.">
+                                    <span class="tooltip"/><label for="call_forward_substitute">Bypass user's phones:</label>
+                                </span>
+                                {{if data.call_forward.substitute}}
+                                <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_substitute" name="call_forward.substitute" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want this user to press a key to answer a call that has been call-forwarded?">
+                                    <span class="tooltip"/><label for="require_keypress">Require Key Press?</label>
+                                </span>
+                                {{if data.call_forward.require_keypress}}
+                                <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded.<br/> If false it will use the caller-id of the user.">
+                                    <span class="tooltip"/><label for="call_forward_keep_caller_id">Keep Caller ID?</label>
+                                </span>
+                                {{if data.call_forward.keep_caller_id}}
+                                <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="password_management">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <label for="pwd_reco_pwd1">New password: </label>
+                                <input id="pwd_mngt_pwd1" name="pwd_mngt_pwd1" type="password" value="fakePassword"/>
+                            </li>
+                            <li>
+                                <label for="pwd_reco_pwd2">Confirm password: </label>
+                                <input id="pwd_mngt_pwd2" name="pwd_mngt_pwd2" type="password" value="fakePassword"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+                <div id="hot_desking">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want to enable Hot Desking?">
+                                    <span class="tooltip"/><label for="hotdesk_enable">Enable Hot Desking?</label>
+                                </span>
+                                {{if data.hotdesk.enable}}
+                                    <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="hotdesk_enable" name="hotdesk.enable" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN.">
+                                    <span class="tooltip"/><label for="hotdesk_id">ID: </label>
+                                </span>
+                                <input id="hotdesk_id" name="hotdesk.id" type="text" value="${data.hotdesk.id}"/>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Does it require a PIN?">
+                                    <span class="tooltip"/><label for="hotdesk_require_pin">Require PIN?</label>
+                                </span>
+                                {{if data.hotdesk.require_pin}}
+                                    <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="hotdesk_require_pin" name="hotdesk.require_pin" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li id="pin_wrapper">
+                                <span class="tooltip-wrapper" tooltip="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN.">
+                                    <span class="tooltip"/><label for="hotdesk_pin">PIN:</label>
+                                </span>
+                                <input id="hotdesk_pin" name="hotdesk.pin" type="text" value="${data.hotdesk.pin}"/>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick if you want to stay logged in on your other devices">
+                                    <span class="tooltip"/><label for="hotdesk_keep_logged_in_elsewhere">Keep logged in elsewhere?</label>
+                                </span>
+                                {{if data.hotdesk.keep_logged_in_elsewhere}}
+                                <input id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+        <div class="buttons_wrapper">
+            <ul class="buttons right users">
+                <li><a class="user-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="user-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+            </ul>
+        </div>
+
+        </form>
+    </div>
+</div>

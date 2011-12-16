@@ -1,0 +1,56 @@
+<div>
+    <div class="popup popup_register">
+        <form name="form">
+            <ul class="controls">
+                <li>
+                    <label>Username</label>
+                    <input type="text" name="username" id="username" />
+                </li>
+                <li>
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" />
+                </li>
+                <li>
+                    <label>Confirm password</label>
+                    <input type="password" name="password2" id="password2" />
+                </li>
+                <li>
+                    <label>Email</label>
+                    <input type="text" name="email" id="email" value=""/>
+                </li>
+                <li>
+                    <label>First Name</label>
+                    <input type="text" name="first_name" id="first_name"/>
+                </li>
+                <li>
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" id="last_name"/>
+                </li>
+                <li>
+                    <label>Account Name</label>
+                    <input type="text" name="name" id="name"/>
+                </li>
+
+
+                {{if request_realm}}
+                <li>
+                    <label>Domain Name</label>
+                    <input type="text" name="realm" id="realm" class="field_last" />
+                </li>
+                {{/if}}
+
+            </ul>
+            
+            <div class="clear"/>
+
+            <div class="center">
+                <button class="register">Register</button>
+            </div>
+
+            <div class="clear"/>
+
+            <p>&nbsp;</p>
+        </form>
+    </div>
+</div>
+

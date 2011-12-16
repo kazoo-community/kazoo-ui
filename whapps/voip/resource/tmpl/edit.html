@@ -1,0 +1,174 @@
+<div>
+    <div class="inner">
+        <form id="resource-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Resource</h1>
+            {{else}}
+                <h1>Create Resource</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+            {{if data.type}}
+                <input id="type" name="type" type="hidden" value="${data.type}" />
+            {{/if}}
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            {{if data.type}}{{else}}
+                                <li>
+                                    <span class="tooltip-wrapper" tooltip="Global resources are system-wide trunks">
+                                        <span class="tooltip"/>
+                                        <label for="type">Resource Type:</label>
+                                    </span>
+                                    <select id="type" name="type">
+                                        <option value="local">Local</option>
+                                        <option value="global">Global</option>
+                                    </select>
+                                </li>
+                            {{/if}}
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Friendly name of this resource">
+                                    <span class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The destination server domain or IP">
+                                    <span class="tooltip"/>
+                                    <label for="gateways_server">Server</label>
+                                </span>
+                                <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="If resource routing rules overlap, the lowest weight will take precedence">
+                                    <span class="tooltip"/>
+                                    <label for="weight_cost">Weight Cost:</label>
+                                </span>
+                                <input id="weight_cost" name="weight_cost" type="text" value="${data.weight_cost}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use the resource">
+                                    <span class="tooltip"/>
+                                    <label for="rules">Rules:</label>
+                                </span>
+                                <span class="rules_span">
+                                    <select name="rules_dropdown" id="rules_dropdown">
+                                    {{each(key, val) field_data.rules}}
+                                        {{if data.rules[0] == key}}
+                                            <option id="${key}" value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option id="${key}" value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
+                                </span>
+                                <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="A supported functionality by this route, such as fax, e911 or g729">
+                                    <span class="tooltip"/>
+                                    <label for="flags">Flags:</label>
+                                </span>
+                                <input id="flags" name="flags[0]" type="text" value="${data.flags[0]}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
+                                    <span class="tooltip"/>
+                                    <label for="enabled">Enabled</label>
+                                </span>
+                                {{if data.enabled}}
+                                <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="enabled" name="enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span>
+                    <h2 id="advanced_settings_link">Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span  class="icon sip"/>Gateway</a></li>
+                        <li><a href="#"><span  class="icon audio"/>Gateways Codecs</a></li>
+                        <li><a href="#"><span  class="icon device"/>Caller-ID Options</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="gateways">
+                </div>
+                <div id="audio_settings">
+                    <fieldset>
+                        <legend>Audio Codecs</legend>
+                        <ul class="controls">
+                            {{each(key, val) field_data.gateways.codecs}}
+                            <li>
+                                {{if functions.inArray(key, data.gateways[0].codecs)}}
+                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}" checked="checked"/>${val}
+                                {{else}}
+                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}"/>${val}
+                                {{/if}}
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+                <div id="caller_id_options">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="An arbitrary caller-id type to search for when this route is used">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_options_type">Type</label>
+                                </span>
+                                <select name="caller_id_options.type" id="caller_id_options_type">
+                                    {{each(key, val) field_data.caller_id_options.type}}
+                                        {{if data.caller_id_options.type == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        <div class="buttons_wrapper">
+            <ul class="buttons right resources">
+                <li><a class="resource-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="resource-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+            </ul>
+        </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+#device-listpanel ul .list-element {
+    background-image: url(../images/red.png);
+    background-position: 8px center;
+    background-repeat: no-repeat;
+}
+
+#device-listpanel ul .list-element.registered {
+    background-image: url(../images/green.png);
+}
+
+/* If you are building a widget that could be used by EVERYONE, please consider adding your CSS
+ * to the global CSS stylesheet (talk to Dhruvi). Otherwise, add it here only */
+
+/* DO NOT USE IDs FOR CSS! CLASSES ONLY! */
+
+/**************************
+----TOP TABS MEDIA---------
+****************************/
+
+.media_tabs {
+	background-color: #555555;
+    border: 1px solid #363636;
+	width: 888px;
+	height: 130px;
+	margin: 20px 0 0 18px; 
+	padding: 0 6px;
+    /*text-align: center;*/
+	position:relative;	
+	z-index:600;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.media_tabs .buttons {
+	width: 191px;
+	height: 130px;
+	line-height: 130px;
+    display: inline-block;
+	position: relative;
+	margin: 0 3px;	
+	background-image:url(../images/blank_btn.png);
+	background-position: 0px 0px;		
+    text-align: center;
+}
+
+.media_tabs .buttons:hover {
+	background-position: 0px -130px;		
+}
+
+.media_tabs .buttons.current, .media_tabs .buttons.current:hover {
+	background-position: 0px -130px;		
+	cursor:default !important; 
+	-moz-box-shadow: 3px 5px 10px #383838;
+	-webkit-box-shadow: 3px 5px 10px #383838;
+	box-shadow: 3px 5px 10px #383838;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
+}
+
+.media_tabs .buttons .label_device {
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+}
+
+.media_pane {
+	width:860px;
+	margin-left:18px;
+	padding: 20px 20px 20px 20px;
+	background-color: #555555;
+    border: 1px solid #363636;
+	position:relative;
+	top: 7px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+	
+}

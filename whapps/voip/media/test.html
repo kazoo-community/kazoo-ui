@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script type="text/javascript" src="js/external/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript"> 
+            $(function() { 
+                $("#file_upload_form").submit(function() {
+                    //$("#file_upload_form").target = "upload_target";
+                    //Mad hax
+                    document.getElementById('file_upload_form').target = 'upload_target';
+                    $("#upload_target").load(function() {
+                        alert("Uploaded");
+                    });
+                });
+            });
+        </script> 
+    </head>
+    <body onload="init();">
+        <form id="file_upload_form" method="post" enctype="multipart/form-data" action="http://apps002-dev-ord.2600hz.com:8000/v1/accounts/04152ed2b428922e99ac66f3a71b0215/media/4621d5150c44fba17523ea3ae4484331/raw">
+        <input name="file" id="file" size="27" type="file" /><br />
+        <input type="submit" name="action" value="Upload" /><br />
+        <iframe id="upload_target" name="upload_target" src="" style="display:none;width:100px;height:100px;border:1px solid #ccc;"></iframe> 
+        </form>
+    </body>
+</html>

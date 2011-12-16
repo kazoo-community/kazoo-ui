@@ -1,0 +1,7 @@
+#media-content div.description {
+    float: left;
+    max-width: 400px;
+    margin-right: 10px;
+    line-height: 22px;
+    overflow: hidden;
+}

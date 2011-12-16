@@ -1,0 +1,194 @@
+/* Add your custom CSS here */
+
+/* If you are building a widget that could be used by EVERYONE, please consider adding your CSS
+ * to the global CSS stylesheet (talk to Dhruvi). Otherwise, add it here only */
+
+/* DO NOT USE IDs FOR CSS! CLASSES ONLY! */
+
+.list-skeleton {
+    cursor: pointer;
+}
+
+#myaccount_popup #tabs .pane {
+    background-color: #3D3D3D;
+    width: 670px;
+}
+
+#myaccount_popup #account_title {
+    margin-top: 10px;
+}
+
+#myaccount_popup ul.settings_tabs {
+    margin-top: 0px;
+}
+
+#myaccount_popup #account_title .header3 {
+    font-size: 16px;
+}
+
+#myaccount_popup .pane {
+    color: #2CB9E1;
+    margin: 0px;
+}
+
+#myaccount_popup #accnt_free_app {
+    margin-top: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+    background-color: #787878;
+    padding: 10px;
+    font-size: 8px;
+}
+
+#myaccount_popup #accnt_prem_app {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+    margin-top: 30px;
+    background-color: #787878;
+    padding: 10px;
+    font-size: 8px;
+}
+
+#myaccount_popup .app_holder {
+    float: left;
+    margin: 4px;
+    /*background-color: red;*/
+    height: 100px;
+    width: 200px;
+    cursor: pointer;
+    color: white;
+}
+
+#myaccount_popup ul.settings_tabs a.current, #myaccount_popup ul.settings_tabs a.current:hover, #myaccount_popup ul.settings_tabs li.current a {
+    background-position: 0 -23px;
+    color: #FFFFFF !important;
+    cursor: default !important;
+}
+
+#myaccount_popup ul.settings_tabs a {
+    background-image: url("../images/settings_tabs.png");
+    background-position: 0 0;
+    width: 218px;
+}
+
+#myaccount_popup .apps .img_app {
+    margin: auto;
+}
+
+#myaccount_popup .apps .app_text {
+    display: inline-block;
+    float: left;
+    width: 120px;
+}
+
+#myaccount_popup .apps .img_container {
+    float: left;
+    height: 95px;
+    width: 80px;
+    
+    padding-top: 10%;
+}
+
+#myaccount_popup .apps .app_text .head_app_text {
+    display: inline-block;
+    width: 120px;
+    font-size: 14px;
+    margin-top: 30%;
+}
+
+#myaccount_popup .apps .app_text .app_desc {
+    display: inline-block;
+    width: 120px;
+    font-size: 14px;
+    margin-top: 30%;
+}
+
+#myaccount_popup .apps .img_container img {
+    margin-left: -10px;
+    margin-right: -5px;
+}
+
+#myaccount_popup .pane .app_htitle {
+    background-image: url("../images/AppTitle_BG.png");
+    background-repeat: no-repeat;
+    width: 210px;
+    height: 26px;
+    text-align: center;
+    color: white;
+    padding-top: 5px;
+    float: right;
+}
+
+#myaccount_popup .pane .app_htitle#free_app {
+    margin-top: -16px;
+}
+
+#myaccount_popup .pane .app_htitle#premium_app {
+    margin-top: 4px;
+    color: #2CB9E1;
+}
+
+#myaccount_popup .active {
+  border : 1px inset black;
+  background-color : #666666;
+  height: 98px;
+}
+
+#myaccount_popup .myaccount_popup h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+#myaccount_popup #billing a {
+    background-image: url(../images/regular_btn.png);
+    width: 81px;
+    height: 27px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    line-height: 27px;
+    color: white;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px
+}
+
+#myaccount_popup #billing a:hover {
+    color: #05AFDC;
+    cursor: pointer;
+}
+
+#myaccount_popup #billing p.note_box {
+    background-color: #E7E7E7;
+    padding: 15px 10px;
+    font-size: 10px;
+    line-height: 15px;
+}
+
+#myaccount_popup .myaccount_popup .apps li{
+    margin-left: 20px;
+    
+}
+
+#myaccount_popup #apikey a {
+    background-image: url(../images/regular_btn.png);
+    width: 81px;
+    height: 27px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    line-height: 27px;
+    color: white;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px
+}
+
+#myaccount_popup #apikey a:hover {
+    color: #05AFDC;
+    cursor: pointer;
+}

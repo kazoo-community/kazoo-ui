@@ -1,0 +1,170 @@
+<div>
+    <div class="inner">
+        <form id="account-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Account</h1>
+            {{else}}
+                <h1>Create Account</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Name of this account">
+                                    <span class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Realm of this account">
+                                    <span class="tooltip"/>
+                                    <label for="realm">Realm (unique):</label>
+                                </span>
+                                <input id="realm" name="realm" type="text" value="${data.realm}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span id="advanced_settings_link">
+                    <h2>Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
+                        <li><a href="#"><span  class="icon sip"/>Voicemail-to-Email Template</a></li>
+                        <li><a href="#"><span  class="icon audio"/>Music on hold</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Account for In-House Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Account for In-House Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Account for Outbound Calls.<br/>If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Account for Outbound Calls.<br/>If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="vm_to_email">
+                    <fieldset>
+                        <legend>Template fields</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input the support number that will be inserted in the voicemail-to-email template">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_support_number">Support Number:</label>
+                                </span>
+                                <input id="vm_to_email_support_number" name="vm_to_email.support_number" type="text"  value="${data.vm_to_email.support_number}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input the support email address that will be inserted in the voicemail-to-email template">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_support_email">Support Email</label>
+                                </span>
+                                <input id="vm_to_email_support_email" name="vm_to_email.support_email" type="text"  value="${data.vm_to_email.support_email}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="music_on_hold">
+                    <fieldset>
+                        <legend>Music on hold</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+                                    <span class="tooltip"/>
+                                    <label for="Music on Hold">Music on hold:</label>
+                                </span>
+                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id">
+                                {{each field_data.media}}
+                                    {{if data.music_on_hold.media_id == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"/>
+                </div>
+            </div>
+        <div class="buttons_wrapper">
+            <ul class="buttons right accounts">
+                {{if data.id}}
+                    <li><a class="account-switch" href="#">Use account</a></li>
+                {{/if}}
+                <li><a class="account-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="account-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+            </ul>
+        </div>
+
+        </form>
+    </div>
+</div>

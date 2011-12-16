@@ -1,0 +1,8 @@
+.welcomediv {
+    background-image: url(../images/AppStore_welcomePage.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 15px;
+	width: 100%;
+    height: 465px;
+}

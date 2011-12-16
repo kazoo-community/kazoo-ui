@@ -1,0 +1,198 @@
+fieldset.submit {
+    padding-left: 190px !important;
+}
+label {
+    padding: 0 10px;
+    width: 160px;
+}
+label.error, input.submit {
+    margin-left: 180px !important;
+}
+fieldset fieldset label.error {
+    margin-left: 0 !important;
+    width: 200px !important;
+}
+.centered {
+    margin-left: 180px !important;
+    width: 200px !important;
+}
+/*.text, .button, .group, .control, .submit, textarea, select {
+    width: 200px;
+}*/
+
+form {
+    clear: both;
+    margin-bottom: 25px;
+}
+
+fieldset {
+    border: 1px solid #BFBAB0;
+    clear: both;
+    float: left;
+    margin: 0 0 1.5em;
+    padding: 0 0 10px 0;
+    width: 100%;
+}
+
+fieldset.submit {
+    background-color: transparent;
+    background-image: none;
+    border-style: none;
+    float: none;
+    padding: 0 10px 10px 190px;
+    width: auto;
+}
+legend {
+    color: #000000;
+    font-size: 1.3em;
+    font-variant: small-caps;
+    font-weight: bold;
+    margin-left: 1em;
+    padding: 0 5px;
+}
+fieldset p {
+    margin: 10px 0 0 10px;
+}
+form ul.controls {
+    list-style: none outside none;
+    padding: 5px 10px;
+}
+form ul.controls li {
+    border-top: 1px dotted #CCCCCC;
+    clear: left;
+    display: block;
+    float: left;
+    font-size: inherit !important;
+    padding: 5px 0 10px 0;
+    width: 100%;
+}
+form ul.controls li:first-child {
+    border: medium none;
+}
+label {
+    float: left;
+    padding: 0 10px;
+    width: 160px;
+}
+.error {
+    color: #CC0000;
+}
+label.error {
+    border-top: 1px dotted #CCCCCC;
+    clear: both;
+    color: #CC0000;
+    display: none;
+    font-size: 100%;
+    font-variant: small-caps;
+    font-weight: bold;
+    margin: 8px 0 0 180px;
+    padding: 3px 0 0 5px;
+    width: 308px;
+}
+label.info {
+    font-size: 100%;
+    font-variant: small-caps;
+    font-weight: bold;
+    margin: 8px 0 0 180px;
+    padding: 3px 0 0 5px;
+}
+fieldset fieldset, .group {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    clear: none;
+    float: left;
+    margin: 0;
+    width: 200px;
+}
+fieldset fieldset label {
+    clear: both;
+    display: block;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    width: auto !important;
+}
+label label.error {
+    margin-left: 0;
+}
+label.centered, label.text {
+    padding: 0;
+    width: 200px !important;
+}
+fieldset fieldset label.spaced {
+    margin-bottom: 3px;
+}
+.col-1, fieldset fieldset.col-1 label {
+    width: 100%;
+}
+.col-2, fieldset fieldset.col-2 label {
+    width: 50%;
+}
+.col-3, fieldset fieldset.col-3 label {
+    width: 33%;
+}
+.col-4, fieldset fieldset.col-4 label {
+    width: 25%;
+}
+input.submit {
+    margin: 10px 0 10px 180px;
+    padding: 0 2px;
+}
+input, textarea, select, label {
+    font-size: 1em;
+    line-height: 1.6em;
+}
+input, textarea, select {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+}
+.input[type="text"], textarea {
+    padding: 1px;
+}
+.input[type="radio"], .input[type="checkbox"] {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 3px;
+}
+optgroup {
+    margin-bottom: 5px;
+    padding: 5px 0 2px 5px;
+}
+optgroup option {
+    padding: 2px 20px;
+}
+.required {
+    background-image: url("../images/required_star.gif");
+    background-position: right -20%;
+    background-repeat: no-repeat;
+}
+span.required {
+    padding-right: 15px;
+}
+.off {
+    display: none !important;
+}
+.info {
+    color: #AAAAAA;
+    font-size: 80%;
+    line-height: 100%;
+    padding-top: 0.5em;
+}
+.indent {
+    padding-bottom: 2px;
+    padding-left: 25px !important;
+    padding-right: 20px;
+    padding-top: 2px;
+    white-space: nowrap;
+    width: auto !important;
+}
+label.disabled {
+    color: #AAAAAA;
+}
+.clear {
+    clear: both;
+}
+.highlight {
+    background-color: #E2E2E2;
+    background-image: url("../images/highlight.gif");
+}

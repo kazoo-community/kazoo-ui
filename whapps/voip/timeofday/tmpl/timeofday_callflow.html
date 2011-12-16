@@ -1,0 +1,29 @@
+<div>
+    <div class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <form name="form" method="post" action="#">
+                    <ul class="controls">
+                        <li>
+                            <label for="timezone_selector">Timezone</label>
+                            <select id="timezone_selector">
+                                {{each(i, item) items}}
+                                    {{if selected == item.id}}
+                                        <option value="${item.id}" SELECTED>${item.name}</option>
+                                    {{else}}
+                                        <option value="${item.id}">${item.name}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                        </li>
+                    </ul>
+                </form>
+                <form name="form" method="post" action="#">
+                    <div class="btn_wrapper">
+                        <a href="javascript:void(0)" id="add" class="submit_btn ctr save-btn">Save</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

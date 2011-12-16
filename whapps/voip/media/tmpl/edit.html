@@ -1,0 +1,106 @@
+<div>
+    <div class="inner">
+        <form id="media-form" action="" enctype="multipart/form-data" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Media</h1>
+            {{else}}
+                <h1>Create Media</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this media file">
+                                    <span class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Choose your audio file by clicking on the change file button (.mp3 or .wav).">
+                                    <span class="tooltip"/>
+                                    <label>Media File: </label>
+                                </span>
+                                {{if data.id }}
+                                <span id="player_file">
+                                    <input type="button" id="change_link" value="Change File"/>
+                                    <input type="button" id="download_link" value="Download File"/>
+                                    <div class="description">${data.description}</div>
+                                </span>
+                                {{/if}}
+                                <span id="upload_span">
+                                    <input name="upload_media" id="file" size="27" type="file" />
+                                    <iframe id="upload_target" name="upload_target" src="" style="display:none;width:100px;height:100px;border:1px solid #ccc;"></iframe>
+                                </span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <input name="auth_token" id="auth_token" type="hidden" value="${auth_token}"/>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span id="advanced_settings_link">
+                    <h2>Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span  class="icon sip"/>Options</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="options">
+                    <fieldset>
+                        <ul class="controls">
+                             <li>
+                                <span class="tooltip-wrapper" tooltip="Enable streaming of media">
+                                    <span class="tooltip"/>
+                                    <label for="streamable">Streamable:</label>
+                                </span>
+                                {{if data.streamable}}
+                                <input class="streamable" id="streamable" name="streamable" type="checkbox" checked="checked" style="margin-top: 5px"/>
+                                {{else}}
+                                <input class="streamable" id="streamable" name="streamable" type="checkbox" style="margin-top: 5px"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="buttons_wrapper">
+                <ul class="buttons right media">
+                    <li><a class="media-save save-btn" href="#">Save</a></li>
+                    {{if data.id}}
+                        <li><a class="media-delete delete-btn" href="#">Delete</a></li>
+                    {{/if}}
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>

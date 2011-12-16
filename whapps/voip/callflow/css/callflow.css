@@ -1,0 +1,103 @@
+#callflow-view {
+    width: 80%;
+}
+
+#ws_callflow {
+    width: 100%;
+    margin-top: 30px;
+}
+
+#ws_callflow #ws_cf_flow {
+    width: 100%;
+    overflow-x: auto;
+    min-height: 400px;
+    padding-top: 20px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#ws_callflow span.flow {
+    width: 80%;
+}
+
+#ws_callflow .child {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    white-space: normal;
+}
+
+#ws_callflow .branch {
+    display: block;
+    text-align: center;
+}
+
+#ws_callflow .node.active {
+    background-color: #fff;
+    border-radius:10px;
+    border: 3px solid #05addc;
+}
+
+#ws_callflow .node.inactive {
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+
+#ws_callflow .children {
+    display: block;
+    white-space: pre;
+}
+
+#ws_callflow div.tools {
+    width: 168px;
+    right: 0%;
+    top: 150px;
+    margin-top: 0px;
+    display: inline-block;
+    position: fixed;
+}
+
+#ws_callflow .tool {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#ws_callflow .tool_name {
+    text-transform: capitalize;
+    cursor: default;
+    font-size: 11px;
+}
+
+#ws_callflow .tool .action.inactive {
+    display: none;
+}
+
+#ws_callflow .tool .action.active {
+    z-index: 10000;
+}
+
+#ws_callflow .title {
+    background: url("../images/blue_bar.png");
+    font-size: 12px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 13px 13px 0px 0px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+}
+
+#ws_callflow .helpbox_wrapper {
+    margin-top: 25px;
+}
+
+#ws_callflow .help_box {
+    background-color: #3D3D3D;
+    border: 1px solid #333333;
+    border-radius: 0 0 13px 13px;
+    padding: 2px;
+    text-align: center;
+    font-size: 11px;
+}

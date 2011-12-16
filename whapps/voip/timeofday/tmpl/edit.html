@@ -1,0 +1,146 @@
+<div>
+    <div class="inner">
+        <form id="timeofday-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Time of Day</h1>
+            {{else}}
+                <h1>Create Time of Day</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+            
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="A friendly name for this Time of day rule">
+                                    <span class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li id="repeats">
+                                <span class="tooltip-wrapper" tooltip="Select the recurrence of this time based route">
+                                    <span class="tooltip"/>
+                                    <label for="cycle">Repeats:</label>
+                                </span>
+                                 <select id="cycle" name="cycle">
+                                {{each field_data.cycle}}
+                                    {{if data.cycle == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li id="every">
+                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, define the recurrence of this rule">
+                                    <span class="tooltip"/>
+                                    <label>Every:</label>
+                                </span>
+                                <span id="yearly_every">
+                                    <select name="month">
+                                    {{each field_data.months}}
+                                        {{if data.month == id}}}
+                                        <option value="${id}" selected="selected">${value}</option>
+                                        {{else}}
+                                        <option value="${id}">${value}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
+                                </span>
+                                <span id="monthly_every">
+                                    <input id="interval_month" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace(/\D+/, '')"/>&nbsp;month(s)
+                                </span>
+                                <span id="weekly_every">
+                                    <input id="interval_week" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace (/\D+/, '')"/>&nbsp;week(s)
+                                </span>
+                            </li>
+                            <li id="on">
+                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, select the specific day(s) where this rule should apply">
+                                    <span class="tooltip"/>
+                                    <label>On:</label>
+                                </span>
+                                <select id="ordinal" name="ordinal">
+                                {{each field_data.ordinals}}
+                                    {{if data.ordinal == id}}
+                                    <option value="${id}" selected="selected">${value}</option>
+                                    {{else}}
+                                    <option value="${id}">${value}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="weekdays">
+                                    <select id="wday" name="weekday">
+                                    {{each(i, day) field_data.wdays}}
+                                        {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
+                                        <option value="${day.toLowerCase()}" selected="selected">${day}</option>
+                                        {{else}}
+                                        <option value="${day.toLowerCase()}">${day}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                    </select>
+                                </span>
+                                <span id="days_checkboxes">
+                                {{each(i, day) field_data.wdays}}
+                                    {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
+                                        <div class="fake_checkbox checked" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
+                                    {{else}}
+                                        <div class="fake_checkbox" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
+                                    {{/if}}
+                                {{/each}}
+                                </span>
+                                <select id="specific_day" name="days[0]">
+                                {{each(i, day) field_data.day}}
+                                    ${day}
+                                    {{if data.days[0] == day}}
+                                    <option value="${day}" selected="selected">${day}</option>
+                                    {{else}}
+                                    <option value="${day}">${day}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the starting date of this rule">
+                                    <span class="tooltip"/>
+                                    <label for="day">Start Date: </label>
+                                </span>
+                                <input type="text" id="start_date" name="start_date" value="${data.start_date}" size="10"/>
+                            </li>
+                            <li id="start_time">
+                                <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
+                                    <span class="tooltip"/>
+                                    <label for="time">Time:</label>
+                                </span>
+                                <span class="time-wrapper">
+                                    <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
+                                </span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+        <div class="buttons_wrapper">
+            <ul class="buttons right timeofday">
+                <li><a class="timeofday-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="timeofday-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+            </ul>
+        </div>
+            
+        </form>
+    </div>
+</div>

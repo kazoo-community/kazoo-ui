@@ -1,0 +1,156 @@
+<div>
+    <div class="inner">
+        <form id="menu-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit Menu</h1>
+            {{else}}
+                <h1>Create Menu</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this Menu">
+                                    <span class="tooltip"/>
+                                    <label for="name">Name:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="PIN to enter in order to allow users to record their own greetings">
+                                    <span class="tooltip"/>
+                                    <label for="record_pin">Prompt Record PIN:</label>
+                                </span>
+                                <input id="record_pin" name="record_pin" type="text" value="${data.record_pin}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want to allow the user to dial extensions from this menu?">
+                                    <span class="tooltip"/>
+                                    <label for="hunt">Allow caller to dial extensions?</label>
+                                </span>
+                                {{if data.hunt}}
+                                <input id="hunt" name="hunt" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="hunt" name="hunt" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the Greeting message that you want to use for this this menu.<br/>If you select - Not set -, then no media file will be played.">
+                                    <span class="tooltip"/>
+                                    <label for="media_greeting">Greeting Message:</label>
+                                </span>
+                                <select name="media.greeting" id="media_greeting">
+                                {{each field_data.media}}
+                                    {{if data.media.greeting == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span>
+                    <h2 id="advanced_settings_link">Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span class="icon dial_pad2"/>Extension Dialing</a></li>
+                        <li><a href="#"><span class="icon wrench_screw"/>Options</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="dialing">
+                    <fieldset>
+                        <legend>Hunting</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="List of numbers that users are allowed to dial when hunting">
+                                    <span class="tooltip"/>
+                                    <label for="hunt_allow">Whitelist of numbers (regex)</label>
+                                </span>
+                                <input id="hunt_allow" name="hunt_allow" type="text" value="${data.hunt_allow}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="List of numbers that users are not allowed to dial when hunting">
+                                    <span class="tooltip"/>
+                                    <label for="hunt_deny">Blacklist of numbers (regex)</label>
+                                </span>
+                                <input id="hunt_deny" name="hunt_deny" type="textbox" value="${data.hunt_deny}"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div id="options">
+                    <fieldset>
+                        <legend>Menu Options</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Number of allowed retries on misdial on this menu">
+                                    <span class="tooltip"/>
+                                    <label for="retries">Number of retries on misdial:</label>
+                                </span>
+                                <input id="retries" name="retries" type="text" value="${data.retries}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Allowed number of seconds without any key pressed:">
+                                    <span class="tooltip"/>
+                                    <label for="timeout">Timeout for dialing (s):</label>
+                                </span>
+                                <input id="timeout" name="timeout" type="text" value="${data.timeout / 1000}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The maximum length of an extension. By default, it is set to the Record PIN number length.">
+                                    <span class="tooltip"/>
+                                    <label for="max_extension_length">Extension Number Length:</label>
+                                </span>
+                                <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+        <div class="buttons_wrapper">
+            <ul class="buttons right menus">
+                <li><a class="menu-save save-btn" href="#">Save</a></li>
+                {{if data.id}}
+                    <li><a class="menu-delete delete-btn" href="#">Delete</a></li>
+                {{/if}}
+            </ul>
+        </div>
+
+        </form>
+    </div>
+</div>

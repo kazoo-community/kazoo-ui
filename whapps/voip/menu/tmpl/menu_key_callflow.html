@@ -1,0 +1,29 @@
+<div>
+    <div class="popup container_resize">
+        <div class="resize">
+            <div class="stylized myform">
+                <form name="form" method="post" action="#">
+                    <ul class="controls">
+                        <li>
+                            <label for="menu_key_selector">Menu option</label>
+                            <select id="menu_key_selector">
+                                {{each(key, val) items}}
+                                    {{if selected == key}}
+                                        <option value="${key}" SELECTED>${val}</option>
+                                    {{else}}
+                                        <option value="${key}">${val}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                        </li>
+                    </ul>
+                </form>
+                <form name="form" method="post" action="#">
+                    <div class="btn_wrapper">
+                        <a href="javascript:void(0)" id="add" class="submit_btn ctr save-btn">Save</a>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div>
+</div>

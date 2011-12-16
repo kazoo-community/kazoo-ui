@@ -1,0 +1,354 @@
+<div>
+    <div class="inner">
+        <form id="device-form" action="" method="post" class="niceform">
+            {{if data.id}}
+                <h1>Edit SIP Device</h1>
+            {{/if}}
+
+            <ul class="settings_tabs settings1">
+                <li><a href="#">Basic Settings</a></li>
+                {{if data.id}}
+                    <li><a href="#">Troubleshooting</a></li>
+                {{/if}}
+            </ul>
+
+            <div class="clear"></div>
+
+            <div class="pane">
+                <div id="basic_settings">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Friendly name for this device">
+                                    <span class="tooltip"/>
+                                    <label for="name">Device Nickname:</label>
+                                </span>
+                                <input id="name" name="name" type="text" value="${data.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the owner of this device">
+                                    <span class="tooltip"/>
+                                    <label for="owner_id">Assign To:</label>
+                                </span>
+                                <select name="owner_id" id="owner_id">
+                                {{each field_data.users}}
+                                    {{if data.owner_id == id}}
+                                        <option id="${id}" value="${id}" selected="selected">${first_name} ${last_name}</option>
+                                    {{else}}
+                                        <option id="${id}" value="${id}">${first_name} ${last_name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action" data-action="create" href="#">Create</a>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B">
+                                    <span class="tooltip"/>
+                                    <label for="mac_address">Device MAC Address:</label>
+                                </span>
+                                <input id="mac_address" placeholder="01:23:45:67:89:AB" name="mac_address" type="text" value="${data.mac_address}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want this device enabled?">
+                                    <span class="tooltip"/>
+                                    <label for="status">Enabled:</label>
+                                </span>
+                                {{if data.status == true}}
+                                    <input type="checkbox" id="status" name="status" checked="checked"/>
+                                {{else}}
+                                    <input type="checkbox" id="status" name="status"/>
+                                {{/if}}
+                            </li>
+                        </ul>
+                        <input type="hidden" value="${data.device_type}" name="device_type"/>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
+
+                <div id="troubleshooting">
+                    Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
+                    <ul class="buttons">
+                        <li>
+                            <a href="#">Ring Phone</a>
+                        </li>
+                    </ul>
+
+                    <div class="clear"></div>
+
+                    <br/>
+                    <br/>
+
+                    If you are having problems with your phone or wish to upgrade it's firmware, you can reboot the phone.
+                    <ul class="buttons">
+                        <li>
+                            <a href="#">Reboot</a>
+                        </li>
+                    </ul>
+
+                    <div class="clear"></div>
+                </div> <!-- end troubleshooting -->
+            </div>
+
+            <div class="clear"></div>
+
+
+            <span class="advanced_settings_box">
+                <span>
+                    <h2 id="advanced_settings_link">Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span class="icon phone" style="margin-bottom: 4px"/>Caller ID</a></li>
+                        <li><a href="#"><span class="icon sip"/>SIP Settings</a></li>
+                        <li><a href="#"><span class="icon audio"/>Audio</a></li>
+                        <li><a href="#"><span class="icon video"/>Video</a></li>
+                        <li><a href="#"><span class="icon fax"/>Fax</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+
+                <div id="caller_id">
+                    <fieldset>
+                        <legend>In-House Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Device for In-House Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_internal">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for In-House Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_internal">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Outbound Calls</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Device for Outbound Calls.<br/>If this Caller ID Name isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Name will be used if none of those is set)">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_external">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Device for Outbound Calls.<br/>If this Caller ID Number isn't set, then the user's Caller ID will be used.<br/> (or the account's Caller ID Number will be used if none of those is set)">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_external">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="SIP Settings">
+                    <fieldset>
+                        <legend>SIP Settings</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input you're SIP Realm (Domain Name)">
+                                    <span class="tooltip"/>
+                                    <label for="sip_realm">Realm / Domain Name:</label>
+                                </span>
+                                <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select your authentication method">
+                                    <span class="tooltip"/>
+                                    <label for="sip_method">Authentication Method:</label>
+                                </span>
+                                <select name="sip.method" id="sip_method">
+                                    {{each(key, val) field_data.sip.methods}}
+                                        {{if data.sip.method == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Username">
+                                    <span class="tooltip"/>
+                                    <label for="sip_username">Username:</label>
+                                </span>
+                                <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Password <br /> Click on the input to make the password appear">
+                                    <span class="tooltip"/>
+                                    <label for="sip_password">Password:</label>
+                                </span>
+                                <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
+                                <!--Show password? : <input id="sip_password_visible" type="checkbox" />-->
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Invite Format">
+                                    <span class="tooltip"/>
+                                    <label for="sip_invite_format">Invite Format:</label>
+                                </span>
+                                <select name="sip.invite_format" id="sip_invite_format">
+                                    {{each(key, val) field_data.sip.invite_formats}}
+                                        {{if data.sip.invite_format == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter the expiration time of this device (in seconds)">
+                                    <span class="tooltip"/>
+                                    <label for="sip_expire_seconds">Expire Seconds:</label>
+                                </span>
+                                <input id="sip_expire_seconds" name="sip.expire_seconds" type="text"  value="${data.sip.expire_seconds}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+                <div id="audio_settings">
+                    <fieldset>
+                        <legend>Music on Hold</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+                                    <span class="tooltip"/>
+                                    <label for="Music on Hold">Music on hold:</label>
+                                </span>
+                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id">
+                                {{each field_data.music_on_hold}}
+                                    {{if data.music_on_hold.media_id == id}}
+                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                    {{else}}
+                                    <option id="${id}" value="${id}">${name}</option>
+                                    {{/if}}
+                                {{/each}}
+                                </select>
+                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Optimization</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Select the kind of Peer-to-Peer that you would like to set on this device">
+                                    <span class="tooltip"/>
+                                    <label for="media_bypass_media">Peer to Peer Audio</label>
+                                </span>
+                                <select name="media.bypass_media" id="media_bypass_media">
+                                    {{each(key, val) field_data.media.bypass_media_options}}
+                                        {{if data.media.bypass_media == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Audio Codecs</legend>
+                        <ul class="controls">
+                            {{each(key, val) field_data.media.audio.codecs}}
+                                <li>
+                                    {{if functions.inArray(key, data.media.audio.codecs)}}
+                                        <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" value="${key}" checked="checked"/>${val}
+                                    {{else}}
+                                        <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" value="${key}"/>${val}
+                                    {{/if}}
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div id="video_settings">
+                    <fieldset>
+                        <legend>Video Codecs</legend>
+                        <ul class="controls">
+                            {{each(key, val) field_data.media.video.codecs}}
+                                <li>
+                                    {{if functions.inArray(key, data.media.video.codecs)}}
+                                        <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" value="${key}" checked="checked"/>${val}
+                                    {{else}}
+                                        <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" value="${key}"/>${val}
+                                    {{/if}}
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div id="fax_settings">
+                    <fieldset>
+                        <legend>Fax Support</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want to enable T-38 for this device?">
+                                    <span class="tooltip"/>
+                                    <label for="media_fax_option">T.38</label>
+                                </span>
+                                <select name="media.fax.option" id="media_fax_option">
+                                    {{each(key, val) field_data.media.fax.options}}
+                                        {{if data.media.fax.option == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                                <span>(Requires a T.38 Capable Device)</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+
+                </div>
+
+            </div>
+
+            <div class="buttons_wrapper">
+                <ul class="buttons right devices">
+                    <li><a class="device-save save-btn" href="#">Save</a></li>
+                    {{if data.id}}
+                        <li><a class="device-delete delete-btn" href="#">Delete</a></li>
+                    {{/if}}
+                </ul>
+                <div class="clear"/>
+            </div>
+
+        </form>
+    </div>
+</div>

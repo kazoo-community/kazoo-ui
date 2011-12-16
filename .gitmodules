@@ -1,0 +1,18 @@
+[submodule "whapps/dashboard"]
+	path = whapps/dashboard
+	url = git@github.com:2600hz/dashboard.git
+[submodule "whapps/cluster"]
+	path = whapps/cluster
+	url = git@github.com:2600hz/cluster.git
+[submodule "whapps/provision"]
+	path = whapps/provision
+	url = git@github.com:2600hz/provision.git
+[submodule "whapps/userportal"]
+	path = whapps/userportal
+	url = git@github.com:2600hz/userportal.git
+[submodule "whapps/connect"]
+	path = whapps/connect
+	url = git@github.com:2600hz/connect.git
+[submodule "whapps/indesign"]
+	path = whapps/indesign
+	url = git@github.com:2600hz/indesign.git

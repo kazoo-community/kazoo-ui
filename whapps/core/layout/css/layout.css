@@ -1,0 +1,469 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*******************
+----GENERAL---------
+*******************/
+
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td { 
+  margin: 0; 
+  padding: 0; 
+  border: 0;	
+  outline: 0;	
+  font-weight: inherit;	
+  font-style: inherit; 
+  font-size: 100%; 
+  font-family: inherit; 
+}
+
+:focus { outline: 0;}
+
+.clear { 
+	clear: both;
+}
+
+.center {
+    text-align: center;
+}
+
+body {
+	background-image: url(../images/background.jpg);
+	background-repeat: repeat-x;
+	background-color: #9F9F9F;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #EBEBEB;
+}
+
+h1
+{
+	color: #29abe1;
+	font-size: 24px;
+	display: block;
+	line-height: 60px;
+	height: 60px;
+	padding-left: 20px;
+    text-shadow: #000000 1px 1px;
+}
+
+h2
+{
+	clear: left;
+	color: #EBEBEB;
+/*	background: #8b8b9f;
+	margin: 1em 0;*/
+	padding-left:8px;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+
+a {
+	color: #EBEBEB;
+	text-decoration: none;	
+}
+
+a:hover {
+    color: #05addc;
+    cursor: pointer;
+}
+
+a:active {
+	color: #05addc;	
+}
+
+.selected {
+    color: #05addc;
+}
+
+/*************************************
+----------------HEADER----------------
+**************************************/
+
+.header {
+	/*width: 1023px;*/
+	height: 80px;
+	/*margin: auto;*/
+	padding: 0px;
+    -moz-box-shadow: 0px 5px 5px #222;
+    -webkit-box-shadow: 0px 5px 5px #222;
+    box-shadow: 0px 5px 5px #222;
+}
+
+.logo {
+	width: 192px;
+	height: 80px;
+	background-image: url(../images/nav_line.jpg);
+	background-repeat: repeat-y;
+    background-position: right;
+	text-indent: -9999px;
+	display: block;
+	float: left;
+}
+
+.logo .img {
+	width: 100%;
+	height: 100%;
+	background-image: url(../../../../config/images/logo.png);
+	background-repeat: no-repeat;
+    background-position: center center;
+	text-indent: -9999px;
+	display: block;
+	float: left;
+}
+
+.main_content {
+    padding-top:10px;
+    padding-left:10px;
+}
+
+.main_nav {
+	height: 80px;
+	font-size: 12px;
+    float: left;
+}
+
+.main_nav ul {
+	list-style: none;
+	display: block;
+}
+
+.main_nav li {
+    background-image: url(../images/nav_line.jpg);
+    background-repeat: repeat-y;
+    background-position: right;
+    padding: 0 23px;
+    float: left;
+    height: 80px;
+    width: 110px;
+    text-align: center;
+}
+
+.main_nav li:hover .whapp a{
+    color: #05ADDC;
+}
+
+.main_nav .whapp {
+    margin-top: 12px;
+}
+
+.main_nav li .whapp span {
+    margin-bottom: 5px;
+}
+
+.main_nav div {
+    text-align: center;
+}
+
+ul.universal_nav {
+	float: left;	
+	/*width: 240px;*/
+	list-style: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+ul.universal_nav li {
+	float: left;
+	padding: 0 10px;
+	line-height: 80px;
+	font-size: 10px;
+}
+
+ul.universal_nav li.my_account_wrapper {
+    visibility: hidden;
+}
+
+ul.universal_nav li > span {
+    display: inline-block;
+    line-height: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+ul.universal_nav li span.my_account_icon {
+	background: url(../images/account_icon.png) no-repeat;
+    height: 15px;
+    width: 17px;
+    margin-right: 5px;
+}
+
+ul.universal_nav li span.my_help_icon {
+	background: url(../images/help_icon.png) no-repeat;
+    height: 14px;
+	width: 10px;
+    margin-right: 5px;
+}
+
+ul.universal_nav li span.my_logout_icon {
+	background: url(../images/logout_icon.png) no-repeat;
+	height: 15px;
+    width: 11px;
+    margin-right: 5px;
+}
+
+/*************************************
+--------------CONTENT----------------
+**************************************/
+
+.content_container {
+	width: 100%;
+	margin: 0;
+    z-index: -1000;
+    position: relative;
+}
+
+/*************************************
+-------------DATA LIST---------------
+**************************************/
+
+.datalist{
+	width: 190px;
+	float: left;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #FFF;
+	border-right-color: #FFF;
+	border-bottom-color: #FFF;
+	border-left-color: #FFF;
+	
+}
+
+.add_element{
+	height: 70px;
+	background-color: #4d4d4d;	
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #FFF;
+}
+
+.add_element p{
+	text-transform: uppercase;
+	line-height:70px;	
+}
+
+.plus_btn{
+	background-image: url(../images/plus_btn.png);
+	width: 25px;
+	height: 25px;
+	background-position: 0px 0px;
+    margin-top: -4px;
+    margin-right: 7px;
+    vertical-align: middle;
+}
+
+.add_flow{
+    cursor: pointer;
+}
+
+.add_flow .add_flow_text {
+}
+
+.add_flow:hover .plus_btn{ 
+	background-position: 0px -25px;
+}
+
+.add_flow:hover .add_flow_text{
+    color: #05ADDC;
+}
+
+.searchbox{
+	height: 28px;
+	background-color:#636363;
+	padding-top:7px;
+}
+
+.searchsubmit1 { 
+	float: left;
+	margin-left: 5px;
+	
+}
+.searchsubmit2 { 
+	float: left;
+	
+}
+
+.searchfield { 
+	background: url(../images/search_mid.png) repeat-x;
+ 	border: medium none;
+  	float: left; 
+ 	height: 20px; 
+ 	width: 130px;
+	color: #666;
+}
+
+
+.elements{
+	height: 490px;
+	border-bottom: 1px solid #8b8a8a;
+	filter:alpha(opacity=80);
+    -moz-opacity:0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+}
+
+.elements ul{
+	background-color:#989898;
+	
+}
+
+.elements ul li{
+	height:27px;
+	line-height:27px;
+	border-bottom: 1px solid #E3E3E3;
+	border-top: 1px solid #8b8a8a;
+	list-style-type: none;	
+}
+
+.elements ul li a{
+	float: left;
+	display:block;
+	color: #464747;
+	width: 102px;
+	height: 27px;
+	padding-left: 35px;
+	color: #474747;
+	text-decoration: none;
+	background-color:#989898;
+	border-right: 1px solid #7a7a7a;
+}
+
+.elements ul li a:hover{
+	background-color:#bebebe;
+}
+
+.elements ul li .account_arrow a{
+	display: block;
+	width: 28px !important;
+	height: 27px !important;
+	background-image:url(../images/account_arrow.png) !important;
+	background-color:#989898;
+	float: left;
+	background-position: center center !important;
+	background-repeat: no-repeat !important;
+	padding: 0 !important;
+	border: none; !important;
+}
+
+.elements ul li .account_arrow a:hover{
+	background-color: #bebebe !important;
+}
+
+a.detailed_listing{
+	display: block;
+	background-image: url(../images/view_detail_btn.png);
+	width: 161px;
+	height: 26px;
+	padding-left: 29px;
+	margin-top: 17px;
+	background-position: 0px 0px;
+	line-height: 26px;
+	color: #EBEBEB;
+	text-decoration: none;	
+}
+
+a.detailed_listing:hover{
+	background-position: 0px -26px;	
+}
+
+
+
+/***********
+ * BUTTONS *
+ ***********/
+
+/*******************************
+----REMOVE & SAVE BUTTONS-----
+*******************************/
+
+div.buttons_wrapper{
+    width: 804px;
+    margin-left: 18px;
+    margin-top: 10px;
+}
+
+ul.buttons{
+        display: block;
+        list-style-type: none;
+}
+
+ul.buttons.right{
+    float: right;
+}
+
+ul.buttons li{
+        float: left;
+        text-align: center;
+        padding-right: 3px;
+
+}
+
+ul.buttons a{
+        display: block;
+        background-image: url(../images/button_bg.png);
+        width: 81px;
+        height: 27px;
+        line-height: 27px;
+        font-weight: bold;
+        color: #EBEBEB;
+        text-decoration: none;
+}
+
+ul.buttons a:hover{
+        color: #29abe1;
+}
+
+#loading {
+    font-size: large;
+    color: #EBEBEB;
+    padding: 2em;
+
+    background-color: #999999; 
+    border: 1px;
+    border-radius: 1em;
+    box-shadow: 3px 3px 3px #333333;
+
+    position: absolute;
+    top:43%;
+    left:43%;
+    z-index:9999;
+    opacity: 0.8;
+
+    display:none;
+}
+
+#loading .graphic {
+    float: left;
+}
+
+#loading .text {
+    float: left;
+    line-height: 32px;
+    margin-left: 10px;
+}
+
+#span_ajax_loader {
+    margin-left: 1em;
+    vertical-align: middle;
+}
+
+/**** Tooltip ****/
+.tooltip {
+    float:left;
+    background-image: url('../images/question_mark.png');
+    height: 16px;
+    width: 16px;
+}
+
+.tooltip-wrapper {
+    display: inline-block;
+    float: left;
+    margin-left: -16px;
+}
