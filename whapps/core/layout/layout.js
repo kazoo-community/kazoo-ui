@@ -27,7 +27,7 @@ winkstart.module('core', 'layout', {
     /* Bootstrap */
     function(args) {
         var THIS = this;
-        
+
         THIS.parent = args.parent || $('body');
 
         THIS.attach();
@@ -38,7 +38,7 @@ winkstart.module('core', 'layout', {
         }
 
         $('#ws-content .welcomediv').click(function() {
-            winkstart.publish('nav.my_logout_click');
+            winkstart.publish('nav.get_started');
         });
 
         $('#my_account', '.universal_nav').click(function() {
@@ -58,7 +58,7 @@ winkstart.module('core', 'layout', {
                 $('#my_account', '.universal_nav').unbind('click')
                                                   .attr('href', winkstart.config.nav.my_account);
             }
-            
+
             if('my_help' in winkstart.config.nav) {
                 $('#my_help', '.universal_nav').unbind('click')
                                                .attr('href', winkstart.config.nav.my_help);
@@ -81,7 +81,7 @@ winkstart.module('core', 'layout', {
 
             // We need to hide this by defualt but keep our display: inline-block in the css
             $('#ws-notification-bar').hide();
-            
+
             $("#loading").ajaxStart(function(){
                 $(this).show();
              }).ajaxStop(function(){
