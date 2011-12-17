@@ -148,7 +148,9 @@ winkstart.module('voip', 'device', {
                     }
                 };
 
-            if(form_data.device_type == 'sip_device' && form_data.mac_address) {
+            save();
+
+            /*if(form_data.device_type == 'sip_device' && form_data.mac_address) {
                 winkstart.request(true, 'device.filter', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -173,7 +175,7 @@ winkstart.module('voip', 'device', {
             }
             else {
                 save();
-            }
+            }*/
         },
 
         edit_device: function(data, _parent, _target, _callbacks, data_defaults) {
