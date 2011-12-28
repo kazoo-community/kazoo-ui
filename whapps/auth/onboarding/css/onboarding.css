@@ -122,10 +122,6 @@
     text-shadow: 1px 1px #000;
 }
 
-#fast_onboarding_form .user_tab {
-    height: 175px;
-}
-
 #fast_onboarding_form .column {
     float:left;
     text-align: center;
@@ -133,6 +129,10 @@
 
 #fast_onboarding_form .column:not(:last-child) {
     border-right: 1px solid #b0b1b3;
+}
+
+#fast_onboarding_form .user_tab {
+    padding-bottom: 10px;
 }
 
 #fast_onboarding_form .title_bar {

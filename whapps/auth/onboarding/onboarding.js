@@ -72,6 +72,10 @@ winkstart.module('auth', 'onboarding', {
             winkstart.validate.set(THIS.config.validation['step2'], onboard_html);
             winkstart.validate.set(THIS.config.validation['step3'], onboard_html);
 
+            $('*[tooltip]', onboard_html).each(function() {
+                $(this).tooltip({ attach: onboard_html });
+            });
+
             $('#ws-content').empty()
                             .append(onboard_html);
 
@@ -241,9 +245,6 @@ winkstart.module('auth', 'onboarding', {
                 );
             });
 
-            $('*[tooltip]', onboard_html).each(function() {
-                $(this).tooltip({ attach: onboard_html });
-            });
         }
     }
 );
