@@ -987,11 +987,11 @@ winkstart.module('voip', 'callflow', {
 
                                 $('.column.left .options', popup_html).hide();
 
-                                $('.options .option.delay', popup_html).bind('change blur focus', function() {
+                                $('.options .option.delay', popup_html).bind('keyup', function() {
                                     $(this).parents('li').dataset('delay', $(this).val());
                                 });
 
-                                $('.options .option.timeout', popup_html).bind('change blur focus', function() {
+                                $('.options .option.timeout', popup_html).bind('keyup', function() {
                                     $(this).parents('li').dataset('timeout', $(this).val());
                                 });
 

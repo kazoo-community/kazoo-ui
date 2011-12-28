@@ -8,14 +8,14 @@
                         <div class="scrollable">
                             <ul class="connect">
                                 {{each(i, item) left.items}}
-                                    <li id="${item.id}" data-id="${item.id}" data-delay="0", data-timeout="0">
+                                    <li id="${item.id}" data-id="${item.id}" data-delay="0", data-timeout="20">
                                         <a href="#" class="drag_btn"></a>
                                         <div class="item_name">
                                         ${item.name}
                                         </div>
                                         <span class="options">
                                             <input class="option delay" type="text" value="0" tooltip="Delay (S)"/>
-                                            <input class="option timeout" type="text" value="0" tooltip="Timeout (S)"/>
+                                            <input class="option timeout" type="text" value="20" tooltip="Timeout (S)"/>
                                         </span>
                                     </li>
                                 {{/each}}
@@ -40,7 +40,7 @@
                                 {{/each}}
                             </ul>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <div class="clear"/>
                 <form name="form" class="stylized myform" method="post" action="#">
@@ -58,7 +58,7 @@
                                 {{else}}
                                     <option value="${obj.id}">${obj.name}</option>
                                 {{/if}}
-                            {{/each}} 
+                            {{/each}}
                         </select>
                     </div>
                     <div>
@@ -69,7 +69,7 @@
                     <div class="btn_wrapper">
                         <a href="#" class="submit_btn ctr save-btn">Save</a><br>
                     </div>
-                </form>   
+                </form>
             </div>
         </div>
     </div>
