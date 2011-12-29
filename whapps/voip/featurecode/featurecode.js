@@ -348,7 +348,7 @@ winkstart.module('voip', 'featurecode', {
                     icon: 'phone',
                     category: 'Call-Forward',
                     module: 'call_forward',
-                    number_type: 'number',
+                    number_type: 'pattern',
                     data: {
                         action: 'toggle'
                     },
@@ -356,7 +356,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '74',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '*'+number;
+                        return '^\\*'+number+'([0-9]*)$';
                     }
                 },
                 'call_forward[action=update]': {
