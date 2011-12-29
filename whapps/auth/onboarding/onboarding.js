@@ -40,7 +40,7 @@ winkstart.module('auth', 'onboarding', {
             step3: [
                 { name: '#login',            regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
                 { name: '#password',         regex: /^.{3,16}$/ },
-                { name: '#company_name',     regex: /^.*$/ }
+                { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
             ],
         },
 
@@ -81,9 +81,12 @@ winkstart.module('auth', 'onboarding', {
 
             $('#fast_onboarding_form', onboard_html).formToWizard({ submitButton: 'save_account' });
 
-            $('#picked_number_li', onboard_html).hide();
-            $('#extensions_block', onboard_html).hide();
-            $('#li_list_number', onboard_html).hide();
+            //$('#picked_number_li', onboard_html).hide();
+            $('#li_number_for', onboard_html).hide();
+            $('#small_office_div', onboard_html).hide();
+            $('#single_phone_div', onboard_html).hide();
+            $('#reseller_div', onboard_html).hide();
+            $('#api_tester_div', onboard_html).hide();
 
             $('#address_infos', onboard_html).hide();
             $('#e911_country_block', onboard_html).hide();
@@ -103,9 +106,9 @@ winkstart.module('auth', 'onboarding', {
                             }
                         }
                         $('#picked_number', onboard_html).html(number);
-                        $('#change_number', onboard_html).val('I don\'t like this number!');
+                        $('#change_number', onboard_html).html('I don\'t like this number!');
                         $('#picked_number_li', onboard_html).show();
-                        $('#extensions_block', onboard_html).show();
+                        $('#li_number_for', onboard_html).show();
                     },
                     function() {
                         alert('You need to input a valid area code (eg: 415, 508, ...)');
@@ -113,9 +116,27 @@ winkstart.module('auth', 'onboarding', {
                 );
             });
 
-            $('input[name=group1]', onboard_html).change(function() {
+            $('#role', onboard_html).change(function() {
+                $('#small_office_div', onboard_html).hide();
+                $('#single_phone_div', onboard_html).hide();
+                $('#reseller_div', onboard_html).hide();
+                $('#api_tester_div', onboard_html).hide();
                 console.log($(this).val());
-                $(this).val() == 'single_phone' ? $('#li_list_number', onboard_html).hide() : $('#li_list_number', onboard_html).show();
+                switch($(this).val()) {
+                    case 'single_phone':
+                        break;
+
+                    case 'small_office':
+                        $('#small_office_div', onboard_html).slideDown('show');
+                        break;
+
+                    case 'reseller':
+                        $('#small_office_div', onboard_html).slideDown('show');
+                        break;
+
+                    case 'api_tester':
+                        break;
+                }
             });
 
             $('.prev, .next', onboard_html).focus(function() {

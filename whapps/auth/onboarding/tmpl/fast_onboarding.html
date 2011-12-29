@@ -13,21 +13,30 @@
                             <label>Area Code</label>
                             <input type="text" name="area_code" id="area_code" maxlength="3" size="3"/>
                         </li>
+                        <div class="clear"/>
                         <li id="picked_number_li" class="center">
-                            <span id="picked_number" class="center picked_number"></span>
+                            <div class="number_wrapper">
+                                <span id="picked_number" class="center picked_number"></span>
+                                <a class="fancy_button" name="change_number" id="change_number">Give me a number!</a>
+                            </div>
                         </li>
-                        <li class="center">
-                            <input type="button" name="change_number" id="change_number" value="Give me a number!"/>
-                        </li>
-                    </ul>
-                    <ul id="extensions_block" class="controls">
                         <li id="li_number_for">
-                            <label>Is this number for: </label>
-                            <input type="radio" name="group1" value="single_phone" checked="checked">&nbsp;&nbsp;a single phone?</input>
-                            <br/>
-                            <input type="radio" name="group1" value="small_office">&nbsp;&nbsp;a small office?</input>
+                            <label>Type of Service: </label>
+                            <select name="role" id="role">
+                                <option value="single_phone">Single Phone</option>
+                                <option value="small_office">Small Office</option>
+                                <option value="reseller">Reseller</option>
+                                <option value="api_tester">API Developer</option>
+                                <option value="voip_minutes">VoIP minutes only</option>
+                            </select>
                         </li>
-                        <li id="li_list_number">
+                        <li id="single_phone_div">
+                        </li>
+                        <li id="reseller_div">
+                        </li>
+                        <li id="api_tester_div">
+                        </li>
+                        <li id="small_office_div">
                             <div class="help_text">
                                 Configure your first 5 users easily, by setting their name and their extension number!
                             </div>
@@ -335,7 +344,7 @@
                     <ul class="controls">
                         <li>
                             <label>Username</label>
-                            <input type="text" name="login" id="login" value="${username}"/>
+                            <input type="text" name="login" id="login"/>
                         </li>
 
                         <li>
@@ -344,8 +353,8 @@
                         </li>
 
                         <li>
-                            <label>Company name</label>
-                            <input type="text" name="company_name" id="company_name" />
+                            <label>E-mail</label>
+                            <input type="text" name="email" id="email" />
                         </li>
                     </ul>
                 </fieldset>
@@ -353,7 +362,7 @@
                 <div class="clear"/>
                 <br/>
                 <div class="center">
-                    <input id="save_account" type="button" value="Finish Setup" />
+                    <a class="fancy_button" id="save_account">Create Account</a>
                 </div>
             </form>
         </div>
