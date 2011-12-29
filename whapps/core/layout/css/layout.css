@@ -5,20 +5,20 @@
 ----GENERAL---------
 *******************/
 
-html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td { 
-  margin: 0; 
-  padding: 0; 
-  border: 0;	
-  outline: 0;	
-  font-weight: inherit;	
-  font-style: inherit; 
-  font-size: 100%; 
-  font-family: inherit; 
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
 }
 
 :focus { outline: 0;}
 
-.clear { 
+.clear {
 	clear: both;
 }
 
@@ -62,7 +62,7 @@ h2
 
 a {
 	color: #EBEBEB;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:hover {
@@ -71,7 +71,7 @@ a:hover {
 }
 
 a:active {
-	color: #05addc;	
+	color: #05addc;
 }
 
 .selected {
@@ -158,7 +158,7 @@ a:active {
 }
 
 ul.universal_nav {
-	float: left;	
+	float: left;
 	/*width: 240px;*/
 	list-style: none;
 	position: absolute;
@@ -233,12 +233,12 @@ ul.universal_nav li span.my_logout_icon {
 	border-right-color: #FFF;
 	border-bottom-color: #FFF;
 	border-left-color: #FFF;
-	
+
 }
 
 .add_element{
 	height: 70px;
-	background-color: #4d4d4d;	
+	background-color: #4d4d4d;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #FFF;
@@ -246,7 +246,7 @@ ul.universal_nav li span.my_logout_icon {
 
 .add_element p{
 	text-transform: uppercase;
-	line-height:70px;	
+	line-height:70px;
 }
 
 .plus_btn{
@@ -266,7 +266,7 @@ ul.universal_nav li span.my_logout_icon {
 .add_flow .add_flow_text {
 }
 
-.add_flow:hover .plus_btn{ 
+.add_flow:hover .plus_btn{
 	background-position: 0px -25px;
 }
 
@@ -280,21 +280,21 @@ ul.universal_nav li span.my_logout_icon {
 	padding-top:7px;
 }
 
-.searchsubmit1 { 
+.searchsubmit1 {
 	float: left;
 	margin-left: 5px;
-	
+
 }
-.searchsubmit2 { 
+.searchsubmit2 {
 	float: left;
-	
+
 }
 
-.searchfield { 
+.searchfield {
 	background: url(../images/search_mid.png) repeat-x;
  	border: medium none;
-  	float: left; 
- 	height: 20px; 
+  	float: left;
+ 	height: 20px;
  	width: 130px;
 	color: #666;
 }
@@ -311,7 +311,7 @@ ul.universal_nav li span.my_logout_icon {
 
 .elements ul{
 	background-color:#989898;
-	
+
 }
 
 .elements ul li{
@@ -319,7 +319,7 @@ ul.universal_nav li span.my_logout_icon {
 	line-height:27px;
 	border-bottom: 1px solid #E3E3E3;
 	border-top: 1px solid #8b8a8a;
-	list-style-type: none;	
+	list-style-type: none;
 }
 
 .elements ul li a{
@@ -366,11 +366,11 @@ a.detailed_listing{
 	background-position: 0px 0px;
 	line-height: 26px;
 	color: #EBEBEB;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a.detailed_listing:hover{
-	background-position: 0px -26px;	
+	background-position: 0px -26px;
 }
 
 
@@ -425,7 +425,7 @@ ul.buttons a:hover{
     color: #EBEBEB;
     padding: 2em;
 
-    background-color: #999999; 
+    background-color: #999999;
     border: 1px;
     border-radius: 1em;
     box-shadow: 3px 3px 3px #333333;
@@ -435,7 +435,6 @@ ul.buttons a:hover{
     left:43%;
     z-index:9999;
     opacity: 0.8;
-
     display:none;
 }
 
@@ -466,4 +465,71 @@ ul.buttons a:hover{
     display: inline-block;
     float: left;
     margin-left: -16px;
+}
+
+/* fancy_button */
+.fancy_button {
+    color: #dfdfdf !important;
+    border: solid 1px #333333;
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    box-shadow: 2px 2px 2px #333333;
+}
+
+.fancy_button:hover, .fancy_button:focus {
+    cursor: default;
+    background: #333333 !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#000000)) !important;
+    background: -moz-linear-gradient(top,  #333333,  #000000) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#000000') !important;
+}
+
+.fancy_button:active {
+    background: #333333 !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#000000), to(#333333)) !important;
+    background: -moz-linear-gradient(top,  #000000,  #333333) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#333333') !important;
+    position:relative;
+    top:1px;
+}
+
+/* BLUE */
+.fancy_button.blue {
+    background: #05addc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#05addc), to(#0078a5));
+    background: -moz-linear-gradient(top,  #05addc,  #0078a5);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#0078a5');
+}
+
+.fancy_button.blue:hover, .fancy_button.blue:focus {
+    color: #05addc !important;
+}
+
+
+/* GREEN */
+.fancy_button.green {
+    background: #7EC63E;
+    background: -webkit-gradient(linear, left top, left bottom, from(#7EC63E), to(#4D6C1F));
+    background: -moz-linear-gradient(top, #7EC63E, #4D6C1F);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#7EC63E', endColorstr='#4D6C1F');
+}
+
+.fancy_button.green:hover, .fancy_button.green:focus {
+    color: #7EC63E !important;
+}
+
+/* RED */
+.fancy_button.red {
+    background: #ED1C24;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ED1C24), to(#4D0C0C));
+    background: -moz-linear-gradient(top, #ED1C24, #4D0C0C);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ED1C24', endColorstr='#4D0C0C');
+}
+
+.fancy_button.red:hover, .fancy_button.red:focus {
+    color: #ED1C24 !important;
 }
