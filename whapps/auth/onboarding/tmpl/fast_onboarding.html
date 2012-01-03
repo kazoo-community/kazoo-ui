@@ -11,18 +11,17 @@
                     <ul class="controls">
                         <li>
                             <label>Area Code</label>
-                            <input type="text" name="area_code" id="area_code" maxlength="3" size="3"/>
+                            <input type="text" name="field_data.area_code" id="area_code" maxlength="3" size="3"/>
                         </li>
-                        <div class="clear"/>
                         <li id="picked_number_li" class="center">
                             <div class="number_wrapper">
                                 <span id="picked_number" class="center picked_number"></span>
-                                <a class="fancy_button blue" name="change_number" id="change_number">Give me a number!</a>
+                                <a class="fancy_button blue" name="change_number" id="change_number" href="javascript:void(0);">Give me a number!</a>
                             </div>
                         </li>
                         <li id="li_number_for">
                             <label>Type of Service: </label>
-                            <select name="role" id="role">
+                            <select name="account.role" id="role">
                                 <option value="single_phone">Single Phone</option>
                                 <option value="small_office">Small Office</option>
                                 <option value="reseller">Reseller</option>
@@ -89,7 +88,7 @@
                         </div>
                         <li>
                             <label>Pick your country</label>
-                            <select name="e911_country" id="e911_country">
+                            <select name="e911.country" id="e911_country">
                                 <option value="Other">Other country...</option>
                                 <option value="AD"> Andorra</option>
                                 <option value="AR"> Argentina</option>
@@ -154,24 +153,24 @@
                         </li>
                         <li id="e911_country_block">
                             <label>Country</label>
-                            <input type="text" name="e911_country_text" id="e911_country_text" />
+                            <input type="text" name="extra.e911_country_other" id="e911_country_text" />
                         </li>
                         <li>
                             <label>Postal Code</label>
-                            <input type="text" name="e911_postal_code" id="e911_postal_code"/>
+                            <input type="text" name="e911.postal_code" id="e911_postal_code"/>
                         </li>
                         <li>
                             <label>Address</label>
-                            <input type="text" name="e911_address" id="e911_address"/>
+                            <input type="text" name="e911.address" id="e911_address"/>
                         </li>
                         <li>
                             <label>State</label>
-                            <input type="text" name="e911_state" id="e911_state" />
+                            <input type="text" name="e911.state" id="e911_state" />
                         </li>
 
                         <li>
                             <label>City</label>
-                            <input type="text" name="e911_city" id="e911_city" class="field_last"/>
+                            <input type="text" name="e911.city" id="e911_city" class="field_last"/>
                         </li>
                     </ul>
                 </fieldset>
@@ -179,30 +178,33 @@
                 <fieldset>
                     <legend>Credit Card</legend>
                     <hr/>
+                    <div class="help_text">
+                        Credit Card information will be used if you decide to buy DIDs or Trunks through our service. You will not be charged for anything if you decide to use your own Trunks and DIDs.
+                    </div>
                     <ul class="controls">
                         <li>
                             <label>First Name</label>
-                            <input type="text" name="first_name" id="first_name"/>
+                            <input type="text" name="credit_card.first_name" id="first_name"/>
                         </li>
 
                         <li>
                             <label>Last Name</label>
-                            <input type="text" name="last_name" id="last_name"/>
+                            <input type="text" name="credit_card.last_name" id="last_name"/>
                         </li>
 
                         <li>
                             <label>Card Number</label>
-                            <input type="text" name="card_number" id="card_number" />
+                            <input type="text" name="credit_card.number" id="card_number" />
                         </li>
 
                         <li>
                             <label>CVV</label>
-                            <input type="text" name="cvv" id="cvv" size="3" maxlength="3"/>
+                            <input type="text" name="credit_card.cvv" id="cvv" size="3" maxlength="3"/>
                         </li>
 
                         <li>
                             <label>Expiration Date</label>
-                            <select name="expiration_month" id="expiration_month">
+                            <select name="extra.expiration_month" id="expiration_month">
                                 <option value="01">01 - January</option>
                                 <option value="02">02 - February</option>
                                 <option value="03">03 - March</option>
@@ -216,7 +218,7 @@
                                 <option value="11">11 - November</option>
                                 <option value="12">12 - December</option>
                             </select>
-                            <select name="expiration_year" id="expiration_year">
+                            <select name="extra.expiration_year" id="expiration_year">
                                 <option value="2011">2011</option>
                                 <option value="2012">2012</option>
                                 <option value="2013">2013</option>
@@ -241,7 +243,7 @@
 
                         <li>
                             <label>Use 911 Address?</label>
-                            <input type="checkbox" name="use_e911" id="use_e911" checked="checked" />
+                            <input type="checkbox" name="field_data.use_e911" id="use_e911" checked="checked" />
                         </li>
                         <li id="e911_address_block">
                             <label>e911 Address</label>
@@ -250,7 +252,7 @@
                         <div id="address_infos">
                             <li>
                                 <label>Pick your country</label>
-                                <select name="country" id="country">
+                                <select name="credit_card.country" id="country">
                                     <option value="Other">Other country...</option>
                                     <option value="AD"> Andorra</option>
                                     <option value="AR"> Argentina</option>
@@ -315,46 +317,59 @@
                             </li>
                             <li id="billing_country_text">
                                 <label>Country</label>
-                                <input type="text" name="country" id="country" />
+                                <input type="text" name="extra.credit_card_country_other" id="country_other" />
                             </li>
                             <li>
                                 <label>Postal Code</label>
-                                <input type="text" name="postal_code" id="postal_code" class="field_last" />
+                                <input type="text" name="credit_card.postal_code" id="postal_code" class="field_last" />
                             </li>
                             <li>
                                 <label>Address</label>
-                                <input type="text" name="address" id="address" value=""/>
+                                <input type="text" name="credit_card.address" id="address" value=""/>
                             </li>
                             <li>
                                 <label>State</label>
-                                <input type="text" name="state" id="state" />
+                                <input type="text" name="credit_card.state" id="state" />
                             </li>
 
                             <li>
                                 <label>City</label>
-                                <input type="text" name="city" id="city"/>
+                                <input type="text" name="credit_card.city" id="city"/>
                             </li>
                         </div>
                     </ul>
                 </fieldset>
 
                 <fieldset>
+                    <legend>Additional Info</legend>
+                    <hr/>
+                    <ul class="controls">
+                        <li>
+                            <label>Name</label>
+                            <input type="text" name="extra.name" id="name"/>
+                        </li>
+                        <li>
+                            <label>Company Name</label>
+                            <input type="text" name="account.name" id="company_name"/>
+                        </li>
+                    </ul>
+                    <div class="clear"/>
                     <legend>Credentials</legend>
                     <hr/>
                     <ul class="controls">
                         <li>
-                            <label>Username</label>
-                            <input type="text" name="login" id="login"/>
+                            <label>E-mail</label>
+                            <input type="text" name="extra.email" id="email"/>
                         </li>
 
                         <li>
                             <label>Password</label>
-                            <input type="password" name="password" id="password" />
+                            <input type="password" name="extra.password" id="password"/>
                         </li>
 
                         <li>
-                            <label>E-mail</label>
-                            <input type="text" name="email" id="email" />
+                            <label>Confirm Password</label>
+                            <input type="password" name="extra.verify_password" id="verify_password"/>
                         </li>
                     </ul>
                 </fieldset>
@@ -362,7 +377,7 @@
                 <div class="clear"/>
                 <br/>
                 <div class="center">
-                    <a class="fancy_button blue" id="save_account">Create Account</a>
+                    <a class="fancy_button blue" id="save_account" href="javascript:void(0);">Create Account</a>
                 </div>
             </form>
         </div>

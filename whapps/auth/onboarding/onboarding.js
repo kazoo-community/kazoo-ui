@@ -31,6 +31,7 @@ winkstart.module('auth', 'onboarding', {
                 { name: '#first_name',       regex: /^[a-zA-Z\s\-\']+$/ },
                 { name: '#last_name',        regex: /^[a-zA-Z\s\-\']+$/ },
                 { name: '#card_number',      regex: /^[0-9]{10,22}$/ },
+                { name: '#cvv',              regex: /^[0-9]{2,6}$/ },
                 { name: '#address',          regex: /^.+$/ },
                 { name: '#state',            regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
                 { name: '#city',             regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
@@ -38,9 +39,11 @@ winkstart.module('auth', 'onboarding', {
                 { name: '#postal_code',      regex: /^[0-9\-]{4,10}$/ }
             ],
             step3: [
-                { name: '#login',            regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
                 { name: '#password',         regex: /^.{3,16}$/ },
-                { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
+                { name: '#verify_password',  regex: /^.{3,16}$/ },
+                { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#company_name',     regex: /^.*$/ },
+                { name: '#name',     regex: /^.*$/ }
             ],
         },
 
@@ -60,6 +63,65 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
+        clean_form_data: function(form_data, target) {
+            var number = "+1" + form_data.extra.number.replace(/-/g,"")
+
+            if(form_data.extra.credit_card_country_other != "") {
+                form_data.credit_card.country = form_data.extra.credit_card_country_other;
+            }
+
+            if(form_data.extra.e911_country_other != "") {
+                form_data.e911.country = form_data.extra.credit_card_country_other;
+            }
+
+            form_data.credit_card.expiration_date = form_data.extra.expiration_month +"/"+ form_data.extra.expiration_year;
+
+            form_data.extensions = [
+                {
+                    user: {
+                        credentials: $.md5(form_data.extra.login + ':' + form_data.extra.password),
+                        admin: true,
+                        name: form_data.credit_card.first_name + " " + form_data.credit_card.last_name,
+                        email: form_data.extra.email
+                    },
+                    callflow: {
+                        numbers: [ number ]
+                    }
+                }
+            ]
+
+            if(form_data.account.role == "small_office") {
+                var first_name,
+                    last_name,
+                    extension;
+
+                for(i=0; i<5; i++) {
+                    first_name = $('#first_name_'+i, target).val();
+                    last_name = $('#last_name_'+i, target).val();
+                    extension = $('#extension_'+i, target).val();
+                    if(first_name && last_name && extension){
+                        var user = {
+                            user: {
+                                name: first_name + " " + last_name
+                            },
+                            callflow: {
+                                numbers: [ extension ]
+                            }
+                        }
+                        form_data.extensions.push(user);
+                    }
+                }
+            }
+            form_data.dids = {};
+            form_data.dids[number]= {e911: form_data.e911};
+
+            delete form_data.e911;
+            delete form_data.field_data;
+            delete form_data.extra;
+
+            return form_data;
+        },
+
         render_onboarding: function() {
             var THIS = this,
                 onboard_html = THIS.templates.onboarding.tmpl({}),
@@ -81,7 +143,6 @@ winkstart.module('auth', 'onboarding', {
 
             $('#fast_onboarding_form', onboard_html).formToWizard({ submitButton: 'save_account' });
 
-            //$('#picked_number_li', onboard_html).hide();
             $('#li_number_for', onboard_html).hide();
             $('#small_office_div', onboard_html).hide();
             $('#single_phone_div', onboard_html).hide();
@@ -111,7 +172,8 @@ winkstart.module('auth', 'onboarding', {
                         $('#li_number_for', onboard_html).show();
                     },
                     function() {
-                        alert('You need to input a valid area code (eg: 415, 508, ...)');
+                        //alert('You need to input a valid area code (eg: 415, 508, ...)');
+                        winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
                     }
                 );
             });
@@ -128,6 +190,7 @@ winkstart.module('auth', 'onboarding', {
 
                     case 'small_office':
                         $('#small_office_div', onboard_html).slideDown('show');
+
                         break;
 
                     case 'reseller':
@@ -185,12 +248,12 @@ winkstart.module('auth', 'onboarding', {
                             }
                         },
                         function() {
-                            alert('You can\'t go to the next step because you inputted invalid values in the form.');
+                            winkstart.alert('You can\'t go to the next step because you inputted invalid values in the form.');
                         }
                     );
                 }
                 else {
-                    alert('You need to give an area code and click on the Generate number button before going to next step.');
+                    winkstart.alert('You need to give an area code and click on the Generate number button before going to next step.');
                     $('#area_code', onboard_html).focus();
                 }
             });
@@ -257,11 +320,37 @@ winkstart.module('auth', 'onboarding', {
             });
 
             $('#save_account', onboard_html).click(function() {
+                if($('#password', onboard_html).val() != $('#verify_password', onboard_html).val()) {
+                    winkstart.alert('Passwords are not matching, please retype your password.' );
+                    $('#password', onboard_html).val("");
+                    $('#verify_password', onboard_html).val("");
+
+                    winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
+                    });
+                    return true;
+                }
+
                 winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
-                        //Process API Call to onboard the client, log him with the creds he just typed
+                        var form_data = form2object('fast_onboarding_form');
+
+                        form_data.extra.number = number;
+
+                        THIS.clean_form_data(form_data, onboard_html);
+
+                        console.log(form_data);
+                        /*winkstart.request(true, 'onboarding.create', {
+                                account_id: winkstart.apps['auth'].account_id,
+                                api_url: winkstart.apps['auth'].api_url,
+                                data: form_data
+                            },
+                            function (_data, status) {
+                            },
+                            function(_data, status) {
+                            }
+                        );*/
                     },
                     function() {
-                        alert('You can\'t finish the setup because you inputted invalid values in the form.');
+                        winkstart.alert('You can\'t finish the setup because you inputted invalid values in the form.');
                     }
                 );
             });
