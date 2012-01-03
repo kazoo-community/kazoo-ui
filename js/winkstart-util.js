@@ -23,7 +23,33 @@
         });
     };
 
-    winkstart.dialog = function(content, options) {
+    winkstart.alert = function(content, type, options) {
+        var html,
+            popup,
+            options = options || {},
+            type = type || 'Error';
+
+        if(type=='Error') {
+            html = $('<div class="center"><div class="error_img"></div><div class="error_text_wrapper"><span class="error_text">' + content + '</span></div><div class="clear"/><div class="error_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+        }
+        else {
+            html = $('<div class="center"><div class="warning_img"></div><div class="warning_text_wrapper"><span class="warning_text">' + content + '</span></div><div class="clear"/><div class="warning_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+        }
+
+        options.title = type;
+        options.maxWidth = '400px';
+        options.width = '400px';
+
+        popup = winkstart.dialog(html, options);
+
+        $('.fancy_button', html).click(function() {
+            popup.dialog('close');
+        });
+
+        return popup;
+    };
+
+    winkstart.dialog = function(content, options, buttons) {
         var newDiv = $(document.createElement('div')).html(content);
 
         //Unoverridable options

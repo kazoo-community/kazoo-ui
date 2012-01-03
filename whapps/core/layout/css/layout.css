@@ -533,3 +533,44 @@ ul.buttons a:hover{
 .fancy_button.red:hover, .fancy_button.red:focus {
     color: #ED1C24 !important;
 }
+
+/* ALERTS */
+.error_text_wrapper {
+    max-width: 500px;
+    border: 1px dashed red;
+    background: #F2AAAA;
+    padding:10px;
+}
+.error_text {
+
+}
+
+.error_img {
+    background: url('../images/error.png') no-repeat center center;
+    height: 50px;
+}
+
+.error_buttons_wrapper {
+    text-align: center;
+    padding: 15px;
+}
+
+.warning_text_wrapper {
+    border: 1px dashed #DEA704;
+    background: #FFDA61;
+    max-width: 500px;
+    padding:10px;
+}
+.warning_text {
+
+}
+
+.warning_img {
+    background: url('../images/warning.png') no-repeat center center;
+    height: 50px;
+}
+
+.warning_buttons_wrapper {
+    text-align: center;
+    padding: 15px;
+}
