@@ -1,5 +1,9 @@
 winkstart.module('auth', 'auth',
     {
+        css: [
+            'css/auth.css'
+        ],
+
         templates: {
             thankyou: 'tmpl/thankyou.html',
             recover_password: 'tmpl/recover_password.html',
@@ -177,7 +181,7 @@ winkstart.module('auth', 'auth',
                 $('#password', dialogDiv).focus();
             }
 
-            $('button.login', dialogDiv).click(function(event) {
+            $('.login', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
