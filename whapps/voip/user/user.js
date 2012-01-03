@@ -278,7 +278,7 @@ winkstart.module('voip', 'user', {
                 ev.preventDefault();
 
                 if($('#pwd_mngt_pwd1', user_html).val() != $('#pwd_mngt_pwd2', user_html).val()) {
-                    alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
+                    winkstart.alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
 
                     return true;
                 }
@@ -295,7 +295,7 @@ winkstart.module('voip', 'user', {
                         THIS.save_user(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });

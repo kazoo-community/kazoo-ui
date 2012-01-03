@@ -23,20 +23,25 @@
         });
     };
 
-    winkstart.alert = function(content, type, options) {
+    winkstart.alert = function(type, content, options) {
         var html,
             popup,
             options = options || {},
-            type = type || 'Error';
+            content = content || type,
+            type = type.toLowerCase();
 
-        if(type=='Error') {
-            html = $('<div class="center"><div class="error_img"></div><div class="error_text_wrapper"><span class="error_text">' + content + '</span></div><div class="clear"/><div class="error_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+        if(type == 'error') {
+            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+        }
+        else if(type == 'info'){
+            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
         }
         else {
-            html = $('<div class="center"><div class="warning_img"></div><div class="warning_text_wrapper"><span class="warning_text">' + content + '</span></div><div class="clear"/><div class="warning_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+            type = 'warning';
+            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
         }
 
-        options.title = type;
+        options.title = type.charAt(0).toUpperCase() + type.slice(1);
         options.maxWidth = '400px';
         options.width = '400px';
 

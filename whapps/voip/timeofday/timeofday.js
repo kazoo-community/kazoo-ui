@@ -392,7 +392,7 @@ winkstart.module('voip', 'timeofday', {
                         THIS.save_timeofday(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });

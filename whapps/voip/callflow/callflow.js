@@ -1163,7 +1163,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {
@@ -1188,7 +1188,7 @@ winkstart.module('voip', 'callflow', {
                         //Migration here:
                         node.setMetadata('action', 'bridge');
 
-                        alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
                         return '';
                     },
                     edit: function(node, callback) {

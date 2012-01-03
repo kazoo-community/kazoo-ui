@@ -534,43 +534,48 @@ ul.buttons a:hover{
     color: #ED1C24 !important;
 }
 
-/* ALERTS */
-.error_text_wrapper {
-    max-width: 500px;
+/* GENERIC ALERT CSS */
+.alert_buttons_wrapper {
+    text-align: center;
+    padding: 15px;
+}
+
+.alert_text_wrapper {
+    max-width: 400px;
+    padding:15px;
+    margin-top: 10px;
+}
+
+.alert_img {
+    height: 50px;
+}
+
+/* ERROR */
+.alert_text_wrapper.error_alert {
     border: 1px dashed red;
     background: #F2AAAA;
-    padding:10px;
-}
-.error_text {
-
 }
 
-.error_img {
+.alert_img.error_alert {
     background: url('../images/error.png') no-repeat center center;
-    height: 50px;
 }
 
-.error_buttons_wrapper {
-    text-align: center;
-    padding: 15px;
-}
-
-.warning_text_wrapper {
+/* WARNING */
+.alert_text_wrapper.warning_alert {
     border: 1px dashed #DEA704;
     background: #FFDA61;
-    max-width: 500px;
-    padding:10px;
-}
-.warning_text {
-
 }
 
-.warning_img {
+.alert_img.warning_alert {
     background: url('../images/warning.png') no-repeat center center;
-    height: 50px;
 }
 
-.warning_buttons_wrapper {
-    text-align: center;
-    padding: 15px;
+/* INFO */
+.alert_text_wrapper.info_alert {
+    border: 1px dashed #05addc;
+    background: #A0D5EB;
+}
+
+.alert_img.info_alert {
+    background: url('../images/info.png') no-repeat center center;
 }

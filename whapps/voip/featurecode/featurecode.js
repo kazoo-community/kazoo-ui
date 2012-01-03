@@ -160,7 +160,10 @@ winkstart.module('voip', 'featurecode', {
             var THIS = this,
                 count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
-            if(count == 0) { alert('Nothing to save') }
+            if(count == 0) {
+                winkstart.alert('info','Nothing to save');
+                return;
+            }
 
             $.each(form_data.created_callflows, function() {
                 winkstart.putJSON('featurecode.create', {
