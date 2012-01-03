@@ -192,7 +192,7 @@ winkstart.module('voip', 'device', {
 
                     save_error: _callbacks.save_error || function(_data, status, type) {
                         if(status == 200 && type == 'mac_address') {
-                            alert('This MAC Address is already in use, please verify that it is correct.');
+                            winkstart.alert('warning', 'This MAC Address is already in use, please verify that it is correct.');
                         }
                     },
 
@@ -490,7 +490,7 @@ winkstart.module('voip', 'device', {
                             THIS.save_device(form_data, data, callbacks.save_success, callbacks.save_error);
                         },
                         function() {
-                            alert('There were errors on the form, please correct!');
+                            winkstart.alert('There were errors on the form, please correct!');
                         }
                     );
                 });
