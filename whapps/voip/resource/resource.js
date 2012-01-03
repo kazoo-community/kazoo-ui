@@ -19,7 +19,6 @@ winkstart.module('voip', 'resource', {
             { name: '#name',                   regex: /^.+$/ },
             { name: '#weight_cost',            regex: /^[0-9]+$/ },
             { name: '#rules',                  regex: /^.*$/ },
-            { name: '#flags',                  regex: /^.*$/ },
             { name: '#caller_id_options_type', regex: /^\w*$/ },
             { name: '#gateways_username',      regex: /^.*$/ },
             { name: '#gateways_password',      regex: /^[^\s]*$/ },
@@ -170,19 +169,21 @@ winkstart.module('voip', 'resource', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        weight_cost: '100',
+                        weight_cost: 50,
                         enabled: true,
                         gateways: [
                             {
+                                invite_format: 'e164',
                                 prefix: '+1',
                                 codecs: ['PCMU', 'PCMA']
                             }
                         ],
-                        rules: [],
+                        rules: [
+                            '^\\+{0,1}1{0,1}(\\d{10})$'
+                        ],
                         caller_id_options: {
                             type: 'external'
                         },
-                        flags: []
                     }, data_defaults || {}),
                     field_data: {
                         caller_id_options: {
@@ -276,17 +277,18 @@ winkstart.module('voip', 'resource', {
 
         render_resource: function(data, target, callbacks) {
             var THIS = this,
-                resource_html = THIS.templates.edit.tmpl(data);
+                resource_html = THIS.templates.edit.tmpl(data),
+                check_rule_and_hide = function() {
+                    var rule = $('#rules_dropdown', resource_html).val()
 
-            $.each(data.data.gateways, function(i, obj) {
-                var gateway_data = {
-                    data: obj,
-                    field_data: data.field_data,
-                    index: i
-                };
-
-                THIS.templates.gateway.tmpl(gateway_data).appendTo($('#gateways', resource_html));
-            });
+                    if(rule != 'custom') {
+                        $('#rules', resource_html).val('').hide()
+                    }
+                    else {
+                        $('#rules', resource_html).val('').show();
+                    }
+                },
+                _after_render;
 
             winkstart.validate.set(THIS.config.validation, resource_html);
 
@@ -349,11 +351,38 @@ winkstart.module('voip', 'resource', {
                 THIS.delete_resource(data, callbacks.delete_success, callbacks.delete_error);
             });
 
-            $('#rules_dropdown', resource_html).change(function() {
-                $('#rules_dropdown', resource_html).val() != 'custom' ? $('#rules', resource_html).hide() : $('#rules', resource_html).val('').show();
+            $('#gateways_server', resource_html).bind('keyup change blur', function() {
+                var val = $(this).val(),
+                    old_val = $(this).dataset('prev_value');
+
+                if(old_val == $('#gateways_realm', resource_html).val()) {
+                    $('#gateways_realm', resource_html).val(val);
+                }
+
+                $(this).dataset('prev_value', val);
             });
 
-            data.data.rules[0] in data.field_data.rules && data.data.rules[0] != 'custom' ? $('#rules', resource_html).hide() : $('#rules_dropdown', resource_html).val('custom');
+            $('#rules_dropdown', resource_html).change(function() {
+                check_rule_and_hide();
+            });
+
+            check_rule_and_hide();
+
+            _after_render = callbacks.after_render;
+
+            callbacks.after_render = function() {
+                if(typeof _after_render == 'function') {
+                    _after_render();
+                }
+
+                $('#weight_cost', resource_html).slider({
+                    from: 0,
+                    to: 100,
+                    step: 1,
+                    scale: ['Lowest', 'Low', 'Normal', 'High', 'Highest'],
+                    limits: false
+                });
+            };
 
             (target)
                 .empty()
