@@ -419,15 +419,26 @@ winkstart.module('voip', 'callflow', {
 
                         $('button.add_number', popup).click(function(event) {
                             event.preventDefault();
-                            var number = $('#add_number_text', popup).val();
-                            if(number == '' && !confirm('Are you sure that you want to add an empty number?')) {
-                                return;
+                            var number = $('#add_number_text', popup).val(),
+                                add_number = function() {
+                                    THIS.flow.numbers.push(number);
+                                    popup.dialog('close');
+
+                                    THIS.renderFlow();
+                                };
+
+                            if(number == '') {
+                                winkstart.confirm('Are you sure that you want to add an empty number?', function() {
+                                        add_number();
+                                    },
+                                    function() {
+                                        return;
+                                    }
+                                );
                             }
-                            THIS.flow.numbers.push(number);
-
-                            popup.dialog('close');
-
-                            THIS.renderFlow();
+                            else {
+                                add_number();
+                            }
                         });
 
                         $('#create_no_match', popup).click(function(event) {

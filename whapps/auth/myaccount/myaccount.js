@@ -286,7 +286,6 @@ winkstart.module('auth', 'myaccount', {
 
             popup = winkstart.dialog(popup_html, {
                 height: '640',
-                width: '570',
                 title: 'My account',
                 open: function() {
                     // Gross hack to prevent scroll bar glitch (should be in the css sheet)
