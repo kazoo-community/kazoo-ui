@@ -3,6 +3,10 @@
 }
 
 .wrapper_login_button .login {
-    width: 81px;
     height: 35px;
+}
+
+.register_text_wrapper {
+    text-align: center;
+    padding: 15px;
 }

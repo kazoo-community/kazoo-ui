@@ -8,7 +8,7 @@
             if($.isArray(items)) {
                 $.each(items, function(key, val) {
                     if('name' in val && 'regex' in val) {
-                        THIS.add($(val.name, parent), val.regex);   
+                        THIS.add($(val.name, parent), val.regex);
                     }
                 });
             }
@@ -30,11 +30,15 @@
                 _parent = null;
             }
 
+            var failure = failure || function(){
+                winkstart.alert('There are some errors on the form, please correct it');
+            };
+
             parent = _parent || $('body');
 
             if($.isArray(items)) {
                 invalid_num = items.length;
-                
+
                 $.each(items, function(key, val) {
                     if('name' in val && 'regex' in val) {
                         ret = $(val.name, parent)
@@ -55,7 +59,7 @@
                               .trigger('keyup')
                               .parents('.validated')
                               .hasClass('valid');
-                    
+
                     if(ret) {
                         invalid_num--;
                     }
