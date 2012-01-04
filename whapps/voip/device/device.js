@@ -381,7 +381,8 @@ winkstart.module('voip', 'device', {
 
         render_device: function(data, target, callbacks){
             var THIS = this,
-                device_html;
+                device_html,
+                render;
 
             if(typeof data.data == 'object' && data.data.device_type) {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
@@ -518,7 +519,7 @@ winkstart.module('voip', 'device', {
                     winkstart.publish('media.popup_edit', _data, function(_data) {
                         /* Create */
                         if(!_id) {
-                            $('#music_on_hold_media_id', device_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                            $('#music_on_hold_media_id', device_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>');
                             $('#music_on_hold_media_id', device_html).val(_data.data.id);
 
                             $('#edit_link_media', device_html).show();
@@ -555,9 +556,21 @@ winkstart.module('voip', 'device', {
                 });
             }
 
-            (target)
-                .empty()
-                .append(device_html);
+            /* Awesome sauce for provisioning goodness */
+            render = function() {
+                (target)
+                    .empty()
+                    .append(device_html);
+            };
+
+            if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
+                if(winkstart.publish('phone.render_fields', $('.provisioner', device_html), data.data.provision || (data.data.provision = {}), render)) {
+                    render();
+                 }
+            }
+            else {
+                render();
+            }
         },
 
         migrate_data: function(data) {
