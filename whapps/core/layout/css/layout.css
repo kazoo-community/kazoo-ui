@@ -568,6 +568,7 @@ ul.buttons a:hover{
 .alert_buttons_wrapper {
     text-align: center;
     padding: 15px;
+    height: 35px;
 }
 
 .alert_text_wrapper {
@@ -580,6 +581,11 @@ ul.buttons a:hover{
     height: 50px;
 }
 
+.alert_buttons_wrapper .alert_button {
+    display: block;
+    width: 81px;
+    margin: auto;
+}
 /* ERROR */
 .alert_text_wrapper.error_alert {
     border: 1px dashed red;
@@ -608,4 +614,17 @@ ul.buttons a:hover{
 
 .alert_img.info_alert {
     background: url('../images/info.png') no-repeat center center;
+}
+
+/* CONFIRM */
+.alert_img.confirm_alert {
+    background: url('../images/confirm.png') no-repeat center center;
+}
+
+.alert_buttons_wrapper .confirm_button {
+    margin-left: 47px;
+    display: block;
+    width: 81px;
+    float:left;
+    padding:10px;
 }

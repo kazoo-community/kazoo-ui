@@ -23,7 +23,8 @@ winkstart.module('auth', 'auth',
         },
 
         validation: [
-            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ }
+            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
+            { name: '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
         ],
 
         resources: {
@@ -66,9 +67,11 @@ winkstart.module('auth', 'auth',
 
         if(URL_DATA['activation_key']) {
             winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
-               alert('You are now registered! Please log in.');
 
-               winkstart.publish('auth.login', {username: data.data.user.username});
+               winkstart.alert('info','You are now registered! Please log in.', function() {
+                   winkstart.publish('auth.login', {username: data.data.user.username});
+               });
+
                if(data.auth_token != '' && data.auth_token != 'null'){
                     winkstart.apps['auth'].account_id = data.data.account.id;
                     winkstart.apps['auth'].auth_token = data.auth_token;
@@ -152,16 +155,16 @@ winkstart.module('auth', 'auth',
                                 }
                             };
                             winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                                alert('Registered successfully. Please check your e-mail to activate your account!');
+                                winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
                                 dialogRegister.dialog('close');
                             });
                         }
                         else {
-                            alert('Please confirm your password');
+                            winkstart.alert('Please confirm your password');
                         }
                     },
                     function() {
-                        alert('Your username is invalid (chars, digits, dashes and underscores only)');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -226,10 +229,10 @@ winkstart.module('auth', 'auth',
                     },
                     function(data, status) {
                         if(status == '401' || status == '403') {
-                            alert('Invalid credentials, please check that your username and password are correct.');
+                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else {
-                            alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
                         }
                     }
                 );
@@ -353,7 +356,7 @@ winkstart.module('auth', 'auth',
                 _t.session.authenticated = true;
                 _t.session.token         = data.auth_token;
                 _t.session.expires       = data.expires;
-                alert('User authenticated');
+                winkstart.alert('User authenticated');
             });
         },
 
@@ -378,8 +381,9 @@ winkstart.module('auth', 'auth',
             else */
             if(winkstart.apps['auth'].auth_token == null) {
                 winkstart.publish('auth.login');
-            } else {
-                if(confirm('Are you sure that you want to log out?')) {
+            }
+            else {
+                winkstart.confirm('Are you sure that you want to log out?', function() {
                     // Remove any individual keys
                     $.each(winkstart.apps, function(k, v) {
                         // TODO: ADD APP UNLOADING CODE HERE. Remove CSS and scripts. This should inherently delete apps.
@@ -400,7 +404,7 @@ winkstart.module('auth', 'auth',
                     window.location.reload();
 
                     //winkstart.publish('auth.activate');
-                }
+                });
             }
         }
     }
