@@ -229,6 +229,16 @@
                                 <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
                                 {{/if}}
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect).">
+                                    <span class="tooltip"/><label for="call_forward_direct_calls_only">Direct Calls Only?</label>
+                                </span>
+                                {{if data.call_forward.direct_calls_only}}
+                                <input id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" type="checkbox" checked="checked"/>
+                                {{else}}
+                                <input id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
 
