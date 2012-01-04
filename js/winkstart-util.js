@@ -23,20 +23,58 @@
         });
     };
 
-    winkstart.alert = function(content, type, options) {
+    winkstart.confirm = function(content, callback_OK, callback_Cancel) {
         var html,
             popup,
-            options = options || {},
-            type = type || 'Error';
+            options = {};
 
-        if(type=='Error') {
-            html = $('<div class="center"><div class="error_img"></div><div class="error_text_wrapper"><span class="error_text">' + content + '</span></div><div class="clear"/><div class="error_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a id="confirm_button" class="fancy_button green confirm_button" href="javascript:void(0);">OK</a><a id="cancel_button" class="fancy_button red confirm_button" href="javascript:void(0);">Cancel</a></div></div>');
+
+        options.title = 'Please confirm';
+        options.maxWidth = '400px';
+        options.width = '400px';
+
+        popup = winkstart.dialog(html, options);
+
+        $('#confirm_button', html).click(function() {
+            popup.dialog('close');
+
+            if(typeof callback_OK == 'function') {
+                callback_OK();
+            }
+        });
+
+        $('#cancel_button', html).click(function() {
+            popup.dialog('close');
+
+            if(typeof callback_Cancel == 'function') {
+                callback_Cancel();
+            }
+        });
+
+        return popup;
+    };
+
+    winkstart.alert = function(type, content, callback) {
+        var html,
+            popup,
+            options = {},
+            type = type.toLowerCase();
+
+        if(type == 'error') {
+            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
+        }
+        else if(type == 'info'){
+            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
         }
         else {
-            html = $('<div class="center"><div class="warning_img"></div><div class="warning_text_wrapper"><span class="warning_text">' + content + '</span></div><div class="clear"/><div class="warning_buttons_wrapper"><a class="fancy_button blue" href="javascript:void(0);">Close</a></div></div>');
+            callback = content;
+            content = type;
+            type = 'warning';
+            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
         }
 
-        options.title = type;
+        options.title = type.charAt(0).toUpperCase() + type.slice(1);
         options.maxWidth = '400px';
         options.width = '400px';
 
@@ -44,12 +82,16 @@
 
         $('.fancy_button', html).click(function() {
             popup.dialog('close');
+
+            if(typeof callback == 'function') {
+                callback();
+            }
         });
 
         return popup;
     };
 
-    winkstart.dialog = function(content, options, buttons) {
+    winkstart.dialog = function(content, options) {
         var newDiv = $(document.createElement('div')).html(content);
 
         //Unoverridable options

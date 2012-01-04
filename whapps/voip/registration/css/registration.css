@@ -7,23 +7,8 @@
     margin-top: 30px;
 }
 
-#registration-view .button-wrapper {
-    text-align: right;
-}
-
-#registration-view .button-wrapper a {
+#registration-view .registration_buttons {
     display: inline-block;
-    width: 81px;
-    height: 27px;
-    line-height: 27px;
-    font-weight: bold;
-    color: #fff;
-    background-image: url(../../../../whapps/core/layout/images/button_bg.png);
-    text-decoration: none;
-    text-align: center;
+    margin-top: 10px;
+    width: 100%;
 }
-
-#registration-view .button-wrapper a:hover {
-    color: #29abe1;
-}
-

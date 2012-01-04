@@ -301,7 +301,7 @@ winkstart.module('voip', 'account', {
                         THIS.save_account(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });
@@ -315,7 +315,7 @@ winkstart.module('voip', 'account', {
             $('.account-switch', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                if(confirm('Do you really want to use ' + data.data.name + '\'s account?')) {
+                winkstart.confirm('Do you really want to use ' + data.data.name + '\'s account?', function() {
                     if(!('masquerade' in winkstart.apps['voip'])) {
                         winkstart.apps['voip'].masquerade = [];
                     }
@@ -326,10 +326,10 @@ winkstart.module('voip', 'account', {
 
                     THIS.masquerade_account(data.data.name);
 
-                    alert('You are now using ' + data.data.name + '\'s account');
+                    winkstart.alert('info', 'You are now using ' + data.data.name + '\'s account');
 
                     winkstart.publish('account.activate');
-                }
+                });
             });
 
             if(!$('#music_on_hold_media_id', account_html).val()) {
