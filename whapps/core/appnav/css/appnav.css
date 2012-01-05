@@ -12,7 +12,6 @@
     width: 100%;
     height: 100%;
     padding-top: 15px;
-    padding-bottom: 10px;
 }
 
 .main_nav li .dropdown .background {
@@ -32,20 +31,29 @@
 }
 
 .main_nav li .dropdown .content .module_category {
+    padding-bottom: 5px;
     clear: both;
 }
 
 .main_nav li .dropdown .content .module_category .header {
-    padding: 0px 5px;
-    padding-top: 1px;
-    margin: 5px;
+    padding: 1px 5px 0px 5px;
+    margin: 0px 0px 10px 1px;
     font-size: 12px;
     height: 16px;
     font-weight: bold;
-    background: #888888;
-    color: #000000;
+    background-color: #2A2A2A;
+    color: #EBEBEB;
     text-transform: uppercase;
     text-align: left;
+    cursor: pointer;
+}
+
+.main_nav li .dropdown .content .module_category.not_expanded .header {
+    margin-bottom: 0px;
+}
+
+.main_nav li .dropdown .content .module_category .header:hover {
+    color: #05ADDC;
 }
 
 .main_nav li .dropdown .content .module_category .header .expand_icon {
@@ -71,7 +79,7 @@
 .main_nav li .dropdown .content .module {
     display: block;
     margin-left: 10px;
-    height: 30px;
+    height: 26px;
     width: 145px;
     font-size: 10px;
     text-align: left;

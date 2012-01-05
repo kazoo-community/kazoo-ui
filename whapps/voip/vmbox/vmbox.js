@@ -71,7 +71,8 @@ winkstart.module('voip', 'vmbox', {
             module: THIS.__module,
             label: 'Voicemail Boxes',
             icon: 'vmbox',
-            weight: '30'
+            weight: '30',
+            category: 'advanced'
         });
     },
 

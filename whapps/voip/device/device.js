@@ -95,7 +95,8 @@ winkstart.module('voip', 'device', {
             module: THIS.__module,
             label: 'Devices',
             icon: 'device',
-            weight: '20'
+            weight: '20',
+            category: 'advanced'
         });
     },
 
