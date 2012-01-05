@@ -74,7 +74,8 @@ winkstart.module('voip', 'user', {
             module: THIS.__module,
             label: 'Users',
             icon: 'user',
-            weight: '10'
+            weight: '10',
+            category: 'advanced'
         });
     },
 

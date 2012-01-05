@@ -59,7 +59,8 @@ winkstart.module('voip', 'media', {
             module: THIS.__module,
             label: 'Media',
             icon: 'media',
-            weight: '45'
+            weight: '45',
+            category: 'advanced'
         });
     },
 

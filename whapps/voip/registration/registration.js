@@ -36,7 +36,8 @@ winkstart.module('voip', 'registration',
 			module: this.__module,
 			label: 'Registrations',
 			icon: 'registration',
-			weight: '15'
+			weight: '15',
+            category: 'advanced'
 		});
 	},
 
