@@ -120,6 +120,9 @@ winkstart.module('core', 'appnav', {
                 $('.header', category)
                     .click(function() {
                         category.toggleClass('not_expanded');
+
+                        /* Prevent this from bubbling over to the li 'whapp click' */
+                        return false;
                     });
             }
 
