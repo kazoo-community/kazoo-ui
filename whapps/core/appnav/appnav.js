@@ -108,11 +108,12 @@ winkstart.module('core', 'appnav', {
             var THIS = this,
                 whapp = $('.main_nav li[whapp-name="' + data.whapp + '"]'),
                 content = $('.dropdown .content', whapp),
-                category = $('.module_category[name="' + (data.category || 'default') + '"]', content);
+                category = $('.module_category[name="' + (data.category || 'default') + '"]', content),
+                module_inserted = false,
+                module_list;
 
             whapp.attr('menu', 'true');
 
-            /* Check to see if category exists */
             if(category.size() == 0) {
                 category = THIS.templates.module_category.tmpl({ name: data.category }).appendTo(content);
 
@@ -122,37 +123,29 @@ winkstart.module('core', 'appnav', {
                     });
             }
 
-            THIS.templates.subitem.tmpl(data).appendTo($('.module_wrapper', category));
-        }
+            module_list = $('.module', category);
 
-            /*
-            if(listModules.length == 0) {
-                this.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
-                whapp.attr('menu', 'true');
-            }
-            else {
-                $.each(listModules, function(k, v) {
-                    if(listModules[k].attributes['module-weight'] != undefined) {
-                        var currentModule = new String(listModules[k].attributes['module-weight'].value),
-                            compare = ((module_weight == currentModule) ? 0 : ((module_weight > currentModule) ? 1 : -1));
+            module_list.each(function(index) {
+                var module_weight = $(this).attr('module-weight');
 
-                        if(k == listModules.length - 1 && compare > 0) {
-                            THIS.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
-                            winkstart.log(data.module + ' appended');
-                            return false;
-                        }
-                        else if(compare < 0){
-                            THIS.templates.subitem.tmpl(data).insertBefore(listModules[k]);
-                            winkstart.log(data.module + ' insertBefore');
-                            return false;
-                        }
-                    } else {
-                        THIS.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
+                if(module_weight != undefined && index < module_list.size()) {
+                    if(data.weight < parseInt(module_weight)) {
+                        module_inserted = true;
+                        THIS.templates.subitem.tmpl(data).insertBefore($(this));
+
                         return false;
                     }
-                });
-            }
-            */
+                    else {
+                        return true;
+                    }
+                }
 
+                return false;
+            });
+
+            if(!module_inserted) {
+                THIS.templates.subitem.tmpl(data).appendTo($('.module_wrapper', category));
+            }
+        }
     }
 );
