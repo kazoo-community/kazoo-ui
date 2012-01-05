@@ -3,7 +3,7 @@
     position: relative;
     top: 18px;
     left: -24px;
-    width: 311px;
+    width: 155px;
     /*height: 50px;*/
 }
 
@@ -31,6 +31,20 @@
     z-index: -100;
 }
 
+.main_nav li .dropdown .content .module_category {
+    clear: both;
+}
+
+.main_nav li .dropdown .content .module_category .header {
+    margin: 5px;
+    font-size: 12px;
+    height: 16px;
+    font-weight: bold;
+    background: #888888;
+    color: #222222;
+    text-transform: uppercase;
+}
+
 .main_nav li .dropdown .content .module {
     display: block;
     margin-left: 10px;
@@ -41,9 +55,11 @@
     float: left;
 }
 
+/*
 .main_nav li .dropdown .content .module:nth-child(odd) {
     width: 146px;
     background-image: url(../../layout/images/nav_line.jpg);
     background-repeat: no-repeat;
     background-position: right;
 }
+*/

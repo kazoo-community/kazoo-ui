@@ -7,7 +7,8 @@ winkstart.module('core', 'appnav', {
         templates: {
             appnav:  'tmpl/appnav.html',
             item:    'tmpl/item.html',
-            subitem: 'tmpl/subitem.html'
+            subitem: 'tmpl/subitem.html',
+            module_category: 'tmpl/module_category.html'
         },
 
         subscribe: {
@@ -29,7 +30,7 @@ winkstart.module('core', 'appnav', {
 
         // Set up the Module Click handlers
         $('div.header .main_nav').delegate('li', 'click', function() {
-            winkstart.publish('appnav.activate', $(this).attr('module-name'));
+            winkstart.publish('appnav.activate', $(this).attr('whapp-name'));
             return false;
         });
 
@@ -39,10 +40,17 @@ winkstart.module('core', 'appnav', {
         /* Methods */
     {
         add: function(args) {
-            var list_node = $('div.header .main_nav').find('ul'),
-                item = this.templates.item.tmpl({ 'name' : args.name, 'module' : winkstart.apps[args.name] }).appendTo(list_node);
+            var THIS = this,
+                list_node = $('div.header .main_nav').find('ul'),
+                item = THIS.templates.item.tmpl({
+                    name: args.name,
+                    whapp: winkstart.apps[args.name]
+                }).appendTo(list_node),
+                columns = args.columns || 1;
 
-            $('.dropdown', item).hide();
+            $('.dropdown', item)
+                .hide()
+                .width((item.innerWidth()  * columns) - 1);
 
             $(item).hoverIntent({
                 sensitivity: 1,
@@ -61,9 +69,6 @@ winkstart.module('core', 'appnav', {
                 $('.whapp a', $(this)).addClass('selected');
             });
 
-            winkstart.log('AppNav: Adding navigation item ' + args.name);
-
-            // Set up the subnav click handler
             $('.dropdown .content', item).delegate('.module', 'click', function() {
                 $('div.header .main_nav .whapp a').removeClass('selected');
                 $('.whapp a', $(this).parents('li')).addClass('selected');
@@ -73,19 +78,19 @@ winkstart.module('core', 'appnav', {
             });
         },
 
-        show_menu: function(module_name) {
-            var module = $('li[module-name=' + module_name + ']', '.main_nav > ul');
+        show_menu: function(whapp_name) {
+            var whapp = $('li[whapp-name=' + whapp_name + ']', '.main_nav > ul');
 
-            if(module.attr('menu') != 'false') {
-                $('.dropdown', module).slideDown(100);
+            if(whapp.attr('menu') != 'false') {
+                $('.dropdown', whapp).slideDown(100);
             }
         },
 
-        hide_menu: function(module_name) {
-            var module = $('li[module-name=' + module_name + ']', '.main_nav > ul');
+        hide_menu: function(whapp_name) {
+            var whapp = $('li[whapp-name=' + whapp_name + ']', '.main_nav > ul');
 
-            if(module.attr('menu') != 'false') {
-                $('.dropdown', module).slideUp(100);
+            if(whapp.attr('menu') != 'false') {
+                $('.dropdown', whapp).slideUp(100);
             }
         },
 
@@ -97,7 +102,6 @@ winkstart.module('core', 'appnav', {
         },
 
         _activate: function(app_name) {
-            winkstart.log('AppNav: Click detected - calling ' + app_name + '.activate');
             winkstart.publish ( app_name + '.activate', { });
         },
 
@@ -107,11 +111,21 @@ winkstart.module('core', 'appnav', {
 
         sub_add: function(data) {
             var THIS = this,
-                whapp_name = new String(data.whapp),
-                whapp = $('.main_nav li[module-name="' + whapp_name + '"]'),
-                module_weight = new String(data.weight),
-                listModules = $('.module', whapp);
+                whapp = $('.main_nav li[whapp-name="' + data.whapp + '"]'),
+                content = $('.dropdown .content', whapp),
+                category = $('.module_category[name="' + (data.category || 'default') + '"]', content);
 
+            whapp.attr('menu', 'true');
+
+            /* Check to see if category exists */
+            if(category.size() == 0) {
+                category = THIS.templates.module_category.tmpl({ name: data.category }).appendTo(content);
+            }
+
+            THIS.templates.subitem.tmpl(data).appendTo(category);
+        }
+
+            /*
             if(listModules.length == 0) {
                 this.templates.subitem.tmpl(data).appendTo($('.dropdown .content', whapp));
                 whapp.attr('menu', 'true');
@@ -138,7 +152,7 @@ winkstart.module('core', 'appnav', {
                     }
                 });
             }
-        }
+            */
 
     }
 );

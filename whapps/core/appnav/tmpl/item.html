@@ -1,12 +1,14 @@
 <ul>
-    <li module-name="${name}" menu="false">
+    <li whapp-name="${name}" menu="false">
         <div class="whapp">
-            <span class="icon ${module.icon}"/>
+            <span class="icon ${whapp.icon}"/>
             <br/>
-            <a href="#">${module.label}</a>
+            <a href="#">${whapp.label}</a>
         </div>
         <div class="dropdown">
-            <div class="content"></div>
+            <div class="content">
+                <div class="module_category" name="default"/>
+            </div>
             <div class="background"></div>
         </div>
     </li>
