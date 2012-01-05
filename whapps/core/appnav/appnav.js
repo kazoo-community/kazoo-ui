@@ -115,9 +115,14 @@ winkstart.module('core', 'appnav', {
             /* Check to see if category exists */
             if(category.size() == 0) {
                 category = THIS.templates.module_category.tmpl({ name: data.category }).appendTo(content);
+
+                $('.header', category)
+                    .click(function() {
+                        category.toggleClass('not_expanded');
+                    });
             }
 
-            THIS.templates.subitem.tmpl(data).appendTo(category);
+            THIS.templates.subitem.tmpl(data).appendTo($('.module_wrapper', category));
         }
 
             /*

@@ -36,13 +36,36 @@
 }
 
 .main_nav li .dropdown .content .module_category .header {
+    padding: 0px 5px;
+    padding-top: 1px;
     margin: 5px;
     font-size: 12px;
     height: 16px;
     font-weight: bold;
     background: #888888;
-    color: #222222;
+    color: #000000;
     text-transform: uppercase;
+    text-align: left;
+}
+
+.main_nav li .dropdown .content .module_category .header .expand_icon {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
+    background-image: url(../images/minus.png);
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.main_nav li .dropdown .content .module_category.not_expanded .header .expand_icon {
+    background-image: url(../images/plus.png);
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.main_nav li .dropdown .content .module_category.not_expanded .module_wrapper {
+    display: none;
 }
 
 .main_nav li .dropdown .content .module {
