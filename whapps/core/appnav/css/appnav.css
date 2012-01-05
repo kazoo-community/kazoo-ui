@@ -28,7 +28,7 @@
     border-right: 1px #05ADDC solid;
     border-left: 1px #05ADDC solid;
     border-bottom: 1px #05ADDC solid;
-    z-index: -100; 
+    z-index: -100;
 }
 
 .main_nav li .dropdown .content .module {
@@ -43,7 +43,7 @@
 
 .main_nav li .dropdown .content .module:nth-child(odd) {
     width: 146px;
-    background-image: url(../layout/images/nav_line.jpg);
+    background-image: url(../../layout/images/nav_line.jpg);
     background-repeat: no-repeat;
     background-position: right;
 }
