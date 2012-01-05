@@ -59,22 +59,22 @@
         var html,
             popup,
             options = {},
-            type = type.toLowerCase();
+            type_temp = type.toLowerCase();
 
-        if(type == 'error') {
+        if(type_temp == 'error') {
             html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
         }
-        else if(type == 'info'){
+        else if(type_temp == 'info'){
             html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
         }
         else {
             callback = content;
             content = type;
-            type = 'warning';
+            type_temp = 'warning';
             html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
         }
 
-        options.title = type.charAt(0).toUpperCase() + type.slice(1);
+        options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);
         options.maxWidth = '400px';
         options.width = '400px';
 
