@@ -82,7 +82,7 @@ a:active {
 ----------------HEADER----------------
 **************************************/
 
-.header {
+body > div > .header {
 	/*width: 1023px;*/
 	height: 80px;
 	/*margin: auto;*/
