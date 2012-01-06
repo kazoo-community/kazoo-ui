@@ -80,8 +80,33 @@ winkstart.module('auth', 'onboarding', {
                 {
                     user: {
                         credentials: $.md5(form_data.extra.login + ':' + form_data.extra.password),
-                        admin: true,
-                        name: form_data.credit_card.first_name + " " + form_data.credit_card.last_name,
+                        priv_level: 'admin',
+                        first_name: form_data.credit_card.last_name,
+                        last_name: form_data.credit_card.last_name,
+                        email: form_data.extra.email
+                    },
+                    callflow: {
+                        numbers: [ number ]
+                    }
+                }
+            ]
+
+            var first_name,
+                last_name,
+                extension,
+                split;
+
+            split = form_data.extra.name.split(' ');
+            first_name = split[0];
+            last_name = split[1];
+
+            form_data.extensions = [
+                {
+                    user: {
+                        credentials: $.md5(form_data.extra.login + ':' + form_data.extra.password),
+                        priv_level: 'admin',
+                        first_name: first_name,
+                        last_name: last_name,
                         email: form_data.extra.email
                     },
                     callflow: {
@@ -91,18 +116,20 @@ winkstart.module('auth', 'onboarding', {
             ]
 
             if(form_data.account.role == "small_office") {
-                var first_name,
-                    last_name,
-                    extension;
+                extension = $('#extension_1', target).val();
+                form_data.extensions[0].callflow.numbers = [ extension ];
 
-                for(i=0; i<5; i++) {
-                    first_name = $('#first_name_'+i, target).val();
-                    last_name = $('#last_name_'+i, target).val();
+                for(i=2; i<6; i++) {
+                    split = $('#name_'+i, target).val().split(' ');
+                    first_name = split[0];
+                    last_name = split[1];
                     extension = $('#extension_'+i, target).val();
                     if(first_name && last_name && extension){
                         var user = {
                             user: {
-                                name: first_name + " " + last_name
+                                first_name: first_name,
+                                last_name: last_name,
+                                priv_level: 'user'
                             },
                             callflow: {
                                 numbers: [ extension ]
@@ -113,7 +140,7 @@ winkstart.module('auth', 'onboarding', {
                 }
             }
             form_data.dids = {};
-            form_data.dids[number]= {e911: form_data.e911};
+            form_data.dids[number] = { e911: form_data.e911 };
 
             delete form_data.e911;
             delete form_data.field_data;
@@ -337,6 +364,7 @@ winkstart.module('auth', 'onboarding', {
 
                         THIS.clean_form_data(form_data, onboard_html);
 
+                        console.log(JSON.stringify(form_data));
                         console.log(form_data);
                         /*winkstart.request(true, 'onboarding.create', {
                                 account_id: winkstart.apps['auth'].account_id,

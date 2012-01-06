@@ -145,14 +145,14 @@
     padding: 5px;
 }
 #fast_onboarding_form .column.third {
-    width: 145px;
-    min-width: 145px;
+    width: 255px;
+    min-width: 255px;
     padding: 5px;
 }
 #fast_onboarding_form .column.fourth {
     width: 50px;
     min-width: 50px;
-    padding: 5px;
+    padding: 5px 15px;
 }
 
 #fast_onboarding_form .extension_input {
@@ -164,6 +164,6 @@
 }
 
 #fast_onboarding_form .last_name_input {
-    width: 135px;
+    width: 235px;
 }
 
