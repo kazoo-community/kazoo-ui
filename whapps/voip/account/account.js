@@ -16,9 +16,9 @@ winkstart.module('voip', 'account', {
         validation: [
                 { name: '#name',                       regex: /^.+$/ },
                 { name: '#realm',                      regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-                { name: '#caller_id_name_external',    regex: /^.*$/ },
+                { name: '#caller_id_name_external',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',    regex: /^.*$/ },
+                { name: '#caller_id_name_internal',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#vm_to_email_support_number', regex: /^[\+]?[0-9]*$/ },
                 { name: '#vm_to_email_support_email',  regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }

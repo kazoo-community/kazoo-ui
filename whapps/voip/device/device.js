@@ -22,9 +22,9 @@ winkstart.module('voip', 'device', {
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_']+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
-                { name: '#caller_id_name_internal',   regex: /^.*$/ },
+                { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^.*$/ },
+                { name: '#caller_id_name_external',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#sip_realm',                 regex: /^[0-9A-Za-z\-\.\:]+$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
