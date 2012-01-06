@@ -22,9 +22,9 @@ winkstart.module('voip', 'user', {
                 { name: '#username',                  regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
                 { name: '#email',                     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',   regex: /^.*$/ },
+                { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^.*/ },
+                { name: '#caller_id_name_external',   regex: /^.{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
@@ -278,7 +278,7 @@ winkstart.module('voip', 'user', {
                 ev.preventDefault();
 
                 if($('#pwd_mngt_pwd1', user_html).val() != $('#pwd_mngt_pwd2', user_html).val()) {
-                    alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
+                    winkstart.alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
 
                     return true;
                 }
@@ -295,7 +295,7 @@ winkstart.module('voip', 'user', {
                         THIS.save_user(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });

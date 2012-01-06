@@ -5,3 +5,7 @@
     line-height: 22px;
     overflow: hidden;
 }
+
+#media-content #file_li {
+    padding-top: 10px;
+}

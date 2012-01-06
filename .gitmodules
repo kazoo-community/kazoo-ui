@@ -16,3 +16,6 @@
 [submodule "whapps/indesign"]
 	path = whapps/indesign
 	url = git@github.com:2600hz/indesign.git
+[submodule "whapps/voip/phone"]
+	path = whapps/voip/phone
+	url = git@github.com:2600hz/phone.git

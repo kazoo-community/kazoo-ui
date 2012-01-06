@@ -24,15 +24,15 @@
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
-                            <li>
+                            <li id="file_li">
                                 <span class="tooltip-wrapper" tooltip="Choose your audio file by clicking on the change file button (.mp3 or .wav).">
                                     <span class="tooltip"/>
                                     <label>Media File: </label>
                                 </span>
                                 {{if data.id }}
                                 <span id="player_file">
-                                    <input type="button" id="change_link" value="Change File"/>
-                                    <input type="button" id="download_link" value="Download File"/>
+                                    <a id="change_link" class="fancy_button blue" href="javascript:void(0);">Change File</a>
+                                    <a id="download_link" class="fancy_button blue" href="javascript:void(0);">Download File</a>
                                     <div class="description">${data.description}</div>
                                 </span>
                                 {{/if}}
@@ -95,9 +95,9 @@
 
             <div class="buttons_wrapper">
                 <ul class="buttons right media">
-                    <li><a class="media-save save-btn" href="#">Save</a></li>
+                    <li><a class="media-save save-btn fancy_button green" href="#">Save</a></li>
                     {{if data.id}}
-                        <li><a class="media-delete delete-btn" href="#">Delete</a></li>
+                        <li><a class="media-delete delete-btn fancy_button red" href="#">Delete</a></li>
                     {{/if}}
                 </ul>
             </div>

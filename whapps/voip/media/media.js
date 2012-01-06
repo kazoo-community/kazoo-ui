@@ -290,7 +290,7 @@ winkstart.module('voip', 'media', {
                         );
                     },
                     function() {
-                        alert('There were errors on the form, please correct!');
+                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });

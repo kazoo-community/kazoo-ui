@@ -22,9 +22,9 @@ winkstart.module('voip', 'device', {
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_']+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
-                { name: '#caller_id_name_internal',   regex: /^.*$/ },
+                { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^.*$/ },
+                { name: '#caller_id_name_external',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#sip_realm',                 regex: /^[0-9A-Za-z\-\.\:]+$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
@@ -192,7 +192,7 @@ winkstart.module('voip', 'device', {
 
                     save_error: _callbacks.save_error || function(_data, status, type) {
                         if(status == 200 && type == 'mac_address') {
-                            alert('This MAC Address is already in use, please verify that it is correct.');
+                            winkstart.alert('warning', 'This MAC Address is already in use, please verify that it is correct.');
                         }
                     },
 
@@ -381,7 +381,8 @@ winkstart.module('voip', 'device', {
 
         render_device: function(data, target, callbacks){
             var THIS = this,
-                device_html;
+                device_html,
+                render;
 
             if(typeof data.data == 'object' && data.data.device_type) {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
@@ -490,7 +491,7 @@ winkstart.module('voip', 'device', {
                             THIS.save_device(form_data, data, callbacks.save_success, callbacks.save_error);
                         },
                         function() {
-                            alert('There were errors on the form, please correct!');
+                            winkstart.alert('There were errors on the form, please correct!');
                         }
                     );
                 });
@@ -518,7 +519,7 @@ winkstart.module('voip', 'device', {
                     winkstart.publish('media.popup_edit', _data, function(_data) {
                         /* Create */
                         if(!_id) {
-                            $('#music_on_hold_media_id', device_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                            $('#music_on_hold_media_id', device_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>');
                             $('#music_on_hold_media_id', device_html).val(_data.data.id);
 
                             $('#edit_link_media', device_html).show();
@@ -555,9 +556,21 @@ winkstart.module('voip', 'device', {
                 });
             }
 
-            (target)
-                .empty()
-                .append(device_html);
+            /* Awesome sauce for provisioning goodness */
+            render = function() {
+                (target)
+                    .empty()
+                    .append(device_html);
+            };
+
+            if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
+                if(winkstart.publish('phone.render_fields', $('.provisioner', device_html), data.data.provision || (data.data.provision = {}), render)) {
+                    render();
+                 }
+            }
+            else {
+                render();
+            }
         },
 
         migrate_data: function(data) {

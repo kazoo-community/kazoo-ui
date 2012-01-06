@@ -45,14 +45,77 @@
                                     <span class="tooltip"/>
                                     <label for="gateways_server">Server</label>
                                 </span>
-                                <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" />
+                                <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" data-prev_value="${data.gateways[0].server}"/>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="If resource routing rules overlap, the lowest weight will take precedence">
+                                <span class="tooltip-wrapper" tooltip="The authentication username used if challenged by the server">
                                     <span class="tooltip"/>
-                                    <label for="weight_cost">Weight Cost:</label>
+                                    <label for="gateways_username">Username</label>
                                 </span>
-                                <input id="weight_cost" name="weight_cost" type="text" value="${data.weight_cost}" />
+                                <input id="gateways_username" name="gateways[0].username" type="text" value="${data.gateways[0].username}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The authentication password used if challenged by the server">
+                                    <span class="tooltip"/>
+                                    <label for="gateways_password">Password</label>
+                                </span>
+                                <input id="gateways_password" name="gateways[0].password" type="password" value="${data.gateways[0].password}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The priority determines which resource is tried first when multiple resources are set up for the same rule (more than 1 10-digit US resource, etc)">
+                                    <span class="tooltip"/>
+                                    <label for="weight_cost">Priority:</label>
+                                </span>
+                                <span class="weight-wrapper">
+                                    <input id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" />
+                                </span>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <span class="advanced_settings_box">
+                <span>
+                    <h2 id="advanced_settings_link">Advanced Settings</h2>
+                </span>
+
+                <span class="advanced_tabs_wrapper">
+                    <ul class="advanced_tabs settings2">
+                        <li><a href="#"><span  class="icon wrench_screw"/>Options</a></li>
+                        <li><a href="#"><span  class="icon audio"/>Gateway Codecs</a></li>
+                        <li><a href="#"><span  class="icon device"/>Caller-ID Options</a></li>
+                    </ul>
+                </span>
+
+                <div class="clear"></div>
+            </span>
+
+            <div class="advanced_pane">
+                <div id="Options">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
+                                    <span class="tooltip"/>
+                                    <label for="enabled">Enabled</label>
+                                </span>
+                                {{if data.enabled}}
+                                    <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="enabled" name="enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="The authentication realm used if challenged by the server">
+                                    <span class="tooltip"/>
+                                    <label for="gateways_realm">Realm</label>
+                                </span>
+                                <input id="gateways_realm" name="gateways[0].realm" type="text" value="${data.gateways[0].realm}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use the resource">
@@ -73,51 +136,38 @@
                                 <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="A supported functionality by this route, such as fax, e911 or g729">
+                                <span class="tooltip-wrapper" tooltip="The format of the request URI used in the SIP invite">
                                     <span class="tooltip"/>
-                                    <label for="flags">Flags:</label>
+                                    <label for="gateways_invite_format">Invite Format</label>
                                 </span>
-                                <input id="flags" name="flags[0]" type="text" value="${data.flags[0]}" />
+                                <select name="gateways[0].invite_format" id="gateways_invite_format">
+                                    {{each(key, val) field_data.gateways.invite_formats}}
+                                        {{if data.gateways[0].invite_format == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
+                                <span class="tooltip-wrapper" tooltip="Additional characters to prepend to the front of the dialed number">
                                     <span class="tooltip"/>
-                                    <label for="enabled">Enabled</label>
+                                    <label for="gateway_prefix">Prefix</label>
                                 </span>
-                                {{if data.enabled}}
-                                <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                <input id="enabled" name="enabled" type="checkbox"/>
-                                {{/if}}
+                                <input id="gateways_prefix" name="gateways[0].prefix" type="text" value="${data.gateways[0].prefix}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Additional characters to append to the front of the dialed number">
+                                    <span class="tooltip"/>
+                                    <label for="gateway_suffix">Suffix</label>
+                                </span>
+                                <input id="gateways_suffix" name="gateways[0].suffix" type="text" value="${data.gateways[0].suffix}" />
                             </li>
                         </ul>
                     </fieldset>
 
                     <div class="clear"></div>
-                </div>
-            </div>
-
-            <div class="clear"></div>
-
-            <span class="advanced_settings_box">
-                <span>
-                    <h2 id="advanced_settings_link">Advanced Settings</h2>
-                </span>
-
-                <span class="advanced_tabs_wrapper">
-                    <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon sip"/>Gateway</a></li>
-                        <li><a href="#"><span  class="icon audio"/>Gateways Codecs</a></li>
-                        <li><a href="#"><span  class="icon device"/>Caller-ID Options</a></li>
-                    </ul>
-                </span>
-
-                <div class="clear"></div>
-            </span>
-
-            <div class="advanced_pane">
-
-                <div id="gateways">
                 </div>
                 <div id="audio_settings">
                     <fieldset>
@@ -162,9 +212,9 @@
             </div>
         <div class="buttons_wrapper">
             <ul class="buttons right resources">
-                <li><a class="resource-save save-btn" href="#">Save</a></li>
+                <li><a class="resource-save save-btn fancy_button green" href="#">Save</a></li>
                 {{if data.id}}
-                    <li><a class="resource-delete delete-btn" href="#">Delete</a></li>
+                    <li><a class="resource-delete delete-btn fancy_button red" href="#">Delete</a></li>
                 {{/if}}
             </ul>
         </div>
