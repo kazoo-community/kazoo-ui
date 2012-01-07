@@ -139,8 +139,8 @@ winkstart.module('auth', 'onboarding', {
                     }
                 }
             }
-            form_data.dids = {};
-            form_data.dids[number] = { e911: form_data.e911 };
+            form_data.phone_numbers = {};
+            form_data.phone_numbers[number] = { e911: form_data.e911 };
 
             delete form_data.e911;
             delete form_data.field_data;
