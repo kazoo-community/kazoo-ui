@@ -12,11 +12,11 @@
                     <input type="password" name="password" id="password" />
                 </li>
 
-                {{if request_realm}}
-                <li>
-                    <label>Domain Name</label>
-                    <input type="text" name="realm" id="realm" class="field_last" />
-                </li>
+                {{if request_account_name}}
+                    <li>
+                        <label>Account Name</label>
+                        <input type="text" name="account_name" id="account_name" value="${account_name}"/>
+                    </li>
                 {{/if}}
             </ul>
 

@@ -170,11 +170,50 @@ winkstart.module('auth', 'auth',
             });
         },
 
-        login: function(args) {
-            var THIS = this;
-            var username = args == undefined ? '' : args.username;
+        get_realm_from_url: function() {
+            var realm = '';
 
-            var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
+            if('realm' in URL_DATA) {
+                realm = URL_DATA['realm'];
+            }
+
+            return realm;
+        },
+
+        get_account_name_from_url: function() {
+            var account_name = '',
+                host,
+                host_parts;
+
+            if('account_name' in URL_DATA) {
+                account_name = URL_DATA['account_name'];
+            }
+            else {
+                host = URL.match(/^(?:http:\/\/)*([^\/]+).*$/)[1];
+                host_parts = host.split('.');
+
+                if(host_parts.slice(1).join('.') == winkstart.config.base_url) {
+                    account_name = host_parts[0];
+                }
+            }
+
+            return account_name;
+        },
+
+        login: function(args) {
+            var THIS = this,
+                username = (typeof args == 'object' && 'username' in args) ? args.username : '',
+                account_name = THIS.get_account_name_from_url(),
+                realm = THIS.get_realm_from_url(),
+                login_html = THIS.templates.login.tmpl({
+                    username: username,
+                    request_account_name: (realm || account_name) ? false : true,
+                    account_name: account_name
+                });
+
+            console.log(realm);
+
+            var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
                 resizable : false,
                 modal: true
@@ -187,32 +226,32 @@ winkstart.module('auth', 'auth',
             $('.login', dialogDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                var hashed_creds = $('#login', dialogDiv).val() + ':' + $('#password', dialogDiv).val();
-                hashed_creds = $.md5(hashed_creds);
+                var login_username = $('#login', dialogDiv).val(),
+                    login_password = $('#password', dialogDiv).val(),
+                    login_account_name = $('#account_name', dialogDiv).val(),
+                    hashed_creds = $.md5(login_username + ':' + login_password),
+                    login_data = {};
 
-                //hash MD5 hashed_creds
-                var realm;
-                if (THIS.request_realm) {
-                    realm = $('#realm', dialogDiv).val();
-                } else {
-                    realm = $('#login', dialogDiv).val() + winkstart.config.realm_suffix;
+                if(realm) {
+                    login_data.realm = realm;
+                }
+                else if(account_name) {
+                    login_data.account_name = account_name;
+                }
+                else if(login_account_name) {
+                    login_data.account_name = login_account_name;
+                }
+                else {
+                    login_data.realm = login_username + winkstart.config.realm_suffix;
                 }
 
-                // If realm was set in the URL, override all
-                if('realm' in URL_DATA) {
-                    realm = URL_DATA['realm'];
-                }
-
-                var rest_data = {
-                    crossbar : true,
-                    api_url : winkstart.apps['auth'].api_url,
-                    data : {
-                        'credentials': hashed_creds,
-                        'realm': realm
-                    }
-                };
-
-                winkstart.putJSON('auth.user_auth', rest_data, function (data, status) {
+                winkstart.putJSON('auth.user_auth', {
+                        api_url: winkstart.apps['auth'].api_url,
+                        data: $.extend(true, {
+                            credentials: hashed_creds
+                        }, login_data)
+                    },
+                    function (data, status) {
                         winkstart.apps['auth'].account_id = data.data.account_id;
                         winkstart.apps['auth'].auth_token = data.auth_token;
                         winkstart.apps['auth'].user_id = data.data.owner_id;
