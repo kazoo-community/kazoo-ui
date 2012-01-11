@@ -222,8 +222,9 @@
     text-align: right;
     width: 140px;
     float: left;
-    /* margin-top: 8px; */
     clear: both;
+    height: 30px;
+    line-height: 30px;
 }
 
 .myform input {
