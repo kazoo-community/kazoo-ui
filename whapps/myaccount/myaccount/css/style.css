@@ -13,6 +13,10 @@
     margin-top: 10px;
 }
 
+#myaccount_popup .myform_myaccount {
+    padding-top: 15px;
+}
+
 #myaccount_popup #tabs .pane {
     background-color: #3D3D3D;
     width: 670px;
@@ -21,6 +25,10 @@
 #myaccount_popup .pane {
     color: #2CB9E1;
     margin: 0px;
+}
+
+#myaccount_popup .popup_buttons_wrapper {
+    margin-top: 10px;
 }
 
 #myaccount_popup ul.settings_tabs {

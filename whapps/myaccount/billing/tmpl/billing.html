@@ -2,13 +2,9 @@
     <div>
         <div class="myaccount_popup">
             <div class="clear" />
-
-
             <div class="popup_bottom">
-
-                <h3>Credit Card Information</h3><div class="cc_icon"></div>
-
-                <form class="stylized myform" name="billing-form" id="billing-form" method="post" action="#">
+                <form class="stylized myform_myaccount" name="billing-form" id="billing-form" method="post" action="#">
+                    <h3>Credit Card Information</h3>
                     <label for="firstname">First Name</label>
                     <input type="text" name="first_name" id="firstname" value="${data.first_name}" /><div class="clear"></div>
 
@@ -102,8 +98,9 @@
                         We do not allow to use credit cards that do not belong to account owners because of the possibility of serious security issues.
                     </p>
                     <div class="clear"></div>
-
-                    <a class="fancy_button block green" id="save-billing" href="#">Save</a>
+                    <div class="popup_buttons_wrapper">
+                        <a class="fancy_button block green" id="save-billing" href="#">Save</a>
+                    </div>
                 </form>
             </div>
             <div class="clear"></div>
