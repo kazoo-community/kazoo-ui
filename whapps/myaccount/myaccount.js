@@ -168,7 +168,6 @@ winkstart.module('myaccount', 'myaccount', {
             popup_html = THIS.templates.myaccount.tmpl({ data: { list_module: THIS.list_submodules } }),
 
             $.each(THIS.list_submodules.list, function(k, v) {
-                console.log(v);
                 var template_data = {
                     data: {
                         key: v,
@@ -191,11 +190,13 @@ winkstart.module('myaccount', 'myaccount', {
             $('#tabs > ul a', popup_html).first().trigger('click');
 
             popup = winkstart.dialog(popup_html, {
-                height: '640',
+                height: 'auto',
+                modal: true,
                 title: 'My account',
                 open: function() {
                     // Gross hack to prevent scroll bar glitch (should be in the css sheet)
                     $(this).css('overflow-x', 'hidden');
+                    $(this).css('max-height', $(document).height()-180);
                 }
             });
         }
