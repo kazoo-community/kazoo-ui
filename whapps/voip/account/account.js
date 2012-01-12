@@ -309,7 +309,9 @@ winkstart.module('voip', 'account', {
             $('.account-delete', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
+                    THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             $('.account-switch', account_html).click(function(ev) {
