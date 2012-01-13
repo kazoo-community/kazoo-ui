@@ -46,10 +46,10 @@
                                 </div>
                                 <div class="first_row">
                                     <div class="third column"><span>Your Extension</span></div>
-                                    <div class="fourth column"><input name="extra.ext1" class="extension_input" type="text" id="extension_1" placeholder="101"/></div>
+                                    <div class="fourth column"><input name="extra.ext1" class="extension_input" type="text" id="extension_1" placeholder="2001"/></div>
                                 </div>
                                 <div class="second_row">
-                                    <div class="third column"><input name="extra.name2"  class="last_name_input" type="text" id="name_2"/></div>
+                                    <div class="third column"><input name="extra.name2"  class="last_name_input" type="text" id="name_2" placeholder="John Doe"/></div>
                                     <div class="fourth column"><input name="extra.ext2" class="extension_input" type="text" id="extension_2"/></div>
                                 </div>
                                 <div class="third_row">
@@ -177,13 +177,8 @@
                     </div>
                     <ul class="controls">
                         <li>
-                            <label>First Name</label>
-                            <input type="text" name="credit_card.first_name" id="first_name"/>
-                        </li>
-
-                        <li>
-                            <label>Last Name</label>
-                            <input type="text" name="credit_card.last_name" id="last_name"/>
+                            <label>Cardholder Name</label>
+                            <input type="text" name="credit_card.cardholder_name" id="cardholder_name"/>
                         </li>
 
                         <li>
@@ -213,7 +208,6 @@
                                 <option value="12">12 - December</option>
                             </select>
                             <select name="extra.expiration_year" id="expiration_year">
-                                <option value="2011">2011</option>
                                 <option value="2012">2012</option>
                                 <option value="2013">2013</option>
                                 <option value="2014">2014</option>
@@ -246,7 +240,7 @@
                         <div id="address_infos">
                             <li>
                                 <label>Pick your country</label>
-                                <select name="credit_card.country" id="country">
+                                <select name="credit_card.billing_address.country" id="country">
                                     <option value="Other">Other country...</option>
                                     <option value="AD"> Andorra</option>
                                     <option value="AR"> Argentina</option>
@@ -315,20 +309,20 @@
                             </li>
                             <li>
                                 <label>Postal Code</label>
-                                <input type="text" name="credit_card.postal_code" id="postal_code" class="field_last" />
+                                <input type="text" name="credit_card.billing_address.postal_code" id="postal_code" class="field_last" />
                             </li>
                             <li>
                                 <label>Address</label>
-                                <input type="text" name="credit_card.address" id="address" value=""/>
+                                <input type="text" name="credit_card.billing_address.street_address" id="address" value=""/>
                             </li>
                             <li>
                                 <label>State</label>
-                                <input type="text" name="credit_card.state" id="state" />
+                                <input type="text" name="credit_card.billing_address.region" id="state" />
                             </li>
 
                             <li>
                                 <label>City</label>
-                                <input type="text" name="credit_card.city" id="city"/>
+                                <input type="text" name="credit_card.billing_address.locality" id="city"/>
                             </li>
                         </div>
                     </ul>

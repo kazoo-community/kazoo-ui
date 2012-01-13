@@ -12,12 +12,14 @@
             'cluster': {
                'label': 'Cluster Manager',
                'icon': 'cluster_manager',
-               'api_url': 'http://apps.2600hz.com:8000/v1'
+               //'api_url': 'http://apps.2600hz.com:8000/v1'
+               'api_url': 'http://192.168.5.157:8000/v1'
             },
             'voip': {
                 'label': 'Trial PBX',
-                'icon': 'phone',
-                'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                'icon': 'voip_services',
+                //'api_url': 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                'api_url': 'http://192.168.5.157:8000/v1'
             }
         },
 

@@ -28,8 +28,7 @@ winkstart.module('auth', 'onboarding', {
                 { name: '#e911_postal_code', regex: /^[0-9\-]{4,10}$/ }
             ],
             step2: [
-                { name: '#first_name',       regex: /^[a-zA-Z\s\-\']+$/ },
-                { name: '#last_name',        regex: /^[a-zA-Z\s\-\']+$/ },
+                { name: '#cardholder_name',  regex: /^[a-zA-Z\s\-\']+$/ },
                 { name: '#card_number',      regex: /^[0-9]{10,22}$/ },
                 { name: '#cvv',              regex: /^[0-9]{2,6}$/ },
                 { name: '#address',          regex: /^.+$/ },
@@ -43,13 +42,18 @@ winkstart.module('auth', 'onboarding', {
                 { name: '#verify_password',  regex: /^.{3,16}$/ },
                 { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
                 { name: '#company_name',     regex: /^.*$/ },
-                { name: '#name',     regex: /^.*$/ }
+                { name: '#name',             regex: /^.*$/ }
             ],
         },
 
         resources: {
-            'device.list': {
-                url: '{api_url}/accounts/{account_id}/devices',
+            'onboard.create': {
+                url: 'http://192.168.5.157:8000/v1/onboard',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'phone_number.get': {
+                url: 'http://192.168.5.157:8000/v1/phone_numbers?prefix={prefix}&quantity={quantity}',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -64,50 +68,32 @@ winkstart.module('auth', 'onboarding', {
 
     {
         clean_form_data: function(form_data, target) {
-            var number = "+1" + form_data.extra.number.replace(/-/g,"")
+            var number = form_data.extra.number,
+                credentials = $.md5(form_data.extra.email + ':' + form_data.extra.password),
+                split = form_data.extra.name.split(' '),
+                first_name = split[0],
+                last_name = split [1],
+                extension;
 
-            if(form_data.extra.credit_card_country_other != "") {
-                form_data.credit_card.country = form_data.extra.credit_card_country_other;
+            if(form_data.extra.credit_card_country_other != '') {
+                form_data.credit_card.billing_address.country = form_data.extra.credit_card_country_other;
             }
 
-            if(form_data.extra.e911_country_other != "") {
-                form_data.e911.country = form_data.extra.credit_card_country_other;
+            if(form_data.extra.e911_country_other != '') {
+                form_data.e911.country = form_data.extra.e911_country_other;
             }
 
-            form_data.credit_card.expiration_date = form_data.extra.expiration_month +"/"+ form_data.extra.expiration_year;
+            form_data.credit_card.expiration_date = form_data.extra.expiration_month + '/' + form_data.extra.expiration_year;
 
             form_data.extensions = [
                 {
                     user: {
-                        credentials: $.md5(form_data.extra.login + ':' + form_data.extra.password),
-                        priv_level: 'admin',
-                        first_name: form_data.credit_card.last_name,
-                        last_name: form_data.credit_card.last_name,
-                        email: form_data.extra.email
-                    },
-                    callflow: {
-                        numbers: [ number ]
-                    }
-                }
-            ]
-
-            var first_name,
-                last_name,
-                extension,
-                split;
-
-            split = form_data.extra.name.split(' ');
-            first_name = split[0];
-            last_name = split[1];
-
-            form_data.extensions = [
-                {
-                    user: {
-                        credentials: $.md5(form_data.extra.login + ':' + form_data.extra.password),
+                        credentials: credentials,
                         priv_level: 'admin',
                         first_name: first_name,
                         last_name: last_name,
-                        email: form_data.extra.email
+                        email: form_data.extra.email,
+                        apps: winkstart.config.register_apps
                     },
                     callflow: {
                         numbers: [ number ]
@@ -139,6 +125,7 @@ winkstart.module('auth', 'onboarding', {
                     }
                 }
             }
+
             form_data.phone_numbers = {};
             form_data.phone_numbers[number] = { e911: form_data.e911 };
 
@@ -154,7 +141,13 @@ winkstart.module('auth', 'onboarding', {
                 onboard_html = THIS.templates.onboarding.tmpl({}),
                 steps = $(onboard_html).find("fieldset"),
                 count = steps.size(),
-                number = '';
+                area_code = '',
+                prev_area_code,
+                quantity = 15,
+                nb_result,
+                random = 0,
+                prev_random,
+                list_number;
 
             winkstart.validate.set(THIS.config.validation['step0'], onboard_html);
             winkstart.validate.set(THIS.config.validation['step1'], onboard_html);
@@ -184,22 +177,50 @@ winkstart.module('auth', 'onboarding', {
             $('#change_number', onboard_html).click(function() {
                 winkstart.validate.is_valid(THIS.config.validation['step0'], onboard_html, function() {
                         //TODO: Call API to retrieve number instead of this crap :D
-                        number = $('#area_code', onboard_html).val();
-                        for(var i = 0; i < 9; i++) {
-                            if(i == 0 || i == 4) {
-                                number += '-';
+                        area_code = $('#area_code', onboard_html).val();
+
+                        //If the list of number is empty or the area code changed.
+                        if(!list_number || prev_area_code != area_code) {
+                            winkstart.request(true, 'phone_number.get', {
+                                    //api_url: winkstart.apps['auth'].api_url,
+                                    prefix: area_code,
+                                    quantity: quantity
+                                },
+                                function(_data, status) {
+                                    if(_data.data.length > 0) {
+                                        nb_result = _data.data.length;
+                                        list_number = _data.data;
+                                        prev_random = 0;
+                                        prev_area_code = area_code;
+                                        number = list_number[0];
+                                        $('#picked_number', onboard_html).html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                                        $('#change_number', onboard_html).html('I don\'t like this number!');
+                                        $('#picked_number_li', onboard_html).show();
+                                        $('#li_number_for', onboard_html).show();
+                                    }
+                                    else {
+                                        winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
+                                    }
+                                }
+                            );
+                        }
+                        else {
+                            if(nb_result > 1) {
+                                random = Math.floor(Math.random()*nb_result);
+                                random == prev_random ? (random != 0 ? random-- : random++) : true;
+                                prev_random = random;
+                                number = list_number[random];
+                                $('#picked_number', onboard_html).html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                                $('#change_number', onboard_html).html('I don\'t like this number!');
+                                $('#picked_number_li', onboard_html).show();
+                                $('#li_number_for', onboard_html).show();
                             }
                             else {
-                                number += Math.floor(Math.random()*10);
+                                winkstart.alert('This number is the only number available for this Area Code at the moment');
                             }
                         }
-                        $('#picked_number', onboard_html).html(number);
-                        $('#change_number', onboard_html).html('I don\'t like this number!');
-                        $('#picked_number_li', onboard_html).show();
-                        $('#li_number_for', onboard_html).show();
                     },
                     function() {
-                        //alert('You need to input a valid area code (eg: 415, 508, ...)');
                         winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
                     }
                 );
@@ -210,7 +231,6 @@ winkstart.module('auth', 'onboarding', {
                 $('#single_phone_div', onboard_html).hide();
                 $('#reseller_div', onboard_html).hide();
                 $('#api_tester_div', onboard_html).hide();
-                console.log($(this).val());
                 switch($(this).val()) {
                     case 'single_phone':
                         break;
@@ -260,7 +280,7 @@ winkstart.module('auth', 'onboarding', {
                                     break;
 
                                 case 1:
-                                    $('#first_name', onboard_html).focus();
+                                    $('#cardholder_name', onboard_html).focus();
                                     $('#address', onboard_html).val($('#e911_address', onboard_html).val());
                                     $('#country', onboard_html).val($('#e911_country', onboard_html).val());
                                     $('#state', onboard_html).val($('#e911_state', onboard_html).val());
@@ -364,18 +384,16 @@ winkstart.module('auth', 'onboarding', {
 
                         THIS.clean_form_data(form_data, onboard_html);
 
-                        console.log(JSON.stringify(form_data));
+                        //console.log(JSON.stringify(form_data));
                         console.log(form_data);
-                        /*winkstart.request(true, 'onboarding.create', {
-                                account_id: winkstart.apps['auth'].account_id,
-                                api_url: winkstart.apps['auth'].api_url,
+                        winkstart.request(true, 'onboard.create', {
                                 data: form_data
                             },
                             function (_data, status) {
                             },
                             function(_data, status) {
                             }
-                        );*/
+                        );
                     },
                     function() {
                         winkstart.alert('You can\'t finish the setup because you inputted invalid values in the form.');
