@@ -33,7 +33,8 @@
 
     winkstart.apps = {
         'auth' : {   // This is our global/failback auth mechanism
-            'api_url': 'http://apps.2600hz.com:8000/v1',
+            //'api_url': 'http://apps.2600hz.com:8000/v1',
+            'api_url': 'http://192.168.5.157:8000/v1',
             'label': 'Login',
             'icon': 'user',
             'realm': null,
@@ -42,7 +43,8 @@
             'user_id': null
         },
         'myaccount': {
-            'api_url': 'http://apps.2600hz.com:8000/v1'
+            'api_url': 'http://192.168.5.157:8000/v1'
+            //'api_url': 'http://apps.2600hz.com:8000/v1'
         }
     };
 
