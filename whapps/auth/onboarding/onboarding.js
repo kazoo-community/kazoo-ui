@@ -61,7 +61,7 @@ winkstart.module('auth', 'onboarding', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            'phone_number.replace': {
+            'phone_number.create': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{number}',
                 contentType: 'application/json',
                 verb: 'PUT'
@@ -81,6 +81,8 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
+        global_used_number: '',
+
         move_to_tab: function(tab_number, text) {
             $('#step0, #step1, #step2, #steps').hide();
             $('#step' + tab_number).show();
@@ -93,46 +95,77 @@ winkstart.module('auth', 'onboarding', {
 
         error_braintree: function(errors, callbacks) {
             var THIS = this;
+
             THIS.move_to_tab(1, 'Credit Card Information');
 
+            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors.message);
+
             $('#save_account').click(function() {
-                //validate braintree
-                //request braintree
-                var form_data = form2object('fast_onboarding_form');
+                winkstart.validate.is_valid(THIS.config.validation['step1'], onboard_html, function() {
+                        //validate braintree
+                        var form_data = form2object('fast_onboarding_form');
 
-                THIS.clean_form_data(form_data);
+                        THIS.clean_form_data(form_data);
 
-                winkstart.request(true, 'braintree.create', {
-                        api_url: winkstart.apps['auth'].api_url,
-                        account_id: winkstart.apps['auth'].account_id,
-                        data: form_data.braintree
+                        winkstart.request(true, 'braintree.create', {
+                                api_url: winkstart.apps['auth'].api_url,
+                                account_id: winkstart.apps['auth'].account_id,
+                                data: form_data.braintree
+                            },
+                            function (_data, status) {
+                                if(callbacks.length > 0) {
+                                    var fn = callbacks.splice(0,1);
+                                    fn[0]();
+                                }
+                            },
+                            function (_data, status) {
+                                winkstart.alert('error', _data.data.message);
+                            }
+                        );
                     },
-                    function (_data, status) {
-                        if(callbacks.length > 0) {
-                            var fn = callbacks.splice(0,1);
-                            fn[0]();
-                        }
-                    },
-                    function (_data, status) {
-                        winkstart.alert('error', _data.data.message);
+                    function() {
+                        winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
                     }
                 );
             });
-
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors.message);
         },
 
         error_phone_numbers: function(errors, callbacks) {
-            var THIS = this;
+            var THIS = this,
+                replaces;
             THIS.move_to_tab(0, 'Phone number and e911 Information');
 
             $('#save_account').click(function() {
-                //validate phone_numbers
-                //request to phone_numbers
-                if(callbacks.length > 0) {
-                    var fn = callbacks.splice(0,1);
-                    fn[0]();
-                }
+                winkstart.validate.is_valid(THIS.config.validation['step0'], function() {
+                        var form_data = form2object('fast_onboarding_form');
+
+                        THIS.clean_form_data(form_data);
+
+                        form_data.number = $('#picked_number').html().replace(/\-\+\(\)\s/g,'');
+
+                        form_data.phone_numbers[form_data.number].replaces = global_used_number;
+
+                        winkstart.request(true, 'phone_number.create', {
+                                api_url: winkstart.apps['auth'].api_url,
+                                account_id: winkstart.apps['auth'].account_id,
+                                number: form_data.number,
+                                data: form_data.phone_numbers[0]
+                            },
+                            function (_data, status) {
+                                if(callbacks.length > 0) {
+                                    var fn = callbacks.splice(0,1);
+                                    fn[0]();
+                                }
+                            },
+                            function (_data, status) {
+                                winkstart.alert('error', _data.data.message);
+                            }
+                        );
+                    },
+                    function() {
+                        winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
+                    }
+                );
             });
 
             winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors.message);
@@ -272,6 +305,7 @@ winkstart.module('auth', 'onboarding', {
             $('#area_code', onboard_html).focus();
 
             $('#change_number', onboard_html).click(function() {
+
                 area_code = $('#area_code', onboard_html).val();
 
                 if(area_code.match(/[0-9]{3}/)) {
@@ -480,6 +514,8 @@ winkstart.module('auth', 'onboarding', {
                                     winkstart.apps['auth'].user_id = _data.data.owner_id;
                                     winkstart.apps['auth'].account_id = _data.data.account_id;
                                     winkstart.apps['auth'].auth_token = _data.data.auth_token;
+
+                                    global_used_number = number;
 
                                     var success = function() {
                                         $('#ws-content').empty();
