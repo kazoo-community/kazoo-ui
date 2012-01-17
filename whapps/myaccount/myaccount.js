@@ -1,16 +1,20 @@
-winkstart.module('voip', 'voip', {
-        css: {
-            voip: 'voip.css'
-        },
+winkstart.module('myaccount', 'myaccount', {
+        css: [
+            'css/style.css',
+            'css/popups.css'
+        ],
 
         templates: {
-            voip: 'voip.html'
+            myaccount: 'tmpl/myaccount.html',
+            tab_module: 'tmpl/tab_module.html'
         },
 
         subscribe: {
-            'voip.activate' : 'activate',
-            'voip.initialized' : 'initialized',
-            'voip.module_activate': 'module_activate'
+            'myaccount.activate' : 'activate',
+            'myaccount.initialized' : 'initialized',
+            'myaccount.module_activate': 'module_activate',
+            'myaccount.display': 'render_myaccount',
+            'nav.my_account_click': 'my_account_click'
         }
     },
 
@@ -36,36 +40,21 @@ winkstart.module('voip', 'voip', {
         }
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
-
-        THIS.whapp_auth(function() {
-            winkstart.publish('appnav.add', {
-                name: THIS.__module,
-                columns: 2
-            });
-        });
-
-        THIS._bootstrap();
     },
     {
+        list_submodules: {
+            list: []
+        },
+
         /* A modules object is required for the loading routine.
          * The format is as follows:
          * <module name>: <initialization status>
          */
         modules: {
-            'account': false,
-            'media': false,
-            'device': false,
-            'callflow': false,
-            'conference': false,
-            'user': false,
-            'vmbox': false,
-            'menu': false,
-            'registration': false,
-            'resource': false,
-            'timeofday': false,
-            'featurecode': false
+            'app_store': false,
+            'billing': false,
+            'personal_info': false
         },
-
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
          * into other whapps.
@@ -81,7 +70,9 @@ winkstart.module('voip', 'voip', {
 
             THIS.is_initialized = true;
 
-            winkstart.publish('subnav.show', THIS.__module);
+            winkstart.publish('myaccount.define_submodules', THIS.list_submodules);
+
+            THIS.list_submodules.list.sort();
 
             THIS.setup_page();
         },
@@ -157,76 +148,57 @@ winkstart.module('voip', 'voip', {
         setup_page: function() {
             var THIS = this;
 
-            $('#ws-content').empty();
-            THIS.templates.voip.tmpl({}).appendTo( $('#ws-content') );
-
-            $('#cur_api_url').append('You are currently using the API on: <b>'+ winkstart.apps['voip'].api_url +'</b>');
-
-            // Link the main buttons
-            $('.options #users').click(function() {
-                winkstart.publish('user.activate');
-            });
-
-            $('.options #devices').click(function() {
-                winkstart.publish('device.activate');
-            });
-
-            $('.options #users').click(function() {
-                winkstart.publish('user.activate');
-            });
-
-            $('.options #auto_attendant').click(function() {
-                winkstart.publish('menu.activate');
-            });
-
-            $('.options #ring_groups').click(function() {
-                winkstart.publish('callflow.activate');
-            });
-
-            $('.options #conferences').click(function() {
-                winkstart.publish('conference.activate');
-            });
-
-            $('.options #registrations').click(function() {
-                winkstart.publish('registration.activate');
-            });
-
-            $('.options #stats').click(function() {
-                winkstart.publish('stats.activate');
-            });
-
-            $('.options #time_of_day').click(function() {
-                winkstart.publish('timeofday.activate');
-            });
+            winkstart.publish('myaccount.display');
         },
 
-        _bootstrap: function() {
-            var a=36,
-                c=[38,38,40,40,37,39,37,39,66,65,13],
-                d=0,
-                e=c.length,
-                f=(49992748).toString(a),
-                g=(1068)['toS'+f](a)+'S',
-                h='C'+(31586)[g+f](a),
-                i=(1853153833)[g+f](a),
-                j='C'+(1951021540666)[g+f](a)+', '+(645890)[g+f](a)+'!',
-                k=(26458)[g+f](a),
-                l=(1011480)[g+f](a),
-                m=(24136)[g+f](a),
-                n='.'+l+' .'+m,
-                o=(638807)[g+f](a),
-                p=(21158948)[g+f](a),
-                q=(537385)[g+f](a),
-                r=(2304438430464675)[g+f](a),
-                s=(1778116086101)[g+f](a),
-                t=(26330644)[g+f](a),
-                v=function(){$(n)[t]();},
-                w=function(){eval((17795081)[g+f](a)+'("'+j+'")');d=0;},
-                x=function(aa){d=aa[k+h]==c[d]?d+1:0;d==e?w():0},
-                y=function(){($(this)[q](k+o,x))[q](p,v);},
-                z=function(){($(this)[i](k+o,x))[i](p,v);};
+        my_account_click: function() {
+            winkstart.publish('myaccount.activate');
+        },
 
-            ($(n)[q](r,y))[q](s,z);
+        render_myaccount: function() {
+            var THIS = this,
+                popup;
+
+            var template_data = {
+                data: {
+                    list_module: THIS.list_submodules
+                }
+            };
+
+            popup_html = THIS.templates.myaccount.tmpl({ data: { list_module: THIS.list_submodules } }),
+
+            $.each(THIS.list_submodules.list, function(k, v) {
+                var template_data = {
+                    data: {
+                        key: v,
+                        display_name: THIS.list_submodules[v].display_name
+                    }
+                }
+
+                $('.settings_tabs', popup_html).append(THIS.templates.tab_module.tmpl(template_data));
+            });
+
+            $('#tabs > ul a', popup_html).click(function(ev) {
+                ev.preventDefault();
+
+                $('#tabs > ul a').removeClass('current');
+                $(this).addClass('current');
+
+                winkstart.publish($(this).dataset('submodule') + '.activate', { target: $('#content', popup_html) });
+            });
+
+            $('#tabs > ul a', popup_html).first().trigger('click');
+
+            popup = winkstart.dialog(popup_html, {
+                height: 'auto',
+                modal: true,
+                title: 'My account',
+                open: function() {
+                    // Gross hack to prevent scroll bar glitch (should be in the css sheet)
+                    $(this).css('overflow-x', 'hidden');
+                    $(this).css('max-height', $(document).height()-180);
+                }
+            });
         }
     }
 );

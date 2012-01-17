@@ -3,17 +3,20 @@
     <head>
         <!-- Awesome URL Parsing -->
         <script type="text/javascript">
-            var URL_DATA = {},
-                URL_STRINGS = window.location.href.match(/^([^\?#]+)[\?#]*([^#]*).*$/),
-                URL = URL_STRINGS[1],
-                URL_DATA_STRINGS = (URL_STRINGS[2]) ? URL_STRINGS[2].split('&') : [],
-                DATA,
-                i;
+            var URL_PARTS = window.location.href.match(/^([^\?#]+)[\?#]*([^#]*).*$/).slice(1),
+                URL = URL_PARTS[0],
+                URL_DATA = function() {
+                    var url_data_parts = (URL_PARTS[1]) ? URL_PARTS[1].split('&') : [],
+                        url_data = {},
+                        data;
 
-            for(i = 0; i < URL_DATA_STRINGS.length; i++) {
-                DATA = URL_DATA_STRINGS[i].split('=');
-                URL_DATA[DATA[0]] = DATA[1];
-            }
+                    for(var i = 0; i < url_data_parts.length; i++) {
+                        data = url_data_parts[i].split('=');
+                        url_data[data[0]] = data[1];
+                    }
+
+                    return url_data;
+                }();
         </script>
 
         <link type="text/css" href="css/base.css" rel="stylesheet" media="screen" />
@@ -52,6 +55,7 @@
         <script type="text/javascript" src="js/external/lab.js"></script>
         <script type="text/javascript" src="js/external/jquery.tooltip.js"></script>
         <script type="text/javascript" src="js/external/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/external/jquery.masonry.min.js"></script>
 
         <script type="text/javascript" src="js/amplify/_amplify.js"></script>
         <script>var _amplify = amplify;</script>

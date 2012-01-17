@@ -8,7 +8,7 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 {{if data.id}}
-                    <li><a href="#">Troubleshooting</a></li>
+                    <!--<li><a href="#">Troubleshooting</a></li>-->
                 {{/if}}
             </ul>
 
@@ -48,16 +48,17 @@
                                     <label for="mac_address">Device MAC Address:</label>
                                 </span>
                                 <input id="mac_address" placeholder="01:23:45:67:89:AB" name="mac_address" type="text" value="${data.mac_address}" />
+                                <span class="provisioner"></span>
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Do you want this device enabled?">
                                     <span class="tooltip"/>
-                                    <label for="status">Enabled:</label>
+                                    <label for="enabled">Enabled:</label>
                                 </span>
-                                {{if data.status == true}}
-                                    <input type="checkbox" id="status" name="status" checked="checked"/>
+                                {{if data.enabled == true}}
+                                    <input type="checkbox" id="enabled" name="enabled" checked="checked"/>
                                 {{else}}
-                                    <input type="checkbox" id="status" name="status"/>
+                                    <input type="checkbox" id="enabled" name="enabled"/>
                                 {{/if}}
                             </li>
                         </ul>
@@ -164,11 +165,11 @@
                         <legend>SIP Settings</legend>
                         <ul class="controls">
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Input you're SIP Realm (Domain Name)">
+                                <span class="tooltip-wrapper" tooltip="Your SIP Realm">
                                     <span class="tooltip"/>
-                                    <label for="sip_realm">Realm / Domain Name:</label>
+                                    <label for="sip_realm">Realm:</label>
                                 </span>
-                                <input id="sip_realm" name="sip.realm" type="text"  value="${data.sip.realm}" />
+                                <span><b>${field_data.sip.realm}</b></span>
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Select your authentication method">

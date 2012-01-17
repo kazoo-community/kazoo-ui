@@ -19,7 +19,8 @@ winkstart.module('auth', 'auth',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
-            'auth.save_registration' : 'save_registration'
+            'auth.save_registration' : 'save_registration',
+            'nav.my_logout_click': 'my_logout_click'
         },
 
         validation: [
@@ -177,6 +178,10 @@ winkstart.module('auth', 'auth',
             });
         },
 
+        my_logout_click: function() {
+            winkstart.publish('auth.activate');
+        },
+
         login: function(args) {
             var THIS = this;
             var username = args == undefined ? '' : args.username;
@@ -272,7 +277,7 @@ winkstart.module('auth', 'auth',
             }
 
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                $('.universal_nav #my_logout').html("Logout");
+                $('.universal_nav #my_logout').html('Logout');
                 $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
                 $('.universal_nav #my_account').html(json.data.first_name + ' ' + json.data.last_name);
 
@@ -302,8 +307,7 @@ winkstart.module('auth', 'auth',
         shared_auth: function(args) {
             var THIS = this;
 
-            rest_data = {
-                crossbar : true,
+            var rest_data = {
                 api_url : winkstart.apps[args.app_name].api_url,
                 data: {
                     realm : winkstart.apps['auth'].realm,                     // Treat auth as global
@@ -312,14 +316,14 @@ winkstart.module('auth', 'auth',
                 }
             };
 
-            get_user_fn = function(auth_token, app_name, callback) {
+            var get_user_fn = function(auth_token, app_name, callback) {
                 var options = {
-                    crossbar: true,
                     account_id: winkstart.apps['auth'].account_id,
                     api_url : winkstart.apps['auth'].api_url,
                     user_id: winkstart.apps['auth'].user_id
                 };
 
+                winkstart.apps[app_name] = $.extend(true, {}, options, winkstart.apps[app_name]);
                 winkstart.apps[app_name]['auth_token'] = auth_token;
 
                 winkstart.getJSON('auth.get_user', options, function(json, xhr) {
@@ -331,7 +335,7 @@ winkstart.module('auth', 'auth',
                         callback();
                     }
                 });
-            }
+            };
 
             if(winkstart.apps['auth'].api_url != winkstart.apps[args.app_name].api_url) {
                 winkstart.putJSON('auth.shared_auth', rest_data, function (json, xhr) {

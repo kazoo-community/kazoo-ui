@@ -38,11 +38,14 @@
             'account_id': null,
             'auth_token': null,
             'user_id': null
+        },
+        'myaccount': {
+            'api_url': 'http://apps.2600hz.com:8000/v1'
         }
     };
 
     amplify.cache = false;
-    
+
     document.title = "2600hz WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

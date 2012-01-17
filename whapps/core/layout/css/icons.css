@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : icons
     Created on : Jun 6, 2011, 7:19:19 AM
     Author     : Darren Schreiber
@@ -81,7 +81,7 @@
 }
 
 .icon.cluster_manager { /* 23, 0 */
-    background-position: -736px 0px;
+    background-position: -730px 0px;
 }
 
 .icon.connectivity { /* 8, 13 */
@@ -169,7 +169,7 @@
 
 /************** ICONS ************/
 .icon.phone {
-    background-position: -512px -163px;
+    background-position: -507px -161px;
 }
 
 .icon.active_phone {
@@ -237,7 +237,7 @@
 }
 
 .icon.location {
-    background-position: -32px -260px;
+    background-position: -24px -255px;
 }
 
 .icon.limit {

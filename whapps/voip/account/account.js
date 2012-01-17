@@ -16,9 +16,9 @@ winkstart.module('voip', 'account', {
         validation: [
                 { name: '#name',                       regex: /^.+$/ },
                 { name: '#realm',                      regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-                { name: '#caller_id_name_external',    regex: /^.*$/ },
+                { name: '#caller_id_name_external',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_external',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',    regex: /^.*$/ },
+                { name: '#caller_id_name_internal',    regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#vm_to_email_support_number', regex: /^[\+]?[0-9]*$/ },
                 { name: '#vm_to_email_support_email',  regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
@@ -309,7 +309,9 @@ winkstart.module('voip', 'account', {
             $('.account-delete', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
+                    THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             $('.account-switch', account_html).click(function(ev) {
