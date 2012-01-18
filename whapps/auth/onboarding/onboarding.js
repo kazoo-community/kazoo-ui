@@ -84,25 +84,32 @@ winkstart.module('auth', 'onboarding', {
         global_used_number: '',
 
         move_to_tab: function(tab_number, text) {
-            $('#step0, #step1, #step2, #steps').hide();
-            $('#step' + tab_number).show();
+            var wrapper = $('#onboarding-view');
 
-            $('.next, .prev').unbind('click').hide();
-            $('#save_account').unbind('click').show();
+            $('#step0, #step1, #step2, #steps', wrapper).hide();
+            $('#step' + tab_number, wrapper).show();
 
-            $('.onboarding_title_text').html(text);
+            $('.next, .prev', wrapper).unbind('click').hide();
+            $('#save_account', wrapper).unbind('click').show();
+
+            $('.onboarding_title_text', wrapper).html(text);
         },
 
         error_braintree: function(errors, callbacks) {
-            var THIS = this;
+            var THIS = this,
+                wrapper = $('#onboarding-view'),
+                error_message = 'Please correct the following errors:<br/>';
 
             THIS.move_to_tab(1, 'Credit Card Information');
 
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors.message);
+            $.each(errors.data.errors, function() {
+                error_message += 'Error ' + this.code + ': ' + this.message + '<br/>';
+            });
 
-            $('#save_account').click(function() {
-                winkstart.validate.is_valid(THIS.config.validation['step1'], onboard_html, function() {
-                        //validate braintree
+            winkstart.alert('error', error_message);
+
+            $('#save_account', wrapper).click(function() {
+                winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
                         var form_data = form2object('fast_onboarding_form');
 
                         THIS.clean_form_data(form_data);
@@ -119,7 +126,11 @@ winkstart.module('auth', 'onboarding', {
                                 }
                             },
                             function (_data, status) {
-                                winkstart.alert('error', _data.data.message);
+                                error_message = 'Please correct the following errors:<br/>';
+                                $.each(_data.data.errors, function() {
+                                    error_message += 'Error ' + this.code + ': ' + this.message + '<br/>';
+                                });
+                                winkstart.alert('error', error_message);
                             }
                         );
                     },
@@ -132,24 +143,29 @@ winkstart.module('auth', 'onboarding', {
 
         error_phone_numbers: function(errors, callbacks) {
             var THIS = this,
-                replaces;
+                replaces,
+                wrapper = $('#onboarding-view');
+
             THIS.move_to_tab(0, 'Phone number and e911 Information');
 
-            $('#save_account').click(function() {
+            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[global_used_number].message);
+
+            $('#save_account', wrapper).click(function() {
                 winkstart.validate.is_valid(THIS.config.validation['step0'], function() {
                         var form_data = form2object('fast_onboarding_form');
 
+                        form_data.extra.number = $('#picked_number', wrapper).html().replace(/\s|\-|\(|\)/g,'');
+                        number = form_data.extra.number;
+
                         THIS.clean_form_data(form_data);
 
-                        form_data.number = $('#picked_number').html().replace(/\-\+\(\)\s/g,'');
-
-                        form_data.phone_numbers[form_data.number].replaces = global_used_number;
+                        form_data.phone_numbers[number].replaces = global_used_number;
 
                         winkstart.request(true, 'phone_number.create', {
                                 api_url: winkstart.apps['auth'].api_url,
                                 account_id: winkstart.apps['auth'].account_id,
-                                number: form_data.number,
-                                data: form_data.phone_numbers[0]
+                                number: number,
+                                data: form_data.phone_numbers[number]
                             },
                             function (_data, status) {
                                 if(callbacks.length > 0) {
@@ -167,8 +183,6 @@ winkstart.module('auth', 'onboarding', {
                     }
                 );
             });
-
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors.message);
         },
 
         parse_username: function(username) {
@@ -188,6 +202,7 @@ winkstart.module('auth', 'onboarding', {
             return response;
         },
 
+        //Transform the data from the form2object method to the data object expected by the onboarding API
         clean_form_data: function(form_data, target) {
             var THIS = this,
                 number = form_data.extra.number,
@@ -300,6 +315,7 @@ winkstart.module('auth', 'onboarding', {
             $('#e911_block', onboard_html).hide();
             $('#address_infos', onboard_html).hide();
             $('#e911_country_block', onboard_html).hide();
+            $('.next', onboard_html).hide();
             $('#e911_country', onboard_html).attr('disabled','disabled');
             $('#country', onboard_html).attr('disabled','disabled');
             $('#area_code', onboard_html).focus();
@@ -307,9 +323,19 @@ winkstart.module('auth', 'onboarding', {
             $('#change_number', onboard_html).click(function() {
 
                 area_code = $('#area_code', onboard_html).val();
+                $('.next', onboard_html).hide();
+                $('#e911_block', onboard_html).hide();
+                $('#picked_number', onboard_html).hide();
 
                 if(area_code.match(/[0-9]{3}/)) {
-                    //If the list of number is empty or the area code changed.
+                    var display_fields = function() {
+                        $('#change_number', onboard_html).html('I don\'t like this number!');
+                        $('#picked_number_li', onboard_html).show();
+                        $('#e911_block', onboard_html).show();
+                        $('.next', onboard_html).show();
+                    };
+
+                    //If the list of number is empty or the area code changed, then re-run the request.
                     if(!list_number || prev_area_code != area_code) {
                         winkstart.request(true, 'phone_number.get', {
                                 api_url: winkstart.apps['auth'].api_url,
@@ -323,10 +349,9 @@ winkstart.module('auth', 'onboarding', {
                                     prev_random = 0;
                                     prev_area_code = area_code;
                                     number = list_number[0];
-                                    $('#picked_number', onboard_html).html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                                    $('#change_number', onboard_html).html('I don\'t like this number!');
-                                    $('#picked_number_li', onboard_html).show();
-                                    $('#e911_block', onboard_html).show();
+                                    $('#picked_number', onboard_html).show()
+                                                                     .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                                    display_fields();
                                 }
                                 else {
                                     winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
@@ -340,9 +365,9 @@ winkstart.module('auth', 'onboarding', {
                             random == prev_random ? (random != 0 ? random-- : random++) : true;
                             prev_random = random;
                             number = list_number[random];
-                            $('#picked_number', onboard_html).html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                            $('#change_number', onboard_html).html('I don\'t like this number!');
-                            $('#picked_number_li', onboard_html).show();
+                            $('#picked_number', onboard_html).show()
+                                                             .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
+                            display_fields();
                         }
                         else {
                             winkstart.alert('This number is the only number available for this Area Code at the moment');
@@ -359,13 +384,13 @@ winkstart.module('auth', 'onboarding', {
                 $('#single_phone_div', onboard_html).hide();
                 $('#reseller_div', onboard_html).hide();
                 $('#api_tester_div', onboard_html).hide();
+
                 switch($(this).val()) {
                     case 'single_phone':
                         break;
 
                     case 'small_office':
                         $('#small_office_div', onboard_html).slideDown('show');
-
                         break;
 
                     case 'reseller':
@@ -384,15 +409,15 @@ winkstart.module('auth', 'onboarding', {
                     winkstart.validate.is_valid(THIS.config.validation['step'+i], onboard_html, function() {
                             var stepName = 'step' + i;
 
-                            $('#' + stepName).hide();
-                            $('#step' + (parseInt(i) + 1)).show();
+                            $('#' + stepName, onboard_html).hide();
+                            $('#step' + (parseInt(i) + 1), onboard_html).show();
 
                             if(i + 2 == count) {
                                 $('#save_account', onboard_html).show();
                             }
 
-                            $('#steps li').removeClass('current');
-                            $('#stepDesc' + (parseInt(i)+1)).addClass('current');
+                            $('#steps li', onboard_html).removeClass('current');
+                            $('#stepDesc' + (parseInt(i)+1), onboard_html).addClass('current');
 
                             switch(i) {
                                 case 0:
@@ -542,12 +567,10 @@ winkstart.module('auth', 'onboarding', {
                                         callback_fn[0]();
                                     }
                                     else {
-                                        //final success
                                         success();
                                     }
                                 }
                                 else {
-                                    //gotostep1
                                     winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
                                 }
                             },
