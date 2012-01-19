@@ -136,10 +136,14 @@
 /*************** POPUP REGISTER *****************/
 /* ----------- My Form ----------- */
 
-.ui-dialog { margin-bottom: 25px; }
+.inline_popup {
+    background: #575757;
+    background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#888888));
+    background: -moz-linear-gradient(top,  #333333,  #888888);
+    padding-bottom: 10px;
+}
 
 .ui-dialog .ui-dialog-titlebar {
-    /*background: url(../images/titlebar.png) repeat-x scroll 50% 50% #6B6B6B;*/
     color: #FFF;
     font-weight: bold;
     height: 22px;
