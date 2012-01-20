@@ -1,7 +1,9 @@
 #two_columns .wrapper {
     clear: left;
     width: 420px;
+    padding: 10px;
 }
+
 #two_columns .wrapper_form {
     margin-top: 20px;
     margin-left: 40px;
@@ -47,10 +49,6 @@
     overflow: auto;
 }
 
-#two_columns .wrapper {
-    background-color: #808080;
-}
-
 #two_columns .wrapper li {
     list-style-type: none;
     background-color: #808080;
@@ -63,6 +61,7 @@
     list-style-type: none;
     overflow: hidden;
     position: relative;
+    cursor: default;
 }
 
 #two_columns .item_name {

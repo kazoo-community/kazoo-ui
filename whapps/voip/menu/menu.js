@@ -477,7 +477,7 @@ winkstart.module('voip', 'menu', {
                             selected: child_node.key
                         });
 
-                        $('.submit_btn', popup_html).click(function() {
+                        $('#add', popup_html).click(function() {
                             child_node.key = $('#menu_key_selector', popup).val();
 
                             child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
@@ -487,6 +487,7 @@ winkstart.module('voip', 'menu', {
 
                         popup = winkstart.dialog(popup_html, {
                             title: 'Menu Option',
+                            minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                     callback();
@@ -533,7 +534,7 @@ winkstart.module('voip', 'menu', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#menu_selector', popup).val());
 
                                     node.caption = $('#menu_selector option:selected', popup).text();
@@ -543,6 +544,7 @@ winkstart.module('voip', 'menu', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Menu',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

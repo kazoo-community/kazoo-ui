@@ -104,7 +104,7 @@ winkstart.module('voip', 'device', {
             var THIS = this,
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
                 normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
-                    
+
             if(id) {
                 winkstart.request(true, 'device.update', {
                         account_id: winkstart.apps['voip'].account_id,
@@ -124,7 +124,7 @@ winkstart.module('voip', 'device', {
                     }
                 );
             }
-            else {   
+            else {
                 winkstart.request(true, 'device.create', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -782,7 +782,7 @@ winkstart.module('voip', 'device', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#device_selector', popup_html).val());
                                     node.setMetadata('timeout', $('#parameter_input', popup_html).val());
 
@@ -793,6 +793,7 @@ winkstart.module('voip', 'device', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Device',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                              callback();

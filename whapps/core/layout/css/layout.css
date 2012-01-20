@@ -465,14 +465,14 @@ ul.buttons a:hover{
     width: 14px;
 }
 
-.tooltip:hover {
-    background-position: 0 -14px;
-}
-
 .tooltip-wrapper {
     display: inline-block;
     float: left;
     margin-left: -16px;
+}
+
+.tooltip-wrapper:hover .tooltip {
+    background-position: 0 -14px;
 }
 
 /* fancy_button */
@@ -593,7 +593,7 @@ ul.buttons a:hover{
 .alert_text_wrapper {
     max-width: 400px;
     padding:15px;
-    margin-top: 10px;
+    margin: 15px 15px 0;
 }
 
 .alert_img {
@@ -629,7 +629,6 @@ ul.buttons a:hover{
 .alert_text_wrapper.info_alert {
     border: 1px dashed #05addc;
     background: #A0D5EB;
-    margin: 15px 15px 0;
 }
 
 .alert_img.info_alert {

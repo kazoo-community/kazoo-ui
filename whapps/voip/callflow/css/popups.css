@@ -53,7 +53,7 @@
 
 .btn_wrapper {
     text-align: center;
-    padding-top: 1px;
+    padding: 15px;
 }
 
 .popup a.register_btn {
@@ -152,7 +152,7 @@
 
 .popup .myform{
     margin: 0 auto;
-    padding: 5px;
+    padding: 10px;
     height: auto;
 }
 
@@ -207,16 +207,19 @@
 
 .myform label {
     display: block;
-    text-align: right;
-    width: 140px;
     float: left;
+    text-align: right;
+    width: 80px;
     padding-right:10px;
- /*   margin-top: 8px; */
     clear: both;
 }
 
 .myform label:first-letter {
     text-transform: capitalize;
+}
+
+.myform #add_number_label {
+    width: 130px;
 }
 
 .myform input {
@@ -233,6 +236,7 @@
 
 .myform select {
     width: 150px;
+    margin: 0px
 }
 
 .popup input.field_round {

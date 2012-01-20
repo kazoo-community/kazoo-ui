@@ -5,7 +5,7 @@
                 <form name="form" method="post" action="#">
                     <ul class="controls">
                         <li>
-                            <label for="device_selector">Select a device</label>
+                            <label for="device_selector">Device</label>
                             <select id="device_selector">
                                 {{each(i, item) objects.items}}
                                     {{if objects.selected == item.id}}
@@ -28,8 +28,9 @@
                 </form>
                 <form name="form" method="post" action="#">
                     <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="submit_btn ctr save-btn">Save</a>
+                        <a href="javascript:void(0)" id="add" class="fancy_button blue">Save</a>
                     </div>
+                    <div class="clear"/>
                 </form>
             </div>
         </div>

@@ -189,7 +189,8 @@ winkstart.module('auth', 'auth',
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
                 title : 'Login',
                 resizable : false,
-                modal: true
+                modal: true,
+                width: '315px'
             });
 
             if(username != '') {

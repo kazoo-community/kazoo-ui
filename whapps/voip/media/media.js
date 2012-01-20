@@ -487,7 +487,7 @@ winkstart.module('voip', 'media', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#media_selector', popup_html).val());
 
                                     node.caption = $('#media_selector option:selected', popup_html).text();
@@ -496,7 +496,8 @@ winkstart.module('voip', 'media', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                     title: 'Media',
+                                    title: 'Media',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
