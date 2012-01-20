@@ -562,7 +562,7 @@ winkstart.module('voip', 'conference', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#conference_selector', popup_html).val());
 
                                     node.caption = $('#conference_selector option:selected', popup_html).text();
@@ -571,7 +571,8 @@ winkstart.module('voip', 'conference', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                     title: 'Conference',
+                                    title: 'Conference',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

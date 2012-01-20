@@ -582,24 +582,20 @@ winkstart.module('voip', 'user', {
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = (_data.data.first_name || '') + ' ' + (_data.data.last_name || '');
-                                        //node.setMetadata('name', name);
 
                                         popup.dialog('close');
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
-                                    /*console.log(node);
-                                    console.log($('#user_selector option:selected', popup_html).text());
-                                    node.setMetadata('name', $('#user_selector option:selected', popup_html).text());
-                                    console.log(node);*/
                                     node.caption = $('#user_selector option:selected', popup_html).text();
                                     popup.dialog('close');
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Select User',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

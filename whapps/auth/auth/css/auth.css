@@ -2,7 +2,16 @@
     padding: 10px;
 }
 
-.wrapper_login_button .login {
-    width: 81px;
+.wrapper_login_button button {
     height: 35px;
+    padding-bottom: 7px;
+}
+
+.register_text_wrapper {
+    text-align: center;
+    padding: 15px;
+}
+
+.login_bottom_links {
+    padding-bottom: 10px;
 }

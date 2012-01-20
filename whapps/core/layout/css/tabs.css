@@ -58,10 +58,12 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 	padding: 20px;
 	background-color: #a3a3a3;
 	font: 13px/1.231 arial,helvetica,clean,sans-serif;
+    color: #EBEBEB;
 }
 
-
-
+.pane a {
+    color: #EBEBEB;
+}
 /*******************
 ----BOTTOM TABS-----
 *******************/

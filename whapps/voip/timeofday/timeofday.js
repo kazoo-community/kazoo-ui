@@ -660,7 +660,7 @@ winkstart.module('voip', 'timeofday', {
                                     $('#timeofday_selector option:selected', popup_html).val() == '_' ? $('#edit_link', popup_html).hide() : $('#edit_link', popup_html).show();
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     child_node.key = $('#timeofday_selector', popup_html).val();
 
                                     child_node.key_caption = $('#timeofday_selector option:selected', popup_html).text();
@@ -670,6 +670,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Time of Day',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -692,7 +693,7 @@ winkstart.module('voip', 'timeofday', {
 
                         winkstart.timezone.populate_dropdown($('#timezone_selector', popup_html), node.getMetadata('timezone'));
 
-                        $('.submit_btn', popup_html).click(function() {
+                        $('#add', popup_html).click(function() {
                             node.setMetadata('timezone', $('#timezone_selector', popup_html).val());
 
                             node.caption = $('#timezone_selector option:selected', popup_html).text();
@@ -702,6 +703,7 @@ winkstart.module('voip', 'timeofday', {
 
                         popup = winkstart.dialog(popup_html, {
                             title: 'Select a Timezone',
+                            minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                     callback();
@@ -764,7 +766,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -778,6 +780,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Disable Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -860,7 +863,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -874,6 +877,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Enable Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -955,7 +959,7 @@ winkstart.module('voip', 'timeofday', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     var _rules = [];
 
                                     $('.right .connect li', popup_html).each(function() {
@@ -969,6 +973,7 @@ winkstart.module('voip', 'timeofday', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Reset Time of Day rules',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

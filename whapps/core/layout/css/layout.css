@@ -385,8 +385,7 @@ a.detailed_listing:hover{
 
 div.buttons_wrapper{
     width: 804px;
-    margin-left: 18px;
-    margin-top: 10px;
+    margin: 10px 18px;
 }
 
 ul.buttons{
@@ -455,16 +454,25 @@ ul.buttons a:hover{
 
 /**** Tooltip ****/
 .tooltip {
-    float:left;
-    background-image: url('../images/question_mark.png');
-    height: 16px;
-    width: 16px;
+    background-image: url("../images/help_icon2.png");
+    background-position: 0 0;
+    display: block;
+    float: left;
+    height: 14px;
+    margin-top: 3px;
+    margin-right: 6px;
+    text-indent: -9999px;
+    width: 14px;
 }
 
 .tooltip-wrapper {
     display: inline-block;
     float: left;
     margin-left: -16px;
+}
+
+.tooltip-wrapper:hover .tooltip {
+    background-position: 0 -14px;
 }
 
 /* fancy_button */
@@ -585,7 +593,7 @@ ul.buttons a:hover{
 .alert_text_wrapper {
     max-width: 400px;
     padding:15px;
-    margin-top: 10px;
+    margin: 15px 15px 0;
 }
 
 .alert_img {
@@ -633,7 +641,7 @@ ul.buttons a:hover{
 }
 
 .alert_buttons_wrapper .confirm_button {
-    margin-left: 47px;
+    margin-left: 57px;
     display: block;
     width: 81px;
     float:left;

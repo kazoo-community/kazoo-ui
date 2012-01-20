@@ -28,6 +28,10 @@ winkstart.module('auth', 'auth',
             { name: '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
         ],
 
+        validationRecover: [
+            { name: '#username_recover', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
+        ],
+
         resources: {
             "auth.user_auth": {
                 url: '{api_url}/user_auth',
@@ -81,6 +85,9 @@ winkstart.module('auth', 'auth',
                     winkstart.publish('auth.load_account');
                }
             });
+        }
+        else if(URL_DATA['recover_password']) {
+            winkstart.alert('info','You are in the Recover Password tool.');
         }
 
         // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
@@ -186,7 +193,8 @@ winkstart.module('auth', 'auth',
             var dialogDiv = winkstart.dialog(THIS.templates.login.tmpl({username: username}), {
                 title : 'Login',
                 resizable : false,
-                modal: true
+                modal: true,
+                width: '315px'
             });
 
             if(username != '') {
@@ -347,8 +355,55 @@ winkstart.module('auth', 'auth',
 
         recover_password: function(args) {
             var THIS = this;
-            var dialogDiv = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
+
+            var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
                 title: 'Recover Password'
+            });
+
+            winkstart.validate.set(THIS.config.validationRecover, dialogRecover);
+
+            $('.recover_password', dialogRecover).click(function(event) {
+                event.preventDefault(); // Don't run the usual "click" handler
+
+                winkstart.validate.is_valid(THIS.config.validationRecover, dialogRecover, function() {
+                    winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
+                    dialogRecover.dialog('close');
+                });
+                /*winkstart.validate.is_valid(THIS.config.validation, dialogDiv, function() {
+                        var realm;
+                        if(THIS.request_realm) {
+                            realm = $('#realm', dialogRegister).val();
+                        } else {
+                            realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
+                        }
+
+                        if('realm' in URL_DATA) {
+                            realm = URL_DATA['realm'];
+                        }
+
+                        var rest_data = {
+                            crossbar : true,
+                            api_url : winkstart.apps['auth'].api_url,
+                            data : {
+                                'account': {
+                                    'realm': realm,
+                                    'name':$('#name', dialogRegister).val(),
+                                    'app_url': URL
+                                },
+                                'user': {
+                                    'username':$('#username', dialogRegister).val(),
+                                }
+                            }
+                        };
+                        winkstart.putJSON('auth.recover_password', rest_data, function (json, xhr) {
+                            winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
+                            dialogDiv.dialog('close');
+                        });
+                    },
+                    function() {
+                        winkstart.alert('There were errors on the form, please correct!');
+                    }
+                ); */
             });
         },
 

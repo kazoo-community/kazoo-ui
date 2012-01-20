@@ -561,7 +561,7 @@ winkstart.module('voip', 'vmbox', {
                                     });
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#vmbox_selector', popup_html).val());
 
                                     node.caption = $('#vmbox_selector option:selected', popup_html).text();
@@ -571,6 +571,7 @@ winkstart.module('voip', 'vmbox', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: 'Voicemail',
+                                    minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();

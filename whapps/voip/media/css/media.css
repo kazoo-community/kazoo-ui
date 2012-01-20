@@ -1,4 +1,4 @@
-#media-content div.description {
+#media-form div.description {
     float: left;
     max-width: 400px;
     margin-right: 10px;
@@ -6,6 +6,6 @@
     overflow: hidden;
 }
 
-#media-content #file_li {
+#media-form #file_li {
     padding-top: 10px;
 }

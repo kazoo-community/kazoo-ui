@@ -277,10 +277,11 @@
     display: inline-block;
     height: 15px;
     width: 131px;
-    background-color: #424242;
+    background-color: #474747;
     margin: 0;
     padding: 0;
-    border: 1px solid #000000;
+    border: 1px solid #303030;
+    border-radius: 3px 3px 3px 3px;
 }
 
 #ws_callflow .div_icon {
