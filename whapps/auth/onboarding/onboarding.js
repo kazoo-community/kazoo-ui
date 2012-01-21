@@ -16,21 +16,23 @@ winkstart.module('auth', 'onboarding', {
         validation: {
             //phone_number
             step0: [
-                { name: '#area_code',        regex: /^[0-9]{3}$/ },
-                { name: '#e911_address',     regex: /^.+$/ },
-                { name: '#e911_state',       regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_city',        regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_country',     regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_postal_code', regex: /^[0-9\-]{4,10}$/ }
+                { name: '#area_code',               regex: /^[0-9]{3}$/ },
+                { name: '#e911_street_address',     regex: /^.+$/ },
+                { name: '#e911_extended_address',   regex: /^.*$/ },
+                { name: '#e911_region',             regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_locality',           regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_country',            regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#e911_postal_code',        regex: /^[0-9\-]{4,10}$/ }
             ],
             //braintree
             step1: [
                 { name: '#cardholder_name',  regex: /^[a-zA-Z\s\-\']+$/ },
                 { name: '#card_number',      regex: /^[0-9\s\-]{10,22}$/ },
                 { name: '#cvv',              regex: /^[0-9]{2,6}$/ },
-                { name: '#address',          regex: /^.+$/ },
-                { name: '#state',            regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
-                { name: '#city',             regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
+                { name: '#street_address',   regex: /^.+$/ },
+                { name: '#extended_address', regex: /^.*/ },
+                { name: '#region',           regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
+                { name: '#locality',         regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
                 { name: '#country',          regex: /^[a-zA-Z\_\-\s]+$/ },
                 { name: '#postal_code',      regex: /^[0-9\-]{4,10}$/ }
             ],
@@ -148,7 +150,7 @@ winkstart.module('auth', 'onboarding', {
 
             THIS.move_to_tab(0, 'Phone number and e911 Information');
 
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[global_used_number].message);
+            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[global_used_number].message+'<br/>'+errors[global_used_number].data.dash_e911||' ');
 
             $('#save_account', wrapper).click(function() {
                 winkstart.validate.is_valid(THIS.config.validation['step0'], function() {
@@ -174,7 +176,7 @@ winkstart.module('auth', 'onboarding', {
                                 }
                             },
                             function (_data, status) {
-                                winkstart.alert('error', _data.data.message);
+                                winkstart.alert('error', _data.message ||_data.data.message || _data.data.dash_e911 || ' ');
                             }
                         );
                     },
@@ -272,7 +274,7 @@ winkstart.module('auth', 'onboarding', {
             }
 
             form_data.phone_numbers = {};
-            form_data.phone_numbers[number] = { e911: form_data.e911 };
+            form_data.phone_numbers[number] = { dash_e911: form_data.e911 };
 
             delete form_data.e911;
             delete form_data.field_data;
@@ -315,7 +317,6 @@ winkstart.module('auth', 'onboarding', {
             $('#e911_block', onboard_html).hide();
             $('#address_infos', onboard_html).hide();
             $('#e911_country_block', onboard_html).hide();
-            $('.next', onboard_html).hide();
             $('#e911_country', onboard_html).attr('disabled','disabled');
             $('#country', onboard_html).attr('disabled','disabled');
             $('#area_code', onboard_html).focus();
@@ -323,7 +324,6 @@ winkstart.module('auth', 'onboarding', {
             $('#change_number', onboard_html).click(function() {
 
                 area_code = $('#area_code', onboard_html).val();
-                $('.next', onboard_html).hide();
                 $('#e911_block', onboard_html).hide();
                 $('#picked_number', onboard_html).hide();
 
@@ -332,7 +332,6 @@ winkstart.module('auth', 'onboarding', {
                         $('#change_number', onboard_html).html('I don\'t like this number!');
                         $('#picked_number_li', onboard_html).show();
                         $('#e911_block', onboard_html).show();
-                        $('.next', onboard_html).show();
                     };
 
                     //If the list of number is empty or the area code changed, then re-run the request.
@@ -422,12 +421,13 @@ winkstart.module('auth', 'onboarding', {
                             switch(i) {
                                 case 0:
                                     $('#cardholder_name', onboard_html).focus();
-                                    $('#address', onboard_html).val($('#e911_address', onboard_html).val());
+                                    $('#street_address', onboard_html).val($('#e911_street_address', onboard_html).val());
+                                    $('#extended_address', onboard_html).val($('#e911_extended_address', onboard_html).val());
                                     $('#country', onboard_html).val($('#e911_country', onboard_html).val());
-                                    $('#state', onboard_html).val($('#e911_state', onboard_html).val());
-                                    $('#city', onboard_html).val($('#e911_city', onboard_html).val());
+                                    $('#region', onboard_html).val($('#e911_region', onboard_html).val());
+                                    $('#locality', onboard_html).val($('#e911_locality', onboard_html).val());
                                     $('#postal_code', onboard_html).val($('#e911_postal_code', onboard_html).val());
-                                    $('#e911_address_text', onboard_html).html($('#e911_address', onboard_html).val()+'<br/>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_city', onboard_html).val()+'<br/>'+$('#e911_state', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
+                                    $('#e911_address_text', onboard_html).html($('#e911_street_address', onboard_html).val()+'<br/>'+$('#e911_extended_address', onboard_html).val()+'</br>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_locality', onboard_html).val()+'<br/>'+$('#e911_region', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
                                     break;
 
                                 case 1:
@@ -468,8 +468,8 @@ winkstart.module('auth', 'onboarding', {
                 if($('#e911_country', onboard_html).val() != 'Other' && $(this).val() != '') {
                     $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#e911_country', onboard_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
                         if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                            $('#e911_city', onboard_html).val(response.postalcodes[0].placeName);
-                            $('#e911_state', onboard_html).val(response.postalcodes[0].adminName1);
+                            $('#e911_locality', onboard_html).val(response.postalcodes[0].placeName);
+                            $('#e911_region', onboard_html).val(response.postalcodes[0].adminName1);
                         }
                     });
                 }
@@ -479,8 +479,8 @@ winkstart.module('auth', 'onboarding', {
                 if($('#country', onboard_html).val() != 'Other') {
                     $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#country', onboard_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
                         if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                            $('#city', onboard_html).val(response.postalcodes[0].placeName);
-                            $('#state', onboard_html).val(response.postalcodes[0].adminName1);
+                            $('#locality', onboard_html).val(response.postalcodes[0].placeName);
+                            $('#region', onboard_html).val(response.postalcodes[0].adminName1);
                         }
                     });
                 }
@@ -488,17 +488,19 @@ winkstart.module('auth', 'onboarding', {
 
             $('#use_e911', onboard_html).change(function() {
                 if($(this).is(':checked')) {
-                    $('#address', onboard_html).val($('#e911_address', onboard_html).val());
+                    $('#street_address', onboard_html).val($('#e911_street_address', onboard_html).val());
+                    $('#extended_address', onboard_html).val($('#e911_extended_address', onboard_html).val());
                     $('#country', onboard_html).val($('#e911_country', onboard_html).val());
-                    $('#state', onboard_html).val($('#e911_state', onboard_html).val());
-                    $('#city', onboard_html).val($('#e911_city', onboard_html).val());
+                    $('#region', onboard_html).val($('#e911_region', onboard_html).val());
+                    $('#locality', onboard_html).val($('#e911_locality', onboard_html).val());
                     $('#postal_code', onboard_html).val($('#e911_postal_code', onboard_html).val());
-                    $('#e911_address_text', onboard_html).html($('#e911_address', onboard_html).val()+'<br/>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_city', onboard_html).val()+'<br/>'+$('#e911_state', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
+                    $('#e911_address_text', onboard_html).html($('#e911_street_address', onboard_html).val()+'<br/>'+$('#e911_extended_address', onboard_html).val()+'<br/>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_locality', onboard_html).val()+'<br/>'+$('#e911_region', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
                 }
                 else {
-                    $('#address', onboard_html).val('');
-                    $('#state', onboard_html).val('');
-                    $('#city', onboard_html).val('');
+                    $('#street_address', onboard_html).val('');
+                    $('#extended_address', onboard_html).val('');
+                    $('#region', onboard_html).val('');
+                    $('#locality', onboard_html).val('');
                     $('#postal_code', onboard_html).val('');
                     $('#country', onboard_html).val('US');
                     $('#billing_country_text', onboard_html).hide();
