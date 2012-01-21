@@ -9,17 +9,19 @@
                     <legend>Pick a Number</legend>
                     <hr/>
                     <ul class="controls">
-                        <li>
-                            <label>Area Code</label>
-                            <input type="text" name="field_data.area_code" id="area_code" maxlength="3" size="3"/>
-                        </li>
-                        <li id="picked_number_li" class="center">
-                            <div class="number_wrapper">
-                                <span id="picked_number" class="center picked_number"></span>
-                                <a class="fancy_button blue" name="change_number" id="change_number" href="javascript:void(0);">Give me a number!</a>
-                            </div>
-                        </li>
-                        <div class="clear"/>
+                        <div id="pick_number_block">
+                            <li>
+                                <label>Area Code</label>
+                                <input type="text" name="field_data.area_code" id="area_code" maxlength="3" size="3"/>
+                            </li>
+                            <li id="picked_number_li" class="center">
+                                <div class="number_wrapper">
+                                    <span id="picked_number" class="center picked_number"></span>
+                                    <a class="fancy_button blue" name="change_number" id="change_number" href="javascript:void(0);">Give me a number!</a>
+                                </div>
+                            </li>
+                            <div class="clear"/>
+                        </div>
                         <div id="e911_block">
                             <div class="help_text">
                                 The following information will be used as your e911 information.
