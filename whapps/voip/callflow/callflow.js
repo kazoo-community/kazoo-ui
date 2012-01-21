@@ -199,7 +199,7 @@ winkstart.module('voip', 'callflow', {
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
-                this.children = {};
+                this.children = [];
                 this.data = {
                     data: $.extend(true, {}, THIS.actions[this.actionName].data)
                 };
@@ -220,7 +220,7 @@ winkstart.module('voip', 'callflow', {
 
                         switch (rule.type) {
                             case 'quantity':
-                                if(THIS._count(this.children) >= rule.maxSize) {
+                                if(this.children.length >= rule.maxSize) {
                                     list = [];
                                 }
                                 break;
@@ -248,7 +248,8 @@ winkstart.module('voip', 'callflow', {
                 this.removeChild = function(branch) {
                     $.each(this.children, function(i, child) {
                         if(child.id == branch.id) {
-                            delete that.children[i];
+                            that.children.splice(i,1);
+                            return false;
                         }
                     });
                 }
@@ -268,7 +269,7 @@ winkstart.module('voip', 'callflow', {
 
                     branch.parent = this;
 
-                    this.children[THIS._count(this.children)] = branch;
+                    this.children.push(branch);
 
                     return true;
                 }
@@ -747,7 +748,7 @@ winkstart.module('voip', 'callflow', {
                         callflow_id: THIS.flow.id,
                         data: {
                             numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
                         }
                     },
                     function(json) {
@@ -762,7 +763,7 @@ winkstart.module('voip', 'callflow', {
                         api_url: winkstart.apps['voip'].api_url,
                         data: {
                             numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children['0'] == undefined) ? {} : THIS.flow.root.children['0'].serialize()
+                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
                         }
                     },
                     function(json) {
