@@ -10,6 +10,7 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Caller-ID</a></li>
+                <li><a href="#">Equipment</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -58,9 +59,9 @@
                             </li>
                         </ul>
                     </fieldset>
-
                     <div class="clear"></div>
                 </div>
+
                 <div id="caller_id">
                     <fieldset>
                         <legend>In-House Calls</legend>
@@ -102,7 +103,31 @@
 
                     <div class="clear"></div>
                 </div>
+                <div id="equipment">
+                    <div class="device_list">
+                        Fixer Max Height;
+                        Display the Name;
+                        Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111
+                        mettre un lien pour editer en popup un device
+                        onclick we need to figure out a way to hide select owner
+                        if(user_id existe pas) {
+                            create a fake flag for device creation (user_not_yet_created=randomHash)
+                        }
+                        create device
+                        create user
+                        callback put user {
+                            if(ancien user id existait pas) {
+                                then list by user_not_yet_created=randomHash,
+                                for {
+                                    delete fake key
+                                    get(id) post(get_data and update owner_id with put)
+                                }
+                            }
+                        }
 
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
 
             <div class="clear"></div>
