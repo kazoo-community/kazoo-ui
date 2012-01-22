@@ -189,7 +189,7 @@ winkstart.module('auth', 'auth',
                 account_name = URL_DATA['account_name'];
             }
             else {
-                host = URL.match(/^(?:http:\/\/)*([^\/]+).*$/)[1];
+                host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1];
                 host_parts = host.split('.');
 
                 if(typeof winkstart.config.base_urls == 'object' && host_parts.slice(1).join('.') in winkstart.config.base_urls) {
