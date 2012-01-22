@@ -192,7 +192,7 @@ winkstart.module('auth', 'auth',
                 host = URL.match(/^(?:http:\/\/)*([^\/]+).*$/)[1];
                 host_parts = host.split('.');
 
-                if(host_parts.slice(1).join('.') == winkstart.config.base_url) {
+                if(typeof winkstart.config.base_urls == 'object' && host_parts.slice(1).join('.') in winkstart.config.base_urls) {
                     account_name = host_parts[0];
                 }
             }
@@ -210,8 +210,6 @@ winkstart.module('auth', 'auth',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name
                 });
-
-            console.log(realm);
 
             var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
