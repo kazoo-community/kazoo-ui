@@ -105,11 +105,11 @@ winkstart.module('auth', 'auth',
             winkstart.publish('auth.load_account');
         }
 
-        // Into the My Account utility. Note that we don't care if this utility isn't present or loads slowly
+        /*
         winkstart.module.loadModule('auth', 'myaccount', function() {
             this.init();
             winkstart.log('Core: Loaded My Account manager');
-        });
+        });*/
     },
 
     {
