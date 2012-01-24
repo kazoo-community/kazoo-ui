@@ -57,6 +57,16 @@
                                     {{/if}}
                                 </select>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
+                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                </span>
+                                {{if data.vm_to_email_enabled}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
                     <div class="clear"></div>
@@ -105,25 +115,25 @@
                 </div>
                 <div id="equipment">
                     <div class="device_list">
-                        Fixer Max Height;
-                        Display the Name;
-                        Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111
-                        mettre un lien pour editer en popup un device
-                        onclick we need to figure out a way to hide select owner
-                        if(user_id existe pas) {
-                            create a fake flag for device creation (user_not_yet_created=randomHash)
-                        }
-                        create device
-                        create user
-                        callback put user {
-                            if(ancien user id existait pas) {
-                                then list by user_not_yet_created=randomHash,
-                                for {
-                                    delete fake key
-                                    get(id) post(get_data and update owner_id with put)
-                                }
-                            }
-                        }
+                        Fixer Max Height;<br/>
+                        Display the Name;<br/>
+                        Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111<br/>
+                        mettre un lien pour editer en popup un device<br/>
+                        onclick we need to figure out a way to hide select owner<br/>
+                        if(user_id existe pas) {<br/>
+                            create a fake flag for device creation (user_not_yet_created=randomHash)<br/>
+                        }<br/>
+                        create device<br/>
+                        create user<br/>
+                        callback put user {<br/>
+                            if(ancien user id existait pas) {<br/>
+                                then list by user_not_yet_created=randomHash,<br/>
+                                for {<br/>
+                                    delete fake key<br/>
+                                    get(id) post(get_data and update owner_id with put)<br/>
+                                }<br/>
+                            }<br/>
+                        }<br/>
 
                     </div>
                     <div class="clear"></div>
@@ -163,16 +173,6 @@
                                     <input id="verified" name="verified" type="checkbox" checked="checked"/>
                                 {{else}}
                                     <input id="verified" name="verified" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
-                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
-                                </span>
-                                {{if data.vm_to_email_enabled}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
