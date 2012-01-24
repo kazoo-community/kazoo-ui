@@ -60,6 +60,11 @@ winkstart.module('voip', 'user', {
                 url: '{api_url}/accounts/{account_id}/users/hotdesks',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'user.device_list': {
+                url: '{api_url}/accounts/{account_id}/devices?filter_owner_id={owner_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -174,25 +179,38 @@ winkstart.module('voip', 'user', {
                     defaults.field_data.media = _data.data;
 
                     if(typeof data == 'object' && data.id) {
-                        winkstart.request(true, 'user.get', {
+                        winkstart.request(true, 'user.device_list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
-                                user_id: data.id
+                                owner_id: data.id
                             },
                             function(_data, status) {
-                                THIS.migrate_data(_data);
+                                defaults.field_data.device_list = _data.data;
 
-                                THIS.format_data(_data);
+                                winkstart.request(true, 'user.get', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url,
+                                        user_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        THIS.migrate_data(_data);
 
-                                THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+                                        THIS.format_data(_data);
 
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
-                                }
+                                        THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+
+                                        if(typeof callbacks.after_render == 'function') {
+                                            callbacks.after_render();
+                                        }
+                                    }
+                                );
                             }
                         );
                     }
                     else {
+                        defaults.field_data.device_list = {};
+                        defaults.field_data.new_user = $.md5(winkstart.random_string(10)+new Date().toString());
+
                         THIS.render_user(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {

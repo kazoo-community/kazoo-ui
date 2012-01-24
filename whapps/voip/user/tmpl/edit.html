@@ -114,7 +114,30 @@
                     <div class="clear"></div>
                 </div>
                 <div id="equipment">
-                    <div class="device_list">
+                    <div class="help_box">
+                        The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.
+                    </div>
+                    <div id="tab_devices">
+                        <div class="row">
+                            <div class="column first">Device Name</div>
+                            <div class="column second">Configure</div>
+                        </div>
+                        {{each field_data.device_list}}
+                            <div class="row" data-id="${id}">
+                                <div class="column first">${name}</div>
+                                <div class="column second"><a href="javascript:void(0);" id="edit_device_link">Configure</a></div>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <div class="add_device">
+                        <span class="add_device_icon"/>
+                        {{if field_data.new_user}}
+                            <a href="javascript:void(0);" data-new_user="${field_data.new_user}">Add a new device for this user</a>
+                        {{else}}
+                            <a href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
+                        {{/if}}
+                    </div>
+                    <div class="device_list" style="display:none;">
                         Fixer Max Height;<br/>
                         Display the Name;<br/>
                         Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111<br/>

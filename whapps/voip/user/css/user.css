@@ -1,0 +1,74 @@
+#user-view .add_device {
+    margin-top: 15px;
+}
+
+#user-view .add_device a .hover {
+    color: #05addc;
+}
+
+#user-view .add_device .add_device_icon {
+    background-image: url("../../../core/layout/images/plus_btn.png");
+    background-position: 0 0;
+    display: inline-block;
+    height: 25px;
+    margin-top: -4px;
+    vertical-align: middle;
+    width: 25px;
+}
+
+#user-view .add_device .add_device_icon .hover {
+    background-position: 0 -24px;
+}
+
+#user-view #tab_devices .column:not(:last-child) {
+    border-right: 1px solid #A6A6A6;
+}
+
+#user-view #tab_devices .column {
+    float: left;
+    text-align: center;
+    height: 25px;
+    line-height: 25px;
+}
+
+#user-view #tab_devices .column.first {
+    width: 100px;
+    text-align:right;
+    padding-right: 25px;
+}
+
+#user-view #tab_devices .column.second {
+    width: 70px;
+}
+
+#user-view #tab_devices .column.third {
+    width: 185px;
+}
+
+#user-view #tab_devices .column.third .did_ratecenter{
+    line-height: 25px;
+}
+
+#user-view #tab_devices .column.fourth {
+    padding-left: 15px;
+}
+
+#user-view #tab_devices .row {
+    height: 25px
+}
+
+#user-view #tab_devices .row:not(:last-child) {
+    border-bottom: 1px solid #A6A6A6;
+}
+
+#user-view #tab_devices .row:nth-child(odd) {
+    background-color: #eeeeee;
+}
+
+#user-view #tab_devices .row:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#user-view #tab_devices .row .select_number {
+    margin-left: 27px;
+}
