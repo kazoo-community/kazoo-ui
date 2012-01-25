@@ -118,23 +118,20 @@
                         The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.
                     </div>
                     <div id="tab_devices">
-                        <div class="row">
-                            <div class="column first">Device Name</div>
-                            <div class="column second">Configure</div>
+                        <div class="row title">
+                            <div class="column first">Device Name&nbsp;&nbsp;<span class="icon medium device"/></div>
+                            <div class="column third">Reg.</div>
+                            <div class="column second">Actions&nbsp;&nbsp;<span class="icon medium settings"/></div>
                         </div>
-                        {{each field_data.device_list}}
-                            <div class="row" data-id="${id}">
-                                <div class="column first">${name}</div>
-                                <div class="column second"><a href="javascript:void(0);" id="edit_device_link">Configure</a></div>
-                            </div>
-                        {{/each}}
+                        <div class="rows">
+                        </div>
                     </div>
                     <div class="add_device">
                         <span class="add_device_icon"/>
                         {{if field_data.new_user}}
-                            <a href="javascript:void(0);" data-new_user="${field_data.new_user}">Add a new device for this user</a>
+                            <a class="add_device_link" href="javascript:void(0);" data-new_user="${field_data.new_user}">Add a new device for this user</a>
                         {{else}}
-                            <a href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
+                            <a class="add_device_link" href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
                         {{/if}}
                     </div>
                     <div class="device_list" style="display:none;">

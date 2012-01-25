@@ -20,7 +20,7 @@ winkstart.module('voip', 'device', {
 
         validation: {
             sip_device : [
-                { name: '#name',                      regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
                 { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
@@ -245,7 +245,8 @@ winkstart.module('voip', 'device', {
                                     'H264': 'H264'
                                 }
                             }
-                        }
+                        },
+                        hide_owner: data.hide_owner || false
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -253,6 +254,15 @@ winkstart.module('voip', 'device', {
                         }
                     }
                 };
+
+            /* If We are currently creating a user, set a variable that we can use to update every device once the user is created */
+            if(data.new_user) {
+                defaults.data.new_user = data.new_user;
+            }
+            /* else if we already created the user, we can use directly the owner_id */
+            else if(data.owner_id) {
+                defaults.data.owner_id = data.owner_id;
+            }
 
             winkstart.request(true, 'account.get', {
                     account_id: winkstart.apps['voip'].account_id,
