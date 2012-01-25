@@ -255,15 +255,6 @@ winkstart.module('voip', 'device', {
                     }
                 };
 
-            /* If We are currently creating a user, set a variable that we can use to update every device once the user is created */
-            if(data.new_user) {
-                defaults.data.new_user = data.new_user;
-            }
-            /* else if we already created the user, we can use directly the owner_id */
-            else if(data.owner_id) {
-                defaults.data.owner_id = data.owner_id;
-            }
-
             winkstart.request(true, 'account.get', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
@@ -703,7 +694,7 @@ winkstart.module('voip', 'device', {
             THIS.render_list(device_html);
         },
 
-        popup_edit_device: function(data, callback) {
+        popup_edit_device: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -728,7 +719,7 @@ winkstart.module('voip', 'device', {
                         title: (data.id) ? 'Edit Device' : 'Create Device'
                     });
                 }
-            });
+            }, data_defaults || {});
         },
 
         define_callflow_nodes: function(callflow_nodes) {
