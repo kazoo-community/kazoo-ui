@@ -135,31 +135,36 @@ winkstart.module('voip', 'user', {
                                     function(_data, status) {
                                         var device_id;
                                         var array_length = _data.data.length;
-                                        $.each(_data.data, function(k, v) {
-                                            device_id = this.id;
-                                            winkstart.request(false, 'device.get', {
-                                                    account_id: winkstart.apps['voip'].account_id,
-                                                    api_url: winkstart.apps['voip'].api_url,
-                                                    device_id: device_id
-                                                },
-                                                function(_data, status) {
-                                                    _data.data.owner_id = user_id;
-                                                    delete _data.data.new_user;
-                                                    winkstart.request(false, 'device.update', {
-                                                            account_id: winkstart.apps['voip'].account_id,
-                                                            api_url: winkstart.apps['voip'].api_url,
-                                                            device_id: _data.data.id,
-                                                            data: _data.data
-                                                        },
-                                                        function(_data, status) {
-                                                            if(k == array_length - 1) {
-                                                                success(user_data, success, 'create');
+                                        if(array_length != 0) {
+                                            $.each(_data.data, function(k, v) {
+                                                device_id = this.id;
+                                                winkstart.request(false, 'device.get', {
+                                                        account_id: winkstart.apps['voip'].account_id,
+                                                        api_url: winkstart.apps['voip'].api_url,
+                                                        device_id: device_id
+                                                    },
+                                                    function(_data, status) {
+                                                        _data.data.owner_id = user_id;
+                                                        delete _data.data.new_user;
+                                                        winkstart.request(false, 'device.update', {
+                                                                account_id: winkstart.apps['voip'].account_id,
+                                                                api_url: winkstart.apps['voip'].api_url,
+                                                                device_id: _data.data.id,
+                                                                data: _data.data
+                                                            },
+                                                            function(_data, status) {
+                                                                if(k == array_length - 1) {
+                                                                    success(user_data, success, 'create');
+                                                                }
                                                             }
-                                                        }
-                                                    );
-                                                }
-                                            );
-                                        });
+                                                        );
+                                                    }
+                                                );
+                                            });
+                                        }
+                                        else {
+                                            success(user_data, success, 'create');
+                                        }
                                     }
                                 );
                             }
@@ -486,7 +491,7 @@ winkstart.module('voip', 'user', {
                                 },
                                 function(_data, status) {
                                     $.each(_data.data, function(key, val) {
-                                        $('.column.third', '#' + val.device_id).addClass('registered');
+                                        $('.column.second', '#' + val.device_id).addClass('registered');
                                     });
                                 }
                             );

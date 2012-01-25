@@ -517,7 +517,10 @@ winkstart.module('voip', 'device', {
             else {
                 device_html = THIS.templates.general_edit.tmpl();
 
+                $('.media_pane', device_html).hide();
+
                 $('.media_tabs .buttons', device_html).click(function() {
+                    $('.media_pane', device_html).show();
                     if(!$(this).hasClass('current')) {
                         $('.media_tabs .buttons').removeClass('current');
                         $(this).addClass('current');

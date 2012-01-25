@@ -22,10 +22,10 @@
     border: 1px solid #363636;
 	width: 888px;
 	height: 130px;
-	margin: 20px 0 0 18px; 
+	margin: 18px;
 	padding: 0 6px;
     /*text-align: center;*/
-	position:relative;	
+	position:relative;
 	z-index:600;
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
@@ -38,19 +38,19 @@
 	line-height: 130px;
     display: inline-block;
 	position: relative;
-	margin: 0 3px;	
+	margin: 0 3px;
 	background-image:url(../images/blank_btn.png);
-	background-position: 0px 0px;		
+	background-position: 0px 0px;
     text-align: center;
 }
 
 .media_tabs .buttons:hover {
-	background-position: 0px -130px;		
+	background-position: 0px -130px;
 }
 
 .media_tabs .buttons.current, .media_tabs .buttons.current:hover {
-	background-position: 0px -130px;		
-	cursor:default !important; 
+	background-position: 0px -130px;
+	cursor:default !important;
 	-moz-box-shadow: 3px 5px 10px #383838;
 	-webkit-box-shadow: 3px 5px 10px #383838;
 	box-shadow: 3px 5px 10px #383838;
@@ -69,6 +69,7 @@
 .media_pane {
 	width:860px;
 	margin-left:18px;
+    margin-bottom: 10px;
 	padding: 20px 20px 20px 20px;
 	background-color: #555555;
     border: 1px solid #363636;
@@ -77,5 +78,5 @@
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
     border-radius: 12px;
-	
+
 }

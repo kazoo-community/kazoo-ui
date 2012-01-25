@@ -2,8 +2,8 @@
     <div class="row" id="${id}">
         {{if id}}
             <div class="column first">${name}</div>
-            <div class="column third"></div>
-            <div class="column second"><span class="action_device edit" data-id="${id}">Configure</span><span class="action_device delete" data-id="${id}">Delete</span></div>
+            <div class="column second"></div>
+            <div class="column third"><a class="action_device edit icon medium pencil" data-id="${id}"></a><a class="action_device delete icon medium trash" data-id="${id}"></a></div>
         {{else}}
             <div class="column merged">There is currently no devices linked to this user</div>
         {{/if}}

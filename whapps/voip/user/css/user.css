@@ -27,7 +27,8 @@
 }
 
 #user-form #equipment #tab_devices  {
-    border: 1px solid #666666;
+    border: 2px solid #666666;
+    border-radius: 15px 15px 15px 15px;
     color: #666666;
     margin: 20px auto auto;
     width: 400px;
@@ -64,22 +65,22 @@
     text-align:center;
 }
 
-#user-form #equipment #tab_devices .column.second {
-    width: 169px;
+#user-form #equipment #tab_devices .column.third {
+    width: 159px;
 }
 
-#user-form #equipment #tab_devices .column.third {
-    min-width: 39px;
+#user-form #equipment #tab_devices .column.second {
+    min-width: 49px;
     border-right: 1px solid #A6A6A6;
 }
 
-#user-form #equipment #tab_devices .rows .column.third {
+#user-form #equipment #tab_devices .rows .column.second {
     background-image: url('../../device/images/red.png');
     background-repeat: no-repeat;
-    background-position: 11px center;
+    background-position: 16px center;
 }
 
-#user-form #equipment #tab_devices .rows .column.third.registered {
+#user-form #equipment #tab_devices .rows .column.second.registered {
     background-image: url('../../device/images/green.png');
 }
 
@@ -93,12 +94,17 @@
 
 #user-form #equipment #tab_devices .row.title {
     background-color: #dddddd !important;
-    border-bottom: 1px solid #666666 !important;
+    border-bottom: 2px solid #666666 !important;
+    border-radius: 15px 15px 0px 0px;
     font-weight: bold;
 }
 
 #user-form #equipment #tab_devices .row:not(:last-child) {
     border-bottom: 1px solid #A6A6A6;
+}
+
+#user-form #equipment #tab_devices .row:last-child {
+    border-radius: 0px 0px 15px 15px;
 }
 
 #user-form #equipment #tab_devices .row:nth-child(odd) {
