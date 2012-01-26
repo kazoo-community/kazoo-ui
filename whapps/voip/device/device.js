@@ -20,7 +20,7 @@ winkstart.module('voip', 'device', {
 
         validation: {
             sip_device : [
-                { name: '#name',                      regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
                 { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
@@ -245,7 +245,8 @@ winkstart.module('voip', 'device', {
                                     'H264': 'H264'
                                 }
                             }
-                        }
+                        },
+                        hide_owner: data.hide_owner || false
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -507,7 +508,10 @@ winkstart.module('voip', 'device', {
             else {
                 device_html = THIS.templates.general_edit.tmpl();
 
+                $('.media_pane', device_html).hide();
+
                 $('.media_tabs .buttons', device_html).click(function() {
+                    $('.media_pane', device_html).show();
                     if(!$(this).hasClass('current')) {
                         $('.media_tabs .buttons').removeClass('current');
                         $(this).addClass('current');
@@ -690,7 +694,7 @@ winkstart.module('voip', 'device', {
             THIS.render_list(device_html);
         },
 
-        popup_edit_device: function(data, callback) {
+        popup_edit_device: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -715,7 +719,7 @@ winkstart.module('voip', 'device', {
                         title: (data.id) ? 'Edit Device' : 'Create Device'
                     });
                 }
-            });
+            }, data_defaults || {});
         },
 
         define_callflow_nodes: function(callflow_nodes) {

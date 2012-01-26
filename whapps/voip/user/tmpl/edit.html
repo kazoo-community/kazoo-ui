@@ -10,6 +10,7 @@
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
                 <li><a href="#">Caller-ID</a></li>
+                <li><a href="#">Equipment</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -56,11 +57,21 @@
                                     {{/if}}
                                 </select>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
+                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
+                                </span>
+                                {{if data.vm_to_email_enabled}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
-
                     <div class="clear"></div>
                 </div>
+
                 <div id="caller_id">
                     <fieldset>
                         <legend>In-House Calls</legend>
@@ -102,7 +113,51 @@
 
                     <div class="clear"></div>
                 </div>
+                <div id="equipment">
+                    <div class="help_box">
+                        The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.
+                    </div>
+                    <div id="tab_devices">
+                        <div class="row title">
+                            <div class="column first">Device Name&nbsp;&nbsp;<span class="icon medium device"/></div>
+                            <div class="column second">Status</div>
+                            <div class="column third">Actions&nbsp;&nbsp;<span class="icon medium settings"/></div>
+                        </div>
+                        <div class="rows">
+                        </div>
+                    </div>
+                    <div class="add_device">
+                        <span class="add_device_icon"/>
+                        {{if field_data.new_user}}
+                            <a class="add_device_link" href="javascript:void(0);" data-new_user="${field_data.new_user}">Add a new device for this user</a>
+                        {{else}}
+                            <a class="add_device_link" href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
+                        {{/if}}
+                    </div>
+                    <div class="device_list" style="display:none;">
+                        Fixer Max Height;<br/>
+                        Display the Name;<br/>
+                        Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111<br/>
+                        mettre un lien pour editer en popup un device<br/>
+                        onclick we need to figure out a way to hide select owner<br/>
+                        if(user_id existe pas) {<br/>
+                            create a fake flag for device creation (user_not_yet_created=randomHash)<br/>
+                        }<br/>
+                        create device<br/>
+                        create user<br/>
+                        callback put user {<br/>
+                            if(ancien user id existait pas) {<br/>
+                                then list by user_not_yet_created=randomHash,<br/>
+                                for {<br/>
+                                    delete fake key<br/>
+                                    get(id) post(get_data and update owner_id with put)<br/>
+                                }<br/>
+                            }<br/>
+                        }<br/>
 
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
 
             <div class="clear"></div>
@@ -138,16 +193,6 @@
                                     <input id="verified" name="verified" type="checkbox" checked="checked"/>
                                 {{else}}
                                     <input id="verified" name="verified" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Tick this checkbox if you want to enable the Voicemail-to-Email feature. <br/>It will allow you to receive an email for each voicemail that you receive.">
-                                    <span class="tooltip"/><label for="vm_to_email_enabled">Voicemail-to-Email?</label>
-                                </span>
-                                {{if data.vm_to_email_enabled}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="vm_to_email_enabled" name="vm_to_email_enabled" type="checkbox"/>
                                 {{/if}}
                             </li>
                             <li>
