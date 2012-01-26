@@ -6,7 +6,8 @@ winkstart.module('voip', 'directory', {
         templates: {
             directory: 'tmpl/directory.html',
             edit: 'tmpl/edit.html',
-            directory_callflow: 'tmpl/directory_callflow.html'
+            directory_callflow: 'tmpl/directory_callflow.html',
+            user_row: 'tmpl/user_row.html'
         },
 
         subscribe: {
@@ -47,6 +48,11 @@ winkstart.module('voip', 'directory', {
                 url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'directory.user_list': {
+                url: '{api_url}/accounts/{account_id}/users?filter_directories.directory_id={directory_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -138,7 +144,6 @@ winkstart.module('voip', 'directory', {
                 defaults = {
                     data: $.extend(true, {
                         min_dtmf: '3',
-                        max_dtmf: '30',
                         sort_by: 'last_name',
                         confirm_match: false
                     }, data_defaults || {}),
@@ -150,28 +155,52 @@ winkstart.module('voip', 'directory', {
                     }
                 };
 
-            if(typeof data == 'object' && data.id) {
-                winkstart.request(true, 'directory.get', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        directory_id: data.id
-                    },
-                    function(_data, status) {
-                        THIS.render_directory($.extend(true, defaults, _data), target, callbacks);
-
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+            winkstart.request(true, 'callflow.list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    var list_callflows = [];
+                    $.each(_data.data, function() {
+                        if(this.featurecode == false) {
+                            list_callflows.push(this);
                         }
-                    }
-                );
-            }
-            else {
-                THIS.render_directory(defaults, target, callbacks);
+                    });
+                    defaults.field_data.callflows = list_callflows;
 
-                if(typeof callbacks.after_render == 'function') {
-                    callbacks.after_render();
+                    winkstart.request(true, 'user.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            defaults.field_data.users = _data.data;
+
+                            if(typeof data == 'object' && data.id) {
+                                winkstart.request(true, 'directory.get', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url,
+                                        directory_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        THIS.render_directory($.extend(true, defaults, _data), target, callbacks);
+
+                                        if(typeof callbacks.after_render == 'function') {
+                                            callbacks.after_render();
+                                        }
+                                    }
+                                );
+                            }
+                            else {
+                                THIS.render_directory(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
+                        }
+                    );
                 }
-            }
+            );
         },
 
         delete_directory: function(data, success, error) {
@@ -200,6 +229,8 @@ winkstart.module('voip', 'directory', {
         render_directory: function(data, target, callbacks){
             var THIS = this,
                 directory_html = THIS.templates.edit.tmpl(data);
+
+            THIS.render_user_list(data.data, directory_html);
 
             winkstart.validate.set(THIS.config.validation, directory_html);
 
@@ -325,6 +356,34 @@ winkstart.module('voip', 'directory', {
                 .append(directory_html);
 
             THIS.render_list(directory_html);
+        },
+
+        render_user_list: function(data, parent) {
+            var THIS = this;
+
+            if(data.id) {
+                winkstart.request(true, 'directory.user_list', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        directory_id: data.id
+                    },
+                    function(_data, status) {
+                        $('.rows', parent).empty();
+                        if(_data.data.length > 0) {
+                            $.each(_data.data, function(k, v) {
+                                $('.rows', parent).append(THIS.templates.user_row.tmpl(v));
+                            });
+                        }
+                        else {
+                            $('.rows', parent).append(THIS.templates.user_row.tmpl());
+                        }
+                    }
+                );
+            }
+            else {
+                $('.rows', parent).empty()
+                                  .append(THIS.templates.user_row.tmpl());
+            }
         },
 
         popup_edit_directory: function(data, callback, data_defaults) {

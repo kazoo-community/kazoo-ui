@@ -8,7 +8,8 @@
             {{/if}}
 
             <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
+                <li><a href="javascript:void(0);">Basic Settings</a></li>
+                <li><a href="javascript:void(0);">Users List</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -29,6 +30,44 @@
 
                     <div class="clear"></div>
                 </div> <!-- end basic settings -->
+                <div id="users_list">
+                    <div class="help_box">
+                        In this section you can select which users are part of this directory.
+                        A user can be part of multiple directories.
+                    </div>
+                    <div id="tab_users">
+                        <div class="row title">
+                            <div class="column first">User&nbsp;&nbsp;<span class="icon medium user"/></div>
+                            <div class="column second">Callflow&nbsp;&nbsp;<span class="icon medium callflow"/></div>
+                            <div class="column third">Remove</div>
+                        </div>
+                        <div class="rows">
+                        </div>
+                    </div>
+                    <div class="add_user">
+                        <span class="add_user_icon"/>
+                            <select name="owner_id" id="owner_id">
+                                {{each field_data.users}}
+                                    {{if data.owner_id == id}}
+                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
+                                    {{else}}
+                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                            <select name="callflow_id" id="callflow_id">
+                                {{each field_data.callflows}}
+                                    {{if data.callflow_id == id}}
+                                        <option value="${id}" id="${id}" selected="selected">[{{each(k,v) numbers}}${k}&nbsp;,{{/each}}]</option>
+                                    {{else}}
+                                        <option value="${id}" id="${id}">[{{each(k,v) numbers}}${k}&nbsp;,{{/each}}]</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                            <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add a user to this directory</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
             </div>
 
