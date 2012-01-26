@@ -402,7 +402,7 @@ winkstart.module('voip', 'menu', {
             THIS.render_list(menu_html);
         },
 
-        popup_edit_menu: function(data, callback) {
+        popup_edit_menu: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -427,7 +427,7 @@ winkstart.module('voip', 'menu', {
                         title: (data.id) ? 'Edit Menu' : 'Create Menu'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {

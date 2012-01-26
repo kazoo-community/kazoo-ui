@@ -570,7 +570,7 @@ winkstart.module('voip', 'timeofday', {
             THIS.render_list(timeofday_html);
         },
 
-        popup_edit_timeofday: function(data, callback) {
+        popup_edit_timeofday: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -595,7 +595,7 @@ winkstart.module('voip', 'timeofday', {
                         title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
