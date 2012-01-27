@@ -690,7 +690,7 @@ winkstart.module('voip', 'user', {
             THIS.render_list(user_html);
         },
 
-        popup_edit_user: function(data, callback) {
+        popup_edit_user: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -715,7 +715,7 @@ winkstart.module('voip', 'user', {
                         title: (data.id) ? 'Edit User' : 'Create User'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {

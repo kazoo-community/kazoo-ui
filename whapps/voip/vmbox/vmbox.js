@@ -474,7 +474,7 @@ winkstart.module('voip', 'vmbox', {
             THIS.render_list(vmbox_html);
         },
 
-        popup_edit_vmbox: function(data, callback) {
+        popup_edit_vmbox: function(data, callback, data_defaults) {
             var popup, popup_html;
 
             popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
@@ -499,7 +499,7 @@ winkstart.module('voip', 'vmbox', {
                         title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
                     });
                 }
-            });
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {

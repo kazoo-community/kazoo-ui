@@ -134,28 +134,6 @@
                             <a class="add_device_link" href="javascript:void(0);" data-user_id="${data.id}">Add a new device for this user</a>
                         {{/if}}
                     </div>
-                    <div class="device_list" style="display:none;">
-                        Fixer Max Height;<br/>
-                        Display the Name;<br/>
-                        Checker API api/accounts/account_id/devices/?filter_by_owner_id=11111111111111111111111111<br/>
-                        mettre un lien pour editer en popup un device<br/>
-                        onclick we need to figure out a way to hide select owner<br/>
-                        if(user_id existe pas) {<br/>
-                            create a fake flag for device creation (user_not_yet_created=randomHash)<br/>
-                        }<br/>
-                        create device<br/>
-                        create user<br/>
-                        callback put user {<br/>
-                            if(ancien user id existait pas) {<br/>
-                                then list by user_not_yet_created=randomHash,<br/>
-                                for {<br/>
-                                    delete fake key<br/>
-                                    get(id) post(get_data and update owner_id with put)<br/>
-                                }<br/>
-                            }<br/>
-                        }<br/>
-
-                    </div>
                     <div class="clear"></div>
                 </div>
             </div>

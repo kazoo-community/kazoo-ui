@@ -719,7 +719,7 @@ winkstart.module('voip', 'device', {
                         title: (data.id) ? 'Edit Device' : 'Create Device'
                     });
                 }
-            }, data_defaults || {});
+            }, data_defaults);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
