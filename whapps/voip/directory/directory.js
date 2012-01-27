@@ -50,7 +50,7 @@ winkstart.module('voip', 'directory', {
                 verb: 'DELETE'
             },
             'directory.user_list': {
-                url: '{api_url}/accounts/{account_id}/users?filter_directories.directory_id={directory_id}',
+                url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -230,7 +230,7 @@ winkstart.module('voip', 'directory', {
             var THIS = this,
                 directory_html = THIS.templates.edit.tmpl(data);
 
-            THIS.render_user_list(data.data, directory_html);
+            THIS.render_user_list(data, directory_html);
 
             winkstart.validate.set(THIS.config.validation, directory_html);
 
@@ -291,6 +291,47 @@ winkstart.module('voip', 'directory', {
                 THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
             });
 
+            $('.add_user_div', directory_html).click(function() {
+                var $user = $('#user_id', directory_html);
+                var $callflow = $('#callflow_id', directory_html);
+
+                if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
+                    var user_id = $user.val(),
+                        user_data = {
+                            id: user_id,
+                            name: $('#option_user_'+user_id, directory_html).text(),
+                            callflow_id: $callflow.val(),
+                            field_data: {
+                                callflows: data.field_data.callflows
+                            }
+                        };
+
+                    console.log(user_data);
+
+                    if($('#row_no_data', directory_html).size() > 0) {
+                        $('#row_no_data', directory_html).remove();
+                    }
+
+                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+                    $('#option_user_'+user_id, directory_html).hide();
+
+                    $user.val('empty_option_user');
+                    $callflow.val('empty_option_callflow');
+                }
+            });
+
+            $(directory_html).delegate('.action_user.delete', 'click', function() {
+                var user_id = $(this).dataset('id');
+                //removes it from the grid
+                $('#row_user_'+user_id, directory_html).remove();
+                //re-add it to the dropdown
+                $('#option_user_'+user_id, directory_html).show();
+                //if grid empty, add no data line
+                if($('.rows .row', directory_html).size() == 0) {
+                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl());
+                }
+            });
+
             (target)
                 .empty()
                 .append(directory_html);
@@ -301,6 +342,8 @@ winkstart.module('voip', 'directory', {
         },
 
         clean_form_data: function(form_data) {
+            delete form_data.user_id;
+            delete form_data.callflow_id;
         },
 
         render_list: function(_parent){
@@ -360,8 +403,9 @@ winkstart.module('voip', 'directory', {
 
         render_user_list: function(data, parent) {
             var THIS = this;
+            console.log(data);
 
-            if(data.id) {
+            if(data.data.id) {
                 winkstart.request(true, 'directory.user_list', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
@@ -371,6 +415,11 @@ winkstart.module('voip', 'directory', {
                         $('.rows', parent).empty();
                         if(_data.data.length > 0) {
                             $.each(_data.data, function(k, v) {
+                                v.field_data = {
+                                    callflows: data.field_data.callflows
+                                };
+                                v.callflow_id = v.field_data.callflows[0];
+                                v.name = v.first_name + ' ' + v.last_name;
                                 $('.rows', parent).append(THIS.templates.user_row.tmpl(v));
                             });
                         }

@@ -1,12 +1,23 @@
 <div>
-    <div class="row" id="${id}">
-        {{if id}}
+    {{if id}}
+        <div class="row" id="row_user_${id}">
             <div class="column first">${name}</div>
-            <div class="column second"></div>
-            <div class="column third"><a class="action_device delete icon medium trash" data-id="${id}"></a></div>
-        {{else}}
+            <div class="column second">
+                <select name="user_callflow_id">
+                    {{each field_data.callflows}}
+                        {{if callflow_id == id}}
+                            <option value="${id}" data-callflow_id="${id}" selected="selected">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
+                        {{else}}
+                            <option value="${id}" data-callflow_id=${id}>&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+            </div>
+            <div class="column third"><a class="action_user delete icon medium trash" data-id="${id}"></a></div>
+    {{else}}
+        <div class="row" id="row_no_data">
             <div class="column merged">There is currently no user in this directory</div>
-        {{/if}}
+    {{/if}}
         <div class="clear"/>
     </div>
 </div>

@@ -45,26 +45,44 @@
                         </div>
                     </div>
                     <div class="add_user">
-                        <span class="add_user_icon"/>
-                            <select name="owner_id" id="owner_id">
-                                {{each field_data.users}}
-                                    {{if data.owner_id == id}}
-                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
-                                    {{else}}
-                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                            <select name="callflow_id" id="callflow_id">
-                                {{each field_data.callflows}}
-                                    {{if data.callflow_id == id}}
-                                        <option value="${id}" id="${id}" selected="selected">[{{each(k,v) numbers}}${k}&nbsp;,{{/each}}]</option>
-                                    {{else}}
-                                        <option value="${id}" id="${id}">[{{each(k,v) numbers}}${k}&nbsp;,{{/each}}]</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                            <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add a user to this directory</a>
+                        <div class="add_user_title">Add User</div>
+                        <div class="add_user_fields">
+                            <ul class="controls">
+                                <div id="user_list_select">
+                                    <li>
+                                        <span class="tooltip-wrapper" tooltip="Choose a user to add to this directory">
+                                            <span class="tooltip"/>
+                                        </span>
+                                        <label>User</label>
+                                        <select name="user_id" id="user_id">
+                                            <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+                                            {{each field_data.users}}
+                                                <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
+                                            {{/each}}
+                                        </select>
+                                    </li>
+                                    <div class="clear"/>
+                                </div>
+                                <li id="callflow_li">
+                                    <span class="tooltip-wrapper" tooltip="Choose the callflow to use in order to reach the selected user via this directory">
+                                        <span class="tooltip"/>
+                                    </span>
+                                    <label>Callflow</label>
+                                    <select name="callflow_id" id="callflow_id">
+                                        <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
+                                        {{each field_data.callflows}}
+                                            <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
+                                        {{/each}}
+                                    </select>
+                                </li>
+                                <div class="clear"/>
+                            </ul>
+                        </div>
+                        <div class="add_user_div">
+                            <span class="add_user_icon"/>
+                            <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add this user to the directory</a>
+                            <div class="clear"/>
+                        </div>
                     </div>
                     <div class="clear"></div>
                 </div>
