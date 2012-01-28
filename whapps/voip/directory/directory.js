@@ -85,6 +85,7 @@ winkstart.module('voip', 'directory', {
                         data: normalized_data
                     },
                     function(_data, status) {
+                        THIS.update_users(data.field_data.user_list, _data.data.id);
                         if(typeof success == 'function') {
                             success(_data, status, 'update');
                         }
@@ -103,6 +104,7 @@ winkstart.module('voip', 'directory', {
                         data: normalized_data
                     },
                     function (_data, status) {
+                        THIS.update_users(data.field_data.user_list, _data.data.id);
                         if(typeof success == 'function') {
                             success(_data, status, 'create');
                         }
@@ -114,6 +116,72 @@ winkstart.module('voip', 'directory', {
                     }
 
                 );
+            }
+        },
+
+        update_single_user: function(user_id, directory_id, callflow_id) {
+            var THIS = this;
+
+            winkstart.request(false, 'user.get', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    user_id: user_id
+                },
+                function(_data, status) {
+                    if(callflow_id) {
+                        if(!_data.data.directories || typeof _data.data.directories != 'object') {
+                            _data.data.directories = {};
+                        }
+                        _data.data.directories[directory_id] = callflow_id;
+                    }
+                    else {
+                        delete _data.data.directories[directory_id];
+                    }
+                    winkstart.request(false, 'user.update', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            user_id: user_id,
+                            data: _data.data
+                        },
+                        function(_data, status) {
+                        }
+                    );
+                }
+            );
+        },
+
+        update_users: function(data, directory_id) {
+            var old_directory_user_list = data.old_list,
+                new_directory_user_list = data.new_list,
+                THIS = this;
+
+            if(old_directory_user_list) {
+                $.each(old_directory_user_list, function(k, v) {
+                    if(!(k in new_directory_user_list)) {
+                        //Request to update user without this directory.
+                        THIS.update_single_user(k, directory_id);
+                    }
+                });
+
+                $.each(new_directory_user_list, function(k, v) {
+                    if(k in old_directory_user_list) {
+                        if(old_directory_user_list[k] != v) {
+                            //Request to update user
+                            THIS.update_single_user(k, directory_id, v);
+                        }
+                        //else it has not been updated
+                    }
+                    else {
+                        THIS.update_single_user(k, directory_id, v);
+                    }
+                });
+            }
+            else {
+                if(new_directory_user_list) {
+                    $.each(new_directory_user_list, function(k, v) {
+                        THIS.update_single_user(k, directory_id, v);
+                    });
+                }
             }
         },
 
@@ -144,6 +212,7 @@ winkstart.module('voip', 'directory', {
                 defaults = {
                     data: $.extend(true, {
                         min_dtmf: '3',
+                        max_dtmf: '0',
                         sort_by: 'last_name',
                         confirm_match: false
                     }, data_defaults || {}),
@@ -182,7 +251,14 @@ winkstart.module('voip', 'directory', {
                                         directory_id: data.id
                                     },
                                     function(_data, status) {
-                                        THIS.render_directory($.extend(true, defaults, _data), target, callbacks);
+                                        var render_data = $.extend(true, defaults, _data);
+                                        render_data.field_data.old_list = {};
+                                        if('users' in _data.data) {
+                                            $.each(_data.data.users, function(k, v) {
+                                                render_data.field_data.old_list[v.user_id] = v.callflow_id;
+                                            });
+                                        }
+                                        THIS.render_directory(render_data, target, callbacks);
 
                                         if(typeof callbacks.after_render == 'function') {
                                             callbacks.after_render();
@@ -273,9 +349,23 @@ winkstart.module('voip', 'directory', {
 
                         THIS.clean_form_data(form_data);
 
-                        if('field_data' in data) {
-                            delete data.field_data;
-                        }
+                        var old_list = {},
+                            new_list = {};
+
+                        /*if('users' in data.data) {
+                            $.each(data.data.users, function(k, v) {
+                                old_list[v.user_id] = v.callflow_id;
+                            });
+                        }*/
+
+                        $('.rows .row:not(#row_no_data)', directory_html).each(function() {
+                            new_list[$(this).dataset('id')] = $('#user_callflow_id', $(this)).val();
+                        });
+
+                        data.field_data.user_list = {
+                            old_list: data.field_data.old_list,
+                            new_list: new_list
+                        };
 
                         THIS.save_directory(form_data, data, callbacks.save_success, callbacks.save_error);
                     },
@@ -298,15 +388,13 @@ winkstart.module('voip', 'directory', {
                 if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
                     var user_id = $user.val(),
                         user_data = {
-                            id: user_id,
-                            name: $('#option_user_'+user_id, directory_html).text(),
+                            user_id: user_id,
+                            user_name: $('#option_user_'+user_id, directory_html).text(),
                             callflow_id: $callflow.val(),
                             field_data: {
                                 callflows: data.field_data.callflows
                             }
                         };
-
-                    console.log(user_data);
 
                     if($('#row_no_data', directory_html).size() > 0) {
                         $('#row_no_data', directory_html).remove();
@@ -338,10 +426,16 @@ winkstart.module('voip', 'directory', {
         },
 
         normalize_data: function(form_data) {
+            delete form_data.users;
             return form_data;
         },
 
         clean_form_data: function(form_data) {
+            if(!(form_data.max_dtmf > 0)) {
+                delete form_data.max_dtmf;
+            }
+
+            delete form_data.user_callflow_id;
             delete form_data.user_id;
             delete form_data.callflow_id;
         },
@@ -403,31 +497,30 @@ winkstart.module('voip', 'directory', {
 
         render_user_list: function(data, parent) {
             var THIS = this;
-            console.log(data);
 
             if(data.data.id) {
-                winkstart.request(true, 'directory.user_list', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        directory_id: data.id
-                    },
-                    function(_data, status) {
-                        $('.rows', parent).empty();
-                        if(_data.data.length > 0) {
-                            $.each(_data.data, function(k, v) {
-                                v.field_data = {
+                if('users' in data.data && data.data.users.length > 0) {
+                    var user_item;
+                    $.each(data.field_data.users, function(k, v) {
+                        if(v.id in data.field_data.old_list) {
+                            user_item = {
+                                user_id: v.id,
+                                user_name: v.first_name + ' ' + v.last_name,
+                                callflow_id: data.field_data.old_list[v.id],
+                                field_data: {
                                     callflows: data.field_data.callflows
-                                };
-                                v.callflow_id = v.field_data.callflows[0];
-                                v.name = v.first_name + ' ' + v.last_name;
-                                $('.rows', parent).append(THIS.templates.user_row.tmpl(v));
-                            });
+                                }
+                            };
+
+                            $('.rows', parent).append(THIS.templates.user_row.tmpl(user_item));
+                            $('#option_user_'+v.id, parent).hide();
                         }
-                        else {
-                            $('.rows', parent).append(THIS.templates.user_row.tmpl());
-                        }
-                    }
-                );
+                    });
+                }
+                else {
+                    $('.rows', parent).empty()
+                                      .append(THIS.templates.user_row.tmpl());
+                }
             }
             else {
                 $('.rows', parent).empty()
@@ -514,7 +607,6 @@ winkstart.module('voip', 'directory', {
                                     ev.preventDefault();
 
                                     winkstart.publish('directory.popup_edit', _data, function(_data) {
-                                        console.log(_data);
                                         node.setMetadata('id', _data.data.id || 'null');
 
                                         node.caption = _data.data.name || '';

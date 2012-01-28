@@ -9,7 +9,6 @@
 
             <ul class="settings_tabs settings1">
                 <li><a href="javascript:void(0);">Basic Settings</a></li>
-                <li><a href="javascript:void(0);">Users List</a></li>
             </ul>
 
             <div class="clear"></div>
@@ -25,13 +24,9 @@
                                 </span>
                                 <input id="name" name="name" type="text" value="${data.name}" />
                             </li>
+                            <div class="clear"/>
                         </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div> <!-- end basic settings -->
-                <div id="users_list">
-                    <div class="help_box">
+                        <div class="help_box">
                         In this section you can select which users are part of this directory.
                         A user can be part of multiple directories.
                     </div>
@@ -46,47 +41,50 @@
                     </div>
                     <div class="add_user">
                         <div class="add_user_title">Add User</div>
-                        <div class="add_user_fields">
-                            <ul class="controls">
-                                <div id="user_list_select">
-                                    <li>
-                                        <span class="tooltip-wrapper" tooltip="Choose a user to add to this directory">
+                        <div class="add_content_wrapper">
+                            <div class="add_user_fields">
+                                <ul class="controls">
+                                    <div id="user_list_select">
+                                        <li>
+                                            <span class="tooltip-wrapper" tooltip="Choose a user to add to this directory">
+                                                <span class="tooltip"/>
+                                            </span>
+                                            <label>User</label>
+                                            <select name="user_id" id="user_id">
+                                                <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+                                                {{each field_data.users}}
+                                                    <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
+                                                {{/each}}
+                                            </select>
+                                        </li>
+                                        <div class="clear"/>
+                                    </div>
+                                    <li id="callflow_li">
+                                        <span class="tooltip-wrapper" tooltip="Choose the callflow to use in order to reach the selected user via this directory">
                                             <span class="tooltip"/>
                                         </span>
-                                        <label>User</label>
-                                        <select name="user_id" id="user_id">
-                                            <option id="empty_option_user" value="empty_option_user">-- Select --</option>
-                                            {{each field_data.users}}
-                                                <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
+                                        <label>Callflow</label>
+                                        <select name="callflow_id" id="callflow_id">
+                                            <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
+                                            {{each field_data.callflows}}
+                                                <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
                                             {{/each}}
                                         </select>
                                     </li>
                                     <div class="clear"/>
-                                </div>
-                                <li id="callflow_li">
-                                    <span class="tooltip-wrapper" tooltip="Choose the callflow to use in order to reach the selected user via this directory">
-                                        <span class="tooltip"/>
-                                    </span>
-                                    <label>Callflow</label>
-                                    <select name="callflow_id" id="callflow_id">
-                                        <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
-                                        {{each field_data.callflows}}
-                                            <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
-                                        {{/each}}
-                                    </select>
-                                </li>
+                                </ul>
+                            </div>
+                            <div class="add_user_div">
+                                <span class="add_user_icon"/>
+                                <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add this user to the directory</a>
                                 <div class="clear"/>
-                            </ul>
-                        </div>
-                        <div class="add_user_div">
-                            <span class="add_user_icon"/>
-                            <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add this user to the directory</a>
-                            <div class="clear"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="clear"></div>
-                </div>
+                    </fieldset>
 
+                    <div class="clear"></div>
+                </div> <!-- end basic settings -->
             </div>
 
             <div class="clear"></div>
@@ -117,7 +115,7 @@
                                 <input id="min_dtmf" name="min_dtmf" type="text" value="${data.min_dtmf}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Count of the most DTMFs collected, once reached the list of matches is played.">
+                                <span class="tooltip-wrapper" tooltip="Count of the most DTMFs collected, once reached the list of matches is played. If set to 0, then there is no limit to the number of DTMFs collected.">
                                     <span class="tooltip"/>
                                     <label for="max_dtmf">Max number of input:</label>
                                 </span>
