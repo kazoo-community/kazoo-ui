@@ -9,6 +9,7 @@ winkstart.module('auth', 'onboarding', {
 
         subscribe: {
             'nav.get_started': 'render_onboarding',
+            'onboard.register': 'render_onboarding',
             'onboard.error_braintree': 'error_braintree',
             'onboard.error_phone_numbers': 'error_phone_numbers'
         },
@@ -64,7 +65,7 @@ winkstart.module('auth', 'onboarding', {
                 verb: 'GET'
             },
             'phone_number.create': {
-                url: '{api_url}/accounts/{account_id}/phone_numbers/{number}',
+                url: '{api_url}/accounts/{account_id}/phone_numbers/{number}/activate',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
@@ -213,7 +214,7 @@ winkstart.module('auth', 'onboarding', {
                                     }
                                 },
                                 function (_data, status) {
-                                    winkstart.alert('error', _data.message ||_data.data.message || _data.data.dash_e911 || ' ');
+                                    winkstart.alert('error', _data.message || _data.data.message || _data.data.dash_e911 || ' ');
                                 }
                             );
                         }
