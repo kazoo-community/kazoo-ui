@@ -501,7 +501,7 @@ ul.buttons a:hover{
     user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
-    box-shadow: 2px 2px 2px #333333;
+    box-shadow: 1px 1px 1px #333333;
     margin-left: 5px;
 }
 
@@ -516,7 +516,6 @@ ul.buttons a:hover{
 
 .fancy_button:active {
     color: #dfdfdf !important;
-
     position:relative;
     top:1px;
 }

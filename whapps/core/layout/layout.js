@@ -10,7 +10,8 @@ winkstart.module('core', 'layout', {
 
         templates: {
             layout: 'tmpl/layout.html',
-            welcome: '../../../config/tmpl/welcome.html'
+            //welcome: '../../../config/tmpl/welcome.html',
+            welcome: '../../../config/tmpl/new_welcome.html'
         },
 
         subscribe: {
@@ -25,10 +26,7 @@ winkstart.module('core', 'layout', {
 
         THIS.attach();
 
-        /* If we find a login cookie, don't display welcome message */
-        if(!$.cookie('c_winkstart_auth')) {
-            THIS.templates.welcome.tmpl().appendTo('#ws-content');
-        }
+        winkstart.publish('auth.load_auth');
 
         $('#ws-content .welcomediv').click(function() {
             winkstart.publish('nav.my_logout_click');
