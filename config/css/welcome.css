@@ -98,6 +98,7 @@
     height: 34px;
     width: 105px;
     text-shadow: 1px 1px #333333;
+    font-family: trebuchet MS;
 }
 
 #content_welcome_page .right_div .row_welcome_field .recover_password {
@@ -114,6 +115,7 @@
     height: 45px;
     width: 145px;
     text-shadow: 1px 1px #333333;
+    font-family: trebuchet MS;
 }
 
 #content_welcome_page .right_div .register_div > div{
