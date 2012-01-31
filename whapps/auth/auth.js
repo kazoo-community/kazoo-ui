@@ -8,14 +8,14 @@ winkstart.module('auth', 'auth',
             thankyou: 'tmpl/thankyou.html',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
-            welcome: '../../../config/tmpl/new_welcome.html',
+            new_login: 'tmpl/new_login.html',
             register: 'tmpl/register.html'
         },
 
         subscribe: {
             'auth.activate' : 'activate',
-            'auth.login' : 'login_popup',
-            'auth.welcome' : 'login',
+            'auth.login' : 'login_popup', //popup login process
+            'auth.welcome' : 'login', //login from the welcome page
             'auth.load_account' : 'load_account',
             'auth.recover_password' : 'recover_password',
             'auth.authenticate' : 'authenticate',
@@ -225,16 +225,15 @@ winkstart.module('auth', 'auth',
                 username = (typeof args == 'object' && 'username' in args) ? args.username : '',
                 account_name = THIS.get_account_name_from_url(),
                 realm = THIS.get_realm_from_url(),
-                welcome_html = THIS.templates.welcome.tmpl({
+                login_html = THIS.templates.new_login.tmpl({
                     username: username,
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name
                 });
 
-            var contentDiv = $('#ws-content');
+            var contentDiv = $('.right_div', '#content_welcome_page');
             contentDiv.empty();
-
-            contentDiv.append(welcome_html);
+            contentDiv.append(login_html);
 
             if(username != '') {
                 $('#password', contentDiv).focus();

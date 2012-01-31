@@ -10,8 +10,8 @@ winkstart.module('core', 'layout', {
 
         templates: {
             layout: 'tmpl/layout.html',
-            //welcome: '../../../config/tmpl/welcome.html',
-            welcome: '../../../config/tmpl/new_welcome.html'
+            layout_welcome: 'tmpl/layout_welcome.html',
+            left_welcome: '../../../config/tmpl/left_welcome.html'
         },
 
         subscribe: {
@@ -26,7 +26,9 @@ winkstart.module('core', 'layout', {
 
         THIS.attach();
 
-        winkstart.publish('auth.load_auth');
+        if(!$.cookie('c_winkstart_auth')) {
+            THIS.render_welcome();
+        }
 
         $('#ws-content .welcomediv').click(function() {
             winkstart.publish('nav.my_logout_click');
@@ -70,7 +72,7 @@ winkstart.module('core', 'layout', {
         attach: function() {
             var THIS = this;
 
-            THIS.templates.layout.tmpl().appendTo(THIS.parent);
+            var layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent);
 
             $("#loading").ajaxStart(function(){
                 $(this).show();
@@ -81,6 +83,11 @@ winkstart.module('core', 'layout', {
              });
         },
 
+        render_welcome: function() {
+            var THIS = this;
+            layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
+            THIS.templates.left_welcome.tmpl().appendTo($('.left_div', layout_welcome_html));
+        },
 
         detect_and_set_logo: function() {
             var host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1],
