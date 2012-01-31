@@ -48,10 +48,17 @@
 }
 
 #content_welcome_page .left_div .learn_more {
-    color: #05addc;
     font-size: 18px;
     font-weight: bold;
     text-shadow: 2px 2px #333;
+}
+
+#content_welcome_page .left_div .learn_more > a {
+    color: #05addc;
+}
+
+#content_welcome_page .left_div .learn_more > a:hover {
+    color: #EEEEEE;
 }
 
 #content_welcome_page .left_div .world_map {
