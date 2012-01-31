@@ -1,0 +1,27 @@
+#ws-topbar .whapps > .divider {
+    height: 72px;
+    width: 2px;
+    background-image: url(../img/nav_line.jpg);
+    background-repeat: repeat-y;
+}
+
+#ws-topbar .whapps > .whapp {
+    width: 120px;
+    text-align: center;
+}
+
+#ws-topbar .whapps > .whapp > .dropdown-toggle::after {
+    display: none;
+}
+
+#ws-topbar .whapps > .whapp .category > .dropdown-toggle::after {
+    content: "&rarr;";
+    margin-top: 6px;
+    border-left: 4px solid white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+}
+
+#ws-topbar .whapps > .whapp .category > .dropdown-menu {
+    left: 160px;
+}

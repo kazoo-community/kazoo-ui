@@ -38,7 +38,7 @@ winkstart.module('voip', 'voip', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('appnav.add', {
+            winkstart.publish('whappnav.add', {
                 name: THIS.__module,
                 columns: 2
             });
@@ -88,7 +88,7 @@ winkstart.module('voip', 'voip', {
             THIS.is_initialized = true;
 
             //Disabling post lazy loading behavior
-            //winkstart.publish('subnav.show', THIS.__module);
+            //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
         },
 

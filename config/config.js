@@ -39,9 +39,8 @@
 
         /* Custom links */
         nav: {
-            /* 'my_account':'http://www.google.com/', */
-            my_help: 'http://help.2600hz.com/'
-            /*'my_logout:''*/
+            help: 'http://www.2600hz.org/support.html'
+            /* logout: ''*/
         }
     };
 

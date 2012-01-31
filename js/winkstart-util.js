@@ -105,6 +105,7 @@
         var strict_options = {
             show: { effect : 'fade', duration : 200 },
             hide: { effect : 'fade', duration : 200 },
+            zIndex: 20000,
             close: function() {
                 $(newDiv).dialog('destroy');
                 $(newDiv).remove();

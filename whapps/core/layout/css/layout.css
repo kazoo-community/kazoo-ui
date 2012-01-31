@@ -1,10 +1,90 @@
-@charset "UTF-8";
+/* New CSS */
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #EBEBEB;
+}
+
+body > .topbar {
+    position: absolute;
+    height: 72px;
+    min-width: 980px;
+    -moz-box-shadow: 0px 5px 5px #222;
+    -webkit-box-shadow: 0px 5px 5px #222;
+    box-shadow: 0px 5px 5px #222;
+}
+
+body > .topbar .topbar-inner {
+    background: none;
+}
+
+body > .topbar .topbar-inner > .container-fluid {
+    padding-right: 0px;
+}
+
+#ws-topbar .brand.logo {
+    width: 150px;
+	height: 52px;
+	background-image: url(../../../../config/images/logo.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#ws-topbar .nav > li a {
+    white-space: nowrap;
+}
+
+#ws-topbar .nav > li .dropdown-menu {
+    max-width: none;
+}
+
+#ws-topbar .nav > li > .dropdown-menu {
+    top: 72px;
+    text-align: left;
+}
+
+#ws-topbar .nav > li .category > .dropdown-menu {
+    top: -6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#ws-topbar .links {
+    margin: 0px;
+}
+
+#ws-topbar .links > .link {
+    height: 72px;
+}
+
+#ws-topbar .links > .link a {
+    line-height: 51px;
+}
+
+.container-fluid.page {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#ws-content {
+    padding-top: 72px;
+}
+
+.background {
+    background-image: url(../images/background.jpg);
+    background-repeat: repeat-x;
+    background-color: #9F9F9F;
+}
+
+
+
 /* CSS Document */
 
 /*******************
 ----GENERAL---------
 *******************/
-
+/*
 html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td {
   margin: 0;
   padding: 0;
@@ -17,22 +97,13 @@ html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockqu
 }
 
 :focus { outline: 0;}
-
+*/
 .clear {
 	clear: both;
 }
 
 .center {
     text-align: center;
-}
-
-body {
-	background-image: url(../images/bg.jpg);
-	background-repeat: repeat-x;
-	background-color: #6E7377;
-	font-family: Helvetica, Arial, sans-serif;
-	font-size: 12px;
-	color: #EBEBEB;
 }
 
 .footer_wrapper {
@@ -59,20 +130,17 @@ h1
 	padding-left: 20px;
     text-shadow: #000000 1px 1px;
 }
-
 h2
 {
 	clear: left;
 	color: #EBEBEB;
-/*	background: #8b8b9f;
-	margin: 1em 0;*/
 	padding-left:8px;
 
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
-
+/*
 
 a {
 	color: #EBEBEB;
@@ -92,88 +160,8 @@ a:active {
     color: #05addc;
 }
 
-/*************************************
-----------------HEADER----------------
-**************************************/
-
-body > div > .header {
-	/*width: 1023px;*/
-	height: 80px;
-	/*margin: auto;*/
-	padding: 0px;
-    -moz-box-shadow: 0px 5px 5px #222;
-    -webkit-box-shadow: 0px 5px 5px #222;
-    box-shadow: 0px 5px 5px #222;
-}
-
-.logo {
-	width: 192px;
-	height: 80px;
-	background-image: url(../images/nav_line.jpg);
-	background-repeat: repeat-y;
-    background-position: right;
-	text-indent: -9999px;
-	display: block;
-	float: left;
-}
-
-.logo .img {
-	width: 100%;
-	height: 100%;
-	background-image: url(../../../../config/images/logo.png);
-	background-repeat: no-repeat;
-    background-position: center center;
-	text-indent: -9999px;
-	display: block;
-	float: left;
-}
-
-.main_content {
-    padding-top:10px;
-    padding-left:10px;
-}
-
-.main_nav {
-	height: 80px;
-	font-size: 12px;
-    float: left;
-}
-
-.main_nav ul {
-	list-style: none;
-	display: block;
-}
-
-.main_nav li {
-    background-image: url(../images/nav_line.jpg);
-    background-repeat: repeat-y;
-    background-position: right;
-    padding: 0 23px;
-    float: left;
-    height: 80px;
-    width: 110px;
-    text-align: center;
-}
-
-.main_nav li:hover .whapp a{
-    color: #05ADDC;
-}
-
-.main_nav .whapp {
-    margin-top: 12px;
-}
-
-.main_nav li .whapp span {
-    margin-bottom: 5px;
-}
-
-.main_nav div {
-    text-align: center;
-}
-
 ul.universal_nav {
 	float: left;
-	/*width: 240px;*/
 	list-style: none;
 	position: absolute;
 	top: 0;
@@ -218,18 +206,7 @@ ul.universal_nav li span.my_logout_icon {
     width: 11px;
     margin-right: 5px;
 }
-
-/*************************************
---------------CONTENT----------------
-**************************************/
-
-.content_container {
-	width: 100%;
-	margin: 0;
-    z-index: -1000;
-    position: relative;
-    padding-bottom: 20px;
-}
+*/
 
 /*************************************
 -------------DATA LIST---------------
@@ -448,7 +425,7 @@ ul.buttons a:hover{
     position: absolute;
     top:43%;
     left:43%;
-    z-index:9999;
+    z-index:30000;
     opacity: 0.8;
     display:none;
 }

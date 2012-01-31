@@ -89,7 +89,7 @@ winkstart.module('voip', 'device', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('subnav.add', {
+        winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
             label: 'Devices',

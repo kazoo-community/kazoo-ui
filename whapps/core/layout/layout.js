@@ -36,32 +36,23 @@ winkstart.module('core', 'layout', {
             winkstart.publish('nav.my_logout_click');
         });
 
-        $('#my_account', '.universal_nav').click(function() {
-            winkstart.publish('nav.my_account_click');
-        });
-
-        $('#my_help', '.universal_nav').click(function() {
+        $('#ws-topbar .links .help').click(function() {
             winkstart.publish('nav.my_help_click');
         });
 
-        $('#my_logout', '.universal_nav').click(function() {
+        $('#ws-topbar .links .logout').click(function() {
             winkstart.publish('nav.my_logout_click');
         });
 
         if('nav' in winkstart.config) {
-            if('my_account' in winkstart.config.nav) {
-                $('#my_account', '.universal_nav').unbind('click')
-                                                  .attr('href', winkstart.config.nav.my_account);
+            if('help' in winkstart.config.nav || 'my_help' in winkstart.config.nav) {
+                $('#ws-topbar .links .help').unbind('click')
+                                            .attr('href', winkstart.config.nav.help || winkstart.config.nav.my_help);
             }
 
-            if('my_help' in winkstart.config.nav) {
-                $('#my_help', '.universal_nav').unbind('click')
-                                               .attr('href', winkstart.config.nav.my_help);
-            }
-
-            if('my_logout' in winkstart.config.nav) {
-                $('#my_logout', '.universal_nav').unbind('click')
-                                                 .attr('href', winkstart.config.nav.my_logout);
+            if('logout' in winkstart.config.nav || 'my_logout' in winkstart.config.nav) {
+                $('#ws-topbar .links .logout').unbind('click')
+                                              .attr('href', winkstart.config.nav.logout || winkstart.config.nav.my_logout);
             }
 
         }
