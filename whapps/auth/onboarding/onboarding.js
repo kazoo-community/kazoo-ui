@@ -312,6 +312,12 @@ winkstart.module('auth', 'onboarding', {
                 }
             }
 
+            form_data.account.caller_id = {
+                default: {
+                    number: number
+                }
+            };
+
             form_data.phone_numbers = {};
             form_data.phone_numbers[number] = { dash_e911: form_data.e911 };
 
