@@ -567,12 +567,17 @@ winkstart.module('voip', 'device', {
             if('realm' in data.data.sip) {
                 delete data.data.sip.realm;
             }
+            console.log(data.data);
 
             if('status' in data.data) {
                 data.data.enabled = data.data.status;
                 delete data.data.status;
             }
+            else {
+                data.data.enabled = !data.data.call_forward.enabled;
+            }
 
+            console.log(data.data.enabled);
             return data;
         },
 
