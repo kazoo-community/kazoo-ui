@@ -567,17 +567,12 @@ winkstart.module('voip', 'device', {
             if('realm' in data.data.sip) {
                 delete data.data.sip.realm;
             }
-            console.log(data.data);
 
             if('status' in data.data) {
                 data.data.enabled = data.data.status;
                 delete data.data.status;
             }
-            else {
-                data.data.enabled = !data.data.call_forward.enabled;
-            }
 
-            console.log(data.data.enabled);
             return data;
         },
 
@@ -630,6 +625,8 @@ winkstart.module('voip', 'device', {
                 form_data.media.audio.codecs = $.map(form_data.media.audio.codecs, function(val) { return (val) ? val : null });
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
+
+            form_data.enabled = form_data.call_forward.enabled;
 
             return form_data;
         },
