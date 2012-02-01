@@ -31,39 +31,47 @@ winkstart.module('auth', 'auth',
         ],
 
         validationRecover: [
-            { name: '#username_recover', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
+            { name: '#username', regex: /^.+$/ },
+            { name: '#account_name', regex: /^.*$/ },
+            { name: '#account_realm', regex: /^.*$/ },
+            { name: '#phone_number', regex: /^.*$/ }
         ],
 
         resources: {
-            "auth.user_auth": {
+            'auth.user_auth': {
                 url: '{api_url}/user_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "auth.shared_auth": {
+            'auth.shared_auth': {
                 url: '{api_url}/shared_auth',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "auth.register": {
+            'auth.register': {
                 url: '{api_url}/signup',
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            "auth.activate": {
+            'auth.activate': {
                 url: '{api_url}/signup/{activation_key}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            "auth.get_user": {
+            'auth.get_user': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            "auth.user.update": {
+            'auth.user.update': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'POST'
+            },
+            'auth.recover_password': {
+                url: '{api_url}/user_auth/recovery',
+                contentType: 'application/json',
+                verb: 'PUT'
             }
         }
     },
@@ -297,7 +305,7 @@ winkstart.module('auth', 'auth',
                 winkstart.publish('auth.register');
             });
 
-            $('button.recover_password', contentDiv).click(function(event) {
+            $('a.recover_password', contentDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
                 winkstart.publish('auth.recover_password');
@@ -482,53 +490,32 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
+                width: '340px',
                 title: 'Recover Password'
             });
 
             winkstart.validate.set(THIS.config.validationRecover, dialogRecover);
 
-            $('.recover_password', dialogRecover).click(function(event) {
+            $('.btn_recover_password', dialogRecover).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
+                var data_recover = form2object('recover_password_form');
+                console.log(data_recover);
+
                 winkstart.validate.is_valid(THIS.config.validationRecover, dialogRecover, function() {
-                    winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
-                    dialogRecover.dialog('close');
-                });
-                /*winkstart.validate.is_valid(THIS.config.validation, dialogDiv, function() {
-                        var realm;
-                        if(THIS.request_realm) {
-                            realm = $('#realm', dialogRegister).val();
-                        } else {
-                            realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
-                        }
-
-                        if('realm' in URL_DATA) {
-                            realm = URL_DATA['realm'];
-                        }
-
-                        var rest_data = {
-                            crossbar : true,
-                            api_url : winkstart.apps['auth'].api_url,
-                            data : {
-                                'account': {
-                                    'realm': realm,
-                                    'name':$('#name', dialogRegister).val(),
-                                    'app_url': URL
-                                },
-                                'user': {
-                                    'username':$('#username', dialogRegister).val(),
-                                }
-                            }
-                        };
-                        winkstart.putJSON('auth.recover_password', rest_data, function (json, xhr) {
+                    winkstart.request(true, 'auth.recover_password', {
+                            api_url: winkstart.apps['auth'].api_url,
+                            data: data_recover
+                        },
+                        function(_data, status) {
                             winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
-                            dialogDiv.dialog('close');
-                        });
-                    },
-                    function() {
-                        winkstart.alert('There were errors on the form, please correct!');
-                    }
-                ); */
+                            dialogRecover.dialog('close');
+                        },
+                        function(_data, status) {
+                            winkstart.alert('error', 'Error ' + status + ', Unexpected error, please try again.');
+                        }
+                    );
+                });
             });
         },
 
