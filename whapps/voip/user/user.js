@@ -587,7 +587,7 @@ winkstart.module('voip', 'user', {
                         $('.rows', parent).empty();
                         if(_data.data.length > 0) {
                             $.each(_data.data, function(k, v) {
-                                v.device_type = data.field_data.device_types[v.device_type];
+                                v.display_type = data.field_data.device_types[v.device_type];
                                 $('.rows', parent).append(THIS.templates.device_row.tmpl(v));
                             });
 

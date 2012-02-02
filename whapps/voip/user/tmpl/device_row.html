@@ -2,8 +2,8 @@
     <div class="row" id="${id}">
         {{if id}}
             <div class="column first">${name}</div>
-            <div class="column second">${device_type}</div>
-            <div class="column third"></div>
+            <div class="column second">${display_type}</div>
+            <div class="column third ${device_type}"></div>
             <div class="column fourth">
                 {{if enabled}}
                 <input type="checkbox" class="enabled_checkbox" data-device_id="${id}" checked="checked"/>

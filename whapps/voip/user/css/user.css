@@ -79,7 +79,7 @@
     background-position: 16px center;
 }
 
-#user-form #equipment #tab_devices .rows .column.third.registered {
+#user-form #equipment #tab_devices .rows .column.third.registered, #user-form #equipment #tab_devices .rows .column.third.cellphone {
     background-image: url('../../device/images/green.png');
 }
 
