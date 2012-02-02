@@ -9,7 +9,8 @@ winkstart.module('auth', 'auth',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
             new_login: 'tmpl/new_login.html',
-            register: 'tmpl/register.html'
+            register: 'tmpl/register.html',
+            new_password: 'tmpl/new_password.html'
         },
 
         subscribe: {
@@ -18,6 +19,7 @@ winkstart.module('auth', 'auth',
             'auth.welcome' : 'login', //login from the welcome page
             'auth.load_account' : 'load_account',
             'auth.recover_password' : 'recover_password',
+            'auth.new_password': 'new_password',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
@@ -30,11 +32,17 @@ winkstart.module('auth', 'auth',
             { name: '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
         ],
 
-        validationRecover: [
+        validation_recover: [
             { name: '#username', regex: /^.+$/ },
             { name: '#account_name', regex: /^.*$/ },
             { name: '#account_realm', regex: /^.*$/ },
             { name: '#phone_number', regex: /^.*$/ }
+        ],
+
+        validation_new_password: [
+            { name: '#old_password', regex: '.+' },
+            { name: '#new_password1', regex: '.+' },
+            { name: '#new_password2', regex: '.+' }
         ],
 
         resources: {
@@ -436,6 +444,10 @@ winkstart.module('auth', 'auth',
                         winkstart.log('WhApps: Initializing ' + k);
                     })
                 });
+
+                if(json.data.require_password_update) {
+                    winkstart.publish('auth.new_password', json.data);
+                }
             });
 
         },
@@ -486,6 +498,43 @@ winkstart.module('auth', 'auth',
             }
         },
 
+        new_password: function(user_data) {
+            var THIS = this;
+
+            var dialog_new_password = winkstart.dialog(THIS.templates.new_password.tmpl(), {
+                title: 'Please set a new password'
+            });
+
+            winkstart.validate.set(THIS.config.validation_new_password, dialog_new_password);
+
+            $('.btn_new_password', dialog_new_password).click(function(event) {
+                event.preventDefault();
+                var data_new_password = form2object('new_password_form');
+
+                winkstart.validate.is_valid(THIS.config.validation_new_password, dialog_new_password, function() {
+                    if(data_new_password.new_password1 == data_new_password.new_password2) {
+                        user_data.password = data_new_password.new_password1;
+                        user_data.require_password_update = false;
+
+                        winkstart.request(true, 'auth.user.update', {
+                                api_url: winkstart.apps.auth.api_url,
+                                account_id: winkstart.apps.auth.account_id,
+                                user_id: user_data.id,
+                                data: user_data
+                            },
+                            function(_data, status) {
+                                winkstart.alert('info', 'Password updated !');
+                                dialog_new_password.dialog('close');
+                            },
+                            function(_data, status) {
+                                winkstart.alert('error', 'Error :' + status);
+                            }
+                        );
+                    }
+                });
+            });
+        },
+
         recover_password: function(args) {
             var THIS = this;
 
@@ -494,25 +543,36 @@ winkstart.module('auth', 'auth',
                 title: 'Recover Password'
             });
 
-            winkstart.validate.set(THIS.config.validationRecover, dialogRecover);
+            winkstart.validate.set(THIS.config.validation_recover, dialogRecover);
 
             $('.btn_recover_password', dialogRecover).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
-
+                event.preventDefault();
                 var data_recover = form2object('recover_password_form');
-                console.log(data_recover);
 
-                winkstart.validate.is_valid(THIS.config.validationRecover, dialogRecover, function() {
+                data_recover.account_realm == '' ? delete data_recover.account_realm : true;
+                data_recover.account_name == '' ? delete data_recover.account_name : true;
+                data_recover.phone_number == '' ? delete data_recover.phone_number : true;
+
+                winkstart.validate.is_valid(THIS.config.validation_recover, dialogRecover, function() {
                     winkstart.request(true, 'auth.recover_password', {
                             api_url: winkstart.apps['auth'].api_url,
                             data: data_recover
                         },
                         function(_data, status) {
-                            winkstart.alert('info','An email in order to recover your password has been sent to the email address linked to this account.');
+                            winkstart.alert('info', _data.data);
                             dialogRecover.dialog('close');
                         },
                         function(_data, status) {
-                            winkstart.alert('error', 'Error ' + status + ', Unexpected error, please try again.');
+                            var msg_error = 'Error ' + status + '<br/>';
+                            if(_data.data) {
+                                $.each(_data.data, function(k, v) {
+                                    $.each(_data.data[k], function(key, msg) {
+                                        msg_error += '<br/>' + msg;
+                                    });
+                                });
+                            }
+
+                            winkstart.alert('error', msg_error);
                         }
                     );
                 });
