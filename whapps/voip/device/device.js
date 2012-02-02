@@ -31,7 +31,7 @@ winkstart.module('voip', 'device', {
             ],
             cellphone: [
                 { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
-                { name: '#call_forward_number', regex: /^[\+]?[0-9]*$/ }
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ]
         },
 
@@ -624,6 +624,10 @@ winkstart.module('voip', 'device', {
             if(form_data.media) {
                 form_data.media.audio.codecs = $.map(form_data.media.audio.codecs, function(val) { return (val) ? val : null });
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
+            }
+
+            if(form_data.device_type == 'cellphone') {
+                form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
             }
 
             return form_data;
