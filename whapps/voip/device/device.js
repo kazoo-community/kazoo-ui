@@ -628,6 +628,7 @@ winkstart.module('voip', 'device', {
 
             if(form_data.device_type == 'cellphone') {
                 form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
+                form_data.enabled = form_data.call_forward.enabled;
             }
 
             return form_data;

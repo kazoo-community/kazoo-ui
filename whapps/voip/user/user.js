@@ -222,7 +222,12 @@ winkstart.module('voip', 'user', {
                         hotdesk: {},
                         music_on_hold: {}
                     }, data_defaults || {}),
-                    field_data: {}
+                    field_data: {
+                        device_types: {
+                            sip_device: 'SIP Device',
+                            cellphone: 'Cell Phone'
+                        }
+                    }
                 };
 
             THIS.random_id = false;
@@ -306,11 +311,50 @@ winkstart.module('voip', 'user', {
             }
         },
 
+        update_single_device: function($checkbox) {
+            $checkbox.attr('disabled', 'disabled');
+
+            var device_id = $checkbox.dataset('device_id'),
+                enabled = $checkbox.is(':checked');
+
+            winkstart.request(false, 'device.get', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    device_id: device_id
+                },
+                function(_data, status) {
+                    if(_data.data.device_type == 'cellphone') {
+                        _data.data.call_forward.enabled = enabled;
+                    }
+                    _data.data.enabled = enabled;
+                    winkstart.request(false, 'device.update', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            device_id: _data.data.id,
+                            data: _data.data
+                        },
+                        function(_data, status) {
+                            $checkbox.removeAttr('disabled');
+                        },
+                        function(_data, status) {
+                            $checkbox.removeAttr('disabled');
+                            enabled ? $checkbox.removeAttr('checked') : $checkbox.attr('checked', 'checked');
+                        }
+                    );
+                },
+                function(_data, status) {
+                    $checkbox.removeAttr('disabled');
+                    enabled ? $checkbox.removeAttr('checked') : $checkbox.attr('checked', 'checked');
+                }
+            );
+        },
+
         render_user: function(data, target, callbacks) {
             var THIS = this,
-                user_html = THIS.templates.edit.tmpl(data);
+                user_html = THIS.templates.edit.tmpl(data),
+                data_devices;
 
-            THIS.render_device_list(data.data, user_html);
+            THIS.render_device_list(data, user_html);
 
             winkstart.validate.set(THIS.config.validation, user_html);
 
@@ -442,6 +486,10 @@ winkstart.module('voip', 'user', {
                 });
             });
 
+            $(user_html).delegate('.enabled_checkbox', 'click', function() {
+                THIS.update_single_device($(this));
+            });
+
             $(user_html).delegate('.action_device.edit', 'click', function() {
                 var data_device = {
                     id: $(this).dataset('id'),
@@ -458,7 +506,15 @@ winkstart.module('voip', 'user', {
                 }
 
                 winkstart.publish('device.popup_edit', data_device, function(_data) {
-                    THIS.render_device_list(_data.data.new_user ? { new_user: true, id: THIS.random_id } : { id: data.data.id }, user_html);
+                    data_devices = {
+                        data: { },
+                        field_data: {
+                            device_types: data.field_data.device_types
+                        }
+                    };
+                    data_devices.data = _data.data.new_user ? { new_user: true, id: THIS.random_id } : { id: data.data.id };
+
+                    THIS.render_device_list(data_devices, user_html);
                 }, defaults);
             });
 
@@ -471,7 +527,15 @@ winkstart.module('voip', 'user', {
                             device_id: device_id
                         },
                         function(_data, status) {
-                            THIS.render_device_list( THIS.random_id ? { new_user: true, id: THIS.random_id } : { id: data.data.id }, user_html);
+                            data_devices = {
+                                data: { },
+                                field_data: {
+                                    device_types: data.field_data.device_types
+                                }
+                            };
+                            data_devices.data = THIS.random_id ? { new_user: true, id: THIS.random_id } : { id: data.data.id };
+
+                            THIS.render_device_list(data_devices, user_html);
                         }
                     );
                 });
@@ -491,7 +555,15 @@ winkstart.module('voip', 'user', {
                 }
 
                 winkstart.publish('device.popup_edit', data_device, function(_data) {
-                    THIS.render_device_list( THIS.random_id ? { new_user: true, id: THIS.random_id } : { id: data.data.id }, user_html);
+                    var data_devices = {
+                        data: { },
+                        field_data: {
+                            device_types: data.field_data.device_types
+                        }
+                    };
+                    data_devices.data = THIS.random_id ? { new_user: true, id: THIS.random_id } : { id: data.data.id };
+
+                    THIS.render_device_list(data_devices, user_html);
                 }, defaults);
             });
 
@@ -503,18 +575,19 @@ winkstart.module('voip', 'user', {
         render_device_list: function(data, parent) {
             var THIS = this;
 
-            if(data.id) {
-                var request_string = data.new_user ? 'user.device_new_user' : 'user.device_list';
+            if(data.data.id) {
+                var request_string = data.data.new_user ? 'user.device_new_user' : 'user.device_list';
 
                 winkstart.request(true, request_string, {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        owner_id: data.id
+                        owner_id: data.data.id
                     },
                     function(_data, status) {
                         $('.rows', parent).empty();
                         if(_data.data.length > 0) {
                             $.each(_data.data, function(k, v) {
+                                v.display_type = data.field_data.device_types[v.device_type];
                                 $('.rows', parent).append(THIS.templates.device_row.tmpl(v));
                             });
 
