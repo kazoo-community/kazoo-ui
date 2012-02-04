@@ -15,3 +15,10 @@
 .login_bottom_links {
     padding-bottom: 10px;
 }
+
+.help_recover {
+    color: #eeeeee;
+    font-style: normal;
+    margin: 10px;
+    padding: 10px;
+}
