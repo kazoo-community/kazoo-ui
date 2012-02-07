@@ -111,11 +111,13 @@
 }
 
 #content_welcome_page .right_div .register_div .register {
-    font-weight: bold;
-    height: 45px;
-    width: 145px;
-    text-shadow: 1px 1px #333333;
-    font-family: trebuchet MS;
+    background: url('../images/signup_button.png') no-repeat;
+    width: 169px;
+    height: 48px;
+}
+
+#content_welcome_page .right_div .register_div .register:hover {
+    background: url('../images/signup_button_hover.png') no-repeat;
 }
 
 #content_welcome_page .right_div .register_div > div{
