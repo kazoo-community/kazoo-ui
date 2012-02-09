@@ -98,3 +98,18 @@
     width: 30px;
     font-size: 10px;
 }
+
+#two_columns .ring_group_form_wrapper {
+    display: block;
+    margin: auto;
+    width: 260px;
+}
+
+#two_columns .form_field_div {
+    width: 260px;
+}
+
+#two_columns .button_field_div {
+    margin: 20px 0px 5px;
+    text-align: center;
+}
