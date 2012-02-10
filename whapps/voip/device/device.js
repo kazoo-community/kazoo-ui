@@ -100,10 +100,19 @@ winkstart.module('voip', 'device', {
     },
 
     {
+        fix_codecs: function(data, data2) {
+            if(typeof data.media == 'object' && typeof data2.media == 'object') {
+                (data.media.audio || {}).codecs = (data2.media.audio || {}).codecs;
+                (data.media.video || {}).codecs = (data2.media.video || {}).codecs;
+            }
+
+            return data;
+        },
+
         save_device: function(form_data, data, success, error) {
             var THIS = this,
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
             if(id) {
                 winkstart.request(true, 'device.update', {
@@ -296,11 +305,16 @@ winkstart.module('voip', 'device', {
                                                 device_id: data.id
                                             },
                                             function(_data, status) {
+                                                var render_data;
                                                 defaults.data.device_type = 'sip_device';
 
                                                 THIS.migrate_data(_data);
 
-                                                THIS.render_device($.extend(true, defaults, _data), target, callbacks);
+                                                render_data = $.extend(true, defaults, _data);
+
+                                                render_data.data = THIS.fix_codecs(render_data.data, _data.data);
+
+                                                THIS.render_device(render_data, target, callbacks);
 
                                                 if(typeof callbacks.after_render == 'function') {
                                                     callbacks.after_render();
