@@ -1,16 +1,35 @@
 <div>
     <div id="onboarding-view">
+        <div class="onboarding_title">GET STARTED</div>
         <div class="steps_nav">
             <div class="steps_img"></div>
-            <div class="steps_text"></div>
+            <div class="steps_text">
+                <ul id="steps">
+                    <li id="step_title_1" class="step_title">
+                        Step 1
+                        <span>Pick a Number</span>
+                    </li>
+                    <li id="step_title_2" class="step_title">
+                        Step 2
+                        <span>Credit Card</span>
+                    </li>
+                    <li id="step_title_3" class="step_title">
+                        Step 3
+                        <span>Account Information</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="step_content">
+        <div class="form_content">
+            <form id="fast_onboarding_form" name="form" data-step="1" data-maxstep="3">
             <!-- Filled by jQuery Templates -->
+            </form>
+            <div class="clear"/>
         </div>
         <div class="step_buttons">
-            <button class="previous_step">Previous</button>
-            <button class="save_onboarding">Create Account</button>
-            <button class="next_step">Next</button>
+            <a class="prev_step fancy_button blue prev left">Previous</a>
+            <a id="save_account" class="fancy_button blue right">Create Account</a>
+            <a class="next_step fancy_button blue next right">Next</a>
         </div>
     </div>
 </div>

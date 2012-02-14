@@ -1,26 +1,5 @@
 #onboarding-view {
     text-align: center;
-    width: 750px;
-    display: block;
-    margin: auto;
-}
-
-#onboarding-view .step_buttons {
-    height: 50px;
-    margin: 20px;
-}
-
-#onboarding-view .form_content {
-    border-bottom: 1px solid #363636;
-    margin-top: 20px;
-}
-
-#onboarding-view .step_buttons > a.right {
-    float: right;
-}
-
-#onboarding-view .step_buttons > a.left {
-    float: left;
 }
 
 #onboarding-view .form_wrapper {
@@ -37,54 +16,50 @@
 }
 
 #onboarding-view .onboarding_title {
-    margin-top: 20px;
-    color: #05ADDC;
+    background-image: url("img/onboarding_title_bg.jpg");
+    background-position: center center;
+    background-repeat: repeat-x;
     height: 36px;
-    line-height: 36px;
-    font-size: 20px;
     text-align: center;
 }
 
-#onboarding-view .steps_nav {
-    margin-top: 20px;
-}
-
-#onboarding-view .steps_img {
-    background: url('img/steps.png') no-repeat;
-    width: 601px;
-    height: 81px;
-    margin: auto;
+#onboarding-view .onboarding_title_text {
+    color: #05ADDC;
+    font-size: 22px;
+    line-height: 36px;
+    text-shadow: 1px 1px #000000;
 }
 
 #onboarding-view #steps {
     list-style: none;
-    width: 800px;
+    width: 100%;
     overflow: hidden;
     padding: 0px;
-    margin: auto;
-    display: block;
+    border-bottom: 1px solid #363636;
 }
 
 #onboarding-view #steps li {
     font-size: 24px;
     float: left;
-    color: #05addc;
+    color: #ffffff;
     text-shadow: 1px 1px #000000;
-    width: 234px;
+    width: 130px;
     padding-bottom: 10px;
     padding-top: 10px;
-    padding-right: 25px;
     text-align: center;
 }
 
 #onboarding-view #steps li span {
     font-size: 11px;
-    color: #eeeeee;
     display: block;
 }
 
 #onboarding-view #steps li.current {
-    color: #C4DB4C;
+    color: #05addc;
+}
+
+#onboarding-view #steps li:focus {
+    color: #05addc;
 }
 
 #fast_onboarding_form {
@@ -122,14 +97,8 @@
     margin-right: 10px;
 }
 
-#fast_onboarding_form .change_number {
-    background: url('img/btn_search.png') no-repeat;
-    width: 154px;
-    height: 45px;
-}
-
-#fast_onboarding_form .change_number:hover {
-    background: url('img/btn_search_hover.png') no-repeat;
+#fast_onboarding_form #change_number {
+    margin-left: 5px;
 }
 
 #fast_onboarding_form .number_wrapper {
@@ -154,9 +123,6 @@
 
 #fast_onboarding_form .user_tab {
     padding-bottom: 10px;
-    display: block;
-    margin: auto;
-    width: 350px;
 }
 
 #fast_onboarding_form .title_bar {
