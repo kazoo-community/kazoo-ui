@@ -22,16 +22,16 @@ winkstart.module('voip', 'device', {
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
-                { name: '#caller_id_name_internal',   regex: /^.{0,15}$/ },
+                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^.{0,15}$/ },
+                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ],
             cellphone: [
                 { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
-                { name: '#call_forward_number', regex: /^[\+]?[0-9]*$/ }
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ]
         },
 
@@ -100,10 +100,19 @@ winkstart.module('voip', 'device', {
     },
 
     {
+        fix_codecs: function(data, data2) {
+            if(typeof data.media == 'object' && typeof data2.media == 'object') {
+                (data.media.audio || {}).codecs = (data2.media.audio || {}).codecs;
+                (data.media.video || {}).codecs = (data2.media.video || {}).codecs;
+            }
+
+            return data;
+        },
+
         save_device: function(form_data, data, success, error) {
             var THIS = this,
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
             if(id) {
                 winkstart.request(true, 'device.update', {
@@ -296,11 +305,16 @@ winkstart.module('voip', 'device', {
                                                 device_id: data.id
                                             },
                                             function(_data, status) {
+                                                var render_data;
                                                 defaults.data.device_type = 'sip_device';
 
                                                 THIS.migrate_data(_data);
 
-                                                THIS.render_device($.extend(true, defaults, _data), target, callbacks);
+                                                render_data = $.extend(true, defaults, _data);
+
+                                                render_data.data = THIS.fix_codecs(render_data.data, _data.data);
+
+                                                THIS.render_device(render_data, target, callbacks);
 
                                                 if(typeof callbacks.after_render == 'function') {
                                                     callbacks.after_render();
@@ -626,6 +640,11 @@ winkstart.module('voip', 'device', {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
+            if(form_data.device_type == 'cellphone') {
+                form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
+                form_data.enabled = form_data.call_forward.enabled;
+            }
+
             return form_data;
         },
 
@@ -679,6 +698,13 @@ winkstart.module('voip', 'device', {
                             });
                         }
                     );
+
+                    /* Cell Phones are always registered */
+                    $.each(data.data, function(k, v) {
+                        if($.inArray(v.device_type, ['cellphone']) > -1) {
+                            $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                        }
+                    });
                 }
             );
         },
@@ -779,6 +805,7 @@ winkstart.module('voip', 'device', {
 
                                     winkstart.publish('device.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        node.setMetadata('timeout', $('#parameter_input', popup_html).val());
 
                                         node.caption = _data.data.name || '';
 

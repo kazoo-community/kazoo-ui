@@ -44,30 +44,32 @@
                 </div>
                 <div class="clear"/>
                 <form name="form" class="stylized myform" method="post" action="#">
-                    <div>
-                        <label>Name</label>
-                        <input id="name" type="text" value="${form.name}"/>
-                        <div class="clear"/>
-                    </div>
-                    <div>
-                        <label>Ring Strategy</label>
-                        <select id="strategy">
-                            {{each(i, obj) form.strategy.items}}
-                                {{if form.strategy.selected == obj.id}}
-                                    <option value="${obj.id}" SELECTED>${obj.name}</option>
-                                {{else}}
-                                    <option value="${obj.id}">${obj.name}</option>
-                                {{/if}}
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div>
-                        <label>Timeout (s)</label>
-                        <input id="timeout" type="text" value="${form.timeout}"/>
-                        <div class="clear"/>
-                    </div>
-                    <div class="btn_wrapper">
-                        <a href="#" class="submit_btn ctr save-btn">Save</a><br>
+                    <div class="ring_group_form_wrapper">
+                        <div class="form_field_div">
+                            <label>Name</label>
+                            <input id="name" type="text" value="${form.name}"/>
+                            <div class="clear"/>
+                        </div>
+                        <div class="form_field_div">
+                            <label>Ring Strategy</label>
+                            <select id="strategy">
+                                {{each(i, obj) form.strategy.items}}
+                                    {{if form.strategy.selected == obj.id}}
+                                        <option value="${obj.id}" SELECTED>${obj.name}</option>
+                                    {{else}}
+                                        <option value="${obj.id}">${obj.name}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form_field_div">
+                            <label>Timeout (s)</label>
+                            <input id="timeout" type="text" value="${form.timeout}"/>
+                            <div class="clear"/>
+                        </div>
+                        <div class="button_field_div" style="text-align: center;">
+                            <a href="javascript:void(0);" class="fancy_button blue" id="save_ring_group">Save</a>
+                        </div>
                     </div>
                 </form>
             </div>

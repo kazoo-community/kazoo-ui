@@ -1007,7 +1007,7 @@ winkstart.module('voip', 'callflow', {
                                     $(this).parents('li').dataset('timeout', $(this).val());
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#save_ring_group', popup_html).click(function() {
                                     var name = $('#name', popup_html).val();
 
                                     endpoints = [];
