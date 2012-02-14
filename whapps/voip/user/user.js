@@ -830,8 +830,14 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup_html = THIS.templates.user_callflow.tmpl({
-                                    items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    parameter: {
+                                        name: 'timeout (s)',
+                                        value: node.getMetadata('timeout') || '20'
+                                    },
+                                    objects: {
+                                        items: data.data,
+                                        selected: node.getMetadata('id') || ''
+                                    }
                                 });
 
                                 if($('#user_selector option:selected', popup_html).val() == undefined) {
@@ -846,6 +852,7 @@ winkstart.module('voip', 'user', {
 
                                     winkstart.publish('user.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        node.setMetadata('timeout', $('#parameter_input', popup_html).val());
 
                                         node.caption = (_data.data.first_name || '') + ' ' + (_data.data.last_name || '');
 
@@ -855,7 +862,10 @@ winkstart.module('voip', 'user', {
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
+                                    node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+
                                     node.caption = $('#user_selector option:selected', popup_html).text();
+
                                     popup.dialog('close');
                                 });
 

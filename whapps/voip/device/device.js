@@ -805,6 +805,7 @@ winkstart.module('voip', 'device', {
 
                                     winkstart.publish('device.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        node.setMetadata('timeout', $('#parameter_input', popup_html).val());
 
                                         node.caption = _data.data.name || '';
 
