@@ -282,7 +282,7 @@ winkstart.module('voip', 'resource', {
                     var rule = $('#rules_dropdown', resource_html).val()
 
                     if(rule != 'custom') {
-                        $('#rules', resource_html).val('').hide()
+                        $('#rules', resource_html).val('').hide();
                     }
                     else {
                         $('#rules', resource_html).val('').show();
@@ -366,7 +366,12 @@ winkstart.module('voip', 'resource', {
                 check_rule_and_hide();
             });
 
-            check_rule_and_hide();
+            if(data.data.rules[0] in data.field_data.rules) {
+                $('#rules', resource_html).hide();
+            }
+            else {
+                $('#rules_dropdown', resource_html).val('custom');
+            }
 
             _after_render = callbacks.after_render;
 
