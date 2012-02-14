@@ -21,7 +21,6 @@ winkstart.module('auth', 'onboarding', {
         validation: {
             //phone_number
             step1: [
-                { name: '#area_code',               regex: /^[0-9]{3}$/ },
                 { name: '#e911_street_address',     regex: /^.+$/ },
                 { name: '#e911_extended_address',   regex: /^.*$/ },
                 { name: '#e911_region',             regex: /^[a-zA-Z\_\-\s]+$/ },
@@ -332,20 +331,25 @@ winkstart.module('auth', 'onboarding', {
                 list_number,
                 onboard_html = parent;
 
+            $('.pick_number_right', onboard_html).hide();
             $('#e911_block', onboard_html).hide();
             $('#e911_country_block', onboard_html).hide();
             $('#e911_country', onboard_html).attr('disabled','disabled');
             $('#area_code', onboard_html).focus();
 
-            $('#change_number', onboard_html).click(function(ev) {
+            $('#change_number, #change_number_link', onboard_html).click(function(ev) {
                 ev.preventDefault();
                 area_code = $('#area_code', onboard_html).val();
                 $('#e911_block', onboard_html).hide();
-                $('#picked_number', onboard_html).hide();
+                $('.pick_number_right', onboard_html).hide();
+                $('.pick_number_left', onboard_html).css('float', 'none');
+                //$('#picked_number', onboard_html).hide();
 
                 if(area_code.match(/[0-9]{3}/)) {
                     var display_fields = function() {
-                        $('#picked_number_li', onboard_html).show();
+                        //$('#picked_number_li', onboard_html).show();
+                        $('.pick_number_left', onboard_html).css('float', 'left');
+                        $('.pick_number_right', onboard_html).show();
                         $('#e911_block', onboard_html).show();
                     };
 
@@ -363,6 +367,7 @@ winkstart.module('auth', 'onboarding', {
                                     prev_random = 0;
                                     prev_area_code = area_code;
                                     number = list_number[0];
+                                    $('.pick_number_left', onboard_html).css('float', 'left');
                                     $('#picked_number', onboard_html).attr('data-number', number);
                                     $('#picked_number', onboard_html).show()
                                                                      .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));

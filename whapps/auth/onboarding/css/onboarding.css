@@ -7,12 +7,14 @@
 
 #onboarding-view .step_buttons {
     height: 50px;
-    margin: 20px;
+    margin: auto;
+    width: 600px;
 }
 
 #onboarding-view .form_content {
-    border-bottom: 1px solid #363636;
     margin-top: 20px;
+    margin: auto;
+    width: 600px;
 }
 
 #onboarding-view .step_buttons > a.right {
@@ -47,6 +49,7 @@
 
 #onboarding-view .steps_nav {
     margin-top: 20px;
+    padding-bottom: 50px;
 }
 
 #onboarding-view .steps_img {
@@ -88,25 +91,10 @@
 }
 
 #fast_onboarding_form {
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 15px;
-    padding-top: 15px;
 }
 
 #fast_onboarding_form legend {
     color: #ffffff;
-}
-
-#fast_onboarding_form .help_text {
-    background-color: #999999;
-    border: 1px solid #363636;
-    font-style: italic;
-    margin-bottom: 10px;
-    padding: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    box-shadow: 1px 1px 1px #333333
 }
 
 #fast_onboarding_form ul.controls li:first-child {
@@ -122,6 +110,129 @@
     margin-right: 10px;
 }
 
+#fast_onboarding_form .help_onboarding {
+    font-size: 10px;
+    color: #cccccc;
+    margin-top: 20px;
+}
+
+#fast_onboarding_form .help_onboarding.link {
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#fast_onboarding_form .wrapping_div {
+    border: 1px solid #333333;
+    background: #555555;
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+}
+
+#onboarding-view .hr {
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #999999;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#fast_onboarding_form .onboarding_field {
+    float: left;
+    width: 200px;
+    padding-bottom: 10px;
+}
+
+#fast_onboarding_form .onboarding_field > label{
+    text-align: left;
+    margin-left: 14px;
+}
+
+#fast_onboarding_form .onboarding_field input{
+    height: 20px;
+}
+/* Individual Steps */
+
+/* Step 1 */
+#fast_onboarding_form .pick_number_left {
+    margin: auto;
+    width: 380px;
+}
+
+#fast_onboarding_form .pick_number_right {
+    float: left;
+    width: 220px;
+}
+
+#fast_onboarding_form .area_code_wrapper {
+    float: left;
+    color: #05ADDC;
+    font-size: 35px;
+    font-weight: bold;
+    line-height: 20px;
+    text-shadow: 1px 1px 1px #333333;
+}
+
+#fast_onboarding_form .area_code_wrapper #area_code {
+    border-radius: 10px 10px 10px 10px;
+    color: #05ADDC;
+    font-size: 28px;
+    font-weight: bold;
+    height: 30px;
+    margin: 0 5px;
+    padding: 5px 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 90px;
+}
+
+#fast_onboarding_form .area_code_wrapper input::-webkit-input-placeholder {
+    color:    #CCCCCC !important;
+    font-size: 12px !important;
+}
+
+#fast_onboarding_form .area_code_wrapper input:-moz-placeholder {
+    color:    #CCCCCC !important;
+    font-size: 12px !important;
+}
+
+#fast_onboarding_form .picked_number {
+    font-size: 22px;
+    color: #C4DB4C;
+    text-shadow: 1px 1px 1px #333333;
+    height: 43px;
+    line-height: 43px;
+    text-align: center;
+}
+
+#fast_onboarding_form .help_area_code {
+    float: left;
+}
+
+#fast_onboarding_form .e911_block {
+    padding-top: 15px;
+}
+
+#fast_onboarding_form .help_e911_left {
+    background-image: url('img/help_e911.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 133px;
+}
+
+#fast_onboarding_form .e911_left {
+    float: left;
+    width: 160px;
+}
+
+#fast_onboarding_form .e911_right {
+    float: left;
+    width: 400px;
+    padding-left: 40px;
+}
+
+/* End new stuff */
 #fast_onboarding_form .change_number {
     background: url('img/btn_search.png') no-repeat;
     width: 154px;
@@ -134,13 +245,6 @@
 
 #fast_onboarding_form .number_wrapper {
     padding-top: 5px;
-}
-
-#fast_onboarding_form .picked_number {
-    font-size: 22px;
-    color: #05addc;
-    text-shadow: 1px 1px #000;
-    vertical-align: middle;
 }
 
 #fast_onboarding_form .column {
