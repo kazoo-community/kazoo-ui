@@ -631,7 +631,7 @@ winkstart.module('auth', 'onboarding', {
                     return true;
                 }
 
-                winkstart.validate.is_valid(THIS.config.validation['step2'], onboard_html, function() {
+                winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
                         var form_data = form2object('fast_onboarding_form');
 
                         //form_data.extra.number = number;

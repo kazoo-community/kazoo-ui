@@ -1,81 +1,92 @@
 <div>
     <fieldset id="step3" class="step_content">
-        <ul class="controls">
-            <li>
-                <label>Name</label>
-                <input type="text" name="extra.name" id="name"/>
-            </li>
-            <li>
-                <label>Company Name</label>
-                <input type="text" name="account.name" id="company_name"/>
-            </li>
-            <li>
-                <label>E-mail</label>
-                <input type="text" name="extra.email" id="email"/>
-            </li>
-
-            <li>
-                <label>Password</label>
-                <input type="password" name="extra.password" id="password"/>
-            </li>
-
-            <li>
-                <label>Confirm Password</label>
-                <input type="password" name="extra.verify_password" id="verify_password"/>
-            </li>
-            <li id="li_number_for">
-                <label>Type of Service: </label>
-                <select name="account.role" id="role">
-                    <option value="single_phone">Single Phone</option>
-                    <option value="small_office">Small Office</option>
-                    <option value="reseller">Reseller</option>
-                    <option value="api_tester">API Developer</option>
-                    <option value="voip_minutes">VoIP minutes only</option>
-                </select>
-            </li>
-            <li class="role_block" id="single_phone_div">
-            </li>
-            <li class="role_block" id="reseller_div">
-            </li>
-            <li class="role_block" id="api_tester_div">
-            </li>
-            <li class="role_block" id="small_office_div">
-                <div class="help_text">
-                    Configure your first 5 users easily, by setting their name and their extension number!
+        <div class="controls" style="padding: 0px; margin: 0px;">
+            <div class="onboarding_block">
+                <div class="e911_left">
+                    <div class="help_account wrapping_div"/>
+                    <div class="help_onboarding">* You can change this information anytime later from my account.</div>
                 </div>
-                <div class="user_tab">
-                    <div class="title_bar">
-                        <div class="third column">Users Name</div>
-                        <div class="fourth column">Ext. #</div>
+                <div class="e911_right">
+                    <div class="onboarding_field">
+                        <label>*Name</label>
+                        <input type="text" name="extra.name" id="name"/>
                     </div>
-                    <div class="first_row">
-                        <div class="third column"><span>Your Extension</span></div>
-                        <div class="fourth column"><input name="extra.ext1" class="extension_input" type="text" id="extension_1" placeholder="2001"/></div>
+                    <div class="onboarding_field">
+                        <label>*Company Name</label>
+                        <input type="text" name="account.name" id="company_name"/>
                     </div>
-                    <div class="second_row">
-                        <div class="third column"><input name="extra.name2"  class="last_name_input" type="text" id="name_2" placeholder="John Doe"/></div>
-                        <div class="fourth column"><input name="extra.ext2" class="extension_input" type="text" id="extension_2"/></div>
+                    <div class="onboarding_field">
+                        <label>*Password</label>
+                        <input type="password" name="extra.password" id="password"/>
                     </div>
-                    <div class="third_row">
-                        <div class="third column"><input name="extra.name3" class="last_name_input" type="text" id="name_3"/></div>
-                        <div class="fourth column"><input name="extra.ext3" class="extension_input" type="text" id="extension_3"/></div>
+                    <div class="onboarding_field">
+                        <label>*Confirm Password</label>
+                        <input type="password" name="extra.verify_password" id="verify_password"/>
                     </div>
-                    <div class="fourth_row">
-                        <div class="third column"><input name="extra.name4" class="last_name_input" type="text" id="name_4"/></div>
-                        <div class="fourth column"><input name="extra.ext4" class="extension_input" type="text" id="extension_4"/></div>
+                    <div class="onboarding_field">
+                        <label>*Email Address</label>
+                        <input type="text" name="extra.email" id="email"/>
                     </div>
-                    <div class="fifth_row">
-                        <div class="third column"><input name="extra.name5" class="last_name_input" type="text" id="name_5"/></div>
-                        <div class="fourth column"><input name="extra.ext5" class="extension_input" type="text" id="extension_5"/></div>
+                    <div class="onboarding_field">
+                        <label>*Type of Service</label>
+                        <select name="account.role" id="role">
+                            <option value="single_phone">Single Phone</option>
+                            <option value="small_office">Small Office</option>
+                            <option value="reseller">Reseller</option>
+                            <option value="api_tester">API Developer</option>
+                            <option value="voip_minutes">VoIP minutes only</option>
+                        </select>
                     </div>
-                    <div class="clear"/>
                 </div>
-                <div class="help_text">
-                    You will be able to configure more users once this setup is complete.
+                <div class="clear"/>
+            </div>
+            <div class="role_block" id="single_phone_div">
+            </div>
+            <div class="role_block" id="reseller_div">
+            </div>
+            <div class="role_block" id="api_tester_div">
+            </div>
+            <div class="role_block" id="small_office_div">
+                <div class="hr"/>
+                <div class="onboarding_block">
+                    <div class="e911_left">
+                        <div class="help_extensions wrapping_div"/>
+                        <div class="help_onboarding">* Configure your first 5 users auick and easy, by adding their name and extension number!<br/><br/>You can also add, delete or change users through Callflows under VoIP Services.</div>
+                    </div>
+                    <div class="e911_right">
+                        <div class="user_tab onboarding_field">
+                            <div class="title_bar">
+                                <div class="first column">Users Name</div>
+                                <div class="second column">Ext. #</div>
+                            </div>
+                            <div class="first_row">
+                                <div class="first column"><span>Your Extension</span></div>
+                                <div class="second column"><input name="extra.ext1" class="extension_input" type="text" id="extension_1" placeholder="2001"/></div>
+                            </div>
+                            <div class="second_row">
+                                <div class="first column"><input name="extra.name2"  class="last_name_input" type="text" id="name_2" placeholder="John Doe"/></div>
+                                <div class="second column"><input name="extra.ext2" class="extension_input" type="text" id="extension_2"/></div>
+                            </div>
+                            <div class="third_row">
+                                <div class="first column"><input name="extra.name3" class="last_name_input" type="text" id="name_3"/></div>
+                                <div class="second column"><input name="extra.ext3" class="extension_input" type="text" id="extension_3"/></div>
+                            </div>
+                            <div class="fourth_row">
+                                <div class="first column"><input name="extra.name4" class="last_name_input" type="text" id="name_4"/></div>
+                                <div class="second column"><input name="extra.ext4" class="extension_input" type="text" id="extension_4"/></div>
+                            </div>
+                            <div class="fifth_row">
+                                <div class="first column"><input name="extra.name5" class="last_name_input" type="text" id="name_5"/></div>
+                                <div class="second column"><input name="extra.ext5" class="extension_input" type="text" id="extension_5"/></div>
+                            </div>
+                            <div class="clear"/>
+                        </div>
+                    </div>
                 </div>
-            </li>
-        </ul>
-        <div class="clear"/>
+                <div class="clear"/>
+            </div>
+        </div>
     </fieldset>
     <div class="clear"/>
 </div>
+
