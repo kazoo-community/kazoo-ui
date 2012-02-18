@@ -111,18 +111,50 @@
                                     <span class="tooltip"/>
                                     <label for="vm_to_email_support_number">Support Number:</label>
                                 </span>
-                                <input id="vm_to_email_support_number" name="vm_to_email.support_number" type="text"  value="${data.vm_to_email.support_number}" />
+                                <input id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text"  value="${data.notifications.voicemail_to_email.support_number}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Input the support email address that will be inserted in the voicemail-to-email template">
                                     <span class="tooltip"/>
                                     <label for="vm_to_email_support_email">Support Email</label>
                                 </span>
-                                <input id="vm_to_email_support_email" name="vm_to_email.support_email" type="text"  value="${data.vm_to_email.support_email}" />
+                                <input id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text"  value="${data.notifications.voicemail_to_email.support_email}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="This will be displayed as the Send form field in the Voicemail-To-Email template">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_send_from">Send from</label>
+                                </span>
+                                <input id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text"  value="${data.notifications.voicemail_to_email.send_from}"/>
                             </li>
                         </ul>
                     </fieldset>
-
+                    <fieldset>
+                        <legend>Template fields for sub-accounts</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input the Service URL">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_service_url">Service URL</label>
+                                </span>
+                                <input id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text"  value="${data.notifications.voicemail_to_email.service_url}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input the service name">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_service_name">Service Name</label>
+                                </span>
+                                <input id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text"  value="${data.notifications.voicemail_to_email.service_name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Input the service provider">
+                                    <span class="tooltip"/>
+                                    <label for="vm_to_email_service_provider">Service Provider</label>
+                                </span>
+                                <input id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text"  value="${data.notifications.voicemail_to_email.service_provider}" />
+                            </li>
+                        </ul>
+                    </fieldset>
                     <div class="clear"></div>
 
                 </div>
