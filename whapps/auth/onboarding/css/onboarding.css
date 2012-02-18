@@ -8,13 +8,13 @@
 #onboarding-view .step_buttons {
     height: 50px;
     margin: auto;
-    width: 600px;
+    width: 620px;
 }
 
 #onboarding-view .form_content {
     margin-top: 20px;
     margin: auto;
-    width: 600px;
+    width: 620px;
 }
 
 #onboarding-view .step_buttons > a.right {
@@ -35,7 +35,7 @@
     margin-top: 50px;
     margin-bottom: 50px;
     text-align: left;
-    width: 400px;
+    width: 420px;
 }
 
 #onboarding-view .onboarding_title {
@@ -139,20 +139,20 @@
 
 #fast_onboarding_form .onboarding_field {
     float: left;
-    width: 200px;
+    width: 210px;
     padding-bottom: 20px;
 }
 
 #fast_onboarding_form .onboarding_field > label{
     text-align: left;
-    width: 160px;
+    width: 170px;
 }
 
 #fast_onboarding_form .onboarding_field select {
     border: 0 none;
     border-radius: 5px 5px 5px 5px;
-    max-width: 165px;
-    width: 165px;
+    max-width: 175px;
+    width: 175px;
     padding: 6px;
     float: left;
     margin-left: 2px;
@@ -163,8 +163,8 @@
     border: 0 none;
     border-radius: 5px 5px 5px 5px;
     height: 20px;
-    max-width: 160px;
-    width: 160px;
+    max-width: 170px;
+    width: 170px;
     padding: 4px;
 }
 /* Individual Steps */
@@ -270,7 +270,7 @@
 
 #fast_onboarding_form .e911_right {
     float: left;
-    width: 400px;
+    width: 420px;
     padding-left: 40px;
 }
 
@@ -285,6 +285,15 @@
     float: left;
 }
 
+#fast_onboarding_form .onboarding_field_merged {
+    width: 420px;
+}
+
+#fast_onboarding_form .valid_credit_cards {
+    background: url('img/cc_image.png') no-repeat center #555555;
+    width: 378px;
+    height: 41px;
+}
 /* End new stuff */
 #fast_onboarding_form .change_number {
     background: url('img/btn_search.png') no-repeat;
