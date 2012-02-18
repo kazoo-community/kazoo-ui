@@ -62,16 +62,18 @@
     font-size: 24px;
     height: 45px;
     line-height: 45px;
-    margin-left: 15px;
+    margin-left: 5px;
+    margin-right: 15px;
 }
 
 #content_welcome_page .right_div .register_div .register {
-    font-weight: bold;
-    height: 45px;
-    width: 145px;
-    text-shadow: 1px 1px #333333;
-    font-family: trebuchet MS;
-    font-size: 20px;
+    background: url('img/signup_button.png') no-repeat;
+    width: 169px;
+    height: 48px;
+}
+
+#content_welcome_page .right_div .register_div .register:hover {
+    background: url('img/signup_button_hover.png') no-repeat;
 }
 
 #content_welcome_page .right_div .register_div > div{
