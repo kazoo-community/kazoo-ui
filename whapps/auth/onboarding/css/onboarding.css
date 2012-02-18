@@ -101,13 +101,38 @@
     border-top: 0;
 }
 
-#fast_onboarding_form .prev {
+#onboarding-view .step_buttons .prev_step {
     float: left;
+    background: url('img/back.png') no-repeat center;
+    width: 67px;
+    height: 18px;
 }
 
-#fast_onboarding_form .next {
+#onboarding-view .step_buttons .prev_step:hover {
+    background: url('img/back_hover.png') no-repeat center;
+}
+
+#onboarding-view .step_buttons .next_step {
     float: right;
     margin-right: 10px;
+    background: url('img/next.png') no-repeat center;
+    width: 67px;
+    height: 18px;
+}
+
+#onboarding-view .step_buttons .next_step:hover {
+    background: url('img/next_hover.png') no-repeat center;
+}
+
+#onboarding-view .step_buttons .submit_account {
+    background: url('img/submit.png') no-repeat center;
+    width: 97px;
+    height: 28px;
+    float: right;
+}
+
+#onboarding-view .step_buttons .submit_account:hover {
+    background: url('img/submit_hover.png') no-repeat center;
 }
 
 #fast_onboarding_form .help_onboarding {
@@ -291,8 +316,9 @@
 
 #fast_onboarding_form .valid_credit_cards {
     background: url('img/cc_image.png') no-repeat center #555555;
-    width: 378px;
     height: 41px;
+    width: 368px;
+    margin-bottom: 20px;
 }
 /* End new stuff */
 #fast_onboarding_form .change_number {

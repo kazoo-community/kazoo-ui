@@ -4,7 +4,6 @@ winkstart.module('auth', 'onboarding', {
         ],
 
         templates: {
-            onboarding: 'tmpl/fast_onboarding.html',
             new_onboarding: 'tmpl/onboarding.html',
             step1: 'tmpl/step1.html',
             step2: 'tmpl/step2.html',
@@ -92,7 +91,8 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
-        global_used_number: '',
+        global_used_number: '', //TODO: may change with dom element?
+
         error_braintree: function(errors, callbacks) {
             var THIS = this,
                 wrapper = $('#onboarding-view'),
@@ -510,7 +510,7 @@ winkstart.module('auth', 'onboarding', {
             $form.attr('data-step', step_number);
 
             /* Manage display of buttons */
-            $('.step_buttons > a', parent).hide();
+            $('.step_buttons > button', parent).hide();
 
             if(error) {
                 $('.onboarding_title', parent).empty().html(error);
@@ -532,23 +532,7 @@ winkstart.module('auth', 'onboarding', {
             /* Show the right template */
             $('.step_content', parent).hide();
             $('#step'+ step_number, parent).show();
-
-
         },
-
-
-        move_to_tab: function(tab_number, text) {
-            var wrapper = $('#onboarding-view');
-
-            $('#step0, #step1, #step2, #steps', wrapper).hide();
-            $('#step' + tab_number, wrapper).show();
-
-            $('.next, .prev', wrapper).unbind('click').hide();
-            $('#save_account', wrapper).unbind('click').show();
-
-            $('.onboarding_title_text', wrapper).html(text);
-        },
-
 
         load_step: function(step, parent, data) {
             var THIS = this;
@@ -633,6 +617,7 @@ winkstart.module('auth', 'onboarding', {
 
                 winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
                         var form_data = form2object('fast_onboarding_form');
+                        console.log(form_data);
 
                         //form_data.extra.number = number;
                         number = $('#picked_number', onboard_html).dataset('number');
@@ -701,311 +686,6 @@ winkstart.module('auth', 'onboarding', {
 
             $('#ws-content').empty()
                             .append(onboard_html);
-        },
-
-        render_onboarding2: function() {
-            var THIS = this,
-                onboard_html = THIS.templates.onboarding.tmpl({}),
-                steps = $(onboard_html).find('fieldset'),
-                count = steps.size(),
-                area_code = '',
-                number = '',
-                prev_area_code,
-                quantity = 15,
-                nb_result,
-                random = 0,
-                prev_random,
-                list_number;
-
-            $.each(THIS.config.validation, function() {
-                winkstart.validate.set(this, onboard_html);
-            });
-
-            $('*[tooltip]', onboard_html).each(function() {
-                $(this).tooltip({ attach: onboard_html });
-            });
-
-            $('#ws-content').empty()
-                            .append(onboard_html);
-
-            $('#fast_onboarding_form', onboard_html).formToWizard({ submitButton: 'save_account' });
-
-            $('#small_office_div', onboard_html).hide();
-            $('#single_phone_div', onboard_html).hide();
-            $('#reseller_div', onboard_html).hide();
-            $('#api_tester_div', onboard_html).hide();
-            $('#e911_block', onboard_html).hide();
-            $('#address_infos', onboard_html).hide();
-            $('#e911_country_block', onboard_html).hide();
-            $('#e911_country', onboard_html).attr('disabled','disabled');
-            $('#country', onboard_html).attr('disabled','disabled');
-            $('#area_code', onboard_html).focus();
-
-            $('#change_number', onboard_html).click(function() {
-
-                area_code = $('#area_code', onboard_html).val();
-                $('#e911_block', onboard_html).hide();
-                $('#picked_number', onboard_html).hide();
-
-                if(area_code.match(/[0-9]{3}/)) {
-                    var display_fields = function() {
-                        $('#change_number', onboard_html).html('I don\'t like this number!');
-                        $('#picked_number_li', onboard_html).show();
-                        $('#e911_block', onboard_html).show();
-                    };
-
-                    //If the list of number is empty or the area code changed, then re-run the request.
-                    if(!list_number || prev_area_code != area_code) {
-                        winkstart.request(true, 'phone_number.get', {
-                                api_url: winkstart.apps['auth'].api_url,
-                                prefix: area_code,
-                                quantity: quantity
-                            },
-                            function(_data, status) {
-                                if(_data.data.length > 0) {
-                                    nb_result = _data.data.length;
-                                    list_number = _data.data;
-                                    prev_random = 0;
-                                    prev_area_code = area_code;
-                                    number = list_number[0];
-                                    $('#picked_number', onboard_html).show()
-                                                                     .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                                    display_fields();
-                                }
-                                else {
-                                    winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
-                                }
-                            }
-                        );
-                    }
-                    else {
-                        if(nb_result > 1) {
-                            random = Math.floor(Math.random()*nb_result);
-                            random == prev_random ? (random != 0 ? random-- : random++) : true;
-                            prev_random = random;
-                            number = list_number[random];
-                            $('#picked_number', onboard_html).show()
-                                                             .html(number.replace(/(\+1)([0-9]{3})([0-9]{3})([0-9]{4})/, '$1 ($2) $3-$4'));
-                            display_fields();
-                        }
-                        else {
-                            winkstart.alert('This number is the only number available for this Area Code at the moment');
-                        }
-                    }
-                }
-                else {
-                    winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
-                }
-            });
-
-            $('#role', onboard_html).change(function() {
-                $('#small_office_div', onboard_html).hide();
-                $('#single_phone_div', onboard_html).hide();
-                $('#reseller_div', onboard_html).hide();
-                $('#api_tester_div', onboard_html).hide();
-
-                switch($(this).val()) {
-                    case 'single_phone':
-                        break;
-
-                    case 'small_office':
-                        $('#small_office_div', onboard_html).slideDown('show');
-                        break;
-
-                    case 'reseller':
-                        $('#small_office_div', onboard_html).slideDown('show');
-                        break;
-
-                    case 'api_tester':
-                        break;
-                }
-            });
-
-            $('.next', onboard_html).click(function() {
-                var i = parseInt($(this).attr('id').substr(4,1));
-
-                if(i != 0 || (i == 0 && number.replace(/\-\+\(\)\s/g,'').match(/[0-9]{10}/))) {
-                    winkstart.validate.is_valid(THIS.config.validation['step'+i], onboard_html, function() {
-                            var stepName = 'step' + i;
-
-                            $('#' + stepName, onboard_html).hide();
-                            $('#step' + (parseInt(i) + 1), onboard_html).show();
-
-                            if(i + 2 == count) {
-                                $('#save_account', onboard_html).show();
-                            }
-
-                            $('#steps li', onboard_html).removeClass('current');
-                            $('#stepDesc' + (parseInt(i)+1), onboard_html).addClass('current');
-
-                            switch(i) {
-                                case 0:
-                                    $('#cardholder_name', onboard_html).focus();
-                                    $('#street_address', onboard_html).val($('#e911_street_address', onboard_html).val());
-                                    $('#extended_address', onboard_html).val($('#e911_extended_address', onboard_html).val());
-                                    $('#country', onboard_html).val($('#e911_country', onboard_html).val());
-                                    $('#region', onboard_html).val($('#e911_region', onboard_html).val());
-                                    $('#locality', onboard_html).val($('#e911_locality', onboard_html).val());
-                                    $('#postal_code', onboard_html).val($('#e911_postal_code', onboard_html).val());
-                                    $('#e911_address_text', onboard_html).html($('#e911_street_address', onboard_html).val()+'<br/>'+$('#e911_extended_address', onboard_html).val()+'</br>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_locality', onboard_html).val()+'<br/>'+$('#e911_region', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
-                                    break;
-
-                                case 1:
-                                    $('#name', onboard_html).focus();
-                                    break;
-                            }
-                        },
-                        function() {
-                            winkstart.alert('You can\'t go to the next step because you inputted invalid values in the form.');
-                        }
-                    );
-                }
-                else {
-                    winkstart.alert('You need to give an area code and click on the Generate number button before going to next step.');
-                    $('#area_code', onboard_html).focus();
-                }
-            });
-
-            $('#e911_country', onboard_html).change(function() {
-                if($(this).val() == 'Other') {
-                   $('#e911_country_block', onboard_html).show();
-                }
-                else {
-                   $('#e911_country_block', onboard_html).hide();
-                }
-            });
-
-            $('#country', onboard_html).change(function() {
-                if($(this).val() == 'Other') {
-                   $('#billing_country_text', onboard_html).show();
-                }
-                else {
-                   $('#billing_country_text', onboard_html).hide();
-                }
-            });
-
-            $('#e911_postal_code', onboard_html).blur(function() {
-                if($('#e911_country', onboard_html).val() != 'Other' && $(this).val() != '') {
-                    $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#e911_country', onboard_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
-                        if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                            $('#e911_locality', onboard_html).val(response.postalcodes[0].placeName);
-                            $('#e911_region', onboard_html).val(response.postalcodes[0].adminName1);
-                        }
-                    });
-                }
-            });
-
-            $('#postal_code', onboard_html).blur(function() {
-                if($('#country', onboard_html).val() != 'Other') {
-                    $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#country', onboard_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
-                        if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                            $('#locality', onboard_html).val(response.postalcodes[0].placeName);
-                            $('#region', onboard_html).val(response.postalcodes[0].adminName1);
-                        }
-                    });
-                }
-            });
-
-            $('#use_e911', onboard_html).change(function() {
-                if($(this).is(':checked')) {
-                    $('#street_address', onboard_html).val($('#e911_street_address', onboard_html).val());
-                    $('#extended_address', onboard_html).val($('#e911_extended_address', onboard_html).val());
-                    $('#country', onboard_html).val($('#e911_country', onboard_html).val());
-                    $('#region', onboard_html).val($('#e911_region', onboard_html).val());
-                    $('#locality', onboard_html).val($('#e911_locality', onboard_html).val());
-                    $('#postal_code', onboard_html).val($('#e911_postal_code', onboard_html).val());
-                    $('#e911_address_text', onboard_html).html($('#e911_street_address', onboard_html).val()+'<br/>'+$('#e911_extended_address', onboard_html).val()+'<br/>'+$('#e911_postal_code', onboard_html).val()+'&nbsp;'+$('#e911_locality', onboard_html).val()+'<br/>'+$('#e911_region', onboard_html).val()+',&nbsp;'+$('#e911_country', onboard_html).val());
-                }
-                else {
-                    $('#street_address', onboard_html).val('');
-                    $('#extended_address', onboard_html).val('');
-                    $('#region', onboard_html).val('');
-                    $('#locality', onboard_html).val('');
-                    $('#postal_code', onboard_html).val('');
-                    $('#country', onboard_html).val('US');
-                    $('#billing_country_text', onboard_html).hide();
-                }
-                $('#address_infos', onboard_html).toggle();
-                $('#e911_address_block', onboard_html).toggle()
-            });
-
-            $('#save_account', onboard_html).click(function() {
-                if($('#password', onboard_html).val() != $('#verify_password', onboard_html).val()) {
-                    winkstart.alert('Passwords are not matching, please retype your password.' );
-                    $('#password', onboard_html).val('');
-                    $('#verify_password', onboard_html).val('');
-
-                    //Gross Hack in order to display Validation Error next to password fields
-                    winkstart.validate.is_valid(THIS.config.validation['step2'], onboard_html, function() {
-                    });
-                    return true;
-                }
-
-                winkstart.validate.is_valid(THIS.config.validation['step2'], onboard_html, function() {
-                        var form_data = form2object('fast_onboarding_form');
-
-                        form_data.extra.number = number;
-
-                        THIS.clean_form_data(form_data, onboard_html);
-
-                        console.log(form_data);
-                        winkstart.request(true, 'onboard.create', {
-                                api_url: winkstart.apps['auth'].api_url,
-                                data: form_data
-                            },
-                            function (_data, status) {
-                                var callbacks = [],
-                                    callback_fn;
-
-                                if(_data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
-                                    winkstart.apps['auth'].user_id = _data.data.owner_id;
-                                    winkstart.apps['auth'].account_id = _data.data.account_id;
-                                    winkstart.apps['auth'].auth_token = _data.data.auth_token;
-
-                                    global_used_number = number;
-
-                                    var success = function() {
-                                        $('#ws-content').empty();
-
-                                        $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
-
-                                        winkstart.publish('auth.load_account');
-                                    };
-
-                                    if(_data.data.errors) {
-                                        $.each(_data.data.errors, function(key, val) {
-                                            callbacks.push(function() {
-                                                winkstart.publish('onboard.error_' + key, val, callbacks);
-                                            });
-                                        });
-
-                                        callbacks.push(function() {
-                                            winkstart.alert('info', 'You fixed the errors properly and your account has been created!');
-                                            success();
-                                        });
-
-                                        callback_fn = callbacks.splice(0, 1);
-
-                                        callback_fn[0]();
-                                    }
-                                    else {
-                                        success();
-                                    }
-                                }
-                                else {
-                                    winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
-                                }
-                            },
-                            function(_data, status) {
-                                winkstart.alert('There was an error in the request, please try again or contact us.');
-                            }
-                        );
-                    },
-                    function() {
-                        winkstart.alert('You can\'t finish the setup because you inputted invalid values in the form.');
-                    }
-                );
-            });
         }
     }
 );
