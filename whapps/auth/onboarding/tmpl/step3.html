@@ -28,60 +28,82 @@
                         <input type="text" name="extra.email" id="email"/>
                     </div>
                     <div class="onboarding_field">
-                        <label>*Type of Service</label>
-                        <select name="account.role" id="role">
-                            <option value="single_phone">Single Phone</option>
-                            <option value="small_office">Small Office</option>
-                            <option value="reseller">Reseller</option>
-                            <option value="api_tester">API Developer</option>
-                            <option value="voip_minutes">VoIP minutes only</option>
-                        </select>
+                        <label>*Verify Email Address</label>
+                        <input type="text" name="extra.verify_email" id="verify_email"/>
                     </div>
                 </div>
                 <div class="clear"/>
             </div>
-            <div class="role_block" id="single_phone_div">
-            </div>
-            <div class="role_block" id="reseller_div">
-            </div>
-            <div class="role_block" id="api_tester_div">
-            </div>
-            <div class="role_block" id="small_office_div">
-                <div class="hr"/>
-                <div class="onboarding_block">
-                    <div class="e911_left">
-                        <div class="help_extensions wrapping_div"/>
-                        <div class="help_onboarding">* Configure your first 5 users auick and easy, by adding their name and extension number!<br/><br/>You can also add, delete or change users through Callflows under VoIP Services.</div>
-                    </div>
-                    <div class="e911_right">
-                        <div class="user_tab onboarding_field">
-                            <div class="title_bar">
-                                <div class="first column">Users Name</div>
-                                <div class="second column">Ext. #</div>
-                            </div>
-                            <div class="first_row">
-                                <div class="first column"><span>Your Extension</span></div>
-                                <div class="second column"><input name="extra.ext1" class="extension_input" type="text" id="extension_1" placeholder="2001"/></div>
-                            </div>
-                            <div class="second_row">
-                                <div class="first column"><input name="extra.name2"  class="last_name_input" type="text" id="name_2" placeholder="John Doe"/></div>
-                                <div class="second column"><input name="extra.ext2" class="extension_input" type="text" id="extension_2"/></div>
-                            </div>
-                            <div class="third_row">
-                                <div class="first column"><input name="extra.name3" class="last_name_input" type="text" id="name_3"/></div>
-                                <div class="second column"><input name="extra.ext3" class="extension_input" type="text" id="extension_3"/></div>
-                            </div>
-                            <div class="fourth_row">
-                                <div class="first column"><input name="extra.name4" class="last_name_input" type="text" id="name_4"/></div>
-                                <div class="second column"><input name="extra.ext4" class="extension_input" type="text" id="extension_4"/></div>
-                            </div>
-                            <div class="fifth_row">
-                                <div class="first column"><input name="extra.name5" class="last_name_input" type="text" id="name_5"/></div>
-                                <div class="second column"><input name="extra.ext5" class="extension_input" type="text" id="extension_5"/></div>
-                            </div>
-                            <div class="clear"/>
+            <div class="onboarding_block">
+                <div class="type_title_bar">
+                    <div class="type_title">Type of Account: </div>
+                    Choose one of the options below to set up your account with 5 free seats.
+                    <div class="clear"/>
+                </div>
+                <div class="role_div">
+                    <div class="clear hr"/>
+                    <div class="role_row">
+                        <div class="role_icon reseller"/>
+                        <div class="role_title">Reseller</div>
+                        <input type="radio" class="role_radio" name="account.role" value="reseller"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">Manage and configure your customer's VoIP systems here.</div>
                         </div>
                     </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon small_office"/>
+                        <div class="role_title">Small Office</div>
+                        <input type="radio" class="role_radio" name="account.role" value="small_office"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">Create and customize a unique phone system that matches your business needs.</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon single_phone"/>
+                        <div class="role_title">Single Phone</div>
+                        <input type="radio" class="role_radio" name="account.role" value="single_phone"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">Get VoIP for your single home office phone or cell phone.</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon api_developer"/>
+                        <div class="role_title">API Developer</div>
+                        <input type="radio" class="role_radio" name="account.role" value="api_developer"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">Get access to our APIs you need to start building the telecom app you always wanted.</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon voip_minutes"/>
+                        <div class="role_title">VoIP Minutes</div>
+                        <input type="radio" class="role_radio" name="account.role" value="voip_minutes"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">Just looking for minutes? We've got DIDs and trunks to make your life easier.</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
                 </div>
                 <div class="clear"/>
             </div>
@@ -89,4 +111,3 @@
     </fieldset>
     <div class="clear"/>
 </div>
-

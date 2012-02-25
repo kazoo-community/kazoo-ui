@@ -7,7 +7,12 @@ winkstart.module('auth', 'onboarding', {
             new_onboarding: 'tmpl/onboarding.html',
             step1: 'tmpl/step1.html',
             step2: 'tmpl/step2.html',
-            step3: 'tmpl/step3.html'
+            step3: 'tmpl/step3.html',
+            /*api_developer: 'tmpl/roles/api_developer.html',
+            single_phone: 'tmpl/roles/single_phone.html',
+            voip_minutes: 'tmpl/roles/voip_minutes.html',*/
+            small_office: 'tmpl/roles/small_office.html',
+            reseller: 'tmpl/roles/reseller.html'
         },
 
         subscribe: {
@@ -44,14 +49,9 @@ winkstart.module('auth', 'onboarding', {
                 { name: '#password',         regex: /^.{3,16}$/ },
                 { name: '#verify_password',  regex: /^.{3,16}$/ },
                 { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#verify_email',     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
                 { name: '#company_name',     regex: /^.*$/ },
-                { name: '#name',             regex: /^.*$/ },
-                { name: '#extension_1',      regex: /^[0-9]*$/ },
-                { name: '#extension_2',      regex: /^[0-9]*$/ },
-                { name: '#extension_3',      regex: /^[0-9]*$/ },
-                { name: '#extension_4',      regex: /^[0-9]*$/ },
-                { name: '#extension_5',      regex: /^[0-9]*$/ },
-
+                { name: '#name',             regex: /^.*$/ }
             ],
         },
 
@@ -279,6 +279,8 @@ winkstart.module('auth', 'onboarding', {
                 }
             ]
 
+            form_data.account.role = $('input:radio[name=account.role]:checked').val();
+
             if(form_data.account.role == 'small_office') {
                 extension = $('#extension_1', target).val();
                 form_data.extensions[0].callflow.numbers = [ extension ];
@@ -479,28 +481,16 @@ winkstart.module('auth', 'onboarding', {
 
             $('#name', onboard_html).focus();
 
-            $('.role_block', onboard_html).hide();
+            $('.role_radio', onboard_html).click(function() {
+                var role = $('input:radio[name=account.role]:checked').val(),
+                    $container = $(this).parents('.role_div').first();
 
-            $('#role', onboard_html).change(function() {
-                $('.role_block', onboard_html).hide();
+                $('.role_content').slideUp().empty();
 
-                switch($(this).val()) {
-                    case 'single_phone':
-                        break;
-
-                    case 'small_office':
-                        $('#small_office_div', onboard_html).slideDown('show');
-                        break;
-
-                    case 'reseller':
-                        $('#small_office_div', onboard_html).slideDown('show');
-                        break;
-
-                    case 'api_tester':
-                        break;
+                if(role in THIS.templates) {
+                    $('.role_content', $container).hide().append(THIS.templates[role].tmpl()).slideDown();
                 }
             });
-
         },
 
         move_to_step: function(step_number, parent, error) {
@@ -610,8 +600,16 @@ winkstart.module('auth', 'onboarding', {
                     $('#verify_password', onboard_html).val('');
 
                     //Gross Hack in order to display Validation Error next to password fields
-                    winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
-                    });
+                    winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {}, function() {});
+                    return true;
+                }
+                if($('#email', onboard_html).val() != $('#verify_email', onboard_html).val()) {
+                    winkstart.alert('Email addresses are not matching, please retype your email address.' );
+                    $('#email', onboard_html).val('');
+                    $('#verify_email', onboard_html).val('');
+
+                    //Gross Hack in order to display Validation Error next to email fields
+                    winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {}, function() {});
                     return true;
                 }
 
