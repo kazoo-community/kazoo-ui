@@ -1,13 +1,15 @@
 <div>
     <fieldset id="step2" class="step_content">
-        <div class="controls" style="padding: 0px; margin: 0px;">
+        <div style="padding: 0px; margin: 0px;">
             <div class="onboarding_block">
-                <div class="e911_left">
-                    <div class="help_card wrapping_div"/>
-                    <div class="help_onboarding">* This helps us prevent fraud. Your card will not be charged without notifying you when you purchase our paid services.</div>
+                <div class="onboarding_div_left">
+                    <div class="credit_card_help">
+                        <div class="help_card wrapping_div"/>
+                        <div class="help_onboarding">* This helps us prevent fraud. Your card will not be charged without notifying you when you purchase our paid services.</div>
+                    </div>
+                    <div class="cvv_help"></div>
                 </div>
-                <div class="e911_right">
-                    <!-- <div class="wrapping_div onboarding_field_merged valid_credit_cards"/> -->
+                <div class="onboarding_div_right">
                     <div class="onboarding_field_merged valid_credit_cards"/>
                     <div class="onboarding_field">
                         <label>*Name on Card</label>
@@ -18,7 +20,7 @@
                         <input type="text" name="braintree.credit_card.number" id="card_number" />
                     </div>
                     <div class="onboarding_field">
-                        <label>*CVV</label>
+                        <label style="width: 50px;">*CVV</label><span class="tooltip-wrapper cvv_help_icon"><span class="tooltip"/></span>
                         <input type="text" name="braintree.credit_card.cvv" id="cvv" maxlength="4"/>
                     </div>
                     <div class="onboarding_field">
@@ -63,11 +65,11 @@
             </div>
             <div class="hr"/>
             <div class="onboarding_block">
-                <div class="e911_left">
+                <div class="onboarding_div_left">
                     <div class="billing_as_911">Billing Address is the same as 911?</div>
                     <input type="checkbox" name="field_data.use_e911" id="use_e911"/>
                 </div>
-                <div class="e911_right">
+                <div class="onboarding_div_right">
                     <div class="onboarding_field">
                         <label>*Country</label>
                         <select name="braintree.credit_card.billing_address.country" id="country">

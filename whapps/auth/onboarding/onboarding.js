@@ -98,7 +98,6 @@ winkstart.module('auth', 'onboarding', {
                 wrapper = $('#onboarding-view'),
                 error_message = 'Please correct the following errors:<br/>';
 
-            //THIS.move_to_tab(1, 'Credit Card Information');
             THIS.move_to_step(2, wrapper, 'Credit Card Information');
 
             $.each(errors.data.errors, function() {
@@ -109,6 +108,8 @@ winkstart.module('auth', 'onboarding', {
 
             $('#save_account', wrapper).unbind().click(function() {
                 winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
+                        $('html, body').scrollTop(0);
+
                         var form_data = form2object('fast_onboarding_form');
 
                         THIS.clean_form_data(form_data);
@@ -142,10 +143,8 @@ winkstart.module('auth', 'onboarding', {
 
         error_phone_numbers: function(errors, callbacks) {
             var THIS = this,
-                replaces,
                 wrapper = $('#onboarding-view');
 
-            //THIS.move_to_tab(0, 'Phone number and e911 Information');
             THIS.move_to_step(1, wrapper, 'Phone number and e911 Information');
 
             winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[global_used_number].message+'<br/>'+errors[global_used_number].data.dash_e911||' ');
@@ -157,6 +156,8 @@ winkstart.module('auth', 'onboarding', {
 
             $('#save_account', wrapper).unbind().click(function() {
                 winkstart.validate.is_valid(THIS.config.validation['step0'], function() {
+                        $('html, body').scrollTop(0);
+
                         var form_data = form2object('fast_onboarding_form');
 
                         if(errors[global_used_number].data.dash_e911) {
@@ -279,6 +280,7 @@ winkstart.module('auth', 'onboarding', {
                 }
             ]
 
+            //form2object fails to get radio values so here is a quick hack.
             form_data.account.role = $('input:radio[name=account.role]:checked').val();
 
             if(form_data.account.role == 'small_office') {
@@ -306,6 +308,9 @@ winkstart.module('auth', 'onboarding', {
 
             form_data.account.caller_id = {
                 default: {
+                    number: number
+                },
+                emergency: {
                     number: number
                 }
             };
@@ -337,7 +342,6 @@ winkstart.module('auth', 'onboarding', {
             $('#e911_block', onboard_html).hide();
             $('#e911_country_block', onboard_html).hide();
             $('#e911_country', onboard_html).attr('disabled','disabled');
-            $('#area_code', onboard_html).focus();
 
             $('#change_number, #change_number_link', onboard_html).click(function(ev) {
                 ev.preventDefault();
@@ -345,14 +349,13 @@ winkstart.module('auth', 'onboarding', {
                 $('#e911_block', onboard_html).hide();
                 $('.pick_number_right', onboard_html).hide();
                 $('.pick_number_left', onboard_html).css('float', 'none');
-                //$('#picked_number', onboard_html).hide();
 
                 if(area_code.match(/[0-9]{3}/)) {
                     var display_fields = function() {
-                        //$('#picked_number_li', onboard_html).show();
                         $('.pick_number_left', onboard_html).css('float', 'left');
                         $('.pick_number_right', onboard_html).show();
                         $('#e911_block', onboard_html).show();
+                        $('#e911_postal_code', onboard_html).focus();
                     };
 
                     //If the list of number is empty or the area code changed, then re-run the request.
@@ -428,21 +431,25 @@ winkstart.module('auth', 'onboarding', {
                 current_step = 2,
                 onboard_html = parent;
 
-            $('#cardholder_name', onboard_html).focus();
             $('#country', onboard_html).attr('disabled','disabled');
             $('#billing_country_text', onboard_html).hide();
-
-            $('#street_address', onboard_html).val($('#e911_street_address', onboard_html).val());
-            $('#extended_address', onboard_html).val($('#e911_extended_address', onboard_html).val());
-            $('#country', onboard_html).val($('#e911_country', onboard_html).val());
-            $('#region', onboard_html).val($('#e911_region', onboard_html).val());
-            $('#locality', onboard_html).val($('#e911_locality', onboard_html).val());
-            $('#postal_code', onboard_html).val($('#e911_postal_code', onboard_html).val());
 
             $('#country', onboard_html).change(function() {
                 $(this).val() === 'Other' ? $('#billing_country_text', onboard_html).show() : $('#billing_country_text', onboard_html).hide();
             });
 
+            $('.cvv_help_icon', onboard_html).hover(
+                function() {
+                    $('.cvv_help', onboard_html).show();
+                    $('.credit_card_help', onboard_html).hide();
+                },
+                function() {
+                    $('.cvv_help', onboard_html).hide();
+                    $('.credit_card_help', onboard_html).show();
+                }
+            );
+
+            //Code in order to automatically fill State and City based on the Postal Code
             $('#postal_code', onboard_html).blur(function() {
                 if($('#country', onboard_html).val() != 'Other' && $(this).val() != '') {
                     $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country='+$('#country', onboard_html).val()+'&callback=?', { postalcode: $(this).val() }, function(response) {
@@ -479,8 +486,6 @@ winkstart.module('auth', 'onboarding', {
                 current_step = 3,
                 onboard_html = parent;
 
-            $('#name', onboard_html).focus();
-
             $('.role_radio', onboard_html).click(function() {
                 var role = $('input:radio[name=account.role]:checked').val(),
                     $container = $(this).parents('.role_div').first();
@@ -494,7 +499,7 @@ winkstart.module('auth', 'onboarding', {
         },
 
         move_to_step: function(step_number, parent, error) {
-            var $form = $form = $('#fast_onboarding_form', parent),
+            var $form = $('#fast_onboarding_form', parent),
                 max_step = parseFloat($form.dataset('maxstep'));
 
             $form.attr('data-step', step_number);
@@ -521,7 +526,16 @@ winkstart.module('auth', 'onboarding', {
 
             /* Show the right template */
             $('.step_content', parent).hide();
+
             $('#step'+ step_number, parent).show();
+
+            switch(step_number) {
+                case 1: $('#area_code', parent).focus();
+                case 2: $('#cardholder_name', parent).focus();
+                case 3: $('#name', parent).focus();
+            }
+
+            $('html, body').scrollTop(0);
         },
 
         load_step: function(step, parent, data) {
@@ -541,7 +555,6 @@ winkstart.module('auth', 'onboarding', {
             }
         },
 
-
         render_onboarding: function() {
             var THIS = this,
                 onboard_html = THIS.templates.new_onboarding.tmpl({}),
@@ -549,7 +562,6 @@ winkstart.module('auth', 'onboarding', {
                 max_step = $form.dataset('max-step'),
                 current_step = 1;
 
-            //can replace by for each
             THIS.load_step(1, onboard_html);
             THIS.load_step(2, onboard_html);
             THIS.load_step(3, onboard_html);
@@ -599,7 +611,7 @@ winkstart.module('auth', 'onboarding', {
                     $('#password', onboard_html).val('');
                     $('#verify_password', onboard_html).val('');
 
-                    //Gross Hack in order to display Validation Error next to password fields
+                    //Display Validation Error next to password fields
                     winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {}, function() {});
                     return true;
                 }
@@ -608,16 +620,16 @@ winkstart.module('auth', 'onboarding', {
                     $('#email', onboard_html).val('');
                     $('#verify_email', onboard_html).val('');
 
-                    //Gross Hack in order to display Validation Error next to email fields
+                    //Display Validation Error next to email fields
                     winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {}, function() {});
                     return true;
                 }
 
                 winkstart.validate.is_valid(THIS.config.validation['step3'], onboard_html, function() {
-                        var form_data = form2object('fast_onboarding_form');
-                        console.log(form_data);
+                        $('html, body').scrollTop(0);
 
-                        //form_data.extra.number = number;
+                        var form_data = form2object('fast_onboarding_form');
+
                         number = $('#picked_number', onboard_html).dataset('number');
                         form_data.extra.number = number;
 

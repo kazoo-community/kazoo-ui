@@ -45,6 +45,7 @@
     line-height: 36px;
     font-size: 20px;
     text-align: center;
+    text-shadow: 1px 1px 1px #000000;
 }
 
 #onboarding-view .steps_nav {
@@ -90,17 +91,15 @@
     color: #C4DB4C;
 }
 
-#fast_onboarding_form {
-}
-
-#fast_onboarding_form legend {
+/*#fast_onboarding_form legend {
     color: #ffffff;
 }
 
 #fast_onboarding_form ul.controls li:first-child {
     border-top: 0;
-}
+}*/
 
+/* Buttons */
 #onboarding-view .step_buttons .prev_step {
     float: left;
     background: url('img/back.png') no-repeat center;
@@ -139,6 +138,21 @@
     font-size: 10px;
     color: #cccccc;
     margin-top: 20px;
+}
+
+#fast_onboarding_form .onboarding_div_left {
+    float: left;
+    width: 160px;
+}
+
+#fast_onboarding_form .onboarding_div_right {
+    float: left;
+    width: 420px;
+    padding-left: 40px;
+}
+
+#fast_onboarding_form .onboarding_block {
+    padding-top: 20px;
 }
 
 #fast_onboarding_form .help_onboarding.link {
@@ -201,6 +215,20 @@
 /* Individual Steps */
 
 /* Step 1 */
+#fast_onboarding_form .change_number {
+    background: url('img/btn_search.png') no-repeat;
+    width: 154px;
+    height: 45px;
+}
+
+#fast_onboarding_form .change_number:hover {
+    background: url('img/btn_search_hover.png') no-repeat;
+}
+
+#fast_onboarding_form #change_number_link {
+    font-size: 14px;
+}
+
 #fast_onboarding_form .pick_number_left {
     margin: auto;
     width: 380px;
@@ -270,22 +298,6 @@
 }
 
 /* Step 2 */
-#fast_onboarding_form .help_account {
-    background-image: url('img/help_account.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 85px;
-    width: 133px;
-}
-
-#fast_onboarding_form .help_extensions {
-    background-image: url('img/help_extensions.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 85px;
-    width: 133px;
-}
-
 #fast_onboarding_form .help_card {
     background-image: url('img/help_card.png');
     background-position: center;
@@ -294,26 +306,24 @@
     width: 133px;
 }
 
-#fast_onboarding_form .e911_left {
-    float: left;
-    width: 160px;
-}
-
-#fast_onboarding_form .e911_right {
-    float: left;
-    width: 420px;
-    padding-left: 40px;
-}
-
-#fast_onboarding_form .onboarding_block {
-    padding-top: 20px;
-}
-
 #fast_onboarding_form .billing_as_911 {
     font-weight: bold;
     color: #cccccc;
-    width: 100px;
+    width: 140px;
     float: left;
+    font-size: 15px;
+}
+
+#fast_onboarding_form #use_e911 {
+    margin-left: 5px;
+    margin-top: 13px;
+}
+
+#fast_onboarding_form .cvv_help {
+    display: none;
+    background: url('img/help_cvv.png') no-repeat center;
+    height: 194px;
+    width: 167px;
 }
 
 #fast_onboarding_form .onboarding_field_merged {
@@ -326,23 +336,21 @@
     width: 290px;
 }
 
-/* End new stuff */
-#fast_onboarding_form .change_number {
-    background: url('img/btn_search.png') no-repeat;
-    width: 154px;
-    height: 45px;
-}
-
-#fast_onboarding_form .change_number:hover {
-    background: url('img/btn_search_hover.png') no-repeat;
-}
-
 #fast_onboarding_form #expiration_month {
     width: 54px;
 }
 
 #fast_onboarding_form #expiration_year {
     width: 70px;
+}
+
+/* Step 3 */
+#fast_onboarding_form .help_account {
+    background-image: url('img/help_account.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 85px;
+    width: 133px;
 }
 
 /* New role layout */
@@ -354,15 +362,11 @@
     text-shadow: 1px 1px 1px #333333;
 }
 
-#fast_onboarding_form .type_title {
+#fast_onboarding_form .type_title_bar .type_title {
     float: left;
     font-size: 20px;
     font-weight: bold;
     padding-right: 10px;
-}
-
-#fast_onboarding_form .role_div {
-
 }
 
 #fast_onboarding_form .role_div .role_row {
@@ -436,10 +440,6 @@
     display: none;
 }
 
-#fast_onboarding_form .radio_block {
-
-}
-
 #fast_onboarding_form .radio_block .radio_div_left {
     float: left;
     width: 186px;
@@ -467,57 +467,56 @@
 }
 
 /* Extension Array */
-#fast_onboarding_form .column {
+#fast_onboarding_form .user_tab {
+    padding-bottom: 10px;
+    display: block;
+    margin: auto;
+    width: 270px;
+}
+
+#fast_onboarding_form .user_tab .title_bar {
+    border-bottom: 1px solid #333333;
+}
+
+#fast_onboarding_form .user_tab .first_row {
+    border-top: 1px solid #999999;
+}
+
+#fast_onboarding_form .user_tab .column {
     float:left;
     text-align: center;
     height: 30px;
 }
 
-#fast_onboarding_form .column:not(.title) {
+#fast_onboarding_form .user_tab .column:not(.title) {
     padding-top: 10px;
 }
 
-/*#fast_onboarding_form .column:not(:last-child) {
-    border-right: 1px solid #b0b1b3;
-}
-*/
-#fast_onboarding_form .user_tab {
-    padding-bottom: 10px;
-    display: block;
-    margin: auto;
-    width: 330px;
-}
-
-#fast_onboarding_form .column.first {
+#fast_onboarding_form .user_tab .column.first {
     width: 170px;
     padding-right: 30px;
 }
 
-#fast_onboarding_form .column.first > span {
+#fast_onboarding_form .user_tab .column.first > span {
     height: 30px;
     line-height: 30px;
 }
 
-#fast_onboarding_form .column.second {
+#fast_onboarding_form .user_tab .column.second {
     width: 70px;
 }
 
-#fast_onboarding_form .column.title {
+#fast_onboarding_form .user_tab .column.title {
     font-weight: bold;
     font-size: 12px;
-    border-bottom: 1px solid #eeeeee;
     height: 15px;
     text-align: left;
 }
 
-#fast_onboarding_form .onboarding_field .extension_input {
+#fast_onboarding_form .user_tab .extension_input {
     width: 50px;
 }
 
-#fast_onboarding_form .first_name_input {
-    width: 100px;
-}
-
-#fast_onboarding_form .last_name_input {
+#fast_onboarding_form .user_tab .name_input {
     width: 235px;
 }
