@@ -259,7 +259,10 @@ winkstart.module('voip', 'device', {
                     },
                     functions: {
                         inArray: function(value, array) {
-                            return ($.inArray(value, array) == -1) ? false : true;
+                            if(array) {
+                                return ($.inArray(value, array) == -1) ? false : true;
+                            }
+                            else return false;
                         }
                     }
                 };
