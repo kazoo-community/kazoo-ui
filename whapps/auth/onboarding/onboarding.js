@@ -91,8 +91,6 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
-        global_used_number: '', //TODO: may change with dom element?
-
         error_braintree: function(errors, callbacks) {
             var THIS = this,
                 wrapper = $('#onboarding-view'),
@@ -107,7 +105,7 @@ winkstart.module('auth', 'onboarding', {
             winkstart.alert('error', error_message);
 
             $('#save_account', wrapper).unbind().click(function() {
-                winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
+                winkstart.validate.is_valid(THIS.config.validation['step2'], function() {
                         $('html, body').scrollTop(0);
 
                         var form_data = form2object('fast_onboarding_form');
@@ -143,26 +141,27 @@ winkstart.module('auth', 'onboarding', {
 
         error_phone_numbers: function(errors, callbacks) {
             var THIS = this,
-                wrapper = $('#onboarding-view');
+                wrapper = $('#onboarding-view'),
+                new_number = $('#picked_number', wrapper).dataset('number');
 
             THIS.move_to_step(1, wrapper, 'Phone number and e911 Information');
 
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[global_used_number].message+'<br/>'+errors[global_used_number].data.dash_e911||' ');
+            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[new_number].message+'<br/>'+errors[new_number].data.dash_e911||' ');
 
-            if(errors[global_used_number].data.dash_e911) {
+            if(errors[new_number].data.dash_e911) {
                 $('#pick_number_block', wrapper).hide();
                 $('#e911_block', wrapper).show();
             }
 
             $('#save_account', wrapper).unbind().click(function() {
-                winkstart.validate.is_valid(THIS.config.validation['step0'], function() {
+                winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
                         $('html, body').scrollTop(0);
 
                         var form_data = form2object('fast_onboarding_form');
 
-                        if(errors[global_used_number].data.dash_e911) {
-                            number = global_used_number;
-                            form_data.extra.number = global_used_number;
+                        if(errors[new_number].data.dash_e911) {
+                            number = new_number;
+                            form_data.extra.number = new_number;
 
                             THIS.clean_form_data(form_data);
                             console.log(form_data);
@@ -190,7 +189,7 @@ winkstart.module('auth', 'onboarding', {
 
                             THIS.clean_form_data(form_data);
 
-                            form_data.phone_numbers[number].replaces = global_used_number;
+                            form_data.phone_numbers[number].replaces = new_number;
 
                             winkstart.request(true, 'phone_number.create', {
                                     api_url: winkstart.apps['auth'].api_url,
@@ -648,8 +647,6 @@ winkstart.module('auth', 'onboarding', {
                                     winkstart.apps['auth'].user_id = _data.data.owner_id;
                                     winkstart.apps['auth'].account_id = _data.data.account_id;
                                     winkstart.apps['auth'].auth_token = _data.data.auth_token;
-
-                                    global_used_number = number;
 
                                     var success = function() {
                                         $('#ws-content').empty();

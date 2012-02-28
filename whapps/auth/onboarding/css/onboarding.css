@@ -40,6 +40,7 @@
 
 #onboarding-view .onboarding_title {
     margin-top: 20px;
+    padding-bottom: 20px;
     color: #05ADDC;
     height: 36px;
     line-height: 36px;
@@ -49,7 +50,6 @@
 }
 
 #onboarding-view .steps_nav {
-    margin-top: 20px;
     padding-bottom: 30px;
 }
 
@@ -333,7 +333,7 @@
 #fast_onboarding_form .valid_credit_cards {
     background: url('img/credit_cards.png') no-repeat center;
     height: 85px;
-    width: 290px;
+    width: 397px;
 }
 
 #fast_onboarding_form #expiration_month {
