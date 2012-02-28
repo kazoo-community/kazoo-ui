@@ -1,0 +1,46 @@
+#cdr-view {
+    margin: auto;
+    width: 90%;
+}
+
+#cdr-view .table-wrapper {
+    margin-top: 30px;
+}
+
+#cdr-view .button-search {
+    height: 14px;
+    line-height: 14px;
+}
+
+#cdr-view .date {
+    width: 45%;
+    float: left;
+    margin-bottom: 18px;
+}
+
+#cdr-view .date input{
+    font-size: 11px;
+    padding: 4px 2px;
+    border: solid 1px #999;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#cdr-view .date input:focus {
+    background: #FFF;
+    border: solid 1px #09f;
+    color: #000;
+}
+
+#cdr-view .date a {
+    vertical-align: middle;
+}
+
+#cdr-view .date input[type="text"] {
+    height: 12px;
+    width: 100px;
+}

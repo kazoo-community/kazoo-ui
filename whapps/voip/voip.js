@@ -63,6 +63,7 @@ winkstart.module('voip', 'voip', {
             'registration': false,
             'resource': false,
             'timeofday': false,
+            'cdr': false,
             'featurecode': false
         },
 
