@@ -86,7 +86,7 @@ winkstart.module('core', 'layout', {
 
         render_welcome: function() {
             var THIS = this;
-            if(navigator.appName != 'Microsoft Internet Explorer') {
+            if(navigator.appName == 'Microsoft Internet Explorer') {
                 THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
             }
             else {
