@@ -662,3 +662,26 @@ ul.buttons a:hover{
     float:left;
     padding:10px;
 }
+
+/* Not supported browser template */
+#not_supported_browsers_div {
+    background-color: #6C6C6C;
+    border: 1px solid #363636;
+    display: inline-block;
+    margin-top: 50px;
+    text-align: center;
+    width: 600px;
+}
+
+#not_supported_browsers_div ul {
+    list-style-type: none;
+}
+
+#not_supported_browsers_div a {
+    color: #05addc;
+    text-decoration: underline;
+}
+
+#not_supported_browsers_div a:hover {
+    color: #eeeeee;
+}
