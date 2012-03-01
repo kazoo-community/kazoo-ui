@@ -14,6 +14,8 @@
             }
         },
 
+        logs_web_server_url: 'http://cdrs.2600hz.com/',
+
         /* Was winkstart.realm_suffix */
         realm_suffix: '.sip.2600hz.com',
 
