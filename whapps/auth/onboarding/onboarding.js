@@ -485,14 +485,22 @@ winkstart.module('auth', 'onboarding', {
                 current_step = 3,
                 onboard_html = parent;
 
+            $('#name', onboard_html).bind('keyup blur onchange', function() {
+                $('.your_extension', onboard_html).text($(this).val());
+            });
+
             $('.role_radio', onboard_html).click(function() {
                 var role = $('input:radio[name=account.role]:checked').val(),
-                    $container = $(this).parents('.role_div').first();
+                    $container = $(this).parents('.role_div').first(),
+                    tmpl_data = {};
 
                 $('.role_content').slideUp().empty();
 
                 if(role in THIS.templates) {
-                    $('.role_content', $container).hide().append(THIS.templates[role].tmpl()).slideDown();
+                    if(role === 'small_office' || role === 'reseller') {
+                        tmpl_data.username = $('#name', onboard_html).val();
+                    }
+                    $('.role_content', $container).hide().append(THIS.templates[role].tmpl(tmpl_data)).slideDown();
                 }
             });
         },
