@@ -107,6 +107,9 @@
                 if(typeof error == 'function') {
                     error(data, status);
                 }
+                else {
+                    winkstart.alert('Error '+status+'</br>'+ data.message);
+                }
 
                 if(locking === true) {
                     delete locked_requests[resource_name];

@@ -64,8 +64,9 @@
     winkstart.alert = function(type, content, callback) {
         var html,
             popup,
+            type = type || '',
             options = {},
-            type_temp = type.toLowerCase();
+            type_temp = type.toLowerCase() || '';
 
         if(type_temp == 'error') {
             html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a class="fancy_button blue alert_button" href="javascript:void(0);">Close</a></div></div>');
