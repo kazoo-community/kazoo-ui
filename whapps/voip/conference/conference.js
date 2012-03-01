@@ -175,7 +175,7 @@ winkstart.module('voip', 'conference', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        member_play_name: true,
+                        play_name_on_join: true,
                         member: {}
                     }, data_defaults || {}),
                     field_data: {
@@ -351,9 +351,35 @@ winkstart.module('voip', 'conference', {
 
         migrate_data: function(data) {
             if($.isArray(data.data.conference_numbers)) {
-                data.data.member.numbers = data.data.conference_numbers;
+                if(data.data.member.numbers == undefined) {
+                    data.data.member.numbers = data.data.conference_numbers;
+                }
 
                 delete data.data.conference_numbers;
+            }
+
+            if(data.data.member_play_name) {
+                if(data.data.play_name_on_join == undefined) {
+                    data.data.play_name_on_join = data.data.member_play_name;
+                }
+
+                delete data.data.member_play_name;
+            }
+
+            if(data.data.member_join_muted) {
+                if(data.data.member.join_muted == undefined) {
+                    data.data.member.join_muted = data.data.member_join_muted;
+                }
+
+                delete data.data.member_join_muted;
+            }
+
+            if(data.data.member_join_deaf) {
+                if(data.data.member.join_deaf == undefined) {
+                    data.data.member.join_deaf = data.data.member_join_deaf;
+                }
+
+                delete data.data.member_join_deaf;
             }
 
             return data;

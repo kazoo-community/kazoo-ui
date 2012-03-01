@@ -662,3 +662,59 @@ ul.buttons a:hover{
     float:left;
     padding:10px;
 }
+
+/* Not supported browser template */
+#not_supported_browsers_div {
+    background-color: #6C6C6C;
+    border: 1px solid #363636;
+    display: inline-block;
+    margin-top: 50px;
+    text-align: center;
+    width: 600px;
+}
+
+#not_supported_browsers_div a {
+    color: #05addc;
+    height: 32px;
+    line-height: 32px;
+    text-decoration: underline;
+}
+
+#not_supported_browsers_div a:hover {
+    color: #eeeeee;
+}
+
+#not_supported_browsers_div .list_browsers {
+    display: block;
+    padding-bottom: 30px;
+    padding-top: 10px;
+}
+
+#not_supported_browsers_div ul {
+    list-style-type: none;
+}
+
+#not_supported_browsers_div .li_text {
+    display: inline-block;
+    text-align: left;
+}
+
+#not_supported_browsers_div .li_text > a {
+    margin-left: 40px;
+}
+
+#not_supported_browsers_div .safari-icon {
+    background: url('../images/icon_safari.png') no-repeat;
+}
+
+#not_supported_browsers_div .firefox-icon {
+    background: url('../images/icon_firefox.png') no-repeat;
+}
+
+#not_supported_browsers_div .chrome-icon {
+    background: url('../images/icon_chrome.png') no-repeat;
+}
+
+#not_supported_browsers_div .opera-icon {
+    background: url('../images/icon_opera.png') no-repeat;
+}

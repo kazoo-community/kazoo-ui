@@ -84,10 +84,10 @@
                                 <span class="tooltip"/>
                                 <label for="member_play_name">Play name upon entry?</label>
                             </span>
-                            {{if data.member_play_name }}
-                            <input id="member_play_name" name="member_play_name" type="checkbox" checked="checked"/>
+                            {{if data.play_name_on_join}}
+                            <input id="play_name_on_join" name="play_name_on_join" type="checkbox" checked="checked"/>
                             {{else}}
-                            <input id="member_play_name" name="member_play_name" type="checkbox"/>
+                            <input id="play_name_on_join" name="play_name_on_join" type="checkbox"/>
                             {{/if}}
                         </li>
                         <li>
@@ -95,10 +95,10 @@
                                 <span class="tooltip"/>
                                 <label for="member_join_muted">Join the conference muted?</label>
                             </span>
-                            {{if data.member_join_muted }}
-                            <input id="member_join_muted" name="member_join_muted" type="checkbox" checked="checked"/>
+                            {{if data.member.join_muted}}
+                            <input id="member_join_muted" name="member.join_muted" type="checkbox" checked="checked"/>
                             {{else}}
-                            <input id="member_join_muted" name="member_join_muted" type="checkbox"/>
+                            <input id="member_join_muted" name="member.join_muted" type="checkbox"/>
                             {{/if}}
                         </li>
                         <li>
@@ -106,10 +106,10 @@
                                 <span class="tooltip"/>
                                 <label for="member_join_deaf">Join the conference deaf?</label>
                             </span>
-                            {{if data.member_join_deaf }}
-                            <input id="member_join_deaf" name="member_join_deaf" type="checkbox" checked="checked"/>
+                            {{if data.member.join_deaf}}
+                            <input id="member_join_deaf" name="member.join_deaf" type="checkbox" checked="checked"/>
                             {{else}}
-                            <input id="member_join_deaf" name="member_join_deaf" type="checkbox"/>
+                            <input id="member_join_deaf" name="member.join_deaf" type="checkbox"/>
                             {{/if}}
                         </li>
                     </ul>
