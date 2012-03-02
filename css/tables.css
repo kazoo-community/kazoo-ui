@@ -130,9 +130,9 @@ table.display {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
-	
+
 	/* Note Firefox 3.5 and before have a bug with border-collapse
-	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 ) 
+	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 )
 	 * border-spacing: 0; is one possible option. Conditional-css.com is
 	 * useful for this kind of thing
 	 *
@@ -140,15 +140,15 @@ table.display {
 	 * It subtracts one px relative to the other browsers from the first column, and
 	 * adds one to the end...
 	 *
-	 * If you want that effect I'd suggest setting a border-top/left on th/td's and 
+	 * If you want that effect I'd suggest setting a border-top/left on th/td's and
 	 * then filling in the gaps with other borders.
 	 */
 }
 
 table.display thead th {
-	padding: 7px 18px 7px 10px;
+	padding: 7px 0px;
 	font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     color: #BCB5AB;
     background-color: #595959;
@@ -157,7 +157,7 @@ table.display thead th {
 
 	border-top: 1px solid #7E7E7E;
     border-right: 2px ridge #7E7E7E;
-    border-bottom: 1px solid #878787; 
+    border-bottom: 1px solid #878787;
 }
 
 table.display thead th:last-child {
@@ -174,7 +174,7 @@ table.display td {
 	padding: 6px 10px;
     text-align: center;
     letter-spacing: 1px;
-    font-size: 13px;
+    font-size: 12px;
     color: #424242;
 
     border-right: 2px ridge #808080;
@@ -262,7 +262,7 @@ tr.even {
 
 	border-top: 1px solid #323232;
     border-left: 1px solid #323232;
-    border-bottom: 1px solid #323232; 
+    border-bottom: 1px solid #323232;
 }
 
 .paging_full_numbers .first {
