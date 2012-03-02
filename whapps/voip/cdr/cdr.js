@@ -64,7 +64,7 @@ function(args) {
                 }
 
                 if(type == 'verbose') {
-                    duration = hours+' hours '+minutes+' minutes and '+seconds+' seconds!';
+                    duration = hours+' hours '+minutes+' minutes and '+seconds+' seconds';
                 }
                 else {
                     duration = hours+':'+minutes+':'+seconds;
@@ -135,23 +135,21 @@ function(args) {
                             web_browser_id = parse_cdr_id(cdr_id);
                             call_duration += parseFloat(this.billing_seconds);
 
-                            if(this.caller_id_name && this.caller_id_number && this.callee_id_name && this.callee_id_number){
-                                tab_data.push([
-                                    this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
-                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
-                                    user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
-                                    duration || '-',
-                                    this.hangup_cause || '-',
-                                    '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
-                                    '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
-                                    humanFullDate,
-                                    cdr_id,
-                                    this.billing_seconds
-                                ]);
-                            }
+                            tab_data.push([
+                                this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
+                                this.callee_id_number === this.callee_id_name ? this.callee_id_number || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
+                                user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
+                                duration || '-',
+                                this.hangup_cause || '-',
+                                '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
+                                '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
+                                humanFullDate,
+                                cdr_id,
+                                this.billing_seconds
+                            ]);
                         });
 
-                        call_duration = 'Active Calls : ' + parse_duration(call_duration, 'verbose');
+                        call_duration = 'Total duration : ' + parse_duration(call_duration, 'verbose');
                         $('.call_duration', '#cdr-grid_wrapper').text(call_duration);
 
                         winkstart.table.cdr.fnAddData(tab_data);
@@ -218,11 +216,15 @@ function(args) {
                 return_sub_data = THIS.parse_data_cdr(this);
 
                 $.each(return_sub_data, function(k2, v2) {
-                    return_data.push({'key': k+'.'+v2.key, 'value': v2.value});;
+                    if(jQuery.inArray(v2.key, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
+                        return_data.push({'key': v2.key, 'value': v2.value});
+                    }
                 });
             }
             else {
-                return_data.push({'key':k, 'value':v});
+                if(jQuery.inArray(k, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
+                    return_data.push({'key':k, 'value':v});
+                }
             }
         });
         return return_data;
