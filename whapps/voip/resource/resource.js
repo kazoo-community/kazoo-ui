@@ -23,7 +23,8 @@ winkstart.module('voip', 'resource', {
             { name: '#gateways_username',      regex: /^.*$/ },
             { name: '#gateways_password',      regex: /^[^\s]*$/ },
             { name: '#gateways_prefix',        regex: /^[\+]?[\#0-9]*$/ },
-            { name: '#gateways_suffix',        regex: /^[0-9]*$/ }
+            { name: '#gateways_suffix',        regex: /^[0-9]*$/ },
+            { name: '#gateways_progress_timeout', regex: /^[0-9]*$/ }
         ],
 
         resources: {
@@ -175,7 +176,8 @@ winkstart.module('voip', 'resource', {
                             {
                                 invite_format: 'e164',
                                 prefix: '+1',
-                                codecs: ['PCMU', 'PCMA']
+                                codecs: ['PCMU', 'PCMA'],
+                                progress_timeout: '6'
                             }
                         ],
                         rules: [
