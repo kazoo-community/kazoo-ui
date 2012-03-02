@@ -4,7 +4,8 @@ winkstart.module('voip', 'cdr', {
 	],
 
 	templates: {
-		cdr: 'tmpl/cdr.html'
+		cdr: 'tmpl/cdr.html',
+        cdr_details: 'tmpl/cdr_details.html'
 	},
 
 	subscribe: {
@@ -45,16 +46,15 @@ function(args) {
     list_by_date: function(start_date, end_date) {
         var THIS = this,
             map_users = {},
-            parse_duration = function(duration) {
-                var seconds = duration % 60,
-                    minutes = (duration-seconds) / 60,
-                    hours = (duration - (minutes*60) - seconds) / 3600;
+            parse_duration = function(duration, type) {
+                var duration = parseFloat(duration);
+                    seconds = duration % 60,
+                    minutes = ((duration - seconds) / 60) % 60,
+                    hours = Math.floor((duration-seconds)/3600),
+                    type = type || 'numbers';
 
-                if(hours < 10) {
+                if(hours < 10 && type == 'numbers') {
                     hours = '0' + hours;
-                }
-                if(minutes > 59) {
-                    minutes -= 60;
                 }
                 if(minutes < 10) {
                     minutes = '0' + minutes;
@@ -63,7 +63,14 @@ function(args) {
                     seconds = '0' + seconds;
                 }
 
-                return hours+':'+minutes+':'+seconds;
+                if(type == 'verbose') {
+                    duration = hours+' hours '+minutes+' minutes and '+seconds+' seconds!';
+                }
+                else {
+                    duration = hours+':'+minutes+':'+seconds;
+                }
+
+                return duration;
             },
             find_user_name = function(owner_id) {
                 var parsed_name = '';
@@ -103,7 +110,7 @@ function(args) {
                     map_users[this.id] = this;
                 });
 
-                winkstart.request('cdr.list_by_week', {
+                winkstart.request(true, 'cdr.list_by_week', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         created_from: start_date,
@@ -115,7 +122,8 @@ function(args) {
                             user_name,
                             duration,
                             humanFullDate,
-                            web_browser_id;
+                            web_browser_id,
+                            call_duration = 0;
 
                         var tab_data = [];
 
@@ -125,19 +133,26 @@ function(args) {
                             duration = parse_duration(this.duration_seconds);
                             humanFullDate = parse_date(this.timestamp);
                             web_browser_id = parse_cdr_id(cdr_id);
+                            call_duration += parseFloat(this.billing_seconds);
 
                             if(this.caller_id_name && this.caller_id_number && this.callee_id_name && this.callee_id_number){
                                 tab_data.push([
-                                    this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' - ' + this.caller_id_name,
-                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || '(empty)' : this.callee_id_number + ' - ' + this.callee_id_name,
+                                    this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
+                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
                                     user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
                                     duration || '-',
                                     this.hangup_cause || '-',
-                                    '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>',
-                                    humanFullDate
+                                    '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
+                                    '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
+                                    humanFullDate,
+                                    cdr_id,
+                                    this.billing_seconds
                                 ]);
                             }
                         });
+
+                        call_duration = 'Active Calls : ' + parse_duration(call_duration, 'verbose');
+                        $('.call_duration', '#cdr-grid_wrapper').text(call_duration);
 
                         winkstart.table.cdr.fnAddData(tab_data);
                     }
@@ -150,11 +165,11 @@ function(args) {
         var cdr_html = parent,
 		    columns = [
             {
-                'sTitle': 'Caller ID',
+                'sTitle': 'From (Caller ID)',
                 'sWidth': '250px'
             },
             {
-                'sTitle': 'Callee ID',
+                'sTitle': 'To (Dialed number)',
                 'sWidth': '250px'
             },
             {
@@ -170,12 +185,20 @@ function(args) {
                 'sWidth': '160px'
             },
             {
-                'sTitle': 'Logs',
-                'sWidth': '50px',
+                'sTitle': 'Actions',
+                'sWidth': '80px',
                 'bSortable': false
             },
             {
                 'sTitle': 'Date'
+            },
+            {
+                'sTitle': 'cdr_id',
+                'bVisible': false
+            },
+            {
+                'sTitle': 'billing_seconds',
+                'bVisible': false
             }
 		];
 
@@ -183,6 +206,26 @@ function(args) {
 			sDom: '<"date">frtlip',
             aaSorting: [[6, 'desc']]
 		});
+    },
+
+    parse_data_cdr: function(data) {
+        var return_data = [],
+            return_sub_data,
+            THIS = this;
+
+        $.each(data, function(k, v) {
+            if(typeof v == 'object') {
+                return_sub_data = THIS.parse_data_cdr(this);
+
+                $.each(return_sub_data, function(k2, v2) {
+                    return_data.push({'key': k+'.'+v2.key, 'value': v2.value});;
+                });
+            }
+            else {
+                return_data.push({'key':k, 'value':v});
+            }
+        });
+        return return_data;
     },
 
 	activate: function(data) {
@@ -195,10 +238,56 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a>');
+		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });
+        });
+
+        $('#cdr-grid_filter input[type=text]', '#cdr-grid_wrapper').keyup(function() {
+            if($(this).val() != '') {
+                $('.call_duration', '#cdr-grid_wrapper').hide();
+            }
+            else {
+                $('.call_duration', '#cdr-grid_wrapper').show();
+            }
+        });
+
+        $(cdr_html).delegate('.table_detail_link','click', function() {
+            var cdr_id = $(this).dataset('cdr_id');
+
+            winkstart.request(true, 'cdr.read', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    cdr_id: cdr_id,
+                },
+                function(_data, status) {
+                    var cdr_data =  THIS.parse_data_cdr(_data.data);
+                    cdr_data = cdr_data.sort(function(a, b) {
+                        var keyA = a.key.toLowerCase(),
+                            keyB = b.key.toLowerCase();
+
+                        return keyA <= keyB ? -1 : 1;
+                    });
+
+                    var tmpl_data = {
+                        cdr_fields: cdr_data
+                    }
+
+                    cdr_detail_html = THIS.templates.cdr_details.tmpl(tmpl_data);
+                    winkstart.dialog(cdr_detail_html, {
+                            title: 'Detail of cdr: '+cdr_id,
+                            width: '840px',
+                            height: 'auto',
+                            open: function() {
+                                // Gross hack to prevent scroll bar glitch (should be in the css sheet)
+                                $(this).css('overflow-x', 'hidden');
+                                $(this).css('max-height', $(document).height()-180);
+                            }
+                        }
+                    );
+                }
+            );
         });
 
 		$('#searchLink', cdr_html).click(function() {
@@ -207,6 +296,7 @@ function(args) {
                 regex = /^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$/;
 
             winkstart.table.cdr.fnClearTable();
+            $('.call_duration', '#cdr-grid_wrapper').text('');
 
             if(start_date.match(regex) && end_date.match(regex)) {
                 var start_date_sec = (new Date(start_date).getTime()/1000) + 62167219200,
