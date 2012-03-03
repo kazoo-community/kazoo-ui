@@ -17,6 +17,7 @@ winkstart.module('voip', 'callflow', {
             add_number: 'tmpl/add_number.html',
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
+            disa_callflow: 'tmpl/disa_callflow.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html'
         },
 
@@ -1156,6 +1157,64 @@ winkstart.module('voip', 'callflow', {
                         if(typeof callback == 'function') {
                             callback();
                         }
+                    }
+                },
+                'disa[]': {
+                    name: 'DISA',
+                    icon: 'conference',
+                    category: 'Advanced',
+                    module: 'disa',
+                    tip: 'DISA allows external callers to make outbound calls as though they originated from the system',
+                    data: {
+                        pin: '',
+                        retries: '3'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.disa_callflow.tmpl({
+                            data_disa: {
+                                'pin': node.getMetadata('pin') || '',
+                                'retries': node.getMetadata('retries') || '3'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var save_disa = function() {
+                                node.setMetadata('pin', $('#disa_pin_input', popup_html).val());
+                                node.setMetadata('retries', $('#disa_retries_input', popup_html).val());
+
+                                popup.dialog('close');
+                            };
+                            if($('#disa_pin_input', popup_html).val() == '') {
+                                winkstart.confirm('Not setting a PIN is a security risk, are you sure you don\'t want to set a PIN?', function() {
+                                    save_disa();
+                                });
+                            }
+                            else {
+                                save_disa();
+                            }
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'DISA',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 }
             });
