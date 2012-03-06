@@ -812,8 +812,6 @@ winkstart.module('voip', 'user', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        /*var name = node.getMetadata('name');
-                        return (name) ? name : '';*/
                         var id = node.getMetadata('id');
                         return (id && id != '') ? caption_map[id].name : '';
                     },
@@ -830,6 +828,7 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup_html = THIS.templates.user_callflow.tmpl({
+                                    can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
                                         value: node.getMetadata('timeout') || '20'
@@ -853,6 +852,7 @@ winkstart.module('voip', 'user', {
                                     winkstart.publish('user.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
                                         node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                        node.setMetadata('can_call_self', $('#user_can_call_self', popup_html).is(':checked'));
 
                                         node.caption = (_data.data.first_name || '') + ' ' + (_data.data.last_name || '');
 
@@ -863,6 +863,7 @@ winkstart.module('voip', 'user', {
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
                                     node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                    node.setMetadata('can_call_self', $('#user_can_call_self', popup_html).is(':checked'));
 
                                     node.caption = $('#user_selector option:selected', popup_html).text();
 

@@ -26,6 +26,15 @@
             <div class="parameter_div">
                 Ring this user's devices for <input type="text" size="2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
             </div>
+            <div class="parameter_div">
+                {{if can_call_self === true}}
+                <input type="checkbox" checked="checked" id="user_can_call_self">
+                {{else}}
+                <input type="checkbox" id="user_can_call_self">
+                {{/if}}
+                Allow this user to call himself.
+                <div class="parameter_description">When you check this box, calls from the user's own extension to themselves will not ring the extension. This allows them to dial their own number to get to voicemail.</div>
+            </div>
         </form>
         <div class="btn_wrapper_popup">
             <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
