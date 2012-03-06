@@ -3,6 +3,10 @@
     width: 90%;
 }
 
+#cdr-view table.display td {
+    padding: 6px 3px;
+}
+
 #cdr-view .table-wrapper {
     margin-top: 30px;
 }
@@ -16,6 +20,10 @@
     width: 65%;
     float: left;
     margin-bottom: 18px;
+}
+
+#cdr-view .date #endDate {
+    display: none;
 }
 
 #cdr-view .date input{

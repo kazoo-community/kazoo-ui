@@ -137,7 +137,7 @@ function(args) {
 
                             tab_data.push([
                                 this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
-                                this.callee_id_number === this.callee_id_name ? this.callee_id_number || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
+                                this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
                                 user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
                                 duration || '-',
                                 this.hangup_cause || '-',
@@ -172,11 +172,11 @@ function(args) {
             },
             {
                 'sTitle': 'Owner',
-                'sWidth': '170px'
+                'sWidth': '160px'
             },
             {
                 'sTitle': 'Duration',
-                'sWidth': '120px'
+                'sWidth': '110px'
             },
             {
                 'sTitle': 'Hangup Cause',
@@ -240,7 +240,8 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
+		//$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
+		$('div.date', cdr_html).html('Date: <input id="startDate" readonly="readonly" type="text"/><input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });
@@ -304,7 +305,7 @@ function(args) {
                 var start_date_sec = (new Date(start_date).getTime()/1000) + 62167219200,
                     end_date_sec = (new Date(end_date).getTime()/1000) + 62167219200;
 
-                if((end_date_sec - start_date_sec) <= (7*24*60*60)) {
+                if((end_date_sec - start_date_sec) <= (1*24*60*60)) { //range
                     THIS.list_by_date(start_date_sec, end_date_sec);
                 }
                 else {
@@ -322,7 +323,7 @@ function(args) {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         var end_date = Math.floor(tomorrow.getTime()/1000) + 62167219200,
-            start_date = end_date - (7*24*60*60);
+            start_date = end_date - (1*24*60*60); //range
 
         THIS.list_by_date(start_date, end_date);
 	},
@@ -346,7 +347,7 @@ function(args) {
         );
 
         end_date = tomorrow;
-        start_date.setDate(new Date().getDate() - 6);
+        start_date.setDate(new Date().getDate() - 0); //range
 
         $start_date.datepicker('setDate', start_date);
         $end_date.datepicker('setDate', end_date);
@@ -359,14 +360,14 @@ function(args) {
                 date_min = $start_date.datepicker('getDate');
                 if($end_date.datepicker('getDate') == null) {
                     date_max = date_min;
-                    date_max.setDate(date_min.getDate() + 7);
+                    date_max.setDate(date_min.getDate() + 1); //range
                     $end_date.val(THIS.to_string_date(date_max));
                 }
                 else {
                     date_max = $end_date.datepicker('getDate');
-                    if((date_max > (new Date(date_min).setDate(date_min.getDate() + 7)) || (date_max <= date_min))) {
+                    if((date_max > (new Date(date_min).setDate(date_min.getDate() + 1)) || (date_max <= date_min))) {
                         date_max = date_min;
-                        date_max.setDate(date_max.getDate() + 7);
+                        date_max.setDate(date_max.getDate() + 1);
                         date_max > tomorrow ? date_max = tomorrow : true;
                         $end_date.val(THIS.to_string_date(date_max));
                     }
@@ -375,7 +376,7 @@ function(args) {
             else if(input.id == 'endDate') {
                 if($start_date.datepicker('getDate') == null) {
                     date_min = $end_date.datepicker('getDate');
-                    date_min.setDate(date_min.getDate() - 7);
+                    date_min.setDate(date_min.getDate() - 1);
                     $start_date.val(THIS.to_string_date(date_min));
                 }
             }
@@ -394,7 +395,7 @@ function(args) {
                     /* Range of 1 day minimum */
                     date_min.setDate(date_min.getDate() + 1);
                     date_max = $start_date.datepicker('getDate');
-                    date_max.setDate(date_max.getDate() + 7);
+                    date_max.setDate(date_max.getDate() + 1); //range
 
                     if(date_max > tomorrow) {
                         date_max = tomorrow;
