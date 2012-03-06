@@ -96,7 +96,8 @@ winkstart.module('voip', 'resource', {
             module: THIS.__module,
             label: 'Resources',
             icon: 'resource',
-            weight: '35'
+            weight: '15',
+            category: 'advanced'
         });
     },
 
