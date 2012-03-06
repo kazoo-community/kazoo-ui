@@ -1,0 +1,11 @@
+.callflow_popup {
+    padding: 10px 20px;
+}
+
+.callflow_popup .action_links_div {
+
+}
+
+.callflow_popup .action_links_div > div > a {
+    text-align: right;
+}
