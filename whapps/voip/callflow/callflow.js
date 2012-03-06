@@ -3,7 +3,8 @@ winkstart.module('voip', 'callflow', {
             'css/style.css',
             'css/popups.css',
             'css/two_columns.css',
-            'css/callflow.css'
+            'css/callflow.css',
+            'css/action_popups.css'
         ],
 
         templates: {

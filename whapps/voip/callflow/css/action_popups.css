@@ -1,11 +1,51 @@
 .callflow_popup {
     padding: 10px 20px;
+    text-align: center;
 }
 
-.callflow_popup .action_links_div {
-
+.callflow_popup h1 {
+    padding: 0 0 10px 0;
 }
 
-.callflow_popup .action_links_div > div > a {
+.callflow_popup .btn_wrapper_popup {
+    float: left;
+    width: 100%;
+    padding: 30px 0px 10px 0px;
+}
+
+.callflow_popup .form_content {
+    display: inline-block;
+}
+
+.callflow_popup .form_content label {
+    font-weight: bold;
+    width: auto;
+    margin-right: 10px;
+}
+
+.callflow_popup .form_content select {
+    width: 100%;
+    max-width: 200px;
+}
+
+.callflow_popup .form_content .select_wrapper {
+    float: left;
+}
+
+.callflow_popup .form_content .select_wrapper .action_links_div a {
+    float: right;
+    width: 100%;
     text-align: right;
+    text-decoration: underline;
+    color: #05addc;
+}
+
+.callflow_popup .form_content .popup_field {
+    padding-bottom: 15px;
+}
+
+.callflow_popup .form_content .parameter_div {
+    padding: 10px 0px 10px 0px;
+    float: left;
+    width: 100%;
 }
