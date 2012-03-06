@@ -44,8 +44,7 @@
     padding-bottom: 15px;
 }
 
-.callflow_popup .form_content .parameter_div {
+.callflow_popup .parameter_div {
     padding: 10px 0px 10px 0px;
-    float: left;
-    width: 100%;
+    width: auto;
 }
