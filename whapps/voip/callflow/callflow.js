@@ -896,7 +896,7 @@ winkstart.module('voip', 'callflow', {
                                     }
                                 });
 
-                                $('.submit_btn', popup_html).click(function() {
+                                $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#object-selector', popup_html).val());
 
                                     node.caption = $('#object-selector option:selected', popup_html).text();

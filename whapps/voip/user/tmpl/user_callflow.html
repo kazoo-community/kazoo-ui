@@ -1,40 +1,36 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="user_selector">User</label>
-                            <select id="user_selector">
-                                {{each(i, item) objects.items}}
-                                    {{if objects.selected == item.id}}
-                                        <option value="${item.id}" SELECTED>${item.name}</option>
-                                    {{else}}
-                                        <option value="${item.id}">${item.name}</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                            <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
-                            <a class="inline_action" data-action="create" href="#">Create</a>
-                        </li>
-                    </ul>
-                    <ul class="controls">
-                        <li>
-                            <label for="parameter_input">${parameter.name}: </label>
-                            <input type="text" name="parameter_input" id="parameter_input" value="${parameter.value}"/>
-                        </li>
-                    </ul>
-                    <div class="clear"/>
-                </form>
-                <form name="form" method="post" action="#">
-                    <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
-                        <div class="clear"/>
+    <div class="callflow_popup">
+        <h1>Connect a caller to a user...</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="user_selector">Which user?</label>
+                    <div class="select_wrapper">
+                        <select id="user_selector">
+                            {{each(i, item) objects.items}}
+                                {{if objects.selected == item.id}}
+                                    <option value="${item.id}" SELECTED>${item.name}</option>
+                                {{else}}
+                                    <option value="${item.id}">${item.name}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                        <div class="action_links_div">
+                            <div id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit user options</a></div>
+                            <div><a class="inline_action" data-action="create" href="#">Add a user</a></div>
+                        </div>
                     </div>
                     <div class="clear"/>
-                </form>
+                </div>
+                <div class="parameter_div">
+                    Ring this user's devices for <input type="text" size="2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
+                </div>
             </div>
+        </form>
+        <div class="btn_wrapper_popup">
+            <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
+            <div class="clear"/>
         </div>
+        <div class="clear"/>
     </div>
 </div>
