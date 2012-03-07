@@ -81,8 +81,8 @@
         }
 
         options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);
-        options.maxWidth = '400px';
-        options.width = '400px';
+        options.maxWidth = '600px';
+        //options.width = '400px';
         options.onClose = function() {
             if(typeof callback == 'function') {
                 callback();

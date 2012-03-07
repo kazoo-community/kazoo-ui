@@ -390,7 +390,7 @@ winkstart.module('voip', 'timeofday', {
 
                         form_data = THIS.clean_form_data(form_data);
 
-                        THIS.save_timeofday(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_timeofday(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
