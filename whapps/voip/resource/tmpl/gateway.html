@@ -52,6 +52,13 @@
                 </span>
                 <input id="gateways_suffix" name="gateways[${index}].suffix" type="text" value="${data.suffix}" />
             </li>
+            <li>
+                <span class="tooltip-wrapper" tooltip="In secs, the maximum time to wait for media from a resource gateway.">
+                    <span class="tooltip"/>
+                    <label for="gateway_progress_timeout">Progress Timeout</label>
+                </span>
+                <input id="gateways_progress_timeout" name="gateways[${index}].progress_timeout" type="text" value="${data.progress_timeout}" />
+            </li>
         </ul>
     </fieldset>
 

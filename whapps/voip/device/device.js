@@ -786,6 +786,7 @@ winkstart.module('voip', 'device', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.device_callflow.tmpl({
+                                    can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
                                         value: node.getMetadata('timeout') || '20'
@@ -809,6 +810,7 @@ winkstart.module('voip', 'device', {
                                     winkstart.publish('device.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
                                         node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                        node.setMetadata('can_call_self', $('#device_can_call_self', popup_html).is(':checked'));
 
                                         node.caption = _data.data.name || '';
 
@@ -819,6 +821,7 @@ winkstart.module('voip', 'device', {
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#device_selector', popup_html).val());
                                     node.setMetadata('timeout', $('#parameter_input', popup_html).val());
+                                    node.setMetadata('can_call_self', $('#device_can_call_self', popup_html).is(':checked'));
 
                                     node.caption = $('#device_selector option:selected', popup_html).text();
 

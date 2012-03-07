@@ -33,12 +33,3 @@
 #content_welcome_page .left_div .learn_more > a:hover {
     color: #EEEEEE;
 }
-
-#content_welcome_page .left_div .world_map {
-    background-image: url(../images/map.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 368px;
-    height: 213px;
-    margin: 45px auto auto;
-}
