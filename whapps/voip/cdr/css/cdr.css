@@ -22,10 +22,6 @@
     margin-bottom: 18px;
 }
 
-#cdr-view .date #endDate {
-    display: none;
-}
-
 #cdr-view .date input{
     font-size: 11px;
     padding: 4px 2px;
