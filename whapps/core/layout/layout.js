@@ -31,9 +31,9 @@ winkstart.module('core', 'layout', {
             THIS.render_welcome();
         }
 
-        $('#ws-content .welcomediv').click(function() {
-            winkstart.publish('nav.my_logout_click');
-        });
+        /*$('#ws-content .welcomediv').click(function() {
+            winkstart.publish('nav.get_started');
+        });*/
 
         $('#my_account', '.universal_nav').click(function() {
             winkstart.publish('nav.my_account_click');
