@@ -1,6 +1,6 @@
 #two_columns .wrapper {
     clear: left;
-    width: 480px;
+    width: 520px;
     padding: 10px;
 }
 
@@ -11,6 +11,9 @@
 
 #two_columns .wrapper .column {
     width: 230px;
+    padding: 6px 0px 5px;
+    background: #444;
+    border-radius: 6px;
 }
 
 #two_columns .wrapper .column.right {
@@ -25,52 +28,56 @@
 
 #two_columns .wrapper .title_column {
     background-color: #AFAFAF;
-    height: 18px;
+    height: 28px;
+    line-height: 28px;
     font-weight: bold;
     font-size: 14px;
     text-align: center;
+    margin-bottom: 3px;
 }
 
 #two_columns .wrapper .left ul.connect {
-    background-color: #AFAFAF;
-    height: 250px;
+    background-color: #444444;
+    height: 289px;
     width: 230px;
     overflow: auto;
 }
 
 #two_columns .wrapper .connect {
-    min-height: 250px;
+    min-height: 289px;
 }
 
 #two_columns .wrapper .right ul.connect {
-    background-color: #AFAFAF;
-    height: 250px;
+    background-color: #444444;
+    height: 289px;
     width: 230px;
     overflow: auto;
 }
 
 #two_columns .wrapper li {
     list-style-type: none;
-    background-color: #808080;
-    color: white;
-    border-bottom: 1px solid #DEDEDE;
-    border-top: 1px solid #5F5F5F;
+    background-color: #AFAFAF;
+    color: #444;
     display: block;
-    height: 22px;
-    line-height: 22px;
+    height: 28px;
+    line-height: 28px;
     list-style-type: none;
     overflow: hidden;
     position: relative;
     cursor: default;
 }
 
+#two_columns .wrapper li:not(:first-child) {
+    border-top: 1px solid #444;
+}
+
 #two_columns .item_name {
     float:left;
     overflow: hidden;
-    height: 22px;
-    line-height: 22px;
-    width: 170px;
-    font-size: 11px;
+    height: 28px;
+    line-height: 28px;
+    width: 190px;
+    font-size: 12px;
     white-space: nowrap;
 }
 #two_columns .item_name.right {
@@ -78,25 +85,32 @@
 }
 
 #two_columns .wrapper li:hover {
-    background-color: #0097BB;
+    background-color: #cccccc;
 }
+
 #two_columns .wrapper li a.drag_btn{
-    background-image: url("../images/drag_btn.png");
+    background-image: url("../images/drag_btn_28.png");
     float: left;
-    height: 22px;
-    width: 9px;
+    height: 28px;
+    width: 7px;
     margin-right: 5px;
+    margin-left: 1px;
 }
 
 /* Ring group specific css */
 #two_columns .options {
     float: right;
     margin-right: 2px;
+    padding-left: 7px;
+    border-left: 1px solid #444444;
+    height: 28px;
 }
 
 #two_columns .options .option {
     width: 30px;
-    font-size: 10px;
+    font-size: 12px;
+    margin-top: 2px;
+    height: 20px;
 }
 
 #two_columns .ring_group_form_wrapper {
