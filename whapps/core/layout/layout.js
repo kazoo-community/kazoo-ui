@@ -96,7 +96,7 @@ winkstart.module('core', 'layout', {
         },
 
         detect_and_set_logo: function() {
-            var host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1],
+            var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
                 host_parts = host.split('.'),
                 partial_host = host_parts.slice(1).join('.'),
                 logo_html = $('.header > .logo > .img'),
