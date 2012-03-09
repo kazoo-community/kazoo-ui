@@ -1,6 +1,6 @@
 #two_columns .wrapper {
     clear: left;
-    width: 420px;
+    width: 480px;
     padding: 10px;
 }
 
@@ -10,7 +10,7 @@
 }
 
 #two_columns .wrapper .column {
-    width: 200px;
+    width: 230px;
 }
 
 #two_columns .wrapper .column.right {
@@ -34,7 +34,7 @@
 #two_columns .wrapper .left ul.connect {
     background-color: #AFAFAF;
     height: 250px;
-    width: 200px;
+    width: 230px;
     overflow: auto;
 }
 
@@ -45,7 +45,7 @@
 #two_columns .wrapper .right ul.connect {
     background-color: #AFAFAF;
     height: 250px;
-    width: 200px;
+    width: 230px;
     overflow: auto;
 }
 
@@ -74,7 +74,7 @@
     white-space: nowrap;
 }
 #two_columns .item_name.right {
-    width: 90px;
+    width: 120px;
 }
 
 #two_columns .wrapper li:hover {
