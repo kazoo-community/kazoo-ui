@@ -4,7 +4,8 @@ winkstart.module('voip', 'callflow', {
             'css/popups.css',
             'css/two_columns.css',
             'css/callflow.css',
-            'css/action_popups.css'
+            'css/action_popups.css',
+            'css/ring_groups.css'
         ],
 
         templates: {
@@ -995,6 +996,13 @@ winkstart.module('voip', 'callflow', {
                                     }
                                 });
 
+                                if(jQuery.isEmptyObject(selected_endpoints)) {
+                                    $('.column.right .connect', popup_html).addClass('no_element');
+                                }
+                                else {
+                                    $('.column.right .connect', popup_html).removeClass('no_element');
+                                }
+
                                 $('.options .option', popup_html).each(function() {
                                     $(this).tooltip({ attach: $('body'), relative: false });
                                 });
@@ -1052,10 +1060,14 @@ winkstart.module('voip', 'callflow', {
                                         if($(this).parents('.column').hasClass('left')) {
                                             $('.options', ui.item).hide();
                                             $('.item_name', ui.item).removeClass('right');
+                                            if($('.column.right .connect li', popup).size() == 0) {
+                                                $('.column.right .connect', popup).addClass('no_element');
+                                            }
                                         }
                                         else {
                                             $('.options', ui.item).show();
                                             $('.item_name', ui.item).addClass('right');
+                                            $('.column.right .connect', popup).removeClass('no_element');
                                         }
 
                                         $('.scrollable', popup).data('jsp').reinitialise();

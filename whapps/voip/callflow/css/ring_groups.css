@@ -1,0 +1,65 @@
+#ring_group_popup #two_columns .wrapper {
+    width: 600px;
+}
+
+#ring_group_popup #two_columns .column li a.drag_btn {
+    margin-right: 0px;
+}
+
+#ring_group_popup #two_columns .column .icon {
+    float: left;
+    margin-top: 3px;
+}
+
+#ring_group_popup #two_columns .column .icon.user {
+    background-position: -477px -197px;
+}
+
+#ring_group_popup #two_columns .column .icon.device {
+    background-position: -508px -166px;
+}
+
+#ring_group_popup #two_columns .column.right{
+    width: 320px;
+}
+
+#ring_group_popup #two_columns .column.right .item_name {
+    width: 155px;
+}
+
+#ring_group_popup #two_columns .column.right .options {
+    font-size: 10px;
+    width: 100px;
+    line-height: 28px;
+    float: left;
+}
+
+#ring_group_popup #two_columns .column.right .options .option {
+    font-size: 12px;
+    width: 36px;
+    margin: 2px 5px 0;
+    border: 1px solid #ccc;
+}
+
+#ring_group_popup #two_columns .column.right ul.connect {
+    width: 320px;
+}
+
+#ring_group_popup #two_columns .column.right ul.connect.no_element {
+    background: url('../images/empty_ring_groups.png') no-repeat center;
+}
+
+#ring_group_popup #two_columns .column.right .title_column .title{
+    float: left;
+    width: 193px;
+    height: 28px;
+    line-height: 28px;
+}
+
+#ring_group_popup .form_content .popup_field select {
+    width: auto;
+}
+
+#ring_group_popup .form_content .popup_field {
+    text-align: left;
+}

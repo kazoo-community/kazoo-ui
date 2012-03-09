@@ -1,78 +1,76 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div id="two_columns">
-                <div class="wrapper">
-                    <div class="column left">
-                        <div class="title_column">${left.title}</div>
-                        <div class="scrollable">
-                            <ul class="connect">
-                                {{each(i, item) left.items}}
-                                    <li id="${item.id}" data-id="${item.id}" data-delay="0", data-timeout="20">
-                                        <a href="#" class="drag_btn"></a>
-                                        <div class="item_name">
-                                        ${item.name}
-                                        </div>
-                                        <span class="options">
-                                            <input class="option delay" type="text" value="0" tooltip="Delay (S)"/>
-                                            <input class="option timeout" type="text" value="20" tooltip="Timeout (S)"/>
-                                        </span>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="column right">
-                        <div class="title_column">${right.title}</div>
-                        <div class="scrollable">
-                            <ul class="connect">
-                                {{each(i, item) right.items}}
-                                    <li id="${item.id}" data-id="${item.id}" data-delay="${item.delay}" data-timeout="${item.timeout}">
-                                        <a href="#" class="drag_btn"></a>
-                                        <div class="item_name right">
-                                        ${item.name}
-                                        </div>
-                                        <span class="options">
-                                            <input class="option delay" type="text" value="${item.delay}" tooltip="Delay (S)"/>
-                                            <input class="option timeout" type="text" value="${item.timeout}" tooltip="Timeout (S)"/>
-                                        </span>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </div>
+    <div id="ring_group_popup" class="callflow_popup">
+        <div class="form_content">
+            <div class="popup_field">
+                <label>Name this ring group</label>
+                <input id="name" type="text" value="${form.name}"/>
+                <div class="clear"/>
+            </div>
+            <div class="popup_field">
+                <label>Ring Strategy</label>
+                <select id="strategy">
+                    {{each(i, obj) form.strategy.items}}
+                        {{if form.strategy.selected == obj.id}}
+                            <option value="${obj.id}" SELECTED>${obj.name}</option>
+                        {{else}}
+                            <option value="${obj.id}">${obj.name}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+            </div>
+            <div class="popup_field">
+                Don't ring more than <input id="timeout" type="text" value="${form.timeout}" size="2"/> seconds.
+                <div class="clear"/>
+            </div>
+        </div>
+        <div id="two_columns">
+            <div class="wrapper">
+                <div class="column left">
+                    <div class="title_column">${left.title}</div>
+                    <div class="scrollable">
+                        <ul class="connect">
+                            {{each(i, item) left.items}}
+                                <li id="${item.id}" data-id="${item.id}" data-delay="0", data-timeout="20">
+                                    <a href="#" class="drag_btn"></a>
+                                    <div class="icon device medium"/>
+                                    <div class="item_name">
+                                    ${item.name}
+                                    </div>
+                                    <span class="options">
+                                        <input class="option delay" type="text" value="0" tooltip="Delay (S)"/>
+                                        <input class="option timeout" type="text" value="20" tooltip="Timeout (S)"/>
+                                    </span>
+                                </li>
+                            {{/each}}
+                        </ul>
                     </div>
                 </div>
-                <div class="clear"/>
-                <form name="form" class="stylized myform" method="post" action="#">
-                    <div class="ring_group_form_wrapper">
-                        <div class="form_field_div">
-                            <label>Name</label>
-                            <input id="name" type="text" value="${form.name}"/>
-                            <div class="clear"/>
-                        </div>
-                        <div class="form_field_div">
-                            <label>Ring Strategy</label>
-                            <select id="strategy">
-                                {{each(i, obj) form.strategy.items}}
-                                    {{if form.strategy.selected == obj.id}}
-                                        <option value="${obj.id}" SELECTED>${obj.name}</option>
-                                    {{else}}
-                                        <option value="${obj.id}">${obj.name}</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                        </div>
-                        <div class="form_field_div">
-                            <label>Timeout (s)</label>
-                            <input id="timeout" type="text" value="${form.timeout}"/>
-                            <div class="clear"/>
-                        </div>
-                        <div class="button_field_div" style="text-align: center;">
-                            <a href="javascript:void(0);" class="fancy_button blue" id="save_ring_group">Save</a>
-                        </div>
+                <div class="column right">
+                    <div class="title_column"><div class="title">${right.title}</div><span class="options">&nbsp;&nbsp;Delay(s)&nbsp;&nbsp;Timeout(s)</span></div>
+                    <div class="scrollable">
+                        <ul class="connect">
+                            {{each(i, item) right.items}}
+                                <li id="${item.id}" data-id="${item.id}" data-delay="${item.delay}" data-timeout="${item.timeout}">
+                                    <a href="#" class="drag_btn"></a>
+                                    <div class="icon device medium"/>
+                                    <div class="item_name right">
+                                    ${item.name}
+                                    </div>
+                                    <div class="options">
+                                        <input class="option delay" type="text" value="${item.delay}" tooltip="Delay (S)"/>
+                                        <input class="option timeout" type="text" value="${item.timeout}" tooltip="Timeout (S)"/>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ul>
                     </div>
-                </form>
+                </div>
             </div>
+            <div class="clear"/>
+            <div class="btn_wrapper_popup">
+                <a href="javascript:void(0);" class="fancy_button blue" id="save_ring_group">Change</a>
+            </div>
+            <div class="clear"/>
         </div>
     </div>
 </div>

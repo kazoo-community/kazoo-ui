@@ -10,7 +10,7 @@
 }
 
 #two_columns .wrapper .column {
-    width: 230px;
+    width: 220px;
     padding: 6px 0px 5px;
     background: #444;
     border-radius: 6px;
@@ -39,7 +39,7 @@
 #two_columns .wrapper .left ul.connect {
     background-color: #444444;
     height: 289px;
-    width: 230px;
+    width: 220px;
     overflow: auto;
 }
 
@@ -50,7 +50,7 @@
 #two_columns .wrapper .right ul.connect {
     background-color: #444444;
     height: 289px;
-    width: 230px;
+    width: 220px;
     overflow: auto;
 }
 
@@ -76,7 +76,7 @@
     overflow: hidden;
     height: 28px;
     line-height: 28px;
-    width: 190px;
+    width: 155px;
     font-size: 12px;
     white-space: nowrap;
 }
@@ -101,7 +101,7 @@
 #two_columns .options {
     float: right;
     margin-right: 2px;
-    padding-left: 7px;
+    padding-left: 4px;
     border-left: 1px solid #444444;
     height: 28px;
 }
