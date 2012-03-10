@@ -1,5 +1,5 @@
 #ring_group_popup #two_columns .wrapper {
-    width: 600px;
+    width: 650px;
 }
 
 #ring_group_popup #two_columns .column li a.drag_btn {
@@ -11,7 +11,7 @@
     margin-top: 3px;
 }
 
-#ring_group_popup #two_columns .column .icon.user {
+#ring_group_popup #two_columns .column .icon.head1 {
     background-position: -477px -197px;
 }
 
@@ -19,18 +19,47 @@
     background-position: -508px -166px;
 }
 
+#ring_group_popup #two_columns .column .icon.trash {
+    background-position: -32px -68px;
+    margin-left: 10px;
+}
+
+#ring_group_popup #two_columns .column.left{
+    border-radius: 0px 0px 6px 6px;
+    padding: 0px 0px 5px;
+}
+
+#ring_group_popup #two_columns .column.left .search_box{
+    background: #AFAFAF;
+    height: 27px;
+}
+
+#ring_group_popup #two_columns .column.left .search_box .searchsubmit1 {
+    margin-left: 18px;
+}
+
 #ring_group_popup #two_columns .column.right{
-    width: 320px;
+    width: 370px;
 }
 
 #ring_group_popup #two_columns .column.right .item_name {
     width: 155px;
 }
 
+#ring_group_popup #two_columns .column.right .actions {
+    font-size: 10px;
+    width: 39px;
+    float: left;
+    line-height: 28px;
+    height: 28px;
+    border-left: 1px solid #444444;
+}
+
 #ring_group_popup #two_columns .column.right .options {
     font-size: 10px;
-    width: 100px;
+    width: 110px;
     line-height: 28px;
+    height: 28px;
     float: left;
 }
 
@@ -42,11 +71,11 @@
 }
 
 #ring_group_popup #two_columns .column.right ul.connect {
-    width: 320px;
+    width: 370px;
 }
 
 #ring_group_popup #two_columns .column.right ul.connect.no_element {
-    background: url('../images/empty_ring_groups.png') no-repeat center;
+    background: url('../images/empty_ring_group.png') no-repeat center;
 }
 
 #ring_group_popup #two_columns .column.right .title_column .title{
@@ -62,4 +91,28 @@
 
 #ring_group_popup .form_content .popup_field {
     text-align: left;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs {
+    margin: 0px;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs > li {
+    background-color: none;
+    border: 0;
+    height: 22px;
+    line-height: 22px;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs > li:first-child {
+    border-radius: 10px 0px 0px 0px;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs > li {
+    border-radius: 0px 10px 0px 0px;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs > li > a{
+    width: 110px;
+    height: 22px;
 }
