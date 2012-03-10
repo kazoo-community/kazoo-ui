@@ -436,7 +436,7 @@ winkstart.module('voip', 'user', {
                                     callbacks.save_success(data, status, action);
                                 }
                             }
-                        }, callbacks.save_error);
+                        }, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');

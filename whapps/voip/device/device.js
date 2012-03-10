@@ -472,7 +472,7 @@ winkstart.module('voip', 'device', {
                                 delete data.field_data;
                             }
 
-                            THIS.save_device(form_data, data, callbacks.save_success, callbacks.save_error);
+                            THIS.save_device(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                         },
                         function() {
                             winkstart.alert('There were errors on the form, please correct!');
