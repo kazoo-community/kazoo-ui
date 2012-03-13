@@ -1,35 +1,35 @@
 #ring_group_popup #two_columns .wrapper {
-    width: 650px;
+    width: 700px;
 }
 
-#ring_group_popup #two_columns .column li a.drag_btn {
+#ring_group_popup #two_columns .sortable_li a.drag_btn {
     margin-right: 0px;
 }
 
-#ring_group_popup #two_columns .column .icon {
+#ring_group_popup #two_columns .sortable_li .icon {
     float: left;
     margin-top: 3px;
 }
 
-#ring_group_popup #two_columns .column .icon.head1 {
+#ring_group_popup #two_columns .sortable_li .icon.head1 {
     background-position: -477px -197px;
 }
 
-#ring_group_popup #two_columns .column .icon.device {
+#ring_group_popup #two_columns .sortable_li .icon.device {
     background-position: -508px -166px;
 }
 
-#ring_group_popup #two_columns .column .icon.trash {
+#ring_group_popup #two_columns .sortable_li .icon.trash {
     background-position: -32px -68px;
     margin-left: 10px;
 }
 
-#ring_group_popup #two_columns .column.left{
+#ring_group_popup #two_columns .column.left {
     border-radius: 0px 0px 6px 6px;
     padding: 0px 0px 5px;
 }
 
-#ring_group_popup #two_columns .column.left .search_box{
+#ring_group_popup #two_columns .column.left .search_box {
     background: #AFAFAF;
     height: 27px;
 }
@@ -38,15 +38,15 @@
     margin-left: 18px;
 }
 
-#ring_group_popup #two_columns .column.right{
-    width: 370px;
+#ring_group_popup #two_columns .column.right {
+    width: 420px;
 }
 
 #ring_group_popup #two_columns .column.right .item_name {
-    width: 155px;
+    width: 205px;
 }
 
-#ring_group_popup #two_columns .column.right .actions {
+#ring_group_popup #two_columns .actions {
     font-size: 10px;
     width: 39px;
     float: left;
@@ -55,7 +55,7 @@
     border-left: 1px solid #444444;
 }
 
-#ring_group_popup #two_columns .column.right .options {
+#ring_group_popup #two_columns .options {
     font-size: 10px;
     width: 110px;
     line-height: 28px;
@@ -63,7 +63,7 @@
     float: left;
 }
 
-#ring_group_popup #two_columns .column.right .options .option {
+#ring_group_popup #two_columns .options .option {
     font-size: 12px;
     width: 36px;
     margin: 2px 5px 0;
@@ -71,7 +71,7 @@
 }
 
 #ring_group_popup #two_columns .column.right ul.connect {
-    width: 370px;
+    width: 420px;
 }
 
 #ring_group_popup #two_columns .column.right ul.connect.no_element {
@@ -80,7 +80,7 @@
 
 #ring_group_popup #two_columns .column.right .title_column .title{
     float: left;
-    width: 193px;
+    width: 243px;
     height: 28px;
     line-height: 28px;
 }
