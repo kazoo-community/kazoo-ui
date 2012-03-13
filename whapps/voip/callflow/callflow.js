@@ -19,6 +19,7 @@ winkstart.module('voip', 'callflow', {
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
             disa_callflow: 'tmpl/disa_callflow.html',
+            prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html'
         },
 
@@ -1147,9 +1148,87 @@ winkstart.module('voip', 'callflow', {
                 'dynamic_cid[]': {
                     name: 'Dynamic cid',
                     icon: 'rightarrow',
-                    category: 'Advanced',
+                    category: 'Caller ID',
                     module: 'dynamic_cid',
                     tip: 'Set your CallerId by entering it on the phone',
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'prepend_cid[action=prepend]': {
+                    name: 'Prepend',
+                    icon: 'plus_circle',
+                    category: 'Caller ID',
+                    module: 'prepend_cid',
+                    tip: 'Prepend Caller ID with a text.',
+                    data: {
+                        action: 'prepend',
+                        caller_id_name_prefix: '',
+                        caller_id_number_prefix: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.prepend_cid_callflow.tmpl({
+                            data_cid: {
+                                'caller_id_name_prefix': node.getMetadata('caller_id_name_prefix') || '',
+                                'caller_id_number_prefix': node.getMetadata('caller_id_number_prefix') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('caller_id_name_prefix', $('#cid_name_prefix', popup_html).val());
+                            node.setMetadata('caller_id_number_prefix', $('#cid_number_prefix', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Prepend Caller-ID',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
+                'prepend_cid[action=reset]': {
+                    name: 'Reset Prepend',
+                    icon: 'loop2',
+                    category: 'Caller ID',
+                    module: 'prepend_cid',
+                    tip: 'Reset all the prepended texts before the Caller ID.',
+                    data: {
+                        action: 'reset'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
                         return '';
