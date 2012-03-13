@@ -1,34 +1,45 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="user_selector">User</label>
-                            <select id="user_selector">
-                                {{each(i, item) items}}
-                                    {{if selected == item.id}}
-                                        <option value="${item.id}" SELECTED>${item.name}</option>
-                                    {{else}}
-                                        <option value="${item.id}">${item.name}</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                            <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
-                            <a class="inline_action" data-action="create" href="#">Create</a>
-                        </li>
-                    </ul>
-                    <div class="clear"/>
-                </form>
-                <form name="form" method="post" action="#">
-                    <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="fancy_button blue">Save</a>
-                        <div class="clear"/>
+    <div class="callflow_popup">
+        <h1>Connect a caller to a user...</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="user_selector">Which user?</label>
+                    <div class="select_wrapper">
+                        <select id="user_selector">
+                            {{each(i, item) objects.items}}
+                                {{if objects.selected == item.id}}
+                                    <option value="${item.id}" SELECTED>${item.name}</option>
+                                {{else}}
+                                    <option value="${item.id}">${item.name}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                        <div class="action_links_div">
+                            <div id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit user options</a></div>
+                            <div><a class="inline_action" data-action="create" href="#">Add a user</a></div>
+                        </div>
                     </div>
                     <div class="clear"/>
-                </form>
+                </div>
             </div>
+            <div class="parameter_div">
+                Ring this user's devices for <input type="text" size="2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
+            </div>
+            <div class="parameter_div">
+                {{if can_call_self === true}}
+                <input type="checkbox" checked="checked" id="user_can_call_self">
+                {{else}}
+                <input type="checkbox" id="user_can_call_self">
+                {{/if}}
+                Allow this user to call himself.
+                <div class="parameter_description">When you check this box, calls from the user's own extension to themselves will not ring the extension. This allows them to dial their own number to get to voicemail.</div>
+            </div>
+        </form>
+        <div class="btn_wrapper_popup">
+            <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
+            <div class="clear"/>
         </div>
+        <div class="clear"/>
     </div>
 </div>

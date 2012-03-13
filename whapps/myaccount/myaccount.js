@@ -42,10 +42,6 @@ winkstart.module('myaccount', 'myaccount', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
     },
     {
-        list_submodules: {
-            list: []
-        },
-
         /* A modules object is required for the loading routine.
          * The format is as follows:
          * <module name>: <initialization status>
@@ -80,6 +76,8 @@ winkstart.module('myaccount', 'myaccount', {
         activate: function() {
             var THIS = this;
 
+            THIS.whapp_config();
+
             THIS.whapp_auth(function() {
                 THIS.initialization_check();
             });
@@ -103,7 +101,7 @@ winkstart.module('myaccount', 'myaccount', {
                             });
                         });
                     }
-                });
+                })
             } else {
                 THIS.setup_page();
             }
@@ -149,6 +147,22 @@ winkstart.module('myaccount', 'myaccount', {
             var THIS = this;
 
             winkstart.publish('myaccount.display');
+        },
+
+        orig_whapp_config: $.extend(true, {}, winkstart.apps['myaccount']),
+
+        whapp_config: function() {
+            var THIS = this;
+
+            winkstart.apps['myaccount'] = $.extend(true, {
+                api_url: winkstart.apps['auth'].api_url,
+                account_id: winkstart.apps['auth'].account_id,
+                user_id: winkstart.apps['auth'].user_id
+            }, THIS.orig_whapp_config);
+        },
+
+        list_submodules: {
+            list: []
         },
 
         my_account_click: function() {

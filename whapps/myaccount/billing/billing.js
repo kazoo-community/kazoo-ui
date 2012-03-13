@@ -45,9 +45,9 @@ winkstart.module('myaccount', 'billing', {
     {
         update_acct: function(data, new_data, success, error) {
             winkstart.request('billing.user_update', {
-                    account_id: winkstart.apps['auth'].account_id,
-                    api_url: winkstart.apps['auth'].api_url,
-                    user_id: winkstart.apps['auth'].user_id,
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    user_id: winkstart.apps['myaccount'].user_id,
                     data: $.extend(true, {}, data, new_data)
                 },
                 function(_data, status) {
@@ -68,8 +68,8 @@ winkstart.module('myaccount', 'billing', {
                 target = args.target;
 
             winkstart.request('billing.get', {
-                    account_id: winkstart.apps['auth'].account_id,
-                    api_url: winkstart.apps['auth'].api_url
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url
                 },
                 function(data, status) {
                     var defaults = {
@@ -87,8 +87,8 @@ winkstart.module('myaccount', 'billing', {
 
         update_billing: function(data, new_data, success, error) {
             winkstart.request('billing.update', {
-                    account_id: winkstart.apps['auth'].account_id,
-                    api_url: winkstart.apps['auth'].api_url,
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
                     data: $.extend(true, {}, data, new_data)
                 },
                 function(_data, status) {

@@ -1,13 +1,12 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-                {{if objects}}
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="object-selector">${objects.type}</label>
-                            <select id="object-selector">
+    <div class="callflow_popup">
+        <h1>Connect a caller to another callflow...</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="object-selector">Which callflow?</label>
+                    <div class="select_wrapper">
+                        <select id="object-selector">
                             {{each(i,obj) objects.items}}
                                 {{if objects.selected == obj.id}}
                                     <option value="${obj.id}" SELECTED>${obj.name}</option>
@@ -15,47 +14,16 @@
                                     <option value="${obj.id}">${obj.name}</option>
                                 {{/if}}
                             {{/each}}
-                            </select>
-                        </li>
-                    </ul>
-                    <!--<a href="#" id="create_new_item">Create new ${objects.type}</a>-->
-                </form>   
-                {{/if}}
-                {{if options}}
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="object-selector">${options.type}: </label>
-                            <select id="option-selector">
-                            {{each(key,opt) options.items}}
-                                {{if options.selected == key}}
-                                <option value="${key}" SELECTED>${opt}</option>
-                                {{else}}
-                                <option value="${key}">${opt}</option>
-                                {{/if}}
-                            {{/each}}
-                            </select>
-                        </li>
-                    </ul>
-                </form>
-                {{/if}}
-                {{if parameter}}
-                <div class="clear"/>
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="parameter_input">${parameter.name}: </label>
-                            <input type="text" name="parameter_input" id="parameter_input" value="${parameter.value}"/>
-                        </li>
-                    </ul>
-                </form>
-                {{/if}}
-                <form name="form" method="post" action="#">
-                    <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="submit_btn ctr save-btn">Save</a>
+                        </select>
+                        <div class="clear"/>
                     </div>
-                </form>   
+                </div>
             </div>
+        </form>
+        <div class="btn_wrapper_popup">
+            <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
+            <div class="clear"/>
         </div>
+        <div class="clear"/>
     </div>
 </div>

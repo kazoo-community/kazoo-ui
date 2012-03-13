@@ -14,14 +14,18 @@ winkstart.module('voip', 'account', {
         },
 
         validation: [
-                { name: '#name',                       regex: /^.+$/ },
-                { name: '#realm',                      regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
-                { name: '#caller_id_name_external',    regex: /^.{0,15}$/ },
-                { name: '#caller_id_number_external',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',    regex: /^.{0,15}$/ },
-                { name: '#caller_id_number_internal',  regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#vm_to_email_support_number', regex: /^[\+]?[0-9]*$/ },
-                { name: '#vm_to_email_support_email',  regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
+                { name: '#name',                         regex: /^.+$/ },
+                { name: '#realm',                        regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
+                { name: '#caller_id_name_external',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_external',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_internal',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9]*$/ },
+                { name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
+                { name: '#vm_to_email_send_from',        regex: /^.*$/ },
+                { name: '#vm_to_email_service_url',      regex: /^.*$/ },
+                { name: '#vm_to_email_service_provider', regex: /^.*$/ },
+                { name: '#vm_to_email_service_name',     regex: /^.*$/ }
         ],
 
         resources: {
@@ -140,7 +144,9 @@ winkstart.module('voip', 'account', {
                             internal: {},
                             external: {}
                         },
-                        vm_to_email: {},
+                        notifications: {
+                            voicemail_to_email: {}
+                        },
                         music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
@@ -164,6 +170,8 @@ winkstart.module('voip', 'account', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
+                                THIS.migrate_data(_data);
+
                                 THIS.render_account($.extend(true, defaults, _data), target, callbacks);
 
                                 if(typeof callbacks.after_render == 'function') {
@@ -205,6 +213,17 @@ winkstart.module('voip', 'account', {
             }
         },
 
+        migrate_data: function(data) {
+            if('vm_to_email' in data.data) {
+                data.data.notifications = data.data.notifications || {};
+                data.data.notifications.voicemail_to_email = data.data.notifications.voicemail_to_email || {};
+                data.data.notifications.voicemail_to_email.support_number = data.data.vm_to_email.support_number;
+                data.data.notifications.voicemail_to_email.support_email = data.data.vm_to_email.support_email;
+
+                delete data.data.vm_to_email;
+            }
+        },
+
         clean_form_data: function(form_data) {
             form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g, '');
 
@@ -230,9 +249,9 @@ winkstart.module('voip', 'account', {
                 delete data.caller_id;
             }
 
-            $.each(data.vm_to_email, function(key, val) {
+            $.each(data.notifications.voicemail_to_email, function(key, val) {
                 if(val == '') {
-                    delete data.vm_to_email[key];
+                    delete data.notifications.voicemail_to_email[key];
                 }
             });
 
@@ -298,7 +317,7 @@ winkstart.module('voip', 'account', {
                             delete data.field_data;
                         }
 
-                        THIS.save_account(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_account(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');

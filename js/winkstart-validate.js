@@ -1,4 +1,61 @@
 (function(winkstart, amplify, undefined) {
+    winkstart.error_message = {
+        process_error: function(callback) {
+            var objectToArray = function(data) {
+                    var return_data = [],
+                        return_sub_data,
+                        THIS = this;
+
+                    $.each(data, function(k, v) {
+                        if(typeof v == 'object') {
+                            $.each(v, function(key, value) {
+                                v[k+'.'+key] = value;
+                                delete v[key];
+                            });
+
+                            return_sub_data = objectToArray(this);
+
+                            $.each(return_sub_data, function(k2, v2) {
+                                return_data.push({'key': v2.key, 'value': v2.value});
+                            });
+                        }
+                        else {
+                            return_data.push({'key':k, 'value':v});
+                        }
+                    });
+                    return return_data;
+                },
+                arrayToString = function(data) {
+                    var array_obj = objectToArray(data || {}),
+                        output_string = '';
+
+                    $.each(array_obj, function(k, v) {
+                        output_string += v.key+': '+v.value+'<br/>';
+                    });
+
+                    return output_string;
+                };
+
+            return function(data, status) {
+                var string_alert = '';
+
+                if(status === 400 && data.message === 'invalid data') {
+                    string_alert += 'Schema Error:<br/><br/>';
+
+                    string_alert += arrayToString(data.data || {});
+                }
+
+                if(string_alert != '') {
+                    if(typeof callback == 'function') {
+                        winkstart.alert('error', string_alert, function() { callback(data, status); });
+                    }
+                    else {
+                        winkstart.alert('error', string_alert);
+                    }
+                }
+            };
+        }
+    };
 
     winkstart.validate = {
         set: function(items, _parent) {

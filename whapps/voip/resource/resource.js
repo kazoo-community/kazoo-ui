@@ -23,7 +23,8 @@ winkstart.module('voip', 'resource', {
             { name: '#gateways_username',      regex: /^.*$/ },
             { name: '#gateways_password',      regex: /^[^\s]*$/ },
             { name: '#gateways_prefix',        regex: /^[\+]?[\#0-9]*$/ },
-            { name: '#gateways_suffix',        regex: /^[0-9]*$/ }
+            { name: '#gateways_suffix',        regex: /^[0-9]*$/ },
+            { name: '#gateways_progress_timeout', regex: /^[0-9]*$/ }
         ],
 
         resources: {
@@ -95,7 +96,8 @@ winkstart.module('voip', 'resource', {
             module: THIS.__module,
             label: 'Resources',
             icon: 'resource',
-            weight: '35'
+            weight: '15',
+            category: 'advanced'
         });
     },
 
@@ -175,7 +177,8 @@ winkstart.module('voip', 'resource', {
                             {
                                 invite_format: 'e164',
                                 prefix: '+1',
-                                codecs: ['PCMU', 'PCMA']
+                                codecs: ['PCMU', 'PCMA'],
+                                progress_timeout: '6'
                             }
                         ],
                         rules: [
@@ -282,7 +285,7 @@ winkstart.module('voip', 'resource', {
                     var rule = $('#rules_dropdown', resource_html).val()
 
                     if(rule != 'custom') {
-                        $('#rules', resource_html).val('').hide()
+                        $('#rules', resource_html).val('').hide();
                     }
                     else {
                         $('#rules', resource_html).val('').show();
@@ -337,7 +340,7 @@ winkstart.module('voip', 'resource', {
                             delete data.field_data;
                         }
 
-                        THIS.save_resource(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_resource(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
@@ -366,7 +369,12 @@ winkstart.module('voip', 'resource', {
                 check_rule_and_hide();
             });
 
-            check_rule_and_hide();
+            if(data.data.rules[0] in data.field_data.rules) {
+                $('#rules', resource_html).hide();
+            }
+            else {
+                $('#rules_dropdown', resource_html).val('custom');
+            }
 
             _after_render = callbacks.after_render;
 

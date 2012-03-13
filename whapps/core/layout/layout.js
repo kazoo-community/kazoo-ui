@@ -10,7 +10,9 @@ winkstart.module('core', 'layout', {
 
         templates: {
             layout: 'tmpl/layout.html',
-            welcome: '../../../config/tmpl/welcome.html'
+            layout_welcome: 'tmpl/layout_welcome.html',
+            left_welcome: '../../../config/tmpl/left_welcome.html',
+            not_supported_browsers: 'tmpl/not_supported_browsers.html'
         },
 
         subscribe: {
@@ -25,9 +27,8 @@ winkstart.module('core', 'layout', {
 
         THIS.attach();
 
-        /* If we find a login cookie, don't display welcome message */
         if(!$.cookie('c_winkstart_auth')) {
-            THIS.templates.welcome.tmpl().appendTo('#ws-content');
+            THIS.render_welcome();
         }
 
         $('#ws-content .welcomediv').click(function() {
@@ -72,7 +73,7 @@ winkstart.module('core', 'layout', {
         attach: function() {
             var THIS = this;
 
-            THIS.templates.layout.tmpl().appendTo(THIS.parent);
+            var layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent);
 
             $("#loading").ajaxStart(function(){
                 $(this).show();
@@ -83,9 +84,19 @@ winkstart.module('core', 'layout', {
              });
         },
 
+        render_welcome: function() {
+            var THIS = this;
+            if(navigator.appName == 'Microsoft Internet Explorer') {
+                THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
+            }
+            else {
+                layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
+                THIS.templates.left_welcome.tmpl().appendTo($('.left_div', layout_welcome_html));
+            }
+        },
 
         detect_and_set_logo: function() {
-            var host = URL.match(/^(?:http:\/\/)*([^\/?#]+).*$/)[1],
+            var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
                 host_parts = host.split('.'),
                 partial_host = host_parts.slice(1).join('.'),
                 logo_html = $('.header > .logo > .img'),

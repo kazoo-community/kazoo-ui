@@ -23,33 +23,39 @@
         });
     };
 
-    winkstart.confirm = function(content, callback_OK, callback_Cancel) {
+    winkstart.confirm = function(content, callback_ok, callback_cancel) {
         var html,
             popup,
-            options = {};
+            options = {},
+            ok = false;
 
         html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a id="confirm_button" class="fancy_button green confirm_button" href="javascript:void(0);">OK</a><a id="cancel_button" class="fancy_button red confirm_button" href="javascript:void(0);">Cancel</a></div></div>');
 
         options.title = 'Please confirm';
         options.maxWidth = '400px';
         options.width = '400px';
+        options.onClose = function() {
+            if(ok) {
+                if(typeof callback_ok == 'function') {
+                    callback_ok();
+                }
+            }
+            else {
+                if(typeof callback_cancel == 'function') {
+                    callback_cancel();
+                }
+            }
+        };
 
         popup = winkstart.dialog(html, options);
 
         $('#confirm_button', html).click(function() {
+            ok = true;
             popup.dialog('close');
-
-            if(typeof callback_OK == 'function') {
-                callback_OK();
-            }
         });
 
         $('#cancel_button', html).click(function() {
             popup.dialog('close');
-
-            if(typeof callback_Cancel == 'function') {
-                callback_Cancel();
-            }
         });
 
         return popup;
@@ -75,17 +81,18 @@
         }
 
         options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);
-        options.maxWidth = '400px';
-        options.width = '400px';
+        options.maxWidth = '600px';
+        //options.width = '400px';
+        options.onClose = function() {
+            if(typeof callback == 'function') {
+                callback();
+            }
+        };
 
         popup = winkstart.dialog(html, options);
 
         $('.fancy_button', html).click(function() {
             popup.dialog('close');
-
-            if(typeof callback == 'function') {
-                callback();
-            }
         });
 
         return popup;
@@ -101,6 +108,20 @@
             close: function() {
                 $(newDiv).dialog('destroy');
                 $(newDiv).remove();
+
+                if(typeof options.onClose == 'function') {
+                    /* jQuery FREAKS out and gets into an infinite loop if the following function kicks back an error.
+                       Hence the try/catch. */
+                    try {
+                        options.onClose();
+                    }
+                    catch(err) {
+                        if(console && err.message && err.stack) {
+                            console.log(err.message);
+                            console.log(err.stack);
+                        }
+                    }
+                }
             }
         },
 

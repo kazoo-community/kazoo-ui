@@ -70,6 +70,17 @@
                                     <input id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" />
                                 </span>
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
+                                    <span class="tooltip"/>
+                                    <label for="enabled">Enabled</label>
+                                </span>
+                                {{if data.enabled}}
+                                    <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="enabled" name="enabled" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
 
@@ -99,17 +110,6 @@
                 <div id="Options">
                     <fieldset>
                         <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
-                                    <span class="tooltip"/>
-                                    <label for="enabled">Enabled</label>
-                                </span>
-                                {{if data.enabled}}
-                                    <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="enabled" name="enabled" type="checkbox"/>
-                                {{/if}}
-                            </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="The authentication realm used if challenged by the server">
                                     <span class="tooltip"/>
@@ -163,6 +163,13 @@
                                     <label for="gateway_suffix">Suffix</label>
                                 </span>
                                 <input id="gateways_suffix" name="gateways[0].suffix" type="text" value="${data.gateways[0].suffix}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="In secs, the maximum time to wait for media from a resource gateway">
+                                    <span class="tooltip"/>
+                                    <label for="gateways_progress_timeout">Progress Timeout</label>
+                                </span>
+                                <input id="gateways_progress_timeout" name="gateways[0].progress_timeout" type="text" value="${data.gateways[0].progress_timeout}" />
                             </li>
                         </ul>
                     </fieldset>

@@ -287,7 +287,7 @@ winkstart.module('voip', 'media', {
                                     }
                                 }
                             },
-                            callbacks.save_error
+                            winkstart.error_message.process_error(callbacks.save_error)
                         );
                     },
                     function() {
