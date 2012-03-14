@@ -1,26 +1,21 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="disa_pin_input">PIN: </label>
-                            <input type="text" id="disa_pin_input" value="${data_disa.pin}"/>
-                        </li>
-                        <li>
-                            <label for="disa_retries_input">Retries: </label>
-                            <input type="text" id="disa_retries_input" value="${data_disa.retries}"/>
-                        </li>
-                    </ul>
-                </form>
-                <form name="form" method="post" action="#">
-                    <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
-                    </div>
-                    <div class="clear"/>
-                </form>
+    <div class="callflow_popup">
+        <h1>DISA</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="disa_pin_input">PIN: </label>
+                    <input type="text" id="disa_pin_input" value="${data_disa.pin}"/>
+                </div>
+                <div class="popup_field">
+                    Allow a maximum of <input size="2" type="text" id="disa_retries_input" value="${data_disa.retries}"/> retries.
+                </div>
             </div>
+        </form>
+        <div class="btn_wrapper_popup">
+            <a href="javascript:void(0)" id="add" class="fancy_button blue">Change</a>
+        <div class="clear"/>
         </div>
+        <div class="clear"/>
     </div>
 </div>
