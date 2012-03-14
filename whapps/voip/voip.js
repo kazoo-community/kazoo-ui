@@ -42,6 +42,9 @@ winkstart.module('voip', 'voip', {
                 name: THIS.__module,
                 columns: 2
             });
+
+            //This disables lazy loading
+            THIS.initialization_check();
         });
 
         THIS._bootstrap();
@@ -83,9 +86,9 @@ winkstart.module('voip', 'voip', {
 
             THIS.is_initialized = true;
 
-            winkstart.publish('subnav.show', THIS.__module);
-
-            THIS.setup_page();
+            //Disabling post lazy loading behavior
+            //winkstart.publish('subnav.show', THIS.__module);
+            //THIS.setup_page();
         },
 
         activate: function() {
