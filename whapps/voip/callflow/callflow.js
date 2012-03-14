@@ -21,7 +21,8 @@ winkstart.module('voip', 'callflow', {
             two_column: 'tmpl/two_column.html',
             disa_callflow: 'tmpl/disa_callflow.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
-            ring_group_dialog: 'tmpl/ring_group_dialog.html'
+            ring_group_dialog: 'tmpl/ring_group_dialog.html',
+            ring_group_element: 'tmpl/ring_group_element.html'
         },
 
         elements: {
@@ -939,6 +940,9 @@ winkstart.module('voip', 'callflow', {
                         return node.getMetadata('name') || '';
                     },
                     edit: function(node, callback) {
+                        var default_timeout = '20',
+                            default_delay = '0';
+
                         winkstart.request(true, 'device.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
@@ -946,7 +950,9 @@ winkstart.module('voip', 'callflow', {
                             function(data, status) {
                                 var popup, popup_html, index, endpoints
                                     selected_endpoints = {},
-                                    unselected_endpoints = [];
+                                    unselected_endpoints = [],
+                                    unselected_devices = [],
+                                    unselected_users = [];
 
                                 if(endpoints = node.getMetadata('endpoints')) {
                                     // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
@@ -955,129 +961,215 @@ winkstart.module('voip', 'callflow', {
                                         obj.name = 'Undefined';
                                         selected_endpoints[obj.id] = obj;
                                     });
+                                }
 
-                                    $.each(data.data, function(i, obj) {
-                                        if(obj.id in selected_endpoints) {
-                                            selected_endpoints[obj.id].name = obj.name;
+                                $.each(data.data, function(i, obj) {
+                                    obj.endpoint_type = 'device';
+                                    if(obj.id in selected_endpoints) {
+                                        selected_endpoints[obj.id].endpoint_type = 'device';
+                                        selected_endpoints[obj.id].name = obj.name;
+                                    }
+                                    else {
+                                        obj.delay = default_delay;
+                                        obj.timeout = default_timeout;
+                                        unselected_devices.push(obj);
+                                    }
+                                });
+
+                                winkstart.request('user.list', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url
+                                    },
+                                    function(_data, status) {
+                                        $.each(_data.data, function(i, obj) {
+                                            obj.name = obj.first_name + ' ' + obj.last_name;
+                                            obj.endpoint_type = 'user';
+                                            if(obj.id in selected_endpoints) {
+                                                selected_endpoints[obj.id].endpoint_type = 'user',
+                                                selected_endpoints[obj.id].name = obj.name;
+                                            }
+                                            else {
+                                                obj.delay = default_delay;
+                                                obj.timeout = default_timeout;
+                                                unselected_users.push(obj);
+                                            }
+                                        });
+
+                                        popup_html = THIS.templates.ring_group_dialog.tmpl({
+                                            form: {
+                                                name: node.getMetadata('name') || '',
+                                                strategy: {
+                                                    items: [
+                                                        {
+                                                            id: 'simultaneous',
+                                                            name: 'At the same time'
+                                                        },
+                                                        {
+                                                            id: 'single',
+                                                            name: 'In order'
+                                                        }
+                                                    ],
+                                                    selected: node.getMetadata('strategy') || 'simultaneous'
+                                                },
+                                                timeout: node.getMetadata('timeout') || '30'
+                                            }
+                                        });
+
+                                        console.log(unselected_devices);
+                                        console.log(unselected_users);
+                                        console.log(selected_endpoints);
+
+                                        $.each(unselected_devices, function() {
+                                            $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                        });
+
+                                        $.each(unselected_users, function() {
+                                            $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                        });
+
+                                        $.each(selected_endpoints, function() {
+                                            $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                        });
+
+                                        $('ul.settings1 > li > a', popup_html).click(function(item) {
+                                            $('.pane_content', popup_html).hide();
+
+                                            //Reset Search field
+                                            $('.searchfield', popup_html).val('');
+                                            $('.column.left li', popup_html).show();
+
+                                            $('ul.settings1 > li', popup_html).removeClass('current');
+
+                                            var tab_id = $(this).attr('id');
+
+                                            if(tab_id  === 'users_tab_link') {
+                                                $('#users_pane', popup_html).show();
+                                            }
+                                            else if(tab_id === 'devices_tab_link') {
+                                                $('#devices_pane', popup_html).show();
+                                            }
+
+                                            $(this).parent().addClass('current');
+                                        });
+
+                                        $('.searchsubmit2', popup_html).click(function() {
+                                            $('.searchfield', popup_html).val('');
+                                            $('.column li', popup_html).show();
+                                        });
+
+                                        $('#devices_pane .searchfield', popup_html).keyup(function() {
+                                            $('#devices_pane .column.left li').each(function() {
+                                                if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                    $(this).hide();
+                                                }
+                                                else {
+                                                    $(this).show();
+                                                }
+                                            });
+                                        });
+
+                                        $('#users_pane .searchfield', popup_html).keyup(function() {
+                                            $('#users_pane .column.left li').each(function() {
+                                                if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                    $(this).hide();
+                                                }
+                                                else {
+                                                    $(this).show();
+                                                }
+                                            });
+                                        });
+
+
+                                        if(jQuery.isEmptyObject(selected_endpoints)) {
+                                            $('.column.right .connect', popup_html).addClass('no_element');
                                         }
                                         else {
-                                            unselected_endpoints.push(obj);
+                                            $('.column.right .connect', popup_html).removeClass('no_element');
                                         }
-                                    });
-                                }
-                                else {
-                                    unselected_endpoints = data.data;
-                                }
 
-                                popup_html = THIS.templates.ring_group_dialog.tmpl({
-                                    left: {
-                                        title: 'Unselected devices',
-                                        items: unselected_endpoints
-                                    },
-                                    right: {
-                                        title: 'Selected devices',
-                                        items: selected_endpoints
-                                    },
-                                    form: {
-                                        name: node.getMetadata('name') || '',
-                                        strategy: {
-                                            items: [
-                                                {
-                                                    id: 'simultaneous',
-                                                    name: 'At the same time'
-                                                },
-                                                {
-                                                    id: 'single',
-                                                    name: 'In order'
+                                        $('.column.left .options', popup_html).hide();
+
+                                        $('.options .option.delay', popup_html).bind('keyup', function() {
+                                            $(this).parents('li').dataset('delay', $(this).val());
+                                        });
+
+                                        $('.options .option.timeout', popup_html).bind('keyup', function() {
+                                            $(this).parents('li').dataset('timeout', $(this).val());
+                                        });
+
+                                        $('#save_ring_group', popup_html).click(function() {
+                                            var name = $('#name', popup_html).val();
+
+                                            endpoints = [];
+
+                                            $('.right .connect li', popup_html).each(function() {
+                                                endpoints.push($(this).dataset());
+                                            });
+
+                                            node.setMetadata('endpoints', endpoints);
+                                            node.setMetadata('name', name);
+                                            node.setMetadata('strategy', $('#strategy', popup_html).val());
+                                            node.setMetadata('timeout', $('#timeout', popup_html).val());
+
+                                            node.caption = name;
+
+                                            popup.dialog('close');
+                                        });
+
+                                        popup = winkstart.dialog(popup_html, {
+                                            title: 'Ring Group',
+                                            beforeClose: function() {
+                                                if(typeof callback == 'function') {
+                                                    callback();
                                                 }
-                                            ],
-                                            selected: node.getMetadata('strategy') || 'simultaneous'
-                                        },
-                                        timeout: node.getMetadata('timeout') || '30'
-                                    }
-                                });
+                                            }
+                                        });
 
-                                if(jQuery.isEmptyObject(selected_endpoints)) {
-                                    $('.column.right .connect', popup_html).addClass('no_element');
-                                }
-                                else {
-                                    $('.column.right .connect', popup_html).removeClass('no_element');
-                                }
+                                        $('.scrollable', popup).jScrollPane({
+                                            horizontalDragMinWidth: 0,
+                                            horizontalDragMaxWidth: 0
+                                        });
 
-                                $('.options .option', popup_html).each(function() {
-                                    $(this).tooltip({ attach: $('body'), relative: false });
-                                });
+                                        $('.connect', popup).sortable({
+                                            connectWith: $('.connect.right', popup),
+                                            zIndex: 2000,
+                                            helper: 'clone',
+                                            appendTo: $('.wrapper', popup),
+                                            scroll: false,
+                                            receive: function(ev, ui) {
+                                                if($(this).hasClass('right')) {
+                                                    $('.options', ui.item).show();
+                                                    $('.actions', ui.item).show();
+                                                    $('.item_name', ui.item).addClass('right');
+                                                    $('.column.right .connect', popup).removeClass('no_element');
+                                                }
+                                                //$('.scrollable', popup).data('jsp').reinitialise();
+                                            },
+                                            remove: function(ev, ui) {
+                                                //$('.scrollable', popup).data('jsp').reinitialise();
+                                            }
+                                        });
 
-                                $('.column.left .options', popup_html).hide();
+                                        $(popup_html).delegate('.trash', 'click', function() {
+                                            var $parent_li = $(this).parents('li').first();
+                                            var data = $parent_li.dataset();
+                                            data.name = jQuery.trim($('.item_name', $parent_li).html());
+                                            $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
+                                            $parent_li.remove();
 
-                                $('.options .option.delay', popup_html).bind('keyup', function() {
-                                    $(this).parents('li').dataset('delay', $(this).val());
-                                });
-
-                                $('.options .option.timeout', popup_html).bind('keyup', function() {
-                                    $(this).parents('li').dataset('timeout', $(this).val());
-                                });
-
-                                $('#save_ring_group', popup_html).click(function() {
-                                    var name = $('#name', popup_html).val();
-
-                                    endpoints = [];
-
-                                    $('.right .connect li', popup_html).each(function() {
-                                        endpoints.push($(this).dataset());
-                                    });
-
-                                    node.setMetadata('endpoints', endpoints);
-                                    node.setMetadata('name', name);
-                                    node.setMetadata('strategy', $('#strategy', popup_html).val());
-                                    node.setMetadata('timeout', $('#timeout', popup_html).val());
-
-                                    node.caption = name;
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: 'Ring Group',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-
-                                $('.scrollable', popup).jScrollPane({
-                                    horizontalDragMinWidth: 0,
-                                    horizontalDragMaxWidth: 0
-                                });
-
-                                $('.connect', popup).sortable({
-                                    connectWith: $('.connect', popup),
-                                    zIndex: 2000,
-                                    helper: 'clone',
-                                    appendTo: $('.wrapper', popup),
-                                    scroll: false,
-                                    receive: function(ev, ui) {
-                                        if($(this).parents('.column').hasClass('left')) {
-                                            $('.options', ui.item).hide();
-                                            $('.item_name', ui.item).removeClass('right');
-                                            if($('.column.right .connect li', popup).size() == 0) {
+                                            if($('.connect.right li', popup_html).size() == 0) {
                                                 $('.column.right .connect', popup).addClass('no_element');
                                             }
-                                        }
-                                        else {
-                                            $('.options', ui.item).show();
-                                            $('.item_name', ui.item).addClass('right');
-                                            $('.column.right .connect', popup).removeClass('no_element');
-                                        }
 
-                                        $('.scrollable', popup).data('jsp').reinitialise();
-                                    },
-                                    remove: function(ev, ui) {
-                                        $('.scrollable', popup).data('jsp').reinitialise();
+                                            if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                $('#'+data.id, popup_html).hide();
+                                            }
+                                        });
+
+                                        $('.pane_content', popup_html).hide();
+                                        $('#users_pane', popup_html).show();
                                     }
-                                });
-
+                                );
                             }
                         );
                     }
