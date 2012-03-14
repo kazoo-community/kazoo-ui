@@ -1092,7 +1092,8 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('.pane_content', popup_html).hide();
-                                    $('#users_pane', popup_html).show();
+                                    //$('#users_pane', popup_html).show();
+                                    $('#devices_pane', popup_html).show();
 
                                     var remove_element = function(li) {
                                         var $parent_li = li;
