@@ -5,6 +5,7 @@ winkstart.module('core', 'layout', {
             'css/tabs.css',
             'css/icons.css',
             'css/buttons.css',
+            'css/popups.css',
             'css/jquery.override.css'
         ],
 
