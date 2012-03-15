@@ -39,10 +39,17 @@
 
                     if(typeof settings.data == 'object' && 'headers' in settings.data) {
                         $.each(settings.data.headers, function(key, val) {
-                            ampXHR.setRequestHeader(key, val);
+                            switch(key) {
+                                case 'Content-Type':
+                                    ampXHR.overrideMimeType(val);
+                                    break;
+
+                                default:
+                                    ampXHR.setRequestHeader(key, val);
+                            }
                         });
 
-                        delete settings.data.header;
+                        delete settings.data.headers;
                     }
 
                     if(settings.contentType == 'application/json') {
