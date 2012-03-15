@@ -37,15 +37,15 @@
                 beforeSend: function(ampXHR, settings) {
                     ampXHR.setRequestHeader('X-Auth-Token', winkstart.apps[app_name]['auth_token']);
 
+                    if(typeof settings.data == 'object' && 'headers' in settings.data) {
+                        $.each(settings.data.headers, function(key, val) {
+                            ampXHR.setRequestHeader(key, val);
+                        });
+
+                        delete settings.data.header;
+                    }
+
                     if(settings.contentType == 'application/json') {
-                        if(typeof settings.data == 'object' && 'headers' in settings.data) {
-                            $.each(settings.data.headers, function(key, val) {
-                                ampXHR.setRequestHeader(key, val);
-                            });
-
-                            delete settings.data.header;
-                        }
-
                         if(settings.type == 'PUT' || settings.type == 'POST') {
                                 settings.data.verb = settings.type;
                                 settings.data = JSON.stringify(settings.data);
