@@ -401,7 +401,9 @@ winkstart.module('voip', 'timeofday', {
             $('.timeofday-delete', timeofday_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this time of day rule?', function() {
+                    THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             _after_render = callbacks.after_render;

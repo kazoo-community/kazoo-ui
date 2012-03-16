@@ -309,7 +309,9 @@ winkstart.module('voip', 'menu', {
             $('.menu-delete', menu_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_menu(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this menu?', function() {
+                    THIS.delete_menu(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             (target)

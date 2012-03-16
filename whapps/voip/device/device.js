@@ -483,7 +483,9 @@ winkstart.module('voip', 'device', {
                 $('.device-delete', device_html).click(function(ev) {
                     ev.preventDefault();
 
-                    THIS.delete_device(data, callbacks.delete_success, callbacks.delete_error);
+                    winkstart.confirm('Are you sure you want to delete this device?', function() {
+                        THIS.delete_device(data, callbacks.delete_success, callbacks.delete_error);
+                    });
                 });
 
                 if(!$('#music_on_hold_media_id', device_html).val()) {

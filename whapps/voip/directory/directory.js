@@ -378,7 +378,9 @@ winkstart.module('voip', 'directory', {
             $('.directory-delete', directory_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this directory?', function() {
+                    THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             $('.add_user_div', directory_html).click(function() {

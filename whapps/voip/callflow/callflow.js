@@ -473,17 +473,19 @@ winkstart.module('voip', 'callflow', {
                     });
 
                     $('.bottom_bar .delete', node_html).click(function() {
-                        winkstart.deleteJSON('callflow.delete', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                callflow_id: THIS.flow.id
-                            },
-                            function() {
-                                $('#ws_cf_flow').empty();
-                                THIS.renderList();
-                                THIS._resetFlow();
-                            }
-                        );
+                        winkstart.confirm('Are you sure you want to delete this callflow?', function() {
+                            winkstart.deleteJSON('callflow.delete', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    callflow_id: THIS.flow.id
+                                },
+                                function() {
+                                    $('#ws_cf_flow').empty();
+                                    THIS.renderList();
+                                    THIS._resetFlow();
+                                }
+                            );
+                        });
                     });
                 }
                 else {

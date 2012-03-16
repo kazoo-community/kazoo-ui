@@ -351,7 +351,9 @@ winkstart.module('voip', 'resource', {
             $('.resource-delete', resource_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_resource(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this resource?', function() {
+                    THIS.delete_resource(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             $('#gateways_server', resource_html).bind('keyup change blur', function() {

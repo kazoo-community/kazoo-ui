@@ -447,7 +447,9 @@ winkstart.module('voip', 'user', {
             $('.user-delete', user_html).click(function(ev) {
                 ev.preventDefault();
 
-                THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
+                winkstart.confirm('Are you sure you want to delete this user?', function() {
+                    THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
+                });
             });
 
             if(!$('#music_on_hold_media_id', user_html).val()) {
