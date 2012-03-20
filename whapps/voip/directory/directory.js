@@ -67,7 +67,7 @@ winkstart.module('voip', 'directory', {
             module: THIS.__module,
             label: 'Directory',
             icon: 'book',
-            weight: '50',
+            weight: '55',
             category: 'advanced'
         });
     },
@@ -352,12 +352,6 @@ winkstart.module('voip', 'directory', {
                         var old_list = {},
                             new_list = {};
 
-                        /*if('users' in data.data) {
-                            $.each(data.data.users, function(k, v) {
-                                old_list[v.user_id] = v.callflow_id;
-                            });
-                        }*/
-
                         $('.rows .row:not(#row_no_data)', directory_html).each(function() {
                             new_list[$(this).dataset('id')] = $('#user_callflow_id', $(this)).val();
                         });
@@ -367,7 +361,7 @@ winkstart.module('voip', 'directory', {
                             new_list: new_list
                         };
 
-                        THIS.save_directory(form_data, data, callbacks.save_success, callbacks.save_error);
+                        THIS.save_directory(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
@@ -402,7 +396,7 @@ winkstart.module('voip', 'directory', {
                         $('#row_no_data', directory_html).remove();
                     }
 
-                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+                    $('.rows', directory_html).prepend(THIS.templates.user_row.tmpl(user_data));
                     $('#option_user_'+user_id, directory_html).hide();
 
                     $user.val('empty_option_user');
