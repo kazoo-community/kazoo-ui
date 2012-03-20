@@ -658,16 +658,22 @@ winkstart.module('voip', 'callflow', {
                 $(this).siblings('.content').show();
             });
 
+            var help_box = $('.callflow_helpbox_wrapper', '#callflow-view').first();
+
             $('.tool', tools).hover(
                 function () {
                     $(this).addClass('active');
                     $('.tool_name', '#callflow-view').removeClass('active');
                     $('.tool_name', $(this)).addClass('active');
-                    $(this).attr('help') ? $('#help_box', tools).html($(this).attr('help')) : true;
+                    if($(this).attr('help')) {
+                        $('#help_box', help_box).html($(this).attr('help'));
+                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top - 78)
+                                                                        .show();
+                    }
                 },
                 function () {
-                    $('#help_box', tools).html('Drag the following elements and drop them on a callflow item!');
                     $(this).removeClass('active');
+                    $('.callflow_helpbox_wrapper', '#callflow-view').hide();
                 }
             );
 
@@ -685,6 +691,7 @@ winkstart.module('voip', 'callflow', {
                         $(this).addClass('active');
                     },
                     drag: function () {
+                        $('.callflow_helpbox_wrapper', '#callflow-view').hide();
                     },
                     stop: function () {
                         THIS._disableDestinations();
@@ -702,11 +709,6 @@ winkstart.module('voip', 'callflow', {
             target.append(tools);
 
             $('#ws_cf_tools', '#callflow-view').disableSelection();
-
-            $('*[tooltip]', target).each(function() {
-                $(this).tooltip({ xMove: -80, yMove: -80, height: '40px', width: '100px' });
-            });
-
         },
 
         _enableDestinations: function(el) {
