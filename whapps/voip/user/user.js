@@ -28,6 +28,7 @@ winkstart.module('voip', 'user', {
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
+                { name: '#queue_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
         ],
 

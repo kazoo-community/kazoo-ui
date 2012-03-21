@@ -200,6 +200,10 @@
     background-position: -32px -64px;
 }
 
+.icon.queue {
+    background-position: -384px -418px;
+}
+
 .icon.support {
     background-position: -416px -195px;
 }
