@@ -84,7 +84,7 @@ winkstart.module('voip', 'featurecode', {
                             if(this.featurecode.name in THIS.actions) {
                                 THIS.actions[this.featurecode.name].id = this.id;
                                 THIS.actions[this.featurecode.name].enabled = true;
-                                THIS.actions[this.featurecode.name].number = this.featurecode.number;
+                                THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
                             }
                         }
                     });
@@ -241,16 +241,15 @@ winkstart.module('voip', 'featurecode', {
                             if(this.featurecode.name in THIS.actions) {
                                 THIS.actions[this.featurecode.name].id = this.id;
                                 THIS.actions[this.featurecode.name].enabled = true;
-                                THIS.actions[this.featurecode.name].number = this.featurecode.number;
+                                THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
                             }
                         }
                     });
                     var data = {'categories': THIS.categories, 'label':'data' };
                     $('#ws-content').empty();
                     var featurecode_html = THIS.templates.featurecode.tmpl(data).appendTo($('#ws-content'));
-
-
-            });
+                }
+            );
         },
         clean_form_data: function() {
             var THIS = this;
@@ -263,12 +262,20 @@ winkstart.module('voip', 'featurecode', {
 
             $('.enabled', '#featurecode-view').each(function() {
                 var callflow = $(this).dataset();
+
                 callflow.flow = {
                     data: THIS.actions[callflow.action].data,
                     module: THIS.actions[callflow.action].module,
                     children: {}
                 };
+
                 callflow.type += 's';
+
+                /* if a star is in the pattern, then we need to escape it */
+                if(callflow.type === 'patterns') {
+                    callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+                }
+
                 callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
                 form_data.created_callflows.push(callflow);
             });
@@ -281,17 +288,24 @@ winkstart.module('voip', 'featurecode', {
             $('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
                 if($(this).dataset('enabled') == 'true') {
                     var callflow = $(this).dataset();
-                     callflow.flow = {
-                         data: THIS.actions[callflow.action].data,
-                         module: THIS.actions[callflow.action].module,
-                         children: {}
-                     };
 
-                //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
-                callflow.type += 's';
-                callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
+                    callflow.flow = {
+                        data: THIS.actions[callflow.action].data,
+                        module: THIS.actions[callflow.action].module,
+                        children: {}
+                    };
 
-                form_data.updated_callflows.push(callflow);
+                    //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
+                    callflow.type += 's';
+
+                    /* if a star is in the pattern, then we need to escape it */
+                    if(callflow.type === 'patterns') {
+                        callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+                    }
+
+                    callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
+
+                    form_data.updated_callflows.push(callflow);
                 }
             });
 
@@ -441,6 +455,21 @@ winkstart.module('voip', 'featurecode', {
                     number: this.default_number,
                     build_regex: function(number) {
                         return '*'+number;
+                    }
+                },
+                'voicemail[action="direct"]': {
+                    name: 'Direct to Voicemail',
+                    category: 'Miscellaneous',
+                    module: 'voicemail',
+                    number_type: 'pattern',
+                    data: {
+                        action: 'compose'
+                    },
+                    enabled: false,
+                    default_number: '*',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
                     }
                 },
                 'intercom': {
