@@ -85,9 +85,10 @@ winkstart.module('voip', 'queue', {
                         data: normalized_data
                     },
                     function(_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id);
                         if(typeof success == 'function') {
-                            success(_data, status, 'update');
+                            THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+                                success(_data, status, 'update');
+                            });
                         }
                     },
                     function(_data, status) {
@@ -104,9 +105,10 @@ winkstart.module('voip', 'queue', {
                         data: normalized_data
                     },
                     function (_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id);
                         if(typeof success == 'function') {
-                            success(_data, status, 'create');
+                            THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+                                success(_data, status, 'create');
+                            });
                         }
                     },
                     function(_data, status) {
@@ -119,7 +121,7 @@ winkstart.module('voip', 'queue', {
             }
         },
 
-        update_single_user: function(user_id, queue_id, action) {
+        update_single_user: function(user_id, queue_id, action, callback) {
             var THIS = this;
 
             winkstart.request(false, 'user.get', {
@@ -144,38 +146,60 @@ winkstart.module('voip', 'queue', {
                             data: _data.data
                         },
                         function(_data, status) {
+                            if(typeof callback === 'function') {
+                                callback(status);
+                            }
+                        },
+                        function(_data, status) {
+                            if(typeof callback === 'function') {
+                                callback(status);
+                            }
                         }
                     );
                 }
             );
         },
 
-        update_users: function(data, queue_id) {
+        update_users: function(data, queue_id, success) {
             var old_queue_user_list = data.old_list,
                 new_queue_user_list = data.new_list,
-                THIS = this;
+                THIS = this,
+                users_updated_count = 0;
+                users_count = 0,
+                callback = function() {
+                    users_updated_count++;
+                    if(users_updated_count >= users_count) {
+                        success();
+                    }
+                };
+
 
             if(old_queue_user_list) {
                 $.each(old_queue_user_list, function(k, v) {
                     if(new_queue_user_list.indexOf(v) === -1) {
                         //Request to update user without this queue.
-                        THIS.update_single_user(v, queue_id, 'remove');
+                        users_count++;
+                        THIS.update_single_user(v, queue_id, 'remove', callback);
                     }
                 });
 
                 $.each(new_queue_user_list, function(k, v) {
                     if(old_queue_user_list.indexOf(v) === -1) {
-                        THIS.update_single_user(v, queue_id, 'add');
+                        users_count++;
+                        THIS.update_single_user(v, queue_id, 'add', callback);
                     }
                 });
             }
             else {
                 if(new_queue_user_list) {
                     $.each(new_queue_user_list, function(k, v) {
-                        THIS.update_single_user(v, queue_id, 'add');
+                        users_count++;
+                        THIS.update_single_user(v, queue_id, 'add', callback);
                     });
                 }
             }
+
+            //while(users_updated.count < users_count);
         },
 
         edit_queue: function(data, _parent, _target, _callbacks, data_defaults){
