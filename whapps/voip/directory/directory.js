@@ -85,10 +85,11 @@ winkstart.module('voip', 'directory', {
                         data: normalized_data
                     },
                     function(_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id);
-                        if(typeof success == 'function') {
-                            success(_data, status, 'update');
-                        }
+                        THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+                            if(typeof success == 'function') {
+                                success(_data, status, 'update');
+                            }
+                        });
                     },
                     function(_data, status) {
                         if(typeof error == 'function') {
@@ -104,10 +105,11 @@ winkstart.module('voip', 'directory', {
                         data: normalized_data
                     },
                     function (_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id);
-                        if(typeof success == 'function') {
-                            success(_data, status, 'create');
-                        }
+                        THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+                            if(typeof success == 'function') {
+                                success(_data, status, 'create');
+                            }
+                        });
                     },
                     function(_data, status) {
                         if(typeof error == 'function') {
@@ -119,7 +121,7 @@ winkstart.module('voip', 'directory', {
             }
         },
 
-        update_single_user: function(user_id, directory_id, callflow_id) {
+        update_single_user: function(user_id, directory_id, callflow_id, callback) {
             var THIS = this;
 
             winkstart.request(false, 'user.get', {
@@ -144,22 +146,40 @@ winkstart.module('voip', 'directory', {
                             data: _data.data
                         },
                         function(_data, status) {
+                            if(typeof callback === 'function') {
+                                callback();
+                            }
+                        },
+                        function(_data, status) {
+                            if(typeof callback === 'function') {
+                                callback();
+                            }
                         }
                     );
                 }
             );
         },
 
-        update_users: function(data, directory_id) {
+        update_users: function(data, directory_id, success) {
             var old_directory_user_list = data.old_list,
                 new_directory_user_list = data.new_list,
-                THIS = this;
+                THIS = this,
+                users_updated_count = 0,
+                users_count = 0,
+                callback = function() {
+                    users_updated_count++;
+                    console.log(users_updated_count, users_count);
+                    if(users_updated_count >= users_count) {
+                        success();
+                    }
+                };
 
             if(old_directory_user_list) {
                 $.each(old_directory_user_list, function(k, v) {
                     if(!(k in new_directory_user_list)) {
                         //Request to update user without this directory.
-                        THIS.update_single_user(k, directory_id);
+                        users_count++;
+                        THIS.update_single_user(k, directory_id, undefined, callback);
                     }
                 });
 
@@ -167,19 +187,22 @@ winkstart.module('voip', 'directory', {
                     if(k in old_directory_user_list) {
                         if(old_directory_user_list[k] != v) {
                             //Request to update user
-                            THIS.update_single_user(k, directory_id, v);
+                            users_count++;
+                            THIS.update_single_user(k, directory_id, v, callback);
                         }
                         //else it has not been updated
                     }
                     else {
-                        THIS.update_single_user(k, directory_id, v);
+                        users_count++;
+                        THIS.update_single_user(k, directory_id, v, callback);
                     }
                 });
             }
             else {
                 if(new_directory_user_list) {
                     $.each(new_directory_user_list, function(k, v) {
-                        THIS.update_single_user(k, directory_id, v);
+                        users_count++;
+                        THIS.update_single_user(k, directory_id, v, callback);
                     });
                 }
             }
