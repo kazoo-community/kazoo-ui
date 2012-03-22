@@ -168,7 +168,6 @@ winkstart.module('voip', 'directory', {
                 users_count = 0,
                 callback = function() {
                     users_updated_count++;
-                    console.log(users_updated_count, users_count);
                     if(users_updated_count >= users_count) {
                         success();
                     }
