@@ -25,7 +25,7 @@
 }
 
 #ring_group_popup #two_columns .column.left {
-    border-radius: 0px 0px 6px 6px;
+    border-radius: 0px 0px 5px 5px;
     padding: 0px 0px 5px;
 }
 
@@ -105,11 +105,11 @@
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li:first-child {
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 5px 0px 0px 0px;
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li {
-    border-radius: 0px 10px 0px 0px;
+    border-radius: 0px 5px 0px 0px;
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li > a{

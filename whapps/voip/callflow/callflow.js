@@ -1023,19 +1023,42 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('#save_ring_group', popup_html).click(function() {
-                                        var name = $('#name', popup_html).val();
+                                        var name = $('#name', popup_html).val(),
+                                            global_timeout = 0,
+                                            strategy = $('#strategy', popup_html).val();
 
                                         endpoints = [];
 
+                                        if(strategy === 'simultaneous') {
+                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                var duration = delay + local_timeout;
+
+                                                if(duration > global_timeout) {
+                                                    global_timeout = duration;
+                                                }
+
+                                                return global_timeout;
+                                            }
+                                        }
+                                        else {
+                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                global_timeout += delay + local_timeout;
+
+                                                return global_timeout;
+                                            }
+                                        }
+
                                         $('.right .connect li', popup_html).each(function() {
-                                            $(this).removeAttr('data-owner_id');
-                                            endpoints.push($(this).dataset());
+                                            var item_data = $(this).dataset();
+                                            delete item_data.owner_id;
+                                            endpoints.push(item_data);
+                                            global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
                                         });
 
                                         node.setMetadata('endpoints', endpoints);
                                         node.setMetadata('name', name);
-                                        node.setMetadata('strategy', $('#strategy', popup_html).val());
-                                        node.setMetadata('timeout', $('#timeout', popup_html).val());
+                                        node.setMetadata('strategy', strategy);
+                                        node.setMetadata('timeout', global_timeout);
 
                                         node.caption = name;
 
@@ -1112,8 +1135,7 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $('.pane_content', popup_html).hide();
-                                    //$('#users_pane', popup_html).show();
-                                    $('#devices_pane', popup_html).show();
+                                    $('#users_pane', popup_html).show();
 
                                     var remove_element = function(li) {
                                         var $parent_li = li;
