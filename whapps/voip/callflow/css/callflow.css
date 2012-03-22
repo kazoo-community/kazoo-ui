@@ -11,8 +11,7 @@
     width: 100%;
     overflow-x: auto;
     min-height: 400px;
-    padding-top: 20px;
-    margin-top: 10px;
+    padding-top: 10px;
     text-align: center;
 }
 
@@ -87,6 +86,18 @@
     text-align: center;
     color: #fff;
     font-weight: bold;
+}
+
+#callflow-view .wrapper_callflow_buttons {
+    width: 322px;
+    display: block;
+    margin: auto;
+}
+
+#callflow-view .wrapper_callflow_buttons .fancy_button {
+    width: 129px;
+    text-align: center;
+    display: inline-block;
 }
 
 #callflow-view .callflow_helpbox_wrapper {

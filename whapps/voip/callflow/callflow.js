@@ -468,7 +468,27 @@ winkstart.module('voip', 'callflow', {
                         THIS.renderFlow();
                     });
 
-                    $('.bottom_bar .save', node_html).click(function() {
+                    $('.wrapper_callflow_buttons .save', '#callflow-view').click(function() {
+                        THIS.save();
+                    });
+
+                    $('.wrapper_callflow_buttons .delete', '#callflow-view').click(function() {
+                        winkstart.confirm('Are you sure you want to delete this callflow?', function() {
+                            winkstart.deleteJSON('callflow.delete', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    callflow_id: THIS.flow.id
+                                },
+                                function() {
+                                    $('#ws_cf_flow').empty();
+                                    THIS.renderList();
+                                    THIS._resetFlow();
+                                }
+                            );
+                        });
+                    });
+
+                    /*$('.bottom_bar .save', node_html).click(function() {
                         THIS.save();
                     });
 
@@ -486,7 +506,7 @@ winkstart.module('voip', 'callflow', {
                                 }
                             );
                         });
-                    });
+                    });*/
                 }
                 else {
                     node_html = THIS.templates.node.tmpl({

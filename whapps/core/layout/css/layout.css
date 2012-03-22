@@ -524,6 +524,11 @@ ul.buttons a:hover{
     top:1px;
 }
 
+button.fancy_button {
+    height: 27px;
+    line-height: none;
+}
+
 /* block display  */
 .fancy_button.block {
     display: block;

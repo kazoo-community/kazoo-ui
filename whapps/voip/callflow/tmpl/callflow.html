@@ -2,7 +2,13 @@
     <div id="ws_callflow">
         <div class="callflow">
             <div>
-                <span class="flow"><div id="${flow.substr(1)}"></div></span>
+                <span class="flow">
+                    <span class="wrapper_callflow_buttons">
+                        <div class="fancy_button red delete">Delete this callflow</div>
+                        <div class="fancy_button green save">Save your changes</div>
+                    </span>
+                    <div id="${flow.substr(1)}"></div>
+                </span>
             </div>
         </div>
         <div class="tools">
