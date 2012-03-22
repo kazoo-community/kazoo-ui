@@ -89,15 +89,17 @@
 }
 
 #callflow-view .wrapper_callflow_buttons {
-    width: 322px;
     display: block;
+    width: 322px;
     margin: auto;
+    margin-bottom: 5px;
 }
 
 #callflow-view .wrapper_callflow_buttons .fancy_button {
-    width: 129px;
+    width: 137px;
     text-align: center;
     display: inline-block;
+    margin-left: 0px;
 }
 
 #callflow-view .callflow_helpbox_wrapper {

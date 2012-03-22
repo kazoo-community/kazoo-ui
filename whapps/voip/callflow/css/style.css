@@ -32,7 +32,7 @@
 }
 
 #ws_callflow .callflow .root > .content {
-    background-color: #424242;
+    /*background-color: #424242;*/
 }
 
 #ws_callflow .callflow .root > .content .number_row {
@@ -40,11 +40,14 @@
     background-position: bottom;
     background-repeat: repeat-x;
     height: 32px;
+    background-color: #424242;
 }
 
 #ws_callflow .callflow .root > .content .number_row:last-child {
     background: none;
+    background-color: #424242;
     height: 30px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 #ws_callflow .callflow .root > .content .number_column {
@@ -89,6 +92,7 @@
     width: 163px;
 }
 
+/*
 #ws_callflow .callflow .root > .bottom_bar {
     background-image: url(../images/black_bar.png);
     height: 24px;
@@ -109,6 +113,7 @@
 #ws_callflow .callflow .root > .bottom_bar .btn:hover {
     color: #05ADDC;
 }
+*/
 
 #ws_callflow .callflow .node {
     display: inline-block;
@@ -182,7 +187,7 @@
 }
 
 #ws_callflow .destination {
-    border-radius:10px;
+    border-radius: 5px;
     border: 3px solid #05addc;
 }
 
@@ -281,7 +286,7 @@
     margin: 0;
     padding: 0;
     border: 1px solid #303030;
-    border-radius: 3px 3px 3px 3px;
+    border-radius: 5px;
 }
 
 #ws_callflow .div_icon {
