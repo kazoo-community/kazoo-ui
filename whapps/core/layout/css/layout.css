@@ -408,8 +408,9 @@ ul.buttons a{
         display: block;
         background-image: url(../images/button_bg.png);
         width: 81px;
-        height: 27px;
+        /*height: 27px;
         line-height: 27px;
+        */
         font-weight: bold;
         color: #EBEBEB;
         text-decoration: none;
@@ -501,8 +502,10 @@ ul.buttons a:hover{
     user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
-    box-shadow: 1px 1px 1px #333333;
+    box-shadow: 1px 1px 2px #555555;
     margin-left: 5px;
+    height: 18px;
+    line-height: 18px;
 }
 
 .fancy_button:hover, .fancy_button:focus {
@@ -512,6 +515,7 @@ ul.buttons a:hover{
     background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#000000)) !important;
     background: -moz-linear-gradient(top,  #333333,  #000000) !important;
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#000000') !important;
+    box-shadow: 0px 0px 0px #555555;
 }
 
 .fancy_button:active {
@@ -524,8 +528,8 @@ ul.buttons a:hover{
 .fancy_button.block {
     display: block;
     font-weight: bold;
-    height: 27px;
-    line-height: 27px;
+    height: 18px;
+    line-height: 18px;
     margin: 0 auto;
     text-align: center;
     width: 81px;
@@ -541,18 +545,10 @@ ul.buttons a:hover{
 
 .fancy_button.blue:hover, .fancy_button.blue:focus {
     background: #048AB0;
-    background: -webkit-gradient(linear, left top, left bottom, from(#048AB0), to(#02566E)) !important;
-    background: -moz-linear-gradient(top, #048AB0, #02566E) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#048AB0', endColorstr='#02566E') !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#05addc), to(#0783a6)) !important;
+    background: -moz-linear-gradient(top, #05addc, #0783a6) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#0783a6') !important;
 }
-
-.fancy_button.blue:active {
-    background: #02566E;
-    background: -webkit-gradient(linear, left top, left bottom, from(#02566E), to(#048AB0)) !important;
-    background: -moz-linear-gradient(top, #02566E, #048AB0) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#02566E', endColorstr='#048AB0') !important;
-}
-
 
 /* GREEN */
 .fancy_button.green {
@@ -563,17 +559,10 @@ ul.buttons a:hover{
 }
 
 .fancy_button.green:hover, .fancy_button.green:focus {
-    background: #29a329;
-    background: -webkit-gradient(linear, left top, left bottom, from(#29a329), to(#145214)) !important;
-    background: -moz-linear-gradient(top, #29a329, #145214) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#29a329', endColorstr='#145214') !important;
-}
-
-.fancy_button.green:active {
-    background: #145214;
-    background: -webkit-gradient(linear, left top, left bottom, from(#145214), to(#29a329)) !important;
-    background: -moz-linear-gradient(top, #145214, #29a329) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#145214', endColorstr='#29a329') !important;
+    background: #2eb82e;
+    background: -webkit-gradient(linear, left top, left bottom, from(#2eb82e), to(#1e941e)) !important;
+    background: -moz-linear-gradient(top, #2eb82e, #1e941e) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#2eb82e', endColorstr='#1e941e') !important;
 }
 
 /* RED */
@@ -585,17 +574,10 @@ ul.buttons a:hover{
 }
 
 .fancy_button.red:hover, .fancy_button.red:focus {
-    background: #b80000 !important;
-    background: -webkit-gradient(linear, left top, left bottom, from(#b80000), to(#5c0000)) !important;
-    background: -moz-linear-gradient(top,  #b80000,  #5c0000) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#b80000', endColorstr='#5c0000') !important;
-}
-
-.fancy_button.red:active {
-    background: #5c0000 !important;
-    background: -webkit-gradient(linear, left top, left bottom, from(#5c0000), to(#b80000)) !important;
-    background: -moz-linear-gradient(top,  #5c0000,  #b80000) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#5c0000', endColorstr='#b80000') !important;
+    background: #e60000 !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e60000), to(#a80000)) !important;
+    background: -moz-linear-gradient(top,  #e60000,  #a80000) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#e60000', endColorstr='#a80000') !important;
 }
 
 /* GENERIC ALERT CSS */
@@ -660,7 +642,7 @@ ul.buttons a:hover{
     display: block;
     width: 81px;
     float:left;
-    padding:10px;
+    /*padding:10px;*/
 }
 
 /* Not supported browser template */
