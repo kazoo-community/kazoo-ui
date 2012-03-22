@@ -164,7 +164,7 @@ winkstart.module('voip', 'queue', {
             var old_queue_user_list = data.old_list,
                 new_queue_user_list = data.new_list,
                 THIS = this,
-                users_updated_count = 0;
+                users_updated_count = 0,
                 users_count = 0,
                 callback = function() {
                     users_updated_count++;
@@ -198,8 +198,6 @@ winkstart.module('voip', 'queue', {
                     });
                 }
             }
-
-            //while(users_updated.count < users_count);
         },
 
         edit_queue: function(data, _parent, _target, _callbacks, data_defaults){
