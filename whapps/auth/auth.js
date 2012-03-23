@@ -254,6 +254,9 @@ winkstart.module('auth', 'auth',
             if(username != '') {
                 $('#password', contentDiv).focus();
             }
+            else {
+                $('#login', contentDiv).focus();
+            }
 
             $('.login', contentDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
