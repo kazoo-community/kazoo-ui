@@ -6,7 +6,8 @@ winkstart.module('voip', 'resource', {
         templates: {
             resource: 'tmpl/resource.html',
             edit: 'tmpl/edit.html',
-            gateway: 'tmpl/gateway.html'
+            gateway: 'tmpl/gateway.html',
+            landing_resource: 'tmpl/landing_resource.html'
         },
 
         subscribe: {
@@ -510,13 +511,85 @@ winkstart.module('voip', 'resource', {
 
         activate: function(parent) {
             var THIS = this,
-                resource_html = THIS.templates.resource.tmpl();
+                //resource_html = THIS.templates.resource.tmpl();
+//
+                resource_html = THIS.templates.landing_resource.tmpl();
 
             (parent || $('#ws-content'))
                 .empty()
                 .append(resource_html);
 
-            THIS.render_list(resource_html);
+            $('.resource_btn', resource_html).click(function() {
+                var module_name = 'resources',
+                    create_nomatch = function() {
+                        //create callflow own resources
+                        winkstart.request('callflow.create', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                data: {
+                                    numbers: ['no_match'],
+                                    flow: {
+                                        children: {},
+                                        data: {},
+                                        module: module_name
+                                    }
+                                }
+                            },
+                            function(json) {
+                                //THIS.renderResource();
+                                winkstart.alert('module_name');
+                            },
+                            function(json, status) {
+                                winkstart.alert('Error: ' + status);
+                            }
+                        );
+                    },
+                    update_nomatch = function() {
+                        winkstart.request('callflow.get_no_match', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                if(_data.data.length > 0) {
+                                    winkstart.request('callflow.delete', {
+                                            account_id: winkstart.apps['voip'].account_id,
+                                            api_url: winkstart.apps['voip'].api_url,
+                                            callflow_id: _data.data[0].id
+                                        },
+                                        function(_data, status) {
+                                            create_nomatch();
+                                        }
+                                    );
+                                }
+                                else {
+                                    create_nomatch();
+                                }
+                            }
+                        );
+                    };
+
+                if($(this).hasClass('hosted_btn')) {
+                    module_name = 'offnet';
+                    update_nomatch();
+                }
+                else {
+                    winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                        update_nomatch();
+                    });
+                }
+            });
+
+            $('.resources_link', resource_html).click(function() {
+                var list_resource_html = THIS.templates.resource.tmpl();
+
+                (parent || $('#ws-content'))
+                    .empty()
+                    .append(list_resource_html);
+
+                THIS.render_list(list_resource_html);
+            });
+
+            //THIS.render_list(resource_html);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
