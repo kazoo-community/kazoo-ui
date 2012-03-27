@@ -613,7 +613,7 @@ winkstart.module('voip', 'user', {
                                 },
                                 function(_data, status) {
                                     $.each(_data.data, function(key, val) {
-                                        $('.column.second', '#' + val.device_id).addClass('registered');
+                                        $('.column.third', '#' + val.device_id).addClass('registered');
                                     });
                                 }
                             );
