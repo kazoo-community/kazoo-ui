@@ -3,7 +3,11 @@
         {{if id}}
             <div class="column first">${name}</div>
             <div class="column second">${display_type}</div>
+            {{if enabled}}
             <div class="column third ${device_type}"></div>
+            {{else}}
+            <div class="column third ${device_type} disabled"></div>
+            {{/if}}
             <div class="column fourth">
                 {{if enabled}}
                 <input type="checkbox" class="enabled_checkbox" data-device_id="${id}" checked="checked"/>

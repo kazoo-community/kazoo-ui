@@ -312,7 +312,7 @@ winkstart.module('voip', 'user', {
             }
         },
 
-        update_single_device: function($checkbox) {
+        update_single_device: function($checkbox, parent) {
             $checkbox.attr('disabled', 'disabled');
 
             var device_id = $checkbox.dataset('device_id'),
@@ -336,6 +336,12 @@ winkstart.module('voip', 'user', {
                         },
                         function(_data, status) {
                             $checkbox.removeAttr('disabled');
+                            if(_data.data.enabled === true) {
+                                $('#'+ _data.data.id + ' .column.third', parent).removeClass('disabled');
+                            }
+                            else {
+                                $('#'+ _data.data.id + ' .column.third', parent).addClass('disabled');
+                            }
                         },
                         function(_data, status) {
                             $checkbox.removeAttr('disabled');
@@ -503,7 +509,7 @@ winkstart.module('voip', 'user', {
             });
 
             $(user_html).delegate('.enabled_checkbox', 'click', function() {
-                THIS.update_single_device($(this));
+                THIS.update_single_device($(this), user_html);
             });
 
             $(user_html).delegate('.action_device.edit', 'click', function() {

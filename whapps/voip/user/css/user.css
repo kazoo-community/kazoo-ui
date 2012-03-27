@@ -87,6 +87,10 @@
     background-image: url('../../device/images/green.png');
 }
 
+#user-form #equipment #tab_devices .rows .column.third.disabled {
+    background-image: url('../../device/images/gray.png') !important;
+}
+
 #user-form #equipment #tab_devices .column.fourth {
     width: 59px;
 }

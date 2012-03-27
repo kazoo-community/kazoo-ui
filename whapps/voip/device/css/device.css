@@ -8,6 +8,10 @@
     background-image: url(../images/green.png);
 }
 
+#device-listpanel ul .list-element.disabled {
+    background-image: url(../images/gray.png);
+}
+
 /* If you are building a widget that could be used by EVERYONE, please consider adding your CSS
  * to the global CSS stylesheet (talk to Dhruvi). Otherwise, add it here only */
 

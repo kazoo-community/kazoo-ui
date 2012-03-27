@@ -707,7 +707,15 @@ winkstart.module('voip', 'device', {
                     /* Cell Phones are always registered */
                     $.each(data.data, function(k, v) {
                         if($.inArray(v.device_type, ['cellphone']) > -1) {
-                            $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                            if(v.enabled === false) {
+                                $('#' + v.id, $('#device-listpanel', parent)).addClass('disabled');
+                            }
+                            else {
+                                $('#' + v.id, $('#device-listpanel', parent)).addClass('registered');
+                            }
+                        }
+                        else if(v.enabled === false) {
+                            $('#' + v.id, $('#device-listpanel', parent)).addClass('disabled');
                         }
                     });
                 }
