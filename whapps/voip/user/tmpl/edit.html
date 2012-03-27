@@ -200,10 +200,15 @@
                                 <a class="inline_action_media" data-action="create" href="#">Create</a>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Queue PIN">
-                                    <span class="tooltip"/><label for="queue_pin">Queue PIN:</label>
+                                <span class="tooltip-wrapper" tooltip="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory).">
+                                    <span class="tooltip"/><label for="queue_pin">Enable Agent / PIN:</label>
                                 </span>
-                                <input id="queue_pin" name="queue_pin" type="text" value="${data.queue_pin}"/>
+                                {{if data.enable_pin === true}}
+                                <input id="enable_pin" name="enable_pin" type="checkbox" CHECKED="CHECKED"/>
+                                {{else}}
+                                <input id="enable_pin" name="enable_pin" type="checkbox"/>
+                                {{/if}}
+                                <input id="queue_pin" size="6" name="queue_pin" type="text" value="${data.queue_pin}" disabled="disabled"/>
                             </li>
                         </ul>
                     </fieldset>

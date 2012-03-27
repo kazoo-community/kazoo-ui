@@ -370,6 +370,14 @@ winkstart.module('voip', 'user', {
 
             $('#username', user_html).focus();
 
+            if(data.data.enable_pin) {
+                $('#queue_pin', user_html).removeAttr('disabled');
+            }
+
+            $('#enable_pin', user_html).click(function() {
+                $(this).is(':checked') ? $('#queue_pin', user_html).removeAttr('disabled') : $('#queue_pin', user_html).val('').attr('disabled', 'disabled');
+            });
+
             $('.advanced_pane', user_html).hide();
             $('.advanced_tabs_wrapper', user_html).hide();
 
@@ -414,11 +422,16 @@ winkstart.module('voip', 'user', {
                 winkstart.validate.is_valid(THIS.config.validation, user_html, function() {
                         var form_data = form2object('user-form');
 
+                        if(form_data.enable_pin === false) {
+                            delete data.data.queue_pin;
+                        }
+
                         THIS.clean_form_data(form_data);
 
                         if('field_data' in data) {
                             delete data.field_data;
                         }
+
 
                         THIS.save_user(form_data, data, function(data, status, action) {
                             if(action == 'create') {
@@ -631,6 +644,7 @@ winkstart.module('voip', 'user', {
 
         format_data: function(data) {
             // Do work
+            data.data.queue_pin === undefined ? data.data.enable_pin = false : data.data.enable_pin = true;
 
             return data;
         },
@@ -646,6 +660,10 @@ winkstart.module('voip', 'user', {
 
             if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
                 form_data.password = form_data.pwd_mngt_pwd1;
+            }
+
+            if(form_data.enable_pin === false) {
+                delete form_data.queue_pin;
             }
 
             delete form_data.pwd_mngt_pwd1;
@@ -682,6 +700,8 @@ winkstart.module('voip', 'user', {
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
             }
+
+            delete data.enable_pin;
 
             /* Yes, I am aware that the admin does not lose access to the userportal (if switched) */
             if(data.priv_level == 'admin') {
