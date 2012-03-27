@@ -20,7 +20,8 @@ winkstart.module('voip', 'queue', {
         validation: [
             { name: '#name',      regex: /^.*/ },
             { name: '#connection_timeout',  regex: /^[0-9]+$/ },
-            { name: '#caller_exit_key',  regex: /^.{1}/ }
+            { name: '#member_timeout',  regex: /^[0-9]+$/ }
+            /*{ name: '#caller_exit_key',  regex: /^.{1}/ }*/
         ],
 
         resources: {
@@ -198,6 +199,11 @@ winkstart.module('voip', 'queue', {
                     });
                 }
             }
+
+            /* If no users has been updated, we still need to refresh the view for the other attributes */
+            if(users_count == 0) {
+                success();
+            }
         },
 
         edit_queue: function(data, _parent, _target, _callbacks, data_defaults){
@@ -227,7 +233,8 @@ winkstart.module('voip', 'queue', {
                 defaults = {
                     data: $.extend(true, {
                         connection_timeout: '300',
-                        caller_exit_key: '#'
+                        member_timeout: '5',
+                        /* caller_exit_key: '#' */
                     }, data_defaults || {}),
                     field_data: {
                         sort_by: {
@@ -374,17 +381,12 @@ winkstart.module('voip', 'queue', {
 
             $('.add_user_div', queue_html).click(function() {
                 var $user = $('#user_id', queue_html);
-                var $callflow = $('#callflow_id', queue_html);
 
-                if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
+                if($user.val() != 'empty_option_user') {
                     var user_id = $user.val(),
                         user_data = {
                             user_id: user_id,
-                            user_name: $('#option_user_'+user_id, queue_html).text(),
-                            callflow_id: $callflow.val(),
-                            field_data: {
-                                callflows: data.field_data.callflows
-                            }
+                            user_name: $('#option_user_'+user_id, queue_html).text()
                         };
 
                     if($('#row_no_data', queue_html).size() > 0) {
@@ -395,7 +397,6 @@ winkstart.module('voip', 'queue', {
                     $('#option_user_'+user_id, queue_html).hide();
 
                     $user.val('empty_option_user');
-                    $callflow.val('empty_option_callflow');
                 }
             });
 
@@ -422,6 +423,7 @@ winkstart.module('voip', 'queue', {
         },
 
         clean_form_data: function(form_data) {
+            delete form_data.user_id;
         },
 
         render_list: function(_parent){

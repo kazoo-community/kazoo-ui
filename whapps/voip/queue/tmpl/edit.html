@@ -93,10 +93,18 @@
                             <li>
                                 <span class="tooltip-wrapper" tooltip="How long caller stays in queue, in seconds.">
                                     <span class="tooltip"/>
-                                    <label for="connection_timeout">Connection timeout (s)</label>
+                                    <label for="connection_timeout">Queue timeout (s)</label>
                                 </span>
                                 <input id="connection_timeout" name="connection_timeout" type="text" value="${data.connection_timeout}" />
                             </li>
+                             <li>
+                                <span class="tooltip-wrapper" tooltip="How long to ring an agent's phone before moving to the next agent.">
+                                    <span class="tooltip"/>
+                                    <label for="member_timeout">Member timeout (s)</label>
+                                </span>
+                                <input id="member_timeout" name="member_timeout" type="text" value="${data.member_timeout}" />
+                            </li>
+                            <!--
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Caller can exit queue manually by pressing this key.">
                                     <span class="tooltip"/>
@@ -104,6 +112,7 @@
                                 </span>
                                 <input id="caller_exit_key" name="caller_exit_key" type="text" value="${data.caller_exit_key}" />
                             </li>
+                            -->
                         </ul>
                     </fieldset>
                     <div class="clear"></div>
