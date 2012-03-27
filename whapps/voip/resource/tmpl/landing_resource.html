@@ -4,20 +4,29 @@
             <div class="title">
                 <h1>Select the type of Resource you would like to use</h1>
             </div>
-            <div class="wrapper_div">
-                <div class="hosted_btn resource_btn">
-                    <div class="button_text">
-                    Use 2600hz as my phone company
+            <div class="resource_buttons">
+                <div class="wrapper_div">
+                    {{if resource_type === 'offnet'}}
+                    <div class="hosted_btn resource_btn pressed">
+                    {{else}}
+                    <div class="hosted_btn resource_btn">
+                    {{/if}}
+                        <div class="button_text">
+                        Use 2600hz as my phone company
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="wrapper_div">
-                <div class="different_carrier_btn resource_btn">
-                    <div class="button_text">
-                    Use a different carrier
+                <div class="wrapper_div">
+                    {{if resource_type === 'resources'}}
+                    <div class="different_carrier_btn resource_btn pressed">
+                    {{else}}
+                    <div class="different_carrier_btn resource_btn">
+                    {{/if}}
+                        <div class="button_text">
+                        Use a different carrier
+                        </div>
                     </div>
                 </div>
-                <!--<a class="resources_link" href="javascript:void(0);">Manage your local resources</a>-->
             </div>
         </div>
     </div>

@@ -433,7 +433,7 @@ winkstart.module('voip', 'resource', {
             );
         },
 
-        render_list: function(parent){
+        render_list: function(parent, callback){
             var THIS = this,
                 setup_list = function (local_data, global_data) {
                     var resources;
@@ -471,6 +471,10 @@ winkstart.module('voip', 'resource', {
 
                     $('#resource-listpanel', parent).empty();
                     $('#resource-listpanel', parent).listpanel(options);
+
+                    if(typeof callback === 'function') {
+                        callback();
+                    }
                 };
 
             if('admin' in winkstart.apps['voip'] && winkstart.apps['voip'].admin === true) {
@@ -509,87 +513,125 @@ winkstart.module('voip', 'resource', {
             return form_data;
         },
 
-        activate: function(parent) {
+        update_nomatch_route: function(parent, module_name) {
             var THIS = this,
-                //resource_html = THIS.templates.resource.tmpl();
-//
-                resource_html = THIS.templates.landing_resource.tmpl();
+                create_nomatch = function(parent, module_name) {
+                    winkstart.request('callflow.create', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            data: {
+                                numbers: ['no_match'],
+                                flow: {
+                                    children: {},
+                                    data: {},
+                                    module: module_name
+                                }
+                            }
+                        },
+                        function(json) {
+                            THIS.render_landing_resource(parent, module_name);
+                        },
+                        function(json, status) {
+                            winkstart.alert('Error: ' + status);
+                        }
+                    );
+                };
 
-            (parent || $('#ws-content'))
-                .empty()
-                .append(resource_html);
-
-            $('.resource_btn', resource_html).click(function() {
-                var module_name = 'resources',
-                    create_nomatch = function() {
-                        //create callflow own resources
-                        winkstart.request('callflow.create', {
+            winkstart.request('callflow.get_no_match', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    if(_data.data.length > 0) {
+                        winkstart.request('callflow.delete', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
-                                data: {
-                                    numbers: ['no_match'],
-                                    flow: {
-                                        children: {},
-                                        data: {},
-                                        module: module_name
-                                    }
-                                }
-                            },
-                            function(json) {
-                                //THIS.renderResource();
-                                winkstart.alert('module_name');
-                            },
-                            function(json, status) {
-                                winkstart.alert('Error: ' + status);
-                            }
-                        );
-                    },
-                    update_nomatch = function() {
-                        winkstart.request('callflow.get_no_match', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
+                                callflow_id: _data.data[0].id
                             },
                             function(_data, status) {
-                                if(_data.data.length > 0) {
-                                    winkstart.request('callflow.delete', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url,
-                                            callflow_id: _data.data[0].id
-                                        },
-                                        function(_data, status) {
-                                            create_nomatch();
-                                        }
-                                    );
-                                }
-                                else {
-                                    create_nomatch();
-                                }
+                                create_nomatch(parent, module_name);
                             }
                         );
-                    };
-
-                if($(this).hasClass('hosted_btn')) {
-                    module_name = 'offnet';
-                    update_nomatch();
+                    }
+                    else {
+                        create_nomatch(parent, module_name);
+                    }
                 }
-                else {
-                    winkstart.confirm('Are you sure you want to use a different carrier?', function() {
-                        update_nomatch();
+            );
+        },
+
+        render_landing_resource: function(parent, resource_type) {
+            var THIS = this,
+                resource_type = resource_type || 'none',
+                init_events = function() {
+                    $('.resource_btn', resource_html).click(function() {
+                        var module_name = 'resources';
+
+                        if($(this).hasClass('hosted_btn')) {
+                            module_name = 'offnet';
+                            THIS.update_nomatch_route(parent, module_name);
+                            //callback
+                            //landing resource offnet
+                        }
+                        else {
+                            winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                                THIS.update_nomatch_route(parent, module_name);
+                                //landing_resource resource
+                            });
+                        }
                     });
-                }
-            });
+                },
+                display_page = function() {
+                    resource_html = THIS.templates.landing_resource.tmpl({ resource_type: resource_type });
+                    init_events();
+                    if(resource_type === 'resources') {
+                        var list_resource_html = THIS.templates.resource.tmpl();
 
-            $('.resources_link', resource_html).click(function() {
-                var list_resource_html = THIS.templates.resource.tmpl();
+                        (parent || $('#ws-content'))
+                            .empty()
+                            .append(list_resource_html);
 
-                (parent || $('#ws-content'))
-                    .empty()
-                    .append(list_resource_html);
+                        THIS.render_list(parent, function() {
+                            $('#resource-view', parent).append(resource_html);
+                        });
+                    }
+                    else {
+                        (parent || $('#ws-content'))
+                            .empty()
+                            .append(resource_html);
+                    }
+                };
 
-                THIS.render_list(list_resource_html);
-            });
+            if(resource_type === 'none') {
+                winkstart.request('callflow.get_no_match', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url
+                    },
+                    function(_data, status) {
+                        if(_data.data.length > 0) {
+                            winkstart.request('callflow.get', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    callflow_id: _data.data[0].id
+                                },
+                                function(_data, status) {
+                                    resource_type = _data.data.flow.module;
+                                    display_page();
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+            else {
+                display_page();
+            }
+        },
 
-            //THIS.render_list(resource_html);
+        activate: function(parent) {
+            var THIS = this;
+
+            THIS.render_landing_resource(parent);
         },
 
         define_callflow_nodes: function(callflow_nodes) {
