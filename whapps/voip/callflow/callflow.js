@@ -50,6 +50,11 @@ winkstart.module('voip', 'callflow', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'callflow.get_no_match': {
+                url: '{api_url}/accounts/{account_id}/callflows?filter_numbers=no_match',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'callflow.create': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -818,10 +823,9 @@ winkstart.module('voip', 'callflow', {
                                 if(elem.numbers) {
                                     for(var i = 0; i < elem.numbers.length; i++) {
                                         elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
-                                        elem.numbers[i] = elem.numbers[i].replace(/^no_match$/, 'Catch all');
                                     }
                                 }
-                                if(elem.featurecode == false) {
+                                if(elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
                                     new_list.push({
                                         id: elem.id,
                                         title: (elem.numbers) ? elem.numbers.toString() : ''
