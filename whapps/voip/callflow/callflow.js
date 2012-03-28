@@ -4,7 +4,6 @@ winkstart.module('voip', 'callflow', {
             'css/popups.css',
             'css/two_columns.css',
             'css/callflow.css',
-            'css/action_popups.css',
             'css/ring_groups.css'
         ],
 
