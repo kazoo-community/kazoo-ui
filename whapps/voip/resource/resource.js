@@ -565,19 +565,18 @@ winkstart.module('voip', 'resource', {
                 resource_type = resource_type || 'none',
                 init_events = function() {
                     $('.resource_btn', resource_html).click(function() {
-                        var module_name = 'resources';
+                        if(!$(this).hasClass('pressed')) {
+                            var module_name = 'resources';
 
-                        if($(this).hasClass('hosted_btn')) {
-                            module_name = 'offnet';
-                            THIS.update_nomatch_route(parent, module_name);
-                            //callback
-                            //landing resource offnet
-                        }
-                        else {
-                            winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                            if($(this).hasClass('hosted_btn')) {
+                                module_name = 'offnet';
                                 THIS.update_nomatch_route(parent, module_name);
-                                //landing_resource resource
-                            });
+                            }
+                            else {
+                                winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                                    THIS.update_nomatch_route(parent, module_name);
+                                });
+                            }
                         }
                     });
                 },
@@ -620,6 +619,9 @@ winkstart.module('voip', 'resource', {
                                 }
                             );
                         }
+                        else {
+                            display_page();
+                        }
                     }
                 );
             }
@@ -641,7 +643,7 @@ winkstart.module('voip', 'resource', {
                 'offnet[]': {
                     name: 'Global Resource',
                     icon: 'offnet',
-                    category: 'Basic',
+                    category: 'Advanced',
                     module: 'offnet',
                     tip: 'Route calls to the phone network through pre-configured service providers',
                     data: {},

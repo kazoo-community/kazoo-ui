@@ -824,10 +824,9 @@ winkstart.module('voip', 'callflow', {
                                 if(elem.numbers) {
                                     for(var i = 0; i < elem.numbers.length; i++) {
                                         elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
-                                        elem.numbers[i] = elem.numbers[i].replace(/^no_match$/, 'Catch all');
                                     }
                                 }
-                                if(elem.featurecode == false) {
+                                if(elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
                                     new_list.push({
                                         id: elem.id,
                                         title: (elem.numbers) ? elem.numbers.toString() : ''
