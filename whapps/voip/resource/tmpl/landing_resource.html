@@ -3,9 +3,9 @@
         <div class="landing_btn_wrapper">
             {{if resource_type === 'offnet'}}
                 <div class="title">
-                    <h1>Congratulations! You're now using using 2600hz Resources!</h1>
+                    <h1>Congratulations! You're now using using 2600hz as your global carrier!</h1>
                     <div class="help_text">
-                        If you want to manage your own resources, click on "Use a different carrier" button.
+                        If you want to manage your own carriers, click on "Use a different carrier" button.
                     </div>
                 </div>
                 <div class="resource_buttons">
@@ -29,7 +29,7 @@
                     <div class="title">
                         <h1>Your account is currently using an external carrier</h1>
                         <div class="help_text">
-                            You can manage your own carriers by adding/editing or removing resources from the list on the left side.
+                            You can manage your own carriers by adding/editing or removing carriers from the list on the left side.
                         </div>
                     </div>
                     <div class="resource_buttons">
@@ -70,30 +70,6 @@
                     </div>
                 {{/if}}
             {{/if}}
-            <!--<div class="resource_buttons">
-                <div class="wrapper_div">
-                    {{if resource_type === 'offnet'}}
-                    <div class="hosted_btn resource_btn pressed">
-                    {{else}}
-                    <div class="hosted_btn resource_btn">
-                    {{/if}}
-                        <div class="button_text">
-                        Use 2600hz as my phone company
-                        </div>
-                    </div>
-                </div>
-                <div class="wrapper_div">
-                    {{if resource_type === 'resources'}}
-                    <div class="different_carrier_btn resource_btn pressed">
-                    {{else}}
-                    <div class="different_carrier_btn resource_btn">
-                    {{/if}}
-                        <div class="button_text">
-                        Use a different carrier
-                        </div>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>
 </div>

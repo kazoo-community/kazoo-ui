@@ -2,9 +2,9 @@
     <div class="inner">
         <form id="resource-form" action="" method="post" class="niceform">
             {{if data.id}}
-                <h1>Edit ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Resource</h1>
+                <h1>Edit ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Carrier</h1>
             {{else}}
-                <h1>Create Resource</h1>
+                <h1>Add Carrier</h1>
             {{/if}}
 
             <ul class="settings_tabs settings1">
@@ -23,9 +23,9 @@
                         <ul class="controls">
                             {{if data.type}}{{else}}
                                 <li>
-                                    <span class="tooltip-wrapper" tooltip="Global resources are system-wide trunks">
+                                    <span class="tooltip-wrapper" tooltip="Global Carriers are system-wide trunks">
                                         <span class="tooltip"/>
-                                        <label for="type">Resource Type:</label>
+                                        <label for="type">Carrier Type:</label>
                                     </span>
                                     <select id="type" name="type">
                                         <option value="local">Local</option>
@@ -34,7 +34,7 @@
                                 </li>
                             {{/if}}
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Friendly name of this resource">
+                                <span class="tooltip-wrapper" tooltip="Friendly name of this carrier">
                                     <span class="tooltip"/>
                                     <label for="name">Name:</label>
                                 </span>
@@ -62,7 +62,7 @@
                                 <input id="gateways_password" name="gateways[0].password" type="password" value="${data.gateways[0].password}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="The priority determines which resource is tried first when multiple resources are set up for the same rule (more than 1 10-digit US resource, etc)">
+                                <span class="tooltip-wrapper" tooltip="The priority determines which carrier is tried first when multiple carriers are set up for the same rule (more than 1 10-digit US carrier, etc)">
                                     <span class="tooltip"/>
                                     <label for="weight_cost">Priority:</label>
                                 </span>
@@ -71,7 +71,7 @@
                                 </span>
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="When set to false the resource will be ignored by the call routing engine">
+                                <span class="tooltip-wrapper" tooltip="When set to false this carrier will be ignored by the call routing engine">
                                     <span class="tooltip"/>
                                     <label for="enabled">Enabled</label>
                                 </span>
@@ -118,7 +118,7 @@
                                 <input id="gateways_realm" name="gateways[0].realm" type="text" value="${data.gateways[0].realm}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use the resource">
+                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use this carrier">
                                     <span class="tooltip"/>
                                     <label for="rules">Rules:</label>
                                 </span>
@@ -165,7 +165,7 @@
                                 <input id="gateways_suffix" name="gateways[0].suffix" type="text" value="${data.gateways[0].suffix}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="In secs, the maximum time to wait for media from a resource gateway">
+                                <span class="tooltip-wrapper" tooltip="In secs, the maximum time to wait for media from a carrier gateway">
                                     <span class="tooltip"/>
                                     <label for="gateways_progress_timeout">Progress Timeout</label>
                                 </span>

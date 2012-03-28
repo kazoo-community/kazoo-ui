@@ -95,7 +95,7 @@ winkstart.module('voip', 'resource', {
         winkstart.publish('subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Resources',
+            label: 'Carriers',
             icon: 'resource',
             weight: '15',
             category: 'advanced'
@@ -453,9 +453,9 @@ winkstart.module('voip', 'resource', {
                     }
 
                     var options = {};
-                    options.label = 'Resources Module';
+                    options.label = 'Carriers Module';
                     options.identifier = 'resource-listview';
-                    options.new_entity_label = 'Add Resource';
+                    options.new_entity_label = 'Add Carrier';
 
                     resources = [].concat(map_crossbar_data(local_data, 'local'), map_crossbar_data(global_data, 'global'));
                     resources.sort(function(a, b) {
@@ -641,7 +641,7 @@ winkstart.module('voip', 'resource', {
 
             $.extend(callflow_nodes, {
                 'offnet[]': {
-                    name: 'Global Resource',
+                    name: 'Global Carrier',
                     icon: 'offnet',
                     category: 'Advanced',
                     module: 'offnet',
@@ -664,7 +664,7 @@ winkstart.module('voip', 'resource', {
                     }
                 },
                 'resources[]': {
-                    name: 'Account Resource',
+                    name: 'Account Carrier',
                     icon: 'resource',
                     category: 'Advanced',
                     module: 'resources',
