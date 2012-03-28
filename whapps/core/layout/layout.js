@@ -92,7 +92,8 @@ winkstart.module('core', 'layout', {
             }
             else {
                 layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
-                THIS.templates.left_welcome.tmpl().appendTo($('.left_div', layout_welcome_html));
+                var data_welcome = { company_name: winkstart.config.company_name, company_website: winkstart.config.company_website };
+                THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.left_div', layout_welcome_html));
             }
         },
 

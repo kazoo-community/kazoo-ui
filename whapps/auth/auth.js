@@ -538,6 +538,7 @@ winkstart.module('auth', 'auth',
             });
         },
 
+        /* (╯°□°）︵ ┻━━┻━ */
         recover_password: function(args) {
             var THIS = this;
 

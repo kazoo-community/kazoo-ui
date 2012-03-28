@@ -581,7 +581,7 @@ winkstart.module('voip', 'resource', {
                     });
                 },
                 display_page = function() {
-                    resource_html = THIS.templates.landing_resource.tmpl({ resource_type: resource_type });
+                    resource_html = THIS.templates.landing_resource.tmpl({ company_name: winkstart.config.company_name, resource_type: resource_type });
                     init_events();
                     if(resource_type === 'resources') {
                         var list_resource_html = THIS.templates.resource.tmpl();

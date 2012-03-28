@@ -4,6 +4,9 @@
         /* Was winkstart.debug */
         debug: false,
 
+        /* Customized name displayed in the application (login page, resource module..) */
+        company_name: '2600hz',
+
         base_urls: {
             'u.2600hz.com': {
                 /* If this was set to true, Winkstart would look for u_2600hz_com.png in config/images/logos */
@@ -14,6 +17,7 @@
             }
         },
 
+        /* web server used by the cdr module to show the link to the logs */
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 
         /* Was winkstart.realm_suffix */
@@ -56,6 +60,6 @@
 
     amplify.cache = false;
 
-    document.title = "2600hz WinkStart";
+    document.title = winkstart.config.company_name + " WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
