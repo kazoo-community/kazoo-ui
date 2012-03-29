@@ -20,6 +20,8 @@ winkstart.module('voip', 'account', {
                 { name: '#caller_id_number_external',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_internal',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',     regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_emergency',   regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9]*$/ },
                 { name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
                 { name: '#vm_to_email_send_from',        regex: /^.*$/ },
@@ -142,7 +144,8 @@ winkstart.module('voip', 'account', {
                     data: $.extend(true, {
                         caller_id: {
                             internal: {},
-                            external: {}
+                            external: {},
+                            emergency: {}
                         },
                         notifications: {
                             voicemail_to_email: {}
@@ -226,7 +229,7 @@ winkstart.module('voip', 'account', {
 
         clean_form_data: function(form_data) {
             form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g, '');
-
+            form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g, '');
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g, '');
 
             return form_data;
