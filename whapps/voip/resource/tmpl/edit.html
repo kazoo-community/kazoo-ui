@@ -118,7 +118,18 @@
                                 <input id="gateways_realm" name="gateways[0].realm" type="text" value="${data.gateways[0].realm}" />
                             </li>
                             <li>
-                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use the resource">
+                                <span class="tooltip-wrapper" tooltip="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm.">
+                                    <span class="tooltip"/>
+                                    <label for="gateways_format_from_uri">Pass Realm in INVITE:</label>
+                                </span>
+                                {{if data.gateways[0].format_from_uri == true}}
+                                    <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" checked="checked"/>
+                                {{else}}
+                                    <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri"/>
+                                {{/if}}
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use this carrier">
                                     <span class="tooltip"/>
                                     <label for="rules">Rules:</label>
                                 </span>

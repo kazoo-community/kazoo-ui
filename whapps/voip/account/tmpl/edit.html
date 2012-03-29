@@ -47,9 +47,9 @@
 
                 <span class="advanced_tabs_wrapper">
                     <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon sip"/>Caller ID</a></li>
-                        <li><a href="#"><span  class="icon sip"/>Voicemail-to-Email Template</a></li>
-                        <li><a href="#"><span  class="icon audio"/>Music on hold</a></li>
+                        <li><a href="javascript:void(0);"><span  class="icon sip"/>Caller ID</a></li>
+                        <li><a href="javascript:void(0);"><span  class="icon vmbox"/>Voicemail-to-Email Template</a></li>
+                        <li><a href="javascript:void(0);"><span  class="icon fax"/>Options</a></li>
                     </ul>
                 </span>
 
@@ -180,9 +180,8 @@
 
                 </div>
 
-                <div id="music_on_hold">
+                <div id="options">
                     <fieldset>
-                        <legend>Music on hold</legend>
                         <ul class="controls">
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
@@ -200,6 +199,17 @@
                                 </select>
                                 <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
                                 <a class="inline_action_media" data-action="create" href="#">Create</a>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm.">
+                                    <span class="tooltip"/>
+                                    <label for="format_from_uri">Pass Realm in INVITE:</label>
+                                </span>
+                                {{if data.format_from_uri == true}}
+                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" checked="checked"/>
+                                {{else}}
+                                    <input type="checkbox" id="format_from_uri" name="format_from_uri"/>
+                                {{/if}}
                             </li>
                         </ul>
                     </fieldset>
