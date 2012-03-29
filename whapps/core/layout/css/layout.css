@@ -27,12 +27,35 @@ html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockqu
 }
 
 body {
-	background-image: url(../images/background.jpg);
+	background-image: url(../images/bg.jpg);
 	background-repeat: repeat-x;
-	background-color: #9F9F9F;
+	background-color: #6E7377;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	color: #EBEBEB;
+}
+
+.footer_wrapper {
+    position: fixed;
+    bottom: 0;
+    text-align: right;
+    padding-right: 20px;
+    border-top: 1px solid #555555;
+    width: 100%;
+    background: #05addc;
+    background: -webkit-gradient(linear, left top, left bottom, from(#0593dc), to(#05addc)) !important;
+    background: -moz-linear-gradient(top,  #0593dc,  #05addc) !important;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0593dc', endColorstr='#05addc') !important;
+}
+
+.footer_wrapper .powered_by a {
+    margin-right: 20px;
+    text-shadow: 1px 1px 3px #333;
+}
+
+.footer_wrapper .powered_by a:hover {
+    color: #eeeeee;
+    text-decoration: underline;
 }
 
 h1
@@ -214,6 +237,7 @@ ul.universal_nav li span.my_logout_icon {
 	margin: 0;
     z-index: -1000;
     position: relative;
+    padding-bottom: 20px;
 }
 
 /*************************************

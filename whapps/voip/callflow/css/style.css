@@ -72,12 +72,14 @@
 #ws_callflow .callflow .root > .content .number_column .delete {
     background-image: url(../images/btn_delete.png);
     background-repeat: no-repeat;
+    background-position: center;
     width: 6px;
     height: 6px;
     display: inline-block;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    padding: 5px;
+    right: 0px;
+    top: 0px;
     cursor: pointer;
 }
 
