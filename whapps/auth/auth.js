@@ -303,6 +303,9 @@ winkstart.module('auth', 'auth',
                         if(status == '401' || status == '403') {
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
+                        else if(status === 'error') {
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
+                        }
                         else {
                             winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
                         }
@@ -389,8 +392,12 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
+                        console.log(status);
                         if(status == '401' || status == '403') {
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
+                        }
+                        else if(status === 'error') {
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
                         }
                         else {
                             winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
