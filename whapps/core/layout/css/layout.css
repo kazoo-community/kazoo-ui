@@ -37,25 +37,16 @@ body {
 
 .footer_wrapper {
     position: fixed;
-    bottom: 0;
+    bottom: 2px;
     text-align: right;
-    padding-right: 20px;
-    border-top: 1px solid #555555;
     width: 100%;
-    background: #05addc;
-    background: -webkit-gradient(linear, left top, left bottom, from(#0593dc), to(#05addc)) !important;
-    background: -moz-linear-gradient(top,  #0593dc,  #05addc) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0593dc', endColorstr='#05addc') !important;
+    text-decoration: underline;
 }
 
 .footer_wrapper .powered_by a {
-    margin-right: 20px;
+    margin-right: 5px;
     text-shadow: 1px 1px 3px #333;
-}
-
-.footer_wrapper .powered_by a:hover {
-    color: #eeeeee;
-    text-decoration: underline;
+    font-size: 11px;
 }
 
 h1
