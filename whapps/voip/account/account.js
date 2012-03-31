@@ -36,6 +36,11 @@ winkstart.module('voip', 'account', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'account.list_descendants': {
+                url: '{api_url}/accounts/{account_id}/descendants',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
