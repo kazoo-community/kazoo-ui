@@ -117,8 +117,21 @@ winkstart.module('auth', 'auth',
             $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
         }
 
+        if('account_name' in URL_DATA) {
+            account_name = URL_DATA['account_name'];
+        }
+
         if('auth_url' in URL_DATA) {
             winkstart.apps['auth'].api_url = URL_DATA['auth_url'];
+        }
+        else {
+            var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1];
+
+            if(typeof winkstart.config.base_urls == 'object' && host in winkstart.config.base_urls) {
+                if('auth_url' in winkstart.config.base_urls[host]) {
+                    winkstart.apps['auth'].api_url = winkstart.config.base_urls[host].auth_url;
+                }
+            }
         }
 
         if(cookie_data = $.cookie('c_winkstart_auth')) {
