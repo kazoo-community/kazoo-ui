@@ -29,7 +29,7 @@
             options = {},
             ok = false;
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a id="cancel_button" class="fancy_button red confirm_button" href="javascript:void(0);">Cancel</a><a id="confirm_button" class="fancy_button green confirm_button" href="javascript:void(0);">OK</a></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><a id="confirm_button" class="fancy_button green confirm_button" href="javascript:void(0);">OK</a><a id="cancel_button" class="fancy_button red confirm_button" href="javascript:void(0);">Cancel</a></div></div>');
 
         options.title = 'Please confirm';
         options.maxWidth = '400px';
