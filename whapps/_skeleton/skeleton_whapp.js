@@ -33,7 +33,7 @@ winkstart.module('skel', 'skel', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('appnav.add', { 'name' : THIS.__module });
+            winkstart.publish('whappnav.add', { 'name' : THIS.__module });
         });
     },
     {
@@ -60,7 +60,7 @@ winkstart.module('skel', 'skel', {
 
             THIS.is_initialized = true;
 
-            winkstart.publish('subnav.show', THIS.__module);
+            winkstart.publish('whappnav.subnav.show', THIS.__module);
 
             THIS.setup_page();
         },

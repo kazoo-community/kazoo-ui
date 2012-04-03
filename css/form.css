@@ -25,6 +25,7 @@ form {
     margin-bottom: 25px;
 }
 
+/*
 fieldset {
     border: 1px solid #BFBAB0;
     clear: both;
@@ -33,6 +34,7 @@ fieldset {
     padding: 0 0 10px 0;
     width: 100%;
 }
+*/
 
 fieldset.submit {
     background-color: transparent;
@@ -42,6 +44,7 @@ fieldset.submit {
     padding: 0 10px 10px 190px;
     width: auto;
 }
+
 legend {
     color: #000000;
     font-size: 1.3em;

@@ -24,7 +24,7 @@ winkstart.module('auth', 'auth',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
             'auth.save_registration' : 'save_registration',
-            'nav.my_logout_click': 'my_logout_click'
+            'auth.account.loaded': 'post_account_load'
         },
 
         validation: [
@@ -88,6 +88,14 @@ winkstart.module('auth', 'auth',
 
         winkstart.registerResources(this.__whapp, this.config.resources);
 
+        winkstart.publish('linknav.add', {
+            name: 'auth',
+            weight: 60,
+            content: 'Login',
+            publish: 'auth.activate',
+            href: (winkstart.config.nav || {}).auth || '#'
+        });
+
         if(!$.cookie('c_winkstart_auth')) {
             winkstart.publish('auth.welcome');
         }
@@ -112,13 +120,21 @@ winkstart.module('auth', 'auth',
             winkstart.alert('info','You are in the Recover Password tool.');
         }
 
-        // Check if we have an auth token. If yes, assume pre-logged in and show the My Account button
-        if(winkstart.apps['auth'].auth_token) {
-            $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
+        if('account_name' in URL_DATA) {
+            account_name = URL_DATA['account_name'];
         }
 
         if('auth_url' in URL_DATA) {
             winkstart.apps['auth'].api_url = URL_DATA['auth_url'];
+        }
+        else {
+            var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1];
+
+            if(typeof winkstart.config.base_urls == 'object' && host in winkstart.config.base_urls) {
+                if('auth_url' in winkstart.config.base_urls[host]) {
+                    winkstart.apps['auth'].api_url = winkstart.config.base_urls[host].auth_url;
+                }
+            }
         }
 
         if(cookie_data = $.cookie('c_winkstart_auth')) {
@@ -126,12 +142,6 @@ winkstart.module('auth', 'auth',
             eval('winkstart.apps["auth"] = ' + cookie_data);
             winkstart.publish('auth.load_account');
         }
-
-        /*
-        winkstart.module.loadModule('auth', 'myaccount', function() {
-            this.init();
-            winkstart.log('Core: Loaded My Account manager');
-        });*/
     },
 
     {
@@ -200,10 +210,6 @@ winkstart.module('auth', 'auth',
                     }
                 );
             });
-        },
-
-        my_logout_click: function() {
-            winkstart.publish('auth.activate');
         },
 
         get_realm_from_url: function() {
@@ -433,9 +439,7 @@ winkstart.module('auth', 'auth',
             }
 
             winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                $('.universal_nav #my_logout').html('Logout');
-                $('.universal_nav .my_account_wrapper').css('visibility', 'visible');
-                $('.universal_nav #my_account').html(json.data.first_name + ' ' + json.data.last_name);
+                winkstart.publish('auth.account.loaded', json.data);
 
                 $.each(json.data.apps, function(k, v) {
                     winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
@@ -452,7 +456,7 @@ winkstart.module('auth', 'auth',
                     winkstart.module.loadApp(k, function() {
                         this.init();
                         winkstart.log('WhApps: Initializing ' + k);
-                    })
+                    });
                 });
 
                 if(json.data.require_password_update) {
@@ -462,8 +466,13 @@ winkstart.module('auth', 'auth',
 
         },
 
-        // Use this to attempt a shared auth token login if the requested app doesn't have it's own auth token.
-        // TODO: If this fails, pop-up a login box for this particular app
+        post_account_load: function(user_data) {
+            winkstart.publish('linknav.edit', {
+                name: 'auth',
+                content: 'Logout'
+            });
+        },
+
         shared_auth: function(args) {
             var THIS = this;
 
@@ -487,10 +496,6 @@ winkstart.module('auth', 'auth',
                 winkstart.apps[app_name]['auth_token'] = auth_token;
 
                 winkstart.getJSON('auth.get_user', options, function(json, xhr) {
-                    //$('a#my_account').html(json.data.first_name + ' ' + json.data.last_name);
-                    $('#my_logout').html("Logout");
-                    $('.main_nav').show();
-
                     if(typeof callback == 'function') {
                         callback();
                     }
@@ -591,9 +596,6 @@ winkstart.module('auth', 'auth',
         },
 
         authenticate: function() {
-            // A few things need to be done here
-            // 1) If we're not authenticated, do so
-
             var _t = this;
             amplify.request('auth.establish', {
                 username: '',
@@ -643,13 +645,9 @@ winkstart.module('auth', 'auth',
                     $.cookie('c_winkstart_auth', null);
 
                     $('#ws-content').empty();
-                    $('a#my_logout').html("Login");
-                    $('.universal_nav .my_account_wrapper').hide();
 
                     // Temporary hack until module unloading works properly
                     window.location.reload();
-
-                    //winkstart.publish('auth.activate');
                 });
             }
         }

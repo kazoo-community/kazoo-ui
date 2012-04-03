@@ -14,7 +14,7 @@ winkstart.module('myaccount', 'myaccount', {
             'myaccount.initialized' : 'initialized',
             'myaccount.module_activate': 'module_activate',
             'myaccount.display': 'render_myaccount',
-            'nav.my_account_click': 'my_account_click'
+            'auth.account.loaded': 'post_load_account'
         }
     },
 
@@ -165,10 +165,6 @@ winkstart.module('myaccount', 'myaccount', {
             list: []
         },
 
-        my_account_click: function() {
-            winkstart.publish('myaccount.activate');
-        },
-
         render_myaccount: function() {
             var THIS = this,
                 popup;
@@ -212,6 +208,15 @@ winkstart.module('myaccount', 'myaccount', {
                     $(this).css('overflow-x', 'hidden');
                     $(this).css('max-height', $(document).height()-180);
                 }
+            });
+        },
+
+        post_load_account: function(user_data) {
+            winkstart.publish('linknav.add', {
+                name: 'myaccount',
+                weight: 40,
+                content: user_data.first_name + ' ' + user_data.last_name,
+                publish: 'myaccount.activate'
             });
         }
     }

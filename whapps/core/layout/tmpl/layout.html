@@ -1,16 +1,20 @@
 <div>
-    <div style="position:absolute;z-index:1;width:100%;min-width:1054px;">
-        <div class="header">
-
-        <!-- start topmost logo + header w/ applications + my account -->
-            <div class="logo">
-                <a class="img" href="#">2600hz.com</a>
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="container-fluid">
+                <div id="ws-topbar" class="ws-topbar">
+                    <a class="brand logo" href="#"/>
+                    <ul class="nav whapps"/>
+                    <ul class="nav secondary-nav links"/>
+                </div>
             </div>
-
-            <div class="main_nav">
-                <!-- appnav module will populate this area with loaded and accessible apps -->
-            </div>
-
+        </div>
+    </div>
+    <div class="container-fluid page">
+        <div id="ws-content" class="ws-content">
+        </div>
+    </div>
+    <!--
             <ul class="universal_nav">
                 <li class="my_account_wrapper">
                     <span class="my_account_icon"/>
@@ -32,22 +36,9 @@
                     </span>
                 </li>
             </ul>
-        </div>
-        <!-- end topmost logo + header w/ applications + my account -->
+    -->
 
-        <div class="clear"></div>
-
-        <div class="content_container">
-            <div class="ws-content" id="ws-content">
-
-                <!-- main content area -->
-
-            </div>
-            <div class="clear"></div>
-        </div>
-        <!-- end content container -->
-        <div class="footer_wrapper"><span class="powered_by"><a href="http://www.2600hz.com/" target="_blank">Powered by 2600hz</a></div>
-    </div>
+    <div class="footer_wrapper"><span class="powered_by"><a href="http://www.2600hz.com/" target="_blank">Powered by 2600hz</a></div>
 
     <div id="loading">
         <div class="graphic"><img src="whapps/core/layout/images/loading.gif"/></div>

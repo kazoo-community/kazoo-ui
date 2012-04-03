@@ -15,8 +15,6 @@
     display: inline-block;
     width: 32px;
     height: 32px;
-    margin-top: -1px;
-    padding-right: 6px;
     background-image: url(../images/icons/icons_32x32_gradient.png);
     background-repeat: no-repeat;
     background-position: center center;
@@ -122,7 +120,7 @@
     background-position: -320px -293px;
 }
 
-.icon.menu { /* 20, 5 */
+.icon.menu1 { /* 20, 5 */
     background-position: -640px -165px;
 }
 
@@ -166,6 +164,9 @@
     background-position: -480px -131px;
 }
 
+.icon.advanced {
+    background-position: -576px -421px;
+}
 
 /************** ICONS ************/
 .icon.phone {

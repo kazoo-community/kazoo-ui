@@ -10,11 +10,11 @@ winkstart.module('core', 'core',
             this.init({ parent: $('body') }, function() {
 
                 // Next, we need to make sure the navbar at the top is loaded before anything else is so we can catch events
-                winkstart.module.loadModule('core', 'appnav', function() {
+                winkstart.module.loadModule('core', 'whappnav', function() {
                     this.init({ parent: $('body') }, function() {
-                        // We don't use this sub nav any more
-                        //winkstart.module.loadModule('core', 'subnav', function() {
-                            //this.init({ parent: $('body') }, function() {
+                        winkstart.module.loadModule('core', 'linknav', function() {
+                            this.init({ parent: $('body') }, function() {
+
                                 // Now move onto apps
                                 winkstart.log('WhApps: Loading WhApps...');
 
@@ -28,10 +28,11 @@ winkstart.module('core', 'core',
                                 });
 
                                 winkstart.log('WhApps: Finished Loading WhApps');
-                            //});
-                        //});
+                            });
+                        });
                     });
                 });
             });
         });
-});
+    }
+);

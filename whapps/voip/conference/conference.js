@@ -60,7 +60,7 @@ winkstart.module('voip', 'conference', {
 
         winkstart.registerResources(this.__whapp, this.config.resources);
 
-        winkstart.publish('subnav.add', {
+        winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: this.__module,
             label: 'Conferences',
