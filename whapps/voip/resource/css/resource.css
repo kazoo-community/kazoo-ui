@@ -54,6 +54,7 @@
     font-size: 28px;
     margin: auto;
     margin-bottom: 5px;
+    line-height: 28px;
 }
 
 .main_content_resource .landing_btn_wrapper .resource_btn:hover {
