@@ -45,6 +45,11 @@ winkstart.module('voip', 'media', {
                 url: '{api_url}/accounts/{account_id}/media/{media_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'media.upload': {
+                url: '{api_url}/accounts/{account_id}/media/{media_id}/raw',
+                contentType: 'application/x-base64',
+                verb: 'POST'
             }
         }
     },
@@ -206,9 +211,31 @@ winkstart.module('voip', 'media', {
             }
         },
 
+        upload_file: function(data, media_id, callback) {
+            if (data.length > 128) {
+                var base64StartIndex = data.indexOf(',') + 1;
+                if (base64StartIndex < data.length) {
+                    winkstart.request('media.upload', {
+                            account_id: winkstart.apps.voip.account_id,
+                            api_url: winkstart.apps.voip.api_url,
+                            media_id: media_id,
+                            data: data
+                        },
+                        function(_data, status) {
+                            if(typeof callback === 'function') {
+                                callback();
+                            }
+                        }
+                    );
+                }
+            }
+        },
+
         render_media: function(data, target, callbacks){
             var THIS = this,
                 media_html = THIS.templates.edit.tmpl(data);
+
+            var file;
 
             winkstart.validate.set(THIS.config.validation, media_html);
 
@@ -265,6 +292,23 @@ winkstart.module('voip', 'media', {
                                        data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
             });
 
+            //$('#file', media_html).bind('change', THIS.handle_file_select);
+            $('#file', media_html).bind('change', function(evt){
+                var files = evt.target.files; // FileList object
+
+                if(files.length > 0) {
+                    var reader = new FileReader();
+
+                    reader.onloadend = function(evt) {
+                        var data = evt.target.result;
+
+                        file = data;
+                    }
+
+                    reader.readAsDataURL(files[0]);
+                }
+            });
+
             $('.media-save', media_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -275,7 +319,7 @@ winkstart.module('voip', 'media', {
 
                         THIS.save_media(form_data, data, function(_data, status) {
                                 if($('#upload_span', media_html).is(':visible') && $('#file').val() != '') {
-                                    THIS._hijackForm(_data.data.id, media_html, function() {
+                                    THIS.upload_file(file, _data.data.id, function() {
                                         if(typeof callbacks.save_success == 'function') {
                                             callbacks.save_success(_data, status);
                                         }
