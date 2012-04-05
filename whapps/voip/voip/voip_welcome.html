@@ -18,16 +18,23 @@
                             </div>
                         </div>
                         <div class="content_block">
-                            <div class="account_bars">
-                                <div class="content_line">Direct sub-accounts: <div class="bar_wrapper"><div class="progress_bar">&nbsp;</div><div class="number field children_accounts">${children_accounts}</div></div></div>
-                                <div class="content_line">Sub-accounts: <div class="bar_wrapper"><div class="progress_bar">&nbsp;</div><div class="number field descendants_accounts">${descendants_accounts}</div></div></div>
-                            </div>
-                        </div>
-                        <div class="content_block">
                             <span class="title">Account ID:</span> <span class="text field account_id">${account_id}</span>
                         </div>
                         <div class="content_block">
                             <span class="title">Account Realm:</span><span class="text field account_realm">${account_realm}</span>
+                        </div>
+                        <div class="content_block">
+                            Support Contact: <span class="text field support_email">${support_email}</span>&nbsp;&nbsp; |&nbsp;&nbsp;<span class="text field support_number">${support_number}</span>
+                        </div>
+                        <div class="content_block">
+                            <span class="carrier_wrapper">Carrier: <span class="right"><span class="text field carrier">${carrier}</span></span></span>
+                            <div class="clear"/>
+                        </div>
+                        <div class="content_block">
+                            <div class="account_bars">
+                                <div class="content_line">Direct sub-accounts: <div class="bar_wrapper"><div class="progress_bar">&nbsp;</div><div class="number field children_accounts">${children_accounts}</div></div></div>
+                                <div class="content_line">Sub-accounts: <div class="bar_wrapper"><div class="progress_bar">&nbsp;</div><div class="number field descendants_accounts">${descendants_accounts}</div></div></div>
+                            </div>
                         </div>
                         <div class="content_block">
                             <span class="title">Choose another sub-account:</span>
@@ -40,13 +47,6 @@
                                 <button class="fancy_button blue masquerade">Use this account</button>
                                 <button class="fancy_button blue restore">Restore Parent Account</button>
                             </div>
-                        </div>
-                        <div class="content_block">
-                            Support Contact: <span class="text field support_email">${support_email}</span>&nbsp;&nbsp; |&nbsp;&nbsp;<span class="text field support_number">${support_number}</span>
-                        </div>
-                        <div class="content_block">
-                            <span class="carrier_wrapper">Carrier: <span class="right"><span class="text field carrier">${carrier}</span></span></span>
-                            <div class="clear"/>
                         </div>
                     </div>
 
