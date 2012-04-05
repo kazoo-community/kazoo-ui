@@ -38,8 +38,11 @@
     width: 200px;
 }
 
-#content_welcome_page .right_div .login_div .login {
-    margin-top: 10px;
+#content_welcome_page .right_div .login_div {
+    margin-left: 160px;
+    text-align: center;
+    padding: 10px;
+    width: 260px;
 }
 
 #content_welcome_page .right_div .login_div .login {
@@ -47,14 +50,16 @@
     width: 105px;
     text-shadow: 1px 1px #333333;
     font-family: trebuchet MS;
-    margin-left: 225px;
-    float: left;
+    margin-top: 10px;
 }
 
 #content_welcome_page .right_div .login_div .recover_password {
-    margin-left: 215px;
-    margin-top: 10px;
-    float: left;
+    color: #eee;
+}
+
+#content_welcome_page .right_div .login_div .recover_password:hover {
+    text-decoration: underline;
+    color: #05addc;
 }
 
 #content_welcome_page .right_div .register_div .new_user_text {

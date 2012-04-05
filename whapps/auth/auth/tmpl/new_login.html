@@ -16,8 +16,14 @@
                 </div>
             {{/if}}
             <div class="login_div">
-                <button class="fancy_button blue login" href="javascript:void(0);">LOG IN</button>
+                {{if remember_me}}
+                    <input type="checkbox" id="remember_me" CHECKED="CHECKED"/>
+                {{else}}
+                    <input type="checkbox" id="remember_me"/>
+                {{/if}}
+                Remember me |
                 <a href="javascript:void(0);" class="recover_password">Forgot your password?</a>
+                <button class="fancy_button blue login" href="javascript:void(0);">LOG IN</button>
                 <div class="clear"/>
             </div>
             <div class="clear"/>
