@@ -194,23 +194,19 @@ winkstart.module('voip', 'media', {
         },
 
         upload_file: function(data, media_id, callback) {
-            if (data.length > 128) {
-                var base64StartIndex = data.indexOf(',') + 1;
-                if (base64StartIndex < data.length) {
-                    winkstart.request('media.upload', {
-                            account_id: winkstart.apps.voip.account_id,
-                            api_url: winkstart.apps.voip.api_url,
-                            media_id: media_id,
-                            data: data
-                        },
-                        function(_data, status) {
-                            if(typeof callback === 'function') {
-                                callback();
-                            }
-                        }
-                    );
-                }
-            }
+            winkstart.request('media.upload', {
+                    account_id: winkstart.apps.voip.account_id,
+                    api_url: winkstart.apps.voip.api_url,
+                    media_id: media_id,
+                    data: data
+                },
+                function(_data, status) {
+                    if(typeof callback === 'function') {
+                        callback();
+                    }
+                },
+                winkstart.error_message.process_error()
+            );
         },
 
         render_media: function(data, target, callbacks){
@@ -280,12 +276,11 @@ winkstart.module('voip', 'media', {
                 if(files.length > 0) {
                     var reader = new FileReader();
 
-                    $('.media-save', media_html).hide();
+                    file = 'updating';
                     reader.onloadend = function(evt) {
                         var data = evt.target.result;
 
                         file = data;
-                        $('.media-save', media_html).show();
                     }
 
                     reader.readAsDataURL(files[0]);
@@ -302,11 +297,16 @@ winkstart.module('voip', 'media', {
 
                         THIS.save_media(form_data, data, function(_data, status) {
                                 if($('#upload_span', media_html).is(':visible') && $('#file').val() != '') {
-                                    THIS.upload_file(file, _data.data.id, function() {
-                                        if(typeof callbacks.save_success == 'function') {
-                                            callbacks.save_success(_data, status);
-                                        }
-                                    });
+                                    if(file === 'updating') {
+                                        winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                    }
+                                    else {
+                                        THIS.upload_file(file, _data.data.id, function() {
+                                            if(typeof callbacks.save_success == 'function') {
+                                                callbacks.save_success(_data, status);
+                                            }
+                                        });
+                                    }
                                 }
                                 else {
                                     if(typeof callbacks.save_success == 'function') {
