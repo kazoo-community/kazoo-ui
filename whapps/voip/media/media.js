@@ -113,24 +113,6 @@ winkstart.module('voip', 'media', {
             }
         },
 
-        _hijackForm: function(media_id, media_html, callback) {
-            var THIS = this;
-
-            $('#media-form', media_html).submit(function() {
-                /* Mad hax */
-                $('#media-form', media_html).attr('target', 'upload_target');
-
-                $('#upload_target', media_html).load(function() {
-                    if(typeof callback == 'function') {
-                        callback();
-                    }
-                });
-            });
-
-            $('#media-form', media_html).attr('action', winkstart.apps['voip'].api_url + '/accounts/'+ winkstart.apps['voip'].account_id + '/media/'+ media_id +'/raw');
-            $('#media-form', media_html).submit();
-        },
-
         edit_media: function(data, _parent, _target, _callbacks, data_defaults){
             var THIS = this,
                 parent = _parent || $('#media-content'),
@@ -292,17 +274,18 @@ winkstart.module('voip', 'media', {
                                        data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
             });
 
-            //$('#file', media_html).bind('change', THIS.handle_file_select);
             $('#file', media_html).bind('change', function(evt){
-                var files = evt.target.files; // FileList object
+                var files = evt.target.files;
 
                 if(files.length > 0) {
                     var reader = new FileReader();
 
+                    $('.media-save', media_html).hide();
                     reader.onloadend = function(evt) {
                         var data = evt.target.result;
 
                         file = data;
+                        $('.media-save', media_html).show();
                     }
 
                     reader.readAsDataURL(files[0]);
