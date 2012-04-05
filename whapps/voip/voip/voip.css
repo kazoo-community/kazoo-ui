@@ -139,10 +139,6 @@
     width: auto;
 }
 
-#voip_welcome-view .welcome_div .content .content_block .carrier_wrapper {
-    float: right;
-}
-
 #voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper {
     height: 100px;
 }
