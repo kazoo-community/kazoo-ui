@@ -45,6 +45,11 @@ winkstart.module('voip', 'media', {
                 url: '{api_url}/accounts/{account_id}/media/{media_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'media.upload': {
+                url: '{api_url}/accounts/{account_id}/media/{media_id}/raw',
+                contentType: 'application/x-base64',
+                verb: 'POST'
             }
         }
     },
@@ -106,24 +111,6 @@ winkstart.module('voip', 'media', {
                     }
                 );
             }
-        },
-
-        _hijackForm: function(media_id, media_html, callback) {
-            var THIS = this;
-
-            $('#media-form', media_html).submit(function() {
-                /* Mad hax */
-                $('#media-form', media_html).attr('target', 'upload_target');
-
-                $('#upload_target', media_html).load(function() {
-                    if(typeof callback == 'function') {
-                        callback();
-                    }
-                });
-            });
-
-            $('#media-form', media_html).attr('action', winkstart.apps['voip'].api_url + '/accounts/'+ winkstart.apps['voip'].account_id + '/media/'+ media_id +'/raw');
-            $('#media-form', media_html).submit();
         },
 
         edit_media: function(data, _parent, _target, _callbacks, data_defaults){
@@ -206,9 +193,27 @@ winkstart.module('voip', 'media', {
             }
         },
 
+        upload_file: function(data, media_id, callback) {
+            winkstart.request('media.upload', {
+                    account_id: winkstart.apps.voip.account_id,
+                    api_url: winkstart.apps.voip.api_url,
+                    media_id: media_id,
+                    data: data
+                },
+                function(_data, status) {
+                    if(typeof callback === 'function') {
+                        callback();
+                    }
+                },
+                winkstart.error_message.process_error()
+            );
+        },
+
         render_media: function(data, target, callbacks){
             var THIS = this,
                 media_html = THIS.templates.edit.tmpl(data);
+
+            var file;
 
             winkstart.validate.set(THIS.config.validation, media_html);
 
@@ -265,6 +270,23 @@ winkstart.module('voip', 'media', {
                                        data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
             });
 
+            $('#file', media_html).bind('change', function(evt){
+                var files = evt.target.files;
+
+                if(files.length > 0) {
+                    var reader = new FileReader();
+
+                    file = 'updating';
+                    reader.onloadend = function(evt) {
+                        var data = evt.target.result;
+
+                        file = data;
+                    }
+
+                    reader.readAsDataURL(files[0]);
+                }
+            });
+
             $('.media-save', media_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -275,11 +297,16 @@ winkstart.module('voip', 'media', {
 
                         THIS.save_media(form_data, data, function(_data, status) {
                                 if($('#upload_span', media_html).is(':visible') && $('#file').val() != '') {
-                                    THIS._hijackForm(_data.data.id, media_html, function() {
-                                        if(typeof callbacks.save_success == 'function') {
-                                            callbacks.save_success(_data, status);
-                                        }
-                                    });
+                                    if(file === 'updating') {
+                                        winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                    }
+                                    else {
+                                        THIS.upload_file(file, _data.data.id, function() {
+                                            if(typeof callbacks.save_success == 'function') {
+                                                callbacks.save_success(_data, status);
+                                            }
+                                        });
+                                    }
                                 }
                                 else {
                                     if(typeof callbacks.save_success == 'function') {
