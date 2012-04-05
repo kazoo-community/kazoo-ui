@@ -438,7 +438,7 @@ winkstart.module('voip', 'menu', {
             $.extend(callflow_nodes, {
                 'menu[id=*]': {
                     name: 'Menu',
-                    icon: 'menu',
+                    icon: 'menu1',
                     category: 'Basic',
                     module: 'menu',
                     tip: 'Ask a caller to push a menu option or dial an extension number',
