@@ -228,14 +228,13 @@ body {
   margin-left: 240px;
 }
 a {
-/*  color: #0069d6; */
-  color: #eeeeee;
+  color: #0069d6;
   text-decoration: none;
   line-height: inherit;
   font-weight: inherit;
 }
 a:hover {
-/*  color: #00438a; */
+  color: #00438a;
   color: #05addc;
   text-decoration: underline;
 }
