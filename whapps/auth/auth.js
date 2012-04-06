@@ -360,8 +360,7 @@ winkstart.module('auth', 'auth',
             var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
                 resizable : false,
-                modal: true,
-                width: '315px'
+                modal: true
             });
 
             if(username != '') {
@@ -569,7 +568,7 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                width: '340px',
+                width: '320px',
                 title: 'Recover Password'
             });
 

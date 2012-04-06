@@ -90,3 +90,7 @@
 #content_welcome_page .right_div  hr{
     margin: 30px 0px;
 }
+
+.popup_recover_password label {
+    width: 120px;
+}

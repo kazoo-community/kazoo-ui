@@ -67,6 +67,7 @@
     text-transform: capitalize;
     cursor: default;
     font-size: 11px;
+    line-height: 11px;
 }
 
 #ws_callflow .tool .action.inactive {
@@ -117,5 +118,6 @@
     opacity: 80%;
     padding: 5px 2px 5px 9px;
     text-align: left;
-    font-size: 11px;
+    font-size: 10px;
+    line-height: 12px;
 }

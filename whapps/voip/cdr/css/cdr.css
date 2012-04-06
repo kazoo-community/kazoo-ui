@@ -97,6 +97,7 @@
 }
 
 #detail_cdr_content #tab_cdrs .row {
+    margin-left: 0px;
 }
 
 #detail_cdr_content #tab_cdrs .row.title {

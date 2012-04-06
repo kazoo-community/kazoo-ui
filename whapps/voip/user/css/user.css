@@ -108,7 +108,8 @@
 }
 
 #user-form #equipment #tab_devices .row {
-    height: 30px
+    height: 30px;
+    margin-left: 0px;
 }
 
 #user-form #equipment #tab_devices .row.title {
