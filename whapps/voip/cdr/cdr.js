@@ -206,6 +206,11 @@ function(args) {
 			sDom: '<"date">frtlip',
             aaSorting: [[6, 'desc']]
 		});
+
+        $('.cancel-search', cdr_html).click(function(){
+            $('#registration-grid_filter input[type=text]', cdr_html).val('');
+            winkstart.table.cdr.fnFilter('');
+        });
     },
 
     parse_data_cdr: function(data) {
@@ -244,7 +249,6 @@ function(args) {
 		$.fn.dataTableExt.afnFiltering.pop();
 
 		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
-		//$('div.date', cdr_html).html('Date: <input id="startDate" readonly="readonly" type="text"/><input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });

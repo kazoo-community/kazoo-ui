@@ -594,6 +594,8 @@ button.fancy_button {
     max-width: 600px;
     padding:15px;
     margin: 15px 15px 0;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .alert_img {
