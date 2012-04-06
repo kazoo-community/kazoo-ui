@@ -602,6 +602,7 @@ winkstart.module('voip', 'user', {
                         if(_data.data.length > 0) {
                             $.each(_data.data, function(k, v) {
                                 v.display_type = data.field_data.device_types[v.device_type];
+                                v.not_enabled = this.enabled === false ? true : false;
                                 $('.rows', parent).append(THIS.templates.device_row.tmpl(v));
                             });
 
@@ -611,7 +612,7 @@ winkstart.module('voip', 'user', {
                                 },
                                 function(_data, status) {
                                     $.each(_data.data, function(key, val) {
-                                        $('.column.second', '#' + val.device_id).addClass('registered');
+                                        $('#' + val.device_id + ' .column.third', parent).addClass('registered');
                                     });
                                 }
                             );
