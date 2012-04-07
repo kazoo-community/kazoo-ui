@@ -327,7 +327,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
                         }
                         else {
-                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
                         }
                     }
                 );
@@ -419,7 +419,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
                         }
                         else {
-                            winkstart.alert('An error was encountered while attemping to process your request (Error: ' + status + ')');
+                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
                         }
                     }
                 );
