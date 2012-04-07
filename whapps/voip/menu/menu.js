@@ -171,6 +171,8 @@ winkstart.module('voip', 'menu', {
                                 menu_id: data.id
                             },
                             function(_data, status) {
+                                THIS.format_data(_data.data);
+
                                 THIS.render_menu($.extend(true, defaults, _data), target, callbacks);
 
                                 if(typeof callbacks.after_render == 'function') {
@@ -327,6 +329,17 @@ winkstart.module('voip', 'menu', {
             return form_data;
         },
 
+        format_data: function(data) {
+            if(data.media) {
+                if(data.media.invalid_media === false && data.media.transfer_media === false && data.media.exit_media === false) {
+                    data.suppress_media = true;
+                }
+                else {
+                    data.suppress_media = false;
+                }
+            }
+        },
+
         clean_form_data: function(form_data) {
 
             if(form_data.record_pin.length == 0) {
@@ -347,6 +360,20 @@ winkstart.module('voip', 'menu', {
 
             /* Hack to put timeout in ms in database. */
             form_data.timeout = form_data.timeout * 1000;
+
+            if('suppress_media' in form_data) {
+                form_data.media = form_data.media || {};
+                if(form_data.suppress_media === true) {
+                    form_data.media.invalid_media = false;
+                    form_data.media.transfer_media = false;
+                    form_data.media.exit_media = false;
+                }
+                else {
+                    form_data.media.invalid_media = true;
+                    form_data.media.transfer_media = true;
+                    form_data.media.exit_media = true;
+                }
+            }
         },
 
         render_list: function(_parent){

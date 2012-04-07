@@ -146,6 +146,17 @@
                                 <input id="allow_record_from_offnet" name="allow_record_from_offnet" type="checkbox"/>
                                 {{/if}}
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="This option, when checked, will suppress the playing of 'Invalid Entry'.">
+                                    <span class="tooltip"/>
+                                    <label for="suppress_media">Suppress playing of Invalid Entry?</label>
+                                </span>
+                                {{if data.suppress_media}}
+                                <input id="suppress_media" name="suppress_media" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="suppress_media" name="suppress_media" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
 
