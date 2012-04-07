@@ -135,6 +135,17 @@
                                 </span>
                                 <input id="max_extension_length" name="max_extension_length" type="text" value="${data.max_extension_length}" />
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="This option allows someone to dial into a menu from an outside number (i.e. their cell phone, landline, etc.) and enter the PIN for the menu to be able to re-record it.">
+                                    <span class="tooltip"/>
+                                    <label for="allow_record_from_offnet">Allow outside recording?</label>
+                                </span>
+                                {{if data.allow_record_from_offnet}}
+                                <input id="allow_record_from_offnet" name="allow_record_from_offnet" type="checkbox" checked="checked" />
+                                {{else}}
+                                <input id="allow_record_from_offnet" name="allow_record_from_offnet" type="checkbox"/>
+                                {{/if}}
+                            </li>
                         </ul>
                     </fieldset>
 
