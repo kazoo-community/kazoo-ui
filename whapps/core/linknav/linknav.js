@@ -25,6 +25,7 @@ winkstart.module('core', 'linknav', {
             name: 'help',
             weight: 50,
             content: 'Help',
+            new_page: true,
             href: (winkstart.config.nav || {}).help
         });
     },
@@ -36,6 +37,7 @@ winkstart.module('core', 'linknav', {
                     name: args.name || '',
                     weight: args.weight || null,
                     content: args.content || '???',
+                    new_page: args.new_page || false,
                     href: args.href || '#',
                     publish: args.publish || 'dev.null',
                     modifier: args.modifier || null
@@ -106,6 +108,11 @@ winkstart.module('core', 'linknav', {
             if(args.href) {
                 $('> a', link_html)
                     .attr('href', args.href);
+            }
+
+            if(args.new_page) {
+                $('> a', link_html)
+                    .attr('target', '_blank');
             }
 
             if(args.publish) {
