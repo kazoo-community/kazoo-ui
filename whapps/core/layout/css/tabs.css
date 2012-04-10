@@ -64,6 +64,10 @@ ul.settings_tabs a.current,ul.settings_tabs a.current:hover,ul.settings_tabs li.
 .pane a {
     color: #EBEBEB;
 }
+
+.pane a:hover {
+	color: #FFF;
+}
 /*******************
 ----BOTTOM TABS-----
 *******************/
@@ -144,6 +148,15 @@ ul.advanced_tabs a.current,ul.advanced_tabs a.current:hover,ul.advanced_tabs li.
 	padding: 20px;
 	color: #5e5f61;
 	background-color: #c7c7c7;
-    border: 1px solid #727272
+    border: 1px solid #727272;
+}
+
+.advanced_pane a {
+	color: #444;
+}
+
+.advanced_pane a:hover {
+	text-decoration: underline;
+	color: #111;
 }
 

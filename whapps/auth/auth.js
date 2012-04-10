@@ -360,6 +360,7 @@ winkstart.module('auth', 'auth',
             var dialogDiv = winkstart.dialog(login_html, {
                 title : 'Login',
                 resizable : false,
+                width: '340',
                 modal: true
             });
 

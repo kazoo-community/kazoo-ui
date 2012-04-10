@@ -71,6 +71,11 @@ body > .topbar .topbar-inner > .container-fluid {
     padding-top: 72px;
 }
 
+.main_content {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
 .background {
     background-image: url(../images/background.jpg);
     background-repeat: repeat-x;
@@ -600,6 +605,7 @@ button.fancy_button {
 
 .alert_img {
     height: 50px;
+    padding-top: 15px;
 }
 
 .alert_buttons_wrapper .alert_button {

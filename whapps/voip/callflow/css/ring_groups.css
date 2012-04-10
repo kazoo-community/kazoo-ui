@@ -44,6 +44,7 @@
 
 #ring_group_popup #two_columns .column.right .item_name {
     width: 205px;
+    padding-left: 6px;
 }
 
 #ring_group_popup #two_columns .actions {

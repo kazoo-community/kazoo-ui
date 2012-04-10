@@ -1,10 +1,7 @@
 fieldset.submit {
     padding-left: 190px !important;
 }
-label {
-    padding: 0 10px;
-    width: 160px;
-}
+
 label.error, input.submit {
     margin-left: 180px !important;
 }
@@ -47,11 +44,7 @@ fieldset.submit {
 
 legend {
     color: #000000;
-    font-size: 1.3em;
     font-variant: small-caps;
-    font-weight: bold;
-    margin-left: 1em;
-    padding: 0 5px;
 }
 fieldset p {
     margin: 10px 0 0 10px;
@@ -74,7 +67,6 @@ form ul.controls li:first-child {
 }
 label {
     float: left;
-    padding: 0 10px;
     width: 160px;
 }
 .error {

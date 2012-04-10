@@ -29,6 +29,7 @@
 
 #content_welcome_page .right_div .row_welcome_field > label {
     font-size: 16px;
+    padding: 0 10px;
 }
 
 #content_welcome_page .right_div .row_welcome_field > input {
