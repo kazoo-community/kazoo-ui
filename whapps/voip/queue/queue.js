@@ -136,10 +136,16 @@ winkstart.module('voip', 'queue', {
                             _data.data.queues = [];
                         }
                         _data.data.queues.push(queue_id);
+
+                        /* If a user is added to a queue, but is not enabled as an agent, we enable this user automatically */
+                        if(!('queue_pin' in _data.data)) {
+                            _data.data.queue_pin = '';
+                        }
                     }
                     else { //remove
                         _data.data.queues.splice(_data.data.queues.indexOf(queue_id), 1);
                     }
+
                     winkstart.request(false, 'user.update', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url,
@@ -398,6 +404,17 @@ winkstart.module('voip', 'queue', {
 
                     $user.val('empty_option_user');
                 }
+            });
+
+            $(queue_html).delegate('.action_user.edit', 'click', function() {
+                var _data = {
+                    id: $(this).dataset('id')
+                };
+
+                winkstart.publish('user.popup_edit', _data, function(_data) {
+                    $('#row_user_' + _data.data.id + ' .column.first', queue_html).html(_data.data.first_name + ' ' + _data.data.last_name);
+                    $('#option_user_' + _data.data.id, queue_html).html(_data.data.first_name + ' ' + _data.data.last_name);
+                });
             });
 
             $(queue_html).delegate('.action_user.delete', 'click', function() {

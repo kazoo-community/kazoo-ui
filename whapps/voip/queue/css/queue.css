@@ -53,7 +53,8 @@
 }
 
 #queue-form #basic_settings #tab_users .row {
-    height: 30px
+    height: 30px;
+    margin-left: 0px;
 }
 
 #queue-form #basic_settings #tab_users .row.title {
