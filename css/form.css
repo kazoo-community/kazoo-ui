@@ -62,6 +62,9 @@ form ul.controls li {
     padding: 5px 0 10px 0;
     width: 100%;
 }
+form ul.controls li input{
+    margin-right: 10px;
+}
 form ul.controls li:first-child {
     border: medium none;
 }
