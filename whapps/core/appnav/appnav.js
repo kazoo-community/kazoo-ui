@@ -11,6 +11,8 @@ winkstart.module('core', 'appnav', {
         },
 
         subscribe: {
+            // Added whappnav.add subscription for future messages
+            'whappnav.add'      : 'add',
             'appnav.add'        : 'add',
             'appnav.activate'   : 'activate',
             'appnav.remove'     : 'remove',
