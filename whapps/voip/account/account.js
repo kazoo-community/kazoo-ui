@@ -22,7 +22,7 @@ winkstart.module('voip', 'account', {
                 { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_emergency',     regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_emergency',   regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9]*$/ },
+                { name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
                 { name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
                 { name: '#vm_to_email_send_from',        regex: /^.*$/ },
                 { name: '#vm_to_email_service_url',      regex: /^.*$/ },
