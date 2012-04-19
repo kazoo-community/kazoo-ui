@@ -111,6 +111,26 @@
                         </ul>
                     </fieldset>
 
+                    <fieldset>
+                        <legend>Emergency</legend>
+                        <ul class="controls">
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Name of this Account for Emergency Calls.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_name_emergency">Caller ID Name:</label>
+                                </span>
+                                <input id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Define the Caller ID Number of this Account for Emergency Calls.">
+                                    <span class="tooltip"/>
+                                    <label for="caller_id_number_emergency">Caller ID Number:</label>
+                                </span>
+                                <input id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="555-555-5555" value="${data.caller_id.emergency.number}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+
                     <div class="clear"></div>
                 </div>
                 <div id="equipment">

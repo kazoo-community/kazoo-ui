@@ -26,9 +26,11 @@ winkstart.module('voip', 'user', {
                 { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
-                { name: '#queue_pin',               regex: /^[0-9]*$/ },
+                { name: '#queue_pin',                 regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
         ],
 
@@ -218,7 +220,8 @@ winkstart.module('voip', 'user', {
                         call_forward: {},
                         caller_id: {
                             internal: {},
-                            external: {}
+                            external: {},
+                            emergency: {}
                         },
                         hotdesk: {},
                         music_on_hold: {}
@@ -657,8 +660,8 @@ winkstart.module('voip', 'user', {
 
         clean_form_data: function(form_data){
             form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,'');
-
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
+            form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g,'');
 
             if(!form_data.hotdesk.require_pin) {
                 delete form_data.hotdesk.pin;
