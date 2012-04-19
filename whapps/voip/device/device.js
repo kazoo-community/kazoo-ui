@@ -640,8 +640,11 @@ winkstart.module('voip', 'device', {
                 form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
             }
 
-            if(form_data.media) {
+            if(form_data.media.audio) {
                 form_data.media.audio.codecs = $.map(form_data.media.audio.codecs, function(val) { return (val) ? val : null });
+            }
+
+            if(form_data.media.video) {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
