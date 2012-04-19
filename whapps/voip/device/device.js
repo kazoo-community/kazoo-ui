@@ -653,6 +653,15 @@ winkstart.module('voip', 'device', {
                 form_data.enabled = form_data.call_forward.enabled;
             }
 
+            if(form_data.extra.notify_unregister === true) {
+                form_data.suppress_unregister_notifications = false;
+            }
+            else {
+                form_data.suppress_unregister_notifications = true;
+            }
+
+            delete form_data.extra;
+
             return form_data;
         },
 
