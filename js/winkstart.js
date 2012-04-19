@@ -75,6 +75,23 @@
                 }).appendTo('head');
             });
         }
+        if ( this.config.less ) {
+            $.each(this.config.less, function(k, less_str) {
+                if ( less_str === true ) {
+                    THIS.__module + '.less';
+                }
+                less_str = 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + less_str;
+                //completed++;
+                less_link = '<link href="' + less_str + '" rel="stylesheet/less" type="text/css">';
+
+                $less = $(less_link);
+
+                $less.appendTo('head');
+
+                less.sheets.push($less[0]);
+            });
+            less.refresh();
+        }
         if ( this.config.subscribe ) {
             $.each(this.config.subscribe, function(k, v) {
                 winkstart.subscribe(k, function() {

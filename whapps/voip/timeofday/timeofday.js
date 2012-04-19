@@ -169,8 +169,9 @@ winkstart.module('voip', 'timeofday', {
                             { id: 'second', value: 'Second' },
                             { id: 'third', value: 'Third' },
                             { id: 'fourth', value: 'Fourth' },
+                            { id: 'fifth', value: 'Fifth' },
                             { id: 'last', value: 'Last' },
-                            { id: 'day', value: 'Day' }
+                            { id: 'every', value: 'Day' }
                         ],
 
                         months: [
@@ -250,17 +251,11 @@ winkstart.module('voip', 'timeofday', {
 
             winkstart.validate.set(THIS.config.validation, timeofday_html);
 
-            $('*[tooltip]', timeofday_html).each(function() {
-                $(this).tooltip({ attach: timeofday_html });
+            $('*[rel=popover]', timeofday_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', timeofday_html).tabs($('.pane > div', timeofday_html));
-            $('ul.settings2', timeofday_html).tabs($('.advanced_pane > div', timeofday_html));
-
-            $('#name', timeofday_html).focus();
-
-            $('.advanced_pane', timeofday_html).hide();
-            $('.advanced_tabs_wrapper', timeofday_html).hide();
+            winkstart.tabs($('.view-buttons', timeofday_html), $('.tabs', timeofday_html), false);
 
             $('#start_date', timeofday_html).datepicker();
 
@@ -271,27 +266,6 @@ winkstart.module('voip', 'timeofday', {
             $('#days_checkboxes', timeofday_html).hide();
             $('#weekdays', timeofday_html).hide();
             $('#specific_day', timeofday_html).hide();
-
-            $('#advanced_settings_link', timeofday_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', timeofday_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper').animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper').animate({
-                            width: 'toggle'
-                        },
-                        function() {
-                            $('.advanced_pane').slideToggle();
-                        }
-                    );
-                }
-            });
 
             if(data.data.id == undefined) {
                 $('#weekly_every', timeofday_html).show();
@@ -324,7 +298,7 @@ winkstart.module('voip', 'timeofday', {
             });
 
             $('#ordinal', timeofday_html).change(function() {
-                if($(this).val() == 'day') {
+                if($(this).val() == 'every') {
                     $('#weekdays', timeofday_html).hide();
                     $('#specific_day', timeofday_html).show();
                 } else {
@@ -346,24 +320,24 @@ winkstart.module('voip', 'timeofday', {
                     case 'yearly':
                         $('#yearly_every', timeofday_html).show();
                         $('#ordinal', timeofday_html).show();
-                        if($('#ordinal', timeofday_html).val() == 'day') {
-                            $('#weekdays', timeofday_html).hide();
+                        if($('#ordinal', timeofday_html).val() == 'every') {
+                            //$('#weekdays', timeofday_html).hide();
                             $('#specific_day', timeofday_html).show();
                         } else {
                             $('#weekdays', timeofday_html).show();
-                            $('#specific_day', timeofday_html).hide();
+                            //$('#specific_day', timeofday_html).hide();
                         }
                         break;
 
                     case 'monthly':
                         $('#monthly_every', timeofday_html).show();
                         $('#ordinal', timeofday_html).show();
-                        if($('#ordinal', timeofday_html).val() == 'day') {
-                            $('#weekdays', timeofday_html).hide();
+                        if($('#ordinal', timeofday_html).val() == 'every') {
+                            //$('#weekdays', timeofday_html).hide();
                             $('#specific_day', timeofday_html).show();
                         } else {
                             $('#weekdays', timeofday_html).show();
-                            $('#specific_day', timeofday_html).hide();
+                            //$('#specific_day', timeofday_html).hide();
                         }
                         break;
 
@@ -486,7 +460,7 @@ winkstart.module('voip', 'timeofday', {
             }
             else {
                 form_data.cycle == 'yearly' ? delete form_data.interval : delete form_data.month;
-                form_data.ordinal != 'day' ? delete form_data.days : delete form_data.wdays;
+                form_data.ordinal != 'every' ? delete form_data.days : delete form_data.wdays;
             }
 
             delete form_data.time;
@@ -576,7 +550,7 @@ winkstart.module('voip', 'timeofday', {
         popup_edit_timeofday: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="main_content inline_content"/></div>');
 
             winkstart.publish('timeofday.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

@@ -1,187 +1,187 @@
 <div>
-    <div class="inner">
-        <form id="vmbox-form" action="" method="post" class="niceform">
-            {{if data.id}}
+	<div class="row">
+		<div class="whapp-header">
+			{{if data.id}}
                 <h1>Edit Voicemail Box</h1>
             {{else}}
                 <h1>Create Voicemail Box</h1>
             {{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advanced">Advanced</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		</ul>
+		 <form id="vmbox-form" action="" method="post">
+		 	<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly Name for this voicemail box"/>
+						</div>
+					</div>
 
-            <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
-            </ul>
+					<div class="clearfix">
+						<label for="mailbox">Voicemail Number</label>
+						<div class="input">
+							<input class="span4" id="mailbox" name="mailbox" type="text" placeholder="Number" value="${data.mailbox}" rel="popover" data-content="Number of this voicemail box"/>
+						</div>
+					</div>
 
-            <div class="clear"></div>
-
-            <div class="pane">
-                <div id="basic_settings">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Friendly Name for this voicemail box">
-                                    <span class="tooltip"/>
-                                    <label for="name">Name:</label>
-                                </span>
-                                <input id="name" name="name" type="text" value="${data.name}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Number of this voicemail box">
-                                    <span class="tooltip"/>
-                                    <label for="mailbox">Voicemail Box Number:</label>
-                                </span>
-                                <input id="mailbox" name="mailbox" type="text" value="${data.mailbox}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Chose the owner of this voicemail box">
-                                    <span class="tooltip"/>
-                                    <label for="owner_id">Assign To:</label>
-                                </span>
-                                <select name="owner_id" id="owner_id">
-                                {{each field_data.users}}
+					<div class="clearfix">
+						<label for="owner_id">Assign To</label>
+						<div class="input">
+							<select name="owner_id" id="owner_id" class="medium" rel="popover" data-content="Chose the owner of this voicemail box">
+								{{each field_data.users}}
                                     {{if data.owner_id == id}}
                                         <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
                                     {{else}}
                                         <option value="${id}" id="${id}">${first_name} ${last_name}</option>
                                     {{/if}}
                                 {{/each}}
-                                </select>
-                                <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+							</select>
+							<div class="edit_create">
+                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
                                 <a class="inline_action" data-action="create" href="#">Create</a>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Enter the PIN Number of this voicemail box">
-                                    <span class="tooltip"/>
-                                    <label for="pin">PIN number:</label>
-                                </span>
-                                <input id="pin" name="pin" type="text" value="${data.pin}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Select the Unavailable message that you want to use for this this device.<br/>If you select - Not set -, then no media file will be played.">
-                                    <span class="tooltip"/>
-                                    <label for="media_unavailable">Unavailable Message:</label>
-                                </span>
-                                <select name="media.unavailable" id="media_unavailable">
-                                {{each field_data.media}}
+							</div>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="pin">PIN number</label>
+						<div class="input">
+							<input class="span4" id="pin" name="pin" type="text" placeholder="PIN" value="${data.pin}" rel="popover" data-content="Enter the PIN Number of this voicemail box"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="media_unavailable">Unavailable Message</label>
+						<div class="input">
+							<select name="media.unavailable" id="media_unavailable" class="medium" rel="popover" data-content="Select the Unavailable message that you want to use for this this device. If you select - Not set -, then no media file will be played.">
+								{{each field_data.media}}
                                     {{if data.media.unavailable == id}}
-                                        <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                        <option value="${id}" id="${id}" selected="selected">${name}</option>
                                     {{else}}
-                                        <option id="${id}" value="${id}">${name}</option>
+                                        <option value="${id}" id="${id}">${name}</option>
                                     {{/if}}
                                 {{/each}}
-                                </select>
-                                <span id="edit_link_media"><a class="inline_action_media" data-action="edit" href="#">Edit</a>&nbsp;|</span>
+							</select>
+							<div class="edit_create">
+                            	<a id="edit_link_media"  class="inline_action_media" data-action="edit" href="#">Edit</a>
                                 <a class="inline_action_media" data-action="create" href="#">Create</a>
-                            </li>
-                        </ul>
-                    </fieldset>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                    <div class="clear"></div>
-                </div> <!-- end basic settings -->
-            </div>
+				<div id="options">
+					<div class="clearfix">
+						<label for="timezone">Timezone</label>
+						<div class="input">
+							<select name="timezone" id="timezone">
+                            </select>
+						</div>
+					</div>
 
-            <div class="clear"></div>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.is_setup}}
+						                    <input type="checkbox" id="is_setup" name="is_setup" checked="checked" rel="popover" data-content="Is this voicemail box already considered initialized? If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
+						                {{else}}
+						                    <input type="checkbox" id="is_setup" name="is_setup" rel="popover" data-content="Is this voicemail box already considered initialized? If not, the first time the user logs in they will be forced to change their PIN and setup a greeting."/>
+						                {{/if}}
+						                <span>Already Setup</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-            <span class="advanced_settings_box">
-                <span>
-                    <h2 id="advanced_settings_link">Advanced Settings</h2>
-                </span>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.require_pin}}
+						                    <input type="checkbox" id="require_pin" name="require_pin" checked="checked" rel="popover" data-content="Does this voicemail require a PIN"/>
+						                {{else}}
+						                    <input type="checkbox" id="require_pin" name="require_pin" rel="popover" data-content="Does this voicemail require a PIN"/>
+						                {{/if}}
+						                <span>Require PIN</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-                <span class="advanced_tabs_wrapper">
-                    <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon wrench_screw"/>Options</a></li>
-                    </ul>
-                </span>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.check_if_owner}}
+						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" checked="checked" rel="popover" data-content="Do you want to enable auto-login for this voicemail box? (If the user call his own voicemail, it goes straight to his messages)"/>
+						                {{else}}
+						                    <input type="checkbox" id="check_if_owner" name="check_if_owner" rel="popover" data-content="Do you want to enable auto-login for this voicemail box? (If the user call his own voicemail, it goes straight to his messages)"/>
+						                {{/if}}
+						                <span>Auto-login enabled</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-                <div class="clear"></div>
-            </span>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.skip_greeting}}
+						                    <input type="checkbox" id="skip_greeting" name="skip_greeting" checked="checked" rel="popover" data-content="Do you want to skip greetings by default"/>
+						                {{else}}
+						                    <input type="checkbox" id="skip_greeting" name="skip_greeting" rel="popover" data-content="Do you want to skip greetings by default"/>
+						                {{/if}}
+						                <span>Skip Greeting</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-            <div class="advanced_pane">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.skip_instructions}}
+						                    <input type="checkbox" id="skip_instructions" name="skip_instructions" checked="checked" rel="popover" data-content="Do you want to skip instructions by default"/>
+						                {{else}}
+						                    <input type="checkbox" id="skip_instructions" name="skip_instructions" rel="popover" data-content="Do you want to skip instructions by default"/>
+						                {{/if}}
+						                <span>Skip Instructions</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		 </form>
 
-                <div id="options">
-                    <fieldset>
-                        <legend>Options</legend>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Select the time zone of this voicemail box">
-                                    <span class="tooltip"/>
-                                    <label for="timezone">Time zone:</label>
-                                </span>
-                                <select name="timezone" id="timezone">
-                                </select>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Is this voicemail box already considered initialized?<br>If not, the first time the user logs in they will be forced to change their PIN and setup a greeting.">
-                                    <span class="tooltip"/>
-                                    <label for="initialized">Already Setup?</label>
-                                </span>
-                                {{if data.is_setup}}
-                                <input id="is_setup" name="is_setup" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="is_setup" name="is_setup" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Does this voicemail require a PIN?">
-                                    <span class="tooltip"/>
-                                    <label for="require_pin">Require PIN?</label>
-                                </span>
-                                {{if data.require_pin}}
-                                <input id="require_pin" name="require_pin" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="require_pin" name="require_pin" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to enable auto-login for this voicemail box?<br/>(If the user call his own voicemail, it goes straight to his messages)">
-                                    <span class="tooltip"/>
-                                    <label for="check_if_owner">Auto-login enabled?</label>
-                                </span>
-                                {{if data.check_if_owner}}
-                                <input id="check_if_owner" name="check_if_owner" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="check_if_owner" name="check_if_owner" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to skip greetings by default?">
-                                    <span class="tooltip"/>
-                                    <label for="skip_greeting">Skip Greeting?</label>
-                                </span>
-                                {{if data.skip_greeting}}
-                                <input id="skip_greeting" name="skip_greeting" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="skip_greeting" name="skip_greeting" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to skip instructions by default?">
-                                    <span class="tooltip"/>
-                                    <label for="skip_instructions">Skip Instructions?</label>
-                                </span>
-                                {{if data.skip_instructions}}
-                                <input id="skip_instructions" name="skip_instructions" type="checkbox" checked="checked" />
-                                {{else}}
-                                <input id="skip_instructions" name="skip_instructions" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-
-                </div>
-
-            </div>
-        <div class="buttons_wrapper">
-            <ul class="buttons right vmboxes">
-                {{if data.id}}
-                    <li><a class="vmbox-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                {{/if}}
-                <li><a class="vmbox-save save-btn fancy_button green" href="#">Save</a></li>
-            </ul>
-            <div class="clear"/>
-        </div>
-
-        </form>
-    </div>
+		 <div class="buttons-right">
+	        {{if data.id}}
+	            <button class="btn danger vmbox-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success vmbox-save">Save</button>
+		</div>
+	</div>
 </div>

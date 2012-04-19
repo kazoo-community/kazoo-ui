@@ -211,60 +211,29 @@ winkstart.module('voip', 'media', {
 
         render_media: function(data, target, callbacks){
             var THIS = this,
-                media_html = THIS.templates.edit.tmpl(data);
-
-            var file;
+                media_html = THIS.templates.edit.tmpl(data),
+                file;
 
             winkstart.validate.set(THIS.config.validation, media_html);
 
-            $('*[tooltip]', media_html).each(function() {
-                $(this).tooltip({ attach: media_html });
+            $('*[rel=popover]', media_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', media_html).tabs($('.pane > div', media_html));
-            $('ul.settings2', media_html).tabs($('.advanced_pane > div', media_html));
+            winkstart.tabs($('.view-buttons', media_html), $('.tabs', media_html), true);
 
-            $('#name', media_html).focus();
-
-            $('.advanced_pane', media_html).hide();
-            $('.advanced_tabs_wrapper', media_html).hide();
-
-            $('#advanced_settings_link', media_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', media_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', media_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', media_html).animate({
-                            width: 'toggle'
-                        },
-                        function() {
-                            $('.advanced_pane', media_html).slideToggle();
-                        }
-                    );
-                }
-            });
-
-            if(data.data.id != undefined && data.data.description != '') {
-                $('#upload_span', media_html).hide();
-                $('#player_file', media_html).show();
-            }
-            else {
-                $('#upload_span', media_html).show();
-                $('#player_file', media_html).hide();
+            if(data.data.id) {
+                $('#upload_div', media_html).hide();
             }
 
-            $('#change_link', media_html).click(function() {
-                $('#upload_span', media_html).show();
-                $('#player_file', media_html).hide();
+            $('#change_link', media_html).click(function(ev) {
+                ev.preventDefault();
+                $('#upload_div', media_html).show();
+                $('.player_file', media_html).hide();
             });
 
-            $('#download_link', media_html).click(function() {
+            $('#download_link', media_html).click(function(ev) {
+                ev.preventDefault();
                 window.location.href = winkstart.apps['voip'].api_url + '/accounts/' +
                                        winkstart.apps['voip'].account_id + '/media/' +
                                        data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
@@ -296,7 +265,7 @@ winkstart.module('voip', 'media', {
                         form_data = THIS.clean_form_data(form_data);
 
                         THIS.save_media(form_data, data, function(_data, status) {
-                                if($('#upload_span', media_html).is(':visible') && $('#file').val() != '') {
+                                if($('#upload_div', media_html).is(':visible') && $('#file').val() != '') {
                                     if(file === 'updating') {
                                         winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
                                     }
@@ -432,7 +401,7 @@ winkstart.module('voip', 'media', {
         popup_edit_media: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('media.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

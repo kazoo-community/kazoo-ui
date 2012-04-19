@@ -11,11 +11,6 @@
     margin-top: 30px;
 }
 
-#cdr-view .button-search {
-    height: 14px;
-    line-height: 14px;
-}
-
 #cdr-view .date {
     width: 65%;
     float: left;
@@ -52,7 +47,7 @@
 #cdr-view .date label.call_duration {
     float: right;
     text-align: right;
-    width: 300px;
+    width: 350px;
     color: #05addc;
 }
 

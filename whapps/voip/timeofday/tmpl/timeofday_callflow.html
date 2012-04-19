@@ -1,30 +1,25 @@
 <div>
-    <div class="popup container_resize">
-        <div class="resize">
-            <div class="stylized myform">
-                <form name="form" method="post" action="#">
-                    <ul class="controls">
-                        <li>
-                            <label for="timezone_selector">Timezone</label>
-                            <select id="timezone_selector">
-                                {{each(i, item) items}}
-                                    {{if selected == item.id}}
-                                        <option value="${item.id}" SELECTED>${item.name}</option>
-                                    {{else}}
-                                        <option value="${item.id}">${item.name}</option>
-                                    {{/if}}
-                                {{/each}}
-                            </select>
-                        </li>
-                    </ul>
-                </form>
-                <form name="form" method="post" action="#">
-                    <div class="btn_wrapper">
-                        <a href="javascript:void(0)" id="add" class="fancy_button blue">&nbsp;&nbsp;OK&nbsp;&nbsp;</a>
+    <div class="dialog_popup">
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="timezone_selector">Timezone</label>
+                    <div class="select_wrapper">
+                        <select id="timezone_selector">
+                            {{each(i, item) items}}
+                                {{if selected == item.id}}
+                                    <option value="${item.id}" SELECTED>${item.name}</option>
+                                {{else}}
+                                    <option value="${item.id}">${item.name}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
                     </div>
-                    <div class="clear"/>
-                </form>
+                </div>
             </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
         </div>
     </div>
 </div>

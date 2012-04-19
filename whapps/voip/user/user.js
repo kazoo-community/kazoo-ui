@@ -362,7 +362,11 @@ winkstart.module('voip', 'user', {
         render_user: function(data, target, callbacks) {
             var THIS = this,
                 user_html = THIS.templates.edit.tmpl(data),
-                data_devices;
+                data_devices,
+                enable_pin = $('#enable_pin', user_html),
+                queue_pin = $('.queue_pin', user_html);
+                hotdesk_pin =   $('.hotdesk_pin', user_html),
+                hotdesk_pin_require = $('#hotdesk_require_pin', user_html);
 
             THIS.render_device_list(data, user_html);
 
@@ -370,53 +374,22 @@ winkstart.module('voip', 'user', {
 
             winkstart.timezone.populate_dropdown($('#timezone', user_html), data.data.timezone);
 
-            $('*[tooltip]', user_html).each(function() {
-                $(this).tooltip({ attach: user_html });
+            $('*[rel=popover]', user_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', user_html).tabs($('.pane > div', user_html));
-            $('ul.settings2', user_html).tabs($('.advanced_pane > div', user_html));
+            winkstart.tabs($('.view-buttons', user_html), $('.tabs', user_html), true);
+            winkstart.link_form(user_html);
 
-            $('#username', user_html).focus();
+            enable_pin.is(':checked') ? queue_pin.show() : queue_pin.hide();
+            hotdesk_pin_require.is(':checked') ? hotdesk_pin.show() : hotdesk_pin.hide();
 
-            if(data.data.enable_pin) {
-                $('#queue_pin', user_html).removeAttr('disabled');
-            }
-
-            $('#enable_pin', user_html).click(function() {
-                $(this).is(':checked') ? $('#queue_pin', user_html).removeAttr('disabled') : $('#queue_pin', user_html).val('').attr('disabled', 'disabled');
+            enable_pin.change(function() {
+                $(this).is(':checked') ? queue_pin.show('blind') : queue_pin.hide('blind');
             });
 
-            $('.advanced_pane', user_html).hide();
-            $('.advanced_tabs_wrapper', user_html).hide();
-
-            $('#advanced_settings_link', user_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', user_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', user_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', user_html).animate({
-                            width: 'toggle'
-                        },
-                        function() {
-                            $('.advanced_pane', user_html).slideToggle();
-                        }
-                    );
-                }
-            });
-
-            if(!data.data.hotdesk.require_pin) {
-                $('#pin_wrapper', user_html).hide();
-            }
-
-            $('#hotdesk_require_pin', user_html).change(function() {
-                $('#pin_wrapper', user_html).toggle();
+            hotdesk_pin_require.change(function() {
+                $(this).is(':checked') ? hotdesk_pin.show('bind') : hotdesk_pin.hide('bind');
             });
 
             $('.user-save', user_html).click(function(ev) {
@@ -424,7 +397,6 @@ winkstart.module('voip', 'user', {
 
                 if($('#pwd_mngt_pwd1', user_html).val() != $('#pwd_mngt_pwd2', user_html).val()) {
                     winkstart.alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
-
                     return true;
                 }
 
@@ -568,12 +540,14 @@ winkstart.module('voip', 'user', {
                 });
             });
 
-            $('.add_device', user_html).click(function() {
+            $('.add_device', user_html).click(function(ev) {
                 var data_device = {
-                    hide_owner: true
-                };
+                        hide_owner: true
+                    },
+                    defaults = {};
 
-                var defaults = {};
+                ev.preventDefault();
+
                 if(!data.data.id) {
                     defaults.new_user = THIS.random_id;
                 }
@@ -805,7 +779,7 @@ winkstart.module('voip', 'user', {
         popup_edit_user: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('user.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

@@ -1,107 +1,81 @@
 <div>
-    <div class="inner">
-        <form id="media-form" action="" enctype="multipart/form-data" method="post" class="niceform">
-            {{if data.id}}
+	<div class="row">
+		<div class="whapp-header">
+			{{if data.id}}
                 <h1>Edit Media</h1>
             {{else}}
                 <h1>Create Media</h1>
             {{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advanced">Advanced</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		</ul>
+		 <form id="media-form" action="" enctype="multipart/form-data" method="post">
+		 	<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this media file"/>
+						</div>
+					</div>
 
-            <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
-            </ul>
+					<div class="clearfix">
+			            <label for="fileInput">File input</label>
+			            <div id="upload_div" class="input">
+				            <input class="input-file" id="file" name="upload_media" type="file">
+				        </div>
+				        {{if data.id }}
+			            	<div class="input player_file">
+			            		<span class="uneditable-input">${data.description}</span>
+				            </div>
+				    </div>
+				        <div class="clearfix player_file">
+				        	<div class="input">
+				        		<button class="btn" id="change_link">Change File</button>
+				            	<button class="btn" id="download_link">Download File</button>
+				        	</div>
+				        </div>
+				        {{else}}
+				    </div>
+			            {{/if}}
+          			
 
-            <div class="clear"></div>
+          			<input name="auth_token" id="auth_token" type="hidden" value="${auth_token}"/>
+				</div>
 
-            <div class="pane">
-                <div id="basic_settings">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Friendly name for this media file">
-                                    <span class="tooltip"/>
-                                    <label for="name">Name:</label>
-                                </span>
-                                <input id="name" name="name" type="text" value="${data.name}" />
-                            </li>
-                            <li id="file_li">
-                                <span class="tooltip-wrapper" tooltip="Choose your audio file by clicking on the change file button (.mp3 or .wav).">
-                                    <span class="tooltip"/>
-                                    <label>Media File: </label>
-                                </span>
-                                {{if data.id }}
-                                <span id="player_file">
-                                    <a id="change_link" class="fancy_button blue" href="javascript:void(0);">Change File</a>
-                                    <a id="download_link" class="fancy_button blue" href="javascript:void(0);">Download File</a>
-                                    <div class="description">${data.description}</div>
-                                </span>
-                                {{/if}}
-                                <span id="upload_span">
-                                    <input name="upload_media" id="file" size="27" type="file" />
-                                    <iframe id="upload_target" name="upload_target" src="" style="display:none;width:100px;height:100px;border:1px solid #ccc;"></iframe>
-                                </span>
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <input name="auth_token" id="auth_token" type="hidden" value="${auth_token}"/>
-
-                    <div class="clear"></div>
-                </div> <!-- end basic settings -->
-            </div>
-
-            <div class="clear"></div>
-
-            <span class="advanced_settings_box">
-                <span id="advanced_settings_link">
-                    <h2>Advanced Settings</h2>
-                </span>
-
-                <span class="advanced_tabs_wrapper">
-                    <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon sip"/>Options</a></li>
-                    </ul>
-                </span>
-
-                <div class="clear"></div>
-            </span>
-
-            <div class="advanced_pane">
-
-                <div id="options">
-                    <fieldset>
-                        <ul class="controls">
-                             <li>
-                                <span class="tooltip-wrapper" tooltip="Enable streaming of media">
-                                    <span class="tooltip"/>
-                                    <label for="streamable">Streamable:</label>
-                                </span>
-                                {{if data.streamable}}
-                                <input class="streamable" id="streamable" name="streamable" type="checkbox" checked="checked" style="margin-top: 5px"/>
-                                {{else}}
-                                <input class="streamable" id="streamable" name="streamable" type="checkbox" style="margin-top: 5px"/>
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-
-                </div>
-
-            </div>
-
-            <div class="clear"></div>
-
-            <div class="buttons_wrapper">
-                <ul class="buttons right media">
-                    {{if data.id}}
-                        <li><a class="media-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                    {{/if}}
-                    <li><a class="media-save save-btn fancy_button green" href="#">Save</a></li>
-                </ul>
-                <div class="clear"/>
-            </div>
-        </form>
-    </div>
+				<div id="options">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.streamable}}
+						                    <input type="checkbox" id="streamable" name="streamable" checked="checked" rel="popover" data-content="Enable streaming of media"/>
+						                {{else}}
+						                    <input type="checkbox" id="streamable" name="streamable" rel="popover" data-content="Enable streaming of media"/>
+						                {{/if}}
+						                <span>Streamable</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		 </form>
+		 <div class="buttons-right">
+	        {{if data.id}}
+	            <button class="btn danger media-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success media-save">Save</button>
+		</div>
+	</div>
 </div>

@@ -1,51 +1,51 @@
 <div>
-    <div class="inner">
-        <form id="timeofday-form" action="" method="post" class="niceform">
+    <div class="row">
+        <div class="whapp-header">
             {{if data.id}}
                 <h1>Edit Time of Day</h1>
             {{else}}
                 <h1>Create Time of Day</h1>
             {{/if}}
+            <div class="buttons-right pasted view-buttons">
+                <button class="btn black basic activate">Basic</button>
+                <button class="btn black advanced">Advanced</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="tabs" data-tabs="tabs">
+            <li class="active"><a href="#basic">Basic</a></li>
+        </ul>
+        <form action="#" id="timeofday-form">
+            <div class="pill-content">
+                <div class="active basic_view" id="basic">
+                    <div class="clearfix">
+                        <label for="name">Name</label>
+                        <div class="input">
+                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this Time of Day Rule"/>
+                        </div>
+                    </div>
 
-            <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
-            </ul>
-
-            <div class="clear"></div>
-
-            <div class="pane">
-                <div id="basic_settings">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="A friendly name for this Time of day rule">
-                                    <span class="tooltip"/>
-                                    <label for="name">Name:</label>
-                                </span>
-                                <input id="name" name="name" type="text" value="${data.name}" />
-                            </li>
-                            <li id="repeats">
-                                <span class="tooltip-wrapper" tooltip="Select the recurrence of this time based route">
-                                    <span class="tooltip"/>
-                                    <label for="cycle">Repeats:</label>
-                                </span>
-                                 <select id="cycle" name="cycle">
+                    <div class="clearfix" id="repeats">
+                        <label for="cycle">Repeats</label>
+                        <div class="input">
+                            <select name="cycle" id="cycle" class="medium" rel="popover" data-content="Select the recurrence of this time based route">
                                 {{each field_data.cycle}}
                                     {{if data.cycle == id}}
-                                    <option value="${id}" selected="selected">${value}</option>
+                                    <option id="${id}" value="${id}" selected="selected">${value}</option>
                                     {{else}}
-                                    <option value="${id}">${value}</option>
+                                    <option id="${id}" value="${id}">${value}</option>
                                     {{/if}}
                                 {{/each}}
-                                </select>
-                            </li>
-                            <li id="every">
-                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, define the recurrence of this rule">
-                                    <span class="tooltip"/>
-                                    <label>Every:</label>
-                                </span>
-                                <span id="yearly_every">
-                                    <select name="month">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix" id="every">
+                        <label>Every:</label>
+                        <div class="input" >
+                            <div id="yearly_every">
+                                <select name="month" id="month" class="medium" rel="popover" data-content="Depending on the cycle, define the recurrence of this rule">
                                     {{each field_data.months}}
                                         {{if data.month == id}}}
                                         <option value="${id}" selected="selected">${value}</option>
@@ -53,21 +53,22 @@
                                         <option value="${id}">${value}</option>
                                         {{/if}}
                                     {{/each}}
-                                    </select>
-                                </span>
-                                <span id="monthly_every">
-                                    <input id="interval_month" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace(/\D+/, '')"/>&nbsp;month(s)
-                                </span>
-                                <span id="weekly_every">
-                                    <input id="interval_week" type="text" value="${data.interval}" name="interval" size="2" onkeyup="this.value = this.value.replace (/\D+/, '')"/>&nbsp;week(s)
-                                </span>
-                            </li>
-                            <li id="on">
-                                <span class="tooltip-wrapper" tooltip="Depending on the cycle, select the specific day(s) where this rule should apply">
-                                    <span class="tooltip"/>
-                                    <label>On:</label>
-                                </span>
-                                <select id="ordinal" name="ordinal">
+                                </select>
+                            </div>
+
+                            <span id="monthly_every">
+                                <input class="span1" id="interval_month" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;month(s)
+                            </span>
+                            <span id="weekly_every">
+                                <input class="span1" id="interval_week" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;week(s)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="clearfix" id="on">
+                        <label>On:</label>
+                        <div class="input">
+                            <select name="ordinal" id="ordinal" class="medium" rel="popover" data-content="">
                                 {{each field_data.ordinals}}
                                     {{if data.ordinal == id}}
                                     <option value="${id}" selected="selected">${value}</option>
@@ -75,9 +76,10 @@
                                     <option value="${id}">${value}</option>
                                     {{/if}}
                                 {{/each}}
-                                </select>
-                                <span id="weekdays">
-                                    <select id="wday" name="weekday">
+                            </select>
+
+                            <span id="weekdays">
+                                <select id="wday" name="weekday" class="medium">
                                     {{each(i, day) field_data.wdays}}
                                         {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
                                         <option value="${day.toLowerCase()}" selected="selected">${day}</option>
@@ -85,9 +87,10 @@
                                         <option value="${day.toLowerCase()}">${day}</option>
                                         {{/if}}
                                     {{/each}}
-                                    </select>
-                                </span>
-                                <span id="days_checkboxes">
+                                </select>
+                            </span>
+
+                            <span id="days_checkboxes" rel="popover" data-content="Select which days to apply this rule">
                                 {{each(i, day) field_data.wdays}}
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
                                         <div class="fake_checkbox checked" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
@@ -95,8 +98,9 @@
                                         <div class="fake_checkbox" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
                                     {{/if}}
                                 {{/each}}
-                                </span>
-                                <select id="specific_day" name="days[0]">
+                            </span>
+
+                            <select id="specific_day" name="days[0]" class="medium">
                                 {{each(i, day) field_data.day}}
                                     ${day}
                                     {{if data.days[0] == day}}
@@ -105,43 +109,31 @@
                                     <option value="${day}">${day}</option>
                                     {{/if}}
                                 {{/each}}
-                                </select>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Select the starting date of this rule">
-                                    <span class="tooltip"/>
-                                    <label for="day">Start Date: </label>
-                                </span>
-                                <input type="text" id="start_date" name="start_date" value="${data.start_date}" size="10"/>
-                            </li>
-                            <li id="start_time">
-                                <span class="tooltip-wrapper" tooltip="Drag the first slider button to select the End hour of this rule,<br/> and then drag the second slider button and drop it at the Start Hour of this rule.">
-                                    <span class="tooltip"/>
-                                    <label for="time">Time:</label>
-                                </span>
-                                <span class="time-wrapper">
-                                    <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}" />
-                                </span>
-                            </li>
-                        </ul>
-                    </fieldset>
+                            </select>
+                        </div>
+                    </div>
 
-                    <div class="clear"></div>
+                    <div class="clearfix">
+                        <label for="day">Start Date</label>
+                        <div class="input">
+                            <input class="span4" id="start_date" name="start_date" type="text" placeholder="03/12/2012" value="${data.start_date}" rel="popover" data-content="Select the starting date of this rule"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix time_wrapper_field">
+                        <label for="time">Time:</label>
+                        <div class="input time_wrapper">
+                            <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}"/>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
-            <div class="clear"></div>
-        <div class="buttons_wrapper">
-            <ul class="buttons right timeofday">
-                {{if data.id}}
-                    <li><a class="timeofday-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                {{/if}}
-                <li><a class="timeofday-save save-btn fancy_button green" href="#">Save</a></li>
-            </ul>
-            <div class="clear"/>
-        </div>
-
         </form>
+        <div class="buttons-right">
+            {{if data.id}}
+                <button class="btn danger timeofday-delete">Delete</button>
+            {{/if}}
+            <button class="btn success timeofday-save">Save</button>
+        </div>
     </div>
 </div>

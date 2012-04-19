@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="parameter_div">
-                Ring this device for <input type="text" size="2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
+                Ring this device for <input type="text" class="size2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
             </div>
             <div class="parameter_div">
                 {{if can_call_self}}
@@ -36,9 +36,8 @@
                 <div class="parameter_description">When you check this box, calls from the user's own extension to themselves will not ring the extension. This allows them to dial their own number to get to voicemail.</div>
             </div>
         </form>
-        <div class="btn_wrapper_popup">
-            <a href="javascript:void(0)" id="add" class="fancy_button blue">&nbsp;&nbsp;OK&nbsp;&nbsp;</a>
-            <div class="clear"/>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
         </div>
         <div class="clear"/>
     </div>

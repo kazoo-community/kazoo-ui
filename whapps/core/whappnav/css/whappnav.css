@@ -10,6 +10,29 @@
     text-align: center;
 }
 
+
+#ws-topbar .whapps > .whapp.open > a {
+    background: #414141;
+    background: -moz-radial-gradient(center, ellipse cover,  #414141 50%, #343434 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(50%,#414141), color-stop(100%,#343434));
+    background: -webkit-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: -o-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: -ms-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#414141', endColorstr='#343434',GradientType=1 );
+}
+
+#ws-topbar .whapps > .whapp > a:hover {
+    background: #414141;
+    background: -moz-radial-gradient(center, ellipse cover,  #414141 50%, #343434 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(50%,#414141), color-stop(100%,#343434));
+    background: -webkit-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: -o-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: -ms-radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    background: radial-gradient(center, ellipse cover,  #414141 50%,#343434 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#414141', endColorstr='#343434',GradientType=1 );
+}
+
 #ws-topbar .whapps > .whapp > .dropdown-toggle::after {
     display: none;
 }

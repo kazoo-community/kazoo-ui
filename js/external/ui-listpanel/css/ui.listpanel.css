@@ -2,24 +2,13 @@
 
 .list_panel {
     width: 190px;
-    float: left;
-    /* border-top-width: 1px; 
-       border-right-width: 1px; 
-       border-bottom-width: 1px; 
-       border-top-style: solid; 
-       border-right-style: solid; 
-       border-bottom-style: solid;
-       border-top-color: #FFF; 
-       border-right-color: #FFF; 
-       border-bottom-color: #FFF; 
-    border-left-color: #FFF; */
     box-shadow: 5px 5px 5px #222222;
 }
 
 .add_flow{
     padding-top: 5px;
     height: 70px;
-    background-color: #4d4d4d;  
+    background-color: #4d4d4d;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: #A0A0A0;
@@ -46,25 +35,34 @@
     padding-top:7px;
 }
 
-.search_box .searchsubmit1 { 
+.search_box .searchsubmit1 {
     float: left;
     background: url(../images/search_left.png  ) no-repeat top left;
     height: 20px;
     width: 23px;
 }
-.search_box .searchsubmit2 { 
+.search_box .searchsubmit2 {
     float: left;
     background: url(../images/search_right.png  ) no-repeat top right;
     height: 20px;
-    width: 26px; 
+    width: 26px;
 }
 
-.search_box .searchfield { 
+.search_box .searchfield {
     background: url(../images/search_mid.png) repeat-x;
     border: medium none;
-    float: left; 
-    height: 20px; 
+    float: left;
+    height: 14px;
     width: 130px;
+    border-radius: 0px;
+}
+
+.search_box .searchfield:focus {
+    border: none;
+    border-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .list-panel-anchor {
@@ -85,8 +83,8 @@
     height:27px;
     border-bottom: 1px solid #E3E3E3;
     border-top: 1px solid #8b8a8a;
-    list-style-type: none;  
-    background-color:#989898; 
+    list-style-type: none;
+    background-color:#989898;
 }
 
 .list-panel-anchor ul li:hover {

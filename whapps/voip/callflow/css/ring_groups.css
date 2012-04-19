@@ -47,7 +47,7 @@
     padding-left: 6px;
 }
 
-#ring_group_popup #two_columns .actions {
+#ring_group_popup #two_columns .actions_item {
     font-size: 10px;
     width: 39px;
     float: left;
@@ -65,10 +65,8 @@
 }
 
 #ring_group_popup #two_columns .options .option {
-    font-size: 12px;
-    width: 36px;
+    height: 12px;
     margin: 2px 5px 0;
-    border: 1px solid #ccc;
 }
 
 #ring_group_popup #two_columns .column.right ul.connect {
@@ -99,21 +97,44 @@
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li {
-    background-color: none;
-    border: 0;
+    width: 108px;
     height: 22px;
     line-height: 22px;
+    border: 1px solid #888;
+    float: left;
+    border-radius: 0px 5px 0px 0px;
+    color: #fff;
+    background: #b2b2b2; /* Old browsers */
+    background: -moz-linear-gradient(top, #b2b2b2 1%, #7c7c7c 50%, #333333 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#b2b2b2), color-stop(50%,#7c7c7c), color-stop(100%,#333333)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #b2b2b2 1%,#7c7c7c 50%,#333333 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #b2b2b2 1%,#7c7c7c 50%,#333333 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #b2b2b2 1%,#7c7c7c 50%,#333333 100%); /* IE10+ */
+    background: linear-gradient(top, #b2b2b2 1%,#7c7c7c 50%,#333333 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b2b2b2', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li:first-child {
     border-radius: 5px 0px 0px 0px;
 }
 
-#ring_group_popup #two_columns .wrapper .settings_tabs > li {
-    border-radius: 0px 5px 0px 0px;
+#ring_group_popup #two_columns .wrapper .settings_tabs > li.current{
+    background: #05addc; /* Old browsers */
+    background: -moz-linear-gradient(top, #05addc 0%, #2989d8 50%, #203838 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#05addc), color-stop(50%,#2989d8), color-stop(100%,#203838)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #05addc 0%,#2989d8 50%,#203838 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #05addc 0%,#2989d8 50%,#203838 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #05addc 0%,#2989d8 50%,#203838 100%); /* IE10+ */
+    background: linear-gradient(top, #05addc 0%,#2989d8 50%,#203838 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05addc', endColorstr='#203838',GradientType=0 ); /* IE6-9 */
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li > a{
-    width: 110px;
+    outline: none;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    width: 108px;
     height: 22px;
 }
+
