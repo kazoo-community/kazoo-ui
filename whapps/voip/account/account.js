@@ -27,7 +27,8 @@ winkstart.module('voip', 'account', {
                 { name: '#vm_to_email_send_from',        regex: /^.*$/ },
                 { name: '#vm_to_email_service_url',      regex: /^.*$/ },
                 { name: '#vm_to_email_service_provider', regex: /^.*$/ },
-                { name: '#vm_to_email_service_name',     regex: /^.*$/ }
+                { name: '#vm_to_email_service_name',     regex: /^.*$/ },
+                { name: '#deregister_email',             regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
         ],
 
         resources: {
@@ -175,6 +176,8 @@ winkstart.module('voip', 'account', {
                             function(_data, status) {
                                 THIS.migrate_data(_data);
 
+                                THIS.format_data(_data);
+
                                 THIS.render_account($.extend(true, defaults, _data), target, callbacks);
 
                                 if(typeof callbacks.after_render == 'function') {
@@ -227,10 +230,29 @@ winkstart.module('voip', 'account', {
             }
         },
 
+        format_data: function(data) {
+            if(!data.field_data) {
+                data.field_data = {};
+            }
+
+            if(data.data.notifications && 'deregister' in data.data.notifications && data.data.notifications.deregister.send_to && data.data.notifications.deregister.send_to != '') {
+                data.field_data.deregister = true;
+            }
+            else {
+                data.field_data.deregister = false;
+            }
+        },
+
         clean_form_data: function(form_data) {
             form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g, '');
             form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g, '');
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g, '');
+
+            if(form_data.extra.deregistration_notify === false) {
+                form_data.notifications.deregister.send_to = '';
+            }
+
+            delete form_data.extra;
 
             return form_data;
         },
@@ -264,6 +286,13 @@ winkstart.module('voip', 'account', {
 
             if($.isEmptyObject(data.vm_to_email)) {
                 delete data.vm_to_email;
+            }
+
+
+            if(data.notifications.deregister) {
+                if(data.notifications.deregister.send_to === '') {
+                    delete data.notifications.deregister.send_to;
+                }
             }
 
             return data;
@@ -306,6 +335,12 @@ winkstart.module('voip', 'account', {
                         }
                     );
                 }
+            });
+
+            $('#deregister', account_html).is(':checked') ? $('.deregister_email', account_html).show() : $('.deregister_email', account_html).hide();
+
+            $('#deregister', account_html).change(function() {
+                $(this).is(':checked') ? $('.deregister_email', account_html).show() : $('.deregister_email', account_html).hide();
             });
 
             $('.account-save', account_html).click(function(ev) {

@@ -50,6 +50,7 @@
                         <li><a href="javascript:void(0);"><span  class="icon sip"/>Caller ID</a></li>
                         <li><a href="javascript:void(0);"><span  class="icon vmbox"/>Voicemail-to-Email Template</a></li>
                         <li><a href="javascript:void(0);"><span  class="icon fax"/>Options</a></li>
+                        <li><a href="javascript:void(0);"><span  class="icon fax"/>Monitoring</a></li>
                     </ul>
                 </span>
 
@@ -210,6 +211,35 @@
                                 {{else}}
                                     <input type="checkbox" id="format_from_uri" name="format_from_uri"/>
                                 {{/if}}
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <div class="clear"/>
+                </div>
+
+                <div id="monitoring">
+                    <fieldset>
+                        <ul class="controls">
+                            <li>
+                                <span class="deregister_block">
+                                    <span class="tooltip-wrapper" tooltip="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters.">
+                                        <span class="tooltip"/>
+                                        <label for="deregister">Notify on de-register:</label>
+                                    </span>
+                                    {{if field_data.deregister}}
+                                    <input id="deregister" type="checkbox" name="extra.deregistration_notify" CHECKED="CHECKED"/>
+                                    {{else}}
+                                    <input id="deregister" type="checkbox" name="extra.deregistration_notify"/>
+                                    {{/if}}
+                                    <span class="deregister_email">
+                                        <label for="deregister_email">Email to notify:</label>
+                                        {{if field_data.deregister}}
+                                        <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}"/>
+                                        {{else}}
+                                        <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to"/>
+                                        {{/if}}
+                                    </span>
+                                </span>
                             </li>
                         </ul>
                     </fieldset>
