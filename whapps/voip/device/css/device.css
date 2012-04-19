@@ -84,3 +84,7 @@
     border-radius: 12px;
 
 }
+
+#device-view .realm_label {
+    line-height: 22px;
+}

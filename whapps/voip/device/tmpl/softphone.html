@@ -2,14 +2,11 @@
     <div class="inner">
         <form id="device-form" action="" method="post" class="niceform">
             {{if data.id}}
-                <h1>Edit SIP Device</h1>
+                <h1>Edit Softphone</h1>
             {{/if}}
 
             <ul class="settings_tabs settings1">
                 <li><a href="#">Basic Settings</a></li>
-                {{if data.id}}
-                    <!--<li><a href="#">Troubleshooting</a></li>-->
-                {{/if}}
             </ul>
 
             <div class="clear"></div>
@@ -46,12 +43,25 @@
                             </li>
                             {{/if}}
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B">
+                                <span class="tooltip-wrapper" tooltip="Your SIP Realm">
                                     <span class="tooltip"/>
-                                    <label for="mac_address">Device MAC Address:</label>
+                                    <label for="sip_realm">Realm:</label>
                                 </span>
-                                <input id="mac_address" placeholder="01:23:45:67:89:AB" name="mac_address" type="text" value="${data.mac_address}" />
-                                <span class="provisioner"></span>
+                                <span class="realm_label"><b>${field_data.sip.realm}</b></span>
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Username">
+                                    <span class="tooltip"/>
+                                    <label for="sip_username">Username:</label>
+                                </span>
+                                <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
+                            </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Enter your SIP Password <br /> Click on the input to make the password appear">
+                                    <span class="tooltip"/>
+                                    <label for="sip_password">Password:</label>
+                                </span>
+                                <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
                             </li>
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Do you want this device enabled?">
@@ -64,50 +74,15 @@
                                     <input type="checkbox" id="enabled" name="enabled"/>
                                 {{/if}}
                             </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Do you want to notify the administrator each time this device unregisters?">
-                                    <span class="tooltip"/>
-                                    <label for="enabled">Notify when unregistered:</label>
-                                </span>
-                                {{if data.suppress_unregister_notifications === true}}
-                                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister"/>
-                                {{else}}
-                                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked"/>
-                                {{/if}}
-                            </li>
                         </ul>
                         <input type="hidden" value="${data.device_type}" name="device_type"/>
                     </fieldset>
 
                     <div class="clear"></div>
                 </div> <!-- end basic settings -->
-
-                <div id="troubleshooting">
-                    Click "Ring Phone" to place a test call to your phone. This ensures inbound calls work and your phone's ringer is setup properly.
-                    <ul class="buttons">
-                        <li>
-                            <a href="#">Ring Phone</a>
-                        </li>
-                    </ul>
-
-                    <div class="clear"></div>
-
-                    <br/>
-                    <br/>
-
-                    If you are having problems with your phone or wish to upgrade it's firmware, you can reboot the phone.
-                    <ul class="buttons">
-                        <li>
-                            <a href="#">Reboot</a>
-                        </li>
-                    </ul>
-
-                    <div class="clear"></div>
-                </div> <!-- end troubleshooting -->
             </div>
 
             <div class="clear"></div>
-
 
             <span class="advanced_settings_box">
                 <span>
@@ -120,7 +95,6 @@
                         <li><a href="#"><span class="icon sip"/>SIP Settings</a></li>
                         <li><a href="#"><span class="icon audio"/>Audio</a></li>
                         <li><a href="#"><span class="icon video"/>Video</a></li>
-                        <li><a href="#"><span class="icon fax"/>Fax</a></li>
                     </ul>
                 </span>
 
@@ -179,13 +153,6 @@
                         <legend>SIP Settings</legend>
                         <ul class="controls">
                             <li>
-                                <span class="tooltip-wrapper" tooltip="Your SIP Realm">
-                                    <span class="tooltip"/>
-                                    <label for="sip_realm">Realm:</label>
-                                </span>
-                                <span class="realm_label"><b>${field_data.sip.realm}</b></span>
-                            </li>
-                            <li>
                                 <span class="tooltip-wrapper" tooltip="Select your authentication method">
                                     <span class="tooltip"/>
                                     <label for="sip_method">Authentication Method:</label>
@@ -200,21 +167,7 @@
                                     {{/each}}
                                 </select>
                             </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Enter your SIP Username">
-                                    <span class="tooltip"/>
-                                    <label for="sip_username">Username:</label>
-                                </span>
-                                <input id="sip_username" name="sip.username" type="text"  value="${data.sip.username}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Enter your SIP Password <br /> Click on the input to make the password appear">
-                                    <span class="tooltip"/>
-                                    <label for="sip_password">Password:</label>
-                                </span>
-                                <input id="sip_password" name="sip.password" type="password"  value="${data.sip.password}" />
-                                <!--Show password? : <input id="sip_password_visible" type="checkbox" />-->
-                            </li>
+
                             <li>
                                 <span class="tooltip-wrapper" tooltip="Enter your SIP Invite Format">
                                     <span class="tooltip"/>
@@ -351,6 +304,9 @@
                     <div class="clear"></div>
 
                 </div>
+
+                <input type="hidden" name="extra.notify_unregister" value="false"/>
+                <input type="hidden" name="media.fax.option" value="false"/>
 
             </div>
 
