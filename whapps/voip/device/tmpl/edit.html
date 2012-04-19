@@ -64,6 +64,17 @@
                                     <input type="checkbox" id="enabled" name="enabled"/>
                                 {{/if}}
                             </li>
+                            <li>
+                                <span class="tooltip-wrapper" tooltip="Do you want to notify the administrator each time this device unregisters?">
+                                    <span class="tooltip"/>
+                                    <label for="enabled">Notify when unregistered:</label>
+                                </span>
+                                {{if data.suppress_unregister_notifications === true}}
+                                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister"/>
+                                {{else}}
+                                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked"/>
+                                {{/if}}
+                            </li>
                         </ul>
                         <input type="hidden" value="${data.device_type}" name="device_type"/>
                     </fieldset>
