@@ -683,6 +683,10 @@ winkstart.module('voip', 'user', {
         },
 
         normalize_data: function(data) {
+            if($.isArray(data.directories)) {
+                data.directories = {};
+            }
+
             $.each(data.caller_id, function(key, val) {
                 $.each(val, function(_key, _val) {
                     if(_val == '') {
