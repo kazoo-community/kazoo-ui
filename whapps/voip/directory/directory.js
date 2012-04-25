@@ -131,7 +131,7 @@ winkstart.module('voip', 'directory', {
                 },
                 function(_data, status) {
                     if(callflow_id) {
-                        if(!_data.data.directories || typeof _data.data.directories != 'object') {
+                        if(!_data.data.directories || $.isArray(_data.data.directories)) {
                             _data.data.directories = {};
                         }
                         _data.data.directories[directory_id] = callflow_id;
