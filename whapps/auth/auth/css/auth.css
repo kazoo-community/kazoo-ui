@@ -16,34 +16,49 @@
 
 #content_welcome_page .right_div {
     width: 420px;
-    padding: 10px 0px 0px 65px;;
-    border-left: 1px solid #555555;
+    padding-top: 10px;
     float: left;
     height: 370px;
     text-shadow: 1px 1px #333333;
 }
 
+#content_welcome_page .right_div .list_fields {
+    border: 1px solid #353535;
+    border-radius: 5px;
+    background: #484848;
+    padding: 10px 20px 10px 25px;
+}
+
 #content_welcome_page .right_div .row_welcome_field {
-    padding: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
 }
 
 #content_welcome_page .right_div .row_welcome_field > label {
     font-size: 16px;
     padding: 0 10px;
+    text-align: right;
+    width: 120px;
+    margin-right: 20px;
+    line-height: 30px;
 }
 
 #content_welcome_page .right_div .row_welcome_field > input {
-    padding: 5px;
-    height: 18px;
+    border: 1px solid #444;
     border-radius: 5px 5px 5px 5px;
-    width: 200px;
+    height: 18px;
+    width: 190px;
+    padding: 5px;
+}
+
+#content_welcome_page .right_div .row_welcome_field > input:focus {
+    border: 1px solid #05addc;
+    outline: none; /* In order to get rid of Chrome's border */
 }
 
 #content_welcome_page .right_div .login_div {
-    margin-left: 160px;
     text-align: center;
-    padding: 10px;
-    width: 260px;
+    padding: 10px 10px 10px 0px;
 }
 
 #content_welcome_page .right_div .login_div .login {
@@ -51,11 +66,14 @@
     width: 105px;
     text-shadow: 1px 1px #333333;
     font-family: trebuchet MS;
-    margin-top: 10px;
+    margin: 10px 0 0 0;
 }
 
 #content_welcome_page .right_div .login_div .recover_password {
     color: #eee;
+    text-shadow: none;
+    text-decoration: underline;
+    margin-right: 10px;
 }
 
 #content_welcome_page .right_div .login_div .recover_password:hover {

@@ -6,7 +6,6 @@
 #content_welcome_page .left_div {
     width: 480px;
     padding: 10px 25px 0 0;
-    border-right: 1px solid #aaaaaa;
     float: left;
     height: 370px;
 }
@@ -18,18 +17,20 @@
     font-weight: bold;
     text-shadow: 1px 1px #333;
     padding-bottom: 25px;
+    text-align: center;
 }
 
 #content_welcome_page .left_div .learn_more {
     font-size: 18px;
     font-weight: bold;
-    text-shadow: 2px 2px #333;
+    text-shadow: 1px 1px #333;
+    text-align: center;
 }
 
 #content_welcome_page .left_div .learn_more > a {
-    color: #05addc;
+    color: #EEEEEE;
 }
 
 #content_welcome_page .left_div .learn_more > a:hover {
-    color: #EEEEEE;
+    color: #05addc;
 }
