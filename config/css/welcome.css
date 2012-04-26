@@ -21,7 +21,7 @@
 }
 
 #content_welcome_page .left_div .learn_more {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-shadow: 1px 1px #333;
     text-align: center;
@@ -33,4 +33,5 @@
 
 #content_welcome_page .left_div .learn_more > a:hover {
     color: #05addc;
+    text-decoration: underline;
 }
