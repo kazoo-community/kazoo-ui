@@ -825,7 +825,7 @@ winkstart.module('voip', 'callflow', {
                                         elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
                                     }
                                 }
-                                if(elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
+                                if($.isArray(elem.numbers) && elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
                                     new_list.push({
                                         id: elem.id,
                                         title: (elem.numbers) ? elem.numbers.toString() : ''
