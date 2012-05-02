@@ -21,7 +21,10 @@
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 
         /* Was winkstart.realm_suffix */
-        realm_suffix: '.sip.2600hz.com',
+        realm_suffix: {
+            login: '.sip.2600hz.com',
+            register: '.trial.2600hz.com'
+        },
 
         /* What applications is available for a user that just registered */
         register_apps: {

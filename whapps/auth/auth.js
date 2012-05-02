@@ -169,7 +169,8 @@ winkstart.module('auth', 'auth',
                             if(THIS.request_realm) {
                                 realm = $('#realm', dialogRegister).val();
                             } else {
-                                realm = $('#username', dialogRegister).val() + winkstart.config.realm_suffix;
+                                realm = $('#username', dialogRegister).val() + (typeof winkstart.config.realm_suffix === 'object' ? winkstart.config.realm_suffix.register : winkstart.config.realm_suffix);
+                                console.log('register ' + realm);
                             }
 
                             // If realm was set in the URL, override all
@@ -287,7 +288,8 @@ winkstart.module('auth', 'auth',
                     login_data.account_name = login_account_name;
                 }
                 else {
-                    login_data.realm = login_username + winkstart.config.realm_suffix;
+                    login_data.realm = login_username + (typeof winkstart.config.realm_suffix === 'object' ? winkstart.config.realm_suffix.login : winkstart.config.realm_suffix);
+                    console.log('login ' + login_data.realm);
                 }
 
                 winkstart.putJSON('auth.user_auth', {
@@ -387,7 +389,9 @@ winkstart.module('auth', 'auth',
                     login_data.account_name = login_account_name;
                 }
                 else {
-                    login_data.realm = login_username + winkstart.config.realm_suffix;
+                    //TODO JR
+                    login_data.realm = login_username + (typeof winkstart.config.realm_suffix === 'object' ? winkstart.config.realm_suffix.login : winkstart.config.realm_suffix);
+                    console.log('login ' + login_data.realm);
                 }
 
                 winkstart.putJSON('auth.user_auth', {
