@@ -381,6 +381,7 @@ winkstart.module('voip', 'timeofday', {
                         var form_data = form2object('timeofday-form');
 
                         form_data.wdays = [];
+                        data.data.wdays = [];
 
                         $('.fake_checkbox.checked', timeofday_html).each(function() {
                             form_data.wdays.push($(this).dataset('value'));
