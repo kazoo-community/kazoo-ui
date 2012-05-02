@@ -442,24 +442,26 @@ winkstart.module('voip', 'user', {
                         }
 
 
-                        THIS.save_user(form_data, data, function(data, status, action) {
-                            if(action == 'create') {
-                                THIS.acquire_device(data, function() {
+                        if(form_data.password === undefined || winkstart.is_password_valid(form_data.password)) {
+                            THIS.save_user(form_data, data, function(data, status, action) {
+                                if(action == 'create') {
+                                    THIS.acquire_device(data, function() {
+                                        if(typeof callbacks.save_success == 'function') {
+                                            callbacks.save_success(data, status, action);
+                                        }
+                                    }, function() {
+                                        if(typeof callbacks.save_error == 'function') {
+                                            callbacks.save_error(data, status, action);
+                                        }
+                                    });
+                                }
+                                else {
                                     if(typeof callbacks.save_success == 'function') {
                                         callbacks.save_success(data, status, action);
                                     }
-                                }, function() {
-                                    if(typeof callbacks.save_error == 'function') {
-                                        callbacks.save_error(data, status, action);
-                                    }
-                                });
-                            }
-                            else {
-                                if(typeof callbacks.save_success == 'function') {
-                                    callbacks.save_success(data, status, action);
                                 }
-                            }
-                        }, winkstart.error_message.process_error(callbacks.save_error));
+                            }, winkstart.error_message.process_error(callbacks.save_error));
+                        }
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');

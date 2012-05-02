@@ -1,4 +1,48 @@
 ( function(winkstart, amplify, $) {
+    winkstart.is_password_valid = function(password_string, strength) {
+        var help_standard = 'The password must contain at least 6 characters and include a letter and a number.',
+            help_strong = 'The password must contain at least 8 characters including a non-capitalized letter, a capitalized letter, a number and a special character (!%$...)',
+            strength = strength || 'standard', //Standard is the default value
+            res = password_string.match(winkstart.get_password_regex(strength)),
+            alert_message = 'Your password is not valid<br/>';
+
+        if(res && res[0]) {
+            return true;
+        }
+        else {
+            switch(strength) {
+                case 'standard':
+                    alert_message += help_standard;
+                    break;
+
+                case 'strong':
+                    alert_message += help_strong;
+                    break;
+
+                default: true;
+            }
+            winkstart.alert(alert_message);
+            return false;
+        }
+    };
+
+    winkstart.get_password_regex = function(strength) {
+        var standard_validation = /(?=^.{6,}$)(?=.*\d)((?=.*[a-z])|(?=.*[A-Z])).*$/g,
+            strong_validation = /(?=^.{8,}$)(?![.\n])(?=.*[\!\@\#\$\%\^\&\*\-\_\(\)\[\]\=\+\^])(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).*$/g;
+
+        switch(strength) {
+            case 'standard':
+                return standard_validation;
+                break;
+
+            case 'strong':
+                return strong_validation;
+                break;
+
+            default:
+                return standard_validation;
+        }
+    };
 
     winkstart.log = function(data) {
         //if (winkstart.debug) {

@@ -165,42 +165,44 @@ winkstart.module('auth', 'auth',
 
                 winkstart.validate.is_valid(THIS.config.validation, dialogRegister, function() {
                         if ($('#password', dialogRegister).val() == $('#password2', dialogRegister).val()) {
-                            var realm;
-                            if(THIS.request_realm) {
-                                realm = $('#realm', dialogRegister).val();
-                            } else {
-                                realm = $('#username', dialogRegister).val() + (typeof winkstart.config.realm_suffix === 'object' ? winkstart.config.realm_suffix.register : winkstart.config.realm_suffix);
-                            }
-
-                            // If realm was set in the URL, override all
-                            if('realm' in URL_DATA) {
-                                realm = URL_DATA['realm'];
-                            }
-
-                            var rest_data = {
-                                crossbar : true,
-                                api_url : winkstart.apps['auth'].api_url,
-                                data : {
-                                    'account': {
-                                        'realm': realm,
-					'name':$('#name', dialogRegister).val(),
-                                        'app_url': URL
-                                    },
-                                    'user': {
-                                        'username':$('#username', dialogRegister).val(),
-                                        'password' : $('#password', dialogRegister).val(),
-                                        'first_name': $('#first_name', dialogRegister).val() ,
-                                        'last_name':$('#last_name', dialogRegister).val(),
-                                        'email': $('#email', dialogRegister).val(),
-                                        'apps': winkstart.config.register_apps
-                                    }
+                            if(winkstart.is_password_valid($('#password', dialogRegister).val())) {
+                                var realm;
+                                if(THIS.request_realm) {
+                                    realm = $('#realm', dialogRegister).val();
+                                } else {
+                                    realm = $('#username', dialogRegister).val() + (typeof winkstart.config.realm_suffix === 'object' ? winkstart.config.realm_suffix.register : winkstart.config.realm_suffix);
                                 }
-                            };
-                            winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
-                                $.cookie('c_winkstart.login', null);
-                                winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
-                                dialogRegister.dialog('close');
-                            });
+
+                                // If realm was set in the URL, override all
+                                if('realm' in URL_DATA) {
+                                    realm = URL_DATA['realm'];
+                                }
+
+                                var rest_data = {
+                                    crossbar : true,
+                                    api_url : winkstart.apps['auth'].api_url,
+                                    data : {
+                                        'account': {
+                                            'realm': realm,
+                                            'name' :$('#name', dialogRegister).val(),
+                                            'app_url': URL
+                                        },
+                                        'user': {
+                                            'username':$('#username', dialogRegister).val(),
+                                            'password' : $('#password', dialogRegister).val(),
+                                            'first_name': $('#first_name', dialogRegister).val() ,
+                                            'last_name':$('#last_name', dialogRegister).val(),
+                                            'email': $('#email', dialogRegister).val(),
+                                            'apps': winkstart.config.register_apps
+                                        }
+                                    }
+                                };
+                                winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
+                                    $.cookie('c_winkstart.login', null);
+                                    winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
+                                    dialogRegister.dialog('close');
+                                });
+                            }
                         }
                         else {
                             winkstart.alert('Please confirm your password');

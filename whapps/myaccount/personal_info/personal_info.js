@@ -86,13 +86,15 @@ winkstart.module('myaccount', 'personal_info', {
                 var pass = $('#infos_pwd1', info_html).val();
 
                 if(pass == $('#infos_pwd2', info_html).val()) {
-                    THIS.update_acct(data.data, {
-                            password: pass
-                        },
-                        function() {
-                            winkstart.alert('info', 'Password updated!');
-                        }
-                    );
+                    if(winkstart.is_password_valid(pass)) {
+                        THIS.update_acct(data.data, {
+                                password: pass
+                            },
+                            function() {
+                                winkstart.alert('info', 'Password updated!');
+                            }
+                        );
+                    }
                 }
                 else {
                     winkstart.alert('Passwords do not match, please retype the passwords.');
