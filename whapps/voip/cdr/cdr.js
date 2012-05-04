@@ -240,6 +240,7 @@ function(args) {
 	activate: function(data) {
 		var THIS = this,
             cdr_html = this.templates.cdr.tmpl({}),
+            init_range = 1,
             range = THIS.cdr_range;
 
 		$('#ws-content').empty().append(cdr_html);
@@ -330,7 +331,7 @@ function(args) {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         var end_date = Math.floor(tomorrow.getTime()/1000) + 62167219200,
-            start_date = end_date - (range*24*60*60);
+            start_date = end_date - (init_range*24*60*60);
 
         THIS.list_by_date(start_date, end_date);
 	},
@@ -343,6 +344,7 @@ function(args) {
             start_date = new Date(),
             end_date,
             tomorrow = new Date(),
+            init_range = 1,
             range = THIS.cdr_range;
 
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -355,7 +357,7 @@ function(args) {
         );
 
         end_date = tomorrow;
-        start_date.setDate(new Date().getDate() - range + 1);
+        start_date.setDate(new Date().getDate() - init_range + 1);
 
         $start_date.datepicker('setDate', start_date);
         $end_date.datepicker('setDate', end_date);
