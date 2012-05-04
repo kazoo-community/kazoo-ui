@@ -95,6 +95,7 @@ winkstart.module('voip', 'callflow', {
             THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
 
             THIS.renderList(function() {
+                console.log('renderlistcb');
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
             });
 
@@ -222,6 +223,7 @@ winkstart.module('voip', 'callflow', {
         renderFlow: function() {
             var target = $(this.config.elements.flow).empty();
 
+            console.log(target);
             target.append(this._renderFlow());
         },
 
@@ -806,8 +808,7 @@ winkstart.module('voip', 'callflow', {
         renderList: function(callback){
             var THIS = this;
 
-            winkstart.getJSON('callflow.list', {
-                    crossbar: true,
+            winkstart.request(true,'callflow.list', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 },
@@ -825,7 +826,7 @@ winkstart.module('voip', 'callflow', {
                                         elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
                                     }
                                 }
-                                if($.isArray(elem.numbers) && elem.featurecode == false && jQuery.inArray('no_match', elem.numbers) === -1) {
+                                if($.isArray(elem.numbers) && elem.featurecode == false) {
                                     new_list.push({
                                         id: elem.id,
                                         title: (elem.numbers) ? elem.numbers.toString() : ''
