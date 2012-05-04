@@ -778,9 +778,7 @@ winkstart.module('voip', 'callflow', {
                         THIS.renderList();
                         THIS.editCallflow({id: json.data.id});
                     },
-                    function(json, status) {
-                        winkstart.alert('Error: ' + status);
-                    }
+                    winkstart.error_message.process_error()
                 );
             }
             else {
@@ -796,9 +794,7 @@ winkstart.module('voip', 'callflow', {
                         THIS.renderList();
                         THIS.editCallflow({id: json.data.id});
                     },
-                    function(json, status) {
-                        winkstart.alert('Error: ' + status);
-                    }
+                    winkstart.error_message.process_error()
                 );
             }
         },

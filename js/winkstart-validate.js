@@ -44,6 +44,9 @@
 
                     string_alert += arrayToString(data.data || {});
                 }
+                else if($.inArray(status, ['401','403','404','405','413','503']) >= 0) {
+                    string_alert += 'Error status code : ' + status;
+                }
 
                 if(string_alert != '') {
                     if(typeof callback == 'function') {
