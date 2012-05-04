@@ -520,6 +520,7 @@ winkstart.module('voip', 'resource', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url,
                             data: {
+                                featurecode: {},
                                 numbers: ['no_match'],
                                 flow: {
                                     children: {},
