@@ -95,7 +95,6 @@ winkstart.module('voip', 'callflow', {
             THIS.templates.callflow_main.tmpl({}).appendTo($('#ws-content'));
 
             THIS.renderList(function() {
-                console.log('renderlistcb');
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
             });
 
@@ -223,7 +222,6 @@ winkstart.module('voip', 'callflow', {
         renderFlow: function() {
             var target = $(this.config.elements.flow).empty();
 
-            console.log(target);
             target.append(this._renderFlow());
         },
 
