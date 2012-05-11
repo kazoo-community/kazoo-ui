@@ -43,7 +43,7 @@ winkstart.module('myaccount', 'nav', {
             winkstart.publish('nav.add_sublink', 'nav', 'logout', 'logout', '20', 'auth.activate',
                 function(sub_link) {
                     var width = $(container).css('width');
-                    $('.dropdown-menu', container).css('width', width);
+                    $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
                 }
             );
         },
