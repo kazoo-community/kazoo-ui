@@ -14,7 +14,7 @@ winkstart.module('core', 'linknav', {
         subscribe: {
             'linknav.add': 'add',
             'linknav.sub_add': 'sub_add',
-            'linknav.edit': 'edit'
+            'linknav.get': 'get'
         },
 
         targets: {
@@ -176,6 +176,16 @@ winkstart.module('core', 'linknav', {
                 if(typeof data.modifier == 'function') {
                     data.modifier.call(link_sublink_html, link_sublink_html);
                 }
+            }
+        },
+
+        get: function(data, callback) {
+            var THIS = this,
+                link_list_html = $(THIS.config.targets.link_nav),
+                link_html = $('.link[data-link="' + data.link + '"]', link_list_html);
+
+            if(typeof callback == 'function') {
+                callback.call(link_html, link_html);
             }
         },
 
