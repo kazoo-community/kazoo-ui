@@ -466,12 +466,13 @@ winkstart.module('voip', 'account', {
         },
 
         masquerade_account: function(account_name) {
-            var THIS = this;
+            var THIS = this,
+                link = $('#myaccount_navbar .masquerade');
 
-            $('.universal_nav .my_account_wrapper .label .other')
-                .html('<br>as<br>' + account_name + '<br><a href="#" class="masquerade">(restore)</a>');
+            link.text('as ' + account_name + ' (restore)');
 
-            $('.universal_nav .my_account_wrapper .masquerade').click(function() {
+            link.unbind('click');
+            link.click(function() {
                 var id = winkstart.apps['voip'].masquerade.pop();
 
                 if(winkstart.apps['voip'].masquerade.length) {
@@ -481,23 +482,24 @@ winkstart.module('voip', 'account', {
                         },
                         function(data, status) {
                             winkstart.apps['voip'].account_id = data.data.id;
-
                             THIS.masquerade_account(data.data.name);
-
                             winkstart.publish('voip.activate');
                         }
                     );
                 }
                 else {
                     winkstart.apps['voip'].account_id = id;
-
-                    $('.universal_nav .my_account_wrapper .label .other').empty();
-
+                    link.text(winkstart.config.company_name);
                     delete winkstart.apps['voip'].masquerade;
-
-                    winkstart.publish('voip.activate');
+                    winkstart.publish('voip.activate');    
                 }
+
+                var width = $('#myaccount_navbar').css('width');
+                $('.dropdown-menu').css('width', width);
             });
+
+            var width = $('#myaccount_navbar').css('width');
+            $('.dropdown-menu').css('width', width);
         },
 
         activate: function(parent) {

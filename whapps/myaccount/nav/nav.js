@@ -10,7 +10,8 @@ winkstart.module('myaccount', 'nav', {
         subscribe: {
             'nav.activate': 'activate',
             'nav.add_sublink': 'add_sublink',
-            'myaccount.initialized': 'activate'
+            'myaccount.initialized': 'activate',
+            'nav.masquerade': 'masquerade'
         }
     },
 
@@ -20,12 +21,16 @@ winkstart.module('myaccount', 'nav', {
     },
     {
         activate: function(user_data) {
-            var THIS = this,
-                user_name = user_data.first_name + ' ' + user_data.last_name || 'Username',
-                container = THIS.templates.myaccount_navbar.tmpl({
-                    user_name: user_name,
-                    company_name: winkstart.config.company_name 
-                });
+            var THIS = this;
+            
+            (user_data.first_name) ? user_name = user_data.first_name + ' ' + user_data.last_name : user_name = user_data;
+
+            var container = THIS.templates.myaccount_navbar.tmpl({
+                user_name: user_name,
+                company_name: winkstart.config.company_name 
+            });
+
+            $('ul.secondary-nav').empty();
 
             winkstart.publish('linknav.add', {
                 name: 'nav',
@@ -38,7 +43,7 @@ winkstart.module('myaccount', 'nav', {
             winkstart.publish('nav.add_sublink', 'nav', 'logout', 'logout', '20', 'auth.activate',
                 function(sub_link) {
                     var width = $(container).css('width');
-                    $('.dropdown-menu').css('width', width);
+                    $('.dropdown-menu', container).css('width', width);
                 }
             );
         },
@@ -52,6 +57,10 @@ winkstart.module('myaccount', 'nav', {
                 publish: publish,
                 modifier: modifier
             });
+        },
+
+        masquerade: function(user_name, link) {
+            
         }
     }
 );
