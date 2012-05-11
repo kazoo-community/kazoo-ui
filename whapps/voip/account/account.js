@@ -466,40 +466,39 @@ winkstart.module('voip', 'account', {
         },
 
         masquerade_account: function(account_name) {
-            var THIS = this,
-                link = $('#myaccount_navbar .masquerade');
+            var THIS = this;
 
-            link.text('as ' + account_name + ' (restore)');
+            $('#myaccount_navbar .masquerade')
+                .text('as ' + account_name + ' (restore)')
+                .unbind('click')
+                .click(function() {
+                    var id = winkstart.apps['voip'].masquerade.pop();
 
-            link.unbind('click');
-            link.click(function() {
-                var id = winkstart.apps['voip'].masquerade.pop();
+                    if(winkstart.apps['voip'].masquerade.length) {
+                        winkstart.getJSON('account.get', {
+                                api_url: winkstart.apps['voip'].api_url,
+                                account_id: id
+                            },
+                            function(data, status) {
+                                winkstart.apps['voip'].account_id = data.data.id;
+                                THIS.masquerade_account(data.data.name);
+                                winkstart.publish('voip.activate');
+                            }
+                        );
+                    }
+                    else {
+                        winkstart.apps['voip'].account_id = id;
+                        $('#myaccount_navbar .masquerade').text(winkstart.config.company_name);
+                        delete winkstart.apps['voip'].masquerade;
+                        winkstart.publish('voip.activate');    
+                    }
 
-                if(winkstart.apps['voip'].masquerade.length) {
-                    winkstart.getJSON('account.get', {
-                            api_url: winkstart.apps['voip'].api_url,
-                            account_id: id
-                        },
-                        function(data, status) {
-                            winkstart.apps['voip'].account_id = data.data.id;
-                            THIS.masquerade_account(data.data.name);
-                            winkstart.publish('voip.activate');
-                        }
-                    );
-                }
-                else {
-                    winkstart.apps['voip'].account_id = id;
-                    link.text(winkstart.config.company_name);
-                    delete winkstart.apps['voip'].masquerade;
-                    winkstart.publish('voip.activate');    
-                }
-
-                var width = $('#myaccount_navbar').css('width');
-                $('.dropdown-menu').css('width', width);
-            });
+                    var width = $('#myaccount_navbar').css('width');
+                    $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
+                });
 
             var width = $('#myaccount_navbar').css('width');
-            $('.dropdown-menu').css('width', width);
+            $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
         },
 
         activate: function(parent) {

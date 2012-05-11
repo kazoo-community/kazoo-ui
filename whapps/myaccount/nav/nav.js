@@ -57,10 +57,6 @@ winkstart.module('myaccount', 'nav', {
                 publish: publish,
                 modifier: modifier
             });
-        },
-
-        masquerade: function(user_name, link) {
-            
         }
     }
 );
