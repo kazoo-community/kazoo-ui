@@ -42,12 +42,14 @@
 		 					<ul class="inputs-list">
 		 						<li>
 		 							<label>
-		 								{{if data.hunt}}
-		 				                    <input type="checkbox" id="hunt" name="hunt" checked="checked" rel="popover" data-content="Do you want to allow the user to dial extensions from this menu"/>
-		 				                {{else}}
-		 				                    <input type="checkbox" id="hunt" name="hunt" rel="popover" data-content="Do you want to allow the user to dial extensions from this menu"/>
-		 				                {{/if}}
-		 				                <span>Allow caller to dial extensions</span>
+		 								<span rel="popover" data-content="Do you want to allow the user to dial extensions from this menu">
+			 								{{if data.hunt}}
+			 				                    <input type="checkbox" id="hunt" name="hunt" checked="checked" />
+			 				                {{else}}
+			 				                    <input type="checkbox" id="hunt" name="hunt" />
+			 				                {{/if}}
+			 				                <span>Allow caller to dial extensions</span>
+		 				                </span>
 		 				            </label>
 		 				        </li>
 		 				    </ul>
@@ -57,19 +59,21 @@
 		 			<div class="clearfix">
 						<label for="media_greeting">Greeting Message</label>
 						<div class="input">
-							<select name="media.greeting" id="media_greeting" class="medium" rel="popover" data-content="Select the Greeting message that you want to use for this this menu. If you select - Not set -, then no media file will be played.">
-								{{each field_data.media}}
-                                    {{if data.media.greeting == id}}
-                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
-                                    {{else}}
-                                    <option id="${id}" value="${id}">${name}</option>
-                                    {{/if}}
-                            	{{/each}}
-							</select>
-							<div class="edit_create">
-								<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
-							</div>
+							<span rel="popover" data-content="Select the Greeting message that you want to use for this this menu. If you select - Not set -, then no media file will be played.">
+								<select name="media.greeting" id="media_greeting" class="medium">
+									{{each field_data.media}}
+	                                    {{if data.media.greeting == id}}
+	                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+	                                    {{else}}
+	                                    <option id="${id}" value="${id}">${name}</option>
+	                                    {{/if}}
+	                            	{{/each}}
+								</select>
+								<div class="edit_create">
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+								</div>
+							</span>
 						</div>
 					</div>
 		 		</div>
@@ -117,12 +121,14 @@
 		 					<ul class="inputs-list">
 		 						<li>
 		 							<label>
+		 								<span rel="popover" data-content="This option allows someone to dial into a menu from an outside number (i.e. their cell phone, landline, etc.) and enter the PIN for the menu to be able to re-record it.">
 		 								{{if data.allow_record_from_offnet}}
-		 				                    <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" checked="checked" rel="popover" data-content="This option allows someone to dial into a menu from an outside number (i.e. their cell phone, landline, etc.) and enter the PIN for the menu to be able to re-record it."/>
+		 				                    <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" checked="checked" />
 		 				                {{else}}
-		 				                    <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" rel="popover" data-content="This option allows someone to dial into a menu from an outside number (i.e. their cell phone, landline, etc.) and enter the PIN for the menu to be able to re-record it."/>
+		 				                    <input type="checkbox" id="allow_record_from_offnet" name="allow_record_from_offnet" />
 		 				                {{/if}}
 		 				                <span>Allow outside recording</span>
+		 				                </span>
 		 				            </label>
 		 				        </li>
 		 				    </ul>
@@ -134,12 +140,14 @@
 		 					<ul class="inputs-list">
 		 						<li>
 		 							<label>
-		 								{{if data.suppress_media}}
-		 				                    <input type="checkbox" id="suppress_media" name="suppress_media" checked="checked" rel="popover" data-content="This option, when checked, will suppress the playing of 'Invalid Entry'."/>
-		 				                {{else}}
-		 				                    <input type="checkbox" id="suppress_media" name="suppress_media" rel="popover" data-content="This option, when checked, will suppress the playing of 'Invalid Entry'."/>
-		 				                {{/if}}
-		 				                <span>Suppress playing of Invalid Entry</span>
+		 								<span rel="popover" data-content="This option, when checked, will suppress the playing of 'Invalid Entry'.">
+			 								{{if data.suppress_media}}
+			 				                    <input type="checkbox" id="suppress_media" name="suppress_media" checked="checked" />
+			 				                {{else}}
+			 				                    <input type="checkbox" id="suppress_media" name="suppress_media" />
+			 				                {{/if}}
+			 				                <span>Suppress playing of Invalid Entry</span>
+		 				                </span>
 		 				            </label>
 		 				        </li>
 		 				    </ul>

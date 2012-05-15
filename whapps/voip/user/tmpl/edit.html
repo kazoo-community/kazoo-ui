@@ -73,12 +73,14 @@
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-										{{if data.vm_to_email_enabled}}
-		                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
-		                                {{else}}
-		                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
-		                                {{/if}}
-		                                <span>Voicemail to Email</span>
+	              						<span rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters.">
+											{{if data.vm_to_email_enabled}}
+			                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" checked="checked" />
+			                                {{else}}
+			                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" />
+			                                {{/if}}
+			                                <span>Voicemail to Email</span>
+		                                </span>
                             		</label>
                                 </li>
                             </ul>
@@ -197,12 +199,15 @@
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-										{{if data.verified}}
-		                                    <input type="checkbox" id="verified" name="verified" checked="checked" rel="popover" data-content=""/>
-		                                {{else}}
-		                                    <input type="checkbox" id="verified" name="verified" rel="popover" data-content=""/>
-		                                {{/if}}
-		                                <span>User has been verified</span>
+	              						<span rel="popover" data-content="Verify User ?">
+											{{if data.verified}}
+			                                    <input type="checkbox" id="verified" name="verified" checked="checked"/>
+			                                {{else}}
+			                                    <input type="checkbox" id="verified" name="verified"
+			                                    />
+			                                {{/if}}
+			                                <span>User has been verified</span>
+		                                </span>
 	                                </label>
                                 </li>
                             </ul>
@@ -219,19 +224,21 @@
 					<div class="clearfix">
 						<label for="music_on_hold_media_id">Music on Hold</label>
 						<div class="input">
-							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
-								{{each field_data.media}}
-                                    {{if data.music_on_hold.media_id == id}}
-                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
-                                    {{else}}
-                                    <option id="${id}" value="${id}">${name}</option>
-                                    {{/if}}
-                            	{{/each}}
-							</select>
-							<div class="edit_create">
-								<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
-							</div>
+							<span rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
+									{{each field_data.media}}
+	                                    {{if data.music_on_hold.media_id == id}}
+	                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+	                                    {{else}}
+	                                    <option id="${id}" value="${id}">${name}</option>
+	                                    {{/if}}
+	                            	{{/each}}
+								</select>
+								<div class="edit_create">
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+								</div>
+							</span>
 						</div>
 					</div>
 
@@ -240,12 +247,14 @@
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-										{{if data.enable_pin === true}}
-		                                <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory)."/>
-		                                {{else}}
-		                                <input id="enable_pin" type="checkbox" name="enable_pin" rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory)." />
-		                                {{/if}}
-		                                <span>Enable Agent / PIN</span>
+	              						<span rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory).">
+											{{if data.enable_pin === true}}
+			                                <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" />
+			                                {{else}}
+			                                <input id="enable_pin" type="checkbox" name="enable_pin"/>
+			                                {{/if}}
+			                                <span>Enable Agent / PIN</span>
+		                                </span>
                             		</label>
                                 </li>
                             </ul>
@@ -291,12 +300,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.substitute}}
-						                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute" checked="checked" rel="popover" data-content="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box."/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute" rel="popover" data-content="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box."/>
-						                {{/if}}
-						                <span>Bypass user's phones</span>
+										<span rel="popover" data-content="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box.">
+											{{if data.call_forward.substitute}}
+							                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute"/>
+							                {{/if}}
+							                <span>Bypass user's phones</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -308,12 +319,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.require_keypress}}
-						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked" rel="popover" data-content="Do you want this user to press a key to answer a call that has been call-forwarded"/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" rel="popover" data-content="Do you want this user to press a key to answer a call that has been call-forwarded"/>
-						                {{/if}}
-						                <span>Require Key Press</span>
+										<span rel="popover" data-content="Do you want this user to press a key to answer a call that has been call-forwarded">
+											{{if data.call_forward.require_keypress}}
+							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked"/>
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" />
+							                {{/if}}
+							                <span>Require Key Press</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -325,12 +338,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.keep_caller_id}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded. If false it will use the caller-id of the user."/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded. If false it will use the caller-id of the user."/>
-						                {{/if}}
-						                <span>Keep Caller ID</span>
+										<span rel="popover" data-content="If set to true when call forwarding takes place it will use the caller-id of the person being forwarded. If false it will use the caller-id of the user.">
+											{{if data.call_forward.keep_caller_id}}
+							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id"/>
+							                {{/if}}
+							                <span>Keep Caller ID</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -342,12 +357,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.direct_calls_only}}
-						                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" checked="checked" rel="popover" data-content="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect)."/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" rel="popover" data-content="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect)."/>
-						                {{/if}}
-						                <span>Direct Calls Only</span>
+										<span rel="popover" data-content="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect).">
+											{{if data.call_forward.direct_calls_only}}
+							                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" />
+							                {{/if}}
+							                <span>Direct Calls Only</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -377,12 +394,14 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						{{if data.hotdesk.enable}}
-	            		                    <input type="checkbox" id="hotdesk_enable" name="hotdesk.enable" checked="checked" rel="popover" data-content="Do you want to enable Hot Desking?"/>
-	            		                {{else}}
-	            		                    <input type="checkbox" id="hotdesk_enable" name="hotdesk.enable" rel="popover" data-content="Do you want to enable Hot Desking?"/>
-	            		                {{/if}}
-	            		                <span>Enable Hot Desking</span>
+	            						<span rel="popover" data-content="Do you want to enable Hot Desking?">
+		            						{{if data.hotdesk.enable}}
+		            		                    <input type="checkbox" id="hotdesk_enable" name="hotdesk.enable" checked="checked" />
+		            		                {{else}}
+		            		                    <input type="checkbox" id="hotdesk_enable" name="hotdesk.enable"/>
+		            		                {{/if}}
+		            		                <span>Enable Hot Desking</span>
+	            		                </span>
 	            		            </label>
 	            		        </li>
 	            		    </ul>
@@ -401,12 +420,14 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						{{if data.hotdesk.require_pin}}
-	            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin" checked="checked" rel="popover" data-content="Does it require a PIN?"/>
-	            		                {{else}}
-	            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin" rel="popover" data-content="Does it require a PIN?"/>
-	            		                {{/if}}
-	            		                <span>Require PIN</span>
+	            						<span  rel="popover" data-content="Does it require a PIN?">
+		            						{{if data.hotdesk.require_pin}}
+		            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin" checked="checked"/>
+		            		                {{else}}
+		            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin"/>
+		            		                {{/if}}
+		            		                <span>Require PIN</span>
+	            		                </span>
 	            		            </label>
 	            		        </li>
 	            		    </ul>
@@ -425,12 +446,14 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						{{if data.hotdesk.keep_logged_in_elsewhere}}
-	            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" checked="checked" rel="popover" data-content="Tick if you want to stay logged in on your other devices"/>
-	            		                {{else}}
-	            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" rel="popover" data-content="Tick if you want to stay logged in on your other devices"/>
-	            		                {{/if}}
-	            		                <span>Keep logged in elsewhere</span>
+	            						<span rel="popover" data-content="Tick if you want to stay logged in on your other devices">
+		            						{{if data.hotdesk.keep_logged_in_elsewhere}}
+		            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" checked="checked" />
+		            		                {{else}}
+		            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere"/>
+		            		                {{/if}}
+		            		                <span>Keep logged in elsewhere</span>
+	            		                </span>
 	            		            </label>
 	            		        </li>
 	            		    </ul>

@@ -374,7 +374,11 @@ winkstart.module('voip', 'user', {
 
             winkstart.timezone.populate_dropdown($('#timezone', user_html), data.data.timezone);
 
-            $('*[rel=popover]', user_html).popover({
+            $('*[rel=popover]:not([type="text"])', user_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', user_html).popover({
                 trigger: 'focus'
             });
 

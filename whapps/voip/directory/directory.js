@@ -332,7 +332,11 @@ winkstart.module('voip', 'directory', {
 
             winkstart.validate.set(THIS.config.validation, directory_html);
 
-            $('*[rel=popover]', directory_html).popover({
+            $('*[rel=popover]:not([type="text"])', directory_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', directory_html).popover({
                 trigger: 'focus'
             });
 

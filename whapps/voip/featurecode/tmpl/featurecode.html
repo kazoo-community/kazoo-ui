@@ -1,55 +1,54 @@
-<div>
-    <div id="featurecode-view-wrapper">
-        <div id="featurecode-view">
-            <div>
-                <span class="featurecode_wrapper">
-                    <div class="module_title">
-                        <span class="module_title_text">Feature Codes</span>
-                    </div>
-                    <div class="content_wrapper">
-                        {{each(i, actions) categories}}
-                        <div>
-                            <div class="category_header">
-                                <div class="category_title">${i}</div>
-                                <span class="arrow icon right medium down_arrow_circle"></span>
-                            </div>
-
-                            <div class="clear"/>
-
-                            <div class="featurecode_list">
-                                <div class="action_wrapper">
-                                    <div class="action_title title">Name</div>
-                                    <div class="number_title title" tooltip="The star is mandatory for any feature code, that's why it has been added by default.">Number<span class="tooltip right help"/></div>
-                                    <div class="enabled_title title">Enabled?</div>
-                                </div>
-                                <div class="clear"/>
-                                {{each(j, action) actions}}
-                                <div class="action_wrapper" data-id=${id} data-action=${tag} data-number=${number} data-type=${number_type} data-enabled=${enabled}>
-                                    <div class="action_field">${name}</div>
-                                    <span class="number_field">
-                                            <div class="star">*</div><input type="text" class="featurecode_number" value=${number} size="2"/>
-                                        </span>
-                                    <span class="enabled_field">
-                                    {{if enabled}}
-                                        <input type="checkbox" class="featurecode_enabled" checked="CHECKED">
-                                    {{else}}
-                                        <input type="checkbox" class="featurecode_enabled">
-                                    {{/if}}
-                                    </span>
-                                </div>
-                                <div class="clear"/>
-                                {{/each}}
-                            </div>
-                        </div>
-                        {{/each}}
-                    </div>
-                </span>
-            </div>
-            <div class="featurecodes_buttons">
-                <ul class="buttons right featurecodes">
-                    <li><a class="featurecode-save save-btn fancy_button green" href="#">Save</a></li>
-                </ul>
-            </div>
+<div> 
+    <div id="featurecode-content" class="container-fluid page">
+        <div class="content">
+        	<div id="featurecode-view"  class="main_content">
+        		<div class="row">
+					<div class="whapp-header">
+						<h1>Feature Codes</h1>
+						<div class="buttons-right">
+							<button class="btn black basic toggle-all">Show All</button>
+						</div>
+					</div>
+				</div>
+				<div class="row pill-content">
+					<form>
+						{{each(i, actions) categories}}
+							<div class="row">
+								<div class="whapp-header">
+									<h3>${i}</h3>
+									<div class="buttons-right">
+										<button class="btn black basic toggle" data-toggle="${i}">Show</button>
+									</div>
+								</div>
+							</div>
+							<hr />
+							<div class="row toggled" id="${i}">
+								{{each(j, action) actions}}
+									<div class="clearfix action_wrapper" data-id=${id} data-action=${tag} data-number=${number} data-type=${number_type} data-enabled=${enabled}>
+							            <label for="${name}">${name}</label>
+							            <div class="input">
+							            	<div class="input-append">
+							            		<span class="add-on">*</span>
+							                	<input class="featurecode_number mini" id="${name}" name="${name}" size="16" type="text" value=${number} rel="popover" data-content="The star is mandatory for any feature code, that's why it has been added by default.">
+							                	<label class="add-on">
+							                		{{if enabled}}
+				                                        <input type="checkbox" class="featurecode_enabled" checked="checked">
+				                                    {{else}}
+				                                        <input type="checkbox" class="featurecode_enabled">
+				                                    {{/if}}
+							                	</label>
+							              	</div>
+							            </div>
+							        </div>
+						        {{/each}}
+							</div>
+						{{/each}}
+					</form>
+				</div>
+				<div class="buttons-right">
+		            <button class="btn success featurecode-save">Save</button>
+				</div>
+        	</div>
         </div>
     </div>
 </div>

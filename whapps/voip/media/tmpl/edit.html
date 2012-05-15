@@ -57,12 +57,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.streamable}}
-						                    <input type="checkbox" id="streamable" name="streamable" checked="checked" rel="popover" data-content="Enable streaming of media"/>
-						                {{else}}
-						                    <input type="checkbox" id="streamable" name="streamable" rel="popover" data-content="Enable streaming of media"/>
-						                {{/if}}
-						                <span>Streamable</span>
+										<span rel="popover" data-content="Enable streaming of media">
+											{{if data.streamable}}
+							                    <input type="checkbox" id="streamable" name="streamable" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="streamable" name="streamable" />
+							                {{/if}}
+							                <span>Streamable</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
