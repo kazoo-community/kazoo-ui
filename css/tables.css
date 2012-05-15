@@ -80,6 +80,16 @@
 
 .dataTables_filter input {
     float: right;
+    border: none;
+    border-radius: 0px;
+    height: auto;
+    line-height: auto;
+    padding: 0;
+    width: auto;
+}
+
+.dataTables_filter input:focus {
+    box-shadow: none;
 }
 
 .dataTables_info {
@@ -127,7 +137,7 @@
  * DataTables display
  */
 table.display {
-	margin: 0 auto;
+	margin: 0 auto 10px auto;
 	clear: both;
 	width: 100%;
 

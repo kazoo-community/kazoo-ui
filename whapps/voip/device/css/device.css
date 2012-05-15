@@ -24,10 +24,8 @@
 .media_tabs {
 	background-color: #555555;
     border: 1px solid #363636;
-	width: 888px;
 	height: 130px;
-	margin: 18px;
-	padding: 0 6px;
+	padding: 9px 0 10px 10px;
     /*text-align: center;*/
 	position:relative;
 	z-index:600;
@@ -70,21 +68,11 @@
     color: white;
 }
 
-.media_pane {
-	width:860px;
-	margin-left:18px;
-    margin-bottom: 10px;
-	padding: 20px 20px 20px 20px;
-	background-color: #555555;
-    border: 1px solid #363636;
-	position:relative;
-	top: 7px;
-    -moz-border-radius: 12px;
-    -webkit-border-radius: 12px;
-    border-radius: 12px;
-
-}
-
 #device-view .realm_label {
     line-height: 22px;
+}
+
+.media_pane {
+	margin-left: 0;
+	margin-top: 40px;
 }

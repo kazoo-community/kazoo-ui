@@ -1,16 +1,9 @@
-#resource-form .weight-wrapper {
-    display: inline-block;
-    width: 565px;
+#resource-form .priority_wrapper {
     height: 50px;
-    margin-top: 10px;
 }
 
 .main_content_resource {
     text-align: center;
-}
-
-#resource-view .main_content_resource {
-    padding-left: 150px;
 }
 
 .main_content_resource .landing_btn_wrapper {

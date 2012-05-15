@@ -1,3 +1,7 @@
+#two_columns {
+    padding-bottom: 20px;
+}
+
 #two_columns .wrapper {
     clear: left;
     width: 520px;

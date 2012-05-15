@@ -319,36 +319,11 @@ winkstart.module('voip', 'queue', {
 
             winkstart.validate.set(THIS.config.validation, queue_html);
 
-            $('*[tooltip]', queue_html).each(function() {
-                $(this).tooltip({ attach: queue_html });
+            $('*[rel=popover]', queue_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', queue_html).tabs($('.pane > div', queue_html));
-            $('ul.settings2', queue_html).tabs($('.advanced_pane > div', queue_html));
-
-            $('#name', queue_html).focus();
-
-            $('.advanced_pane', queue_html).hide();
-            $('.advanced_tabs_wrapper', queue_html).hide();
-
-            $('#advanced_settings_link', queue_html).click(function() {
-                if($(this).attr('enabled')=='true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', queue_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', queue_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', queue_html).animate({
-                        width: 'toggle'
-                    }, function() {
-                        $('.advanced_pane', queue_html).slideToggle();
-                    });
-                }
-            });
+            winkstart.tabs($('.view-buttons', queue_html), $('.tabs', queue_html), true);
 
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();

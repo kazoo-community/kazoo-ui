@@ -249,7 +249,7 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<a class="button-search fancy_button blue" id="searchLink" href="javascript:void(0);">Filter</a><label class="call_duration"/>');
+		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn primary button-search" id="searchLink">Filter</button><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });

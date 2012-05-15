@@ -9,15 +9,6 @@
                     <div class="content_wrapper">
                         {{each(i, actions) categories}}
                         <div>
-                            <!--<h2>${i}</h2>
-                            <div class="action_wrapper">
-                                <div class="action_name title">Name</div>
-                                <div class="action_fields">
-                                    <span class="number_field title">Number</span>
-                                    <span class="enabled_field title">Enabled?</span>
-                                </div>
-                            </div>-->
-
                             <div class="category_header">
                                 <div class="category_title">${i}</div>
                                 <span class="arrow icon right medium down_arrow_circle"></span>
@@ -30,7 +21,6 @@
                                     <div class="action_title title">Name</div>
                                     <div class="number_title title" tooltip="The star is mandatory for any feature code, that's why it has been added by default.">Number<span class="tooltip right help"/></div>
                                     <div class="enabled_title title">Enabled?</div>
-                                    <!--<span id="arrow" class="arrow active"></span>-->
                                 </div>
                                 <div class="clear"/>
                                 {{each(j, action) actions}}

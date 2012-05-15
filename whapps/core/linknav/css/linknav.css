@@ -25,3 +25,10 @@
 #ws-topbar .links > .link .category > .dropdown-menu {
     left: -160px;
 }
+
+#ws-topbar .links > .divider {
+    height: 72px;
+    width: 2px;
+    background-image: url(../img/nav_line.jpg);
+    background-repeat: repeat-y;
+}

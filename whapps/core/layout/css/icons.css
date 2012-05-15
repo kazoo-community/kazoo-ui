@@ -145,7 +145,7 @@
 }
 
 .icon.vmbox { /* 30, 5 */
-    background-position: -960px -165px;
+    background-position: -960px -160px;
 }
 
 .icon.voicemail { /* 30, 5 */
@@ -218,7 +218,7 @@
 }
 
 .icon.sip {
-    background-position: -704px -165px;
+    background-position: -705px -160px;
 }
 
 .icon.audio {
@@ -230,7 +230,7 @@
 }
 
 .icon.fax {
-    background-position: -512px -357px;
+    background-position: -512px -353px;
 }
 
 .icon.cc {

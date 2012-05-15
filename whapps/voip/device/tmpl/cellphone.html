@@ -1,129 +1,124 @@
 <div>
-    <div class="inner">
-        {{if data.id}}
-            <h1>Edit Cellphone/Landline</h1>
-        {{/if}}
-        <form id="device-form" action="" method="post" class="niceform">
-            <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
-            </ul>
-            <div class="clear"></div>
-                <div class="pane">
-                    <div id="basic_settings">
-                        <fieldset>
-                            <ul class="controls">
-                                <li>
-                                    <span class="tooltip-wrapper" tooltip="Friendly name for this device">
-                                        <span class="tooltip"/>
-                                        <label for="name">Name:</label>
-                                    </span>
-                                    <input id="name" name="name" type="text" value="${data.name}"/>
-                                </li>
-                                {{if field_data.hide_owner}}
-                                {{else}}
-                                    <li>
-                                        <span class="tooltip-wrapper" tooltip="Select the owner of this device">
-                                            <span class="tooltip"/>
-                                            <label for="owner_id">Belongs To:</label>
-                                        </span>
-                                        <select name="owner_id" id="owner_id">
-                                        {{each field_data.users}}
-                                            {{if data.owner_id == id}}
-                                                <option id="${id}" value="${id}" selected="selected">${first_name} ${last_name}</option>
-                                            {{else}}
-                                                <option id="${id}" value="${id}">${first_name} ${last_name}</option>
-                                            {{/if}}
-                                        {{/each}}
-                                        </select>
-                                        <span id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit</a>&nbsp;|</span>
-                                        <a class="inline_action" data-action="create" href="#">Create</a>
-                                    </li>
-                                {{/if}}
-                                <li>
-                                    <span class="tooltip-wrapper" tooltip="Outside number you wish to reach">
-                                        <span class="tooltip"/><label for="call_forward_number">Number:</label>
-                                    </span>
-                                    <input id="call_forward_number" name="call_forward.number" type="text" value="${data.call_forward.number}"/>
-                                </li>
-                                <li>
-                                    <span class="tooltip-wrapper" tooltip="Do you want this device enabled?">
-                                        <span class="tooltip"/>
-                                        <label for="call_forward.enabled">Enabled:</label>
-                                    </span>
-                                    {{if data.call_forward.enabled === false}}
-                                        <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox"/>
-                                    {{else}}
-                                        <input id="call_forward_enabled" name="call_forward.enabled" type="checkbox" checked="checked"/>
-                                    {{/if}}
-                                </li>
-                            </ul>
-                            <input type="hidden" value="${data.device_type}" name="device_type"/>
-                            <input type="hidden" value="false" name="media.fax.option"/>
-                            <input type="hidden" value="false" name="extra.notify_unregister"/>
-                        </fieldset>
+	<div class="row">
+		<div class="whapp-header">
+			{{if data.id}}
+                <h1>Edit Cellphone/Landline</h1>
+            {{else}}
+            	<h1>Create Cellphone/Landline</h1>
+            {{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advanced">Advanced</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		</ul>
+		<form id="device-form" action="" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this device"/>
+						</div>
+					</div>
 
-                        <div class="clear"></div>
-                    </div>
-                    </div>
+					{{if field_data.hide_owner}}
+                    {{else}}
+						<div class="clearfix">
+							<label for="owner_id">Belongs To</label>
+							<div class="input">
+								<select name="owner_id" id="owner_id" class="medium" rel="popover" data-content="Select the owner of this device">
+									{{each field_data.users}}
+	                                    {{if data.owner_id == id}}
+	                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
+	                                    {{else}}
+	                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
+	                                    {{/if}}
+	                                {{/each}}
+								</select>
+								<div class="edit_create">
+	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
+	                                <a class="inline_action" data-action="create" href="#">Create</a>
+								</div>
+							</div>
+						</div>
+					{{/if}}
 
-                    <div class="clear"></div>
+					<div class="clearfix">
+						<label for="call_forward_number">Number</label>
+						<div class="input">
+							<input class="span4" id="call_forward_number" name="call_forward.number" type="text" placeholder="Number" value="${data.call_forward.number}" rel="popover" data-content="Outside number you wish to reach"/>
+						</div>
+					</div>
 
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.call_forward.enabled === false}}
+						                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" checked="checked" rel="popover" data-content="Do you want this device enabled"/>
+						                {{else}}
+						                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" rel="popover" data-content="Do you want this device enabled"/>
+						                {{/if}}
+						                <span>Enabled</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+					<input type="hidden" value="${data.device_type}" name="device_type"/>
+	                <input type="hidden" value="false" name="media.fax.option"/>
+	                <input type="hidden" value="false" name="extra.notify_unregister"/>
+				</div>
 
-                    <span class="advanced_settings_box">
-                        <span>
-                            <h2 id="advanced_settings_link">Advanced Settings</h2>
-                        </span>
+				<div id="options">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.call_forward.require_keypress === false}}
+						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked" rel="popover" data-content="Do you want to require a key press to answer this call"/>
+						                {{else}}
+						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" rel="popover" data-content="Do you want to require a key press to answer this call"/>
+						                {{/if}}
+						                <span>Require Key Press</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-                        <span class="advanced_tabs_wrapper">
-                            <ul class="advanced_tabs settings2">
-                                <li><a href="#"><span  class="icon sip"/>Options</a></li>
-                            </ul>
-                        </span>
-
-                        <div class="clear"></div>
-                    </span>
-
-                    <div class="advanced_pane">
-                        <div id="audio_settings">
-                            <fieldset>
-                                <ul class="controls">
-                                    <li>
-                                        <span class="tooltip-wrapper" tooltip="Do you want to require a key press to answer this call">
-                                            <span class="tooltip"/><label for="require_keypress">Require Key Press?</label>
-                                        </span>
-                                        {{if data.call_forward.require_keypress === false}}
-                                            <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox"/>
-                                        {{else}}
-                                            <input id="call_forward_require_keypress" name="call_forward.require_keypress" type="checkbox" checked="checked"/>
-                                        {{/if}}
-                                    </li>
-                                    <li>
-                                        <span class="tooltip-wrapper" tooltip="If set to true it will use the caller-id of the caller">
-                                            <span class="tooltip"/><label for="call_forward_keep_caller_id">Keep Caller ID?</label>
-                                        </span>
-                                        {{if data.call_forward.keep_caller_id === false}}
-                                            <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox"/>
-                                        {{else}}
-                                            <input id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
-                                        {{/if}}
-                                    </li>
-                                </ul>
-
-                            </fieldset>
-
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-
-                <div class="buttons_wrapper">
-                    <ul class="buttons right devices">
-                        {{if data.id}}
-                            <li><a class="device-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                        {{/if}}
-                        <li><a class="device-save save-btn fancy_button green" href="#">Save</a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                </form>
-            </div>
-        </div>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.call_forward.keep_caller_id === false}}
+						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" rel="popover" data-content="If set to true it will use the caller-id of the caller"/>
+						                {{else}}
+						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" rel="popover" data-content="If set to true it will use the caller-id of the caller"/>
+						                {{/if}}
+						                <span>Keep Caller ID</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</form>
+		<div class="buttons-right">
+	        {{if data.id}}
+	            <button class="btn danger device-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success device-save">Save</button>
+		</div>
+	</div>
+</div>

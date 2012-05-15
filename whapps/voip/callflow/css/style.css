@@ -31,10 +31,6 @@
     float: right;
 }
 
-#ws_callflow .callflow .root > .content {
-    /*background-color: #424242;*/
-}
-
 #ws_callflow .callflow .root > .content .number_row {
     background-image: url(../../../core/layout/images/nav_line_horizontal.jpg);
     background-position: bottom;
@@ -94,29 +90,6 @@
     width: 163px;
 }
 
-/*
-#ws_callflow .callflow .root > .bottom_bar {
-    background-image: url(../images/black_bar.png);
-    height: 24px;
-}
-
-#ws_callflow .callflow .root > .bottom_bar > span {
-    line-height: 24px;
-}
-
-#ws_callflow .callflow .root > .bottom_bar .btn {
-    float: right;
-    margin-right: 10px;
-    font-size: 11px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#ws_callflow .callflow .root > .bottom_bar .btn:hover {
-    color: #05ADDC;
-}
-*/
-
 #ws_callflow .callflow .node {
     display: inline-block;
 }
@@ -141,12 +114,10 @@
 }
 
 #ws_callflow .toolbox {
-    /* width: 160px; */
     width: 172px;
 }
 
 #ws_callflow .tools {
-    /*background: #3D3D3D;*/
     float: left;
 }
 
@@ -182,7 +153,6 @@
 #ws_callflow .tools .tool {
     background: #777777;
     float: left;
-    /* width: 76px; */
     width: 82px;
     padding-left: 1px;
     padding-top: 1px;
@@ -210,12 +180,10 @@
     background: url(../images/blackbox.png) no-repeat;
 }
 
-/* This will blow your mind */
 #ws_callflow #ws_cf_flow .children .child:last-child:not(:first-child) {
     padding-right: 10px;
 }
 
-/* This will blow your mind AGAIN */
 #ws_callflow #ws_cf_flow .children .child:first-child:not(:last-child) {
     padding-left: 10px;
 }

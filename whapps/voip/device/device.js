@@ -402,38 +402,6 @@ winkstart.module('voip', 'device', {
 
                 winkstart.validate.set(THIS.config.validation[data.data.device_type], device_html);
 
-                $('*[tooltip]', device_html).each(function() {
-                    $(this).tooltip({ attach: device_html });
-                });
-
-                $('ul.settings1', device_html).tabs($('.pane > div', device_html));
-                $('ul.settings2', device_html).tabs($('.advanced_pane > div', device_html));
-
-                $('#name', device_html).focus();
-
-                $('.advanced_pane', device_html).hide();
-                $('.advanced_tabs_wrapper', device_html).hide();
-
-                $('#advanced_settings_link', device_html).click(function() {
-                    if($(this).attr('enabled') === 'true') {
-                        $(this).attr('enabled', 'false');
-
-                        $('.advanced_pane', device_html).slideToggle(function() {
-                            $('.advanced_tabs_wrapper', device_html).animate({ width: 'toggle' });
-                        });
-                    }
-                    else {
-                        $(this).attr('enabled', 'true');
-
-                        $('.advanced_tabs_wrapper', device_html).animate({
-                                width: 'toggle'
-                            },
-                            function() {
-                                $('.advanced_pane', device_html).slideToggle();
-                            }
-                        );
-                    }
-                });
 
                 if(!$('#owner_id', device_html).val()) {
                     $('#edit_link', device_html).hide();
@@ -533,14 +501,13 @@ winkstart.module('voip', 'device', {
                         }
                     });
                 });
-            }
-            else {
+            } else {
                 device_html = THIS.templates.general_edit.tmpl();
 
                 $('.media_pane', device_html).hide();
-
                 $('.media_tabs .buttons', device_html).click(function() {
                     $('.media_pane', device_html).show();
+
                     if(!$(this).hasClass('current')) {
                         $('.media_tabs .buttons').removeClass('current');
                         $(this).addClass('current');
@@ -554,6 +521,14 @@ winkstart.module('voip', 'device', {
                     }
                 });
             }
+
+            $('*[rel=popover]', device_html).popover({
+                trigger: 'focus'
+            });
+
+            winkstart.tabs($('.view-buttons', device_html), $('.tabs', device_html), true);
+
+            $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
 
             /* Awesome sauce for provisioning goodness */
             render = function() {
@@ -758,7 +733,7 @@ winkstart.module('voip', 'device', {
         popup_edit_device: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('device.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

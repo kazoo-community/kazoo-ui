@@ -1,21 +1,11 @@
-#timeofday-form .days {
-    margin-right: 12px;
-}
-
-#timeofday-form .time-wrapper {
-    display: inline-block;
-    width: 565px;
+#timeofday-form .time_wrapper_field {
     height: 50px;
-    margin-top: 10px;
-}
-
-#ui-datepicker-div
-{
-    z-index: 99999 !important;
+    padding: 10px 20px 0 0;
 }
 
 #timeofday-form #days_checkboxes .fake_checkbox {
     float: left;
+    color: #eeeeee;
     width: 15px;
     height: 20px;
     line-height: 20px;
@@ -25,31 +15,20 @@
     border-top: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-right: 1px solid #000000;
-    background-color: #989898; 
+    background-color: #989898;
     cursor: pointer;
 }
 
 #timeofday-form #days_checkboxes .fake_checkbox:first-child {
     border-left: 1px solid #000000;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-radius: 5px 0 0 5px;
 }
 
 #timeofday-form #days_checkboxes .fake_checkbox:last-child {
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 5px 5px 0;
 }
 
 #timeofday-form #days_checkboxes .fake_checkbox:hover {
-    /*background-color: #05ADDC;*/
     background-color: #BEBEBE;
 }
 

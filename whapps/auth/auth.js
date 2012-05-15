@@ -23,8 +23,7 @@ winkstart.module('auth', 'auth',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
-            'auth.save_registration' : 'save_registration',
-            'auth.account.loaded': 'post_account_load'
+            'auth.save_registration' : 'save_registration'
         },
 
         validation: [
@@ -87,14 +86,6 @@ winkstart.module('auth', 'auth',
         var cookie_data;
 
         winkstart.registerResources(this.__whapp, this.config.resources);
-
-        winkstart.publish('linknav.add', {
-            name: 'auth',
-            weight: 60,
-            content: 'Login',
-            publish: 'auth.activate',
-            href: (winkstart.config.nav || {}).auth || '#'
-        });
 
         if(!$.cookie('c_winkstart_auth')) {
             winkstart.publish('auth.welcome');
@@ -479,13 +470,6 @@ winkstart.module('auth', 'auth',
                 }
             });
 
-        },
-
-        post_account_load: function(user_data) {
-            winkstart.publish('linknav.edit', {
-                name: 'auth',
-                content: 'Logout'
-            });
         },
 
         shared_auth: function(args) {

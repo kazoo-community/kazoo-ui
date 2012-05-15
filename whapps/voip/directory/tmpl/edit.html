@@ -1,167 +1,138 @@
 <div>
-    <div class="inner">
-        <form id="directory-form" action="" method="post" class="niceform">
-            {{if data.id}}
+	<div class="row">
+		<div class="whapp-header">
+			{{if data.id}}
                 <h1>Edit Directory</h1>
             {{else}}
                 <h1>Create Directory</h1>
             {{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advanced">Advanced</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		</ul>
+		<form id="directory-form" action="" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this Directory"/>
+						</div>
+					</div>
 
-            <ul class="settings_tabs settings1">
-                <li><a href="javascript:void(0);">Basic Settings</a></li>
-            </ul>
+					<div class="row">
+                    	<div id="tab_users">
+	                        <div class="row title">
+	                            <div class="column first">User&nbsp;&nbsp;<span class="icon medium user"/></div>
+	                            <div class="column second">Callflow&nbsp;&nbsp;<span class="icon medium callflow"/></div>
+	                            <div class="column third">Remove</div>
+	                        </div>
+	                        <div class="rows">
+	                        </div>
+	                    </div>
 
-            <div class="clear"></div>
-
-            <div class="pane">
-                <div id="basic_settings">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Friendly name for this Directory">
-                                    <span class="tooltip"/>
-                                    <label for="name">Name:</label>
-                                </span>
-                                <input id="name" name="name" type="text" value="${data.name}" />
-                            </li>
-                            <div class="clear"/>
-                        </ul>
-                       <!-- <div class="help_box">
-                        In this section you can select which users are part of this directory.
-                        A user can be part of multiple directories.
-                    </div>-->
-                    <div id="tab_users">
-                        <div class="row title">
-                            <div class="column first">User&nbsp;&nbsp;<span class="icon medium user"/></div>
-                            <div class="column second">Callflow&nbsp;&nbsp;<span class="icon medium callflow"/></div>
-                            <div class="column third">Remove</div>
-                        </div>
-                        <div class="rows">
-                        </div>
+	                    
+	                    <div class="add_user">
+	                        <div class="add_user_title">Add User</div>
+	                        <div class="add_content_wrapper">
+	                            <div class="add_user_fields">
+	                                <ul class="controls">
+	                                    <div id="user_list_select">
+	                                        <li>
+	                                            <label>User</label>
+	                                            <select name="user_id" id="user_id">
+	                                                <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+	                                                {{each field_data.users}}
+	                                                    <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
+	                                                {{/each}}
+	                                            </select>
+	                                        </li>
+	                                        <div class="clear"/>
+	                                    </div>
+	                                    <li id="callflow_li">
+	                                        </span>
+	                                        <label>Callflow</label>
+	                                        <select name="callflow_id" id="callflow_id">
+	                                            <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
+	                                            {{each field_data.callflows}}
+	                                                <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
+	                                            {{/each}}
+	                                        </select>
+	                                    </li>
+	                                    <div class="clear"/>
+	                                </ul>
+	                            </div>
+	                            <div class="add_user_div">
+	                                <span class="add_user_icon"/>
+	                                <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add this user to the directory</a>
+	                                <div class="clear"/>
+	                            </div>
+	                        </div>
+	                    </div>
                     </div>
-                    <div class="add_user">
-                        <div class="add_user_title">Add User</div>
-                        <div class="add_content_wrapper">
-                            <div class="add_user_fields">
-                                <ul class="controls">
-                                    <div id="user_list_select">
-                                        <li>
-                                            <span class="tooltip-wrapper" tooltip="Choose a user to add to this directory">
-                                                <span class="tooltip"/>
-                                            </span>
-                                            <label>User</label>
-                                            <select name="user_id" id="user_id">
-                                                <option id="empty_option_user" value="empty_option_user">-- Select --</option>
-                                                {{each field_data.users}}
-                                                    <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
-                                                {{/each}}
-                                            </select>
-                                        </li>
-                                        <div class="clear"/>
-                                    </div>
-                                    <li id="callflow_li">
-                                        <span class="tooltip-wrapper" tooltip="Choose the callflow to use in order to reach the selected user via this directory">
-                                            <span class="tooltip"/>
-                                        </span>
-                                        <label>Callflow</label>
-                                        <select name="callflow_id" id="callflow_id">
-                                            <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
-                                            {{each field_data.callflows}}
-                                                <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
-                                            {{/each}}
-                                        </select>
-                                    </li>
-                                    <div class="clear"/>
-                                </ul>
-                            </div>
-                            <div class="add_user_div">
-                                <span class="add_user_icon"/>
-                                <a class="add_user_link" href="javascript:void(0);" data-directory_id="${data.id}">Add this user to the directory</a>
-                                <div class="clear"/>
-                            </div>
-                        </div>
-                    </div>
-                    </fieldset>
+				</div>
 
-                    <div class="clear"></div>
-                </div> <!-- end basic settings -->
-            </div>
+				<div id="options">
+					<div class="clearfix">
+						<label for="min_dtmf">Minimum number of input</label>
+						<div class="input">
+							<input class="span4" id="min_dtmf" name="min_dtmf" type="text" placeholder="Min of input" value="${data.min_dtmf}" rel="popover" data-content="Count of how many DTMFs must be collected before processing begins"/>
+						</div>
+					</div>
 
-            <div class="clear"></div>
+					<div class="clearfix">
+						<label for="max_dtmf">Max number of input</label>
+						<div class="input">
+							<input class="span4" id="max_dtmf" name="max_dtmf" type="text" placeholder="Max of input" value="${data.max_dtmf}" rel="popover" data-content="Count of the most DTMFs collected, once reached the list of matches is played. If set to 0, then there is no limit to the number of DTMFs collected."/>
+						</div>
+					</div>
 
-            <span class="advanced_settings_box">
-                <span>
-                    <h2 id="advanced_settings_link">Advanced Settings</h2>
-                </span>
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										{{if data.confirm_match == true}}
+						                    <input type="checkbox" id="confirm_match" name="confirm_match" checked="checked" rel="popover" data-content="If only one match is found, is the caller prompted to confirm the match before connecting"/>
+						                {{else}}
+						                    <input type="checkbox" id="confirm_match" name="confirm_match" rel="popover" data-content="If only one match is found, is the caller prompted to confirm the match before connecting"/>
+						                {{/if}}
+						                <span>Confirm Match</span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
 
-                <span class="advanced_tabs_wrapper">
-                    <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span class="icon wrench_screw"/>Options</a></li>
-                    </ul>
-                </span>
-
-                <div class="clear"></div>
-            </span>
-
-            <div class="advanced_pane">
-                <div id="options">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Count of how many DTMFs must be collected before processing begins.">
-                                    <span class="tooltip"/>
-                                    <label for="min_dtmf">Minimum number of input:</label>
-                                </span>
-                                <input id="min_dtmf" name="min_dtmf" type="text" value="${data.min_dtmf}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Count of the most DTMFs collected, once reached the list of matches is played. If set to 0, then there is no limit to the number of DTMFs collected.">
-                                    <span class="tooltip"/>
-                                    <label for="max_dtmf">Max number of input:</label>
-                                </span>
-                                <input id="max_dtmf" name="max_dtmf" type="text" value="${data.max_dtmf}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="If only one match is found, is the caller prompted to confirm the match before connecting">
-                                    <span class="tooltip"/>
-                                    <label for="confirm_match">Confirm Match?</label>
-                                </span>
-                                {{if data.confirm_match == true}}
-                                    <input id="confirm_match" name="confirm_match" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="confirm_match" name="confirm_match" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Select your sort method">
-                                    <span class="tooltip"/>
-                                    <label for="sort_by">Sort by:</label>
-                                </span>
-                                <select name="sort_by" id="sort_by">
-                                    {{each(key, val) field_data.sort_by}}
-                                        {{if data.sort_by == key}}
-                                            <option value="${key}" selected="selected">${val}</option>
-                                        {{else}}
-                                            <option value="${key}">${val}</option>
-                                        {{/if}}
-                                    {{/each}}
-                                </select>
-                            </li>
-                        </ul>
-                    </fieldset>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div class="buttons_wrapper">
-                <ul class="buttons right directories">
-                    {{if data.id}}
-                        <li><a class="directory-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                    {{/if}}
-                    <li><a class="directory-save save-btn fancy_button green" href="#">Save</a></li>
-                </ul>
-                <div class="clear"/>
-            </div>
-
-        </form>
-    </div>
+					<div class="clearfix">
+						<label for="sort_by">Sort by</label>
+						<div class="input">
+							<select name="sort_by" id="sort_by" class="medium" rel="popover" data-content="Select your sort method">
+								 {{each(key, val) field_data.sort_by}}
+                                    {{if data.sort_by == key}}
+                                    <option value="${key}" selected="selected">${val}</option>
+                                    {{else}}
+                                    <option value="${key}">${val}</option>
+                                    {{/if}}
+                            	{{/each}}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="buttons-right">
+	        {{if data.id}}
+	            <button class="btn danger directory-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success directory-save">Save</button>
+		</div>
+	</div>
 </div>

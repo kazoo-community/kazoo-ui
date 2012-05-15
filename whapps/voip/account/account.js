@@ -1,6 +1,5 @@
 winkstart.module('voip', 'account', {
         css: [
-            'css/account.css'
         ],
 
         templates: {
@@ -313,47 +312,22 @@ winkstart.module('voip', 'account', {
 
         render_account: function(data, target, callbacks) {
             var THIS = this,
-                account_html = THIS.templates.edit.tmpl(data);
+                account_html = THIS.templates.edit.tmpl(data),
+                deregister = $('#deregister', account_html),
+                deregister_email = $('.deregister_email', account_html);
 
             winkstart.validate.set(THIS.config.validation, account_html);
 
-            $('*[tooltip]', account_html).each(function() {
-                $(this).tooltip({ attach: account_html });
+            $('*[rel=popover]', account_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', account_html).tabs($('.pane > div', account_html));
-            $('ul.settings2', account_html).tabs($('.advanced_pane > div', account_html));
+            winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
 
-            $('#name', account_html).focus();
+            deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
 
-            $('.advanced_pane', account_html).hide();
-            $('.advanced_tabs_wrapper', account_html).hide();
-
-            $('#advanced_settings_link', account_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', account_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', account_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', account_html).animate({
-                            width: 'toggle'
-                        },
-                        function() {
-                            $('.advanced_pane', account_html).slideToggle();
-                        }
-                    );
-                }
-            });
-
-            $('#deregister', account_html).is(':checked') ? $('.deregister_email', account_html).show() : $('.deregister_email', account_html).hide();
-
-            $('#deregister', account_html).change(function() {
-                $(this).is(':checked') ? $('.deregister_email', account_html).show() : $('.deregister_email', account_html).hide();
+            deregister.change(function() {
+                $(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
             });
 
             $('.account-save', account_html).click(function(ev) {
@@ -440,6 +414,8 @@ winkstart.module('voip', 'account', {
                 });
             });
 
+            winkstart.link_form(account_html);
+
             (target)
                 .empty()
                 .append(account_html);
@@ -492,36 +468,37 @@ winkstart.module('voip', 'account', {
         masquerade_account: function(account_name) {
             var THIS = this;
 
-            $('.universal_nav .my_account_wrapper .label .other')
-                .html('<br>as<br>' + account_name + '<br><a href="#" class="masquerade">(restore)</a>');
+            $('#myaccount_navbar .masquerade')
+                .text('as ' + account_name + ' (restore)')
+                .unbind('click')
+                .click(function() {
+                    var id = winkstart.apps['voip'].masquerade.pop();
 
-            $('.universal_nav .my_account_wrapper .masquerade').click(function() {
-                var id = winkstart.apps['voip'].masquerade.pop();
+                    if(winkstart.apps['voip'].masquerade.length) {
+                        winkstart.getJSON('account.get', {
+                                api_url: winkstart.apps['voip'].api_url,
+                                account_id: id
+                            },
+                            function(data, status) {
+                                winkstart.apps['voip'].account_id = data.data.id;
+                                THIS.masquerade_account(data.data.name);
+                                winkstart.publish('voip.activate');
+                            }
+                        );
+                    }
+                    else {
+                        winkstart.apps['voip'].account_id = id;
+                        $('#myaccount_navbar .masquerade').text(winkstart.config.company_name);
+                        delete winkstart.apps['voip'].masquerade;
+                        winkstart.publish('voip.activate');    
+                    }
 
-                if(winkstart.apps['voip'].masquerade.length) {
-                    winkstart.getJSON('account.get', {
-                            api_url: winkstart.apps['voip'].api_url,
-                            account_id: id
-                        },
-                        function(data, status) {
-                            winkstart.apps['voip'].account_id = data.data.id;
+                    var width = $('#myaccount_navbar').css('width');
+                    $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
+                });
 
-                            THIS.masquerade_account(data.data.name);
-
-                            winkstart.publish('voip.activate');
-                        }
-                    );
-                }
-                else {
-                    winkstart.apps['voip'].account_id = id;
-
-                    $('.universal_nav .my_account_wrapper .label .other').empty();
-
-                    delete winkstart.apps['voip'].masquerade;
-
-                    winkstart.publish('voip.activate');
-                }
-            });
+            var width = $('#myaccount_navbar').css('width');
+            $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
         },
 
         activate: function(parent) {

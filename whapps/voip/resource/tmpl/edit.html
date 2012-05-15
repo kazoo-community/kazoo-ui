@@ -1,243 +1,218 @@
 <div>
-    <div class="inner">
-        <form id="resource-form" action="" method="post" class="niceform">
+    <div class="row">
+        <div class="whapp-header">
             {{if data.id}}
                 <h1>Edit ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Carrier</h1>
             {{else}}
                 <h1>Add Carrier</h1>
             {{/if}}
 
-            <ul class="settings_tabs settings1">
-                <li><a href="#">Basic Settings</a></li>
-            </ul>
-
-            <div class="clear"></div>
-
-            {{if data.type}}
-                <input id="type" name="type" type="hidden" value="${data.type}" />
-            {{/if}}
-
-            <div class="pane">
-                <div id="basic_settings">
-                    <fieldset>
-                        <ul class="controls">
-                            {{if data.type}}{{else}}
-                                <li>
-                                    <span class="tooltip-wrapper" tooltip="Global Carriers are system-wide trunks">
-                                        <span class="tooltip"/>
-                                        <label for="type">Carrier Type:</label>
-                                    </span>
-                                    <select id="type" name="type">
-                                        <option value="local">Local</option>
-                                        <option value="global">Global</option>
-                                    </select>
-                                </li>
-                            {{/if}}
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Friendly name of this carrier">
-                                    <span class="tooltip"/>
-                                    <label for="name">Name:</label>
-                                </span>
-                                <input id="name" name="name" type="text" value="${data.name}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The destination server domain or IP">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_server">Server</label>
-                                </span>
-                                <input id="gateways_server" name="gateways[0].server" type="text" value="${data.gateways[0].server}" data-prev_value="${data.gateways[0].server}"/>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The authentication username used if challenged by the server">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_username">Username</label>
-                                </span>
-                                <input id="gateways_username" name="gateways[0].username" type="text" value="${data.gateways[0].username}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The authentication password used if challenged by the server">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_password">Password</label>
-                                </span>
-                                <input id="gateways_password" name="gateways[0].password" type="password" value="${data.gateways[0].password}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The priority determines which carrier is tried first when multiple carriers are set up for the same rule (more than 1 10-digit US carrier, etc)">
-                                    <span class="tooltip"/>
-                                    <label for="weight_cost">Priority:</label>
-                                </span>
-                                <span class="weight-wrapper">
-                                    <input id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" />
-                                </span>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="When set to false this carrier will be ignored by the call routing engine">
-                                    <span class="tooltip"/>
-                                    <label for="enabled">Enabled</label>
-                                </span>
-                                {{if data.enabled}}
-                                    <input id="enabled" name="enabled" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="enabled" name="enabled" type="checkbox"/>
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div>
+            <div class="buttons-right pasted view-buttons">
+                <button class="btn black basic activate">Basic</button>
+                <button class="btn black advanced">Advanced</button>
             </div>
-
-            <div class="clear"></div>
-
-            <span class="advanced_settings_box">
-                <span>
-                    <h2 id="advanced_settings_link">Advanced Settings</h2>
-                </span>
-
-                <span class="advanced_tabs_wrapper">
-                    <ul class="advanced_tabs settings2">
-                        <li><a href="#"><span  class="icon wrench_screw"/>Options</a></li>
-                        <li><a href="#"><span  class="icon audio"/>Gateway Codecs</a></li>
-                        <li><a href="#"><span  class="icon device"/>Caller-ID Options</a></li>
-                    </ul>
-                </span>
-
-                <div class="clear"></div>
-            </span>
-
-            <div class="advanced_pane">
-                <div id="Options">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The authentication realm used if challenged by the server">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_realm">Realm</label>
-                                </span>
-                                <input id="gateways_realm" name="gateways[0].realm" type="text" value="${data.gateways[0].realm}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm.">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_format_from_uri">Pass Realm in INVITE:</label>
-                                </span>
-                                {{if data.gateways[0].format_from_uri == true}}
-                                    <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" checked="checked"/>
-                                {{else}}
-                                    <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri"/>
-                                {{/if}}
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="A regular expression used by the routine engine to determine when to use this carrier">
-                                    <span class="tooltip"/>
-                                    <label for="rules">Rules:</label>
-                                </span>
-                                <span class="rules_span">
-                                    <select name="rules_dropdown" id="rules_dropdown">
-                                    {{each(key, val) field_data.rules}}
-                                        {{if data.rules[0] == key}}
-                                            <option id="${key}" value="${key}" selected="selected">${val}</option>
-                                        {{else}}
-                                            <option id="${key}" value="${key}">${val}</option>
-                                        {{/if}}
-                                    {{/each}}
-                                    </select>
-                                </span>
-                                <input id="rules" name="rules[0]" type="text" value="${data.rules[0]}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="The format of the request URI used in the SIP invite">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_invite_format">Invite Format</label>
-                                </span>
-                                <select name="gateways[0].invite_format" id="gateways_invite_format">
-                                    {{each(key, val) field_data.gateways.invite_formats}}
-                                        {{if data.gateways[0].invite_format == key}}
-                                            <option value="${key}" selected="selected">${val}</option>
-                                        {{else}}
-                                            <option value="${key}">${val}</option>
-                                        {{/if}}
-                                    {{/each}}
-                                </select>
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Additional characters to prepend to the front of the dialed number">
-                                    <span class="tooltip"/>
-                                    <label for="gateway_prefix">Prefix</label>
-                                </span>
-                                <input id="gateways_prefix" name="gateways[0].prefix" type="text" value="${data.gateways[0].prefix}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="Additional characters to append to the front of the dialed number">
-                                    <span class="tooltip"/>
-                                    <label for="gateway_suffix">Suffix</label>
-                                </span>
-                                <input id="gateways_suffix" name="gateways[0].suffix" type="text" value="${data.gateways[0].suffix}" />
-                            </li>
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="In secs, the maximum time to wait for media from a carrier gateway">
-                                    <span class="tooltip"/>
-                                    <label for="gateways_progress_timeout">Progress Timeout</label>
-                                </span>
-                                <input id="gateways_progress_timeout" name="gateways[0].progress_timeout" type="text" value="${data.gateways[0].progress_timeout}" />
-                            </li>
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div>
-                <div id="audio_settings">
-                    <fieldset>
-                        <legend>Audio Codecs</legend>
-                        <ul class="controls">
-                            {{each(key, val) field_data.gateways.codecs}}
-                            <li>
-                                {{if functions.inArray(key, data.gateways[0].codecs)}}
-                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}" checked="checked"/>${val}
-                                {{else}}
-                                    <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}"/>${val}
-                                {{/if}}
-                            </li>
-                            {{/each}}
-                        </ul>
-                    </fieldset>
-
-                    <div class="clear"></div>
-                </div>
-                <div id="caller_id_options">
-                    <fieldset>
-                        <ul class="controls">
-                            <li>
-                                <span class="tooltip-wrapper" tooltip="An arbitrary caller-id type to search for when this route is used">
-                                    <span class="tooltip"/>
-                                    <label for="caller_id_options_type">Type</label>
-                                </span>
-                                <select name="caller_id_options.type" id="caller_id_options_type">
-                                    {{each(key, val) field_data.caller_id_options.type}}
-                                        {{if data.caller_id_options.type == key}}
-                                            <option value="${key}" selected="selected">${val}</option>
-                                        {{else}}
-                                            <option value="${key}">${val}</option>
-                                        {{/if}}
-                                    {{/each}}
-                                </select>
-                            </li>
-                        </ul>
-                    </fieldset>
-                    <div class="clear"></div>
-                </div>
-            </div>
-        <div class="buttons_wrapper">
-            <ul class="buttons right resources">
-                {{if data.id}}
-                    <li><a class="resource-delete delete-btn fancy_button red" href="#">Delete</a></li>
-                {{/if}}
-                <li><a class="resource-save save-btn fancy_button green" href="#">Save</a></li>
-            </ul>
-            <div class="clear"/>
         </div>
+    </div>
 
+    <div class="row">
+        <ul class="tabs" data-tabs="tabs">
+            <li class="active"><a href="#basic">Basic</a></li>
+            <li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+            <li><a href="#audio_settings"><span class="icon audio"></span>Gateway Codecs</a></li>
+            <li><a href="#caller_id_options"><span class="icon device"></span>Caller-ID Options</a></li>
+        </ul>
+
+        <form id="resource-form">
+            <div class="pill-content">
+                <div class="active basic_view" id="basic">
+                    {{if data.type}}
+                        <input id="type" name="type" type="hidden" value="${data.type}" />
+                    {{/if}}
+
+                    {{if data.type}}{{else}}
+                        <div class="clearfix">
+                            <label for="type">Carrier Type:</label>
+                            <div class="input">
+                                <select name="type" id="type" class="medium" rel="popover" data-content="Global Carriers are system-wide trunks.">
+                                    <option value="local">Local</option>
+                                    <option value="global">Global</option>
+                                </select>
+                            </div>
+                        </div>
+                    {{/if}}
+
+                    <div class="clearfix">
+                        <label for="name">Name:</label>
+                        <div class="input">
+                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name of this carrier"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="gateways_server">Server:</label>
+                        <div class="input">
+                            <input class="span4" id="gateways_server" name="gateways[0].server" type="text" placeholder="Domain name or IP address" value="${data.gateways[0].server}" data-prev_value="${data.gateways[0].server}" rel="popover" data-content="The destination server domain or IP"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="gateways_username">Username:</label>
+                        <div class="input">
+                            <input class="span4" id="gateways_username" name="gateways[0].username" type="text" placeholder="Username" value="${data.gateways[0].username}" rel="popover" data-content="The authentication username used if challenged by the server"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="gateways_password">Password:</label>
+                        <div class="input">
+                            <input class="span4" id="gateways_password" name="gateways[0].password" type="password" placeholder="Password" value="${data.gateways[0].password}" rel="popover" data-content="The authentication password used if challenged by the server"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix priority_wrapper">
+                        <label for="weight_cost">Priority:</label>
+                        <div class="input">
+                            <input class="span4" id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" rel="popover" data-content="The priority determines which carrier is tried first when multiple carriers are set up for the same rule (more than 1 10-digit US carrier, etc)"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if data.enabled}}
+                                            <input id="enabled" name="enabled" type="checkbox" checked="checked" rel="popover" data-content="When set to false this carrier will be ignored by the call routing engine"/>
+                                        {{else}}
+                                            <input id="enabled" name="enabled" type="checkbox" rel="popover" data-content="When set to false this carrier will be ignored by the call routing engine"/>
+                                        {{/if}}
+                                        <span>Enabled</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options">
+                    <div class="clearfix">
+                        <label for="gateways_realm">Realm:</label>
+                        <div class="input">
+                            <input class="span4" name="gateways[0].realm" id="gateways_realm" type="text" placeholder="Realm" value="${data.gateways[0].realm}" rel="popover" data-content="The authentication realm used if challenged by the server"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if data.gateways[0].format_from_uri == true}}
+                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" checked="checked" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+                                        {{else}}
+                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+                                        {{/if}}
+                                        <span>Pass Realm in INVITE</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="rules">Rules:</label>
+                        <div class="input">
+                            <select name="rules_dropdown" id="rules_dropdown" class="medium" rel="popover" data-content="A regular expression used by the routine engine to determine when to use this carrier.">
+                            {{each(key, val) field_data.rules}}
+                                {{if data.rules[0] == key}}
+                                    <option id="${key}" value="${key}" selected="selected">${val}</option>
+                                {{else}}
+                                    <option id="${key}" value="${key}">${val}</option>
+                                {{/if}}
+                            {{/each}}
+                            </select>
+                            <input type="text" id="rules" name="rules[0]" value="${data.rules[0]}" />
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="gateways_invite_format">Invite Format</label>
+                        <div class="input">
+                            <select name="gateways[0].invite_format" id="gateways_invite_format" class="medium" rel="popover" data-content="The format of the request URI used in the SIP invite.">
+                            {{each(key, val) field_data.gateways.invite_formats}}
+                                {{if data.rules[0] == key}}
+                                    <option value="${key}" selected="selected">${val}</option>
+                                {{else}}
+                                    <option value="${key}">${val}</option>
+                                {{/if}}
+                            {{/each}}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="gateways_prefix">Prefix</label>
+                        <div class="input">
+                            <input type="text" name="gateways[0].prefix" id="gateways_prefix" value="${data.gateways[0].prefix}" rel="popover" data-content="Additional characters to prepend to the front of the dialed number"/>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="gateways_suffix">Suffix</label>
+                        <div class="input">
+                            <input type="text" name="gateways[0].suffix" id="gateways_suffix" value="${data.gateways[0].suffix}" rel="popover" data-content="Additional characters to append to the front of the dialed number"/>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="gateways_progress_timeout">Progress Timeout</label>
+                        <div class="input">
+                            <input type="text" name="gateways[0].progress_timeout" id="gateways_progress_timeout" value="${data.gateways[0].progress_timeout}" rel="popover" data-content="In secs, the maximum time to wait for media from a carrier gateway"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="audio_settings">
+                        <h3>Audio Codecs</h3>
+                        {{each(key, val) field_data.gateways.codecs}}
+                            <div class="clearfix">
+                                <ul class="inputs-list">
+                                    <li>
+                                        <label>
+                                        {{if functions.inArray(key, data.gateways[0].codecs)}}
+                                            <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}" checked="checked"/>
+                                        {{else}}
+                                            <input type="checkbox" id="gateways_codecs" name="gateways[0].codecs[]" value="${key}"/>
+                                        {{/if}}
+                                        <span>${val}</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        {{/each}}
+                </div>
+
+                <div id="caller_id_options">
+                    <div class="clearfix">
+                        <label for="caller_id_options_type">Type</label>
+                        <div class="input">
+                            <select name="caller_id_options.type" id="caller_id_options_type" class="medium" rel="popover" data-content="An arbitrary caller-id type to search for when this route is used">
+                                {{each(key, val) field_data.caller_id_options.type}}
+                                    {{if data.caller_id_options.type == key}}
+                                        <option value="${key}" selected="selected">${val}</option>
+                                    {{else}}
+                                        <option value="${key}">${val}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
+        <div class="buttons-right">
+            {{if data.id}}
+                <button class="resource-delete btn danger">Delete</button>
+            {{/if}}
+            <button class="resource-save btn success">Save</button>
+        </div>
     </div>
 </div>

@@ -221,36 +221,11 @@ winkstart.module('voip', 'menu', {
 
             winkstart.validate.set(THIS.config.validation, menu_html);
 
-            $('*[tooltip]', menu_html).each(function() {
-                $(this).tooltip({ attach: menu_html });
+            $('*[rel=popover]', menu_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', menu_html).tabs($('.pane > div', menu_html));
-            $('ul.settings2', menu_html).tabs($('.advanced_pane > div', menu_html));
-
-            $('#name', menu_html).focus();
-
-            $('.advanced_pane', menu_html).hide();
-            $('.advanced_tabs_wrapper', menu_html).hide();
-
-            $('#advanced_settings_link', menu_html).click(function() {
-                if($(this).attr('enabled')=='true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', menu_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', menu_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', menu_html).animate({
-                        width: 'toggle'
-                    }, function() {
-                        $('.advanced_pane', menu_html).slideToggle();
-                    });
-                }
-            });
+            winkstart.tabs($('.view-buttons', menu_html), $('.tabs', menu_html), true);
 
             if(!$('#media_greeting', menu_html).val()) {
                 $('#edit_link_media', menu_html).hide();
@@ -434,7 +409,7 @@ winkstart.module('voip', 'menu', {
         popup_edit_menu: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('menu.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

@@ -332,36 +332,11 @@ winkstart.module('voip', 'directory', {
 
             winkstart.validate.set(THIS.config.validation, directory_html);
 
-            $('*[tooltip]', directory_html).each(function() {
-                $(this).tooltip({ attach: directory_html });
+            $('*[rel=popover]', directory_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', directory_html).tabs($('.pane > div', directory_html));
-            $('ul.settings2', directory_html).tabs($('.advanced_pane > div', directory_html));
-
-            $('#name', directory_html).focus();
-
-            $('.advanced_pane', directory_html).hide();
-            $('.advanced_tabs_wrapper', directory_html).hide();
-
-            $('#advanced_settings_link', directory_html).click(function() {
-                if($(this).attr('enabled')=='true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', directory_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', directory_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', directory_html).animate({
-                        width: 'toggle'
-                    }, function() {
-                        $('.advanced_pane', directory_html).slideToggle();
-                    });
-                }
-            });
+            winkstart.tabs($('.view-buttons', directory_html), $('.tabs', directory_html), true);
 
             $('.directory-save', directory_html).click(function(ev) {
                 ev.preventDefault();
@@ -549,7 +524,7 @@ winkstart.module('voip', 'directory', {
         popup_edit_directory: function(data, callback, data_defaults) {
             var popup, popup_html;
 
-            popup_html = $('<div class="inline_popup"><div class="inline_content"/></div>');
+            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
             winkstart.publish('directory.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {

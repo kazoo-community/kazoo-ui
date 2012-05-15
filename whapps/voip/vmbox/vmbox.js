@@ -242,38 +242,12 @@ winkstart.module('voip', 'vmbox', {
 
             winkstart.validate.set(THIS.config.validation, vmbox_html);
 
-            $('*[tooltip]', vmbox_html).each(function() {
-                $(this).tooltip({ attach: vmbox_html });
+            $('*[rel=popover]', vmbox_html).popover({
+                trigger: 'focus'
             });
 
-            $('ul.settings1', vmbox_html).tabs($('.pane > div', vmbox_html));
-            $('ul.settings2', vmbox_html).tabs($('.advanced_pane > div', vmbox_html));
+            winkstart.tabs($('.view-buttons', vmbox_html), $('.tabs', vmbox_html), true);
 
-            $('#name', vmbox_html).focus();
-
-            $('.advanced_pane', vmbox_html).hide();
-            $('.advanced_tabs_wrapper', vmbox_html).hide();
-
-            $('#advanced_settings_link', vmbox_html).click(function() {
-                if($(this).attr('enabled') === 'true') {
-                    $(this).attr('enabled', 'false');
-
-                    $('.advanced_pane', vmbox_html).slideToggle(function() {
-                        $('.advanced_tabs_wrapper', vmbox_html).animate({ width: 'toggle' });
-                    });
-                }
-                else {
-                    $(this).attr('enabled', 'true');
-
-                    $('.advanced_tabs_wrapper', vmbox_html).animate({
-                            width: 'toggle'
-                        },
-                        function() {
-                            $('.advanced_pane', vmbox_html).slideToggle();
-                        }
-                    );
-                }
-            });
 
             $('#owner_id', vmbox_html).change(function() {
                 if($(this).val()) {

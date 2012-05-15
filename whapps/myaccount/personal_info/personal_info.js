@@ -54,6 +54,7 @@ winkstart.module('myaccount', 'personal_info', {
         },
 
         tab_click: function(args) {
+            $.error('TEST');
             var THIS = this,
                 target = args.target;
 

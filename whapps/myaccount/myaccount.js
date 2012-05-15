@@ -14,7 +14,7 @@ winkstart.module('myaccount', 'myaccount', {
             'myaccount.initialized' : 'initialized',
             'myaccount.module_activate': 'module_activate',
             'myaccount.display': 'render_myaccount',
-            'auth.account.loaded': 'post_load_account'
+            'auth.account.loaded': 'activate'
         }
     },
 
@@ -49,7 +49,8 @@ winkstart.module('myaccount', 'myaccount', {
         modules: {
             'app_store': false,
             'billing': false,
-            'personal_info': false
+            'personal_info': false,
+            'nav': false
         },
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
@@ -73,17 +74,17 @@ winkstart.module('myaccount', 'myaccount', {
             THIS.setup_page();
         },
 
-        activate: function() {
+        activate: function(user_data) {
             var THIS = this;
 
             THIS.whapp_config();
 
             THIS.whapp_auth(function() {
-                THIS.initialization_check();
+                THIS.initialization_check(user_data);
             });
         },
 
-        initialization_check: function() {
+        initialization_check: function(user_data) {
             var THIS = this;
 
             if (!THIS.is_initialized) {
@@ -96,7 +97,7 @@ winkstart.module('myaccount', 'myaccount', {
                                 winkstart.log(THIS.__module + ': Initialized ' + k);
 
                                 if(!(--THIS.uninitialized_count)) {
-                                    winkstart.publish(THIS.__module + '.initialized', {});
+                                    winkstart.publish(THIS.__module + '.initialized', user_data);
                                 }
                             });
                         });
@@ -146,7 +147,7 @@ winkstart.module('myaccount', 'myaccount', {
         setup_page: function() {
             var THIS = this;
 
-            winkstart.publish('myaccount.display');
+            //winkstart.publish('myaccount.display');
         },
 
         orig_whapp_config: $.extend(true, {}, winkstart.apps['myaccount']),
@@ -208,15 +209,6 @@ winkstart.module('myaccount', 'myaccount', {
                     $(this).css('overflow-x', 'hidden');
                     $(this).css('max-height', $(document).height()-180);
                 }
-            });
-        },
-
-        post_load_account: function(user_data) {
-            winkstart.publish('linknav.add', {
-                name: 'myaccount',
-                weight: 40,
-                content: user_data.first_name + ' ' + user_data.last_name,
-                publish: 'myaccount.activate'
             });
         }
     }
