@@ -66,11 +66,7 @@ winkstart.module('myaccount', 'myaccount', {
             var THIS = this;
 
             THIS.is_initialized = true;
-
-            winkstart.publish('myaccount.define_submodules', THIS.list_submodules);
-
             THIS.list_submodules.list.sort();
-
             THIS.setup_page();
         },
 

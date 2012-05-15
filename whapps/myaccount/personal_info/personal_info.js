@@ -8,8 +8,7 @@ winkstart.module('myaccount', 'personal_info', {
         },
 
         subscribe: {
-            'personal_info.activate': 'tab_click',
-            'myaccount.define_submodules': 'define_submodules',
+            'myaccount.nav.post_loaded': 'myaccount_loaded',
             'personal_info.popup': 'popup'
         },
 
@@ -54,19 +53,14 @@ winkstart.module('myaccount', 'personal_info', {
             );
         },
 
-        tab_click: function(args) {
-            var THIS = this,
-                target = args.target;
-
-            winkstart.request('personal_info.user_get', {
-                    account_id: winkstart.apps['myaccount'].account_id,
-                    api_url: winkstart.apps['myaccount'].api_url,
-                    user_id: winkstart.apps['myaccount'].user_id
-                },
-                function(data, status) {
-                    THIS.render_info(data, target);
-                }
-            );
+        myaccount_loaded: function(args) {
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'perso',
+                label: 'Personal Info',
+                weight: '10',
+                publish: 'personal_info.popup'
+            });
         },
 
         render_info: function(data, target) {
@@ -124,19 +118,7 @@ winkstart.module('myaccount', 'personal_info', {
                     title: 'personal Info',
                     autoOpen: true
                 });
-            }
-        );
-        },
-
-        define_submodules: function(list_submodules) {
-            var THIS = this;
-
-            $.extend(list_submodules, {
-                'personal_info': {
-                    display_name: 'Personal Info'
-                }
             });
-            list_submodules.list.push('personal_info');
         }
     }
 );

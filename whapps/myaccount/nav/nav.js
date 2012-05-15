@@ -40,38 +40,14 @@ winkstart.module('myaccount', 'nav', {
                 }
             });
 
-            winkstart.publish('nav.add_sublink', {
-                    link: 'nav',
-                    sublink: 'logout',
-                    label: 'Sign out',
-                    weight: '20',
-                    publish: 'auth.activate'
-                }
-            );
-
-            //HERE FOR NOW
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'app_store',
-                label: 'App Store',
-                weight: '10',
-                publish: 'app_store.popup'
-            });
+            winkstart.publish('myaccount.nav.post_loaded');
 
             winkstart.publish('nav.add_sublink', {
                 link: 'nav',
-                sublink: 'billing',
-                label: 'Billing',
-                weight: '10',
-                publish: 'billing.popup'
-            });
-
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'perso',
-                label: 'Personal Info',
-                weight: '10',
-                publish: 'personal_info.popup'
+                sublink: 'logout',
+                label: 'Sign out',
+                weight: '20',
+                publish: 'auth.activate'
             });
         },
 
