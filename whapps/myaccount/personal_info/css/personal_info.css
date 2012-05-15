@@ -1,0 +1,7 @@
+#personal_info .row {
+	display: block;
+}
+
+#personal_info .pill-content:last-child {
+	margin-top: 30px;
+}

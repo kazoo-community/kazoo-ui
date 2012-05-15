@@ -1,31 +1,3 @@
-#myaccount_popup #account_title {
-    margin-top: 10px;
-}
-
-#myaccount_popup #account_title .header3 {
-    font-size: 16px;
-}
-
-#myaccount_popup #accnt_free_app {
-    margin-top: 10px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background-color: #787878;
-    padding: 10px;
-    font-size: 8px;
-}
-
-#myaccount_popup #accnt_prem_app {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    margin-top: 30px;
-    background-color: #787878;
-    padding: 10px;
-    font-size: 8px;
-}
-
 #myaccount_popup .app_holder {
     float: left;
     margin: 4px;
@@ -33,6 +5,14 @@
     width: 200px;
     cursor: pointer;
     color: white;
+}
+
+#myaccount_popup .row:last-child {
+    margin-top: 30px;
+}
+
+#myaccount_popup .row:last-child .pill-content {
+    height: 225px;
 }
 
 #myaccount_popup .apps .img_app {
@@ -56,7 +36,7 @@
     display: inline-block;
     width: 120px;
     font-size: 14px;
-    margin-top: 30%;
+    margin-top: 20%;
 }
 
 #myaccount_popup .apps .app_text .app_desc {
@@ -69,26 +49,6 @@
 #myaccount_popup .apps .img_container img {
     margin-left: -10px;
     margin-right: -5px;
-}
-
-#myaccount_popup .pane .app_htitle {
-    background-image: url("../images/AppTitle_BG.png");
-    background-repeat: no-repeat;
-    width: 210px;
-    height: 26px;
-    text-align: center;
-    color: white;
-    padding-top: 5px;
-    float: right;
-}
-
-#myaccount_popup .pane .app_htitle#free_app {
-    margin-top: -16px;
-}
-
-#myaccount_popup .pane .app_htitle#premium_app {
-    margin-top: 4px;
-    color: #2CB9E1;
 }
 
 #myaccount_popup #apikey a {
@@ -110,6 +70,3 @@
     cursor: pointer;
 }
 
-#myaccount_popup .myaccount_popup .apps li{
-    margin-left: 20px;
-}

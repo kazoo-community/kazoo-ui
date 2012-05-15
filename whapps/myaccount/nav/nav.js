@@ -48,6 +48,31 @@ winkstart.module('myaccount', 'nav', {
                     publish: 'auth.activate'
                 }
             );
+
+            //HERE FOR NOW
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'app_store',
+                label: 'App Store',
+                weight: '10',
+                publish: 'app_store.popup'
+            });
+
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'billing',
+                label: 'Billing',
+                weight: '10',
+                publish: 'billing.popup'
+            });
+
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'perso',
+                label: 'Personal Info',
+                weight: '10',
+                publish: 'personal_info.popup'
+            });
         },
 
         add_sublink: function(args, callback) {

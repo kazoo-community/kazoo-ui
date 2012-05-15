@@ -9,7 +9,8 @@ winkstart.module('myaccount', 'app_store', {
 
         subscribe: {
             'app_store.activate': 'tab_click',
-            'myaccount.define_submodules': 'define_submodules'
+            'myaccount.define_submodules': 'define_submodules',
+            'app_store.popup': 'popup'
         },
 
         resources: {
@@ -71,6 +72,18 @@ winkstart.module('myaccount', 'app_store', {
             (target)
                 .empty()
                 .append(app_store_html);
+        },
+
+        popup: function(data){
+            var THIS = this,
+                app_store_html = THIS.templates.app_store.tmpl(data);
+
+            winkstart.dialog(app_store_html, {
+                height: 'auto',
+                modal: true,
+                title: 'App Store',
+                autoOpen: true
+            });
         },
 
         define_submodules: function(list_submodules) {

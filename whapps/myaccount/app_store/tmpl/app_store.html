@@ -1,39 +1,49 @@
 <div>
-    <div class="clear"/>
-    <div class="apps">
-        <div id="account_title"><span class="icon account" /><span class="header3">Get Great VoIP APPS.</span> Click to install/uninstall any app.</div>
+    <div class="inline_popup">
+    <div class="inline_content main_content" id="myaccount_popup">
 
-        <div class="clear"/>
-        <div class="app_htitle" id="free_app">Free Applications</div>
-        <div id="accnt_free_app">
-            <div class="app_holder" id="voip"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">PBX Services</span> Communication Applications</div></div>
-            <div class="app_holder" id="connect"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">Connectivity Store</span> VoIP Minutes, Trunks, DIDs</div></div>
-            <div class="app_holder" id="cluster"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool</span> Manage Servers and Infrastructure</div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Least Cost Routing</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">Conference Services</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Billing Tool</span> coming soon...</div></div>
-            <div class="clear"/>
+        <div class="row">
+            <div class="whapp-header">
+                <h1>Get Great VoIP APPS <small>Click to install/uninstall any app</small></h1>
+            </div>
         </div>
 
-        <div class="clear"/>
-        <div class="app_htitle" id="premium_app">Premium Applications</div>
-        <div id="accnt_prem_app">
-            <div class="app_holder" id="userportal"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">User Portal</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">OpenID Authentication</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool (large scale)</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Quality Monitoring</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">Phone Provisioner</span></div></div>
-            <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Call Center</span> coming soon...</div></div>
-            <div class="clear"/>
+        <div class="row">
+            <ul class="tabs" data-tabs="tabs">
+                <li class="active"><a href="#free_app">Free Applications</a></li>
+            </ul>
+
+            <div class="pill-content">
+                <div class="active basic_view apps" id="free_app">
+                    <div class="app_holder" id="voip"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">PBX Services</span> Communication Applications</div></div>
+                    <div class="app_holder" id="connect"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">Connectivity Store</span> VoIP Minutes, Trunks, DIDs</div></div>
+                    <div class="app_holder" id="cluster"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool</span> Manage Servers and Infrastructure</div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Least Cost Routing</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">Conference Services</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Billing Tool</span> coming soon...</div></div>
+                    <div class="clear"/>
+                </div>
+            </div>
+
         </div>
 
-        <!--<ul class="cpl">
 
-            <li id="connect"><a href="#"><img src="whapps/auth/myaccount/images/TrunkStore.png" alt="Connect Tool"/></a></li>
-            <li id="voip"><a href="#"><img src="whapps/auth/myaccount/images/PBXservices.png" alt="VoIP Services"/></a></li>
-            <li id="cluster"><a href="#"><img src="whapps/auth/myaccount/images/ClusterManager.png" alt="Cluster Manager"/></a></li>
-            <li id="userportal"><a href="#"><img src="whapps/auth/myaccount/images/UserPortal.png" alt="User Portal"/></a></li>
+        <div class="row">
+            <ul class="tabs" data-tabs="tabs">
+                <li class="active"><a href="#prenium_app">Prenium Applications</a></li>
+            </ul>
 
-        </ul>-->
+            <div class="pill-content">
+                <div class="active basic_view apps" id="prenium_app">
+                    <div class="app_holder" id="userportal"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">User Portal</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">OpenID Authentication</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool (large scale)</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Quality Monitoring</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">Phone Provisioner</span></div></div>
+                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Call Center</span> coming soon...</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>

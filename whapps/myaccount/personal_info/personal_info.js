@@ -1,6 +1,6 @@
 winkstart.module('myaccount', 'personal_info', {
         css: [
-            //'css/personal_info.css'
+            'css/personal_info.css'
         ],
 
         templates: {
@@ -9,7 +9,8 @@ winkstart.module('myaccount', 'personal_info', {
 
         subscribe: {
             'personal_info.activate': 'tab_click',
-            'myaccount.define_submodules': 'define_submodules'
+            'myaccount.define_submodules': 'define_submodules',
+            'personal_info.popup': 'popup'
         },
 
         resources: {
@@ -54,7 +55,6 @@ winkstart.module('myaccount', 'personal_info', {
         },
 
         tab_click: function(args) {
-            $.error('TEST');
             var THIS = this,
                 target = args.target;
 
@@ -105,6 +105,27 @@ winkstart.module('myaccount', 'personal_info', {
             (target)
                 .empty()
                 .append(info_html);
+        },
+
+        popup: function(){
+            var THIS = this,
+                popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
+
+            winkstart.request('personal_info.user_get', {
+                account_id: winkstart.apps['myaccount'].account_id,
+                api_url: winkstart.apps['myaccount'].api_url,
+                user_id: winkstart.apps['myaccount'].user_id
+            },
+            function(data, status) {
+                THIS.render_info(data, $('.inline_content', popup_html));
+
+                winkstart.dialog(popup_html, {
+                    modal: true,
+                    title: 'personal Info',
+                    autoOpen: true
+                });
+            }
+        );
         },
 
         define_submodules: function(list_submodules) {
