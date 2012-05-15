@@ -1,8 +1,6 @@
 winkstart.module('voip', 'voip', {
         css: {
-            voip: 'css/voip.css',
-            popover: 'css/popover.css',
-            whapp: 'css/whapp.css'
+            voip: 'css/voip.css'
         },
 
         templates: {

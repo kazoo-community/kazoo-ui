@@ -41,6 +41,7 @@
     width: 120px;
     margin-right: 20px;
     line-height: 30px;
+    color: #eee;
 }
 
 #content_welcome_page .right_div .row_welcome_field > input {
@@ -126,4 +127,29 @@
 
 .popup_recover_password label {
     width: 120px;
+}
+
+.popup_register {
+    padding: 10px;
+    width: 400px;
+}
+
+.popup_register form {
+    margin-bottom: 0px;
+}
+
+.popup_register ul {
+    list-style: none;
+}
+
+.popup_register ul > li {
+    margin-top: 10px;
+}
+
+.popup_register ul > li label {
+    color: #333;
+}
+
+.popup_register input {
+    margin-left: 10px;
 }
