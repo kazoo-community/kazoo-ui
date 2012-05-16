@@ -36,24 +36,36 @@
 
     winkstart.subscribe   = amplify.subscribe;
     winkstart.unsubscribe = amplify.unsubscribe;
+    
+    winkstart.templates = {};
+    winkstart.css = {};
 
     winkstart.module = amplify.module;
     amplify.module.constructor = function(args, callback) {
         var completed = 0, THIS = this;
+
         if ( this.config.templates ) {
             this.templates = {};
             $.each(this.config.templates, function(name, url) {
                 completed++;
-                // Make sure you set cache = false, or things really suck
-                $.ajax({
-                    url: 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url,
-                    cache: false,
-                    success: function(template) {
-                        completed--;
-                        THIS.templates[name] = $(template);
-                    }});
+
+                if(THIS.__module + '/' + url in (winkstart.templates[THIS.__whapp] || {})) {
+                    completed--;
+                    THIS.templates[name] = winkstart.templates[THIS.__whapp][THIS.__module + '/' + url];
+                }
+                else {
+                    // Make sure you set cache = false, or things really suck
+                    $.ajax({
+                        url: 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url,
+                        cache: false,
+                        success: function(template) {
+                            completed--;
+                            THIS.templates[name] = $(template);
+                        }});
+                }
             });
         }
+
         if ( this.config.requires ) {
             $.each(this.config.requires, function(k, module) {
                                 winkstart.log('Loading dependency ' + k + ' ' + module);
@@ -63,35 +75,22 @@
                 });
             });
         }
+
         if ( this.config.css ) {
-            $.each(this.config.css, function(k, css) {
-                if ( css === true ) {
-                    THIS.__module + '.css';
+            this.css = {};
+            $.each(this.config.css, function(name, url) {
+                if(THIS.__module + '/' + url in (winkstart.css[THIS.__whapp] || {})) {
+                    THIS.css[name] = winkstart.css[THIS.__whapp][THIS.__module + '/' + url];
+                    THIS.css[name].appendTo('head');
                 }
-                css = 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + css;
-                //completed++;
-                $('<link href="' + css + '" rel="stylesheet" type="text/css">').bind('load', function() {
-                    //completed--;
-                }).appendTo('head');
+                else {
+                    url = 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url;
+
+                    $('<link href="' + url + '" rel="stylesheet" type="text/css">').appendTo('head');
+                }
             });
         }
-        if ( this.config.less ) {
-            $.each(this.config.less, function(k, less_str) {
-                if ( less_str === true ) {
-                    THIS.__module + '.less';
-                }
-                less_str = 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + less_str;
-                //completed++;
-                less_link = '<link href="' + less_str + '" rel="stylesheet/less" type="text/css">';
 
-                $less = $(less_link);
-
-                $less.appendTo('head');
-
-                less.sheets.push($less[0]);
-            });
-            less.refresh();
-        }
         if ( this.config.subscribe ) {
             $.each(this.config.subscribe, function(k, v) {
                 winkstart.subscribe(k, function() {

@@ -437,7 +437,7 @@ amplify.module = function(whapp, module, config, construct, methods) {
         var w = whapp.toLowerCase();
 
 	// The module is being defined
-	if ( arguments.length > 1 ) {
+	if ( arguments.length > 2 ) {
             if (!modules[w]) {
                 modules[w] = {};
             }

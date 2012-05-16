@@ -6,8 +6,8 @@ winkstart.module('voip', 'voip', {
         },
 
         templates: {
-            voip: 'voip.html',
-            voip_welcome: 'voip_welcome.html'
+            voip: 'tmpl/voip.html',
+            voip_welcome: 'tmpl/voip_welcome.html'
         },
 
         subscribe: {
@@ -111,14 +111,12 @@ winkstart.module('voip', 'voip', {
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;
-                        winkstart.module.loadModule(THIS.__module, k, function() {
-                            this.init(function() {
-                                winkstart.log(THIS.__module + ': Initialized ' + k);
+                        winkstart.module(THIS.__module, k).init(function() {
+                            winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                                if(!(--THIS.uninitialized_count)) {
-                                    winkstart.publish(THIS.__module + '.initialized', {});
-                                }
-                            });
+                            if(!(--THIS.uninitialized_count)) {
+                                winkstart.publish(THIS.__module + '.initialized', {});
+                            }
                         });
                     }
                 });
