@@ -116,6 +116,7 @@ winkstart.module('myaccount', 'billing', {
                     }
                 );
             });
+            
             (target)
                 .empty()
                 .append(billing_html);
@@ -143,7 +144,8 @@ winkstart.module('myaccount', 'billing', {
                     winkstart.dialog(popup_html, {
                         modal: true,
                         title: 'Billing',
-                        autoOpen: true
+                        autoOpen: true,
+                        position: 'top'
                     });
                 }
             );
@@ -159,10 +161,7 @@ winkstart.module('myaccount', 'billing', {
                 delete form_data.credit_card.cvv;
             }
 
-            if(form_data.credit_card.billing_address.country_code_three == '') {
-                delete form_data.credit_card.billing_address.country_code_three;
-            }
-
+            form_data.credit_card.expiration_date = form_data.credit_card.expiration_date.month + '/' + form_data.credit_card.expiration_date.year;
 
             return form_data;
         }

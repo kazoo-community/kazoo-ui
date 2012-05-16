@@ -8,31 +8,44 @@
 
 		<div class="row">
 			<div class="pill-content">
+
 				<div class="clearfix">
-					<label for="firstname">First Name</label>
+					<label for="cardnbr">Card Number</label>
 					<div class="input">
-						<input class="span4" id="firstname" name="first_name" type="text" placeholder="First Name" value="${data.first_name}"/>
+						{{if data.credit_cards[0].last_four}}
+                        	<input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="Card Number" value="************${data.credit_cards[0].last_four}"/>
+                    	{{else}}
+                        	<input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="Card Number" value=""/>
+                    	{{/if}}
+                    	<span id="visa"></span>
+                    	<span id="mastercard"></span>
 					</div>
 				</div>
 
 				<div class="clearfix">
-					<label for="lastname">Last Name</label>
+					<label for="expiration_date">Expiration Date</label>
 					<div class="input">
-						<input class="span4" id="lastname" name="last_name" type="text" placeholder="Last Name" value="${data.last_name}"/>
+	                    <input class="span1" id="expiration_date" name="credit_card.expiration_date.month" type="text" placeholder="MM" value="${data.credit_cards[0].expiration_month}"/>
+	                    <input class="span1" id="expiration_date" name="credit_card.expiration_date.year" type="text" placeholder="YYYY" value="${data.credit_cards[0].expiration_year}"/>
+	                    <span> - </span>
+	                    <input class="span2" id="cvv" name="credit_card.cvv" type="text" placeholder="Secure Code" value="${data.credit_cards[0].cvv}"/>
 					</div>
 				</div>
+
+				<div class="clearfix">
+					<label for="firstname">Name On Card</label>
+					<div class="input">
+						<input class="span3" id="firstname" name="first_name" type="text" placeholder="First Name" value="${data.first_name}"/>
+						<input class="span3" id="lastname" name="last_name" type="text" placeholder="Last Name" value="${data.last_name}"/>
+					</div>
+				</div>
+
+				<hr />
 
 				<div class="clearfix">
 					<label for="company">Company</label>
 					<div class="input">
-						<input class="span4" id="company" name="company" type="text" placeholder="Company" value="${data.company}"/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="website">Website</label>
-					<div class="input">
-						<input class="span4" id="website" name="website" type="text" placeholder="Website" value="${data.website}"/>
+						<input class="span4" id="company" name="company" type="text" placeholder="Company Name" value="${data.company}"/>
 					</div>
 				</div>
 
@@ -42,137 +55,6 @@
 						<input class="span4" id="phone" name="phone" type="text" placeholder="Phone" value="${data.phone}"/>
 					</div>
 				</div>
-
-				<div class="clearfix">
-					<label for="fax">Fax</label>
-					<div class="input">
-						<input class="span4" id="fax" name="fax" type="text" placeholder="Fax" value="${data.fax}"/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="email">Email</label>
-					<div class="input">
-						<input class="span4" id="email" name="email" type="text" placeholder="Email" value="${data.email}"/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="cardgolder_name">Cardholder Name</label>
-					<div class="input">
-						<input class="span4" id="cardgolder_name" name="credit_card.cardholder_name" type="text" placeholder="Cardholder Name" value="${data.credit_cards[0].cardholder_name}"/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="cardnbr">Cardholder Number</label>
-					<div class="input">
-						{{if data.credit_cards[0].last_four}}
-                        	<input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="Cardholder Number" value="************${data.credit_cards[0].last_four}"/>
-                    	{{else}}
-                        	<input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="Cardholder Number" value=""/>
-                    	{{/if}}
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="expiration_date">Expiration Date</label>
-					<div class="input">
-						{{if data.credit_cards[0].expiration_month}}
-	                        <input class="span4" id="expiration_date" name="credit_card.expiration_date" type="text" placeholder="Expiration Date" value="${data.credit_cards[0].expiration_month}/${data.credit_cards[0].expiration_year}"/>
-	                    {{else}}
-	                        <input class="span4" id="expiration_date" name="credit_card.expiration_date" type="text" placeholder="Expiration Date" value=""/>
-	                    {{/if}}
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="cvv">CVV</label>
-					<div class="input">
-						<input class="span4" id="cvv" name="credit_card.cvv" type="text" placeholder="CVV" value="${data.credit_cards[0].cvv}"/>
-					</div>
-				</div>
-
-				{{if data.credit_cards[0].id}}
-                    <input type="hidden" id="update_existing" name="credit_card.update_existing" value="${data.credit_cards[0].id}" />
-                {{/if}}
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="whapp-header">
-				<h1>Billing Information</h1>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="pill-content">
-				<div class="clearfix">
-					<label for="first_name">First Name</label>
-					<div class="input">
-						<input class="span4" id="first_name" name="credit_card.billing_address.first_name" type="text" placeholder="First Name" value="${data.credit_cards[0].billing_address.first_name}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="last_name">Last Name</label>
-					<div class="input">
-						<input class="span4" id="last_name" name="credit_card.billing_address.last_name" type="text" placeholder="Last Name" value="${data.credit_cards[0].billing_address.last_name}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="company">Company</label>
-					<div class="input">
-						<input class="span4" id="company" name="credit_card.billing_address.company" type="text" placeholder="Company" value="${data.credit_cards[0].billing_address.company}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="street_address">Street Address</label>
-					<div class="input">
-						<input class="span4" id="street_address" name="credit_card.billing_address.street_address" type="text" placeholder="Street Address" value="${data.credit_cards[0].billing_address.street_address}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="extended_address"> </label>
-					<div class="input">
-						<input class="span4" id="extended_address" name="credit_card.billing_address.extended_address" type="text" placeholder="Extended Address" value="${data.credit_cards[0].billing_address.extended_address}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="locality">City</label>
-					<div class="input">
-						<input class="span4" id="locality" name="credit_card.billing_address.locality" type="text" placeholder="City" value="${data.credit_cards[0].billing_address.locality}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="region">State</label>
-					<div class="input">
-						<input class="span4" id="region" name="credit_card.billing_address.region" type="text" placeholder="State" value="${data.credit_cards[0].billing_address.region}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="postal_code">Postal Code</label>
-					<div class="input">
-						<input class="span4" id="postal_code" name="credit_card.billing_address.postal_code" type="text" placeholder="Postal Code" value="${data.credit_cards[0].billing_address.postal_code}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				<div class="clearfix">
-					<label for="country_code">Country Code</label>
-					<div class="input">
-						<input class="span4" id="country_code" name="credit_card.billing_address.country_code_three" type="text" placeholder="Country Code" value="${data.credit_cards[0].billing_address.country_code_three}" rel="popover" data-content=""/>
-					</div>
-				</div>
-
-				{{if data.credit_cards[0].billing_address.street_address}}
-                    <input type="hidden" name="credit_card.billing_address.update_existing" id="update_existing" value="true" />
-                {{/if}}
 			</div>
 		</div>
 	</form>
