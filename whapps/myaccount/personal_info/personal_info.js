@@ -76,7 +76,9 @@ winkstart.module('myaccount', 'personal_info', {
                 trigger: 'focus'
             });
 
-            $('#btnEmail', info_html).click(function() {
+            $('#btnEmail', info_html).click(function(ev) {
+                ev.preventDefault();
+
                 THIS.update_acct(data.data, {
                         email: $('#infos_email', info_html).val()
                     },
@@ -86,8 +88,10 @@ winkstart.module('myaccount', 'personal_info', {
                 );
             });
 
-            $('#btnPwd', info_html).click(function() {
+            $('#btnPwd', info_html).click(function(ev) {
                 var pass = $('#infos_pwd1', info_html).val();
+
+                ev.preventDefault();
 
                 if(pass == $('#infos_pwd2', info_html).val()) {
                     if(winkstart.is_password_valid(pass)) {
