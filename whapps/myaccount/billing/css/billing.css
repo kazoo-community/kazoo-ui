@@ -2,24 +2,26 @@
     display: block;
 }
 
-#billing-form #visa {
+#billing-form .card {
 	display: inline-block;
-	background-image: url('../img/visa.png');
 	background-repeat: no-repeat;
 	height: 25px;
 	width: 40px;
 	vertical-align: middle;
 	margin-bottom: 2px;
+	opacity: 0.2;
+}
+
+#billing-form #visa {
+	background-image: url('../img/visa.png');
 }
 
 #billing-form #mastercard {
-	display: inline-block;
 	background-image: url('../img/mastercard.png');
-	background-repeat: no-repeat;
-	height: 25px;
-	width: 40px;
-	vertical-align: middle;
-	margin-bottom: 2px;
+}
+
+#billing-form #amex {
+	background-image: url('../img/amex.png');
 }
 
 #billing-form hr {

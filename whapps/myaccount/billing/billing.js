@@ -116,6 +116,28 @@ winkstart.module('myaccount', 'billing', {
                     }
                 );
             });
+
+            $('#cardnbr', billing_html).change(function(){       
+                var re = new RegExp("^4"),
+                    number = $(this).val();
+
+                $('.card').css('opacity', 0.2);
+
+                if (number.match(re) != null) {
+                    $('#visa', billing_html).css('opacity', 1);
+                }
+     
+                re = new RegExp("^(34|37)");
+                if (number.match(re) != null){
+                    $('#amex', billing_html).css('opacity', 1);
+                }
+     
+                re = new RegExp("^5[1-5]");
+                if (number.match(re) != null){
+                    $('#mastercard', billing_html).css('opacity', 1);
+                }
+                
+            });
             
             (target)
                 .empty()
