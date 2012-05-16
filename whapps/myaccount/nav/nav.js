@@ -40,14 +40,15 @@ winkstart.module('myaccount', 'nav', {
                 }
             });
 
+            winkstart.publish('myaccount.nav.post_loaded');
+
             winkstart.publish('nav.add_sublink', {
-                    link: 'nav',
-                    sublink: 'logout',
-                    label: 'Sign out',
-                    weight: '20',
-                    publish: 'auth.activate'
-                }
-            );
+                link: 'nav',
+                sublink: 'logout',
+                label: 'Sign out',
+                weight: '20',
+                publish: 'auth.activate'
+            });
         },
 
         add_sublink: function(args, callback) {

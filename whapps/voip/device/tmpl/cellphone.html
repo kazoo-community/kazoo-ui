@@ -32,19 +32,21 @@
 						<div class="clearfix">
 							<label for="owner_id">Belongs To</label>
 							<div class="input">
-								<select name="owner_id" id="owner_id" class="medium" rel="popover" data-content="Select the owner of this device">
-									{{each field_data.users}}
-	                                    {{if data.owner_id == id}}
-	                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
-	                                    {{else}}
-	                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
-	                                    {{/if}}
-	                                {{/each}}
-								</select>
-								<div class="edit_create">
-	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
-	                                <a class="inline_action" data-action="create" href="#">Create</a>
-								</div>
+								<span rel="popover" data-content="Select the owner of this device">
+									<select name="owner_id" id="owner_id" class="medium">
+										{{each field_data.users}}
+		                                    {{if data.owner_id == id}}
+		                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
+		                                    {{else}}
+		                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
+		                                    {{/if}}
+		                                {{/each}}
+									</select>
+									<div class="edit_create">
+		                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
+		                                <a class="inline_action" data-action="create" href="#">Create</a>
+									</div>
+								</span>
 							</div>
 						</div>
 					{{/if}}
@@ -61,12 +63,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.enabled === false}}
-						                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" checked="checked" rel="popover" data-content="Do you want this device enabled"/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" rel="popover" data-content="Do you want this device enabled"/>
-						                {{/if}}
-						                <span>Enabled</span>
+										<span  rel="popover" data-content="Do you want this device enabled">
+											{{if data.call_forward.enabled === false}}
+							                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" checked="checked"/>
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" />
+							                {{/if}}
+							                <span>Enabled</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -83,12 +87,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.require_keypress === false}}
-						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked" rel="popover" data-content="Do you want to require a key press to answer this call"/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" rel="popover" data-content="Do you want to require a key press to answer this call"/>
-						                {{/if}}
-						                <span>Require Key Press</span>
+										<span rel="popover" data-content="Do you want to require a key press to answer this call">
+											{{if data.call_forward.require_keypress === false}}
+							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" />
+							                {{/if}}
+							                <span>Require Key Press</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -100,12 +106,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.call_forward.keep_caller_id === false}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" rel="popover" data-content="If set to true it will use the caller-id of the caller"/>
-						                {{else}}
-						                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" rel="popover" data-content="If set to true it will use the caller-id of the caller"/>
-						                {{/if}}
-						                <span>Keep Caller ID</span>
+										<span rel="popover" data-content="If set to true it will use the caller-id of the caller">
+											{{if data.call_forward.keep_caller_id === false}}
+							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked"/>
+							                {{else}}
+							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" />
+							                {{/if}}
+							                <span>Keep Caller ID</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>

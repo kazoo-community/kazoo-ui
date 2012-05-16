@@ -242,7 +242,11 @@ winkstart.module('voip', 'vmbox', {
 
             winkstart.validate.set(THIS.config.validation, vmbox_html);
 
-            $('*[rel=popover]', vmbox_html).popover({
+            $('*[rel=popover]:not([type="text"])', vmbox_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', vmbox_html).popover({
                 trigger: 'focus'
             });
 

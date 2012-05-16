@@ -8,8 +8,8 @@ winkstart.module('myaccount', 'billing', {
         },
 
         subscribe: {
-            'billing.activate': 'tab_click',
-            'myaccount.define_submodules': 'define_submodules'
+            'myaccount.nav.post_loaded': 'myaccount_loaded',
+            'billing.popup': 'popup'
         },
 
         resources: {
@@ -63,26 +63,14 @@ winkstart.module('myaccount', 'billing', {
             );
         },
 
-        tab_click: function(args) {
-            var THIS = this,
-                target = args.target;
-
-            winkstart.request('billing.get', {
-                    account_id: winkstart.apps['myaccount'].account_id,
-                    api_url: winkstart.apps['myaccount'].api_url
-                },
-                function(data, status) {
-                    var defaults = {
-                        data: {
-                            credit_cards: [{
-                                billing_address: {}
-                            }]
-                        }
-                    };
-
-                    THIS.render_billing($.extend(true, defaults, data), target);
-                }
-            );
+        myaccount_loaded: function() {
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'billing',
+                label: 'Billing',
+                weight: '10',
+                publish: 'billing.popup'
+            });
         },
 
         update_billing: function(data, new_data, success, error) {
@@ -128,10 +116,38 @@ winkstart.module('myaccount', 'billing', {
                     }
                 );
             });
-
             (target)
                 .empty()
                 .append(billing_html);
+        },
+
+        popup: function(){
+            var THIS = this,
+                popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
+
+             winkstart.request('billing.get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url
+                },
+                function(data, status) {
+                    var defaults = {
+                        data: {
+                            credit_cards: [{
+                                billing_address: {}
+                            }]
+                        }
+                    }; 
+
+                    THIS.render_billing($.extend(true, defaults, data), $('.inline_content', popup_html));
+
+                    winkstart.dialog(popup_html, {
+                        modal: true,
+                        title: 'Billing',
+                        autoOpen: true
+                    });
+                }
+            );
+            
         },
 
         clean_billing_form_data: function(form_data) {
@@ -149,17 +165,6 @@ winkstart.module('myaccount', 'billing', {
 
 
             return form_data;
-        },
-
-        define_submodules: function(list_submodules) {
-            var THIS = this;
-
-            $.extend(list_submodules, {
-                'billing': {
-                    display_name: 'Billing Account'
-                }
-            });
-            list_submodules.list.push('billing');
         }
     }
 );

@@ -4,7 +4,7 @@ winkstart.module('voip', 'featurecode', {
         ],
 
         templates: {
-            featurecode: 'tmpl/featurecode_bootstrap.html',
+            featurecode: 'tmpl/featurecode.html',
        },
 
         subscribe: {
@@ -95,7 +95,11 @@ winkstart.module('voip', 'featurecode', {
 
                     winkstart.accordion(featurecode_html);
 
-                    $('*[rel=popover]', featurecode_html).popover({
+                    $('*[rel=popover]:not([type="text"])', featurecode_html).popover({
+                        trigger: 'hover'
+                    });
+
+                    $('*[rel=popover][type="text"]', featurecode_html).popover({
                         trigger: 'focus'
                     });
 

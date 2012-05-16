@@ -255,7 +255,11 @@ winkstart.module('voip', 'conference', {
 
             winkstart.validate.set(THIS.config.validation, conference_html);
 
-            $('*[rel=popover]', conference_html).popover({
+            $('*[rel=popover]:not([type="text"])', conference_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', conference_html).popover({
                 trigger: 'focus'
             });
 

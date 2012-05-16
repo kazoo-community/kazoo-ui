@@ -221,7 +221,11 @@ winkstart.module('voip', 'menu', {
 
             winkstart.validate.set(THIS.config.validation, menu_html);
 
-            $('*[rel=popover]', menu_html).popover({
+            $('*[rel=popover]:not([type="text"])', menu_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', menu_html).popover({
                 trigger: 'focus'
             });
 

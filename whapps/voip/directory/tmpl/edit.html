@@ -99,12 +99,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.confirm_match == true}}
-						                    <input type="checkbox" id="confirm_match" name="confirm_match" checked="checked" rel="popover" data-content="If only one match is found, is the caller prompted to confirm the match before connecting"/>
-						                {{else}}
-						                    <input type="checkbox" id="confirm_match" name="confirm_match" rel="popover" data-content="If only one match is found, is the caller prompted to confirm the match before connecting"/>
-						                {{/if}}
-						                <span>Confirm Match</span>
+										<span rel="popover" data-content="If only one match is found, is the caller prompted to confirm the match before connecting">
+											{{if data.confirm_match == true}}
+							                    <input type="checkbox" id="confirm_match" name="confirm_match" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="confirm_match" name="confirm_match" />
+							                {{/if}}
+							                <span>Confirm Match</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>

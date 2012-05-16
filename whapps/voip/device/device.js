@@ -522,7 +522,11 @@ winkstart.module('voip', 'device', {
                 });
             }
 
-            $('*[rel=popover]', device_html).popover({
+            $('*[rel=popover]:not([type="text"])', device_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', device_html).popover({
                 trigger: 'focus'
             });
 

@@ -36,19 +36,21 @@
 						<div class="clearfix">
 							<label for="owner_id">Assign To</label>
 							<div class="input">
-								<select name="owner_id" id="owner_id" class="medium" rel="popover" data-content="Select the owner of this device">
-									{{each field_data.users}}
-	                                    {{if data.owner_id == id}}
-	                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
-	                                    {{else}}
-	                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
-	                                    {{/if}}
-	                                {{/each}}
-								</select>
-								<div class="edit_create">
-	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
-	                                <a class="inline_action" data-action="create" href="#">Create</a>
-								</div>
+								<span rel="popover" data-content="Select the owner of this device">
+									<select name="owner_id" id="owner_id" class="medium">
+										{{each field_data.users}}
+		                                    {{if data.owner_id == id}}
+		                                        <option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
+		                                    {{else}}
+		                                        <option value="${id}" id="${id}">${first_name} ${last_name}</option>
+		                                    {{/if}}
+		                                {{/each}}
+									</select>
+									<div class="edit_create">
+		                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
+		                                <a class="inline_action" data-action="create" href="#">Create</a>
+									</div>
+								</span>
 							</div>
 						</div>
 					{{/if}}
@@ -65,12 +67,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.enabled == true}}
-						                    <input type="checkbox" id="enabled" name="enabled" checked="checked" rel="popover" data-content="Do you want this device enabled"/>
-						                {{else}}
-						                    <input type="checkbox" id="enabled" name="enabled" rel="popover" data-content="Do you want this device enabled"/>
-						                {{/if}}
-						                <span>Enabled</span>
+										<span rel="popover" data-content="Do you want this device enabled">
+											{{if data.enabled == true}}
+							                    <input type="checkbox" id="enabled" name="enabled" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="enabled" name="enabled" />
+							                {{/if}}
+							                <span>Enabled</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -82,12 +86,14 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										{{if data.suppress_unregister_notifications === true}}
-						                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked" rel="popover" data-content="Do you want to notify the administrator each time this device unregisters"/>
-						                {{else}}
-						                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" rel="popover" data-content="Do you want to notify the administrator each time this device unregisters"/>
-						                {{/if}}
-						                <span>Notify when unregistered</span>
+										<span rel="popover" data-content="Do you want to notify the administrator each time this device unregisters">
+											{{if data.suppress_unregister_notifications === true}}
+							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" />
+							                {{/if}}
+							                <span>Notify when unregistered</span>
+						                </span>
 						            </label>
 						        </li>
 						    </ul>
@@ -192,19 +198,21 @@
 					<div class="clearfix">
 						<label for="music_on_hold">Music on Hold</label>
 						<div class="input">
-							<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium" rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
-								{{each field_data.music_on_hold}}
-                                    {{if data.music_on_hold.media_id == id}}
-                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
-                                    {{else}}
-                                    <option id="${id}" value="${id}">${name}</option>
-                                    {{/if}}
-                            	{{/each}}
-							</select>
-							<div class="edit_create">
-								<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
-							</div>
+							<span rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
+									{{each field_data.music_on_hold}}
+	                                    {{if data.music_on_hold.media_id == id}}
+	                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
+	                                    {{else}}
+	                                    <option id="${id}" value="${id}">${name}</option>
+	                                    {{/if}}
+	                            	{{/each}}
+								</select>
+								<div class="edit_create">
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+								</div>
+							</span>
 						</div>
 					</div>
 

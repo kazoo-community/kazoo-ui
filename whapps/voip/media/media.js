@@ -216,7 +216,11 @@ winkstart.module('voip', 'media', {
 
             winkstart.validate.set(THIS.config.validation, media_html);
 
-            $('*[rel=popover]', media_html).popover({
+            $('*[rel=popover]:not([type="text"])', media_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', media_html).popover({
                 trigger: 'focus'
             });
 
