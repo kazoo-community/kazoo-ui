@@ -9,7 +9,8 @@ winkstart.module('myaccount', 'personal_info', {
 
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
-            'personal_info.popup': 'popup'
+            'personal_info.popup': 'popup',
+            'personal_info.advanced_view': 'advanced_view'
         },
 
         resources: {
@@ -57,7 +58,7 @@ winkstart.module('myaccount', 'personal_info', {
             winkstart.publish('nav.add_sublink', {
                 link: 'nav',
                 sublink: 'perso',
-                label: 'Personal Info',
+                label: 'Account Preferences',
                 weight: '10',
                 publish: 'personal_info.popup'
             });
@@ -66,6 +67,14 @@ winkstart.module('myaccount', 'personal_info', {
         render_info: function(data, target) {
             var THIS = this,
                 info_html = THIS.templates.info.tmpl(data);
+
+            $('*[rel=popover]:not([type="text"])', info_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', info_html).popover({
+                trigger: 'focus'
+            });
 
             $('#btnEmail', info_html).click(function() {
                 THIS.update_acct(data.data, {
@@ -90,10 +99,17 @@ winkstart.module('myaccount', 'personal_info', {
                             }
                         );
                     }
-                }
-                else {
+                } else {
                     winkstart.alert('Passwords do not match, please retype the passwords.');
                 }
+            });
+
+            $('#advanced', info_html).click(function() {
+                var $this = $(this);
+
+                THIS.update_acct(data.data, {
+                    advanced: $this.is(':checked')
+                });
             });
 
             (target)
@@ -119,6 +135,21 @@ winkstart.module('myaccount', 'personal_info', {
                     autoOpen: true
                 });
             });
+        },
+
+        advanced_view: function(callback){
+             winkstart.request('personal_info.user_get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    user_id: winkstart.apps['myaccount'].user_id
+                },
+                function(data, status) {
+                    if(typeof callback == 'function') {
+                        callback(data.data.advanced);
+                    }
+                }
+            );
         }
+
     }
 );

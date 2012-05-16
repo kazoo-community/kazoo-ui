@@ -323,7 +323,7 @@ winkstart.module('voip', 'queue', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', queue_html), $('.tabs', queue_html), true);
+            winkstart.tabs($('.view-buttons', queue_html), $('.tabs', queue_html));
 
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();

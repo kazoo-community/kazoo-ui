@@ -224,7 +224,7 @@ winkstart.module('voip', 'media', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', media_html), $('.tabs', media_html), true);
+            winkstart.tabs($('.view-buttons', media_html), $('.tabs', media_html));
 
             if(data.data.id) {
                 $('#upload_div', media_html).hide();

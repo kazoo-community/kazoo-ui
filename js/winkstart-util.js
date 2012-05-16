@@ -203,7 +203,14 @@
             $('.btn', buttons_html).removeClass('activate');
             $('.advanced', buttons_html).addClass('activate');
         } else {
-            tabs_html.hide();
+            winkstart.publish('personal_info.advanced_view', function(status){
+                if(status) {
+                    $('.btn', buttons_html).removeClass('activate');
+                    $('.advanced', buttons_html).addClass('activate');
+                } else {
+                     tabs_html.hide('blind');
+                }
+            });
         }
 
         if($('li', tabs_html).length < 2){

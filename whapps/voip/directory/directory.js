@@ -340,7 +340,7 @@ winkstart.module('voip', 'directory', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', directory_html), $('.tabs', directory_html), true);
+            winkstart.tabs($('.view-buttons', directory_html), $('.tabs', directory_html));
 
             $('.directory-save', directory_html).click(function(ev) {
                 ev.preventDefault();

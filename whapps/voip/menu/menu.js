@@ -229,7 +229,7 @@ winkstart.module('voip', 'menu', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', menu_html), $('.tabs', menu_html), true);
+            winkstart.tabs($('.view-buttons', menu_html), $('.tabs', menu_html));
 
             if(!$('#media_greeting', menu_html).val()) {
                 $('#edit_link_media', menu_html).hide();

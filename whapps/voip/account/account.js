@@ -326,7 +326,7 @@ winkstart.module('voip', 'account', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
+            winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html));
 
             deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
 

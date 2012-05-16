@@ -382,7 +382,7 @@ winkstart.module('voip', 'user', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', user_html), $('.tabs', user_html), true);
+            winkstart.tabs($('.view-buttons', user_html), $('.tabs', user_html));
             winkstart.link_form(user_html);
 
             enable_pin.is(':checked') ? queue_pin.show() : queue_pin.hide();

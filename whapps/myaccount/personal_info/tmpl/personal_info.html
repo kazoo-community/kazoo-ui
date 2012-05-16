@@ -1,37 +1,69 @@
 <div>
-	<form id="personal_info">
-		<div class="pill-content">
-			<div class="row">
-				<div class="clearfix">
-					<label for="infos_email">Change your email</label>
-					<div class="input">
-						<input class="span4" id="infos_email" name="infos_email" type="text" placeholder="Email" value="${data.email}" rel="popover" data-content=""/>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#email">Email</a></li>
+		 	<li><a href="#pass">Password</a></li>
+		 	<li><a href="#view">Views</a></li>
+		</ul>
+		<form id="personal_info">
+			<div class="pill-content">
+				<div class="active" id="email">
+					<div class="clearfix">
+						<label for="infos_email">Change your email</label>
+						<div class="input">
+							<input class="span4" id="infos_email" name="infos_email" type="text" placeholder="Email" value="${data.email}" rel="popover" data-content=""/>
+						</div>
+					</div>
+					<div class="clearfix">
+						<div class="buttons-right">
+					        <button class="btn success" id="btnEmail">Save</button>
+						</div>
 					</div>
 				</div>
-				<div class="buttons-right">
-			        <button class="btn success" id="btnEmail">Save</button>
+
+				<div id="pass">
+					<div class="clearfix">
+						<label for="infos_pwd1">Change your password</label>
+						<div class="input">
+							<input class="span4" id="infos_pwd1" name="infos_pwd1" type="password" value="" rel="popover" data-content=""/>
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="infos_pwd2">Confirm your password</label>
+						<div class="input">
+							<input class="span4" id="infos_pwd2" name="infos_pwd2" type="password" value="" rel="popover" data-content=""/>
+						</div>
+					</div>
+					<div class="clearfix">
+						<div class="buttons-right">
+					        <button class="btn success" id="btnPwd">Save</button>
+						</div>
+					</div>
+					
+				</div>
+
+				<div id="view">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="Click if you want to see the advanced view by default.">
+											{{if data.advanced}}
+							                    <input type="checkbox" id="advanced" name="advanced" checked="checked"/>
+							                {{else}}
+							                    <input type="checkbox" id="advanced" name="advanced"/>
+							                {{/if}}
+							                <span>Advanced View</span>
+						                </span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+
 				</div>
 			</div>
-		</div>
-		
-		<div class="pill-content">
-			<div class="row">
-				<div class="clearfix">
-					<label for="infos_pwd1">Change your password</label>
-					<div class="input">
-						<input class="span4" id="infos_pwd1" name="infos_pwd1" type="password" value="" rel="popover" data-content=""/>
-					</div>
-				</div>
-				<div class="clearfix">
-					<label for="infos_pwd2">Confirm your password</label>
-					<div class="input">
-						<input class="span4" id="infos_pwd2" name="infos_pwd2" type="password" value="" rel="popover" data-content=""/>
-					</div>
-				</div>
-				<div class="buttons-right">
-			        <button class="btn success"  id="btnPwd">Save</button>
-				</div>
-			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </div>

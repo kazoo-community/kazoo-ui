@@ -263,7 +263,7 @@ winkstart.module('voip', 'conference', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', conference_html), $('.tabs', conference_html), true);
+            winkstart.tabs($('.view-buttons', conference_html), $('.tabs', conference_html));
 
             if(!$('#owner_id', conference_html).val()) {
                 $('#edit_link', conference_html).hide();

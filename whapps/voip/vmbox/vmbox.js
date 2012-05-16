@@ -250,7 +250,7 @@ winkstart.module('voip', 'vmbox', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', vmbox_html), $('.tabs', vmbox_html), true);
+            winkstart.tabs($('.view-buttons', vmbox_html), $('.tabs', vmbox_html));
 
 
             $('#owner_id', vmbox_html).change(function() {

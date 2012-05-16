@@ -530,7 +530,7 @@ winkstart.module('voip', 'device', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', device_html), $('.tabs', device_html), true);
+            winkstart.tabs($('.view-buttons', device_html), $('.tabs', device_html));
 
             $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
 

@@ -255,7 +255,7 @@ winkstart.module('voip', 'timeofday', {
                 trigger: 'focus'
             });
 
-            winkstart.tabs($('.view-buttons', timeofday_html), $('.tabs', timeofday_html), false);
+            winkstart.tabs($('.view-buttons', timeofday_html), $('.tabs', timeofday_html));
 
             $('#start_date', timeofday_html).datepicker();
 
