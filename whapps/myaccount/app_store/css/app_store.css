@@ -1,72 +1,27 @@
-#myaccount_popup .app_holder {
-    float: left;
-    margin: 4px;
-    height: 100px;
-    width: 200px;
-    cursor: pointer;
-    color: white;
+#app_store .app {
+    height: 230px;
+    overflow: auto;
 }
 
-#myaccount_popup .row:last-child {
-    margin-top: 30px;
-}
-
-#myaccount_popup .row:last-child .pill-content {
-    height: 225px;
-}
-
-#myaccount_popup .apps .img_app {
-    margin: auto;
-}
-
-#myaccount_popup .apps .app_text {
-    display: inline-block;
-    float: left;
-    width: 120px;
-}
-
-#myaccount_popup .apps .img_container {
-    float: left;
-    height: 95px;
-    width: 80px;
-    padding-top: 10%;
-}
-
-#myaccount_popup .apps .app_text .head_app_text {
-    display: inline-block;
-    width: 120px;
-    font-size: 14px;
-    margin-top: 20%;
-}
-
-#myaccount_popup .apps .app_text .app_desc {
-    display: inline-block;
-    width: 120px;
-    font-size: 14px;
-    margin-top: 30%;
-}
-
-#myaccount_popup .apps .img_container img {
-    margin-left: -10px;
-    margin-right: -5px;
-}
-
-#myaccount_popup #apikey a {
-    background-image: url(../images/regular_btn.png);
-    width: 81px;
-    height: 27px;
+#app_store .app_icon {
+    border: 1px solid #0AC9FF;
     text-align: center;
-    font-weight: bold;
-    display: block;
-    line-height: 27px;
-    color: white;
-    margin: auto;
+    border-radius: 5px;
     margin-bottom: 10px;
-    margin-top: 10px
-}
-
-#myaccount_popup #apikey a:hover {
-    color: #05AFDC;
+    box-shadow: 2px 2px 4px #363636;
+    padding: 5px;
     cursor: pointer;
+
+    background: rgb(54,54,54);
+    background: -moz-linear-gradient(top,  rgba(54,54,54,1) 0%, rgba(64,64,64,1) 20%, rgba(80,80,80,1) 40%, rgba(85,85,85,1) 50%, rgba(80,80,80,1) 60%, rgba(64,64,64,1) 80%, rgba(54,54,54,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(54,54,54,1)), color-stop(20%,rgba(64,64,64,1)), color-stop(40%,rgba(80,80,80,1)), color-stop(50%,rgba(85,85,85,1)), color-stop(60%,rgba(80,80,80,1)), color-stop(80%,rgba(64,64,64,1)), color-stop(100%,rgba(54,54,54,1)));
+    background: -webkit-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
+    background: -o-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
+    background: linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#363636', endColorstr='#363636',GradientType=0 );
 }
 
+#app_store .app_icon h3 {
+    margin: 0;
+}
