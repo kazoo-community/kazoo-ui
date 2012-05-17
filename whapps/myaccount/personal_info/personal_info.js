@@ -58,7 +58,7 @@ winkstart.module('myaccount', 'personal_info', {
             winkstart.publish('nav.add_sublink', {
                 link: 'nav',
                 sublink: 'perso',
-                label: 'Account Preferences',
+                label: 'My Account',
                 weight: '10',
                 publish: 'personal_info.popup'
             });
@@ -135,7 +135,7 @@ winkstart.module('myaccount', 'personal_info', {
 
                 winkstart.dialog(popup_html, {
                     modal: true,
-                    title: 'personal Info',
+                    title: 'My Account',
                     autoOpen: true
                 });
             });

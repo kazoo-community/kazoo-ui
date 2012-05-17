@@ -1,0 +1,7 @@
+#personal_info .clearfix {
+	display: block;
+}
+
+#personal_info hr {
+	margin-bottom: 20px;
+}
