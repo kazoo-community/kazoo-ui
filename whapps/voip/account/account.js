@@ -13,53 +13,34 @@ winkstart.module('voip', 'account', {
         },
 
         validation: [
-                { name: '#name',                         regex: /^.+$/ },
-                { name: '#realm',                        regex: /^[0-9A-Za-z\-\.\:\_]+$/ },
                 { name: '#caller_id_name_external',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_internal',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_emergency',     regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_emergency',   regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
-                { name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
-                { name: '#vm_to_email_send_from',        regex: /^.*$/ },
-                { name: '#vm_to_email_service_url',      regex: /^.*$/ },
-                { name: '#vm_to_email_service_provider', regex: /^.*$/ },
-                { name: '#vm_to_email_service_name',     regex: /^.*$/ },
-                { name: '#deregister_email',             regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
         ],
 
         resources: {
-            'account.list': {
-                url: '{api_url}/accounts/{account_id}/children',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'account.list_descendants': {
-                url: '{api_url}/accounts/{account_id}/descendants',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
             'account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
-            },
-            'account.create': {
-                url: '{api_url}/accounts/{account_id}',
-                contentType: 'application/json',
-                verb: 'PUT'
             },
             'account.update': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
-            'account.delete': {
-                url: '{api_url}/accounts/{account_id}',
+            'account.list_descendants': {
+                url: '{api_url}/accounts/{account_id}/descendants',
                 contentType: 'application/json',
-                verb: 'DELETE'
+                verb: 'GET'
+            },
+            'account.list': {
+                url: '{api_url}/accounts/{account_id}/children',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -72,7 +53,7 @@ winkstart.module('voip', 'account', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Accounts',
+            label: 'Account Details',
             icon: 'account',
             weight: '0'
         });
@@ -101,24 +82,6 @@ winkstart.module('voip', 'account', {
                     }
                 );
             }
-            else {
-                winkstart.request(true, 'account.create', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        data: normalized_data
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'create');
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'create');
-                        }
-                    }
-                );
-            }
         },
 
         edit_account: function(data, _parent, _target, _callback, data_defaults) {
@@ -128,8 +91,6 @@ winkstart.module('voip', 'account', {
                 _callbacks = _callbacks || {},
                 callbacks = {
                     save_success: _callbacks.save_success || function(_data) {
-                        THIS.render_list(parent);
-
                         THIS.edit_account({ id: _data.data.id }, parent, target, callbacks);
                     },
 
@@ -137,8 +98,6 @@ winkstart.module('voip', 'account', {
 
                     delete_success: _callbacks.delete_success || function() {
                         target.empty();
-
-                        THIS.render_list(parent);
                     },
 
                     delete_error: _callbacks.delete_error,
@@ -151,9 +110,6 @@ winkstart.module('voip', 'account', {
                             internal: {},
                             external: {},
                             emergency: {}
-                        },
-                        notifications: {
-                            voicemail_to_email: {}
                         },
                         music_on_hold: {}
                     }, data_defaults || {}),
@@ -224,14 +180,6 @@ winkstart.module('voip', 'account', {
         },
 
         migrate_data: function(data) {
-            if('vm_to_email' in data.data) {
-                data.data.notifications = data.data.notifications || {};
-                data.data.notifications.voicemail_to_email = data.data.notifications.voicemail_to_email || {};
-                data.data.notifications.voicemail_to_email.support_number = data.data.vm_to_email.support_number;
-                data.data.notifications.voicemail_to_email.support_email = data.data.vm_to_email.support_email;
-
-                delete data.data.vm_to_email;
-            }
         },
 
         format_data: function(data) {
@@ -242,13 +190,6 @@ winkstart.module('voip', 'account', {
             if(data.data.music_on_hold && 'media_id' in data.data.music_on_hold) {
                 data.data.music_on_hold.media_id = data.data.music_on_hold.media_id.split('/')[2];
             }
-
-            if(data.data.notifications && 'deregister' in data.data.notifications && data.data.notifications.deregister.send_to && data.data.notifications.deregister.send_to != '') {
-                data.field_data.deregister = true;
-            }
-            else {
-                data.field_data.deregister = false;
-            }
         },
 
         clean_form_data: function(form_data) {
@@ -258,10 +199,6 @@ winkstart.module('voip', 'account', {
 
             if(form_data.music_on_hold && form_data.music_on_hold.media_id) {
                 form_data.music_on_hold.media_id = '/' + winkstart.apps['voip'].account_id + '/' + form_data.music_on_hold.media_id;
-            }
-
-            if(form_data.extra.deregistration_notify === false) {
-                form_data.notifications.deregister.send_to = '';
             }
 
             delete form_data.extra;
@@ -286,25 +223,8 @@ winkstart.module('voip', 'account', {
                 delete data.caller_id;
             }
 
-            $.each(data.notifications.voicemail_to_email, function(key, val) {
-                if(val == '') {
-                    delete data.notifications.voicemail_to_email[key];
-                }
-            });
-
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
-            }
-
-            if($.isEmptyObject(data.vm_to_email)) {
-                delete data.vm_to_email;
-            }
-
-
-            if(data.notifications.deregister) {
-                if(data.notifications.deregister.send_to === '') {
-                    delete data.notifications.deregister.send_to;
-                }
             }
 
             return data;
@@ -312,9 +232,7 @@ winkstart.module('voip', 'account', {
 
         render_account: function(data, target, callbacks) {
             var THIS = this,
-                account_html = THIS.templates.edit.tmpl(data),
-                deregister = $('#deregister', account_html),
-                deregister_email = $('.deregister_email', account_html);
+                account_html = THIS.templates.edit.tmpl(data);
 
             winkstart.validate.set(THIS.config.validation, account_html);
 
@@ -327,12 +245,6 @@ winkstart.module('voip', 'account', {
             });
 
             winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html));
-
-            deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
-
-            deregister.change(function() {
-                $(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
-            });
 
             $('.account-save', account_html).click(function(ev) {
                 ev.preventDefault();
@@ -359,26 +271,6 @@ winkstart.module('voip', 'account', {
 
                 winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
                     THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
-                });
-            });
-
-            $('.account-switch', account_html).click(function(ev) {
-                ev.preventDefault();
-
-                winkstart.confirm('Do you really want to use ' + data.data.name + '\'s account?', function() {
-                    if(!('masquerade' in winkstart.apps['voip'])) {
-                        winkstart.apps['voip'].masquerade = [];
-                    }
-
-                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
-
-                    winkstart.apps['voip'].account_id = data.data.id;
-
-                    THIS.masquerade_account(data.data.name);
-
-                    winkstart.alert('info', 'You are now using ' + data.data.name + '\'s account');
-
-                    winkstart.publish('account.activate');
                 });
             });
 
@@ -425,86 +317,6 @@ winkstart.module('voip', 'account', {
                 .append(account_html);
         },
 
-        render_list: function(parent) {
-            var THIS = this;
-
-            winkstart.request('account.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(data, status) {
-                    var map_crossbar_data = function(data) {
-                        var new_list = [];
-
-                        if(data.length > 0) {
-                            $.each(data, function(key, val) {
-                                new_list.push({
-                                    id: val.id,
-                                    title: val.name || '(no name)'
-                                });
-                            });
-                        }
-
-                        new_list.sort(function(a, b) {
-                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-                        });
-
-                        return new_list;
-                    };
-
-                    $('#account-listpanel', parent)
-                        .empty()
-                        .listpanel({
-                            label: 'Accounts',
-                            identifier: 'account-listview',
-                            new_entity_label: 'Add Account',
-                            data: map_crossbar_data(data.data),
-                            publisher: winkstart.publish,
-                            notifyMethod: 'account.edit',
-                            notifyCreateMethod: 'account.edit',
-                            notifyParent: parent
-                        });
-
-                }
-            );
-        },
-
-        masquerade_account: function(account_name) {
-            var THIS = this;
-
-            $('#myaccount_navbar .masquerade')
-                .text('as ' + account_name + ' (restore)')
-                .unbind('click')
-                .click(function() {
-                    var id = winkstart.apps['voip'].masquerade.pop();
-
-                    if(winkstart.apps['voip'].masquerade.length) {
-                        winkstart.getJSON('account.get', {
-                                api_url: winkstart.apps['voip'].api_url,
-                                account_id: id
-                            },
-                            function(data, status) {
-                                winkstart.apps['voip'].account_id = data.data.id;
-                                THIS.masquerade_account(data.data.name);
-                                winkstart.publish('voip.activate');
-                            }
-                        );
-                    }
-                    else {
-                        winkstart.apps['voip'].account_id = id;
-                        $('#myaccount_navbar .masquerade').text(winkstart.config.company_name);
-                        delete winkstart.apps['voip'].masquerade;
-                        winkstart.publish('voip.activate');    
-                    }
-
-                    var width = $('#myaccount_navbar').css('width');
-                    $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
-                });
-
-            var width = $('#myaccount_navbar').css('width');
-            $('.dropdown-menu', '.nav.secondary-nav.links').css('width', width);
-        },
-
         activate: function(parent) {
             var THIS = this,
                 account_html = THIS.templates.account.tmpl();
@@ -513,7 +325,7 @@ winkstart.module('voip', 'account', {
                 .empty()
                 .append(account_html);
 
-            THIS.render_list(account_html);
+            THIS.edit_account({id: winkstart.apps['voip'].account_id});
         }
     }
 );

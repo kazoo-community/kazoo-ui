@@ -8,10 +8,10 @@ winkstart.module('myaccount', 'nav', {
         },
 
         subscribe: {
-            'nav.activate': 'activate',
             'nav.add_sublink': 'add_sublink',
             'myaccount.initialized': 'activate',
-            'nav.masquerade': 'masquerade'
+            'nav.masquerade': 'masquerade',
+            'nav.company_name': 'company_name'
         }
     },
 
@@ -21,15 +21,17 @@ winkstart.module('myaccount', 'nav', {
     {
         activate: function(user_data) {
             var THIS = this;
-            
+
             (user_data.first_name) ? user_name = user_data.first_name + ' ' + user_data.last_name : user_name = user_data;
 
             var container = THIS.templates.myaccount_navbar.tmpl({
                 user_name: user_name,
-                company_name: winkstart.config.company_name 
+                company_name: winkstart.config.company_name
             });
 
-            $('ul.secondary-nav').empty();
+            $('.masquerade', container).click(function() {
+                winkstart.publish('nav.company_name_click');
+            });
 
             winkstart.publish('linknav.add', {
                 name: 'nav',
@@ -46,8 +48,17 @@ winkstart.module('myaccount', 'nav', {
                 link: 'nav',
                 sublink: 'logout',
                 label: 'Sign out',
-                weight: '20',
+                weight: '25',
                 publish: 'auth.activate'
+            });
+
+            winkstart.publish('nav.add_sublink', {
+                link: 'nav',
+                sublink: 'switch_account',
+                label: 'Switch Account',
+                weight: '20',
+                publish: 'accounts_manager.switch_account'
+                //publish: 'accounts.switch_account'
             });
         },
 
@@ -68,6 +79,25 @@ winkstart.module('myaccount', 'nav', {
         update_size: function(link_html) {
             var width = $('> .dropdown-toggle', link_html).width();
             $('> .dropdown-menu', link_html).width(width);
+        },
+
+        company_name: function(callback) {
+            var THIS = this;
+
+            winkstart.publish('linknav.get', {
+                    link: 'nav'
+                },
+                function(link_html) {
+                    var name = $('#myaccount_info .masquerade', link_html).text(name);
+                    if(typeof callback === 'function') {
+                        ret = callback(name);
+
+                        if(ret != undefined) {
+                            $('#myaccount_info .masquerade', link_html).text(ret);
+                        }
+                    }
+                }
+            );
         }
-    } 
+    }
 );

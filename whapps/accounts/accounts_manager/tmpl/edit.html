@@ -1,0 +1,168 @@
+<div>
+    <div class="row">
+        <div class="whapp-header">
+            <h1>Edit Account</h1>
+            <div class="buttons-right pasted view-buttons">
+                <button class="btn black basic activate">Basic</button>
+                <button class="btn black advanced">Advanced</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="tabs" data-tabs="tabs">
+            <li class="active"><a href="#basic">Basic</a></li>
+            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
+            <li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
+            <li><a href="#options"><span class="icon sip"></span>Options</a></li>
+            <li><a href="#applications"><span class="icon sip"></span>Available Applications</a></li>
+        </ul>
+        <form action="#" id="accounts_manager-form">
+            <div class="pill-content">
+                <div class="active basic_view" id="basic">
+                    <div class="clearfix">
+                        <label for="name">Name</label>
+                        <div class="input">
+                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this account"/>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="realm">Realm</label>
+                        <div class="input">
+                            <input class="span4" id="realm" name="realm" type="text" placeholder="Realm (unique)" value="${data.realm}"
+                             rel="popover" data-content="Realm of this account" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="voicemail_to_email">
+                    <h3>Template fields</h3>
+                    <div class="clearfix">
+                        <label for="vm_to_email_support_number">Support Number</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="vm_to_email_support_email">Support Email</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="Support Email" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="Input the support email address that will be inserted in the voicemail-to-email template"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="vm_to_email_send_from">Send From</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <h3>Template fields for sub-accounts</h3>
+                    <div class="clearfix">
+                        <label for="vm_to_email_service_url">Service URL</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="Input the Service URL"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="vm_to_email_service_name">Service Name</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="Input the service name"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="vm_to_email_service_provider">Service Provider</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="Input the service provider"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="monitoring">
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if field_data.deregister}}
+                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters."/>
+                                        {{else}}
+                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
+                                        {{/if}}
+                                        <span>Notify on de-register</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix deregister_email">
+                        <label for="deregister_email">Email to notify</label>
+                        <div class="input">
+                            {{if field_data.deregister}}
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="Email to notify"/>
+                            {{else}}
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="Email to notify"/>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options">
+                    <div class="clearfix">
+                        <label>Billing Account</label>
+                        <div class="input">
+                            <select name="extra.billing_account">
+                                {{if field_data.billing_account === 'self'}}
+                                    <option value="parent">This Parent Account</option>
+                                    <option value="self" selected="selected">This Account itself</option>
+                                {{else}}
+                                    {{if field_data.billing_account === 'parent'}}
+                                        <option value="parent" selected="selected">This Parent Account</option>
+                                        <option value="self">This Account itself</option>
+                                    {{else}}
+                                        <option value="parent">This Parent Account</option>
+                                        <option value="self">This Account itself</option>
+                                        <option value="other" selected="selected">Other</option>
+                                    {{/if}}
+                                {{/if}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="applications">
+                    {{each(k, v) field_data.available_apps}}
+                        <div class="clearfix">
+                            <div class="input">
+                                <ul class="inputs-list">
+                                    <li>
+                                        <label>
+                                            {{if functions.inArray(k, data.apps) }}
+                                                <input type="checkbox"  name="apps[]" checked="checked" value="${k}"/>
+                                            {{else}}
+                                                <input type="checkbox" name="apps[]" value="${k}"/>
+                                            {{/if}}
+                                            <span>${v.name}</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+
+            </div>
+        </form>
+        <div class="buttons-right">
+            {{if data.id}}
+                <button class="btn primary accounts_manager-switch">Use Account</button>
+                <button class="btn danger accounts_manager-delete">Delete</button>
+            {{/if}}
+            <button class="btn success accounts_manager-save">Save</button>
+        </div>
+    </div>
+</div>

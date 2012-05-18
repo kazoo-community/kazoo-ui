@@ -60,6 +60,24 @@
         'myaccount': {}
     };
 
+    winkstart.available_apps = {
+        'voip': {
+            'name': 'VoIP Services'
+        },
+        'cluster': {
+            'name': 'Cluster Manager'
+        },
+        'connect': {
+            'name': 'Trunkstore'
+        },
+        'userportal': {
+            'name': 'User Portal'
+        },
+        'accounts': {
+            'name': 'Accounts Manager'
+        }
+    };
+
     amplify.cache = false;
 
     document.title = winkstart.config.company_name + " WinkStart";
