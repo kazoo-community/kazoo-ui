@@ -156,7 +156,10 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        available_apps: winkstart.available_apps
+                        available_apps: winkstart.available_apps,
+                        white_label: {
+                            has_logo: false
+                        }
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -296,11 +299,28 @@ winkstart.module('accounts', 'accounts_manager', {
             return data;
         },
 
+        upload_file: function(data, media_id, callback) {
+            winkstart.request('media.upload', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    media_id: media_id,
+                    data: data
+                },
+                function(_data, status) {
+                    if(typeof callback === 'function') {
+                        callback();
+                    }
+                },
+                winkstart.error_message.process_error()
+            );
+        },
+
         render_accounts_manager: function(data, target, callbacks) {
             var THIS = this,
                 account_html = THIS.templates.edit.tmpl(data),
                 deregister = $('#deregister', account_html),
-                deregister_email = $('.deregister_email', account_html);
+                deregister_email = $('.deregister_email', account_html),
+                file;
 
             winkstart.validate.set(THIS.config.validation, account_html);
 
@@ -309,6 +329,40 @@ winkstart.module('accounts', 'accounts_manager', {
             });
 
             winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
+
+            if(data.field_data.white_label.has_logo) {
+                $('#upload_div', account_html).hide();
+            }
+
+            $('#change_link', account_html).click(function(ev) {
+                ev.preventDefault();
+                $('#upload_div', account_html).show();
+                $('.player_file', account_html).hide();
+            });
+
+            $('#download_link', account_html).click(function(ev) {
+                ev.preventDefault();
+                window.location.href = winkstart.apps['accounts'].api_url + '/accounts/' +
+                                       winkstart.apps['accounts'].account_id + '/white_label/raw?' +
+                                       '/raw?auth_token=' + winkstart.apps['accounts'].auth_token;
+            });
+
+            $('#file', account_html).bind('change', function(evt){
+                var files = evt.target.files;
+
+                if(files.length > 0) {
+                    var reader = new FileReader();
+
+                    file = 'updating';
+                    reader.onloadend = function(evt) {
+                        var data = evt.target.result;
+
+                        file = data;
+                    }
+
+                    reader.readAsDataURL(files[0]);
+                }
+            });
 
             deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
 
@@ -324,13 +378,50 @@ winkstart.module('accounts', 'accounts_manager', {
 
                         THIS.clean_form_data(form_data);
 
+                        console.log(form_data);
                         if('field_data' in data) {
+                            white_label_data = form_data.white_label;
+                            white_label_data.name = 'test_white_label';
+                            white_label_data.streamable = true;
+                            white_label_data.description = 'Test White Label';
                             delete data.field_data;
                         }
 
+                        console.log(white_label_data);
+                        console.log(file);
+                        data.data.music_on_hold.media_id = data.data.music_on_hold.media_id.substr(-32);
                         data.data.apps = [];
 
-                        THIS.save_accounts_manager(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
+                        THIS.save_accounts_manager(form_data, data, function(_data, status) {
+                                var account_id = _data.data.id;
+                                winkstart.request('media.create', {
+                                        account_id: winkstart.apps['accounts'].account_id,
+                                        api_url: winkstart.apps['accounts'].api_url,
+                                        data: white_label_data
+                                    },
+                                    function(_data, status) {
+                                        if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
+                                            if(file === 'updating') {
+                                                winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                            }
+                                            else {
+                                                THIS.upload_file(file, _data.data.id, function() {
+                                                    if(typeof callbacks.save_success == 'function') {
+                                                        _data.data.id = account_id;
+                                                        callbacks.save_success(_data, status);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        else {
+                                            if(typeof callbacks.save_success == 'function') {
+                                                callbacks.save_success(_data, status);
+                                            }
+                                        }
+                                    }
+                                );
+                            },  winkstart.error_message.process_error(callbacks.save_error)
+                        );
                     },
                     function() {
                         winkstart.alert('There were errors on the form, please correct!');
