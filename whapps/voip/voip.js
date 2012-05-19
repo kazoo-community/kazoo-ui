@@ -165,8 +165,6 @@ winkstart.module('voip', 'voip', {
             winkstart.apps['voip'] = $.extend(true, {
                 is_masqueradable: true
             }, winkstart.apps['voip']);
-
-            console.log(winkstart.apps);
         },
 
         // A setup_page function is required for the copy and paste code

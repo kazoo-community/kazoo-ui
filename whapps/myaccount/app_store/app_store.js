@@ -59,7 +59,7 @@ winkstart.module('myaccount', 'app_store', {
                 link: 'nav',
                 sublink: 'app_store',
                 label: 'App Store',
-                weight: '10',
+                weight: '20',
                 publish: 'app_store.popup'
             });
         },

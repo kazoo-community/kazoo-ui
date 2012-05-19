@@ -1,5 +1,5 @@
 <div>
-    <div class="inline_popup">
+    <div class="switch_account_popup inline_popup">
         <div class="inline_content main_content">
             <form id="switch-form">
                 <div class="row">
@@ -8,23 +8,23 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="clearfix">
-                        <label for="sub_accounts">Choose a sub-account</label>
-                        <div class="input">
-                            <select id="sub_accounts">
-                                {{each accounts}}
-                                    <option value="${id}">${name}</option>
-                                {{/each}}
-                            </select>
+                    <div class="pill-content">
+                        <div class="clearfix">
+                            <label for="sub_accounts">Choose a sub-account</label>
+                            <div class="input">
+                                <select id="sub_accounts">
+                                    {{each accounts}}
+                                        <option value="${id}">${name}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="button_accounts buttons-center">
-                        <button class="btn primary masquerade">Use this account</button>
-                    </div>
-                </div>
             </form>
+            <div class="buttons-right">
+                <button class="btn primary masquerade">Use this account</button>
+            </div>
         </div>
     </div>
 </div>

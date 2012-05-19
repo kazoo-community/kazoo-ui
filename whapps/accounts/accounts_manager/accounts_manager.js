@@ -421,7 +421,7 @@ winkstart.module('accounts', 'accounts_manager', {
                 function(_data, status) {
                     if(_data.data.length > 0) {
                         switch_html = winkstart.dialog(THIS.templates.switch.tmpl({ 'accounts': _data.data }), {
-                            width: '600px'
+                            title: 'Account Masquerading'
                         });
 
                         $('.masquerade', switch_html).click(function() {
@@ -471,18 +471,31 @@ winkstart.module('accounts', 'accounts_manager', {
         update_apps: function(account_id) {
             winkstart.apps['accounts'].account_id = account_id;
 
-            $.each(winkstart.apps, function(k, v) {
-                if(k != 'accounts' && this.is_masqueradable && this.api_url === winkstart.apps['accounts'].api_url) {
-                    this.account_id = winkstart.apps['accounts'].account_id;
-                }
-            });
+            if(winkstart.apps['accounts'].masquerade) {
+                $.each(winkstart.apps, function(k, v) {
+                    if(k != 'accounts' && this.is_masqueradable && this.api_url === winkstart.apps['accounts'].api_url) {
+                        this.account_id = winkstart.apps['accounts'].account_id;
+                        winkstart.publish('whappnav.subnav.enable', k);
+                    }
+                    else if(k != 'accounts') {
+                        winkstart.publish('whappnav.subnav.disable', k);
+                    }
+                });
+            }
+            else {
+                $.each(winkstart.apps, function(k, v) {
+                    winkstart.publish('whappnav.subnav.enable', k);
+                    if(this.is_masqueradable && this.api_url === winkstart.apps['accounts'].api_url) {
+                        this.account_id = winkstart.apps['accounts'].account_id;
+                    }
+                });
+            }
         },
 
         restore_masquerading: function() {
             var THIS = this,
                 id = winkstart.apps['accounts'].masquerade.pop();
 
-            console.log('restore', winkstart.apps['accounts'].masquerade.length);
             if(winkstart.apps['accounts'].masquerade.length) {
                 winkstart.request('accounts_manager.get', {
                         api_url: winkstart.apps['accounts'].api_url,
@@ -498,10 +511,11 @@ winkstart.module('accounts', 'accounts_manager', {
                 );
             }
             else {
+                delete winkstart.apps['accounts'].masquerade;
+
                 THIS.update_apps(id);
 
                 winkstart.publish('nav.company_name', function() { return winkstart.apps['accounts'].account_name });
-                delete winkstart.apps['accounts'].masquerade;
                 winkstart.alert('info', 'Masquerading finished, you\'re now using your root account.');
 
                 winkstart.publish('accounts_manager.activate');

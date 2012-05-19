@@ -15,7 +15,9 @@ winkstart.module('core', 'whappnav', {
             'whappnav.add': 'add',
             'whappnav.subnav.add': 'sub_add',
             'whappnav.subnav.show': 'show_menu',
-            'whappnav.subnav.hide': 'hide_menu'
+            'whappnav.subnav.hide': 'hide_menu',
+            'whappnav.subnav.disable' : 'disable_whapp',
+            'whappnav.subnav.enable': 'enable_whapp'
         },
 
         targets: {
@@ -44,7 +46,9 @@ winkstart.module('core', 'whappnav', {
             $('> a', whapp_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.publish(args.name + '.activate', {});
+                if(!(whapp_html.hasClass('disabled'))) {
+                    winkstart.publish(args.name + '.activate', {});
+                }
             });
 
             (whapp_html)
@@ -53,7 +57,7 @@ winkstart.module('core', 'whappnav', {
                     interval: 40,
                     timeout: 200,
                     over: function() {
-                        if((whapp_html).dataset('dropdown')) {
+                        if((whapp_html).dataset('dropdown') && !(whapp_html.hasClass('disabled'))) {
                             (whapp_html).addClass('open');
                         }
                     },
@@ -67,6 +71,20 @@ winkstart.module('core', 'whappnav', {
             (whapp_list_html)
                 .append(whapp_html)
                 .append(whapp_divider_html);
+        },
+
+        disable_whapp: function(whapp_name) {
+            var THIS = this,
+                whapp_list_html = $(THIS.config.targets.nav_bar);
+
+            $('li[data-whapp='+whapp_name+']', whapp_list_html).addClass('disabled');
+        },
+
+        enable_whapp: function(whapp_name) {
+            var THIS = this,
+                whapp_list_html = $(THIS.config.targets.nav_bar);
+
+            $('li[data-whapp='+whapp_name+']', whapp_list_html).removeClass('disabled');
         },
 
         show_menu: function(whapp) {

@@ -56,7 +56,7 @@ winkstart.module('myaccount', 'nav', {
                 link: 'nav',
                 sublink: 'switch_account',
                 label: 'Switch Account',
-                weight: '20',
+                weight: '05',
                 publish: 'accounts_manager.switch_account'
                 //publish: 'accounts.switch_account'
             });

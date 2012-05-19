@@ -68,7 +68,6 @@
             var THIS = this;
 
             if (!THIS.is_initialized) {
-                console.log(THIS.is_initialized);
                 // Load the modules
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {

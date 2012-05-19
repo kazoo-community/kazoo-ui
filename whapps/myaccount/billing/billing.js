@@ -68,7 +68,7 @@ winkstart.module('myaccount', 'billing', {
                 link: 'nav',
                 sublink: 'billing',
                 label: 'Billing',
-                weight: '10',
+                weight: '15',
                 publish: 'billing.popup'
             });
         },
@@ -117,7 +117,7 @@ winkstart.module('myaccount', 'billing', {
                 );
             });
 
-            $('#cardnbr', billing_html).change(function(){       
+            $('#cardnbr', billing_html).change(function(){
                 var re = new RegExp("^4"),
                     number = $(this).val();
 
@@ -126,19 +126,19 @@ winkstart.module('myaccount', 'billing', {
                 if (number.match(re) != null) {
                     $('#visa', billing_html).css('opacity', 1);
                 }
-     
+
                 re = new RegExp("^(34|37)");
                 if (number.match(re) != null){
                     $('#amex', billing_html).css('opacity', 1);
                 }
-     
+
                 re = new RegExp("^5[1-5]");
                 if (number.match(re) != null){
                     $('#mastercard', billing_html).css('opacity', 1);
                 }
-                
+
             });
-            
+
             (target)
                 .empty()
                 .append(billing_html);
@@ -159,7 +159,7 @@ winkstart.module('myaccount', 'billing', {
                                 billing_address: {}
                             }]
                         }
-                    }; 
+                    };
 
                     THIS.render_billing($.extend(true, defaults, data), $('.inline_content', popup_html));
 
@@ -171,7 +171,7 @@ winkstart.module('myaccount', 'billing', {
                     });
                 }
             );
-            
+
         },
 
         clean_billing_form_data: function(form_data) {

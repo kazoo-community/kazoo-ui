@@ -1,0 +1,7 @@
+.switch_account_popup .main_content {
+    width: 450px;
+}
+
+.switch_account_popup .main_content .pill-content .clearfix {
+    display: block;
+}
