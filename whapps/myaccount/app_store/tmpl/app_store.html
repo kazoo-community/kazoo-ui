@@ -1,49 +1,14 @@
 <div>
-    <div class="inline_popup">
-    <div class="inline_content main_content" id="myaccount_popup">
-
-        <div class="row">
-            <div class="whapp-header">
-                <h1>Get Great VoIP APPS <small>Click to install/uninstall any app</small></h1>
-            </div>
-        </div>
-
-        <div class="row">
-            <ul class="tabs" data-tabs="tabs">
-                <li class="active"><a href="#free_app">Free Applications</a></li>
-            </ul>
-
-            <div class="pill-content">
-                <div class="active basic_view apps" id="free_app">
-                    <div class="app_holder" id="voip"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">PBX Services</span> Communication Applications</div></div>
-                    <div class="app_holder" id="connect"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">Connectivity Store</span> VoIP Minutes, Trunks, DIDs</div></div>
-                    <div class="app_holder" id="cluster"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool</span> Manage Servers and Infrastructure</div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Least Cost Routing</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">Conference Services</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Billing Tool</span> coming soon...</div></div>
-                    <div class="clear"/>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="row">
-            <ul class="tabs" data-tabs="tabs">
-                <li class="active"><a href="#prenium_app">Prenium Applications</a></li>
-            </ul>
-
-            <div class="pill-content">
-                <div class="active basic_view apps" id="prenium_app">
-                    <div class="app_holder" id="userportal"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/UserPortal.png" /></div><div class="app_text"><span class="head_app_text">User Portal</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/TrunkStore.png" /></div><div class="app_text"><span class="head_app_text">OpenID Authentication</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/ClusterManager.png" /></div><div class="app_text"><span class="head_app_text">Deployment Tool (large scale)</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/Monitoring.png" /></div><div class="app_text"><span class="head_app_text">Quality Monitoring</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/PBXservices.png" /></div><div class="app_text"><span class="head_app_text">Phone Provisioner</span></div></div>
-                    <div class="app_holder"><div class="img_container"><img class="img_app" src="whapps/myaccount/app_store/images/DTHbilling.png" /></div><div class="app_text"><span class="head_app_text">Call Center</span> coming soon...</div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+	<div class="row" id="app_store">
+		<div class="row app">
+			<div class="arrow"><</div>
+			{{each(i, app) available_app}}
+				<div class="span3 app_icon" data-id="${app.id}">
+					<img src="whapps/myaccount/app_store/images/${app.icon}"/>
+					<h3>${app.name}</h3>
+				</div>
+			{{/each}}
+			<div class="arrow">></div>
+		</div>
+	</div>
 </div>

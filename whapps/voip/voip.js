@@ -91,6 +91,10 @@ winkstart.module('voip', 'voip', {
             //Disabling post lazy loading behavior
             //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
+
+            if(winkstart.apps['voip'].default){
+                THIS.setup_page();
+            }
         },
 
         activate: function() {

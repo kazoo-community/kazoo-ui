@@ -64,4 +64,46 @@
 
     document.title = winkstart.config.company_name + " WinkStart";
 
+    winkstart.config.available_app = {
+                'voip': {
+                    id: 'voip',
+                    name: 'VoIP Sevices',
+                    url: '',
+                    icon: 'PBXservices.png',
+                    desc: 'Manage vmbox, callflows ...'
+                },
+
+                'cluster': {
+                    id: 'cluster',
+                    name: 'Cluster Manager',
+                    url: '',
+                    icon: 'ClusterManager.png',
+                    desc: 'Manage Servers and Infrastructure'
+                },
+                
+                'trunkstore': {
+                    id: 'trunkstore',
+                    name: 'TrunkStore',
+                    url: '',
+                    icon: 'Monitoring.png',
+                    desc: 'Some desc'
+                },
+                
+                'userportal': {
+                    id: 'userportal',
+                    name: 'Userportal',
+                    url: '',
+                    icon: 'UserPortal.png',
+                    desc: 'Some desc'
+                },
+                
+                'accounts': {
+                    id: 'accounts',
+                    name: 'Accounts',
+                    url: '',
+                    icon: 'TrunkStore.png',
+                    desc: 'Some desc'
+                }
+            };
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

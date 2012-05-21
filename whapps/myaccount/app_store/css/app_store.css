@@ -1,27 +1,44 @@
 #app_store .app {
-    height: 230px;
-    overflow: auto;
+    border: 1px solid #262626;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px 1px #363636;
+    background-color: #404040;
+    margin-bottom: 30px;
 }
 
-#app_store .app_icon {
-    border: 1px solid #0AC9FF;
+#app_store .app .arrow {
+    float: left;
+    width: 18px;
     text-align: center;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    box-shadow: 2px 2px 4px #363636;
-    padding: 5px;
-    cursor: pointer;
-
-    background: rgb(54,54,54);
-    background: -moz-linear-gradient(top,  rgba(54,54,54,1) 0%, rgba(64,64,64,1) 20%, rgba(80,80,80,1) 40%, rgba(85,85,85,1) 50%, rgba(80,80,80,1) 60%, rgba(64,64,64,1) 80%, rgba(54,54,54,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(54,54,54,1)), color-stop(20%,rgba(64,64,64,1)), color-stop(40%,rgba(80,80,80,1)), color-stop(50%,rgba(85,85,85,1)), color-stop(60%,rgba(80,80,80,1)), color-stop(80%,rgba(64,64,64,1)), color-stop(100%,rgba(54,54,54,1)));
-    background: -webkit-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
-    background: -o-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
-    background: -ms-linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
-    background: linear-gradient(top,  rgba(54,54,54,1) 0%,rgba(64,64,64,1) 20%,rgba(80,80,80,1) 40%,rgba(85,85,85,1) 50%,rgba(80,80,80,1) 60%,rgba(64,64,64,1) 80%,rgba(54,54,54,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#363636', endColorstr='#363636',GradientType=0 );
+    height: 100%;
+    color: transparent;
 }
 
-#app_store .app_icon h3 {
-    margin: 0;
+#app_store .app .arrow:first-child {
+    border-right: 1px solid #363636;
+}
+
+#app_store .app .arrow:last-child {
+    border-left: 1px solid #363636;
+}
+    
+#app_store .app_icon {
+    width: 130px;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 0;
+    padding: 30px 10px 0 10px;
+    border-left: 1px solid #363636;
+    border-right: 1px solid #363636;
+
+}
+
+#app_store .app_icon.activate {
+    background-color: #505050;
+}
+
+#app_store .app_desc {
+    color: #E6E6E6;
 }

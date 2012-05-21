@@ -10,7 +10,8 @@ winkstart.module('myaccount', 'personal_info', {
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
             'personal_info.popup': 'popup',
-            'personal_info.advanced_view': 'advanced_view'
+            'personal_info.advanced_view': 'advanced_view',
+            'personal_info.primary_set': 'primary_set'
         },
 
         resources: {
@@ -116,6 +117,21 @@ winkstart.module('myaccount', 'personal_info', {
                 });
             });
 
+            $('#primary_app', info_html).change(function() {
+                winkstart.publish('personal_info.primary_set', $('option:selected', this).val());
+            });
+
+            var count = true;
+            $.each(data.data.apps, function(k, o) {
+                if(o.default) {
+                    count = false;
+                }
+            });
+
+            if(count) {
+                $('#primary_app option[value="false"]', info_html).attr('checked', 'checked');
+            }
+
             (target)
                 .empty()
                 .append(info_html);
@@ -132,7 +148,6 @@ winkstart.module('myaccount', 'personal_info', {
             },
             function(data, status) {
                 THIS.render_info(data, $('.inline_content', popup_html));
-
                 winkstart.dialog(popup_html, {
                     modal: true,
                     title: 'My Account',
@@ -153,6 +168,41 @@ winkstart.module('myaccount', 'personal_info', {
                     }
                 }
             );
+        },
+
+        primary_set: function(app, callback) {
+            var THIS = this;
+
+            winkstart.request('app_store.user_get', {
+                account_id: winkstart.apps['myaccount'].account_id,
+                api_url: winkstart.apps['myaccount'].api_url,
+                user_id: winkstart.apps['myaccount'].user_id
+            },
+            function(data, status) {
+                var tmp = data.data;
+
+                $.each(tmp.apps, function(k, o) {
+                    if(k == app) {
+                        tmp.apps[k].default = true;
+                    } else {
+                        tmp.apps[k].default = false;
+                    }
+                });
+
+                THIS.update_acct(data.data, tmp,
+                    function(data, status) {
+                        if(app && app != "false"){
+                            winkstart.alert('info', app + ' is now your primary app');
+                        } else {
+                            winkstart.alert('info', "You don't have a primary app anymore");
+                        }
+                        
+                        if(typeof callback == 'function') {
+                            callback(data);
+                        }
+                    }
+                );
+            });            
         }
 
     }
