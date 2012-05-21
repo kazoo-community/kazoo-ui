@@ -3,7 +3,7 @@
 		<div class="row app">
 			{{each(i, app) available_app}}
 				<div class="span3 app-icon" data-id="${app.id}">
-					<img src="whapps/myaccount/app_store/images/${app.icon}"/>
+					<div class="img ${app.id}"></div>
 					<h3>${app.name}</h3>
 				</div>
 			{{/each}}

@@ -32,8 +32,35 @@
     padding: 30px 10px 0 10px;
     border-left: 1px solid #525252;
     border-right: 1px solid #353535;
-
 }
+
+#app_store .app .app-icon .img {
+    width: 99px;
+    height: 57px;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+
+#app_store .app .app-icon .img.voip {
+    background-image: url('../images/PBXservices.png');
+}
+
+#app_store .app .app-icon .img.cluster {
+    background-image: url('../images/ClusterManager.png');
+}
+
+#app_store .app .app-icon .img.trunkstore {
+    background-image: url('../images/Monitoring.png');
+}
+
+#app_store .app .app-icon .img.userportal {
+    background-image: url('../images/UserPortal.png');
+}
+
+#app_store .app .app-icon .img.accounts {
+    background-image: url('../images/TrunkStore.png');
+}
+
 
 #app_store .app .app-icon:hover {
     box-shadow: inset 0px 0px 70px 15px #202020;
