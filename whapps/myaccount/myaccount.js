@@ -62,9 +62,10 @@ winkstart.module('myaccount', 'myaccount', {
 
         uninitialized_count: 1337,
 
-        initialized: function() {
+        initialized: function(user_data) {
             var THIS = this;
-
+            
+            winkstart.flags.advancedView = user_data.advanced;
             THIS.is_initialized = true;
             THIS.list_submodules.list.sort();
             THIS.setup_page();
