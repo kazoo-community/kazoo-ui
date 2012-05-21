@@ -1,14 +1,19 @@
 <div>
 	<div class="row" id="app_store">
 		<div class="row app">
-			<div class="arrow"><</div>
 			{{each(i, app) available_app}}
-				<div class="span3 app_icon" data-id="${app.id}">
+				<div class="span3 app-icon" data-id="${app.id}">
 					<img src="whapps/myaccount/app_store/images/${app.icon}"/>
 					<h3>${app.name}</h3>
 				</div>
 			{{/each}}
-			<div class="arrow">></div>
+		</div>
+		<div class="row">
+			{{each(i, app) available_app}}
+			<div class="span3 on-off">
+				<input type="checkbox" name="${app.id}" />
+			</div>
+			{{/each}}
 		</div>
 	</div>
 </div>
