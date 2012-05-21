@@ -71,6 +71,12 @@ winkstart.module('myaccount', 'app_store', {
                 }),
                 app_store_html = THIS.templates.app_store.tmpl(data);
 
+                $('.switch', app_store_html)
+                    .switch()
+                    .change(function(ev, state){
+                        
+                    });
+
                 (target)
                     .empty()
                     .append(app_store_html);

@@ -10,6 +10,7 @@ winkstart.module('myaccount', 'personal_info', {
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
             'personal_info.popup': 'popup',
+            'personal_info.advanced_view': 'advanced_view',
             'personal_info.primary_set': 'primary_set'
         },
 
@@ -111,7 +112,6 @@ winkstart.module('myaccount', 'personal_info', {
             $('#advanced', info_html).click(function() {
                 var $this = $(this);
 
-                winkstart.flags.advancedView = $this.is(':checked');
                 THIS.update_acct(data.data, {
                     advanced: $this.is(':checked')
                 });
@@ -154,6 +154,20 @@ winkstart.module('myaccount', 'personal_info', {
                     autoOpen: true
                 });
             });
+        },
+
+        advanced_view: function(callback){
+             winkstart.request('personal_info.user_get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    user_id: winkstart.apps['myaccount'].user_id
+                },
+                function(data, status) {
+                    if(typeof callback == 'function') {
+                        callback(data.data.advanced);
+                    }
+                }
+            );
         },
 
         primary_set: function(app, callback) {

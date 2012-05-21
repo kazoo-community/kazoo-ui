@@ -40,6 +40,10 @@
 }
 
 #app_store .on-off {
-    width: 138px;
-    text-align: center;
+    margin: 0;
 }
+
+#app_store .on-off > div {
+    margin: 0 auto 0 auto;
+}
+
