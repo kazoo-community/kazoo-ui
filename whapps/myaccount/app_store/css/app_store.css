@@ -1,5 +1,5 @@
 .app-store {
-    width: 832px;
+    width: 866px;
 }
 
 #app_store {
@@ -22,25 +22,31 @@
     border: 1px solid #525252;
 }
 
-#left_scroll, #right_scroll {
+#app_store #left_scroll, #right_scroll {
     float: left; 
-    width: 15px; 
+    width: 32px; 
     height: 152px;
     background: #525252;
     cursor: pointer;
 }
 
-#left_scroll {
+#app_store #left_scroll:hover, #right_scroll:hover {
+    box-shadow: inset 1px 1px 4px 1px #353535;
+}
+
+#app_store #left_scroll {
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
 }
 
-#right_scroll {
+#app_store #right_scroll {
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-
+#app_store #left_scroll > .icon, #right_scroll > .icon {
+  margin-top: 62px;
+}
 
 #app_store .app-store-inner .app-store-ul {
     position: relative;

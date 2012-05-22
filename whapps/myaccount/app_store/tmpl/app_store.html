@@ -1,6 +1,8 @@
 <div>
 	<div class="row" id="app_store">
-		<div id='left_scroll'></div>
+		<div id='left_scroll'>
+			<span class="icon left_arrow_circle"></span>
+		</div>
 		<div class="app-store-inner">
 			<ul class="app-store-ul">
 				{{each(i, app) available_app}}
@@ -18,7 +20,9 @@
 				{{/each}}
 			</ul>
 		</div>
-		<div id='right_scroll'></div>
+		<div id='right_scroll'>
+			<span class="icon right_arrow_circle"></span>
+		</div>
 	</div>
 
 	<div class="row app-store-btn">

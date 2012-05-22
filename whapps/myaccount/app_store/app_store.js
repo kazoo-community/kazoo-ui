@@ -108,18 +108,23 @@ winkstart.module('myaccount', 'app_store', {
                     $('#app_store_save', app_store_html).click(function(e) {
                         e.preventDefault();
 
-                        var apps = {};
+                        winkstart.confirm(
+                            'Warning! This is going to refresh the page.',
+                            function(){
+                               var apps = {},
+                                    tmp = user_info.data;
 
-                        $('.app', app_store_html).find('[checked]').each(function() {
-                            var id = $(this).attr('name');
-                            apps[id] = winkstart.config.available_app[id];
-                        });
+                                $('.app', app_store_html).find('[checked]').each(function() {
+                                    var id = $(this).attr('name');
+                                    apps[id] = winkstart.config.available_app[id];
+                                });
+                                tmp.apps = apps;
 
-                        var tmp = user_info.data;
-                        tmp.apps = apps;
-
-                        THIS.update_acct(tmp, {});
-                        window.location.reload();
+                                THIS.update_acct(tmp, {}, function() {
+                                    window.location.reload();
+                                }); 
+                            }
+                        );
                     });
 
                     (target)
