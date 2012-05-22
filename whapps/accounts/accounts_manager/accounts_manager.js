@@ -52,6 +52,26 @@ winkstart.module('accounts', 'accounts_manager', {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'whitelabel.get': {
+                url: '{api_url}/accounts/{account_id}/whitelabel',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'whitelabel.create': {
+                url: '{api_url}/accounts/{account_id}/whitelabel',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'whitelabel.update': {
+                url: '{api_url}/accounts/{account_id}/whitelabel',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            'whitelabel.update_logo': {
+                url: '{api_url}/accounts/{account_id}/whitelabel/logo',
+                contentType: 'application/x-base64',
+                verb: 'POST'
             }
         }
     },
@@ -122,6 +142,11 @@ winkstart.module('accounts', 'accounts_manager', {
                     }
                 );
             }
+            else {
+                if(typeof callback == 'function') {
+                    callback();
+                }
+            }
         },
 
         edit_accounts_manager: function(data, _parent, _target, _callback, data_defaults) {
@@ -156,10 +181,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        available_apps: winkstart.available_apps,
-                        white_label: {
-                            has_logo: false
-                        }
+                        available_apps: winkstart.available_apps
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -172,19 +194,41 @@ winkstart.module('accounts', 'accounts_manager', {
                 };
 
             if(typeof data == 'object' && data.id) {
-                winkstart.request(true, 'accounts_manager.get', {
+                var render = function() {
+                    winkstart.request(true, 'accounts_manager.get', {
+                            account_id: data.id,
+                            api_url: winkstart.apps['accounts'].api_url
+                        },
+                        function(_data, status) {
+                            THIS.migrate_data(_data);
+
+                            THIS.format_data(_data);
+
+                            var render_data = $.extend(true, defaults, _data)
+
+                            console.log(render_data);
+                            THIS.render_accounts_manager(render_data, target, callbacks);
+
+                            if(typeof callbacks.after_render == 'function') {
+                                callbacks.after_render();
+                            }
+                        },
+                        winkstart.error_message.process_error()
+                    );
+                };
+
+                winkstart.request('whitelabel.get', {
                         account_id: data.id,
                         api_url: winkstart.apps['accounts'].api_url
                     },
-                    function(_data, status) {
-                        THIS.migrate_data(_data);
+                    function(_data_wl, status) {
+                        defaults.field_data.whitelabel = _data_wl.data;
 
-                        THIS.format_data(_data);
-
-                        THIS.render_accounts_manager($.extend(true, defaults, _data), target, callbacks);
-
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                        render();
+                    },
+                    function(_data_wl, status) {
+                        if(status === 404) {
+                            render();
                         }
                     }
                 );
@@ -270,6 +314,12 @@ winkstart.module('accounts', 'accounts_manager', {
                 form_data.apps = $.map(form_data.apps, function(val) { return (val) ? val : null });
             }
 
+            form_data.whitelabel.description = form_data.extra.upload_media;
+
+            if(form_data.whitelabel.description === '') {
+                delete form_data.whitelabel.description;
+            }
+
             delete form_data.extra;
 
             return form_data;
@@ -299,11 +349,10 @@ winkstart.module('accounts', 'accounts_manager', {
             return data;
         },
 
-        upload_file: function(data, media_id, callback) {
-            winkstart.request('media.upload', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    media_id: media_id,
+        upload_file: function(data, account_id, callback) {
+            winkstart.request('whitelabel.update_logo', {
+                    account_id: account_id,
+                    api_url: winkstart.apps['accounts'].api_url,
                     data: data
                 },
                 function(_data, status) {
@@ -330,8 +379,9 @@ winkstart.module('accounts', 'accounts_manager', {
 
             winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
 
-            if(data.field_data.white_label.has_logo) {
+            if(data.field_data.whitelabel.description) {
                 $('#upload_div', account_html).hide();
+                $('.player_file', account_html).show();
             }
 
             $('#change_link', account_html).click(function(ev) {
@@ -343,8 +393,8 @@ winkstart.module('accounts', 'accounts_manager', {
             $('#download_link', account_html).click(function(ev) {
                 ev.preventDefault();
                 window.location.href = winkstart.apps['accounts'].api_url + '/accounts/' +
-                                       winkstart.apps['accounts'].account_id + '/white_label/raw?' +
-                                       '/raw?auth_token=' + winkstart.apps['accounts'].auth_token;
+                                       winkstart.apps['accounts'].account_id + '/whitelabel/logo?auth_token=' +
+                                       winkstart.apps['accounts'].auth_token;
             });
 
             $('#file', account_html).bind('change', function(evt){
@@ -374,57 +424,86 @@ winkstart.module('accounts', 'accounts_manager', {
                 ev.preventDefault();
 
                 winkstart.validate.is_valid(THIS.config.validation, account_html, function() {
-                        var form_data = form2object('accounts_manager-form');
+                        var form_data = form2object('accounts_manager-form'),
+                            whitelabel_data = {};
 
                         THIS.clean_form_data(form_data);
 
-                        console.log(form_data);
                         if('field_data' in data) {
-                            white_label_data = form_data.white_label;
-                            white_label_data.name = 'test_white_label';
-                            white_label_data.streamable = true;
-                            white_label_data.description = 'Test White Label';
                             delete data.field_data;
                         }
 
-                        console.log(white_label_data);
-                        console.log(file);
-                        data.data.music_on_hold.media_id = data.data.music_on_hold.media_id.substr(-32);
+                        if('whitelabel' in form_data) {
+                            var whitelabel_data = form_data.whitelabel;
+                            delete form_data.whitelabel;
+                        }
+
+                        //data.data.music_on_hold.media_id = (data.data.music_on_hold || {}).media_id.substr(-32);
                         data.data.apps = [];
 
-                        THIS.save_accounts_manager(form_data, data, function(_data, status) {
-                                var account_id = _data.data.id;
-                                winkstart.request('media.create', {
-                                        account_id: winkstart.apps['accounts'].account_id,
-                                        api_url: winkstart.apps['accounts'].api_url,
-                                        data: white_label_data
-                                    },
-                                    function(_data, status) {
+                        THIS.save_accounts_manager(form_data, data,
+                            function(_data_account, status) {
+                                var account_id = _data_account.data.id,
+                                    upload_file = function() {
                                         if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
-                                            if(file === 'updating') {
-                                                winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
-                                            }
-                                            else {
-                                                THIS.upload_file(file, _data.data.id, function() {
-                                                    if(typeof callbacks.save_success == 'function') {
-                                                        _data.data.id = account_id;
-                                                        callbacks.save_success(_data, status);
-                                                    }
-                                                });
-                                            }
+                                            console.log(account_id);
+                                            THIS.upload_file(file, account_id, function() {
+                                                if(typeof callbacks.save_success == 'function') {
+                                                    callbacks.save_success(_data_account, status);
+                                                }
+                                            });
                                         }
                                         else {
                                             if(typeof callbacks.save_success == 'function') {
-                                                callbacks.save_success(_data, status);
+                                                callbacks.save_success(_data_account, status);
                                             }
+                                        }
+                                    };
+
+                                winkstart.request('whitelabel.get', {
+                                        account_id: account_id,
+                                        api_url: winkstart.apps['accounts'].api_url
+                                    },
+                                    function(_data, status) {
+                                        whitelabel_data = $.extend({}, _data.data, whitelabel_data);
+
+                                        winkstart.request('whitelabel.update', {
+                                                account_id: account_id,
+                                                api_url: winkstart.apps['accounts'].api_url,
+                                                data: whitelabel_data
+                                            },
+                                            function(_data, status) {
+                                                //Upload file
+                                                upload_file();
+                                                /*if(typeof callbacks.save_success == 'function') {
+                                                    callbacks.save_success(_data_account, status);
+                                                }*/
+                                            }
+                                        );
+                                    },
+                                    function(_data, status) {
+                                        if(status === 404) {
+                                            winkstart.request('whitelabel.create', {
+                                                    account_id: account_id,
+                                                    api_url: winkstart.apps['accounts'].api_url,
+                                                    data: whitelabel_data
+                                                },
+                                                function(_data, status) {
+                                                    //Upload file
+                                                    upload_file();
+                                                    /*if(typeof callbacks.save_success == 'function') {
+                                                        callbacks.save_success(_data_account, status);
+                                                    }*/
+                                                }
+                                            );
                                         }
                                     }
                                 );
-                            },  winkstart.error_message.process_error(callbacks.save_error)
+                            },
+                            function() {
+                                winkstart.alert('There were errors on the form, please correct!');
+                            }
                         );
-                    },
-                    function() {
-                        winkstart.alert('There were errors on the form, please correct!');
                     }
                 );
             });

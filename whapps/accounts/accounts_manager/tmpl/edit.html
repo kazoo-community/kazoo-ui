@@ -1,7 +1,11 @@
 <div>
     <div class="row">
         <div class="whapp-header">
+            {{if data.id}}
             <h1>Edit Account</h1>
+            {{else}}
+            <h1>Create Account</h1>
+            {{/if}}
             <div class="buttons-right pasted view-buttons">
                 <button class="btn black basic activate">Basic</button>
                 <button class="btn black advanced">Advanced</button>
@@ -160,24 +164,24 @@
                     <div class="clearfix">
                         <label for="white_label_company_name">Company Name</label>
                         <div class="input">
-                            <input class="span4" id="white_label_company_name" name="white_label.company_name" type="text" placeholder="Company Name" value="${field_data.white_label.company_name}" rel="popover" data-content="The company name that you want to display wherever a company name is used in the GUI."/>
+                            <input class="span4" id="white_label_company_name" name="whitelabel.company_name" type="text" placeholder="Company Name" value="${field_data.whitelabel.company_name}" rel="popover" data-content="The company name that you want to display wherever a company name is used in the GUI."/>
                         </div>
                     </div>
                     <div class="clearfix">
                         <label for="white_label_domain">Domain</label>
                         <div class="input">
-                            <input class="span4" id="white_label_domain" name="white_label.domain" type="text" placeholder="Domain" value="${field_data.white_label.domain}" rel="popover" data-content="The domain you want to use for this account."/>
+                            <input class="span4" id="white_label_domain" name="whitelabel.domain" type="text" placeholder="Domain" value="${field_data.whitelabel.domain}" rel="popover" data-content="The domain you want to use for this account."/>
                         </div>
                     </div>
 
                      <div class="clearfix">
                          <label for="fileInput">File input</label>
                          <div id="upload_div" class="input">
-                             <input class="input-file" id="file" name="upload_media" type="file">
+                             <input class="input-file" id="file" name="extra.upload_media" type="file">
                          </div>
-                         {{if field_data.white_label.has_logo}}
+                         {{if field_data.whitelabel.description}}
                          <div class="input player_file">
-                             <span class="uneditable-input">${field_data.white_label.description}</span>
+                             <span class="uneditable-input">${field_data.whitelabel.description}</span>
                          </div>
                     </div>
                     <div class="clearfix player_file">

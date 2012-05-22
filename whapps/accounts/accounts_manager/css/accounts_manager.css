@@ -5,3 +5,8 @@
 .switch_account_popup .main_content .pill-content .clearfix {
     display: block;
 }
+
+#accounts_manager-form .player_file .uneditable-input {
+    white-space: nowrap;
+    overflow: hidden;
+}
