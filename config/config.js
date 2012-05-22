@@ -67,33 +67,44 @@
     winkstart.config.available_app = {
         'voip': {
             id: 'voip',
-            name: 'VoIP Sevices',
-            url: '',
+            label: 'VoIP Services',
+            icon: 'device',
+            api_url: 'http://192.168.1.61:8000/v1',
             desc: 'Manage vmbox, callflows ...'
         },
         'cluster': {
             id: 'cluster',
-            name: 'Cluster Manager',
-            url: '',
+            label: 'Cluster Manager',
+            icon: 'cluster_manager',
+            api_url: 'http://apps.2600hz.com:8000/v1',
             desc: 'Manage Servers and Infrastructure'
         },
-        'trunkstore': {
-            id: 'trunkstore',
-            name: 'TrunkStore',
-            url: '',
+        'connect': {
+            id: 'connect',
+            label: 'TrunkStore',
+            icon: 'connectivity',
+            api_url: 'http://192.168.1.61:8000/v1',
             desc: 'Some desc'
         },
         'userportal': {
             id: 'userportal',
-            name: 'Userportal',
-            url: '',
-            icon: 'UserPortal.png',
+            label: 'Userportal',
+            api_url: 'http://192.168.1.61:8000/v1',
+            icon: 'user',
             desc: 'Some desc'
         },
         'accounts': {
             id: 'accounts',
-            name: 'Accounts',
-            url: '',
+            label: 'Accounts',
+            icon: 'account',
+            api_url: 'http://192.168.1.61:8000/v1',
+            desc: 'Some desc'
+        },
+        'developer': {
+            id: 'developer',
+            label: 'Developer',
+            icon: 'connectivity',
+            api_url: 'http://192.168.1.61:8000/v1',
             desc: 'Some desc'
         }
     };

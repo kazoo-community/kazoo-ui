@@ -1,19 +1,27 @@
 <div>
 	<div class="row" id="app_store">
-		<div class="row app">
-			{{each(i, app) available_app}}
-				<div class="span3 app-icon" data-id="${app.id}">
-					<div class="img ${app.id}"></div>
-					<h3>${app.name}</h3>
-				</div>
-			{{/each}}
+		<div id='left_scroll'></div>
+		<div class="app-store-inner">
+			<ul class="app-store-ul">
+				{{each(i, app) available_app}}
+					<li class="app" data-id="${app.id}">
+						<div class="img ${app.id}"></div>
+						<h3>${app.label}</h3>
+						<div class="on-off">
+							{{if apps[app.id]}}
+								<input type="checkbox" name="${app.id}" class="switch" checked="checked" />
+							{{else}}
+								<input type="checkbox" name="${app.id}" class="switch" />
+							{{/if}}
+						</div>
+					</li>
+				{{/each}}
+			</ul>
 		</div>
-		<div class="row">
-			{{each(i, app) available_app}}
-			<div class="span3 on-off">
-				<input type="checkbox" name="${app.id}" class="switch"/>
-			</div>
-			{{/each}}
-		</div>
+		<div id='right_scroll'></div>
+	</div>
+
+	<div class="row app-store-btn">
+		<button class="btn success" id="app_store_save">Save</button>
 	</div>
 </div>

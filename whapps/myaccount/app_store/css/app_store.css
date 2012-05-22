@@ -1,11 +1,9 @@
-#app_store .app {
-    border: 1px solid #525252;
-    height: 140px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 1px 1px 1px 1px #363636;
-    margin-bottom: 30px;
-    background: #494949;
+.app-store {
+    width: 832px;
+}
+
+#app_store {
+    height: 152px;
     background: -moz-linear-gradient(top,  #494949 0%, #515151 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#494949), color-stop(100%,#515151));
     background: -webkit-linear-gradient(top,  #494949 0%,#515151 100%);
@@ -13,64 +11,111 @@
     background: -ms-linear-gradient(top,  #494949 0%,#515151 100%);
     background: linear-gradient(top,  #494949 0%,#515151 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#494949', endColorstr='#515151',GradientType=0 );
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 1px #363636;
 }
 
-
-#app_store .app .app-icon:first-child {
-    border-left: none;
+#app_store .app-store-inner {
+    float: left; /* important for inline positioning */
+    width: 800px; /* important (this width = width of list item(including margin) * items shown */ 
+    overflow: hidden;  /* important (hide the items outside the div) */
+    border: 1px solid #525252;
 }
 
-#app_store .app .app-icon:last-child {
-    border-right: none;
-}
-    
-#app_store .app .app-icon {
-    width: 138px;
-    text-align: center;
+#left_scroll, #right_scroll {
+    float: left; 
+    width: 15px; 
+    height: 152px;
+    background: #525252;
     cursor: pointer;
-    margin-left: 0;
-    padding: 30px 10px 0 10px;
+}
+
+#left_scroll {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#right_scroll {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+
+
+#app_store .app-store-inner .app-store-ul {
+    position: relative;
+    left: 0px; /* important (this should be negative number of list items width(including margin) */
+    list-style-type: none; /* removing the default styling for unordered list items */
+    margin: 0px;
+    padding: 0px;
+    width: 9999px; /* important */
+}
+
+#app_store .app-store-inner .app-store-ul li {
+    float: left; /* important for inline positioning of the list items */                                    
+    width: 160px;  /* fixed width, important */
+    height: 150px;
     border-left: 1px solid #525252;
     border-right: 1px solid #353535;
+    text-align: center;
 }
 
-#app_store .app .app-icon .img {
+#app_store .app-store-inner .app-store-ul li:hover {
+    box-shadow: inset 0px 0px 70px 15px #202020;
+}
+
+#app_store .app-store-inner .app-store-ul li .img {
     width: 99px;
     height: 57px;
     background-repeat: no-repeat;
-    margin: 0 auto;
+    margin: 2px auto 0 auto;
 }
 
-#app_store .app .app-icon .img.voip {
+
+#app_store .app-store-inner .app-store-ul li .img.voip {
     background-image: url('../images/PBXservices.png');
 }
 
-#app_store .app .app-icon .img.cluster {
+
+#app_store .app-store-inner .app-store-ul li .img.cluster {
     background-image: url('../images/ClusterManager.png');
 }
 
-#app_store .app .app-icon .img.trunkstore {
+
+#app_store .app-store-inner .app-store-ul li .img.connect {
     background-image: url('../images/Monitoring.png');
 }
 
-#app_store .app .app-icon .img.userportal {
+
+#app_store .app-store-inner .app-store-ul li .img.userportal {
     background-image: url('../images/UserPortal.png');
 }
 
-#app_store .app .app-icon .img.accounts {
+
+#app_store .app-store-inner .app-store-ul li .img.accounts {
     background-image: url('../images/TrunkStore.png');
 }
 
 
-#app_store .app .app-icon:hover {
-    box-shadow: inset 0px 0px 70px 15px #202020;
+#app_store .app-store-inner .app-store-ul li .img.developer {
+    background-image: url('../images/DTHbilling.png');
 }
 
-#app_store .on-off {
-    margin: 0;
-}
 
-#app_store .on-off > div {
+#app_store .app-store-inner .app-store-ul li .on-off {
+    width: 94px;
     margin: 0 auto 0 auto;
 }
+
+.app-store-btn {
+    margin: 20px auto 0 auto;
+    text-align: center;
+}
+
+
+
+
+
+
+
 
