@@ -81,6 +81,14 @@ winkstart.module('myaccount', 'app_store', {
                         count = 0,
                         total = $('.app-store-ul li', app_store_html).length;
 
+                     $('*[rel=popover]:not([type="text"])', app_store_html).popover({
+                        trigger: 'hover'
+                    });
+
+                    $('*[rel=popover][type="text"]', app_store_html).popover({
+                        trigger: 'focus'
+                    });
+
                     $('.switch', app_store_html).switch();
                         
                     $('#left_scroll', app_store_html).click(function() {
