@@ -49,6 +49,8 @@ winkstart.module('voip', 'voip', {
         });
 
         THIS._bootstrap();
+
+        THIS.whapp_config();
     },
     {
         /* A modules object is required for the loading routine.
@@ -87,7 +89,6 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
 
             THIS.is_initialized = true;
-
             //Disabling post lazy loading behavior
             //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
@@ -162,6 +163,14 @@ winkstart.module('voip', 'voip', {
          * (Really need to figure out a better way...)
          */
 
+        whapp_config: function() {
+            var THIS = this;
+
+            winkstart.apps['voip'] = $.extend(true, {
+                is_masqueradable: true
+            }, winkstart.apps['voip']);
+        },
+
         // A setup_page function is required for the copy and paste code
         setup_page: function() {
             var THIS = this;
@@ -201,74 +210,6 @@ winkstart.module('voip', 'voip', {
             $('.edit_icon', welcome_html).click(function() {
                 winkstart.publish($(this).dataset('module') + '.activate');
             });
-
-            $('.masquerade', welcome_html).click(function() {
-                var account = {
-                        name: $('#sub_accounts option:selected').text(),
-                        id: $('#sub_accounts').val()
-                    };
-
-                winkstart.confirm('Do you really want to use ' + account.name + '\'s account?', function() {
-                    if(!('masquerade' in winkstart.apps['voip'])) {
-                        winkstart.apps['voip'].masquerade = [];
-                    }
-
-                    winkstart.apps['voip'].masquerade.push(winkstart.apps['voip'].account_id);
-
-                    winkstart.apps['voip'].account_id = account.id;
-
-                    //update label
-                    THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
-
-                    winkstart.alert('info', 'You are now using ' + account.name + '\'s account');
-                });
-            });
-
-            $('.restore').click(function() {
-                var id = winkstart.apps['voip'].masquerade.pop();
-
-                if(winkstart.apps['voip'].masquerade.length) {
-                    winkstart.getJSON('account.get', {
-                            api_url: winkstart.apps['voip'].api_url,
-                            account_id: id
-                        },
-                        function(data, status) {
-                            winkstart.apps['voip'].account_id = data.data.id;
-
-                            THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
-                        }
-                    );
-                }
-                else {
-                    winkstart.apps['voip'].account_id = id;
-
-                    //masquerading over display in label normal
-                    delete winkstart.apps['voip'].masquerade;
-
-                    THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
-                }
-            });
-
-            /*
-            $('.restore', welcome_html).click(function() {
-                THIS.execute_request({ account_id: winkstart.apps.voip.account_id });
-            });
-
-            $('.masquerade', welcome_html).click(function() {
-                var account_id = $('#sub_accounts').val();
-
-                if(account_id) {
-                    THIS.execute_request({ account_id: account_id });
-                }
-                else {
-                    winkstart.alert('This is not a valid sub account');
-                }
-            });
-            */
-            $('.masquerade', welcome_html).hide();
-            if(!('masquerade' in winkstart.apps.voip)) {
-                $('.restore', welcome_html).hide();
-            }
 
             /* Account ID */
             $('.account_id', welcome_html).html(account_id);
@@ -382,18 +323,6 @@ winkstart.module('voip', 'voip', {
                             api_url: winkstart.apps.voip.api_url
                         },
                         function(_data, status) {
-                            $.each(_data.data, function() {
-                                $('#sub_accounts', welcome_html).append('<option value="'+this.id+'">'+this.name+'</option>');
-                            });
-
-                            if(_data.data.length === 0) {
-                                $('#sub_accounts', welcome_html).append('<option value="">-- Empty --</option>');
-                                $('#sub_accounts', welcome_html).attr('disabled', 'disabled');
-                            }
-                            else {
-                                $('.masquerade', welcome_html).show();
-                            }
-
                             $('.children_accounts', welcome_html).html(_data.data.length);
                             $('.children_accounts', welcome_html).siblings('.progress_bar').first().css('width', Math.round((_data.data.length / cpt_descendants)*100) + 'px');
                         }
