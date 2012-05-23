@@ -4,6 +4,8 @@
         /* Was winkstart.debug */
         debug: false,
 
+        advancedView: false,
+
         /* web server used by the cdr module to show the link to the logs */
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 
@@ -44,13 +46,57 @@
         nav: {
             help: 'http://www.2600hz.org/support.html'
             /* logout: ''*/
+        },
+
+        available_app: {
+            'voip': {
+                id: 'voip',
+                label: 'VoIP Services',
+                icon: 'device',
+                api_url: 'http://192.168.1.61:8000/v1',
+                desc: 'Manage vmbox, callflows ...'
+            },
+            'cluster': {
+                id: 'cluster',
+                label: 'Cluster Manager',
+                icon: 'cluster_manager',
+                api_url: 'http://apps.2600hz.com:8000/v1',
+                desc: 'Manage Servers and Infrastructure'
+            },
+            'connect': {
+                id: 'connect',
+                label: 'TrunkStore',
+                icon: 'connectivity',
+                api_url: 'http://192.168.1.61:8000/v1',
+                desc: 'Some desc'
+            },
+            'userportal': {
+                id: 'userportal',
+                label: 'Userportal',
+                api_url: 'http://192.168.1.61:8000/v1',
+                icon: 'user',
+                desc: 'Some desc'
+            },
+            'accounts': {
+                id: 'accounts',
+                label: 'Accounts',
+                icon: 'account',
+                api_url: 'http://192.168.1.61:8000/v1',
+                desc: 'Some desc'
+            },
+            'developer': {
+                id: 'developer',
+                label: 'Developer',
+                icon: 'connectivity',
+                api_url: 'http://192.168.1.61:8000/v1',
+                desc: 'Some desc'
+            }
         }
     };
 
     winkstart.apps = {
         'auth' : {
-            //api_url: 'http://apps.2600hz.com:8000/v1',
-            api_url: 'http://192.168.1.42:8000/v1',
+            api_url: 'http://apps.2600hz.com:8000/v1',
             /* These are some settings that are set automatically. You are free to override them here.
             account_id: null,
             auth_token: null,
@@ -61,73 +107,6 @@
         'myaccount': {}
     };
 
-    winkstart.available_apps = {
-        'voip': {
-            'name': 'VoIP Services'
-        },
-        'cluster': {
-            'name': 'Cluster Manager'
-        },
-        'connect': {
-            'name': 'Trunkstore'
-        },
-        'userportal': {
-            'name': 'User Portal'
-        },
-        'accounts': {
-            'name': 'Accounts Manager'
-        }
-    };
-
     amplify.cache = false;
-
-    winkstart.config.available_app = {
-        'voip': {
-            id: 'voip',
-            label: 'VoIP Services',
-            icon: 'device',
-            api_url: 'http://192.168.1.61:8000/v1',
-            desc: 'Manage vmbox, callflows ...'
-        },
-        'cluster': {
-            id: 'cluster',
-            label: 'Cluster Manager',
-            icon: 'cluster_manager',
-            api_url: 'http://apps.2600hz.com:8000/v1',
-            desc: 'Manage Servers and Infrastructure'
-        },
-        'connect': {
-            id: 'connect',
-            label: 'TrunkStore',
-            icon: 'connectivity',
-            api_url: 'http://192.168.1.61:8000/v1',
-            desc: 'Some desc'
-        },
-        'userportal': {
-            id: 'userportal',
-            label: 'Userportal',
-            api_url: 'http://192.168.1.61:8000/v1',
-            icon: 'user',
-            desc: 'Some desc'
-        },
-        'accounts': {
-            id: 'accounts',
-            label: 'Accounts',
-            icon: 'account',
-            api_url: 'http://192.168.1.61:8000/v1',
-            desc: 'Some desc'
-        },
-        'developer': {
-            id: 'developer',
-            label: 'Developer',
-            icon: 'connectivity',
-            api_url: 'http://192.168.1.61:8000/v1',
-            desc: 'Some desc'
-        }
-    };
-
-    winkstart.flags = {
-        advancedView: false  
-    };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

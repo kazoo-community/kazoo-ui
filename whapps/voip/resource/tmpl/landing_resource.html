@@ -3,7 +3,11 @@
         <div class="landing_btn_wrapper">
             {{if resource_type === 'offnet'}}
                 <div class="title">
+                    {{if company_name}}
                     <h1>Congratulations! You're now using ${company_name} as your global carrier!</h1>
+                    {{else}}
+                    <h1>Congratulations! You're now using your provider as your global carrier!</h1>
+                    {{/if}}
                     <div class="help_text">
                         If you want to manage your own carriers, click on "Use a different carrier" button.
                     </div>
@@ -12,7 +16,11 @@
                     <div class="wrapper_div">
                         <div class="hosted_btn resource_btn pressed">
                             <div class="button_text">
-                            Use ${company_name} as my phone company
+                            {{if company_name}}
+                                Use ${company_name} as my phone company
+                            {{else}}
+                                Use my provider
+                            {{/if}}
                             </div>
                         </div>
                     </div>
@@ -36,7 +44,11 @@
                         <div class="wrapper_div">
                             <div class="hosted_btn resource_btn">
                                 <div class="button_text">
-                                Use ${company_name} as my phone company
+                                {{if company_name}}
+                                    Use ${company_name} as my phone company
+                                {{else}}
+                                    Use my provider
+                                {{/if}}
                                 </div>
                             </div>
                         </div>
@@ -56,7 +68,11 @@
                         <div class="wrapper_div">
                             <div class="hosted_btn resource_btn">
                                 <div class="button_text">
-                                Use ${company_name} as my phone company
+                                {{if company_name}}
+                                    Use ${company_name} as my phone company
+                                {{else}}
+                                    Use my provider
+                                {{/if}}
                                 </div>
                             </div>
                         </div>

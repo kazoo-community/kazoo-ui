@@ -65,8 +65,8 @@ winkstart.module('myaccount', 'myaccount', {
 
         initialized: function(user_data) {
             var THIS = this;
-            
-            winkstart.flags.advancedView = user_data.advanced;
+
+            winkstart.config.advancedView = user_data.advanced;
             THIS.is_initialized = true;
             THIS.list_submodules.list.sort();
             THIS.setup_page();
