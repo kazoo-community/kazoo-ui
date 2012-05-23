@@ -48,7 +48,9 @@ winkstart.module('core', 'core',
                 load_modules();
             },
             function(_data, status) {
-                delete winkstart.config.company_name;
+                if(status != 404) {
+                    delete winkstart.config.company_name;
+                }
                 load_modules();
             }
         );
