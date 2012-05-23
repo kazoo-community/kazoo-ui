@@ -10,6 +10,15 @@
     text-align: center;
 }
 
+#ws-topbar .whapps > .whapp.disabled {
+    opacity: 0.5;
+}
+
+#ws-topbar .whapps > .whapp.disabled a:hover {
+    background: #464646;
+    color: #bfbfbf;
+    cursor: not-allowed;
+}
 
 #ws-topbar .whapps > .whapp.open > a {
     background: #414141;
