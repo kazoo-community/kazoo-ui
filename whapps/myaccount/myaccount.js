@@ -48,7 +48,7 @@ winkstart.module('myaccount', 'myaccount', {
          * <module name>: <initialization status>
          */
         modules: {
-            'app_store': false,
+            //'app_store': false,
             'billing': false,
             'personal_info': false,
             'nav': false
