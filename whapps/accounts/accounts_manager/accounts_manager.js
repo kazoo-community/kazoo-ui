@@ -181,8 +181,8 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        whitelabel: {},
-                        available_apps: winkstart.available_apps
+                        whitelabel: {}/*,
+                        available_apps: winkstart.available_apps*/
                     },
                     functions: {
                         inArray: function(value, array) {
