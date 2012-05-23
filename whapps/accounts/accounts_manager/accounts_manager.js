@@ -181,6 +181,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
+                        whitelabel: {},
                         available_apps: winkstart.available_apps
                     },
                     functions: {
@@ -206,7 +207,6 @@ winkstart.module('accounts', 'accounts_manager', {
 
                             var render_data = $.extend(true, defaults, _data)
 
-                            console.log(render_data);
                             THIS.render_accounts_manager(render_data, target, callbacks);
 
                             if(typeof callbacks.after_render == 'function') {
@@ -223,6 +223,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     },
                     function(_data_wl, status) {
                         defaults.field_data.whitelabel = _data_wl.data;
+                        defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 
                         render();
                     },
@@ -379,6 +380,8 @@ winkstart.module('accounts', 'accounts_manager', {
 
             winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
 
+            $('.logo_div', account_html).css('background-image', 'url('+data.field_data.whitelabel.logo_url+ '&_=' + new Date().getTime()+')');
+
             if(data.field_data.whitelabel.description) {
                 $('#upload_div', account_html).hide();
                 $('.player_file', account_html).show();
@@ -393,7 +396,7 @@ winkstart.module('accounts', 'accounts_manager', {
             $('#download_link', account_html).click(function(ev) {
                 ev.preventDefault();
                 window.location.href = winkstart.apps['accounts'].api_url + '/accounts/' +
-                                       winkstart.apps['accounts'].account_id + '/whitelabel/logo?auth_token=' +
+                                       data.data.id + '/whitelabel/logo?auth_token=' +
                                        winkstart.apps['accounts'].auth_token;
             });
 
@@ -438,7 +441,6 @@ winkstart.module('accounts', 'accounts_manager', {
                             delete form_data.whitelabel;
                         }
 
-                        //data.data.music_on_hold.media_id = (data.data.music_on_hold || {}).media_id.substr(-32);
                         data.data.apps = [];
 
                         THIS.save_accounts_manager(form_data, data,
@@ -446,7 +448,6 @@ winkstart.module('accounts', 'accounts_manager', {
                                 var account_id = _data_account.data.id,
                                     upload_file = function() {
                                         if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
-                                            console.log(account_id);
                                             THIS.upload_file(file, account_id, function() {
                                                 if(typeof callbacks.save_success == 'function') {
                                                     callbacks.save_success(_data_account, status);
@@ -460,42 +461,51 @@ winkstart.module('accounts', 'accounts_manager', {
                                         }
                                     };
 
+                                /*
+                                * We check if the whitelabel exist for this account,
+                                * If yes, then we check if it has been updated and if it was, we update the whitelabel document.
+                                * If it doesn't exist, we check if data is not empty before creating a whitelabel document
+                                */
                                 winkstart.request('whitelabel.get', {
                                         account_id: account_id,
                                         api_url: winkstart.apps['accounts'].api_url
                                     },
                                     function(_data, status) {
-                                        whitelabel_data = $.extend({}, _data.data, whitelabel_data);
+                                        if(_data.data.domain != whitelabel_data.domain || _data.data.company_name != whitelabel_data.company_name) {
+                                            whitelabel_data = $.extend({}, _data.data, whitelabel_data);
 
-                                        winkstart.request('whitelabel.update', {
-                                                account_id: account_id,
-                                                api_url: winkstart.apps['accounts'].api_url,
-                                                data: whitelabel_data
-                                            },
-                                            function(_data, status) {
-                                                //Upload file
-                                                upload_file();
-                                                /*if(typeof callbacks.save_success == 'function') {
-                                                    callbacks.save_success(_data_account, status);
-                                                }*/
-                                            }
-                                        );
+                                            winkstart.request('whitelabel.update', {
+                                                    account_id: account_id,
+                                                    api_url: winkstart.apps['accounts'].api_url,
+                                                    data: whitelabel_data
+                                                },
+                                                function(_data, status) {
+                                                    upload_file();
+                                                },
+                                                winkstart.error_message.process_error()
+                                            );
+                                        }
+                                        else {
+                                            upload_file();
+                                        }
                                     },
                                     function(_data, status) {
-                                        if(status === 404) {
+                                        if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
                                             winkstart.request('whitelabel.create', {
                                                     account_id: account_id,
                                                     api_url: winkstart.apps['accounts'].api_url,
                                                     data: whitelabel_data
                                                 },
                                                 function(_data, status) {
-                                                    //Upload file
                                                     upload_file();
-                                                    /*if(typeof callbacks.save_success == 'function') {
-                                                        callbacks.save_success(_data_account, status);
-                                                    }*/
-                                                }
+                                                },
+                                                winkstart.error_message.process_error()
                                             );
+                                        }
+                                        else {
+                                            if(typeof callbacks.save_success == 'function') {
+                                                callbacks.save_success(_data_account, status);
+                                            }
                                         }
                                     }
                                 );

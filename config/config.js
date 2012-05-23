@@ -4,6 +4,9 @@
         /* Was winkstart.debug */
         debug: false,
 
+        /* web server used by the cdr module to show the link to the logs */
+        logs_web_server_url: 'http://cdrs.2600hz.com/',
+
         /* Customized name displayed in the application (login page, resource module..) */
         company_name: '2600hz',
 
@@ -16,9 +19,6 @@
                 custom_logo: false
             }
         },
-
-        /* web server used by the cdr module to show the link to the logs */
-        logs_web_server_url: 'http://cdrs.2600hz.com/',
 
         /* Was winkstart.realm_suffix */
         realm_suffix: {
@@ -49,7 +49,8 @@
 
     winkstart.apps = {
         'auth' : {
-            api_url: 'http://apps.2600hz.com:8000/v1',
+            //api_url: 'http://apps.2600hz.com:8000/v1',
+            api_url: 'http://192.168.1.42:8000/v1',
             /* These are some settings that are set automatically. You are free to override them here.
             account_id: null,
             auth_token: null,
@@ -79,7 +80,5 @@
     };
 
     amplify.cache = false;
-
-    document.title = winkstart.config.company_name + " WinkStart";
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

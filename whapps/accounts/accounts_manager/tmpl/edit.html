@@ -18,7 +18,7 @@
             <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
             <li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
             <li><a href="#options"><span class="icon sip"></span>Options</a></li>
-            <li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>
+            <!--<li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>-->
             <li><a href="#white_labeling"><span class="icon sip"></span>White labeling</a></li>
         </ul>
         <form action="#" id="accounts_manager-form">
@@ -175,24 +175,28 @@
                     </div>
 
                      <div class="clearfix">
-                         <label for="fileInput">File input</label>
+                         <label for="fileInput">Logo (190x72px)</label>
                          <div id="upload_div" class="input">
                              <input class="input-file" id="file" name="extra.upload_media" type="file">
                          </div>
                          {{if field_data.whitelabel.description}}
                          <div class="input player_file">
                              <span class="uneditable-input">${field_data.whitelabel.description}</span>
+                             <div class="logo_div"></div>
                          </div>
                     </div>
                     <div class="clearfix player_file">
                         <div class="input">
-                            <button class="btn" id="change_link">Change File</button>
-                            <button class="btn" id="download_link">Download File</button>
+                            <button class="btn primary" id="change_link">Change File</button>
+                            <button class="btn primary" id="download_link">Download File</button>
                         </div>
                     </div>
                     {{else}}
                     </div>
                     {{/if}}
+                    <div class="clearfix">
+                        <span class="refresh_text">In order to see these changes, refresh the page!</span>
+                    </div>
                 </div>
 
             </div>
