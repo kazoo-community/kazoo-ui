@@ -181,10 +181,12 @@
         $('input', html).bind('change.link keyup.link focus.link', function() {
             var name = $(this).attr('name'),
                 type = $(this).attr('type'),
+                value = $(this).val(),
                 input_fields = $('input[name="' + name + '"]', html);
 
             if(input_fields.size() > 1) {
                 if(type == 'checkbox'){
+                    input_fields = input_fields.filter('[value='+value+']');
                     ($(this).attr('checked')) ? input_fields.attr('checked', 'checked') : input_fields.removeAttr('checked');
                 }
                 else {

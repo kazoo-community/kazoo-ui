@@ -10,7 +10,6 @@ winkstart.module('myaccount', 'myaccount', {
         },
 
         subscribe: {
-            'myaccount.activate' : 'activate',
             'myaccount.initialized' : 'initialized',
             'myaccount.module_activate': 'module_activate',
             'myaccount.display': 'render_myaccount',
@@ -40,6 +39,8 @@ winkstart.module('myaccount', 'myaccount', {
         }
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
+
+        THIS.whapp_config();
     },
     {
         /* A modules object is required for the loading routine.
@@ -73,8 +74,6 @@ winkstart.module('myaccount', 'myaccount', {
 
         activate: function(user_data) {
             var THIS = this;
-
-            THIS.whapp_config();
 
             THIS.whapp_auth(function() {
                 THIS.initialization_check(user_data);

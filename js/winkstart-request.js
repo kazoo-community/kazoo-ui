@@ -30,7 +30,7 @@
 				},
                 global: (typeof resource.trigger_events == 'boolean') ? resource.trigger_events : true,
                 contentType: resource.contentType || 'application/json',
-                dataType: 'json',
+                dataType: resource.dataType || 'json',
                 type: resource.verb,
                 processData: resource.verb == 'GET',
                 cache: false,

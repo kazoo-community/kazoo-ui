@@ -18,13 +18,26 @@ winkstart.module('core', 'layout', {
 
         subscribe: {
             'layout.detect_logo': 'detect_and_set_logo'
+        },
+
+        resources: {
+            'layout.get_logo': {
+                url: '{api_url}/whitelabel/{domain}/logo',
+                contentType: 'application/json',
+                dataType: 'text',
+                verb: 'GET'
+            }
         }
     },
 
     function(args) {
         var THIS = this;
 
+        winkstart.registerResources('auth', THIS.config.resources);
+
         THIS.parent = args.parent || $('body');
+
+        document.title = winkstart.config.company_name + ' WinkStart';
 
         THIS.attach();
 
@@ -63,9 +76,9 @@ winkstart.module('core', 'layout', {
     },
     {
         attach: function() {
-            var THIS = this;
-
-            var layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent);
+            var THIS = this,
+                domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
+                layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent);
 
             $("#loading").ajaxStart(function(){
                 $(this).show();
@@ -74,6 +87,23 @@ winkstart.module('core', 'layout', {
              }).ajaxError(function(){
                 $(this).hide();
              });
+
+            winkstart.request('layout.get_logo', {
+                    api_url: winkstart.apps['auth'].api_url,
+                    domain: domain
+                },
+                function(_data, status) {
+                    $('#ws-topbar .brand.logo', layout_html).css('background-image', 'url(' + winkstart.apps['auth'].api_url + '/whitelabel/' + domain + '/logo?_='+new Date().getTime()+')');
+                },
+                function(_data, status) {
+                    if(status != 404) {
+                        $('#ws-topbar .brand.logo', layout_html).css('background-image', '');
+                    }
+                    else {
+                        $('#ws-topbar .brand.logo', layout_html).css('background-image', 'url(config/images/logo.png)');
+                    }
+                }
+            );
         },
 
         render_welcome: function() {
