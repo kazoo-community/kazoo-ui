@@ -1,8 +1,13 @@
 winkstart.module('developer', 'developer', {
+
         subscribe: {
             'developer.activate' : 'activate',
             'developer.initialized' : 'initialized',
             'developer.module_activate': 'module_activate'
+        },
+
+        templates: {
+            developer: 'tmpl/developer.html',
         }
     },
     function() {
