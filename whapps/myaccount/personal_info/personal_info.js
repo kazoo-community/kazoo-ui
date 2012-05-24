@@ -111,7 +111,7 @@ winkstart.module('myaccount', 'personal_info', {
             $('#advanced', info_html).click(function() {
                 var $this = $(this);
 
-                winkstart.flags.advancedView = $this.is(':checked');
+                winkstart.config.advancedView = $this.is(':checked');
                 THIS.update_acct(data.data, {
                     advanced: $this.is(':checked')
                 });
@@ -182,13 +182,13 @@ winkstart.module('myaccount', 'personal_info', {
                         } else {
                             winkstart.alert('info', "You don't have a primary app anymore");
                         }
-                        
+
                         if(typeof callback == 'function') {
                             callback(data);
                         }
                     }
                 );
-            });            
+            });
         }
 
     }
