@@ -205,7 +205,7 @@
             $('.btn', buttons_html).removeClass('activate');
             $('.advanced', buttons_html).addClass('activate');
         } else {
-            if(winkstart.flags.advancedView) {
+            if(winkstart.config.advancedView) {
                 $('.btn', buttons_html).removeClass('activate');
                 $('.advanced', buttons_html).addClass('activate');
             } else {

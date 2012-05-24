@@ -139,27 +139,6 @@
                     </div>
                 </div>
 
-                <div id="applications">
-                    {{each(k, v) field_data.available_apps}}
-                        <div class="clearfix">
-                            <div class="input">
-                                <ul class="inputs-list">
-                                    <li>
-                                        <label>
-                                            {{if functions.inArray(k, data.apps) }}
-                                                <input type="checkbox"  name="apps[]" checked="checked" value="${k}"/>
-                                            {{else}}
-                                                <input type="checkbox" name="apps[]" value="${k}"/>
-                                            {{/if}}
-                                            <span>${v.name}</span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    {{/each}}
-                </div>
-
                 <div id="white_labeling">
                     <div class="clearfix">
                         <label for="white_label_company_name">Company Name</label>

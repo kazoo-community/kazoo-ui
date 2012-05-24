@@ -37,7 +37,7 @@ winkstart.module('core', 'layout', {
 
         THIS.parent = args.parent || $('body');
 
-        document.title = winkstart.config.company_name + ' WinkStart';
+        document.title = winkstart.config.company_name || '' + ' WinkStart';
 
         THIS.attach();
 
