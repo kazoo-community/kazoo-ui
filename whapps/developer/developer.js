@@ -4,10 +4,6 @@ winkstart.module('developer', 'developer', {
             'developer.activate' : 'activate',
             'developer.initialized' : 'initialized',
             'developer.module_activate': 'module_activate'
-        },
-
-        templates: {
-            developer: 'tmpl/developer.html',
         }
     },
     function() {
@@ -35,11 +31,12 @@ winkstart.module('developer', 'developer', {
 
         THIS.whapp_auth(function() {
             winkstart.publish('whappnav.add', { 'name' : THIS.__module });
+            THIS.initialization_check();
         });
     },
     {
         modules: {
-
+            'api': false
         },
         
         is_initialized: false,
@@ -52,7 +49,6 @@ winkstart.module('developer', 'developer', {
             THIS.is_initialized = true;
 
             if(winkstart.apps['developer'].default){
-
                 THIS.setup_page();
             }
         },
@@ -123,7 +119,7 @@ winkstart.module('developer', 'developer', {
         setup_page: function() {
             var THIS = this;
 
-            winkstart.publish('developer.module_activate', {name: 'developer'});
+            winkstart.publish('developer.module_activate', {name: 'api'});
         }
     }
 );
