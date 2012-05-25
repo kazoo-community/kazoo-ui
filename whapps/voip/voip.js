@@ -51,6 +51,9 @@ winkstart.module('voip', 'voip', {
         THIS._bootstrap();
 
         THIS.whapp_config();
+
+        console.log('publish');
+        winkstart.publish('voip.loaded');
     },
     {
         /* A modules object is required for the loading routine.

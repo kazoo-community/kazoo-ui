@@ -48,10 +48,11 @@ winkstart.module('myaccount', 'myaccount', {
          * <module name>: <initialization status>
          */
         modules: {
-            //'app_store': false,
+            'app_store': false,
             'billing': false,
             'personal_info': false,
-            'nav': false
+            'nav': false,
+            'statistics': false
         },
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this

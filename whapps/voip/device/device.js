@@ -56,6 +56,12 @@ winkstart.module('voip', 'device', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'device.status_no_loading': {
+                url: '{api_url}/accounts/{account_id}/devices/status',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'device.get': {
                 url: '{api_url}/accounts/{account_id}/devices/{device_id}',
                 contentType: 'application/json',
@@ -98,6 +104,8 @@ winkstart.module('voip', 'device', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+        winkstart.publish('statistics.add_stat', THIS.define_stats());
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
@@ -760,6 +768,41 @@ winkstart.module('voip', 'device', {
                     });
                 }
             }, data_defaults);
+        },
+
+        define_stats: function() {
+            var stats = {
+                'active_calls': {
+                    icon: 'device',
+                    get_stat: function(callback) {
+                        winkstart.request('device.status_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                var stat_attributes = {
+                                    name: 'active_calls',
+                                    number: _data.data.length,
+                                    active: _data.data.length > 0 ? true : false,
+                                    color: _data.data.length < 1 ? 'red' : (_data.data.length > 1 ? 'green' : 'orange')
+                                };
+
+                                if(typeof callback === 'function') {
+                                    callback(stat_attributes);
+                                }
+                            },
+                            function(_data, status) {
+                                callback({error: true});
+                            }
+                        );
+                    },
+                    click_handler: function() {
+                        winkstart.publish('device.activate');
+                    }
+                }
+            };
+
+            return stats;
         },
 
         define_callflow_nodes: function(callflow_nodes) {
