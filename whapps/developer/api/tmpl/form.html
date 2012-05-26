@@ -1,68 +1,26 @@
 <div>
 	<div class="row">
-		<h1>SCHEMA</h1>
+		<h1>${title.toUpperCase()} <small>API URL: ${api_url}</small> </h1>
 		<div class="buttons-right">
-            <button id="show" class="btn">Show</button>
+			<button class="btn black toggle-all">Show All</button>
 		</div>
 	</div>
-	<div class="row">
-		<form action="#">
-			{{each(i, input) schema}}
-				{{if input.type == "string"}}
-					{{if input.required}}
-						<div class="clearfix">
-					{{else}}
-						<div class="clearfix hide">
-					{{/if}}
-						<label for="${input.input_name}">${i}</label>
-						<div class="input">
-							<input class="span4" id="${input.input_name}" name="${input.input_name}" type="text" placeholder="" rel="popover" data-content="${input.description}"/>
-						</div>
-					</div>
-				{{/if}}
-				{{if input.type == "boolean"}}
-					{{if input.required}}
-						<div class="clearfix">
-					{{else}}
-						<div class="clearfix hide">
-					{{/if}}
-						<div class="input">
-							<ul class="inputs-list">
-								<li>
-									<label>
-										<span rel="popover" data-content="${input.description}">
-							                <input type="checkbox" id="${input.input_name}" name="${input.input_name}"/>
-							                <span>${i}</span>
-						                </span>
-						            </label>
-						        </li>
-						    </ul>
-						</div>
-					</div>
-				{{/if}}
-				{{if input.type == "array"}}
-					{{if input.required}}
-						<div class="clearfix">
-					{{else}}
-						<div class="clearfix hide">
-					{{/if}}
-						<div class="input">
-							<ul class="inputs-list">
-								{{each(i, tmp) input.enum}}
-									<li>
-										<label>
-											<span rel="popover" data-content="${input.description}">
-								                <input type="checkbox" id="${input.input_name}.${tmp}" name="${input.input_name}.${tmp}"/>
-								                <span>${tmp}</span>
-							                </span>
-							            </label>
-						        	</li>
-								{{/each}}	
-							</ul>
-						</div>
-					</div>
-				{{/if}}
-			{{/each}}
-		</form>
-	</div>
+
+	{{each(i, o) rest}}
+		<div class="row">
+			<div class="whapp-header">
+				<button class="btn ${o.btn} toggle" data-toggle="${i}">${i.toUpperCase()}</button>
+				<small>/${title}</small>
+			</div>
+			<div class="toggled" id="${i}">
+				<div class="rest">
+					${i.toUpperCase()}
+				</div>
+				<div class="buttons-right">
+					<button class="btn success try" data-rest="${i}">Try It</button>
+				</div>
+			</div>
+		</div>
+	{{/each}}
+	
 </div>
