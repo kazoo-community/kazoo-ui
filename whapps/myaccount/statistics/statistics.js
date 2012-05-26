@@ -51,12 +51,10 @@ winkstart.module('myaccount', 'statistics', {
             var THIS = this;
 
             if($.isEmptyObject(THIS.stats)) {
-                statistics_html = THIS.templates.statistics.tmpl();
-
                 winkstart.publish('linknav.add', {
                     name: 'stats',
                     weight: '05',
-                    content: statistics_html
+                    content: THIS.templates.statistics.tmpl()
                 });
             }
 
