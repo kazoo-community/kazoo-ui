@@ -37,8 +37,6 @@
         });
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
-
-        THIS.activate();
     },
     {
         modules: {
