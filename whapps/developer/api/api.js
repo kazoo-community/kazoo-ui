@@ -2,7 +2,8 @@ winkstart.module('developer', 'api', {
 
         subscribe: {
             'api.activate' : 'activate',
-            'api.render' : 'render_api'
+            'api.render' : 'render_api',
+            'api.request' : 'send_request'
         },
 
         templates: {
@@ -36,9 +37,77 @@ winkstart.module('developer', 'api', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        THIS.test();
+        THIS.ressources();
     },
     {
+        clean_form: function(obj) {
+            var THIS = this,
+                isEmpty = function (o){
+                    for(var i in o){ return false;}
+                    return true;
+                };
+
+            $.each(obj, function(k, o){
+                if(typeof o == "object") {
+                    if(isEmpty(o)) {
+                        delete obj[k];
+                    } else {
+                        obj[k] = THIS.clean_form(o);
+                        if(isEmpty(obj[k])) {
+                            delete obj[k];
+                        }
+                    }
+                } else {
+                    if(o == "") {
+                        delete obj[k];
+                    }
+                }
+            });
+
+            return obj;
+        },
+
+        send_request: function(id, verb, form_html) {
+
+            var THIS = this,
+                request = {
+                    account_id: winkstart.apps['developer'].account_id,
+                    api_url: winkstart.apps['developer'].api_url,
+                },
+                tmp = form2object(id + "_" + verb + "_form");
+                test = THIS.clean_form(tmp);
+
+            console.log(test);
+
+            switch(verb) {
+                case 'put':
+                    request.data = tmp;
+                    break;
+                case 'post':
+                    request.id = tmp.id; 
+                    delete tmp.id;
+                    request.data = tmp;
+                    break;
+                case 'get':
+                    request.id = tmp.id; 
+                    break;
+                case 'delete':
+                    request.id = tmp.id;
+                    break;
+            }
+
+            winkstart.request('developer.' + id + '.' + verb, 
+                request,
+                function(_data, status) {
+                    $('#' + id + '_' + verb + ' .result', form_html)
+                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                },
+                function(_data, status) {
+                    $('#' + id + '_' + verb + ' .result', form_html)
+                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                }
+            );
+        },
 
         render_api: function(args) {
             var THIS = this,
@@ -69,53 +138,8 @@ winkstart.module('developer', 'api', {
 
                         $('.try', form_html).click(function(e) {
                             e.preventDefault();
-                            
-                            var id = $(this).data('id')
-                                verb = $(this).data('verb');
-                                request = {
-                                    account_id: winkstart.apps['developer'].account_id,
-                                    api_url: winkstart.apps['developer'].api_url,
-                                };
 
-
-                            switch(verb) {
-                                case 'put':
-                                    var tmp = form2object(id + "_" + verb + "_form");
-
-                                    request.data = tmp;
-                                    break;
-                                case 'post':
-                                    var tmp = form2object(id + "_" + verb + "_form");
-
-                                    request.device_id = tmp.id; 
-                                    delete tmp.id;
-                                    request.data = tmp;
-                                    break;
-                                case 'get':
-                                    var tmp = form2object(id + "_" + verb + "_form");
-
-                                    request.device_id = tmp.id; 
-                                    break;
-                                case 'delete':
-                                    var tmp = form2object(id + "_" + verb + "_form");
-
-                                    request.device_id = tmp.id;
-                                    break;
-                            }
-
-                            console.log(request);
-
-                            winkstart.request('developer.' + id + '.' + verb, 
-                                request,
-                                function(_data, status) {
-                                    $('#' + id + '_' + verb + ' .result', form_html)
-                                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
-                                },
-                                function(_data, status) {
-                                    $('#' + id + '_' + verb + ' .result', form_html)
-                                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
-                                }
-                            );
+                            winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), form_html)
                         });
 
                     });
@@ -223,7 +247,7 @@ winkstart.module('developer', 'api', {
             });
 
             if(typeof callback == "function"){
-                callback(required, not_required, schema);
+                callback(required, not_required, new_schema, schema);
             }
         },
 
@@ -308,7 +332,7 @@ winkstart.module('developer', 'api', {
             THIS.render_list(api_html);
         },
 
-        test: function() {
+        ressources: function() {
             var THIS = this;
 
             THIS.rest = {
@@ -354,7 +378,7 @@ winkstart.module('developer', 'api', {
                             verb: 'GET'
                         },
                         'developer.devices.get': {
-                            url: '{api_url}/accounts/{account_id}/devices/{device_id}',
+                            url: '{api_url}/accounts/{account_id}/devices/{id}',
                             contentType: 'application/json',
                             verb: 'GET'
                         },
@@ -364,12 +388,12 @@ winkstart.module('developer', 'api', {
                             verb: 'PUT'
                         },
                         'developer.devices.post': {
-                            url: '{api_url}/accounts/{account_id}/devices/{device_id}',
+                            url: '{api_url}/accounts/{account_id}/devices/{d}',
                             contentType: 'application/json',
                             verb: 'POST'
                         },
                         'developer.devices.delete': {
-                            url: '{api_url}/accounts/{account_id}/devices/{device_id}',
+                            url: '{api_url}/accounts/{account_id}/devices/{id}',
                             contentType: 'application/json',
                             verb: 'DELETE'
                         },
@@ -379,8 +403,65 @@ winkstart.module('developer', 'api', {
                             verb: 'GET'
                         }
                     }
+                },
+                'vmboxes': {
+                    api: {
+                        'vmboxes': {
+                            verbs: ['get_all', 'get', 'put', 'post', 'delete'],
+                            title: 'VM Boxes',
+                            url: '/vmboxes'
+                        }
+                    },
+                    ressources: {
+                        'developer.vmboxes.get_all': {
+                            url: '{api_url}/accounts/{account_id}/vmboxes',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.vmboxes.get': {
+                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.vmboxes.put': {
+                            url: '{api_url}/accounts/{account_id}/vmboxes',
+                            contentType: 'application/json',
+                            verb: 'PUT'
+                        },
+                        'developer.vmboxes.post': {
+                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
+                            contentType: 'application/json',
+                            verb: 'POST'
+                        },
+                        'developer.vmboxes.delete': {
+                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
+                            contentType: 'application/json',
+                            verb: 'DELETE'
+                        }
+                    }
                 }
             };
         }
     }
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
