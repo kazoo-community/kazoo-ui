@@ -6,21 +6,42 @@
 		</div>
 	</div>
 
-	{{each(i, o) rest}}
-		<div class="row">
-			<div class="whapp-header">
-				<button class="btn ${o.btn} toggle" data-toggle="${i}">${i.toUpperCase()}</button>
-				<small>/${title}</small>
-			</div>
-			<div class="toggled" id="${i}">
-				<div class="rest">
-					${i.toUpperCase()}
+	{{each(k, api) apis}}
+		{{each(i, verb) api.verbs}}
+			<div class="row">
+				<div class="whapp-header">
+					<button class="btn ${rest[verb].btn} toggle" data-toggle="${k}_${verb}">${verb.toUpperCase()}</button>
+					<small>${api.url}</small>
 				</div>
-				<div class="buttons-right">
-					<button class="btn success try" data-rest="${i}">Try It</button>
+				<div class="toggled" id="${k}_${verb}">
+					<form action="#" id="${k}_${verb}_form">
+						<div class="pill-content">
+							<h3>${api.title}</h3>
+							
+							{{if rest[verb].class}}
+								{{each(index, class_type) rest[verb].class}}
+									<div class="${class_type}"></div>
+								{{/each}}
+							{{/if}}
+							<div class="result"></div>
+						</div>
+					</form>
+					{{if rest[verb].class == "schema"}}
+						<div class="pasted details_clean">
+							<button class="btn details" data-id="${k}_${verb}">Details</button>
+							<button class="btn clean" data-id="${k}_${verb}">Clean</button>
+						</div>
+					{{else}}
+						<button class="btn clean" data-id="${k}_${verb}">Clean</button>
+					{{/if}}
+					
+					<div class="buttons-right">
+						<button class="btn success try" data-id="${k}" data-verb="${verb}">Try It</button>
+					</div>
+					
 				</div>
 			</div>
-		</div>
+		{{/each}}
 	{{/each}}
 	
 </div>

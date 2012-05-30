@@ -33,6 +33,19 @@
 	margin-bottom: 0;
 }
 
-#api-view .pill-content > .clearfix {
+#api-view .pill-content > div {
 	display: block;
+}
+
+#api-view pre {
+	color: #404040;
+	margin-top: 20px;
+}
+
+#api-view .id {
+	margin-bottom: 18px;
+}
+
+#api-view .details_clean {
+	float: left;
 }
