@@ -241,13 +241,13 @@
             var div = $('#' + btn.data('toggle'));
 
             if(state) {
-                btn.addClass('activate');
+                btn.addClass('activated');
                 if(change_name != false) {
                     btn.html('Hide');
                 }
                 div.slideDown();
             } else {
-                btn.removeClass('activate');
+                btn.removeClass('activated');
                 if(change_name != false) {
                     btn.html('Show');
                 }
@@ -278,7 +278,7 @@
             var btn = $(this);
             ev.preventDefault();
 
-            toggle(btn, !btn.hasClass('activate'));
+            toggle(btn, !btn.hasClass('activated'));
         });
 
     };
