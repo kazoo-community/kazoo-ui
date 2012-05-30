@@ -74,10 +74,7 @@ winkstart.module('developer', 'api', {
                     account_id: winkstart.apps['developer'].account_id,
                     api_url: winkstart.apps['developer'].api_url,
                 },
-                tmp = form2object(id + "_" + verb + "_form");
-                test = THIS.clean_form(tmp);
-
-            console.log(test);
+                tmp = THIS.clean_form(form2object(id + "_" + verb + "_form"));
 
             switch(verb) {
                 case 'put':
