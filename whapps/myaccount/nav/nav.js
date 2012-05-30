@@ -51,15 +51,6 @@ winkstart.module('myaccount', 'nav', {
                 weight: '25',
                 publish: 'auth.activate'
             });
-
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'switch_account',
-                label: 'Switch Account',
-                weight: '05',
-                publish: 'accounts_manager.switch_account'
-                //publish: 'accounts.switch_account'
-            });
         },
 
         add_sublink: function(args, callback) {
