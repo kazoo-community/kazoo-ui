@@ -817,6 +817,8 @@ winkstart.module('voip', 'user', {
         },
 
         define_stats: function() {
+            var THIS = this;
+
             var stats = {
                 'users': {
                     icon: 'user',

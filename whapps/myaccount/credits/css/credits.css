@@ -1,0 +1,11 @@
+#statistics_navbar .stat_wrapper[data-name="credits"] .green {
+    color: #33cc44;
+}
+
+#statistics_navbar .stat_wrapper[data-name="credits"] .orange {
+    color: #ff9933;
+}
+
+#statistics_navbar .stat_wrapper[data-name="credits"] .red {
+    color: #ff3322;
+}

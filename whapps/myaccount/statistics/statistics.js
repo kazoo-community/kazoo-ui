@@ -48,7 +48,9 @@ winkstart.module('myaccount', 'statistics', {
         },
 
         add_stat: function(data_stat) {
-            var THIS = this;
+            var THIS = this,
+                stat_html,
+                stat;
 
             if($.isEmptyObject(THIS.stats)) {
                 winkstart.publish('linknav.add', {
@@ -60,56 +62,65 @@ winkstart.module('myaccount', 'statistics', {
 
             var stats_html = $(THIS.config.targets.stats_nav);
 
-            /* Set defaults values */
-            console.log(data_stat);
             $.each(data_stat, function(k,v) {
                 v.active = v.active || false;
                 v.number = v.number || 0;
                 v.color = v.color || 'green';
                 v.name = k;
                 v.clickable = v.click_handler ? true : false;
-            });
-
-            $.extend(THIS.stats, data_stat);
-
-            $.each(data_stat, function(k,v) {
-                stat_html = THIS.templates.stat.tmpl({stat: v}).appendTo(stats_html);
+                stat_html = ('container' in v ? v.container({stat: v}) : THIS.templates.stat.tmpl({stat: v})).prependTo(stats_html);
 
                 if(v.click_handler && typeof v.click_handler === 'function') {
                     $(stat_html, stats_html).click(function() {
                         v.click_handler();
                     });
                 }
+
+                stat = {};
+                stat[k] = v;
+
+                $.extend(THIS.stats, stat);
+
                 THIS.update_stat(k);
             });
         },
 
-        update_stat: function(stat_name) {
+        update_stat: function(stat_name, callback) {
             var THIS = this,
                 current_stat = THIS.stats[stat_name];
 
             if(!current_stat.error || current_stat.error < 3) {
                 THIS.stats[stat_name].get_stat(function(args) {
+                    current_stat = $.extend(current_stat, args);
                     if(!args.error) {
                         delete current_stat.error;
 
                         winkstart.publish('statistics.get_nav', {name: stat_name}, function(stat_html) {
-                            if(args.active) {
-                                $('.icon', stat_html).addClass('blue');
-                                $('.bubble', stat_html).removeClass('inactive');
+                            if('container' in current_stat) {
+                                current_stat.update_container(stat_html);
                             }
                             else {
-                                $('.icon', stat_html).removeClass('blue');
-                                $('.bubble', stat_html).addClass('inactive');
+                                if(current_stat.active) {
+                                    $('.icon', stat_html).addClass('blue');
+                                    $('.bubble', stat_html).removeClass('inactive');
+                                }
+                                else {
+                                    $('.icon', stat_html).removeClass('blue');
+                                    $('.bubble', stat_html).addClass('inactive');
+                                }
+                                $('.bubble', stat_html).html(current_stat.number);
+                                $('.bubble', stat_html).removeClass('green orange red').addClass(current_stat.color);
                             }
-                            $('.bubble', stat_html).html(args.number);
-                            $('.bubble', stat_html).removeClass('green orange red').addClass(args.color);
                         });
                     }
                     else {
                         current_stat.error = current_stat.error ? current_stat.error++ : 1;
                     }
                 });
+            }
+
+            if(typeof callback === 'function') {
+                callback()
             }
         },
 

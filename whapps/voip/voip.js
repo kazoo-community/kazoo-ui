@@ -52,7 +52,6 @@ winkstart.module('voip', 'voip', {
 
         THIS.whapp_config();
 
-        console.log('publish');
         winkstart.publish('voip.loaded');
     },
     {

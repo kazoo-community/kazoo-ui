@@ -43,6 +43,10 @@ winkstart.module('myaccount', 'myaccount', {
         THIS.whapp_config();
     },
     {
+        whapp_vars: {
+            billing_provider: 'braintree'
+        },
+
         /* A modules object is required for the loading routine.
          * The format is as follows:
          * <module name>: <initialization status>
@@ -52,7 +56,8 @@ winkstart.module('myaccount', 'myaccount', {
             'billing': false,
             'personal_info': false,
             'nav': false,
-            'statistics': false
+            'statistics': false,
+            'credits': false
         },
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
@@ -155,6 +160,8 @@ winkstart.module('myaccount', 'myaccount', {
                 account_id: winkstart.apps['auth'].account_id,
                 user_id: winkstart.apps['auth'].user_id
             }, THIS.orig_whapp_config);
+
+            $.extend(winkstart.apps[THIS.__module], THIS.whapp_vars);
         },
 
         list_submodules: {
