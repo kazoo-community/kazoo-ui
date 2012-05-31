@@ -79,6 +79,14 @@ winkstart.module('accounts', 'accounts_manager', {
     function(args) {
         var THIS = this;
 
+        winkstart.publish('nav.add_sublink', {
+            link: 'nav',
+            sublink: 'switch_account',
+            label: 'Switch Account',
+            weight: '05',
+            publish: 'accounts_manager.switch_account'
+        });
+
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
 
