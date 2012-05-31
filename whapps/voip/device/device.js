@@ -517,6 +517,10 @@ winkstart.module('voip', 'device', {
 
                         data.data.device_type = $(this).attr('device_type');
 
+                        (target)
+                            .empty()
+                            .append(device_html);
+
                         THIS.render_device(data, $('.media_pane', device_html), callbacks);
                     }
                 });
