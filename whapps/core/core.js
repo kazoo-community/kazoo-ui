@@ -11,6 +11,7 @@ winkstart.module('core', 'core',
     },
     function(args) {
         var THIS = this,
+            uninitialized_count = 0,
             domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
             load_modules = function() {
                 // First thing we're going to do is go through is load our layout
@@ -22,9 +23,17 @@ winkstart.module('core', 'core',
 
                             // Load any other apps requested (only after core is initialized)
                             $.each(winkstart.apps, function(k, v) {
+                                uninitialized_count++;
+                            });
+
+                            $.each(winkstart.apps, function(k, v) {
                                 winkstart.log('WhApps: Would load ' + k + ' from URL ' + v.url);
                                 winkstart.module.loadApp(k, function() {
-                                    this.init();
+                                    this.init(function() {
+                                        if(!(--uninitialized_count)) {
+                                            winkstart.publish('core.loaded');
+                                        }
+                                    });
                                     winkstart.log('WhApps: Initializing ' + k);
                                 });
                             });

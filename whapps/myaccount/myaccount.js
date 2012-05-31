@@ -40,6 +40,8 @@ winkstart.module('myaccount', 'myaccount', {
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
+        THIS.initialization_check();
+
         THIS.whapp_config();
     },
     {
@@ -66,10 +68,9 @@ winkstart.module('myaccount', 'myaccount', {
         initialized: function(user_data) {
             var THIS = this;
 
-            winkstart.config.advancedView = user_data.advanced;
             THIS.is_initialized = true;
             THIS.list_submodules.list.sort();
-            THIS.setup_page();
+            //THIS.setup_page();
         },
 
         activate: function(user_data) {
@@ -77,6 +78,7 @@ winkstart.module('myaccount', 'myaccount', {
 
             THIS.whapp_auth(function() {
                 THIS.initialization_check(user_data);
+                winkstart.config.advancedView = user_data.advanced;
             });
         },
 
@@ -85,7 +87,14 @@ winkstart.module('myaccount', 'myaccount', {
 
             if (!THIS.is_initialized) {
                 // Load the modules
-                $.each(THIS.modules, function(k, v) {
+                winkstart.module('myaccount', 'nav').init(function() {
+                    winkstart.module('myaccount', 'billing').init(function() {
+                        winkstart.module('myaccount', 'personal_info').init(function() {
+                            winkstart.publish(THIS.__module + '.initialized', user_data);
+                        });
+                    });
+                });
+                /*$.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;
                         winkstart.module(THIS.__module, k).init(function() {
@@ -96,9 +105,9 @@ winkstart.module('myaccount', 'myaccount', {
                             }
                         });
                     }
-                })
+                })*/
             } else {
-                THIS.setup_page();
+                THIS.setup_page(user_data);
             }
         },
 
@@ -138,9 +147,10 @@ winkstart.module('myaccount', 'myaccount', {
          */
 
         // A setup_page function is required for the copy and paste code
-        setup_page: function() {
+        setup_page: function(user_data) {
             var THIS = this;
 
+            winkstart.publish('nav.activate', user_data);
             //winkstart.publish('myaccount.display');
         },
 
