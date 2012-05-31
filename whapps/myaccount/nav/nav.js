@@ -9,7 +9,7 @@ winkstart.module('myaccount', 'nav', {
 
         subscribe: {
             'nav.add_sublink': 'add_sublink',
-            'myaccount.initialized': 'activate',
+            'nav.activate': 'activate',
             'nav.masquerade': 'masquerade',
             'nav.company_name': 'company_name'
         }

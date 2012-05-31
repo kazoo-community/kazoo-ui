@@ -23,7 +23,8 @@ winkstart.module('auth', 'auth',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
-            'auth.save_registration' : 'save_registration'
+            'auth.save_registration' : 'save_registration',
+            'core.loaded': 'core_loaded'
         },
 
         validation: [
@@ -91,26 +92,6 @@ winkstart.module('auth', 'auth',
             winkstart.publish('auth.welcome');
         }
 
-        if(URL_DATA['activation_key']) {
-            winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
-
-               winkstart.alert('info','You are now registered! Please log in.', function() {
-                   winkstart.publish('auth.welcome', {username: data.data.user.username});
-               });
-
-               if(data.auth_token != '' && data.auth_token != 'null'){
-                    winkstart.apps['auth'].account_id = data.data.account.id;
-                    winkstart.apps['auth'].auth_token = data.auth_token;
-                    winkstart.apps['auth'].user_id = data.data.user.id;
-                    winkstart.apps['auth'].realm = data.data.account.realm;
-                    winkstart.publish('auth.load_account');
-               }
-            });
-        }
-        else if(URL_DATA['recover_password']) {
-            winkstart.alert('info','You are in the Recover Password tool.');
-        }
-
         if('account_name' in URL_DATA) {
             account_name = URL_DATA['account_name'];
         }
@@ -127,16 +108,38 @@ winkstart.module('auth', 'auth',
                 }
             }
         }
-
-        if(cookie_data = $.cookie('c_winkstart_auth')) {
-            $('#ws-content').empty();
-            eval('winkstart.apps["auth"] = ' + cookie_data);
-            winkstart.publish('auth.load_account');
-        }
     },
 
     {
         request_realm : false,
+
+        core_loaded: function() {
+            if(URL_DATA['activation_key']) {
+                winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
+
+                   winkstart.alert('info','You are now registered! Please log in.', function() {
+                       winkstart.publish('auth.welcome', {username: data.data.user.username});
+                   });
+
+                   if(data.auth_token != '' && data.auth_token != 'null'){
+                        winkstart.apps['auth'].account_id = data.data.account.id;
+                        winkstart.apps['auth'].auth_token = data.auth_token;
+                        winkstart.apps['auth'].user_id = data.data.user.id;
+                        winkstart.apps['auth'].realm = data.data.account.realm;
+                        winkstart.publish('auth.load_account');
+                   }
+                });
+            }
+            else if(URL_DATA['recover_password']) {
+                winkstart.alert('info','You are in the Recover Password tool.');
+            }
+
+            if(cookie_data = $.cookie('c_winkstart_auth')) {
+                $('#ws-content').empty();
+                eval('winkstart.apps["auth"] = ' + cookie_data);
+                winkstart.publish('auth.load_account');
+            }
+        },
 
         register: function() {
             var THIS = this;
