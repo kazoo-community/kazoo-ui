@@ -42,12 +42,12 @@ winkstart.module('developer', 'api', {
     {
         clean_form: function(obj) {
             var THIS = this,
-                isEmpty = function (o){
+                isEmpty = function (o) {
                     for(var i in o){ return false;}
                     return true;
                 };
 
-            $.each(obj, function(k, o){
+            $.each(obj, function(k, o) {
                 if(typeof o == "object") {
                     if(isEmpty(o)) {
                         delete obj[k];
@@ -67,40 +67,39 @@ winkstart.module('developer', 'api', {
             return obj;
         },
 
-        send_request: function(id, verb, form_html) {
-
+        send_request: function(api, verb, form_html) {
             var THIS = this,
                 request = {
                     account_id: winkstart.apps['developer'].account_id,
                     api_url: winkstart.apps['developer'].api_url,
                 },
-                tmp = THIS.clean_form(form2object(id + "_" + verb + "_form"));
+                data = THIS.clean_form(form2object(api + "_" + verb + "_form"));
 
             switch(verb) {
                 case 'put':
-                    request.data = tmp;
+                    request.data = data;
                     break;
                 case 'post':
-                    request.id = tmp.id; 
-                    delete tmp.id;
-                    request.data = tmp;
+                    request.id = data.id; 
+                    delete data.id;
+                    request.data = data;
                     break;
                 case 'get':
-                    request.id = tmp.id; 
+                    request.id = data.id; 
                     break;
                 case 'delete':
-                    request.id = tmp.id;
+                    request.id = data.id;
                     break;
             }
 
-            winkstart.request('developer.' + id + '.' + verb, 
+            winkstart.request('developer.' + api + '.' + verb, 
                 request,
                 function(_data, status) {
-                    $('#' + id + '_' + verb + ' .result', form_html)
+                    $('#' + api + '_' + verb + ' .result', form_html)
                         .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
                 },
                 function(_data, status) {
-                    $('#' + id + '_' + verb + ' .result', form_html)
+                    $('#' + api + '_' + verb + ' .result', form_html)
                         .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
                 }
             );
@@ -117,7 +116,12 @@ winkstart.module('developer', 'api', {
                     id: args.id
                 },
                 function(data, status) {
-                    winkstart.registerResources(THIS.__whapp, THIS.apis[data.data.id].ressources);
+                    if(THIS.apis[data.data.id]){
+                        winkstart.registerResources(THIS.__whapp, THIS.apis[data.data.id].ressources);
+                    } else {
+                        winkstart.alert('Api not available');
+                        return false;
+                    }
 
                     THIS.schema_to_template(data.data.properties, function(required, not_required, schema) {
 
@@ -139,14 +143,6 @@ winkstart.module('developer', 'api', {
                             winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), form_html)
                         });
 
-                    });
-
-                    $('*[rel=popover]:not([type="text"])', form_html).popover({
-                        trigger: 'hover'
-                    });
-
-                    $('*[rel=popover][type="text"]', form_html).popover({
-                        trigger: 'focus'
                     });
 
                     winkstart.accordion(form_html, false);
@@ -175,6 +171,14 @@ winkstart.module('developer', 'api', {
                     $('.id', form_html)
                         .empty()
                         .append(input_id_html);
+
+                    $('*[rel=popover]:not([type="text"])', (form_html)).popover({
+                        trigger: 'hover'
+                    });
+
+                    $('*[rel=popover][type="text"]', form_html).popover({
+                        trigger: 'focus'
+                    });
                 }
             );
         },
@@ -363,7 +367,7 @@ winkstart.module('developer', 'api', {
                             url: '/devices'
                         },
                         'devices_status': {
-                            verbs: ['get'],
+                            verbs: ['get_all'],
                             title: 'Devices Status',
                             url: '/devices/status'
                         }
@@ -394,7 +398,7 @@ winkstart.module('developer', 'api', {
                             contentType: 'application/json',
                             verb: 'DELETE'
                         },
-                        'developer.devices_status.get': {
+                        'developer.devices_status.get_all': {
                             url: '{api_url}/accounts/{account_id}/devices/status',
                             contentType: 'application/json',
                             verb: 'GET'

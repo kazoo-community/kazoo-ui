@@ -26,15 +26,27 @@
 							<div class="result"></div>
 						</div>
 					</form>
-					{{if rest[verb].class == "schema"}}
-						<div class="pasted details_clean">
-							<button class="btn details" data-id="${k}_${verb}">Details</button>
-							<button class="btn clean" data-id="${k}_${verb}">Clean</button>
-						</div>
-					{{else}}
-						<button class="btn clean" data-id="${k}_${verb}">Clean</button>
+
+
+					{{if rest[verb].class}}
+						{{each(index, class_type) rest[verb].class}}
+							{{if class_type == "schema"}}
+								<div class="pasted details_clean">
+									<button class="btn details" data-id="${k}_${verb}">Details</button>	
+							{{/if}}
+						{{/each}}
 					{{/if}}
-					
+
+					<button class="btn clean" data-id="${k}_${verb}">Clean</button>					
+
+					{{if rest[verb].class}}
+						{{each(index, class_type) rest[verb].class}}
+							{{if class_type == "schema"}}
+								</div>
+							{{/if}}
+						{{/each}}
+					{{/if}}
+
 					<div class="buttons-right">
 						<button class="btn success try" data-id="${k}" data-verb="${verb}">Try It</button>
 					</div>
