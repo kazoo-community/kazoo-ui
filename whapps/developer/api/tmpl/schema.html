@@ -27,7 +27,7 @@
 		{{if input.type == "array"}}
 			<div class="clearfix">
 				{{if input.enum}}
-				<label for="">${i}</label>
+					<label for="">${i}</label>
 					<div class="input">
 						<ul class="inputs-list">
 							{{each(i, tmp) input.enum}}
@@ -43,12 +43,16 @@
 						</ul>
 					</div>
 				{{else}}
-					<div class="clearfix">
-						<label for="${input.input_name}">${i}</label>
-						<div class="input">
-							<input class="span4" id="${input.input_name}" name="${input.input_name}" type="text" placeholder="" rel="popover" data-content="${input.description}"/>
-						</div>
-					</div>
+					{{each(index, field) input}}
+						{{if field.type}}
+							<div class="clearfix">
+								<label for="${index}">${index}</label>
+								<div class="input">
+									<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
+								</div>
+							</div>
+						{{/if}}
+					{{/each}}
 				{{/if}}
 			</div>
 		{{/if}}
@@ -107,12 +111,16 @@
 							</ul>
 						</div>
 					{{else}}
-						<div class="clearfix">
-							<label for="${input.input_name}">${i}</label>
-							<div class="input">
-								<input class="span4" id="${input.input_name}" name="${input.input_name}" type="text" placeholder="" rel="popover" data-content="${input.description}"/>
-							</div>
-						</div>
+						{{each(index, field) input}}
+							{{if field.type}}
+								<div class="clearfix">
+									<label for="${index}">${index}</label>
+									<div class="input">
+										<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
+									</div>
+								</div>
+							{{/if}}
+						{{/each}}
 					{{/if}}
 				</div>
 			{{/if}}

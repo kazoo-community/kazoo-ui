@@ -207,6 +207,7 @@ winkstart.module('developer', 'api', {
                                         new_schema[k] = o;
                                     } else {
                                         target[k] = {};
+                                        target[k].type = 'array';
                                         clean(o.items.properties, target[k]);
                                     }
                                     break;
@@ -440,7 +441,85 @@ winkstart.module('developer', 'api', {
                             verb: 'DELETE'
                         }
                     }
+                },
+                'accounts': {
+                    api: {
+                        'accounts': {
+                            verbs: ['get', 'post'],
+                            title: 'Accounts',
+                            url: '/accounts'
+                        },
+                        'accounts_children': {
+                            verbs: ['get_all'],
+                            title: 'Accounts Children',
+                            url: '/accounts/{account_id}/children'
+                        },
+                        'accounts_descendants': {
+                            verbs: ['get_all'],
+                            title: 'Accounts Descendants',
+                            url: '/accounts/{account_id}/descendants'
+                        }
+                    },
+                    ressources: {
+                        'developer.accounts.get': {
+                            url: '{api_url}/accounts/{account_id}',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.accounts.post': {
+                            url: '{api_url}/accounts/{account_id}',
+                            contentType: 'application/json',
+                            verb: 'POST'
+                        },
+                        'developer.accounts_children.get_all': {
+                            url: '{api_url}/accounts/{account_id}/children',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.accounts_descendants.get_all': {
+                            url: '{api_url}/accounts/{account_id}/descendants',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        }
+                    }
+                },
+                'callflows': {
+                    api: {
+                        'callflows': {
+                            verbs: ['get_all', 'get', 'put', 'post', 'delete'],
+                            title: 'Callflows',
+                            url: '/callflows'
+                        }
+                    },
+                    ressources: {
+                        'developer.callflows.get_all': {
+                            url: '{api_url}/accounts/{account_id}/callflows',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.callflows.get': {
+                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.callflows.put': {
+                            url: '{api_url}/accounts/{account_id}/callflows',
+                            contentType: 'application/json',
+                            verb: 'PUT'
+                        },
+                        'developer.callflows.post': {
+                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                            contentType: 'application/json',
+                            verb: 'POST'
+                        },
+                        'developer.callflows.delete': {
+                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                            contentType: 'application/json',
+                            verb: 'DELETE'
+                        }
+                    }
                 }
+
             };
         }
     }
