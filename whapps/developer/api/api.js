@@ -3,7 +3,8 @@ winkstart.module('developer', 'api', {
         subscribe: {
             'api.activate' : 'activate',
             'api.render' : 'render_api',
-            'api.request' : 'send_request'
+            'api.request' : 'send_request',
+            'api.schema_to_template': 'schema_to_template'
         },
 
         templates: {
@@ -116,6 +117,7 @@ winkstart.module('developer', 'api', {
                     id: args.id
                 },
                 function(data, status) {
+
                     if(THIS.apis[data.data.id]){
                         winkstart.registerResources(THIS.__whapp, THIS.apis[data.data.id].ressources);
                     } else {
@@ -123,12 +125,14 @@ winkstart.module('developer', 'api', {
                         return false;
                     }
 
-                    THIS.schema_to_template(data.data.properties, function(required, not_required, schema) {
+                    winkstart.publish('api.schema_to_template', data.data.properties, function(required, not_required, schema) {
 
                         form_html =  THIS.templates.form.tmpl({
                             title: data.data.id,
-                            api_url: winkstart.apps.developer.api_url,
+                            api_url: winkstart.apps['developer'].api_url,
+                            account_id: winkstart.apps['developer'].account_id,
                             apis: THIS.apis[data.data.id].api,
+                            ressources: THIS.apis[data.data.id].ressources,
                             rest: THIS.rest
                         });
 
@@ -143,21 +147,24 @@ winkstart.module('developer', 'api', {
                             winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), form_html)
                         });
 
+
+                        $('.details', form_html).click(function(e){
+                            e.preventDefault();
+                            var id = $(this).data('id');
+                            $('#' + id + ' .hide', form_html).slideToggle();
+                        });
+
+                        $('.clean', form_html).click(function(e){
+                            e.preventDefault();
+                            var id = $(this).data('id');
+                            $('#' + id + ' .result', form_html).empty();
+                        });
+
+                        winkstart.accordion(form_html, false);
+
                     });
 
-                    winkstart.accordion(form_html, false);
-
-                    $('.details', form_html).click(function(e){
-                        e.preventDefault();
-                        var id = $(this).data('id');
-                        $('#' + id + ' .hide', form_html).slideToggle();
-                    });
-
-                    $('.clean', form_html).click(function(e){
-                        e.preventDefault();
-                        var id = $(this).data('id');
-                        $('#' + id + ' .result', form_html).empty();
-                    });
+                    $('#accounts_get .id', form_html).hide();
 
 
                     $('#api-view')
@@ -390,7 +397,7 @@ winkstart.module('developer', 'api', {
                             verb: 'PUT'
                         },
                         'developer.devices.post': {
-                            url: '{api_url}/accounts/{account_id}/devices/{d}',
+                            url: '{api_url}/accounts/{account_id}/devices/{id}',
                             contentType: 'application/json',
                             verb: 'POST'
                         },

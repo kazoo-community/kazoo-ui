@@ -1,6 +1,10 @@
 <div>
 	<div class="row">
-		<h1>${title.toUpperCase()} <small>API URL: ${api_url}</small> </h1>
+		<h1>${title.toUpperCase()}
+			<p>
+				<small>API URL: ${api_url} ID: ${account_id}</small> 
+			</p>
+		</h1>
 		<div class="buttons-right">
 			<button class="btn black toggle-all">Show All</button>
 		</div>
@@ -11,7 +15,7 @@
 			<div class="row">
 				<div class="whapp-header">
 					<button class="btn ${rest[verb].btn} toggle" data-toggle="${k}_${verb}">${verb.toUpperCase()}</button>
-					<small>${api.url}</small>
+					<small>${ressources['developer.' + k + '.' + verb].url}</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
 					<form action="#" id="${k}_${verb}_form">
@@ -26,7 +30,6 @@
 							<div class="result"></div>
 						</div>
 					</form>
-
 
 					{{if rest[verb].class}}
 						{{each(index, class_type) rest[verb].class}}

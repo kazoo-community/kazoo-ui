@@ -27,6 +27,11 @@
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#373737',endColorstr='#2f2f2f',GradientType=0);
 }
 
+#api-view .whapp-header small {
+	margin-left: 20px;
+	font-size: 14px;
+}
+
 
 #api-view .toggled {
 	margin-top: 5px;
