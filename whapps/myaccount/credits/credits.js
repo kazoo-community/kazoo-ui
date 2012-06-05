@@ -19,6 +19,22 @@ winkstart.module('myaccount', 'credits', {
                 contentType: 'application/json',
                 trigger_events: false,
                 verb: 'GET'
+            },
+            'myaccount_credits.get': {
+                url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'myaccount_limits.get': {
+                url: '{api_url}/accounts/{account_id}/limits',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'myaccount_limits.update': {
+                url: '{api_url}/accounts/{account_id}/limits',
+                contentType: 'application/json',
+                verb: 'POST'
+
             }
         }
     },
@@ -33,6 +49,27 @@ winkstart.module('myaccount', 'credits', {
 
     {
         get_credits: function(success, error) {
+            var THIS = this;
+
+            winkstart.request('myaccount_credits.get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    billing_provider: winkstart.apps['myaccount'].billing_provider
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        get_credits_no_loading: function(success, error) {
             var THIS = this;
 
             winkstart.request('myaccount_credits.get_no_loading', {
@@ -73,24 +110,97 @@ winkstart.module('myaccount', 'credits', {
             );
         },
 
+        get_limits: function(success, error) {
+            var THIS = this;
+
+            winkstart.request('myaccount_limits.get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        update_limits: function(limits, success, error) {
+            var THIS = this;
+
+            winkstart.request('myaccount_limits.update', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    data: limits
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                winkstart.error_message.process_error()
+            );
+        },
+
         render_credits_dialog: function(data) {
+            console.log(data);
             var THIS = this,
                 data_tmpl = {
-                    credits: data.amount,
+                    credits: data.credits.amount,
+                    limits: data.limits
                 },
                 credits_html = THIS.templates.credits.tmpl(data_tmpl),
                 popup;
 
-            $('#per_minute', credits_html).show();
+            $('ul.settings1 > li', credits_html).click(function(item) {
+                $('.pane_content', credits_html).hide();
+
+                $('ul.settings1 > li', credits_html).removeClass('current');
+
+                var tab_id = $(this).attr('id');
+
+                if(tab_id  === 'flat_rate_link') {
+                    $('#flat_rate', credits_html).show();
+                }
+                else if(tab_id === 'per_minute_link') {
+                    $('#per_minute', credits_html).show();
+                }
+
+                $(this).addClass('current');
+            });
 
             $('.purchase_credits', credits_html).click(function(ev) {
                 ev.preventDefault();
                 var credits_to_add = parseFloat($('#add_credits', credits_html).val().replace(',','.'));
 
                 THIS.add_credits(credits_to_add, function() {
-                    winkstart.publish('statistics.update_stat', 'credits');
+                    $('.current_balance', credits_html).html((parseFloat($('.current_balance', credits_html).html()) + credits_to_add).toFixed(2));
 
+                    winkstart.publish('statistics.update_stat', 'credits');
+                });
+            });
+
+            $('.submit_channels', credits_html).click(function(ev) {
+                ev.preventDefault();
+
+                var limits_data = {
+                    twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
+                    inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
+                };
+
+                console.log(limits_data);
+
+                limits_data = $.extend({}, data.limits, limits_data);
+
+                THIS.update_limits(limits_data, function(_data) {
                     popup.dialog('close');
+
+                    winkstart.alert('info', 'Your changes have been saved properly!');
                 });
             });
 
@@ -105,7 +215,7 @@ winkstart.module('myaccount', 'credits', {
                     number: 'loading',
                     color: 'green',
                     get_stat: function(callback) {
-                        THIS.get_credits(
+                        THIS.get_credits_no_loading(
                             function(_data, status) {
                                 var stat_attributes = {
                                     number: _data.data.amount,
@@ -122,8 +232,10 @@ winkstart.module('myaccount', 'credits', {
                         );
                     },
                     click_handler: function() {
-                        THIS.get_credits(function(_data, status) {
-                            THIS.render_credits_dialog(_data.data);
+                        THIS.get_limits(function(_data_limits, status) {
+                            THIS.get_credits(function(_data, status) {
+                                THIS.render_credits_dialog({limits: _data_limits.data, credits: _data.data});
+                            });
                         });
                     },
                     container: function(stat) {
