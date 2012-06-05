@@ -136,21 +136,6 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="gateways_invite_format">Invite Format</label>
-                        <div class="input">
-                            <select name="gateways[0].invite_format" id="gateways_invite_format" class="medium" rel="popover" data-content="The format of the request URI used in the SIP invite.">
-                            {{each(key, val) field_data.gateways.invite_formats}}
-                                {{if data.rules[0] == key}}
-                                    <option value="${key}" selected="selected">${val}</option>
-                                {{else}}
-                                    <option value="${key}">${val}</option>
-                                {{/if}}
-                            {{/each}}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
                         <label for="gateways_prefix">Prefix</label>
                         <div class="input">
                             <input type="text" name="gateways[0].prefix" id="gateways_prefix" value="${data.gateways[0].prefix}" rel="popover" data-content="Additional characters to prepend to the front of the dialed number"/>
