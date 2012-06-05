@@ -68,7 +68,7 @@ winkstart.module('developer', 'api', {
             return obj;
         },
 
-        send_request: function(api, verb, form_html) {
+        send_request: function(api, verb, success, failed) {
             var THIS = this,
                 request = {
                     account_id: winkstart.apps['developer'].account_id,
@@ -93,17 +93,13 @@ winkstart.module('developer', 'api', {
                     break;
             }
 
-            winkstart.request('developer.' + api + '.' + verb, 
-                request,
-                function(_data, status) {
-                    $('#' + api + '_' + verb + ' .result', form_html)
-                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
-                },
-                function(_data, status) {
-                    $('#' + api + '_' + verb + ' .result', form_html)
-                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
-                }
-            );
+            if(typeof success == "function" && typeof failed == "function") {
+                winkstart.request('developer.' + api + '.' + verb, 
+                    request,
+                    success,
+                    failed
+                );
+            }    
         },
 
         render_api: function(args) {
@@ -112,7 +108,7 @@ winkstart.module('developer', 'api', {
                 schema_html = null
                 input_id_html = THIS.templates.input_id.tmpl();
 
-            winkstart.request(true, 'api.show', {
+            winkstart.request('api.show', {
                     api_url: 'http://192.168.1.42:8000',
                     id: args.id
                 },
@@ -141,31 +137,52 @@ winkstart.module('developer', 'api', {
                             not_required: not_required
                         });
 
+                        $('.toggle', form_html).click(function() {
+                            var $header = $(this).parent('.whapp-header');
+                            (!$header.hasClass('active')) ? $header.addClass('active') : $header.removeClass('active');
+                        });
+
                         $('.try', form_html).click(function(e) {
                             e.preventDefault();
+                            var id = $(this).data('id') + '_' +  $(this).data('verb'),
+                                print_result = function(_data) {
+                                    $('#' + id + ' .result_content', form_html)
+                                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                                    
+                                    $('#' + id + ' .result', form_html)
+                                        .fadeToggle();
+                                };
 
-                            winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), form_html)
+                            winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), 
+                                function(_data, status) {
+                                     print_result(_data);
+                                },
+                                function(_data, status) {
+                                    print_result(_data);
+                                }
+                            );
                         });
 
 
                         $('.details', form_html).click(function(e){
                             e.preventDefault();
-                            var id = $(this).data('id');
-                            $('#' + id + ' .hide', form_html).slideToggle();
+                            $('#' + $(this).data('id') + ' .hide', form_html)
+                                .slideToggle();
                         });
 
                         $('.clean', form_html).click(function(e){
                             e.preventDefault();
-                            var id = $(this).data('id');
-                            $('#' + id + ' .result', form_html).empty();
+                            $('#' +  $(this).data('id') + ' .result', form_html)
+                                .toggle()
+                                .find('.result_content')
+                                .empty();
                         });
 
                         winkstart.accordion(form_html, false);
 
                     });
 
-                    $('#accounts_get .id', form_html).hide();
-
+                    $('#accounts_get .id', form_html).remove();
 
                     $('#api-view')
                         .empty()

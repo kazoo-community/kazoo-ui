@@ -1,9 +1,7 @@
 <div>
 	<div class="row">
 		<h1>${title.toUpperCase()}
-			<p>
-				<small>API URL: ${api_url} ID: ${account_id}</small> 
-			</p>
+			<small>API URL: ${api_url} ACCOUNT ID: ${account_id}</small> 
 		</h1>
 		<div class="buttons-right">
 			<button class="btn black toggle-all">Show All</button>
@@ -16,6 +14,7 @@
 				<div class="whapp-header">
 					<button class="btn ${rest[verb].btn} toggle" data-toggle="${k}_${verb}">${verb.toUpperCase()}</button>
 					<small>${ressources['developer.' + k + '.' + verb].url}</small>
+					<small>${api.title}</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
 					<form action="#" id="${k}_${verb}_form">
@@ -25,30 +24,19 @@
 							{{if rest[verb].class}}
 								{{each(index, class_type) rest[verb].class}}
 									<div class="${class_type}"></div>
+									{{if class_type == "schema"}}
+										<a class="details" data-id="${k}_${verb}">Show Advanced</a>	
+									{{/if}}
 								{{/each}}
 							{{/if}}
-							<div class="result"></div>
+							<div class="result">
+								<div class="clean icon gradient x_circle" data-id="${k}_${verb}"></div>
+								<div class="result_content">
+									
+								</div>
+							</div>
 						</div>
 					</form>
-
-					{{if rest[verb].class}}
-						{{each(index, class_type) rest[verb].class}}
-							{{if class_type == "schema"}}
-								<div class="pasted details_clean">
-									<button class="btn details" data-id="${k}_${verb}">Details</button>	
-							{{/if}}
-						{{/each}}
-					{{/if}}
-
-					<button class="btn clean" data-id="${k}_${verb}">Clean</button>					
-
-					{{if rest[verb].class}}
-						{{each(index, class_type) rest[verb].class}}
-							{{if class_type == "schema"}}
-								</div>
-							{{/if}}
-						{{/each}}
-					{{/if}}
 
 					<div class="buttons-right">
 						<button class="btn success try" data-id="${k}" data-verb="${verb}">Try It</button>
