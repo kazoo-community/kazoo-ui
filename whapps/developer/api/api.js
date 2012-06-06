@@ -30,7 +30,6 @@ winkstart.module('developer', 'api', {
                 verb: 'GET'
             }
         }
-
     },
 
     function(args) {
@@ -147,7 +146,8 @@ winkstart.module('developer', 'api', {
                             var id = $(this).data('id') + '_' +  $(this).data('verb'),
                                 print_result = function(_data) {
                                     $('#' + id + ' .result_content', form_html)
-                                        .html("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                                        .empty()
+                                        .append("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
                                     
                                     $('#' + id + ' .result', form_html)
                                         .fadeToggle();
@@ -359,7 +359,72 @@ winkstart.module('developer', 'api', {
         },
 
         ressources: function() {
-            var THIS = this;
+            var THIS = this,
+                ressources_schema = function(id, title, rest) {
+                    var REST = {
+                        get_all: 'GET',
+                        get: 'GET',
+                        put: 'PUT',
+                        post: 'POST',
+                        delete: 'DELETE' 
+                    };
+
+                    THIS.apis[id] = {
+                       api: {},
+                       ressources: {}
+                    };
+
+
+                    THIS.apis[id].api[id] = {
+                        verbs: rest,
+                        title: title,
+                        url: '/' + id
+                    };
+
+                    $.each(rest, function(k, v){
+                        var tmp = "";
+
+                        if(v == "get" || v == "post"  || v == "delete" ){
+                            tmp = "/{id}";
+                        }
+
+                        THIS.apis[id].ressources['developer.' + id + '.' + v] = {
+                            url: '{api_url}/accounts/{account_id}/' + id + tmp,
+                            contentType: 'application/json',
+                            verb: REST[v]
+                        };
+                    });
+                },
+                normal_apis = {
+                    menus: {
+                        title: 'Menus',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    vmboxes: {
+                        title: 'Voicemail Box',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    callflows: {
+                        title: 'Callflows',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    conferences: {
+                        title: 'Conferences',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    media: {
+                        title: 'Media',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    directories: {
+                        title: 'Directories',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    queues: {
+                        title: 'Queues',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    }
+                };
 
             THIS.rest = {
                 'get_all': {
@@ -430,42 +495,6 @@ winkstart.module('developer', 'api', {
                         }
                     }
                 },
-                'vmboxes': {
-                    api: {
-                        'vmboxes': {
-                            verbs: ['get_all', 'get', 'put', 'post', 'delete'],
-                            title: 'VM Boxes',
-                            url: '/vmboxes'
-                        }
-                    },
-                    ressources: {
-                        'developer.vmboxes.get_all': {
-                            url: '{api_url}/accounts/{account_id}/vmboxes',
-                            contentType: 'application/json',
-                            verb: 'GET'
-                        },
-                        'developer.vmboxes.get': {
-                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
-                            contentType: 'application/json',
-                            verb: 'GET'
-                        },
-                        'developer.vmboxes.put': {
-                            url: '{api_url}/accounts/{account_id}/vmboxes',
-                            contentType: 'application/json',
-                            verb: 'PUT'
-                        },
-                        'developer.vmboxes.post': {
-                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
-                            contentType: 'application/json',
-                            verb: 'POST'
-                        },
-                        'developer.vmboxes.delete': {
-                            url: '{api_url}/accounts/{account_id}/vmboxes/{id}',
-                            contentType: 'application/json',
-                            verb: 'DELETE'
-                        }
-                    }
-                },
                 'accounts': {
                     api: {
                         'accounts': {
@@ -507,44 +536,57 @@ winkstart.module('developer', 'api', {
                         }
                     }
                 },
-                'callflows': {
+                'users': {
                     api: {
-                        'callflows': {
+                        'users': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
-                            title: 'Callflows',
-                            url: '/callflows'
+                            title: 'Users',
+                            url: '/users'
+                        },
+                        'hotdesk': {
+                            verbs: ['get_all'],
+                            title: 'Hotdesk',
+                            url: '/users/hotdesk'
                         }
                     },
                     ressources: {
-                        'developer.callflows.get_all': {
-                            url: '{api_url}/accounts/{account_id}/callflows',
+                        'developer.users.get_all': {
+                            url: '{api_url}/accounts/{account_id}/users',
                             contentType: 'application/json',
                             verb: 'GET'
                         },
-                        'developer.callflows.get': {
-                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                        'developer.users.get': {
+                            url: '{api_url}/accounts/{account_id}/users/{id}',
                             contentType: 'application/json',
                             verb: 'GET'
                         },
-                        'developer.callflows.put': {
-                            url: '{api_url}/accounts/{account_id}/callflows',
+                        'developer.users.put': {
+                            url: '{api_url}/accounts/{account_id}/users',
                             contentType: 'application/json',
                             verb: 'PUT'
                         },
-                        'developer.callflows.post': {
-                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                        'developer.users.post': {
+                            url: '{api_url}/accounts/{account_id}/users/{id}',
                             contentType: 'application/json',
                             verb: 'POST'
                         },
-                        'developer.callflows.delete': {
-                            url: '{api_url}/accounts/{account_id}/callflows/{id}',
+                        'developer.users.delete': {
+                            url: '{api_url}/accounts/{account_id}/users/{id}',
                             contentType: 'application/json',
                             verb: 'DELETE'
+                        },
+                        'developer.hotdesk.get_all': {
+                            url: '{api_url}/accounts/{account_id}/users/hotdesk',
+                            contentType: 'application/json',
+                            verb: 'GET'
                         }
                     }
-                }
-
+                },
             };
+
+            $.each(normal_apis, function(k, api){
+                ressources_schema(k, api.title, api.verbs);
+            });
         }
     }
 );

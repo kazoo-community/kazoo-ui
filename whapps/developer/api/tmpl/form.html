@@ -12,8 +12,14 @@
 		{{each(i, verb) api.verbs}}
 			<div class="row">
 				<div class="whapp-header">
-					<button class="btn ${rest[verb].btn} toggle" data-toggle="${k}_${verb}">${verb.toUpperCase()}</button>
-					<small>${ressources['developer.' + k + '.' + verb].url}</small>
+					<button class="btn ${rest[verb].btn} toggle" data-toggle="${k}_${verb}">
+						{{if verb == "get_all"}}
+							GET
+						{{else}}
+							${verb.toUpperCase()}
+						{{/if}}
+					</button>
+					<small>${ressources['developer.' + k + '.' + verb].url.substr(9)}</small>
 					<small>${api.title}</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
