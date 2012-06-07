@@ -139,7 +139,7 @@ winkstart.module('developer', 'api', {
                                         .append("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
                                     
                                     $('#' + id + ' .result', form_html)
-                                        .fadeToggle();
+                                        .show('fade');
                                 };
 
                             winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), 
@@ -162,7 +162,7 @@ winkstart.module('developer', 'api', {
                         $('.clean', form_html).click(function(e){
                             e.preventDefault();
                             $('#' +  $(this).data('id') + ' .result', form_html)
-                                .toggle()
+                                .hide()
                                 .find('.result_content')
                                 .empty();
                         });
@@ -270,8 +270,7 @@ winkstart.module('developer', 'api', {
                 console.log(err.type);
                 console.log(err.message);
                 winkstart.alert('error', 'Something went wrong the schema.');
-            }
-            
+            } 
         },
 
         render_list: function(parent) {
@@ -313,7 +312,7 @@ winkstart.module('developer', 'api', {
                             notifyMethod: 'api.render',
                             notifyCreateMethod: '',
                             notifyParent: parent
-                    });
+                        });
                 }
             );         
         },
