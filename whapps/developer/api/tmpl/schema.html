@@ -25,8 +25,8 @@
 			</div>
 		{{/if}}
 		{{if input.type == "array"}}
-			<div class="clearfix">
-				{{if input.enum}}
+			{{if input.enum}}
+				<div class="clearfix">
 					<label for="">${i}</label>
 					<div class="input">
 						<ul class="inputs-list">
@@ -42,19 +42,19 @@
 							{{/each}}	
 						</ul>
 					</div>
-				{{else}}
-					{{each(index, field) input}}
-						{{if field.type}}
-							<div class="clearfix">
-								<label for="${index}">${index}</label>
-								<div class="input">
-									<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
-								</div>
+				</div>
+			{{else}}
+				{{each(index, field) input}}
+					{{if field.type}}
+						<div class="clearfix">
+							<label for="${index}">${index}</label>
+							<div class="input">
+								<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
 							</div>
-						{{/if}}
-					{{/each}}
-				{{/if}}
-			</div>
+						</div>
+					{{/if}}
+				{{/each}}
+			{{/if}}
 		{{/if}}
 		{{if input.type == "integer"}}
 			<div class="clearfix">
@@ -93,8 +93,8 @@
 				</div>
 			{{/if}}
 			{{if input.type == "array"}}
-				<div class="clearfix">
-					{{if input.enum}}
+				{{if input.enum}}
+					<div class="clearfix">
 						<label for="">${i}</label>
 						<div class="input">
 							<ul class="inputs-list">
@@ -110,19 +110,19 @@
 								{{/each}}	
 							</ul>
 						</div>
-					{{else}}
-						{{each(index, field) input}}
-							{{if field.type}}
-								<div class="clearfix">
-									<label for="${index}">${index}</label>
-									<div class="input">
-										<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
-									</div>
+					</div>
+				{{else}}
+					{{each(index, field) input}}
+						{{if field.type}}
+							<div class="clearfix">
+								<label for="${index}">${index}</label>
+								<div class="input">
+									<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
 								</div>
-							{{/if}}
-						{{/each}}
-					{{/if}}
-				</div>
+							</div>
+						{{/if}}
+					{{/each}}
+				{{/if}}
 			{{/if}}
 			{{if input.type == "integer"}}
 				<div class="clearfix">
