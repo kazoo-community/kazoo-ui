@@ -174,7 +174,7 @@ winkstart.module('myaccount', 'personal_info', {
         primary_set: function(app, callback) {
             var THIS = this;
 
-            winkstart.request('app_store.user_get', {
+            winkstart.request('personal_info.user_get', {
                 account_id: winkstart.apps['myaccount'].account_id,
                 api_url: winkstart.apps['myaccount'].api_url,
                 user_id: winkstart.apps['myaccount'].user_id

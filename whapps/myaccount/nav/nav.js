@@ -9,7 +9,7 @@ winkstart.module('myaccount', 'nav', {
 
         subscribe: {
             'nav.add_sublink': 'add_sublink',
-            'myaccount.initialized': 'activate',
+            'nav.activate': 'activate',
             'nav.masquerade': 'masquerade',
             'nav.company_name': 'company_name'
         }
@@ -50,15 +50,6 @@ winkstart.module('myaccount', 'nav', {
                 label: 'Sign out',
                 weight: '25',
                 publish: 'auth.activate'
-            });
-
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'switch_account',
-                label: 'Switch Account',
-                weight: '05',
-                publish: 'accounts_manager.switch_account'
-                //publish: 'accounts.switch_account'
             });
         },
 

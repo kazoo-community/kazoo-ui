@@ -532,8 +532,6 @@ winkstart.module('voip', 'device', {
 
             winkstart.tabs($('.view-buttons', device_html), $('.tabs', device_html));
 
-            $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
-
             /* Awesome sauce for provisioning goodness */
             render = function() {
                 (target)
@@ -544,10 +542,12 @@ winkstart.module('voip', 'device', {
             if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
                 if(winkstart.publish('phone.render_fields', $('.provisioner', device_html), data.data.provision || (data.data.provision = {}), render)) {
                     render();
-                 }
+                }
             }
             else {
                 render();
+
+                $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
             }
         },
 

@@ -59,6 +59,7 @@
 						<label for="mac_address">Device MAC Address</label>
 						<div class="input">
 							<input class="span4" id="mac_address" name="mac_address" type="text" placeholder="01:23:45:67:89:AB" value="${data.mac_address}" rel="popover" data-content="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B"/>
+                            <span class="provisioner"></span>
 						</div>
 					</div>
 
@@ -87,7 +88,7 @@
 								<li>
 									<label>
 										<span rel="popover" data-content="Do you want to notify the administrator each time this device unregisters">
-											{{if data.suppress_unregister_notifications === true}}
+											{{if data.suppress_unregister_notifications === false}}
 							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" />
@@ -167,7 +168,7 @@
 					<div class="clearfix">
 						<label for="sip_password">Password</label>
 						<div class="input">
-							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}" rel="popover" data-content="Enter your SIP Password. Click on the input to make the password appear"/>
+							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
 						</div>
 					</div>
 
@@ -288,7 +289,7 @@
 						</div>
 					</div>
 
-					<input type="hidden" name="extra.notify_unregister" value="false"/>
+					
                 	<input type="hidden" name="media.fax.option" value="false"/>
 				</div>
 			</div>

@@ -176,7 +176,6 @@ winkstart.module('voip', 'resource', {
                         enabled: true,
                         gateways: [
                             {
-                                invite_format: 'e164',
                                 prefix: '+1',
                                 codecs: ['PCMU', 'PCMA'],
                                 progress_timeout: '6'
@@ -206,11 +205,6 @@ winkstart.module('voip', 'resource', {
                                 'G722_32': 'G722.1 (HD) @ 32kHz',
                                 'CELT_48': 'Siren (HD) @ 48kHz',
                                 'CELT_64': 'Siren (HD) @ 64kHz'
-                            },
-                            invite_formats: {
-                                'username': 'Username',
-                                'npan': 'NPA NXX XXXX',
-                                'e164': 'E. 164'
                             }
                         },
                         rules: {

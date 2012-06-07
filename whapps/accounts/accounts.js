@@ -33,11 +33,10 @@
 
         THIS.whapp_auth(function() {
             winkstart.publish('whappnav.add', { 'name' : THIS.__module });
+            THIS.initialization_check();
         });
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
-
-        THIS.activate();
     },
     {
         modules: {
@@ -53,7 +52,9 @@
 
             THIS.is_initialized = true;
 
-            //THIS.setup_page();
+            if(winkstart.apps['accounts'].default){
+                THIS.setup_page();
+            }
         },
 
         activate: function() {
