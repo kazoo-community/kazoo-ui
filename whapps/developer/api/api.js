@@ -105,7 +105,7 @@ winkstart.module('developer', 'api', {
                     if(THIS.apis[data.data.id]){
                         winkstart.registerResources(THIS.__whapp, THIS.apis[data.data.id].ressources);
                     } else {
-                        winkstart.alert('Api not available');
+                        winkstart.alert('Api ' + data.data.id + ' not available');
                         return false;
                     }
 
@@ -278,10 +278,12 @@ winkstart.module('developer', 'api', {
 
                         if(data.length > 0) {
                             $.each(data, function(key, val) {
-                                new_list.push({
-                                    id: val,
-                                    title: val || '(name)'
-                                });
+                                if(THIS.apis[val]) {
+                                    new_list.push({
+                                        id: val,
+                                        title: val || '(name)'
+                                    });
+                                }
                             });
                         }
 
@@ -412,6 +414,22 @@ winkstart.module('developer', 'api', {
                     queues: {
                         title: 'Queues',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    local_resources: {
+                        title: 'Local Ressources',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    global_resources: {
+                        title: 'Global Ressources',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    temporal_rules: {
+                        title: 'Temporal Rules',
+                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
+                    },
+                    connectivity: {
+                        title: 'Connectivity',
+                        verbs: ['get_all', 'get', 'put', 'post']
                     }
                 };
 
