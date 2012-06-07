@@ -43,7 +43,7 @@ winkstart.module('developer', 'api', {
         clean_form: function(obj) {
             var THIS = this,
                 isEmpty = function (o) {
-                    for(var i in o){ return false;}
+                    for(var i in o) {return false;}
                     return true;
                 };
 
@@ -250,20 +250,28 @@ winkstart.module('developer', 'api', {
                     $.extend(target, new_schema);
                 };
 
-            clean(schema, tmp);
-            template(tmp, new_schema); 
+            try {
+                clean(schema, tmp);
+                template(tmp, new_schema); 
 
-            $.each(new_schema, function(k, o){
-                if(o.required) {
-                    required[k] = o;
-                } else {
-                    not_required[k] = o;
+                $.each(new_schema, function(k, o) {
+                    if(o.required) {
+                        required[k] = o;
+                    } else {
+                        not_required[k] = o;
+                    }
+                });
+
+                if(typeof callback == "function") {
+                    callback(required, not_required, new_schema, schema);
                 }
-            });
-
-            if(typeof callback == "function"){
-                callback(required, not_required, new_schema, schema);
             }
+            catch(err) {
+                console.log(err.type);
+                console.log(err.message);
+                winkstart.alert('error', 'Something went wrong the schema.');
+            }
+            
         },
 
         render_list: function(parent) {
