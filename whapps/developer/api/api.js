@@ -75,22 +75,11 @@ winkstart.module('developer', 'api', {
                 },
                 data = THIS.clean_form(form2object(api + "_" + verb + "_form"));
 
-            switch(verb) {
-                case 'put':
-                    request.data = data;
-                    break;
-                case 'post':
-                    request.id = data.id; 
-                    delete data.id;
-                    request.data = data;
-                    break;
-                case 'get':
-                    request.id = data.id; 
-                    break;
-                case 'delete':
-                    request.id = data.id;
-                    break;
+            if(data.id) {
+                request.id = data.id;
+                delete data.id;
             }
+            request.data = data
 
             if(typeof success == "function" && typeof failed == "function") {
                 winkstart.request('developer.' + api + '.' + verb, 
@@ -128,7 +117,7 @@ winkstart.module('developer', 'api', {
                             account_id: winkstart.apps['developer'].account_id,
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
-                            rest: THIS.rest
+                            rests: THIS.rest
                         });
 
                         schema_html = THIS.templates.schema.tmpl({
@@ -582,6 +571,50 @@ winkstart.module('developer', 'api', {
                         }
                     }
                 },
+                'servers': {
+                    api: {
+                        'servers': {
+                            verbs: ['get_all'],
+                            title: 'Servers',
+                            url: '/servers'
+                        },
+                        'servers_deployment': {
+                            verbs: ['get', 'put'],
+                            title: 'Deployment',
+                            url: '/servers/{id}/deployment',
+                            rest: {
+                                put: ['id']
+                            }
+                        },
+                        'servers_log': {
+                            verbs: ['get'],
+                            title: 'Logs',
+                            url: '/servers/{id}/log'
+                        }
+                    },
+                    ressources: {
+                        'developer.servers.get_all': {
+                            url: '{api_url}/accounts/{account_id}/servers',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.servers_deployment.get': {
+                            url: '{api_url}/accounts/{account_id}/servers/{id}/deployment',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.servers_deployment.put': {
+                            url: '{api_url}/accounts/{account_id}/servers/{id}/deployment',
+                            contentType: 'application/json',
+                            verb: 'PUT'
+                        },
+                        'developer.servers_log.get': {
+                            url: '{api_url}/accounts/{account_id}/servers/{id}/log',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        }
+                    }
+                }
             };
 
             $.each(normal_apis, function(k, api){
