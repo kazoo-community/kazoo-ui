@@ -57,6 +57,7 @@
 	width: 40%;
 	float: left;
     margin-bottom: 18px;
+    color: #BCB5AB;
 }
 
 .dataTables_length select {
@@ -93,7 +94,7 @@
 }
 
 .dataTables_info {
-    color: #323232;
+    color: #BCB5AB;
 	width: 30%;
 	float: left;
     margin-top: 10px;
@@ -140,6 +141,9 @@ table.display {
 	margin: 0 auto 10px auto;
 	clear: both;
 	width: 100%;
+    border: 1px solid #05addc;
+    border-radius: 5px;
+    border-collapse: separate;
 
 	/* Note Firefox 3.5 and before have a bug with border-collapse
 	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 )
@@ -155,28 +159,33 @@ table.display {
 	 */
 }
 
+table.display thead {
+    border: 1px solid #05addc;
+}
+
 table.display thead th {
 	padding: 7px 0px;
 	font-weight: bold;
     font-size: 12px;
     text-align: center;
     color: #BCB5AB;
-    background-color: #595959;
+    background-color: #222222;
 	cursor: pointer;
 	* cursor: hand;
+    border-bottom: 1px solid #05addc;
+}
 
-	border-top: 1px solid #7E7E7E;
-    border-right: 2px ridge #7E7E7E;
-    border-bottom: 1px solid #878787;
+table.display thead th:first-child {
+    border-radius: 5px 0 0 0;
 }
 
 table.display thead th:last-child {
     border-right: none;
+    border-radius: 0 5px 0 0;
 }
 
 table.display tfoot th {
 	padding: 3px 18px 3px 10px;
-	border-top: 1px solid black;
 	font-weight: bold;
 }
 
@@ -185,14 +194,16 @@ table.display td {
     text-align: center;
     letter-spacing: 1px;
     font-size: 12px;
-    color: #424242;
-
-    border-right: 2px ridge #808080;
-    border-bottom: 2px ridge #808080;
+    color: #BCB5AB;
+    border-top: 1px solid #313131;
 }
 
 table.display tr td:last-child {
     border-right: none;
+}
+
+table.display td a {
+    cursor: pointer;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -201,10 +212,12 @@ table.display tr td:last-child {
 
 .sorting_asc {
 	background: url('../img/sort_desc.png') no-repeat center right;
+    color: #05addc !important;
 }
 
 .sorting_desc {
 	background: url('../img/sort_asc.png') no-repeat center right;
+    color: #05addc !important;
 }
 
 .sorting {
@@ -216,11 +229,15 @@ table.display tr td:last-child {
  */
 
 tr.odd {
-	background-color: #b1b1b1;
+	/*background-color: #b1b1b1;*/
+    background-color: #353535;
+    border-bottom: none;
 }
 
 tr.even {
-	background-color: #a6a6a6;
+	/*background-color: #a6a6a6;*/
+    background-color: #3c3c3c;
+    border-bottom: none;
 }
 
 
@@ -270,9 +287,9 @@ tr.even {
 	*cursor: hand;
     color: #BCB5AB;
 
-	border-top: 1px solid #323232;
-    border-left: 1px solid #323232;
-    border-bottom: 1px solid #323232;
+	border-top: 1px solid #05addc;
+    border-left: 1px solid #05addc;
+    border-bottom: 1px solid #05addc;
 }
 
 .paging_full_numbers .first {
@@ -285,18 +302,18 @@ tr.even {
     -moz-border-radius: 0px 3px 3px 0px;
     -webkit-border-radius-left: 0px 3px 3px 0px;
     border-radius: 0px 3px 3px 0px;
-    border-right: 1px solid #323232;
+    border-right: 1px solid #05addc;
 }
 
 .paging_full_numbers span.paginate_button {
-    background-color: #595959;
+    background-color: #353535;
 }
 
 .paging_full_numbers span.paginate_button:hover {
-    background-color: #707070;
+    background-color: #454545;
 }
 
 .paging_full_numbers span.paginate_active {
     font-weight: bold;
-    background-color: #707070;
+    background-color: #555;
 }
