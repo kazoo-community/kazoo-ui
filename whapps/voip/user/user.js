@@ -217,7 +217,9 @@ winkstart.module('voip', 'user', {
                 defaults = {
                     data: $.extend(true, {
                         apps: {},
-                        call_forward: {},
+                        call_forward: {
+                            substitute: true
+                        },
                         caller_id: {
                             internal: {},
                             external: {},
@@ -685,10 +687,6 @@ winkstart.module('voip', 'user', {
 
             if(!data.hotdesk.enable) {
                 delete data.hotdesk;
-            }
-
-            if(!data.call_forward.enabled) {
-                delete data.call_forward;
             }
 
             if(!data.music_on_hold.media_id) {
