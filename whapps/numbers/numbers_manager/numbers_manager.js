@@ -1,6 +1,7 @@
 winkstart.module('numbers', 'numbers_manager', {
         css: [
-            'css/numbers_manager.css'
+            'css/numbers_manager.css',
+            'css/numbers_popup.css'
         ],
 
         templates: {
@@ -9,7 +10,8 @@ winkstart.module('numbers', 'numbers_manager', {
             cnam_dialog: 'tmpl/cnam_dialog.html',
             e911_dialog: 'tmpl/e911_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
-            add_number_search_results: 'tmpl/add_number_search_results.html'
+            add_number_search_results: 'tmpl/add_number_search_results.html',
+            port_dialog: 'tmpl/port_dialog.html'
         },
 
         subscribe: {
@@ -42,10 +44,20 @@ winkstart.module('numbers', 'numbers_manager', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            'number.delete': {
+            'numbers_manager.delete': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'numbers_manager.port': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/port',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'numbers_manager.create': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/docs/{file_name}',
+                contentType: 'application/x-base64',
+                verb: 'PUT'
             }
         }
     },
@@ -57,24 +69,26 @@ winkstart.module('numbers', 'numbers_manager', {
     },
 
     {
-        get_number: function(phone_number, callback) {
+        get_number: function(phone_number, success, error) {
             winkstart.request('numbers_manager.get', {
                     api_url: winkstart.apps['numbers'].api_url,
                     account_id: winkstart.apps['numbers'].account_id,
-                    phone_number: encoreURIComponent(phone_number)
+                    phone_number: encodeURIComponent(phone_number)
                 },
                 function(_data, status) {
-                    if(typeof callback === 'function') {
-                        callback(_data);
+                    if(typeof success === 'function') {
+                        success(_data);
                     }
                 },
                 function(_data, status) {
-
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
                 }
             );
         },
 
-        update_number: function(phone_number, data, callback) {
+        update_number: function(phone_number, data, success, error) {
             winkstart.request('numbers_manager.update', {
                     api_url: winkstart.apps['numbers'].api_url,
                     account_id: winkstart.apps['numbers'].account_id,
@@ -82,12 +96,36 @@ winkstart.module('numbers', 'numbers_manager', {
                     data: data
                 },
                 function(_data, status) {
-                    if(typeof callback === 'function') {
-                        callback(_data);
+                    if(typeof success === 'function') {
+                        success(_data);
                     }
                 },
                 function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
+        },
 
+        port_number: function(data, success, error) {
+            var THIS = this;
+
+            winkstart.request('numbers_manager.port', {
+                    account_id: winkstart.apps['numbers'].account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                    phone_number: encodeURIComponent(data.phone_number),
+                    data: data.options || {}
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
                 }
             );
         },
@@ -95,7 +133,7 @@ winkstart.module('numbers', 'numbers_manager', {
         activate_number: function(phone_number, success, error) {
             var THIS = this;
 
-            winkstart.request(false, 'number.activate', {
+            winkstart.request(false, 'numbers_manager.activate', {
                     account_id: winkstart.apps['numbers'].account_id,
                     api_url: winkstart.apps['numbers'].api_url,
                     phone_number: encodeURIComponent(phone_number),
@@ -117,7 +155,7 @@ winkstart.module('numbers', 'numbers_manager', {
         delete_number: function(phone_number, success, error) {
             var THIS = this;
 
-            winkstart.request('number.delete', {
+            winkstart.request('numbers_manager.delete', {
                     account_id: winkstart.apps['numbers'].account_id,
                     api_url: winkstart.apps['numbers'].api_url,
                     phone_number: encodeURIComponent(phone_number)
@@ -154,6 +192,71 @@ winkstart.module('numbers', 'numbers_manager', {
                     }
                 }
             );
+        },
+
+        create_number_doc: function(data, success, error) {
+            var THIS = this;
+
+            winkstart.request('numbers_manager.create', {
+                    account_id: winkstart.apps['numbers'].account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                    phone_number: encodeURIComponent(data.phone_number),
+                    file_name: data.file_name,
+                    data: data.file_data
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        submit_port: function(port_data, number_data, callback) {
+            var THIS = this,
+                uploads_done = 0,
+                put_port_data = function() {
+                    number_data.options.port = port_data.port;
+
+                    //todo phone nbr/data/cb
+                    THIS.update_number(number_data.phone_number, number_data.options, function(data) {
+                        if(typeof callback == 'function') {
+                            callback(data);
+                        }
+                    });
+                },
+                put_port_doc = function(index) {
+                    /* Add files */
+                    THIS.create_number_doc({
+                            phone_number: number_data.phone_number,
+                            file_name: port_data.loa[0].file_name,
+                            file_data: port_data.loa[0].file_data
+                        },
+                        function(_data, status) {
+                            THIS.create_number_doc({
+                                    phone_number: number_data.phone_number,
+                                    file_name: port_data.files[index].file_name,
+                                    file_data: port_data.files[index].file_data
+                                },
+                                function(_data, status) {
+                                    put_port_data();
+                                }
+                            );
+                        }
+                    );
+                };
+
+            if(port_data.port.main_number === number_data.phone_number) {
+                put_port_doc(0);
+            }
+            else{
+                put_port_data();
+            }
         },
 
         add_numbers: function(numbers_data, callback) {
@@ -234,7 +337,8 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             $(numbers_manager_html).delegate('.failover', 'click', function() {
-                var data_phone_number = $(this).parents('tr').dataset('phone-number'),
+                var $failover_cell = $(this),
+                    data_phone_number = $failover_cell.parents('tr').first().attr('id'),
                     phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
 
                 if(phone_number[1]) {
@@ -245,7 +349,6 @@ winkstart.module('numbers', 'numbers_manager', {
                             THIS.clean_phone_number_data(_data.data);
 
                             THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                var $failover_cell = $('tr[data-phone_number='+data_phone_number+'] .failover', numbers_manager_html);
                                 !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
                             });
                         });
@@ -254,7 +357,8 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             $(numbers_manager_html).delegate('.cid', 'click', function() {
-                var data_phone_number = $(this).parents('tr').dataset('phone-number'),
+                var $cnam_cell = $(this),
+                    data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
                     phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
 
                 if(phone_number[1]) {
@@ -265,7 +369,6 @@ winkstart.module('numbers', 'numbers_manager', {
                             THIS.clean_phone_number_data(_data.data);
 
                             THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                var $cnam_cell = $('tr[data-phone_number='+data_phone_number+'] .cid', numbers_manager_html);
                                 !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
                             });
                         });
@@ -274,7 +377,8 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             $(numbers_manager_html).delegate('.e911', 'click', function() {
-                var data_phone_number = $(this).parents('tr').dataset('phone-number'),
+                var $e911_cell = $(this),
+                    data_phone_number = $e911_cell.parents('tr').first().attr('id'),
                     phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
 
                 if(phone_number[1]) {
@@ -285,7 +389,6 @@ winkstart.module('numbers', 'numbers_manager', {
                             THIS.clean_phone_number_data(_data.data);
 
                             THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                var $e911_cell = $('tr[data-phone_number='+data_phone_number+'] .e911', numbers_manager_html);
                                 !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
                             });
                         });
@@ -308,7 +411,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 if(nb_numbers > 0) {
                     winkstart.confirm('Are you sure you want to delete the '+nb_numbers+' number(s) selected?', function() {
                             $selected_checkboxes.each(function() {
-                                data_phone_number = $(this).parents('tr').dataset('phone-number'),
+                                data_phone_number = $(this).parents('tr').attr('id'),
                                 phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
 
                                 if(phone_number[1]) {
@@ -331,6 +434,36 @@ winkstart.module('numbers', 'numbers_manager', {
                 else {
                     winkstart.alert('You didn\'t select any number to delete');
                 }
+            });
+
+            $(numbers_manager_html).delegate('#port_numbers', 'click', function(ev) {
+                ev.preventDefault();
+
+                THIS.render_port_dialog(function(port_data, popup) {
+                    var ports_done = 0;
+
+                    $.each(port_data.phone_numbers, function(i, val) {
+                        var number_data = {
+                            phone_number: val
+                        };
+
+                        THIS.port_number(number_data, function(_number_data) {
+                            number_data.options = _number_data.data;
+
+                            if('id' in number_data.options) {
+                                delete number_data.options.id;
+                            }
+
+                            THIS.submit_port(port_data, number_data, function(_data) {
+                                if(++ports_done > port_data.phone_numbers.length - 1) {
+                                    THIS.list_numbers();
+
+                                    popup.dialog('close');
+                                }
+                            });
+                        });
+                    });
+                });
             });
 
             THIS.list_numbers(function() {
@@ -528,6 +661,192 @@ winkstart.module('numbers', 'numbers_manager', {
             });
         },
 
+        render_port_dialog: function(callback) {
+            var THIS = this,
+                port_form_data = {},
+                popup_html = THIS.templates.port_dialog.tmpl({
+                    support_file_upload: (File && FileReader)
+                }),
+                popup,
+                files,
+                loa,
+                phone_numbers,
+                current_step = 1,
+                max_steps = 4,
+                $prev_step = $('.prev_step', popup_html),
+                $next_step = $('.next_step', popup_html),
+                $submit_btn = $('.submit_btn', popup_html);
+
+            $('.step_div:not(.first)', popup_html).hide();
+            $prev_step.hide();
+            $submit_btn.hide();
+
+            $('.other_carrier', popup_html).hide();
+
+            $('.carrier_dropdown', popup_html).change(function() {
+                if($(this).val() === 'Other') {
+                    $('.other_carrier', popup_html).show();
+                }
+                else {
+                    $('.other_carrier', popup_html).empty().hide();
+                }
+            });
+
+            $('#postal_code', popup_html).blur(function() {
+                $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country=US&callback=?', { postalcode: $(this).val() }, function(response) {
+                    if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
+                        $('#locality', popup_html).val(response.postalcodes[0].placeName);
+                        $('#region', popup_html).val(response.postalcodes[0].adminName1);
+                    }
+                });
+            });
+
+            $('.prev_step', popup_html).click(function() {
+                $next_step.show();
+                $submit_btn.hide();
+                $('.step_div', popup_html).hide();
+                $('.step_div:nth-child(' + --current_step + ')', popup_html).show();
+                $('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+                $('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+
+                current_step === 1 ? $('.prev_step', popup_html).hide() : true;
+            });
+
+            $('.next_step', popup_html).click(function() {
+                $prev_step.show();
+                $('.step_div', popup_html).hide();
+                $('.step_div:nth-child(' + ++current_step + ')', popup_html).show();
+                $('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+                $('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+                if(current_step === max_steps) {
+                    $next_step.hide();
+                    $submit_btn.show();
+                }
+            });
+
+            $('.loa', popup_html).change(function(ev) {
+                var slice = [].slice,
+                    raw_files = slice.call(ev.target.files, 0),
+                    file_reader = new FileReader(),
+                    file_name,
+                    read_file = function(file) {
+                        file_name = file.fileName || file.name || 'noname';
+                        file_reader.readAsDataURL(file);
+                    };
+
+                loa = [];
+
+                file_reader.onload = function(ev) {
+                    loa.push({
+                        file_name: file_name,
+                        file_data: ev.target.result
+                    });
+
+                    if(raw_files.length > 1) {
+                        raw_files = raw_files.slice(1);
+                        read_file(raw_files[0]);
+                    }
+                };
+
+                read_file(raw_files[0]);
+            });
+
+            $('.files', popup_html).change(function(ev) {
+                var slice = [].slice,
+                    raw_files = slice.call(ev.target.files, 0),
+                    file_reader = new FileReader(),
+                    file_name,
+                    read_file = function(file) {
+                        file_name = file.fileName || file.name || 'noname';
+                        file_reader.readAsDataURL(file);
+                    };
+
+                files = [];
+
+                file_reader.onload = function(ev) {
+                    files.push({
+                        file_name: file_name,
+                        file_data: ev.target.result
+                    });
+
+                    if(raw_files.length > 1) {
+                        raw_files = raw_files.slice(1);
+                        read_file(raw_files[0]);
+                    }
+                    else {
+                        $('.number_of_docs', popup_html).html(files.length);
+                    }
+                };
+
+                read_file(raw_files[0]);
+            });
+
+            $('.submit_btn', popup_html).click(function(ev) {
+                ev.preventDefault();
+                port_form_data = form2object('port');
+
+                var string_alert = '';
+
+                if($('.carrier_dropdown', popup_html).val() === 'Other') {
+                    port_form_data.port.service_provider = $('.other_carrier', popup_html).val();
+                }
+
+                if(!port_form_data.extra.agreed) {
+                    string_alert += 'You must agree to the terms before continuing!<br/>';
+                }
+
+                $.each(port_form_data.extra.cb, function(k, v) {
+                    if(v === false) {
+                        string_alert += 'You must confirm the first conditions before continuing!<br/>';
+                        return false;
+                    }
+                });
+
+                port_form_data.phone_numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
+                port_form_data.phone_numbers = port_form_data.phone_numbers.replace(/[\s-\(\)\.]/g, '').split(',');
+
+                port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
+
+                var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
+                res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += 'You need to enter a main number.<br/>';
+
+                port_form_data.phone_numbers.push(port_form_data.port.main_number);
+
+                phone_numbers = [];
+                $.each(port_form_data.phone_numbers, function(i, val) {
+                    var result = val.match(/^\+?1?([2-9]\d{9})$/);
+
+                    if(result) {
+                        phone_numbers.push('+1' + result[1]);
+                    }
+                    else {
+                        if(val !== '') {
+                            string_alert += val + ' : this Phone Number is not valid.<br/>';
+                        }
+                    }
+                });
+                port_form_data.phone_numbers = phone_numbers;
+
+                port_form_data.files = files;
+                port_form_data.loa = loa;
+
+                if(string_alert === '') {
+                    delete port_form_data.extra;
+
+                    if(typeof callback === 'function') {
+                        callback(port_form_data, popup);
+                    }
+                }
+                else {
+                    winkstart.alert(string_alert);
+                }
+            });
+
+            popup = winkstart.dialog(popup_html, {
+                title: 'Port a number'
+            });
+        },
+
         activate: function() {
             var THIS = this;
 
@@ -545,7 +864,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     var tab_data = [];
                     $.each(_data.data, function(k, v) {
                         if(k != 'id') {
-                            tab_data.push(['lol', k, v.e911, v.cnam, v.failover]);
+                            tab_data.push(['lol', k, v.e911, v.cnam, v.failover, v.state]);
                         }
                     });
 
@@ -595,6 +914,13 @@ winkstart.module('numbers', 'numbers_manager', {
                         return '<a class="'+ e911  +'">E911</a>';
                     },
                     'bSortable': false
+                },
+                {
+                    'sTitle': 'State',
+                    'fnRender': function(obj) {
+                        var state = obj.aData[obj.iDataColumn].replace('_',' ');
+                        return state.charAt(0).toUpperCase() + state.substr(1);
+                    }
                 }
             ];
 
@@ -602,12 +928,12 @@ winkstart.module('numbers', 'numbers_manager', {
                 sDom: '<"action_number">frtlip',
                 aaSorting: [[1, 'desc']],
                 fnRowCallback: function(nRow, aaData, iDisplayIndex) {
-                    $(nRow).dataset('phone-number', aaData[1]);
+                    $(nRow).attr('id', aaData[1]);
                     return nRow;
                 }
             });
 
-            $('div.action_number', numbers_manager_html).html('<button class="btn primary" id="add_number">Add Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
+            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="add_number">Add Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
 
             $('#numbers_manager-grid_filter input[type=text]', numbers_manager_html).first().focus();
 

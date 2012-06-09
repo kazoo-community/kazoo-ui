@@ -27,10 +27,9 @@
 
 #numbers_manager-view .action_number {
     float: left;
-    width: 294px;
 }
 
-#numbers_manager-view .action_number #delete_number {
+#numbers_manager-view .action_number button:not(:first-child) {
     margin-left: 5px;
 }
 
