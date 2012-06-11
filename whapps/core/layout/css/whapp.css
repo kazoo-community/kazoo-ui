@@ -46,12 +46,13 @@
 
 h1, h2, h3, h4, h5 {
 	text-shadow:1px 2px #363636;
-	color:#fff;
+	color:#05ADDC;
 	font-weight:lighter;
 }
 
 h1 {
 	font-size:24px;
+	letter-spacing: 1px;
 }
 
 label {
