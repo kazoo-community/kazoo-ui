@@ -54,6 +54,7 @@
 
             if(winkstart.apps['accounts'].default){
                 THIS.setup_page();
+                $('[data-whapp="accounts"] > a').addClass('activate');
             }
         },
 

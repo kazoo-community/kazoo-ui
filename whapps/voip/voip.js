@@ -106,7 +106,8 @@ winkstart.module('voip', 'voip', {
             //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
 
-            if(winkstart.apps['voip'].default){
+            if(winkstart.apps['voip'].default) {
+                $('[data-whapp="voip"] > a').addClass('activate');
                 THIS.setup_page();
             }
         },
