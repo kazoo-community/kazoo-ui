@@ -20,12 +20,12 @@ winkstart.module('developer', 'api', {
 
         resources: {
             'api.list': {
-                url: '{api_url}/v1/schemas',
+                url: '{api_url}/schemas',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             'api.show': {
-                url: '{api_url}/v1/schemas/{id}',
+                url: '{api_url}/schemas/{id}',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -97,7 +97,7 @@ winkstart.module('developer', 'api', {
                 input_id_html = THIS.templates.input_id.tmpl();
 
             winkstart.request('api.show', {
-                    api_url: 'http://192.168.1.42:8000',
+                    api_url: winkstart.apps['developer'].api_url,
                     id: args.id
                 },
                 function(data, status) {
@@ -277,7 +277,7 @@ winkstart.module('developer', 'api', {
             var THIS = this;
 
             winkstart.request(true, 'api.list', {
-                    api_url: 'http://192.168.1.42:8000'
+                    api_url: winkstart.apps['developer'].api_url
                 },
                 function(data, status) {
                     var map_crossbar_data = function(data) {
