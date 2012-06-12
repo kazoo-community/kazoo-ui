@@ -5,7 +5,7 @@
     box-shadow: 5px 5px 5px #222222;
 }
 
-.add_flow{
+.add_flow {
     padding-top: 5px;
     height: 70px;
     background-color: #4d4d4d;
@@ -13,6 +13,15 @@
     border-bottom-style: solid;
     border-bottom-color: #A0A0A0;
     text-align: center;
+    cursor: pointer;
+}
+
+.add_flow:hover {
+    color: #05ADDC;
+}
+
+.add_flow:hover .plus_btn {
+     background-position: 0px 25px;
 }
 
 .add_flow span{
@@ -22,11 +31,14 @@
     line-height: 65px;
 }
 
-.plus_btn{
+.plus_btn {
     background-image: url(../images/plus_btn.png);
     width: 25px;
     height: 25px;
     background-position: 0px 0px;
+    margin-top: -4px;
+    margin-right: 7px;
+    vertical-align: middle;
 }
 
 .search_box {
