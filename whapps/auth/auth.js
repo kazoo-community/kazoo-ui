@@ -108,6 +108,10 @@ winkstart.module('auth', 'auth',
                 }
             }
         }
+        winkstart.module.loadModule('auth', 'onboarding', function() {
+            this.init();
+            winkstart.log('Core: Loaded Onboarding');
+        });
     },
 
     {
@@ -332,7 +336,8 @@ winkstart.module('auth', 'auth',
             $('button.register', contentDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                winkstart.publish('auth.register');
+                //winkstart.publish('auth.register');
+                winkstart.publish('onboard.register');
             });
 
             $('a.recover_password', contentDiv).click(function(event) {
