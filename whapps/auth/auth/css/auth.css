@@ -1,8 +1,9 @@
 .help_recover {
     color: #eeeeee;
     font-style: normal;
-    margin: 10px;
+    margin-bottom: 20px;
     padding: 10px;
+    width: 370px;
 }
 
 .wrapper_login_button {
@@ -125,8 +126,12 @@
     margin-top: 15px;
 }
 
-.popup_recover_password label {
-    width: 120px;
+.popup_recover_password div {
+    display: block;
+}
+
+.popup_recover_password .main_content {
+    width: auto;
 }
 
 .popup_register {

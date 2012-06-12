@@ -562,7 +562,6 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                width: '320px',
                 title: 'Recover Password'
             });
 
