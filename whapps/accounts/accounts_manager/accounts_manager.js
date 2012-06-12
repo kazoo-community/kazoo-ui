@@ -382,7 +382,11 @@ winkstart.module('accounts', 'accounts_manager', {
 
             winkstart.validate.set(THIS.config.validation, account_html);
 
-            $('*[rel=popover]', account_html).popover({
+            $('*[rel=popover]:not([type="text"])', account_html).popover({
+                trigger: 'hover'
+            });
+
+            $('*[rel=popover][type="text"]', account_html).popover({
                 trigger: 'focus'
             });
 

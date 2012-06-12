@@ -120,21 +120,23 @@
                     <div class="clearfix">
                         <label>Billing Account</label>
                         <div class="input">
-                            <select name="extra.billing_account">
-                                {{if field_data.billing_account === 'self'}}
-                                    <option value="parent">This Parent Account</option>
-                                    <option value="self" selected="selected">This Account itself</option>
-                                {{else}}
-                                    {{if field_data.billing_account === 'parent'}}
-                                        <option value="parent" selected="selected">This Parent Account</option>
-                                        <option value="self">This Account itself</option>
-                                    {{else}}
+                            <span rel="popover" data-content="Who is paying for calls made and phone numbers purchased on this account">
+                                <select name="extra.billing_account">
+                                    {{if field_data.billing_account === 'self'}}
                                         <option value="parent">This Parent Account</option>
-                                        <option value="self">This Account itself</option>
-                                        <option value="other" selected="selected">Other</option>
+                                        <option value="self" selected="selected">This Account itself</option>
+                                    {{else}}
+                                        {{if field_data.billing_account === 'parent'}}
+                                            <option value="parent" selected="selected">This Parent Account</option>
+                                            <option value="self">This Account itself</option>
+                                        {{else}}
+                                            <option value="parent">This Parent Account</option>
+                                            <option value="self">This Account itself</option>
+                                            <option value="other" selected="selected">Other</option>
+                                        {{/if}}
                                     {{/if}}
-                                {{/if}}
-                            </select>
+                                </select>
+                            </span>
                         </div>
                     </div>
                 </div>
