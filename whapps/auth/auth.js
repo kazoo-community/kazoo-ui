@@ -337,8 +337,14 @@ winkstart.module('auth', 'auth',
             $('button.register', contentDiv).click(function(e) {
                 e.preventDefault(); 
 
-                winkstart.publish('auth.register');
-                //winkstart.publish('onboard.register');
+                var register_type = winkstart.config.register_type || false;
+
+                if(register_type) {
+                   winkstart.publish('onboard.register'); 
+                } else {
+                    winkstart.publish('auth.register');
+                }
+
             });
 
             $('a.recover_password', contentDiv).click(function(e) {
