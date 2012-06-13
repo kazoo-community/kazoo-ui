@@ -334,15 +334,15 @@ winkstart.module('auth', 'auth',
                 );
             });
 
-            $('button.register', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('button.register', contentDiv).click(function(e) {
+                e.preventDefault(); 
 
-                //winkstart.publish('auth.register');
-                winkstart.publish('onboard.register');
+                winkstart.publish('auth.register');
+                //winkstart.publish('onboard.register');
             });
 
-            $('a.recover_password', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('a.recover_password', contentDiv).click(function(e) {
+                e.preventDefault();
 
                 winkstart.publish('auth.recover_password');
             });
