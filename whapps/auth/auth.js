@@ -10,7 +10,8 @@ winkstart.module('auth', 'auth',
             login: 'tmpl/login.html',
             new_login: 'tmpl/new_login.html',
             register: 'tmpl/register.html',
-            new_password: 'tmpl/new_password.html'
+            new_password: 'tmpl/new_password.html',
+            code: 'tmpl/code.html'
         },
 
         subscribe: {
@@ -254,11 +255,10 @@ winkstart.module('auth', 'auth',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name || cookie_login.account_name || '',
                     remember_me: cookie_login.login || cookie_login.account_name ? true : false
-                };
-
-            var login_html = THIS.templates.new_login.tmpl(data_tmpl);
-
-            var contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
+                },
+                login_html = THIS.templates.new_login.tmpl(data_tmpl),
+                code_html = THIS.templates.code.tmpl(),
+                contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
                                 .empty()
                                 .append(login_html);
 
@@ -335,7 +335,16 @@ winkstart.module('auth', 'auth',
             });
 
             $('button.register', contentDiv).click(function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
+
+                $('#ws-content')
+                    .empty()
+                    .append(code_html);
+            });
+
+            $('button.register', code_html).click(function(e) {
+                e.preventDefault();
+
 
                 var register_type = winkstart.config.register_type || false;
 
@@ -344,8 +353,11 @@ winkstart.module('auth', 'auth',
                 } else {
                     winkstart.publish('auth.register');
                 }
-
             });
+
+
+
+           
 
             $('a.recover_password', contentDiv).click(function(e) {
                 e.preventDefault();
