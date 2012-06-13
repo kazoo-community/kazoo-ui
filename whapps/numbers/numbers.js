@@ -36,6 +36,8 @@
             THIS.initialization_check();
         });
 
+        THIS.whapp_config();
+
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
     {
@@ -120,6 +122,14 @@
             });
 
             return count;
+        },
+
+        whapp_config: function() {
+            var THIS = this;
+
+            winkstart.apps['numbers'] = $.extend(true, {
+                is_masqueradable: true
+            }, winkstart.apps['numbers']);
         },
 
         setup_page: function() {

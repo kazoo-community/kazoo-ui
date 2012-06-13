@@ -36,6 +36,8 @@ winkstart.module('pbxs', 'pbxs', {
             THIS.initialization_check();
         });
 
+        THIS.whapp_config();
+
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
     {
@@ -126,6 +128,14 @@ winkstart.module('pbxs', 'pbxs', {
             var THIS = this;
 
             winkstart.publish('pbxs.module_activate', {name: 'pbxs_manager'});
+        },
+
+        whapp_config: function() {
+            var THIS = this;
+
+            winkstart.apps['pbxs'] = $.extend(true, {
+                is_masqueradable: true
+            }, winkstart.apps['pbxs']);
         }
     }
 );
