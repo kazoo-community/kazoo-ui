@@ -258,8 +258,9 @@ winkstart.module('auth', 'auth',
 
             var login_html = THIS.templates.new_login.tmpl(data_tmpl);
 
-            var contentDiv = $('.right_div', '#content_welcome_page').empty()
-                                                                     .append(login_html);
+            var contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
+                                .empty()
+                                .append(login_html);
 
             if(data_tmpl.username != '') {
                 $('#password', contentDiv).focus();
