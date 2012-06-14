@@ -96,7 +96,11 @@ winkstart.module('myaccount', 'myaccount', {
                 winkstart.module('myaccount', 'nav').init(function() {
                     winkstart.module('myaccount', 'billing').init(function() {
                         winkstart.module('myaccount', 'personal_info').init(function() {
-                            winkstart.publish(THIS.__module + '.initialized', user_data);
+                            winkstart.module('myaccount', 'statistics').init(function() {
+                                winkstart.module('myaccount', 'credits').init(function() {
+                                    winkstart.publish(THIS.__module + '.initialized', user_data);
+                                });
+                            });
                         });
                     });
                 });

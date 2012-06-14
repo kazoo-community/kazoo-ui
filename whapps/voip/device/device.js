@@ -105,7 +105,7 @@ winkstart.module('voip', 'device', {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('statistics.add_stat', THIS.define_stats());
+        //winkstart.publish('statistics.add_stat', THIS.define_stats());
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
