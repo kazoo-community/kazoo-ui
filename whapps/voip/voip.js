@@ -52,6 +52,8 @@ winkstart.module('voip', 'voip', {
 
         THIS.whapp_config();
 
+        winkstart.publish('voip.loaded');
+
         // THIS IS STRICTLY OOB
         if(!('accounts' in winkstart.apps)) {
             winkstart.module.loadApp('accounts', function() {

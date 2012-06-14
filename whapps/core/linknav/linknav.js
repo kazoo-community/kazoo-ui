@@ -64,14 +64,13 @@ winkstart.module('core', 'linknav', {
 
             if(normalized_args.modifier) {
                 if(typeof normalized_args.modifier == 'function') {
-                    //No, this is not a typo. Let the dev chose if they want 'this' or a param 
+                    //No, this is not a typo. Let the dev chose if they want 'this' or a param
                     normalized_args.modifier.call(link_html, link_html);
                 }
             }
 
             (link_list_html).each(function(index) {
                 var weight = $(this).dataset('weight');
-
                 if(normalized_args.weight < weight) {
                     $(this).before(link_html);
 

@@ -28,6 +28,12 @@ winkstart.module('voip', 'vmbox', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'vmbox.list_no_loading': {
+                url: '{api_url}/accounts/{account_id}/vmboxes',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'vmbox.get': {
                 url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
@@ -65,6 +71,8 @@ winkstart.module('voip', 'vmbox', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+        winkstart.publish('statistics.add_stat', THIS.define_stats());
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
@@ -480,6 +488,40 @@ winkstart.module('voip', 'vmbox', {
                     });
                 }
             }, data_defaults);
+        },
+
+        define_stats: function() {
+            var stats = {
+                'voicemails': {
+                    icon: 'vmbox',
+                    get_stat: function(callback) {
+                        winkstart.request('vmbox.list_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                var stat_attributes = {
+                                    name: 'voicemails',
+                                    number: _data.data.length,
+                                    active: _data.data.length > 0 ? true : false,
+                                    color: _data.data.length < 1 ? 'red' : (_data.data.length > 1 ? 'green' : 'orange')
+                                };
+                                if(typeof callback === 'function') {
+                                    callback(stat_attributes);
+                                }
+                            },
+                            function(_data, status) {
+                                callback({error: true});
+                            }
+                        );
+                    },
+                    click_handler: function() {
+                        winkstart.publish('vmbox.activate');
+                    }
+                }
+            };
+
+            return stats;
         },
 
         define_callflow_nodes: function(callflow_nodes) {
