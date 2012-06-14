@@ -3,6 +3,10 @@ winkstart.module('myaccount', 'credits', {
             'css/credits.css'
         ],
 
+        subscribe: {
+            'nav.activate': 'nav_activate'
+        },
+
         templates: {
             credits: 'tmpl/credits.html',
             stat_credits: 'tmpl/stat_credits.html'
@@ -43,11 +47,15 @@ winkstart.module('myaccount', 'credits', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
-
-        winkstart.publish('statistics.add_stat', THIS.define_stats());
     },
 
     {
+        nav_activate: function() {
+            var THIS = this;
+
+            winkstart.publish('statistics.add_stat', THIS.define_stats());
+        },
+
         get_credits: function(success, error) {
             var THIS = this;
 
