@@ -40,6 +40,12 @@ winkstart.module('voip', 'user', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'user.list_no_loading': {
+                url: '{api_url}/accounts/{account_id}/users',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'user.get': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
@@ -82,6 +88,8 @@ winkstart.module('voip', 'user', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+        //winkstart.publish('statistics.add_stat', THIS.define_stats());
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
@@ -217,7 +225,9 @@ winkstart.module('voip', 'user', {
                 defaults = {
                     data: $.extend(true, {
                         apps: {},
-                        call_forward: {},
+                        call_forward: {
+                            substitute: true
+                        },
                         caller_id: {
                             internal: {},
                             external: {},
@@ -687,10 +697,6 @@ winkstart.module('voip', 'user', {
                 delete data.hotdesk;
             }
 
-            if(!data.call_forward.enabled) {
-                delete data.call_forward;
-            }
-
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
             }
@@ -806,6 +812,43 @@ winkstart.module('voip', 'user', {
                     });
                 }
             }, data_defaults);
+        },
+
+        define_stats: function() {
+            var THIS = this;
+
+            var stats = {
+                'users': {
+                    icon: 'user',
+                    get_stat: function(callback) {
+                        winkstart.request('user.list_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                var stat_attributes = {
+                                    name: 'users',
+                                    number: _data.data.length,
+                                    active: _data.data.length > 0 ? true : false,
+                                    color: _data.data.length < 1 ? 'red' : (_data.data.length > 1 ? 'green' : 'orange')
+                                };
+                                if(typeof callback === 'function') {
+                                    callback(stat_attributes);
+                                }
+                            },
+                            function(_data, status) {
+                                callback({error: true});
+                            }
+                        );
+
+                    },
+                    click_handler: function() {
+                        winkstart.publish('user.activate');
+                    }
+                }
+            };
+
+            return stats;
         },
 
         define_callflow_nodes: function(callflow_nodes) {

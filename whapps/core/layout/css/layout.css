@@ -1,8 +1,13 @@
 /* New CSS */
+html {
+    height: 100%;
+}
+
 body {
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	color: #EBEBEB;
+    height: 100%;
 }
 
 body > .topbar {
@@ -25,6 +30,7 @@ body > .topbar .topbar-inner > .container-fluid {
 #ws-topbar .brand.logo {
     width: 150px;
 	height: 52px;
+    padding: 10px 21px;
 	/*background-image: url(../../../../config/images/logo.png);*/
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -65,10 +71,17 @@ body > .topbar .topbar-inner > .container-fluid {
 .container-fluid.page {
     padding-left: 0px;
     padding-right: 0px;
+    height: 100%;
 }
 
 #ws-content {
     padding-top: 72px;
+    height: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
 .main_content {
@@ -87,6 +100,9 @@ body > .topbar .topbar-inner > .container-fluid {
 .container-fluid > .sidebar.list_panel {
     width: 192px;
     left: 0;
+    position: absolute;
+    height: auto;
+    top: 0;
 }
 
 .container-fluid > .content {
@@ -117,24 +133,6 @@ body > .topbar .topbar-inner > .container-fluid {
 .footer_wrapper .powered_by a:hover {
     color: #ffffff;
 }
-
-
-
-
-.plus_btn{
-	background-image: url(../images/plus_btn.png);
-	width: 25px;
-	height: 25px;
-	background-position: 0px 0px;
-    margin-top: -4px;
-    margin-right: 7px;
-    vertical-align: middle;
-}
-
-
-
-
-
 
 #loading {
     font-size: large;

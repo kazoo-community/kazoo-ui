@@ -39,6 +39,7 @@ winkstart.module('myaccount', 'nav', {
                 content: container,
                 modifier: function(link_html) {
                     $('> a', link_html).css('padding', 0);
+                    $('> .dropdown-menu', link_html).css('width', '100%');
                 }
             });
 
@@ -58,6 +59,7 @@ winkstart.module('myaccount', 'nav', {
 
             winkstart.publish('linknav.sub_add', args);
 
+            /*
             winkstart.publish('linknav.get', {
                     link: args.link
                 },
@@ -65,6 +67,7 @@ winkstart.module('myaccount', 'nav', {
                     THIS.update_size(link_html);
                 }
             );
+            */
         },
 
         update_size: function(link_html) {

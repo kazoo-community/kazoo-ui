@@ -46,6 +46,9 @@ winkstart.module('core', 'whappnav', {
             $('> a', whapp_html).click(function(ev) {
                 ev.preventDefault();
 
+                $('.whapps .whapp > a').removeClass('activate');
+                $(this).addClass('activate');
+
                 if(!(whapp_html.hasClass('disabled'))) {
                     winkstart.publish(args.name + '.activate', {});
                 }
@@ -122,6 +125,9 @@ winkstart.module('core', 'whappnav', {
 
             $('> a', whapp_module_html).click(function(ev) {
                 ev.preventDefault();
+
+                $('.whapps .whapp > a').removeClass('activate');
+                $(this).parents('.whapp').find('a').addClass('activate');
 
                 winkstart.publish(data.whapp + '.module_activate', { name: data.module });
             });
