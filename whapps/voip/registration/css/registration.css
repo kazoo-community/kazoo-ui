@@ -7,8 +7,6 @@
     margin-top: 30px;
 }
 
-#registration-view .registration_buttons {
-    display: inline-block;
-    margin-top: 10px;
-    width: 100%;
+#registration-view .buttons-right {
+    margin-bottom: 30px;
 }
