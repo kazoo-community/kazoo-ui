@@ -2,7 +2,7 @@
 
 .list_panel {
     width: 190px;
-    box-shadow: 5px 5px 5px #222222;
+    box-shadow: 2px 2px 2px #222222;
 }
 
 .add_flow {
@@ -112,10 +112,10 @@
 
 .new_search_box .icon_wrapper .search_icon {
     width: 24px;
-    height: 26px;
+    height: 24px;
     padding: 0 5px;
     display: block;
-    background: url(../images/search_left.png) no-repeat center center transparent;
+    background: url(../images/new_search.png) no-repeat center center transparent;
 }
 
 .new_search_box .new_searchfield {
@@ -156,6 +156,7 @@
     -moz-opacity:0.8;
     -khtml-opacity: 0.8;
     opacity: 0.8;
+    background: #333;
     height: 490px;
 }
 
@@ -168,7 +169,7 @@
     height:27px;
     border-top: 1px solid #666666;
     list-style-type: none;
-    background-color:#262626;
+    background-color:#333333;
 }
 
 .list-panel-anchor ul li:first-child{
