@@ -38,12 +38,12 @@
             voip: {
                 label: 'Trial PBX',
                 icon: 'phone',
-                api_url: 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                api_url: 'http://apps.2600hz.com:8000/v1'
             },
             accounts: {
                 label: 'Accounts',
                 icon: 'account',
-                api_url: 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                api_url: 'http://apps.2600hz.com:8000/v1'
             }
         },
 
@@ -58,7 +58,7 @@
                 id: 'voip',
                 label: 'VoIP Services',
                 icon: 'device',
-                api_url: 'http://192.168.1.61:8000/v1',
+                api_url: 'http://apps.2600hz.com:8000/v1',
                 desc: 'Manage vmbox, callflows ...'
             },
             'cluster': {
@@ -72,13 +72,13 @@
                 id: 'connect',
                 label: 'TrunkStore',
                 icon: 'connectivity',
-                api_url: 'http://192.168.1.61:8000/v1',
+                api_url: 'http://apps.2600hz.com:8000/v1',
                 desc: 'Some desc'
             },
             'userportal': {
                 id: 'userportal',
                 label: 'Userportal',
-                api_url: 'http://192.168.1.61:8000/v1',
+                api_url: 'http://apps.2600hz.com:8000/v1',
                 icon: 'user',
                 desc: 'Some desc'
             },
@@ -86,14 +86,14 @@
                 id: 'accounts',
                 label: 'Accounts',
                 icon: 'account',
-                api_url: 'http://192.168.1.61:8000/v1',
+                api_url: 'http://apps.2600hz.com:8000/v1',
                 desc: 'Some desc'
             },
             'developer': {
                 id: 'developer',
                 label: 'Developer',
                 icon: 'connectivity',
-                api_url: 'http://192.168.1.61:8000/v1',
+                api_url: 'http://apps.2600hz.com:8000/v1',
                 desc: 'Some desc'
             }
         }
