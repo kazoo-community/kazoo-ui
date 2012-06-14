@@ -4,6 +4,7 @@ winkstart.module('core', 'layout', {
             'css/layout.css',
             'css/icons.css',
             'css/popups.css',
+            'css/trunkstore_popups.css',
             'css/jquery.override.css',
             'css/popover.css',
             'css/whapp.css'

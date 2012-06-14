@@ -39,7 +39,7 @@
             return function(data, status) {
                 var string_alert = '';
 
-                if(status === 400 && data.message === 'invalid data') {
+                if(status === 400 && (data.message === 'invalid data' || data.message === 'braintree api error')) {
                     string_alert += 'Schema Error:<br/><br/>';
 
                     string_alert += arrayToString(data.data || {});

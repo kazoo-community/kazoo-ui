@@ -45,6 +45,12 @@ winkstart.module('voip', 'callflow', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'callflow.list_no_loading': {
+                url: '{api_url}/accounts/{account_id}/callflows',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'callflow.get': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
@@ -76,6 +82,8 @@ winkstart.module('voip', 'callflow', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+        //winkstart.publish('statistics.add_stat', THIS.define_stats());
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
@@ -856,6 +864,46 @@ winkstart.module('voip', 'callflow', {
                     }
                 }
             );
+        },
+
+        define_stats: function() {
+            var stats = {
+                'callflows': {
+                    icon: 'callflow',
+                    get_stat: function(callback) {
+                        winkstart.request('callflow.list_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                $.each(_data.data, function() {
+                                    if(this.featurecode) {
+                                        _data.data.length--;
+                                    }
+                                });
+
+                                var stat_attributes = {
+                                    name: 'callflows',
+                                    number: _data.data.length,
+                                    active: _data.data.length > 0 ? true : false,
+                                    color: _data.data.length < 1 ? 'red' : (_data.data.length > 1 ? 'green' : 'orange')
+                                };
+                                if(typeof callback === 'function') {
+                                    callback(stat_attributes);
+                                }
+                            },
+                            function(_data, status) {
+                                callback({error: true});
+                            }
+                        );
+                    },
+                    click_handler: function() {
+                        winkstart.publish('callflow.activate');
+                    }
+                }
+            };
+
+            return stats;
         },
 
         define_callflow_nodes: function(callflow_nodes) {
