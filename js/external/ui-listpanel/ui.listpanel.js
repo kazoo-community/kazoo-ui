@@ -100,7 +100,39 @@
             }
 
             $(function(){
-                $('.list-panel-anchor').jScrollPane();
+                $('.list-panel-anchor').css({'min-height':(($(window).height())-185)+'px'});
+                $('.list-panel-anchor').css({'height':(($(window).height())-185)+'px'});
+                var thisSp = $('.list-panel-anchor').jScrollPane({
+                    verticalDragMaxHeight: 15
+                });
+
+                var api = $(thisSp).data('jsp');
+                var throttleTimeout;
+                $(window).bind(
+                    'resize',
+                    function()
+                    {
+                        if ($.browser.msie) {
+                            // IE fires multiple resize events while you are dragging the browser window which
+                            // causes it to crash if you try to update the scrollpane on every one. So we need
+                            // to throttle it to fire a maximum of once every 50 milliseconds...
+                            if (!throttleTimeout) {
+                                throttleTimeout = setTimeout(
+                                    function()
+                                    {
+                                        api.reinitialise();
+                                        throttleTimeout = null;
+                                    },
+                                    50
+                                );
+                            }
+                        } else {
+                            $('.list-panel-anchor').css({'min-height':(($(window).height())-185)+'px'});
+                            $('.list-panel-anchor').css({'height':(($(window).height())-185)+'px'});
+                            api.reinitialise();
+                        }
+                    }
+                );
             });
         },
 
