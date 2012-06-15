@@ -575,6 +575,16 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
             });
 
+            $('.inline_field > input', popup_html).keydown(function() {
+                $('.gmap_link_div', popup_html).hide();
+            });
+
+            if(e911_data.latitude && e911_data.longitude) {
+                var href = 'http://maps.google.com/maps?q='+ e911_data.latitude + ',+' + e911_data.longitude + '+(Your+E911+Location)&iwloc=A&hl=en';
+                $('#gmap_link', popup_html).attr('href', href);
+                $('.gmap_link_div', popup_html).show();
+            }
+
             $('.submit_btn', popup_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -864,7 +874,10 @@ winkstart.module('numbers', 'numbers_manager', {
                     var tab_data = [];
                     $.each(_data.data, function(k, v) {
                         if(k != 'id') {
-                            tab_data.push(['lol', k, v.e911, v.cnam, v.failover, v.state]);
+                            v.cnam = $.inArray('cnam', v.features) >= 0 ? true : false;
+                            v.failover = $.inArray('failover', v.features) >= 0 ? true : false;
+                            v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
+                            tab_data.push(['', k, v.failover, v.cnam, v.e911, v.state]);
                         }
                     });
 
