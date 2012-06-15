@@ -239,7 +239,6 @@
 
         _registerSearchEvents: function(input) {
             var that = this;
-
             /*input.focus(function() {
                 $(this).addClass('ui-state-active');
             })
@@ -251,6 +250,8 @@
                     return false;
             })
             .keyup(function() {
+                var api = $('.list-panel-anchor').data('jsp');
+                api.scrollToY(0);
                 that._filter.apply(this, [that.list]);
             });
         }
