@@ -67,24 +67,24 @@
 }
 
 #app_store .app-store-inner .app-store-ul li:hover {
-    box-shadow: inset 0px 0px 70px 15px #202020;
+    box-shadow: inset 0px 0px 70px 10px #353535;
 }
 
 #app_store .app-store-inner .app-store-ul li .img {
-    width: 99px;
-    height: 57px;
+    width: 58px;
+    height: 54px;
     background-repeat: no-repeat;
     margin: 2px auto 0 auto;
 }
 
 
 #app_store .app-store-inner .app-store-ul li .img.voip {
-    background-image: url('../images/PBXservices.png');
+    background-image: url('../images/HostedPBX.png');
 }
 
 
 #app_store .app-store-inner .app-store-ul li .img.cluster {
-    background-image: url('../images/ClusterManager.png');
+    background-image: url('../images/CloudManager.png');
 }
 
 
@@ -99,12 +99,12 @@
 
 
 #app_store .app-store-inner .app-store-ul li .img.accounts {
-    background-image: url('../images/TrunkStore.png');
+    background-image: url('../images/AccountManager.png');
 }
 
 
 #app_store .app-store-inner .app-store-ul li .img.developer {
-    background-image: url('../images/DTHbilling.png');
+    background-image: url('../images/DevelopersTool.png');
 }
 
 
