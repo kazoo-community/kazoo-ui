@@ -157,7 +157,13 @@
     -khtml-opacity: 0.8;
     opacity: 0.8;
     background: #333;
-    height: 490px;
+    /*height: 490px;*/
+    overflow: auto;
+    outline: none;
+}
+
+.list-panel-anchor .jspPane {
+    left: 0px !important;
 }
 
 .list-panel-anchor ul{
@@ -167,7 +173,7 @@
 
 .list-panel-anchor ul li{
     height:27px;
-    border-top: 1px solid #666666;
+    border-bottom: 1px solid #666666;
     list-style-type: none;
     background-color:#333333;
 }
