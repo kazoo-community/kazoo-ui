@@ -345,7 +345,6 @@ winkstart.module('auth', 'auth',
             $('button.register', code_html).click(function(e) {
                 e.preventDefault();
 
-
                 var register_type = winkstart.config.register_type || false;
 
                 if(register_type) {
@@ -355,7 +354,10 @@ winkstart.module('auth', 'auth',
                 }
             });
 
-
+            $('button.return', code_html).click(function(e) {
+                e.preventDefault();
+                winkstart.publish('auth.welcome'); 
+            });
 
            
 
