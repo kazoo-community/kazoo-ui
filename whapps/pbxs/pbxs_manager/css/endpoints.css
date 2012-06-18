@@ -1,9 +1,6 @@
 #edit_server {
     padding: 10px 30px;
-}
-
-#edit_server .endpoint.edit {
-    float: right;
+    color: #fff;
 }
 
 #edit_server form > div:not(:last-child) {
@@ -58,9 +55,14 @@
     text-align: center;
 }
 
+.ui-dialog #edit_server .pbxs {
+    width: 614px;
+}
+
 #edit_server .pbxs .pbx.selected {
     border: 2px solid #05addc;
     color: #05addc;
+    opacity: 1 !important;
 }
 
 #edit_server .info_pbx {

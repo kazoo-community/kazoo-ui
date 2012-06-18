@@ -33,3 +33,27 @@
     margin-left: 5px;
 }
 
+#pbxs_manager-view h1 {
+    float: left;
+}
+
+#pbxs_manager-view .detail_pbx {
+    float: left;
+    margin: 3px 15px;
+}
+
+#pbxs_manager-content .list-panel-anchor ul li {
+    height: 57px;
+}
+
+#pbxs_manager-content .list-panel-anchor ul li a{
+    height: 57px;
+    line-height: 57px;
+    padding-left: 10px;
+}
+
+#pbxs_manager-content .list-panel-anchor .img_style {
+    float: left;
+    margin-left: 5px;
+    padding: 7px 2px;
+}

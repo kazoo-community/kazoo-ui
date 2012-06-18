@@ -2,7 +2,11 @@
     <div id="edit_server">
         <div class="row">
             <div class="whapp-header">
-                <h1>Hook up your PBX</h1>
+                {{if server_name}}
+                <h1>Edit settings for ${server_name}</h1>
+                {{else}}
+                <h1>Set your PBX</h1>
+                {{/if}}
             </div>
         </div>
         <div class="row">
@@ -20,7 +24,7 @@
                     <div class="pbxs">
                         <div class="pbx bluebox" data-pbx_name="blue.box">&nbsp;</div>
                         <div class="pbx freeswitch" data-pbx_name="FreeSWITCH">&nbsp;</div>
-                        <div class="pbx threecom" data-pbx_name="3com">&nbsp;</div>
+                        <div class="pbx threecom" data-pbx_name="threecom">&nbsp;</div>
                         <div class="pbx allworks" data-pbx_name="allworks">&nbsp;</div>
                         <div class="pbx altigen" data-pbx_name="AltiGen">&nbsp;</div>
                         <div class="pbx asterisk" data-pbx_name="Asterisk">&nbsp;</div>
@@ -44,8 +48,6 @@
                     <hr/>
 
                     <h3>Set up your PBX<!--<a class="instructions" href="http://www.2600hz.com/instructions" target="_blank">See Instructions</a>--></h3>
-                    <div class="note">Register your PBX to 2600hz and send calls to <b>server/realm: ${extra.realm}</b></div>
-
                     <div class="clearfix">
                         <label for="auth_auth_user">Create a Username</label>
                         <div class="input">
@@ -74,6 +76,14 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <label for="realm">Server/Realm</label>
+                        <div class="input">
+                            <input class="span4" disabled="disabled" type="text" name="extra.realm" value="${extra.realm}"/>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="auth.auth_method" value="Password" />
                     <input type="hidden" name="extra.serverid" value="${extra.id}" />
 
@@ -90,6 +100,9 @@
                 </div>
             </form>
             <div class="buttons-right">
+                {{if server_name}}
+                    <button class="btn danger endpoint delete">Delete</button>
+                {{/if}}
                 <button class="btn success endpoint edit">Save</button>
             </div>
         </div>
