@@ -235,7 +235,7 @@
         });
     };
 
-    winkstart.accordion = function(html, change_name){
+    winkstart.accordion = function(html, change_name) {
 
         function toggle(btn, state) {
             var div = $('#' + btn.data('toggle'));
@@ -281,6 +281,77 @@
             toggle(btn, !btn.hasClass('activated'));
         });
 
+    };
+
+    winkstart.chart = function(target, data, opt, type) {
+        this.target = target;
+        this.data = data;
+        this.options = {
+            backgroundColor: 'transparent',
+            pieSliceText: 'value',
+            pieSliceBorderColor: 'transparent',
+            legend: {
+                textStyle: {
+                    color: 'white'
+                }
+            }
+        };
+        if(type){
+            this.type = type;
+        }
+
+        $.extend(true, this.options, opt);
+
+        return this.init();
+    };
+
+    winkstart.chart.prototype = {
+        init: function() {
+            var THIS = this;
+
+            function loadChart() {
+                THIS.loadChart(THIS);
+            }
+
+            google.load("visualization", "1", {
+                packages:["corechart"],
+                callback: loadChart
+            });
+        },
+
+
+        loadChart: function(THIS){
+            switch(THIS.type) {
+                case 'line':
+                    THIS.chart = new google.visualization.LineChart(document.getElementById(THIS.target));
+                    break;
+                default:
+                    THIS.chart = new google.visualization.PieChart(document.getElementById(THIS.target));
+                    break;
+            }
+            THIS.chart.draw(google.visualization.arrayToDataTable(THIS.data), THIS.options);  
+        },
+
+        setData: function(data, push) {
+            if(push) {
+                this.data.push(data);
+            } else {
+                this.data = data;
+            }
+        },
+
+        setOptions: function(options, ext) {
+            if(ext) {
+                $.extend(true, this.options, options);
+            } else {
+                this.options = options;
+            }
+        },
+
+        refresh: function() {
+            var data = google.visualization.arrayToDataTable(this.data);
+            this.chart.draw(data, this.options);
+        }
     };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

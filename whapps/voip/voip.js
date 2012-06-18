@@ -254,41 +254,22 @@ winkstart.module('voip', 'voip', {
                         },
                         function(_data, status) {
                             var cpt_registered = _data.data.length + cpt_enabled_cell,
-                                cpt_unregistered = cpt_devices - cpt_registered - cpt_disabled;
-
-                            $('.registered_devices', welcome_html).html(cpt_registered);
-                            $('.unregistered_devices', welcome_html).html(cpt_unregistered);
-
-                            var data_pie;
-                            if(cpt_devices > 0) {
-                                data_pie = [
-                                    ['Registered Devices', cpt_registered],['Unregistered Devices', cpt_unregistered], ['Disabled Devices', cpt_disabled]
-                                ];
-                            }
-                            else {
-                                //Hack to display a pie even if there is no data
-                                data_pie = [['Registered Devices', 1]];
-                            }
-
-                            var plot1 = $.jqplot('pie_registration', [data_pie],
-                                {
-                                    grid: {
-                                        background: '#333333',
-                                        borderColor: '#333333',
-                                        shadow: false
+                                cpt_unregistered = cpt_devices - cpt_registered - cpt_disabled
+                                data = [
+                                    ['Devices', 'Number'],
+                                    ['Disabled', cpt_disabled],
+                                    ['Unregistered', cpt_unregistered],
+                                    ['Registered', cpt_registered]
+                                ],
+                                opt = {
+                                    slices: {
+                                        0: {color: 'red'}, 
+                                        1: {color: 'orange'},
+                                        2: {color: 'green'}
                                     },
-                                    seriesDefaults:{
-                                        renderer:$.jqplot.PieRenderer,
-                                        rendererOptions: {
-                                            padding: 0,
-                                            showDataLabels: true,
-                                            startAngle: '-90',
-                                            shadow: false
-                                        },
-                                    },
-                                    seriesColors: ['#5dc151', '#e62727', '#444444']
-                                }
-                            );
+                                    sliceVisibilityThreshold: 0
+                                },
+                                chart = new winkstart.chart('pie_chart_wrapper', data, opt);
                         }
                     );
                 }
