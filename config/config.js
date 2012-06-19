@@ -51,7 +51,10 @@
         nav: {
             help: 'http://www.2600hz.org/support.html'
             /* logout: ''*/
-        }
+        },
+
+        /* Uncomment the following line ONLY IF you want whitelabeling pulled from a different server */
+        /* whitelabel_api_url: 'http://apps.2600hz.com:8000/v1' */
     };
 
     winkstart.apps = {
