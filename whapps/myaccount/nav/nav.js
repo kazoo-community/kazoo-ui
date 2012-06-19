@@ -29,6 +29,8 @@ winkstart.module('myaccount', 'nav', {
                 company_name: winkstart.config.company_name
             });
 
+            $('#help_link', container).attr('href', winkstart.config.nav.help || 'http://www.2600hz.org/support.html');
+
             $('.masquerade', container).click(function() {
                 winkstart.publish('nav.company_name_click');
             });
