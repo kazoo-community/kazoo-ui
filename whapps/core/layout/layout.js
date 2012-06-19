@@ -78,7 +78,8 @@ winkstart.module('core', 'layout', {
         attach: function() {
             var THIS = this,
                 domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
-                layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent);
+                layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent),
+                api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url;
 
             $("#loading").ajaxStart(function(){
                 $(this).show();
@@ -89,11 +90,11 @@ winkstart.module('core', 'layout', {
              });
 
             winkstart.request('layout.get_logo', {
-                    api_url: winkstart.apps['auth'].api_url,
+                    api_url: api_url,
                     domain: domain
                 },
                 function(_data, status) {
-                    $('#ws-topbar .brand.logo', layout_html).css('background-image', 'url(' + winkstart.apps['auth'].api_url + '/whitelabel/' + domain + '/logo?_='+new Date().getTime()+')');
+                    $('#ws-topbar .brand.logo', layout_html).css('background-image', 'url(' + api_url + '/whitelabel/' + domain + '/logo?_='+new Date().getTime()+')');
                 },
                 function(_data, status) {
                     if(status != 404) {
