@@ -126,6 +126,13 @@
     winkstart.dialog = function(content, options) {
         var newDiv = $(document.createElement('div')).html(content);
 
+        $('input', content).keypress(function(e) {
+            if(e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
         //Unoverridable options
         var strict_options = {
             show: { effect : 'fade', duration : 200 },
