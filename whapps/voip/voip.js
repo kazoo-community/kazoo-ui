@@ -223,7 +223,7 @@ winkstart.module('voip', 'voip', {
                                                .append(THIS.templates.voip_welcome.tmpl(data_default)),
                 account_id = data.account_id;
 
-            $('.edit_icon', welcome_html).click(function() {
+            $('[data-module]', welcome_html).click(function() {
                 winkstart.publish($(this).dataset('module') + '.activate');
             });
 

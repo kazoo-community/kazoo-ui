@@ -54,6 +54,16 @@
     color: #05addc;
 }
 
+
+#voip_welcome-view .welcome_div .content .content_block {
+    cursor: pointer;
+}
+
+#voip_welcome-view .welcome_div .content .content_block:hover {
+    box-shadow: inset 0px 0px 50px 0px #666;
+}
+
+
 #voip_welcome-view .welcome_div .content .content_block .content_line {
     width: 250px;
     margin: auto;
@@ -61,7 +71,7 @@
     font-size: 12px;
 }
 
-#voip_welcome-view .welcome_div .content .content_block .content_line .right{
+#voip_welcome-view .welcome_div .content .content_block .content_line .right {
     float: right;
     margin-top: 3px;
 }
@@ -187,38 +197,3 @@
     margin: auto;
     padding-top: 11px;
 }
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .unregistered_devices {
-    color: #e62727;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .disabled_devices {
-    color: #bbbbbb;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper #pie_registration {
-    width: 150px;
-    height: 120px;
-    float: left;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper #pie_registration .jqplot-data-label {
-    color: #222222;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend {
-    width: 150px;
-    padding-top: 25px;
-    height: 80px;
-    float: left;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend .field {
-    float: right;
-    padding: 0 5px;
-}
-
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .pie_legend .content_line {
-    width: 130px;
-}
-
