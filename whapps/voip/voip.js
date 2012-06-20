@@ -41,7 +41,7 @@ winkstart.module('voip', 'voip', {
         THIS.whapp_auth(function() {
             winkstart.publish('whappnav.add', {
                 name: THIS.__module,
-                columns: 2
+                weight: 15
             });
 
             //This disables lazy loading
