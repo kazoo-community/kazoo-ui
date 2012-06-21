@@ -330,6 +330,10 @@ winkstart.module('numbers', 'numbers_manager', {
 
             THIS.setup_table(numbers_manager_html);
 
+            $('#select_all_numbers', numbers_manager_html).click(function() {
+                $('.select_number', numbers_manager_html).prop('checked', $(this).is(':checked'));
+            });
+
             $(numbers_manager_html).delegate('#add_number', 'click', function() {
                 THIS.render_add_number_dialog(function() {
                     THIS.list_numbers();
@@ -895,7 +899,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 numbers_manager_html = parent,
                 columns = [
                 {
-                    'sTitle': 'Select',
+                    'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
                     'fnRender': function(obj) {
                         return '<input type="checkbox" class="select_number"/>';
                     },
