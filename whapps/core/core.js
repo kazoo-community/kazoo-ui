@@ -13,6 +13,7 @@ winkstart.module('core', 'core',
         var THIS = this,
             uninitialized_count = 0,
             domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
+            api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url,
             load_modules = function() {
                 // First thing we're going to do is go through is load our layout
                 winkstart.module('core', 'layout').init({ parent: $('body') }, function() {
@@ -47,7 +48,7 @@ winkstart.module('core', 'core',
         winkstart.registerResources('auth', THIS.config.resources);
 
         winkstart.request('core.get_whitelabel', {
-                api_url: winkstart.apps['auth'].api_url,
+                api_url: api_url,
                 domain: domain
             },
             function(_data, status) {

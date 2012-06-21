@@ -9,7 +9,8 @@ winkstart.module('myaccount', 'billing', {
 
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
-            'billing.popup': 'popup'
+            'billing.popup': 'popup',
+            'billing.ext_link': 'ext_link'
         },
 
         resources: {
@@ -63,14 +64,25 @@ winkstart.module('myaccount', 'billing', {
             );
         },
 
-        myaccount_loaded: function() {
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'billing',
-                label: 'Billing',
-                weight: '15',
-                publish: 'billing.popup'
-            });
+        myaccount_loaded: function(user_data) {
+
+            if(winkstart.config.display_billing || user_data.priv_level == "admin"){
+                var publish = "";
+
+                (winkstart.config.nav.billing) ? publish = "billing.ext_link" : publish = "billing.popup";
+
+                winkstart.publish('nav.add_sublink', {
+                    link: 'nav',
+                    sublink: 'billing',
+                    label: 'Billing',
+                    weight: '15',
+                    publish: publish
+                });
+            }
+        },
+
+        ext_link: function() {
+            window.open(winkstart.config.nav.billing);
         },
 
         update_billing: function(data, new_data, success, error) {
@@ -144,7 +156,7 @@ winkstart.module('myaccount', 'billing', {
                 .append(billing_html);
         },
 
-        popup: function(){
+        popup: function() {
             var THIS = this,
                 popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 

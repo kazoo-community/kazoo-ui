@@ -36,10 +36,12 @@ winkstart.module('core', 'whappnav', {
     {
         add: function(args) {
             var THIS = this,
+                inserted = false,
                 whapp_list_html = $(THIS.config.targets.nav_bar),
                 whapp_html = THIS.templates.whapp.tmpl({
                     name: args.name,
-                    whapp: winkstart.apps[args.name]
+                    whapp: winkstart.apps[args.name],
+                    weight: args.weight || 0
                 }),
                 whapp_divider_html = THIS.templates.whapp_divider.tmpl();
 
@@ -71,9 +73,32 @@ winkstart.module('core', 'whappnav', {
                     }
                 });
 
-            (whapp_list_html)
-                .append(whapp_html)
-                .append(whapp_divider_html);
+            $('.whapp', whapp_list_html).each(function(index) {
+                var weight = $(this).dataset('weight');
+
+                if(args.weight < weight) {
+                    $(this)
+                        .before(whapp_html)
+                        .before(whapp_divider_html);
+                    inserted = true;
+
+                    return false;
+                }
+                else if(index >= $('.whapp', whapp_list_html).length - 1) {
+                    $(this)
+                        .after(whapp_html)
+                        .after(whapp_divider_html);
+                    inserted = true;
+
+                    return false;
+                }
+            });
+
+            if(!inserted) {
+                (whapp_list_html)
+                    .prepend(whapp_html)
+                    .prepend(whapp_divider_html);
+            }
         },
 
         disable_whapp: function(whapp_name) {
