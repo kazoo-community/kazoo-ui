@@ -2,7 +2,20 @@
 	<div class="row">
 		<h1>${title.toUpperCase()}
 			<small>
-				<p>API URL: ${api_url} ACCOUNT ID: ${account_id}</p>
+				<table class="condensed-table">
+					<tr>
+						<td>API URL</td>
+						<td>${developer.api_url}</td>
+					</tr>
+					<tr>
+						<td>ACCOUNT ID</td>
+						<td>${developer.account_id}</td>
+					</tr>
+					<tr>
+						<td>AUTH TOKEN</td>
+						<td>${developer.auth_token}</td>
+					</tr>
+				</table>
 			</small> 
 		</h1>
 		<div class="buttons-right">

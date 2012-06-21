@@ -113,8 +113,7 @@ winkstart.module('developer', 'api', {
 
                         form_html =  THIS.templates.form.tmpl({
                             title: data.data.id,
-                            api_url: winkstart.apps['developer'].api_url,
-                            account_id: winkstart.apps['developer'].account_id,
+                            developer: winkstart.apps['developer'],
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
                             rests: THIS.rest
@@ -132,13 +131,21 @@ winkstart.module('developer', 'api', {
 
                         $('.try', form_html).click(function(e) {
                             e.preventDefault();
-                            var id = $(this).data('id') + '_' +  $(this).data('verb'),
+                            var id = $(this).data('id'),
+                                verb = $(this).data('verb'),
+                                id_verb = id + "_" + verb,
+                                url = winkstart.apps['developer'].api_url + 
+                                    THIS.apis[data.data.id].ressources['developer.' + id + "." + verb].url.substr(9),
                                 print_result = function(_data) {
-                                    $('#' + id + ' .result_content', form_html)
+                                    $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
-                                        .append("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                                        .append(
+                                            "<pre>{\n" + 
+                                            "    'url': " + url + "\n" + 
+                                            THIS.print_r(_data) + 
+                                            "\n}</pre>");
                                     
-                                    $('#' + id + ' .result', form_html)
+                                    $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
                                 };
 
