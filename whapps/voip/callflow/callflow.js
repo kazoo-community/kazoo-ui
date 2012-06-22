@@ -689,7 +689,7 @@ winkstart.module('voip', 'callflow', {
                     $('.tool_name', $(this)).addClass('active');
                     if($(this).attr('help')) {
                         $('#help_box', help_box).html($(this).attr('help'));
-                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top)
+                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top - 72)
                                                                         .show();
                     }
                 },
