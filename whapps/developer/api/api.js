@@ -451,6 +451,10 @@ winkstart.module('developer', 'api', {
                     connectivity: {
                         title: 'Connectivity',
                         verbs: ['get_all', 'get', 'put', 'post']
+                    },
+                    phone_numbers: {
+                        title: 'Phone Numbers',
+                        verbs: ['get_all', 'get', 'post', 'delete']
                     }
                 };
 

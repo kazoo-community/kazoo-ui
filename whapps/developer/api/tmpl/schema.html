@@ -65,22 +65,37 @@
 					</div>
 				</div>
 			{{else}}
-				{{each(index, field) input}}
-					{{if field.type}}
-						<div class="clearfix">
-							<label for="${index}">
-								{{if input.name}}
-									${input.name}
-								{{else}}
-									${input.id}
-								{{/if}}
-							</label>
-							<div class="input">
-								<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
-							</div>
+				{{if input.items}}
+					<div class="clearfix">
+						<label for="${input.input_name}">
+							{{if input.name}}
+								${input.name}
+							{{else}}
+								${input.id}
+							{{/if}}
+						</label>
+						<div class="input">
+							<input class="span4" id="${input.input_name}" name="${input.input_name}" type="text" placeholder="" rel="popover" data-content="${input.description}"/>
 						</div>
-					{{/if}}
-				{{/each}}
+					</div>
+				{{else}}
+					{{each(index, field) input}}
+						{{if field.type}}
+							<div class="clearfix">
+								<label for="${index}">
+									{{if field.name}}
+										${field.name}
+									{{else}}
+										${index} (${input.input_name})
+									{{/if}}
+								</label>
+								<div class="input">
+									<input class="span4" id="${input.input_name}_${index}" name="${input.input_name}[${index}]" type="text" placeholder="" rel="popover" data-content="${field.description}"/>
+								</div>
+							</div>
+						{{/if}}
+					{{/each}}
+				{{/if}}
 			{{/if}}
 		{{/if}}
 		{{if input.type == "integer"}}
