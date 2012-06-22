@@ -23,6 +23,7 @@ winkstart.module('voip', 'callflow', {
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
             ring_group_element: 'tmpl/ring_group_element.html',
             buttons: 'tmpl/buttons.html',
+            help_callflow: 'tmpl/help_callflow.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -149,6 +150,8 @@ winkstart.module('voip', 'callflow', {
 
         editCallflow: function(data) {
             var THIS = this;
+
+            $('#callflow-view .callflow_help').remove();
 
             THIS._resetFlow();
 
@@ -447,6 +450,9 @@ winkstart.module('voip', 'callflow', {
                     $node.removeClass('icons_black root');
                     node_html = THIS.templates.root.tmpl({});
 
+                    $('.tooltip', node_html).click(function() {
+                        winkstart.dialog(THIS.templates.help_callflow.tmpl());
+                    });
 
                     for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
                         x = i * 2;
@@ -667,6 +673,9 @@ winkstart.module('voip', 'callflow', {
 
             $('.content', tools).hide();
 
+            $('.tooltip', tools).click(function() {
+                winkstart.dialog(THIS.templates.help_callflow.tmpl());
+            });
             // Set the basic drawer to open
             $('#basic', tools).removeClass('inactive').addClass('active');
             $('#basic .content', tools).show();
