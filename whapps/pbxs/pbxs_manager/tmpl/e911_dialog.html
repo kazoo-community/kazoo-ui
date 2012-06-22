@@ -29,9 +29,8 @@
                             <input id="region" type="text" name="region" value="${region}" />
                         </div>
                         {{if status}}
-                            <div>
-                                <label>Verify Location</label>
-                                &nbsp;&nbsp;<a href="http://maps.google.com/maps?q=${latitude},+${longitude}+(Your+E911+Location)&iwloc=A&hl=en" target="_blank">Google Maps</a>
+                            <div class="inline_field gmap_link_div" style="display: none;">
+                                <a id="gmap_link" href="http://maps.google.com/maps?q=${latitude},+${longitude}+(Your+E911+Location)&iwloc=A&hl=en" target="_blank">Verify location with Google Maps</a>
                             </div>
                         {{/if}}
                     </div>
