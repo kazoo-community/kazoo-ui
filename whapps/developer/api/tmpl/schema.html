@@ -42,7 +42,13 @@
 		{{if input.type == "array"}}
 			{{if input.enum}}
 				<div class="clearfix">
-					<label for="">${i}</label>
+					<label for="">
+						{{if input.name}}
+							${input.name}
+						{{else}}
+							${i}
+						{{/if}}
+					</label>
 					<div class="input">
 						<ul class="inputs-list">
 							{{each(i, tmp) input.enum}}
@@ -50,13 +56,7 @@
 									<label>
 										<span rel="popover" data-content="${input.description}">
 							                <input type="checkbox" id="${input.input_name}.${tmp}" name="${input.input_name}[]" value="${tmp}"/>
-							                <span>
-							                	{{if input.name}}
-													${input.name}
-												{{else}}
-													${tmp}
-												{{/if}}
-							                </span>
+							                <span>${tmp}</span>
 						                </span>
 						            </label>
 					        	</li>

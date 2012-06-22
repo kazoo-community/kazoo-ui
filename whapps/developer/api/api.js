@@ -112,10 +112,8 @@ winkstart.module('developer', 'api', {
 
                     winkstart.publish('api.schema_to_template', data.data.properties, function(required, not_required, schema) {
 
-                        console.log(not_required);
-
                         form_html =  THIS.templates.form.tmpl({
-                            title: data.data.id,
+                            title: THIS.apis[data.data.id].title,
                             developer: winkstart.apps['developer'],
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
@@ -268,7 +266,7 @@ winkstart.module('developer', 'api', {
                     $.extend(true, target, new_schema);
                 };
 
-            
+            try {
                 clean(schema, tmp);
                 template(tmp, new_schema); 
 
@@ -283,6 +281,9 @@ winkstart.module('developer', 'api', {
                 if(typeof callback == "function") {
                     callback(required, not_required, new_schema, schema);
                 }  
+            } catch(err) {
+                winkstart.alert('error', 'Something went wrong with the schema!')
+            }
         },
 
         render_list: function(parent) {
@@ -300,7 +301,7 @@ winkstart.module('developer', 'api', {
                                 if(THIS.apis[val]) {
                                     new_list.push({
                                         id: val,
-                                        title: val || '(name)'
+                                        title: THIS.apis[val].title || '(name)'
                                     });
                                 }
                             });
@@ -380,8 +381,9 @@ winkstart.module('developer', 'api', {
                     };
 
                     THIS.apis[id] = {
-                       api: {},
-                       ressources: {}
+                        title: title,
+                        api: {},
+                        ressources: {}
                     };
 
 
@@ -476,6 +478,7 @@ winkstart.module('developer', 'api', {
 
             THIS.apis = {
                 'devices': {
+                    title: 'Devices',
                     api: {
                         'devices': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
@@ -522,6 +525,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'accounts': {
+                    title: 'Accounts',
                     api: {
                         'accounts': {
                             verbs: ['get', 'post'],
@@ -563,6 +567,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'users': {
+                    title: 'Users',
                     api: {
                         'users': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
@@ -609,6 +614,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'servers': {
+                    title: 'Servers',
                     api: {
                         'servers': {
                             verbs: ['get_all'],
