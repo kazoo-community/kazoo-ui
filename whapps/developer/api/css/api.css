@@ -4,6 +4,11 @@
 
 #api-view h1 {
 	float: left;
+	margin-bottom: 0;
+}
+
+#api-view table {
+	margin-bottom: 0;
 }
 
 #api-view h1 > small {
