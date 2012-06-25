@@ -130,25 +130,27 @@ function(args) {
                         var tab_data = [];
 
                         $.each(_data.data, function() {
-                            cdr_id = this.cid || this.id;
-                            user_name = this.owner_id ? find_user_name(this.owner_id) : '',
-                            duration = this.duration_seconds >= 0 ? parse_duration(this.duration_seconds) : '--';
-                            humanFullDate = parse_date(this.timestamp);
-                            web_browser_id = parse_cdr_id(cdr_id);
-                            call_duration += this.billing_seconds >= 0 ? parseFloat(this.billing_seconds) : 0;
+                            if(this.inception) {
+                                cdr_id = this.cid || this.id;
+                                user_name = this.owner_id ? find_user_name(this.owner_id) : '',
+                                duration = this.duration_seconds >= 0 ? parse_duration(this.duration_seconds) : '--';
+                                humanFullDate = parse_date(this.timestamp);
+                                web_browser_id = parse_cdr_id(cdr_id);
+                                call_duration += this.billing_seconds >= 0 ? parseFloat(this.billing_seconds) : 0;
 
-                            tab_data.push([
-                                this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
-                                this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
-                                user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
-                                duration || '-',
-                                this.hangup_cause || '-',
-                                '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
-                                '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
-                                humanFullDate,
-                                cdr_id,
-                                this.billing_seconds
-                            ]);
+                                tab_data.push([
+                                    this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
+                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
+                                    user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
+                                    duration || '-',
+                                    this.hangup_cause || '-',
+                                    '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
+                                    '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
+                                    humanFullDate,
+                                    cdr_id,
+                                    this.billing_seconds
+                                ]);
+                            }
                         });
 
                         call_duration = 'Total duration : ' + parse_duration(call_duration, 'verbose');

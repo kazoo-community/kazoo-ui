@@ -19,9 +19,11 @@ winkstart.module('voip', 'callflow', {
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
             disa_callflow: 'tmpl/disa_callflow.html',
+            presence_callflow: 'tmpl/presence_callflow.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
             ring_group_element: 'tmpl/ring_group_element.html',
             buttons: 'tmpl/buttons.html',
+            help_callflow: 'tmpl/help_callflow.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -148,6 +150,8 @@ winkstart.module('voip', 'callflow', {
 
         editCallflow: function(data) {
             var THIS = this;
+
+            $('#callflow-view .callflow_help').remove();
 
             THIS._resetFlow();
 
@@ -446,6 +450,9 @@ winkstart.module('voip', 'callflow', {
                     $node.removeClass('icons_black root');
                     node_html = THIS.templates.root.tmpl({});
 
+                    $('.tooltip', node_html).click(function() {
+                        winkstart.dialog(THIS.templates.help_callflow.tmpl());
+                    });
 
                     for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
                         x = i * 2;
@@ -666,6 +673,9 @@ winkstart.module('voip', 'callflow', {
 
             $('.content', tools).hide();
 
+            $('.tooltip', tools).click(function() {
+                winkstart.dialog(THIS.templates.help_callflow.tmpl());
+            });
             // Set the basic drawer to open
             $('#basic', tools).removeClass('inactive').addClass('active');
             $('#basic .content', tools).show();
@@ -689,7 +699,7 @@ winkstart.module('voip', 'callflow', {
                     $('.tool_name', $(this)).addClass('active');
                     if($(this).attr('help')) {
                         $('#help_box', help_box).html($(this).attr('help'));
-                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top)
+                        $('.callflow_helpbox_wrapper', '#callflow-view').css('top', $(this).offset().top - 72)
                                                                         .show();
                     }
                 },
@@ -1473,6 +1483,54 @@ winkstart.module('voip', 'callflow', {
                         if(typeof callback == 'function') {
                             callback();
                         }
+                    }
+                },
+                'manual_presence[]': {
+                    name: 'Manual Presence',
+                    icon: 'lightbulb_on',
+                    category: 'Advanced',
+                    module: 'manual_presence',
+                    tip: 'Manual Presence Help',
+                    data: {
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('presence_id') || '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.presence_callflow.tmpl({
+                            data_presence: {
+                                'presence_id': node.getMetadata('presence_id') || '',
+                                'status': node.getMetadata('status') || 'busy'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var presence_id = $('#presence_id_input', popup_html).val();
+                            node.setMetadata('presence_id', presence_id);
+                            node.setMetadata('status', $('#presence_status option:selected', popup_html).val());
+
+                            node.caption = presence_id;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Manual Presence',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 },
                 'disa[]': {

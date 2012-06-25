@@ -32,7 +32,11 @@ winkstart.module('pbxs', 'pbxs', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('whappnav.add', { 'name' : THIS.__module });
+            winkstart.publish('whappnav.add', {
+                name : THIS.__module,
+                weight: 20
+            });
+
             THIS.initialization_check();
         });
 

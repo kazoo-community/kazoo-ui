@@ -30,7 +30,10 @@ winkstart.module('developer', 'developer', {
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('whappnav.add', { 'name' : THIS.__module });
+            winkstart.publish('whappnav.add', { 
+                name: THIS.__module,
+                weight: 5
+            });
             THIS.initialization_check();
         });
     },
@@ -49,6 +52,7 @@ winkstart.module('developer', 'developer', {
             THIS.is_initialized = true;
 
             if(winkstart.apps['developer'].default){
+                $('[data-whapp="developer"] > a').addClass('activate');
                 THIS.setup_page();
             }
         },
