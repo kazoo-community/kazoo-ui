@@ -320,7 +320,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
                         }
                         else {
                             winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
@@ -412,7 +412,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
                         }
                         else {
                             winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
@@ -447,31 +447,41 @@ winkstart.module('auth', 'auth',
                 user_id : winkstart.apps['auth'].user_id
             }
 
-            winkstart.getJSON('auth.get_user', rest_data, function (json, xhr) {
-                winkstart.publish('auth.account.loaded', json.data);
+            winkstart.getJSON('auth.get_user', rest_data,
+                function (json, xhr) {
+                    winkstart.publish('auth.account.loaded', json.data);
 
-                $.each(json.data.apps, function(k, v) {
-                    winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
-                    winkstart.apps[k] = v;
+                    $.each(json.data.apps, function(k, v) {
+                        winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
+                        winkstart.apps[k] = v;
 
-                    if(!('account_id' in v)) {
-                        winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
-                    }
+                        if(!('account_id' in v)) {
+                            winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+                        }
 
-                    if(!('user_id' in v)) {
-                        winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
-                    }
+                        if(!('user_id' in v)) {
+                            winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
+                        }
 
-                    winkstart.module.loadApp(k, function() {
-                        this.init();
-                        winkstart.log('WhApps: Initializing ' + k);
+                        winkstart.module.loadApp(k, function() {
+                            this.init();
+                            winkstart.log('WhApps: Initializing ' + k);
+                        });
                     });
-                });
 
-                if(json.data.require_password_update) {
-                    winkstart.publish('auth.new_password', json.data);
+                    if(json.data.require_password_update) {
+                        winkstart.publish('auth.new_password', json.data);
+                    }
+                },
+                function(data, status) {
+                    winkstart.alert('error', 'An error occurred while loading your account.',
+                        function() {
+                            $.cookie('c_winkstart_auth', null);
+                            window.location.reload();
+                        }
+                    );
                 }
-            });
+            );
 
         },
 

@@ -1,7 +1,22 @@
 <div>
 	<div class="row">
 		<h1>${title.toUpperCase()}
-			<small>API URL: ${api_url} ACCOUNT ID: ${account_id}</small> 
+			<small>
+				<table class="condensed-table">
+					<tr>
+						<td>API URL</td>
+						<td>${developer.api_url}</td>
+					</tr>
+					<tr>
+						<td>ACCOUNT ID</td>
+						<td>${developer.account_id}</td>
+					</tr>
+					<tr>
+						<td>AUTH TOKEN</td>
+						<td>${developer.auth_token}</td>
+					</tr>
+				</table>
+			</small> 
 		</h1>
 		<div class="buttons-right">
 			<button class="btn black toggle-all">Show All</button>
@@ -26,6 +41,9 @@
 					<form action="#" id="${k}_${verb}_form">
 						<div class="pill-content">
 							<h3>${api.title}</h3>
+							<p>
+								${description}
+							</p>
 
 							{{if api.rest}}
 								{{if api.rest[verb]}}

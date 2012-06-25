@@ -93,7 +93,8 @@ winkstart.module('developer', 'api', {
         render_api: function(args) {
             var THIS = this,
                 form_html = null,
-                schema_html = null
+                not_required_schema_html = null,
+                required_schema_html = null,
                 input_id_html = THIS.templates.input_id.tmpl();
 
             winkstart.request('api.show', {
@@ -112,17 +113,20 @@ winkstart.module('developer', 'api', {
                     winkstart.publish('api.schema_to_template', data.data.properties, function(required, not_required, schema) {
 
                         form_html =  THIS.templates.form.tmpl({
-                            title: data.data.id,
-                            api_url: winkstart.apps['developer'].api_url,
-                            account_id: winkstart.apps['developer'].account_id,
+                            title: THIS.apis[data.data.id].title,
+                            developer: winkstart.apps['developer'],
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
                             rests: THIS.rest
                         });
 
-                        schema_html = THIS.templates.schema.tmpl({
-                            required: required,
-                            not_required: not_required
+                        not_required_schema_html = THIS.templates.schema.tmpl({
+                            schema: not_required,
+                            hide: true
+                        });
+
+                        required_schema_html = THIS.templates.schema.tmpl({
+                            schema: required
                         });
 
                         $('.toggle', form_html).click(function() {
@@ -132,13 +136,21 @@ winkstart.module('developer', 'api', {
 
                         $('.try', form_html).click(function(e) {
                             e.preventDefault();
-                            var id = $(this).data('id') + '_' +  $(this).data('verb'),
+                            var id = $(this).data('id'),
+                                verb = $(this).data('verb'),
+                                id_verb = id + "_" + verb,
+                                url = winkstart.apps['developer'].api_url + 
+                                    THIS.apis[data.data.id].ressources['developer.' + id + "." + verb].url.substr(9),
                                 print_result = function(_data) {
-                                    $('#' + id + ' .result_content', form_html)
+                                    $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
-                                        .append("<pre>{\n" + THIS.print_r(_data) + "\n}</pre>");
+                                        .append(
+                                            "<pre>{\n" + 
+                                            "    'url': " + url + "\n" + 
+                                            THIS.print_r(_data) + 
+                                            "\n}</pre>");
                                     
-                                    $('#' + id + ' .result', form_html)
+                                    $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
                                 };
 
@@ -179,7 +191,8 @@ winkstart.module('developer', 'api', {
 
                     $('.schema', form_html)
                         .empty()
-                        .append(schema_html);
+                        .append(required_schema_html)
+                        .append(not_required_schema_html);
 
                     $('.id', form_html)
                         .empty()
@@ -231,15 +244,18 @@ winkstart.module('developer', 'api', {
                         });
                     }
 
-                    $.extend(target, new_schema);
+                    $.extend(true, target, new_schema);
                 },
                 template = function (data, target, name) {
                     var new_schema = {};
 
                     $.each(data, function(k, o){
                         if(o.type){
-                            (name) ? o.input_name = name + '.' + k : o.input_name = k;
-                            new_schema[k] = o
+                            var n = "";
+                            (name) ? n = name + '.' + k : n = k;
+                            o.input_name = n;
+                            o.id = k;
+                            new_schema[n] = o;
                         } else {
                             (name) ? k = name + '.' + k : k = k;
                             template(o, target, k);
@@ -247,7 +263,7 @@ winkstart.module('developer', 'api', {
 
                     });
 
-                    $.extend(target, new_schema);
+                    $.extend(true, target, new_schema);
                 };
 
             try {
@@ -264,13 +280,10 @@ winkstart.module('developer', 'api', {
 
                 if(typeof callback == "function") {
                     callback(required, not_required, new_schema, schema);
-                }
+                }  
+            } catch(err) {
+                winkstart.alert('error', 'Something went wrong with the schema!')
             }
-            catch(err) {
-                console.log(err.type);
-                console.log(err.message);
-                winkstart.alert('error', 'Something went wrong the schema.');
-            } 
         },
 
         render_list: function(parent) {
@@ -288,7 +301,7 @@ winkstart.module('developer', 'api', {
                                 if(THIS.apis[val]) {
                                     new_list.push({
                                         id: val,
-                                        title: val || '(name)'
+                                        title: THIS.apis[val].title || '(name)'
                                     });
                                 }
                             });
@@ -368,8 +381,9 @@ winkstart.module('developer', 'api', {
                     };
 
                     THIS.apis[id] = {
-                       api: {},
-                       ressources: {}
+                        title: title,
+                        api: {},
+                        ressources: {}
                     };
 
 
@@ -437,6 +451,10 @@ winkstart.module('developer', 'api', {
                     connectivity: {
                         title: 'Connectivity',
                         verbs: ['get_all', 'get', 'put', 'post']
+                    },
+                    phone_numbers: {
+                        title: 'Phone Numbers',
+                        verbs: ['get_all', 'get', 'post', 'delete']
                     }
                 };
 
@@ -464,6 +482,7 @@ winkstart.module('developer', 'api', {
 
             THIS.apis = {
                 'devices': {
+                    title: 'Devices',
                     api: {
                         'devices': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
@@ -510,6 +529,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'accounts': {
+                    title: 'Accounts',
                     api: {
                         'accounts': {
                             verbs: ['get', 'post'],
@@ -551,6 +571,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'users': {
+                    title: 'Users',
                     api: {
                         'users': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
@@ -597,6 +618,7 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'servers': {
+                    title: 'Servers',
                     api: {
                         'servers': {
                             verbs: ['get_all'],

@@ -2,6 +2,13 @@
     width: 80%;
 }
 
+#callflow-view .callflow_help, .popup_help .callflow_help {
+    background: url(../images/callflow_help.png) no-repeat center;
+    height: 657px;
+    width: 766px;
+    margin: auto;
+}
+
 #ws_callflow {
     width: 100%;
     margin-top: 30px;
@@ -10,7 +17,6 @@
 #ws_callflow #ws_cf_flow {
     width: 100%;
     overflow-x: auto;
-    min-height: 400px;
     padding-top: 10px;
     text-align: center;
 }
@@ -82,6 +88,7 @@
     background: url("../images/blue_bar.png");
     font-size: 12px;
     height: 25px;
+    padding-left: 20px;
     line-height: 25px;
     border-radius: 5px 5px 0px 0px;
     text-align: center;
@@ -120,4 +127,10 @@
     text-align: left;
     font-size: 10px;
     line-height: 12px;
+}
+
+#callflow-view .tooltip {
+    float: right;
+    margin-top: 6px;
+    cursor: pointer;
 }
