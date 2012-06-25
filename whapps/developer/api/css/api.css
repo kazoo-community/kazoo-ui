@@ -6,6 +6,11 @@
 	float: left;
 	margin-bottom: 0;
 }
+
+#api-view h1.api-urls {
+	cursor: pointer;
+}
+
 #api-view h3 {
 	text-align: left;
 }
@@ -102,4 +107,13 @@
 
 #api-view .details_clean {
 	float: left;
+}
+
+
+.info-popup {
+	background: none;
+}
+
+.info-popup .main_content {
+	width: auto;
 }
