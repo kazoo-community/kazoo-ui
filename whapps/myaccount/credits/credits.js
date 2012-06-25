@@ -156,7 +156,6 @@ winkstart.module('myaccount', 'credits', {
         },
 
         render_credits_dialog: function(data) {
-            console.log(data);
             var THIS = this,
                 data_tmpl = {
                     credits: data.credits.amount,
@@ -200,8 +199,6 @@ winkstart.module('myaccount', 'credits', {
                     twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
                     inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
                 };
-
-                console.log(limits_data);
 
                 limits_data = $.extend({}, data.limits, limits_data);
 

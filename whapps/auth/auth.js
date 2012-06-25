@@ -320,7 +320,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
                         }
                         else {
                             winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
@@ -412,7 +412,7 @@ winkstart.module('auth', 'auth',
                             winkstart.alert('Invalid credentials, please check that your username and password are correct.');
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...<br/><br/>(╯°□°）╯︵ ┻━┻');
+                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
                         }
                         else {
                             winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
@@ -447,7 +447,7 @@ winkstart.module('auth', 'auth',
                 user_id : winkstart.apps['auth'].user_id
             }
 
-            winkstart.getJSON('auth.get_user', rest_data, 
+            winkstart.getJSON('auth.get_user', rest_data,
                 function (json, xhr) {
                     winkstart.publish('auth.account.loaded', json.data);
 
@@ -474,7 +474,7 @@ winkstart.module('auth', 'auth',
                     }
                 },
                 function(data, status) {
-                    winkstart.alert('error', 'An error occurred while loading your account.', 
+                    winkstart.alert('error', 'An error occurred while loading your account.',
                         function() {
                             $.cookie('c_winkstart_auth', null);
                             window.location.reload();
