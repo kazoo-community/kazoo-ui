@@ -340,22 +340,19 @@ winkstart.module('auth', 'auth',
             $('button.register', contentDiv).click(function(e) {
                 e.preventDefault();
 
-                $('#ws-content')
-                    .empty()
-                    .append(code_html);
+                if(winkstart.config.register_type == "onboard") {
+                    $('#ws-content')
+                        .empty()
+                        .append(code_html);
+                } else {
+                    winkstart.publish('auth.register');
+                }
             });
 
             $('button.register', code_html).click(function(e) {
                 e.preventDefault();
 
-                var register_type = winkstart.config.register_type || false;
-
-                if(register_type) {
-                   winkstart.publish('onboard.register'); 
-                } else {
-                    winkstart.publish('auth.register');
-                }
-                
+                winkstart.publish('onboard.register');      
             });
 
             $('.apply', code_html).click(function(e) {
