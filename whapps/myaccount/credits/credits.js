@@ -205,7 +205,7 @@ winkstart.module('myaccount', 'credits', {
                 THIS.update_limits(limits_data, function(_data) {
                     popup.dialog('close');
 
-                    winkstart.alert('info', 'Your changes have been saved properly!');
+                    winkstart.alert('info', 'Your changes have been saved!');
                 });
             });
 
