@@ -321,8 +321,11 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
-                        if(status == '401' || status == '403') {
-                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
+                        if(status === 400) {
+                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                        }
+                        else if($.inArray(status, [401, 403]) > -1) {
+                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
                         }
                         else if(status === 'error') {
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
@@ -433,8 +436,11 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
-                        if(status == '401' || status == '403') {
-                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
+                        if(status === 400) {
+                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                        }
+                        else if($.inArray(status, [401, 403]) > -1) {
+                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
                         }
                         else if(status === 'error') {
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
