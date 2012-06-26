@@ -467,6 +467,14 @@ winkstart.module('developer', 'api', {
                     phone_numbers: {
                         title: 'Phone Numbers',
                         verbs: ['get_all', 'get', 'post', 'delete']
+                    },
+                    limits: {
+                        title: 'Limits',
+                        verbs: ['get_all']
+                    },
+                    user_auth: {
+                        title: 'User Auth',
+                        verbs: ['put']
                     }
                 };
 
