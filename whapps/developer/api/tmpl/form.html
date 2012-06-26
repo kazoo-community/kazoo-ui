@@ -23,7 +23,24 @@
 						{{/if}}
 					</button>
 					<small>${ressources['developer.' + k + '.' + verb].url.substr(9)}</small>
-					<small>${api.title}</small>
+					<small>
+						{{if verb == "get_all"}}
+							Get All
+						{{/if}}
+						{{if verb == "post"}}
+							Update a
+						{{/if}}
+						{{if verb == "put"}}
+							Add a
+						{{/if}}
+						{{if verb == "delete"}}
+							Delete a
+						{{/if}}
+						{{if verb == "get"}}
+							Get a
+						{{/if}}
+						${api.title}
+					</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
 					<form action="#" id="${k}_${verb}_form">
