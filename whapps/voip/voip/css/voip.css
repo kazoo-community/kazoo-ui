@@ -54,15 +54,10 @@
     color: #05addc;
 }
 
-
-#voip_welcome-view .welcome_div .content .content_block {
+#voip_welcome-view .welcome_div .content .content_block.hoverable:hover {
+    box-shadow: inset 0px 0px 50px 0px #666;
     cursor: pointer;
 }
-
-#voip_welcome-view .welcome_div .content .content_block:hover {
-    box-shadow: inset 0px 0px 50px 0px #666;
-}
-
 
 #voip_welcome-view .welcome_div .content .content_block .content_line {
     width: 250px;
