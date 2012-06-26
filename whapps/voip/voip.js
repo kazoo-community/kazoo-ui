@@ -238,10 +238,12 @@ winkstart.module('voip', 'voip', {
                 function(_data, status) {
                     var cpt_disabled = 0,
                         cpt_devices = _data.data.length,
-                        cpt_enabled_cell = 0;
+                        cpt_enabled_cell = 0,
+                        map_devices = {};
 
                     $.each(_data.data, function(k, v) {
                         this.enabled === false ? cpt_disabled++ : (this.device_type === 'cellphone' ? cpt_enabled_cell ++ : true);
+                        map_devices[this.id] = true;
                     });
 
                     $('.devices', welcome_html).html(cpt_devices);
@@ -253,7 +255,16 @@ winkstart.module('voip', 'voip', {
                             api_url: winkstart.apps.voip.api_url
                         },
                         function(_data, status) {
-                            var cpt_registered = _data.data.length + cpt_enabled_cell,
+                            var data_registered = [];
+
+                            /* Only check the registered devices from VoIP Services */
+                            $.each(_data.data, function() {
+                                if(map_devices[this.device_id]) {
+                                    data_registered.push(this);
+                                }
+                            });
+
+                            var cpt_registered = data_registered.length + cpt_enabled_cell,
                                 cpt_unregistered = cpt_devices - cpt_registered - cpt_disabled
                                 data = [
                                     ['Devices', 'Number'],
@@ -263,7 +274,7 @@ winkstart.module('voip', 'voip', {
                                 ],
                                 opt = {
                                     slices: {
-                                        0: {color: 'red'}, 
+                                        0: {color: 'red'},
                                         1: {color: 'orange'},
                                         2: {color: 'green'}
                                     },
