@@ -1,0 +1,51 @@
+.portal-view {
+    display: block;
+    width: 1000px;
+    margin: 30px auto auto;
+    border: 1px solid #333;
+    box-shadow: 0 2px 10px #333;
+    background: #444;
+}
+
+.portal-view .left_part {
+    padding: 10px;
+    width: 598px;
+    float: left;
+}
+
+.portal-view .right_part {
+    width: 348px;
+    float: left;
+    padding: 10px;
+}
+
+.portal-view .block {
+    height: 250px;
+}
+
+.portal-view #settings-view form label {
+    width: 160px;
+}
+
+.portal-view #settings-view form .clearfix {
+    margin-bottom: 5px;
+}
+
+.portal-view #settings-view form .input {
+    margin-left: 180px;
+}
+
+.portal-view #settings-view form .input input {
+    max-width: 150px;
+    height: 14px;
+    margin-top: 4px;
+}
+
+.portal-view #settings-view form .input input[type=checkbox] {
+    margin-top: 9px;
+}
+
+.portal-view #settings-view form label .icon.phone {
+    height: 26px;
+    margin: -6px 5px 0 0;
+}
