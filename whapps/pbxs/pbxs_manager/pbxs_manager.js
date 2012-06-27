@@ -23,6 +23,11 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         resources: {
+            'pbxs_manager.get_account': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'pbxs_manager.list_numbers': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers',
                 contentType: 'application/json',
@@ -61,6 +66,11 @@ winkstart.module('pbxs', 'pbxs_manager', {
             'pbxs_manager.create': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/docs/{file_name}',
                 contentType: 'application/x-base64',
+                verb: 'PUT'
+            },
+            'old_trunkstore.create': {
+                url: '{api_url}/accounts/{account_id}/connectivity',
+                contentType: 'application/json',
                 verb: 'PUT'
             },
             'old_trunkstore.list': {
@@ -106,6 +116,47 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     if(typeof error == 'function') {
                         error(data, status);
                     }
+                }
+            );
+        },
+
+        create_account: function(success, error) {
+            winkstart.request('pbxs_manager.get_account', {
+                    account_id: winkstart.apps['pbxs'].account_id,
+                    api_url: winkstart.apps['pbxs'].api_url
+                },
+                function(_data, status) {
+                    var THIS = this,
+                        account_data = {
+                            account: {
+                                credits: {
+                                    prepay: '0.00'
+                                },
+                                trunks: '0',
+                                inbound_trunks: '0',
+                                auth_realm: _data.data.realm
+                            },
+                            billing_account_id: winkstart.apps['pbxs'].account_id,
+                            DIDs_Unassigned: {},
+                            servers: []
+                        };
+
+                    winkstart.request('old_trunkstore.create', {
+                            account_id: winkstart.apps['pbxs'].account_id,
+                            api_url: winkstart.apps['pbxs'].api_url,
+                            data: account_data
+                        },
+                        function(data, status) {
+                            if(typeof success == 'function') {
+                                success(data, status);
+                            }
+                        },
+                        function(data, status) {
+                            if(typeof error == 'function') {
+                                error(data, status);
+                            }
+                        }
+                    );
                 }
             );
         },
@@ -166,7 +217,28 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     get_account();
                 }
                 else {
-                    winkstart.alert('There is currently no trunkstore account setup for this account.');
+                    THIS.create_account(function(_data) {
+                            THIS.list_accounts(function(data, status) {
+                                winkstart.apps['pbxs'].connectivity_id = data.data[0];
+
+                                get_account();
+                            });
+                        },
+                        function(_data, status) {
+                            if(status == 400 && _data.message.match(/credit\ card/)) {
+                                alert('Whoops! It appears you have no credit card on file. ' +
+                                      'You must have a credit card on file before signing up.\n\n' +
+                                      'To enter a credit card:\n' +
+                                      '1) Click on your account name in the upper righthand corner of Winkstart.\n' +
+                                      '2) Click on the Billing Account tab.\n' +
+                                      '3) Fill out your credit card information, then press save.');
+                            }
+                            else {
+                                alert('An error occurred during the signup process,' +
+                                      ' please try again later! (Error: ' + status + ')');
+                            }
+                        }
+                    );
                 }
             });
         },
@@ -490,46 +562,52 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 new_data = $.extend(true, {}, data.data);
 
             THIS.normalize_endpoint_data(endpoint_data);
-            if((index || index === 0) && index != 'new') {
-                $.extend(true, new_data.servers[index], endpoint_data);
+
+            if(endpoint_data.server_name) {
+                if((index || index === 0) && index != 'new') {
+                    $.extend(true, new_data.servers[index], endpoint_data);
+                }
+                else {
+                    new_data.servers.push($.extend(true, {
+                        DIDs: {},
+                        options: {
+                            enabled: true,
+                            inbound_format: 'e.164',
+                            international: false,
+                            caller_id: {},
+                            e911_info: {},
+                            failover: {}
+                        },
+                        permissions: {
+                            users: []
+                        },
+                        monitor: {
+                            monitor_enabled: false
+                        }
+                    }, endpoint_data));
+                }
+
+                winkstart.request('old_trunkstore.update', {
+                        account_id: winkstart.apps['pbxs'].account_id,
+                        api_url: winkstart.apps['pbxs'].api_url,
+                        connectivity_id: winkstart.apps['pbxs'].connectivity_id,
+                        data: new_data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
             }
             else {
-                new_data.servers.push($.extend(true, {
-                    DIDs: {},
-                    options: {
-                        enabled: true,
-                        inbound_format: 'e.164',
-                        international: false,
-                        caller_id: {},
-                        e911_info: {},
-                        failover: {}
-                    },
-                    permissions: {
-                        users: []
-                    },
-                    monitor: {
-                        monitor_enabled: false
-                    }
-                }, endpoint_data));
+                winkstart.alert('You need to specify a name for this PBX.');
             }
-
-            winkstart.request('old_trunkstore.update', {
-                    account_id: winkstart.apps['pbxs'].account_id,
-                    api_url: winkstart.apps['pbxs'].api_url,
-                    connectivity_id: winkstart.apps['pbxs'].connectivity_id,
-                    data: new_data
-                },
-                function(_data, status) {
-                    if(typeof success == 'function') {
-                        success(_data, status);
-                    }
-                },
-                function(_data, status) {
-                    if(typeof error == 'function') {
-                        error(_data, status);
-                    }
-                }
-            );
         },
 
         update_old_trunkstore: function(data, success, error) {
