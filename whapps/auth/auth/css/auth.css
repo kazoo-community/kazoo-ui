@@ -1,8 +1,9 @@
 .help_recover {
     color: #eeeeee;
     font-style: normal;
-    margin: 10px;
+    margin-bottom: 20px;
     padding: 10px;
+    width: 370px;
 }
 
 .wrapper_login_button {
@@ -12,6 +13,10 @@
 .wrapper_login_button button {
     height: 35px;
     padding-bottom: 7px;
+}
+
+.code-page {
+    margin-top: 50px;
 }
 
 #content_welcome_page .right_div {
@@ -125,31 +130,31 @@
     margin-top: 15px;
 }
 
-.popup_recover_password label {
-    width: 120px;
+.popup_recover_password div, .popup_register div {
+    display: block;
 }
 
-.popup_register {
+.popup_recover_password .main_content, .popup_register .main_content{
+    width: auto;
+}
+
+.code-page {
+    text-align: center;
+}
+
+.code-page .content {
+    border: 1px solid #444;
     padding: 10px;
-    width: 400px;
+    width: 500px;
+    margin: auto;
+    border-radius: 4px;
+    background-color: #555;
 }
 
-.popup_register form {
-    margin-bottom: 0px;
+.code-page .content a {
+    color: #05ADDC;
 }
 
-.popup_register ul {
-    list-style: none;
-}
 
-.popup_register ul > li {
-    margin-top: 10px;
-}
 
-.popup_register ul > li label {
-    color: #333;
-}
 
-.popup_register input {
-    margin-left: 10px;
-}

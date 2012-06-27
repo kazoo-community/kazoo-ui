@@ -1,22 +1,10 @@
 <div>
 	<div class="row">
-		<h1>${title.toUpperCase()}
+		<h1 class="api-urls">
+			${title.toUpperCase()}
 			<small>
-				<table class="condensed-table">
-					<tr>
-						<td>API URL</td>
-						<td>${developer.api_url}</td>
-					</tr>
-					<tr>
-						<td>ACCOUNT ID</td>
-						<td>${developer.account_id}</td>
-					</tr>
-					<tr>
-						<td>AUTH TOKEN</td>
-						<td>${developer.auth_token}</td>
-					</tr>
-				</table>
-			</small> 
+				Click to get infos ...
+			</small>
 		</h1>
 		<div class="buttons-right">
 			<button class="btn black toggle-all">Show All</button>
@@ -35,7 +23,24 @@
 						{{/if}}
 					</button>
 					<small>${ressources['developer.' + k + '.' + verb].url.substr(9)}</small>
-					<small>${api.title}</small>
+					<small>
+						{{if verb == "get_all"}}
+							Get All
+						{{/if}}
+						{{if verb == "post"}}
+							Update a
+						{{/if}}
+						{{if verb == "put"}}
+							Add a
+						{{/if}}
+						{{if verb == "delete"}}
+							Delete a
+						{{/if}}
+						{{if verb == "get"}}
+							Get a
+						{{/if}}
+						${api.title}
+					</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
 					<form action="#" id="${k}_${verb}_form">

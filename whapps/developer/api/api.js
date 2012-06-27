@@ -11,7 +11,8 @@ winkstart.module('developer', 'api', {
             api: 'tmpl/api.html',
             form: 'tmpl/form.html',
             schema: 'tmpl/schema.html',
-            input_id: 'tmpl/input_id.html'
+            input_id: 'tmpl/input_id.html',
+            info: 'tmpl/info_popup.html'
         },
 
         css: [
@@ -95,6 +96,9 @@ winkstart.module('developer', 'api', {
                 form_html = null,
                 not_required_schema_html = null,
                 required_schema_html = null,
+                info_html = THIS.templates.info.tmpl({
+                    developer: winkstart.apps['developer'],
+                }),
                 input_id_html = THIS.templates.input_id.tmpl();
 
             winkstart.request('api.show', {
@@ -114,7 +118,6 @@ winkstart.module('developer', 'api', {
 
                         form_html =  THIS.templates.form.tmpl({
                             title: THIS.apis[data.data.id].title,
-                            developer: winkstart.apps['developer'],
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
                             rests: THIS.rest
@@ -177,6 +180,15 @@ winkstart.module('developer', 'api', {
                                 .hide()
                                 .find('.result_content')
                                 .empty();
+                        });
+
+                        $('.api-urls', form_html).click(function(){
+                            info_popup = winkstart.dialog(info_html, {
+                                height: 'auto',
+                                width: 400,
+                                modal: true,
+                                title: 'API Information'
+                            });
                         });
 
                         winkstart.accordion(form_html, false);
@@ -455,6 +467,14 @@ winkstart.module('developer', 'api', {
                     phone_numbers: {
                         title: 'Phone Numbers',
                         verbs: ['get_all', 'get', 'post', 'delete']
+                    },
+                    limits: {
+                        title: 'Limits',
+                        verbs: ['get_all']
+                    },
+                    user_auth: {
+                        title: 'User Auth',
+                        verbs: ['put']
                     }
                 };
 
