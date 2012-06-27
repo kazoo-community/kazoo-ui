@@ -10,7 +10,8 @@ winkstart.module('auth', 'auth',
             login: 'tmpl/login.html',
             new_login: 'tmpl/new_login.html',
             register: 'tmpl/register.html',
-            new_password: 'tmpl/new_password.html'
+            new_password: 'tmpl/new_password.html',
+            code: 'tmpl/code.html'
         },
 
         subscribe: {
@@ -108,6 +109,10 @@ winkstart.module('auth', 'auth',
                 }
             }
         }
+        winkstart.module.loadModule('auth', 'onboarding', function() {
+            this.init();
+            winkstart.log('Core: Loaded Onboarding');
+        });
     },
 
     {
@@ -250,12 +255,12 @@ winkstart.module('auth', 'auth',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name || cookie_login.account_name || '',
                     remember_me: cookie_login.login || cookie_login.account_name ? true : false
-                };
-
-            var login_html = THIS.templates.new_login.tmpl(data_tmpl);
-
-            var contentDiv = $('.right_div', '#content_welcome_page').empty()
-                                                                     .append(login_html);
+                },
+                login_html = THIS.templates.new_login.tmpl(data_tmpl),
+                code_html = THIS.templates.code.tmpl(),
+                contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
+                                .empty()
+                                .append(login_html);
 
             if(data_tmpl.username != '') {
                 $('#password', contentDiv).focus();
@@ -316,8 +321,11 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
-                        if(status == '401' || status == '403') {
-                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
+                        if(status === 400) {
+                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                        }
+                        else if($.inArray(status, [401, 403]) > -1) {
+                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
                         }
                         else if(status === 'error') {
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
@@ -329,14 +337,31 @@ winkstart.module('auth', 'auth',
                 );
             });
 
-            $('button.register', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('button.register', contentDiv).click(function(e) {
+                e.preventDefault();
 
-                winkstart.publish('auth.register');
+                if(winkstart.config.register_type == "onboard") {
+                    $('#ws-content')
+                        .empty()
+                        .append(code_html);
+                } else {
+                    winkstart.publish('auth.register');
+                }
             });
 
-            $('a.recover_password', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('button.register', code_html).click(function(e) {
+                e.preventDefault();
+
+                winkstart.publish('onboard.register');      
+            });
+
+            $('.apply', code_html).click(function(e) {
+
+            });
+
+
+            $('a.recover_password', contentDiv).click(function(e) {
+                e.preventDefault();
 
                 winkstart.publish('auth.recover_password');
             });
@@ -408,8 +433,11 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('auth.load_account');
                     },
                     function(data, status) {
-                        if(status == '401' || status == '403') {
-                            winkstart.alert('Invalid credentials, please check that your username and password are correct.');
+                        if(status === 400) {
+                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                        }
+                        else if($.inArray(status, [401, 403]) > -1) {
+                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
                         }
                         else if(status === 'error') {
                             winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
@@ -567,7 +595,6 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                width: '320px',
                 title: 'Recover Password'
             });
 

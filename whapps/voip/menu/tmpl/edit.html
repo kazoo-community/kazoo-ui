@@ -82,14 +82,14 @@
 		 			<div class="clearfix">
 		 				<label for="hunt_allow">Whitelist of numbers</label>
 		 				<div class="input">
-		 					<input class="span4" id="hunt_allow" name="hunt_allow" type="text" placeholder="Regex" value="${data.hunt_allow}" rel="popover" data-content="List of numbers that users are allowed to dial when hunting"/>
+		 					<input class="span4" id="hunt_allow" name="hunt_allow" type="text" placeholder="Regex" value="${data.hunt_allow}" rel="popover" data-content="List of numbers that users are allowed to dial when hunting (ex: ^[0-9]{0,11}$ is a simple regex catching a group of 0 to 11 numbers)"/>
 		 				</div>
 		 			</div>
 
 		 			<div class="clearfix">
 		 				<label for="hunt_deny">Blacklist of numbers</label>
 		 				<div class="input">
-		 					<input class="span4" id="hunt_deny" name="hunt_deny" type="text" placeholder="Regex" value="${data.hunt_deny}" rel="popover" data-content="List of numbers that users are not allowed to dial when hunting"/>
+		 					<input class="span4" id="hunt_deny" name="hunt_deny" type="text" placeholder="Regex" value="${data.hunt_deny}" rel="popover" data-content="List of numbers that users are not allowed to dial when hunting (ex: ^[0-9]{0,11}$ is a simple regex catching a group of 0 to 11 numbers)"/>
 		 				</div>
 		 			</div>
 		 		</div>

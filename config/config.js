@@ -6,6 +6,8 @@
 
         advancedView: false,
 
+        register_type: 'onboard',
+
         /* web server used by the cdr module to show the link to the logs */
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 

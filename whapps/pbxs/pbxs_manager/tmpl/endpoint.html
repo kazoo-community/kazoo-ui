@@ -79,8 +79,8 @@
 
                     <div class="clearfix">
                         <label for="realm">Server/Realm</label>
-                        <div class="input">
-                            <input class="span4" disabled="disabled" type="text" name="extra.realm" value="${extra.realm}"/>
+                        <div class="input realm_wrapper">
+                            ${extra.realm}
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                 </div>
             </form>
             <div class="buttons-right">
-                {{if extra.id}}
+                {{if server_name}}
                     <button class="btn danger endpoint delete">Delete</button>
                 {{/if}}
                 <button class="btn success endpoint edit">Save</button>

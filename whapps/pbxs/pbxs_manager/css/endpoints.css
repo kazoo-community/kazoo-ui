@@ -55,6 +55,13 @@
     text-align: center;
 }
 
+#edit_server .realm_wrapper {
+    font-size: 14px;
+    height: 28px;
+    line-height: 28px;
+    font-weight: bold;
+}
+
 .ui-dialog #edit_server .pbxs {
     width: 614px;
 }
