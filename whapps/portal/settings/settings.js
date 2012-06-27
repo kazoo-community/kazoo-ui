@@ -113,13 +113,11 @@ function(args) {
 
         if(!$('.invalid').size()) {
             var post_data = {
-                crossbar: true,
                 account_id: winkstart.apps['userportal'].account_id,
                 api_url: winkstart.apps['userportal'].api_url,
                 user_id: winkstart.apps['auth'].user_id,
             }
             winkstart.getJSON('settings.get', {
-                    crossbar: true,
                     account_id: winkstart.apps['userportal'].account_id,
                     api_url: winkstart.apps['userportal'].api_url,
                     user_id: winkstart.apps['auth'].user_id
@@ -156,15 +154,6 @@ function(args) {
     setup_page: function() {
         var THIS = this;
 
-        $("input").focus(function() {
-            //$("input").removeClass("focusField");
-            $(this).addClass("focusField");
-        });
-
-        $("input").blur(function() {
-            $(this).removeClass("focusField");
-        });
-
         $('#ring-number-txt').keyup(function() {
             if($(this).val() == '') {
                 $('.device-field').slideUp();
@@ -177,10 +166,6 @@ function(args) {
 
         $('#vm-to-email-checkbox').change(function() {
             $('#vm-to-email-checkbox').attr('checked') ? $('.email-field').slideDown() : $('.email-field').slideUp();
-        });
-
-        $('#cancel-settings-link').click(function() {
-            winkstart.publish('settings.activate');
         });
 
         $('#save-settings-link').click(function() {
@@ -209,8 +194,6 @@ function(args) {
 
             THIS.update_user_settings(data);
         });
-
     }
-
 }
 );
