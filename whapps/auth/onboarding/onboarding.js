@@ -164,7 +164,6 @@ winkstart.module('auth', 'onboarding', {
                             form_data.extra.number = new_number;
 
                             THIS.clean_form_data(form_data);
-                            console.log(form_data);
 
                             winkstart.request(true, 'phone_number.update', {
                                     api_url: winkstart.apps['auth'].api_url,
