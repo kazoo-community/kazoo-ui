@@ -305,6 +305,18 @@ winkstart.module('voip', 'menu', {
                 delete form_data.media.greeting;
             }
 
+            if(form_data.hunt_allow == '') {
+                delete form_data.hunt_allow;
+            }
+
+            if(form_data.hunt_deny == '') {
+                delete form_data.hunt_deny;
+            }
+
+            if(form_data.record_pin == '') {
+                delete form_data.record_pin;
+            }
+
             return form_data;
         },
 
@@ -323,18 +335,9 @@ winkstart.module('voip', 'menu', {
 
             if(form_data.record_pin.length == 0) {
                 form_data.max_extension_length = 4;
-                delete form_data.record_pin;
             }
             else if(form_data.max_extension_length < form_data.record_pin.length) {
                 form_data.max_extension_length = form_data.record_pin.length;
-            }
-
-            if(form_data.hunt_allow == '') {
-                delete form_data.hunt_allow;
-            }
-
-            if(form_data.hunt_deny == '') {
-                delete form_data.hunt_deny;
             }
 
             /* Hack to put timeout in ms in database. */
