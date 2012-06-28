@@ -644,7 +644,7 @@ winkstart.module('auth', 'onboarding', {
 
                         THIS.clean_form_data(form_data, onboard_html);
 
-                        console.log(form_data);
+                        
                         winkstart.request(true, 'onboard.create', {
                                 api_url: winkstart.apps['auth'].api_url,
                                 data: form_data
@@ -654,12 +654,12 @@ winkstart.module('auth', 'onboarding', {
                                     callback_fn;
 
                                 if(_data && _data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
-                                    winkstart.apps['auth'].user_id = _data.data.owner_id;
-                                    winkstart.apps['auth'].account_id = _data.data.account_id;
-                                    winkstart.apps['auth'].auth_token = _data.data.auth_token;
-
+                                    
                                     var success = function() {
                                         $('#ws-content').empty();
+                                        winkstart.apps['auth'].user_id = _data.data.owner_id;
+                                        winkstart.apps['auth'].account_id = _data.data.account_id;
+                                        winkstart.apps['auth'].auth_token = _data.data.auth_token;
 
                                         $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
 
@@ -667,6 +667,7 @@ winkstart.module('auth', 'onboarding', {
                                     };
 
                                     if(_data.data.errors) {
+                                        /*
                                         $.each(_data.data.errors, function(key, val) {
                                             callbacks.push(function() {
                                                 winkstart.publish('onboard.error_' + key, val, callbacks);
@@ -681,17 +682,26 @@ winkstart.module('auth', 'onboarding', {
                                         callback_fn = callbacks.splice(0, 1);
 
                                         callback_fn[0]();
-                                    }
+                                        */
+                                        current_step = 1;
+                                        THIS.move_to_step(1, onboard_html);
+                                        winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>' 
+                                            + winkstart.print_r(_data.data.errors));
+
+                                    } 
                                     else {
                                         success();
                                     }
-                                }
+                                } 
                                 else {
                                     winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
                                 }
                             },
-                            function(_data, status) {
-                                winkstart.alert('There was an error in the request, please try again or contact us.');
+                            function (_data, status) {
+                                current_step = 1;
+                                THIS.move_to_step(1, onboard_html);
+                                winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>' 
+                                            + winkstart.print_r(_data));
                             }
                         );
                     },
@@ -701,8 +711,9 @@ winkstart.module('auth', 'onboarding', {
                 );
             });
 
-            $('#ws-content').empty()
-                            .append(onboard_html);
+            $('#ws-content')
+                .empty()
+                .append(onboard_html);
         }
     }
 );
