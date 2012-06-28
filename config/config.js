@@ -8,6 +8,90 @@
 
         register_type: 'onboard',
 
+        onboard_roles: {
+            'default': {
+                apps: {
+                    voip: {
+                        label: 'Trial PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    accounts: {
+                        label: 'Accounts',
+                        icon: 'account',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'reseller': {
+                apps: {
+                    voip: {
+                        label: 'Trial PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    accounts: {
+                        label: 'Accounts',
+                        icon: 'account',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'small_office': {
+                apps: {
+                    voip: {
+                        label: 'Trial PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'single_phone': {
+                apps: {
+                    voip: {
+                        label: 'Trial PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'api_developer': {
+                apps: {
+                    developer: {
+                        label: 'Developer Tool',
+                        icon: 'connectivity',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'voip_minutes': {
+                apps: {
+                    pbxs: {
+                        label: 'PBX Connector',
+                        icon: 'device',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            }
+        },
+
         device_threshold: [5, 20, 50, 100],
 
         /* web server used by the cdr module to show the link to the logs */
