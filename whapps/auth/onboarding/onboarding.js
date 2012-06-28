@@ -305,7 +305,7 @@ winkstart.module('auth', 'onboarding', {
             }
 
             form_data.account.caller_id = {
-                default: {
+                'default': {
                     number: number
                 },
                 emergency: {

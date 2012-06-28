@@ -184,9 +184,9 @@ winkstart.module('myaccount', 'personal_info', {
 
                 $.each(tmp.apps, function(k, o) {
                     if(k == app) {
-                        tmp.apps[k].default = true;
+                        tmp.apps[k]['default'] = true;
                     } else {
-                        tmp.apps[k].default = false;
+                        tmp.apps[k]['default'] = false;
                     }
                 });
 

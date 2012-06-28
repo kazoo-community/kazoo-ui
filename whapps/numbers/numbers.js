@@ -57,7 +57,7 @@
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['numbers'].default){
+            if(winkstart.apps['numbers']['default']){
                 THIS.setup_page();
             }
         },

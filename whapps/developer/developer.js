@@ -51,7 +51,7 @@ winkstart.module('developer', 'developer', {
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['developer'].default){
+            if(winkstart.apps['developer']['default']){
                 $('[data-whapp="developer"] > a').addClass('activate');
                 THIS.setup_page();
             }

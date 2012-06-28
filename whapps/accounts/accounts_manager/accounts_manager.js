@@ -6,7 +6,7 @@ winkstart.module('accounts', 'accounts_manager', {
         templates: {
             accounts_manager: 'tmpl/accounts_manager.html',
             edit: 'tmpl/edit.html',
-            switch: 'tmpl/switch.html'
+            'switch_tmpl': 'tmpl/switch.html'
         },
 
         subscribe: {
@@ -652,7 +652,7 @@ winkstart.module('accounts', 'accounts_manager', {
                 },
                 function(_data, status) {
                     if(_data.data.length > 0) {
-                        switch_html = winkstart.dialog(THIS.templates.switch.tmpl({ 'accounts': _data.data }), {
+                        switch_html = winkstart.dialog(THIS.templates.switch_tmpl.tmpl({ 'accounts': _data.data }), {
                             title: 'Account Masquerading'
                         });
 

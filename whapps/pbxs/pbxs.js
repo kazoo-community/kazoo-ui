@@ -58,7 +58,7 @@ winkstart.module('pbxs', 'pbxs', {
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['pbxs'].default){
+            if(winkstart.apps['pbxs']['default']){
                 THIS.setup_page();
             }
         },
