@@ -124,7 +124,7 @@ winkstart.module('myaccount', 'personal_info', {
 
             var count = true;
             $.each(data.data.apps, function(k, o) {
-                if(o.default) {
+                if(o['default']) {
                     count = false;
                 }
             });

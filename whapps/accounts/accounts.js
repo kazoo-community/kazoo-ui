@@ -55,7 +55,7 @@
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['accounts'].default){
+            if(winkstart.apps['accounts']['default']){
                 THIS.setup_page();
                 $('[data-whapp="accounts"] > a').addClass('activate');
             }
