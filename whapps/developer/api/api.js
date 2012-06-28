@@ -170,8 +170,23 @@ winkstart.module('developer', 'api', {
 
                         $('.details', form_html).click(function(e){
                             e.preventDefault();
-                            $('#' + $(this).data('id') + ' .hide', form_html)
-                                .slideToggle();
+
+                            var id = $(this).data('id'),
+                                state = $(this).data('state'),
+                                div = $('#' + id  + ' .hide', form_html);
+
+                            
+                                if(!state) {
+                                    $(this)
+                                        .data('state', true)
+                                        .text('Hide Advanced');
+                                    div.slideDown();
+                                } else {
+                                     $(this)
+                                        .data('state', false)
+                                        .text('Show Advanced');
+                                    div.slideUp();
+                                }
                         });
 
                         $('.clean', form_html).click(function(e){
