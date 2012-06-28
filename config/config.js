@@ -76,19 +76,31 @@
                 id: 'userportal',
                 label: 'Userportal',
                 icon: 'user',
-                desc: 'Some desc'
+                desc: 'Let the user manage is own vmbox ...'
             },
             'accounts': {
                 id: 'accounts',
                 label: 'Accounts',
                 icon: 'account',
-                desc: 'Some desc'
+                desc: 'Manage your sub-accounts'
             },
             'developer': {
                 id: 'developer',
                 label: 'Developer',
                 icon: 'connectivity',
-                desc: 'Some desc'
+                desc: 'Api Developer Tool'
+            },
+            'pbxs': {
+                id: 'pbxs',
+                label: 'PBX Connector',
+                icon: 'device',
+                desc: 'Manage your pbxs'
+            },
+            'numbers': {
+                id: 'Number Manager',
+                label: 'Developer',
+                icon: 'menu1',
+                desc: 'Manage your numbers'
             }
         }
     };

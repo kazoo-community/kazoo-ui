@@ -57,16 +57,18 @@ winkstart.module('myaccount', 'app_store', {
             );
         },
 
-        myaccount_loaded: function() {
+        myaccount_loaded: function(user_data) {
             var THIS = this;
 
-            winkstart.publish('nav.add_sublink', {
-                link: 'nav',
-                sublink: 'app_store',
-                label: 'App Store',
-                weight: '20',
-                publish: 'app_store.popup'
-            });
+            if(user_data.priv_level != "user") {
+                winkstart.publish('nav.add_sublink', {
+                    link: 'nav',
+                    sublink: 'app_store',
+                    label: 'App Store',
+                    weight: '20',
+                    publish: 'app_store.popup'
+                });
+            }
         },
 
         render_app_store: function(data, target, callback) {
