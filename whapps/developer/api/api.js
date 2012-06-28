@@ -241,7 +241,7 @@ winkstart.module('developer', 'api', {
                                     }
                                     break;
                                 case 'array':
-                                    if(o.enum || !o.items || !o.items.properties ){
+                                    if(o["enum"] || !o.items || !o.items.properties ){
                                         new_schema[k] = o;
                                     } else {
                                         target[k] = {};
@@ -389,7 +389,7 @@ winkstart.module('developer', 'api', {
                         get: 'GET',
                         put: 'PUT',
                         post: 'POST',
-                        delete: 'DELETE' 
+                        'delete': 'DELETE' 
                     };
 
                     THIS.apis[id] = {
@@ -484,19 +484,19 @@ winkstart.module('developer', 'api', {
                 },
                 'get': {
                     btn: 'info',
-                    class: ['id']
+                    'class': ['id']
                 },
                 'put': {
                     btn: 'success',
-                    class: ['schema']
+                    'class': ['schema']
                 },
                 'post': {
                     btn: '',
-                    class: ['id', 'schema']
+                    'class': ['id', 'schema']
                 },
                 'delete': {
                     btn: 'danger',
-                    class: ['id']
+                    'class': ['id']
                 }
             };
 

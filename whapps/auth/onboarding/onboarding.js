@@ -262,6 +262,9 @@ winkstart.module('auth', 'onboarding', {
             form_data.braintree.email = form_data.extra.email;
             form_data.braintree.company = form_data.account.name;
 
+            //form2object fails to get radio values so here is a quick hack.
+            form_data.account.role = $('input:radio[name=account.role]:checked', target).val();
+
             form_data.extensions = [
                 {
                     user: {
@@ -270,16 +273,13 @@ winkstart.module('auth', 'onboarding', {
                         first_name: username.first_name,
                         last_name: username.last_name,
                         email: form_data.extra.email,
-                        apps: winkstart.config.register_apps
+                        apps: winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].apps : winkstart.config.register_apps
                     },
                     callflow: {
                         numbers: [ number ]
                     }
                 }
             ]
-
-            //form2object fails to get radio values so here is a quick hack.
-            form_data.account.role = $('input:radio[name=account.role]:checked').val();
 
             if(form_data.account.role == 'small_office') {
                 extension = $('#extension_1', target).val();
@@ -305,13 +305,16 @@ winkstart.module('auth', 'onboarding', {
             }
 
             form_data.account.caller_id = {
-                default: {
+                'default': {
                     number: number
                 },
                 emergency: {
                     number: number
                 }
             };
+
+            form_data.account.available_apps = winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].available_apps : [];
+            form_data.account.default_api_url = winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].default_api_url : '' ;
 
             form_data.phone_numbers = {};
             form_data.phone_numbers[number] = { dash_e911: form_data.e911 };
@@ -650,7 +653,7 @@ winkstart.module('auth', 'onboarding', {
                                 var callbacks = [],
                                     callback_fn;
 
-                                if(_data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
+                                if(_data && _data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
                                     winkstart.apps['auth'].user_id = _data.data.owner_id;
                                     winkstart.apps['auth'].account_id = _data.data.account_id;
                                     winkstart.apps['auth'].auth_token = _data.data.auth_token;

@@ -10,6 +10,7 @@ winkstart.module('myaccount', 'personal_info', {
         subscribe: {
             'myaccount.nav.post_loaded': 'myaccount_loaded',
             'personal_info.popup': 'popup',
+            'personal_info.advanced_view': 'advanced_view',
             'personal_info.primary_set': 'primary_set'
         },
 
@@ -156,6 +157,20 @@ winkstart.module('myaccount', 'personal_info', {
             });
         },
 
+        advanced_view: function(callback){
+             winkstart.request('personal_info.user_get', {
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    user_id: winkstart.apps['myaccount'].user_id
+                },
+                function(data, status) {
+                    if(typeof callback == 'function') {
+                        callback(data.data.advanced);
+                    }
+                }
+            );
+        },
+
         primary_set: function(app, callback) {
             var THIS = this;
 
@@ -169,9 +184,9 @@ winkstart.module('myaccount', 'personal_info', {
 
                 $.each(tmp.apps, function(k, o) {
                     if(k == app) {
-                        tmp.apps[k].default = true;
+                        tmp.apps[k]['default'] = true;
                     } else {
-                        tmp.apps[k].default = false;
+                        tmp.apps[k]['default'] = false;
                     }
                 });
 

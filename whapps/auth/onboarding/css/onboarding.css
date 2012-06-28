@@ -337,7 +337,7 @@
 }
 
 #fast_onboarding_form #expiration_month {
-    width: 54px;
+    width: 51px;
 }
 
 #fast_onboarding_form #expiration_year {
@@ -430,6 +430,7 @@
 
 #fast_onboarding_form .role_div .role_description {
     font-size: 12px;
+    line-height: 18px;
     display: table-cell;
     vertical-align: middle;
     text-align: left;

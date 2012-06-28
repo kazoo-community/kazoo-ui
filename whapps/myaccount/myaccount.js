@@ -93,18 +93,8 @@ winkstart.module('myaccount', 'myaccount', {
 
             if (!THIS.is_initialized) {
                 // Load the modules
-                winkstart.module('myaccount', 'nav').init(function() {
-                    winkstart.module('myaccount', 'billing').init(function() {
-                        winkstart.module('myaccount', 'personal_info').init(function() {
-                            winkstart.module('myaccount', 'statistics').init(function() {
-                                winkstart.module('myaccount', 'credits').init(function() {
-                                    winkstart.publish(THIS.__module + '.initialized', user_data);
-                                });
-                            });
-                        });
-                    });
-                });
-                /*$.each(THIS.modules, function(k, v) {
+                
+                $.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;
                         winkstart.module(THIS.__module, k).init(function() {
@@ -115,7 +105,8 @@ winkstart.module('myaccount', 'myaccount', {
                             }
                         });
                     }
-                })*/
+                })
+
             } else {
                 THIS.setup_page(user_data);
             }
