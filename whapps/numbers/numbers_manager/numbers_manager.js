@@ -352,9 +352,17 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
-                            });
+                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                                function() {
+                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                            !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
+                                        },
+                                        function(_data_update) {
+                                            winkstart.alert('Failed to update the Failover for this phone number<br/>Error: '+_data_update.message);
+                                        }
+                                    );
+                                }
+                            );
                         });
                     });
                 }
@@ -372,9 +380,17 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
-                            });
+                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                                function() {
+                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                            !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
+                                        },
+                                        function(_data_update) {
+                                            winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                        }
+                                    );
+                                }
+                            );
                         });
                     });
                 }
@@ -392,9 +408,17 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
-                            });
+                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                                function() {
+                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                            !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                        },
+                                        function(_data_update) {
+                                            winkstart.alert('Failed to update the e911 for this phone number<br/>Error: '+_data_update.message);
+                                        }
+                                    );
+                                }
+                            );
                         });
                     });
                 }
@@ -446,27 +470,31 @@ winkstart.module('numbers', 'numbers_manager', {
                 THIS.render_port_dialog(function(port_data, popup) {
                     var ports_done = 0;
 
-                    $.each(port_data.phone_numbers, function(i, val) {
-                        var number_data = {
-                            phone_number: val
-                        };
+                    winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                        function() {
+                            $.each(port_data.phone_numbers, function(i, val) {
+                                var number_data = {
+                                    phone_number: val
+                                };
 
-                        THIS.port_number(number_data, function(_number_data) {
-                            number_data.options = _number_data.data;
+                                THIS.port_number(number_data, function(_number_data) {
+                                    number_data.options = _number_data.data;
 
-                            if('id' in number_data.options) {
-                                delete number_data.options.id;
-                            }
+                                    if('id' in number_data.options) {
+                                        delete number_data.options.id;
+                                    }
 
-                            THIS.submit_port(port_data, number_data, function(_data) {
-                                if(++ports_done > port_data.phone_numbers.length - 1) {
-                                    THIS.list_numbers();
+                                    THIS.submit_port(port_data, number_data, function(_data) {
+                                        if(++ports_done > port_data.phone_numbers.length - 1) {
+                                            THIS.list_numbers();
 
-                                    popup.dialog('close');
-                                }
+                                            popup.dialog('close');
+                                        }
+                                    });
+                                });
                             });
-                        });
-                    });
+                        }
+                    );
                 });
             });
 
@@ -640,18 +668,21 @@ winkstart.module('numbers', 'numbers_manager', {
             $('#add_numbers_button', popup_html).click(function(ev) {
                 ev.preventDefault();
 
-                $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
-                    numbers_data.push($(this).dataset());
-                });
+                winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    function() {
+                        $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
+                            numbers_data.push($(this).dataset());
+                        });
 
+                        THIS.add_numbers(numbers_data, function() {
+                            if(typeof callback === 'function') {
+                                callback();
+                            }
 
-                THIS.add_numbers(numbers_data, function() {
-                    if(typeof callback === 'function') {
-                        callback();
+                            popup.dialog('close');
+                        });
                     }
-
-                    popup.dialog('close');
-                });
+                );
             });
 
             $(popup_html).delegate('.checkbox_number', 'click', function() {

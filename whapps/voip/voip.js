@@ -53,19 +53,6 @@ winkstart.module('voip', 'voip', {
         THIS.whapp_config();
 
         winkstart.publish('voip.loaded');
-
-        // THIS IS STRICTLY OOB
-        if(!('accounts' in winkstart.apps)) {
-            winkstart.module.loadApp('accounts', function() {
-                winkstart.apps['accounts'] = {
-                    label: 'Accounts',
-                    icon: 'account',
-                    api_url: winkstart.apps['voip'].api_url
-                };
-
-                this.init();
-            });
-        }
     },
     {
         /* A modules object is required for the loading routine.

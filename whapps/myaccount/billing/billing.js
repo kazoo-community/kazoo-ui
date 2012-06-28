@@ -118,8 +118,8 @@ winkstart.module('myaccount', 'billing', {
                         winkstart.alert('info', 'Credit card updated!');
                     },
                     function(_data, status) {
-                        if(status == 400) {
-                            winkstart.alert('error', 'The following errors occurred:<br/><br/>' + _data.data.message.replace(/\./g, '<br/>'));
+                        if(status == 400 && _data.message) {
+                            winkstart.alert('error', 'The following errors occurred:<br/><br/>' + _data.message.replace(/\./g, '<br/>'));
                         }
                         else {
                             winkstart.alert('error', 'There was an unspecified server error, please try again later.');
