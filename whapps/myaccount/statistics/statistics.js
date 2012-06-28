@@ -36,7 +36,7 @@ winkstart.module('myaccount', 'statistics', {
 
         poll_stat: function() {
             var THIS = this,
-                polling_interval = 10,
+                polling_interval = 15,
                 poll = function() {
                     $.each(THIS.stats, function(k, v) {
                         THIS.update_stat(k);

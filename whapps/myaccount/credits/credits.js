@@ -13,6 +13,11 @@ winkstart.module('myaccount', 'credits', {
         },
 
         resources: {
+            'myaccount_credits.get_user': {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'myaccount_credits.update': {
                 url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
                 contentType: 'application/json',
@@ -53,7 +58,17 @@ winkstart.module('myaccount', 'credits', {
         nav_activate: function() {
             var THIS = this;
 
-            winkstart.publish('statistics.add_stat', THIS.define_stats());
+            winkstart.request('myaccount_credits.get_user', {
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    user_id: winkstart.apps['myaccount'].user_id
+                },
+                function(_data, status) {
+                    if(_data.data.priv_level === 'admin') {
+                        winkstart.publish('statistics.add_stat', THIS.define_stats());
+                    }
+                }
+            );
         },
 
         get_credits: function(success, error) {
