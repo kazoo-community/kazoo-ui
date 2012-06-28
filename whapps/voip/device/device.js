@@ -194,6 +194,8 @@ winkstart.module('voip', 'device', {
                 threshold_html = THIS.templates.device_threshold.tmpl(data);
 
             $('.save-device', threshold_html).click(function() {
+                dialog.dialog('destroy');
+
                 if(typeof success === 'function') {
                     success();
                 }
