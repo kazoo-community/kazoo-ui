@@ -367,7 +367,17 @@ winkstart.module('auth', 'auth',
                         winkstart.publish('onboard.register');
                     },
                     function(_data, status) {
-                        winkstart.alert('error', _data.message);
+                        switch(_data['error']) {
+                            case '404': 
+                                winkstart.alert('error', 'Invalid invite code !');
+                                break;
+                            case '410': 
+                                winkstart.alert('error', 'Invite code already used !');
+                                break;
+                            default:
+                                winkstart.alert('error', winkstart.print_r(_data));
+                                break;
+                        }
                     }
                 );
 
