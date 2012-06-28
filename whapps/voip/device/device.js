@@ -9,7 +9,8 @@ winkstart.module('voip', 'device', {
             cellphone: 'tmpl/cellphone.html',
             softphone: 'tmpl/softphone.html',
             sip_device: 'tmpl/edit.html',
-            device_callflow: 'tmpl/device_callflow.html'
+            device_callflow: 'tmpl/device_callflow.html',
+            device_threshold: 'tmpl/device_threshold.html'
         },
 
         subscribe: {
@@ -152,23 +153,64 @@ winkstart.module('voip', 'device', {
                 );
             }
             else {
-                winkstart.request(true, 'device.create', {
+                winkstart.request('device.list', {
                         account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        data: normalized_data
+                        api_url: winkstart.apps['voip'].api_url
                     },
                     function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'create');
+                        var create_device = function() {
+                            winkstart.request(true, 'device.create', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    data: normalized_data
+                                },
+                                function(_data, status) {
+                                    if(typeof success == 'function') {
+                                        success(_data, status, 'create');
+                                    }
+                                },
+                                function(_data, status) {
+                                    if(typeof error == 'function') {
+                                        error(_data, status, 'create');
+                                    }
+                                }
+                            );
+                        };
+
+                        if($.inArray(_data.data.length, winkstart.config.device_threshold || []) > -1) {
+                            THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
                         }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'create');
+                        else {
+                            create_device();
                         }
                     }
                 );
+
             }
+        },
+
+        render_alert_threshold: function(data, success, error) {
+            var THIS = this,
+                threshold_html = THIS.templates.device_threshold.tmpl(data);
+
+            $('.save-device', threshold_html).click(function() {
+                if(typeof success === 'function') {
+                    success();
+                }
+            });
+
+            $('.cancel-device', threshold_html).click(function() {
+                if(typeof error === 'function') {
+                    error();
+                }
+                else {
+                    dialog.dialog('destroy');
+                }
+            });
+
+            var dialog = winkstart.dialog(threshold_html, {
+                title: 'Maximum number of devices for your current service plan reached'
+            });
         },
 
         edit_device: function(data, _parent, _target, _callbacks, data_defaults) {

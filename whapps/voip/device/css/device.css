@@ -76,3 +76,23 @@
 	margin-left: 0;
 	margin-top: 40px;
 }
+
+.threshold_device {
+    padding: 10px;
+    background: #fff;
+}
+
+.threshold_device .header {
+    font-size: 15px;
+    color: #333333;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #eee;
+    text-align: center;
+}
+
+.threshold_device .seats_price {
+    background: url(../images/pricing.jpg) no-repeat center;
+    width: 829px;
+    height: 253px;
+    padding: 10px 0;
+}
