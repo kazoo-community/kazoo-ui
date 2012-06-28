@@ -148,10 +148,7 @@ winkstart.module('developer', 'api', {
                                     $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
                                         .append('<pre>URL: ' + url + '</pre>')
-                                        .append(
-                                            "<pre>{\n" + 
-                                            winkstart.print_r(_data) + 
-                                            "\n}</pre>");
+                                        .append(winkstart.print_r(_data));
                                     
                                     $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
