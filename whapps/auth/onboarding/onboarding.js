@@ -8,11 +8,11 @@ winkstart.module('auth', 'onboarding', {
             step1: 'tmpl/step1.html',
             step2: 'tmpl/step2.html',
             step3: 'tmpl/step3.html',
-            /*api_developer: 'tmpl/roles/api_developer.html',
-            single_phone: 'tmpl/roles/single_phone.html',
-            voip_minutes: 'tmpl/roles/voip_minutes.html',*/
-            small_office: 'tmpl/roles/small_office.html',
-            reseller: 'tmpl/roles/reseller.html'
+            /*api_developer: 'tmpl/api_developer.html',
+            single_phone: 'tmpl/single_phone.html',
+            voip_minutes: 'tmpl/voip_minutes.html',*/
+            small_office: 'tmpl/small_office.html',
+            reseller: 'tmpl/reseller.html'
         },
 
         subscribe: {
@@ -564,7 +564,7 @@ winkstart.module('auth', 'onboarding', {
             }
         },
 
-        render_onboarding: function() {
+        render_onboarding: function(args) {
             var THIS = this,
                 onboard_html = THIS.templates.new_onboarding.tmpl({}),
                 $form = $('#fast_onboarding_form', onboard_html),
@@ -644,6 +644,7 @@ winkstart.module('auth', 'onboarding', {
 
                         THIS.clean_form_data(form_data, onboard_html);
 
+                        form_data.invite_code = args.invite_code;
                         
                         winkstart.request(true, 'onboard.create', {
                                 api_url: winkstart.apps['auth'].api_url,

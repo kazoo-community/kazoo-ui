@@ -364,7 +364,9 @@ winkstart.module('auth', 'auth',
                         invite_code: code,
                     },
                     function(_data, status) {
-                        winkstart.publish('onboard.register');
+                        winkstart.publish('onboard.register', {
+                            invite_code: code
+                        });
                     },
                     function(_data, status) {
                         switch(_data['error']) {
@@ -380,14 +382,7 @@ winkstart.module('auth', 'auth',
                         }
                     }
                 );
-
-                
             });
-
-            $('.apply', code_html).click(function(e) {
-
-            });
-
 
             $('a.recover_password', contentDiv).click(function(e) {
                 e.preventDefault();
