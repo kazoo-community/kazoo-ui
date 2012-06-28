@@ -150,7 +150,7 @@ winkstart.module('developer', 'api', {
                                         .append('<pre>URL: ' + url + '</pre>')
                                         .append(
                                             "<pre>{\n" + 
-                                            THIS.print_r(_data) + 
+                                            winkstart.print_r(_data) + 
                                             "\n}</pre>");
                                     
                                     $('#' + id_verb + ' .result', form_html)
@@ -355,34 +355,6 @@ winkstart.module('developer', 'api', {
                         });
                 }
             );         
-        },
-
-        print_r: function(arr, level) {
-            var THIS = this,
-                dumped_text = "",
-                level_padding = "";
-
-            if(!level) level = 0;
-            
-            for(var j=0; j< level+1; j++) level_padding += "    ";
-
-            if(typeof(arr) == 'object') { 
-                for(var item in arr) {
-                    var value = arr[item];
-             
-                    if(typeof(value) == 'object') { 
-                       dumped_text += level_padding + "'" + item + "': { \n";
-                       dumped_text += THIS.print_r(value, level+1);
-                       dumped_text += level_padding + "}\n";
-                    } else {
-                       dumped_text += level_padding + "'" + item + "': \"" + value + "\"\n";
-                    }
-                }
-            } else { 
-                dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
-            }
-
-            return dumped_text;
         },
 
         activate: function(parent) {
