@@ -81,6 +81,11 @@ winkstart.module('auth', 'auth',
                 url: '{api_url}/user_auth/recovery',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'auth.invite_code': {
+                url: '{api_url}/onboard/invite/{invite_code}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -351,8 +356,22 @@ winkstart.module('auth', 'auth',
 
             $('button.register', code_html).click(function(e) {
                 e.preventDefault();
+                var code = $('input#code', code_html).val();
 
-                winkstart.publish('onboard.register');
+
+                winkstart.request('auth.invite_code', {
+                        api_url: winkstart.apps.auth.api_url,
+                        invite_code: code,
+                    },
+                    function(_data, status) {
+                        winkstart.publish('onboard.register');
+                    },
+                    function(_data, status) {
+                        winkstart.alert('error', _data.message);
+                    }
+                );
+
+                
             });
 
             $('.apply', code_html).click(function(e) {
