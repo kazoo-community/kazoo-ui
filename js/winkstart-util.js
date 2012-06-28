@@ -391,7 +391,7 @@
             },
             str = "";
 
-        str += "<pre>{\n";
+        str += "<pre style='text-align:left;'>{\n";
         str += arrayToString(arr);
         str += "\n}</pre>";
 
