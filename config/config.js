@@ -12,13 +12,18 @@
             'default': {
                 apps: {
                     voip: {
-                        label: 'Trial PBX',
+                        label: 'Hosted PBX',
                         icon: 'phone',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     },
-                    accounts: {
-                        label: 'Accounts',
-                        icon: 'account',
+                    pbxs: {
+                        label: 'PBX Connector',
+                        icon: 'device',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     }
                 },
@@ -28,13 +33,18 @@
             'reseller': {
                 apps: {
                     voip: {
-                        label: 'Trial PBX',
+                        label: 'Hosted PBX',
                         icon: 'phone',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     },
                     accounts: {
                         label: 'Accounts',
                         icon: 'account',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     }
                 },
@@ -44,8 +54,13 @@
             'small_office': {
                 apps: {
                     voip: {
-                        label: 'Trial PBX',
+                        label: 'Hosted PBX',
                         icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     }
                 },
@@ -55,8 +70,13 @@
             'single_phone': {
                 apps: {
                     voip: {
-                        label: 'Trial PBX',
+                        label: 'Hosted PBX',
                         icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     }
                 },
@@ -68,6 +88,11 @@
                     developer: {
                         label: 'Developer Tool',
                         icon: 'connectivity',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
                         api_url: 'http://api.2600hz.com:8000/v1'
                     }
                 },
@@ -146,9 +171,9 @@
         available_apps: {
             'voip': {
                 id: 'voip',
-                label: 'VoIP Services',
+                label: 'Hosted PBX',
                 icon: 'device',
-                desc: 'Manage vmbox, callflows ...'
+                desc: 'Manage vmboxes, callflows ...'
             },
             'cluster': {
                 id: 'cluster',
@@ -181,8 +206,8 @@
                 desc: 'Manage your pbxs'
             },
             'numbers': {
-                id: 'Number Manager',
-                label: 'Developer',
+                id: 'numbers',
+                label: 'Number Manager',
                 icon: 'menu1',
                 desc: 'Manage your numbers'
             }

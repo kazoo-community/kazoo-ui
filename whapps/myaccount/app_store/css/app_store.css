@@ -88,10 +88,13 @@
 }
 
 
-#app_store .app-store-inner .app-store-ul li .img.connect {
-    background-image: url('../images/Monitoring.png');
+#app_store .app-store-inner .app-store-ul li .img.pbxs {
+    background-image: url('../images/PBXConnector.png');
 }
 
+#app_store .app-store-inner .app-store-ul li .img.numbers {
+    background-image: url('../images/NumberManager.png');
+}
 
 #app_store .app-store-inner .app-store-ul li .img.userportal {
     background-image: url('../images/UserPortal.png');
