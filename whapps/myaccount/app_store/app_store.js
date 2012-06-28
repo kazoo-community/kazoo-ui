@@ -114,7 +114,7 @@ winkstart.module('myaccount', 'app_store', {
                             trigger: 'focus'
                         });
 
-                        $('.switch', app_store_html).switch();
+                        $('.switch', app_store_html)['switch']();
 
                         $('#left_scroll', app_store_html).click(function() {
                             if(count > 0){
