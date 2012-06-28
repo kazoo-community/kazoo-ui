@@ -92,6 +92,8 @@ winkstart.module('accounts', 'accounts_manager', {
 
     {
         save_accounts_manager: function(form_data, data, success, error) {
+            delete data.data.available_apps;
+
             var THIS = this,
                 normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
 
@@ -189,8 +191,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        whitelabel: {}/*,
-                        available_apps: winkstart.available_apps*/
+                        whitelabel: {}
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -202,53 +203,82 @@ winkstart.module('accounts', 'accounts_manager', {
                     }
                 };
 
-            if(typeof data == 'object' && data.id) {
-                var render = function() {
-                    winkstart.request(true, 'accounts_manager.get', {
-                            account_id: data.id,
-                            api_url: winkstart.apps['accounts'].api_url
-                        },
-                        function(_data, status) {
-                            THIS.migrate_data(_data);
 
-                            THIS.format_data(_data);
+            winkstart.request(true, 'accounts_manager.get', {
+                    account_id: winkstart.apps['accounts'].account_id,
+                    api_url: winkstart.apps['accounts'].api_url
+                },
+                function(_data_account, status) {
+                    if(typeof data == 'object' && data.id) {
+                        var render = function() {
+                            winkstart.request(true, 'accounts_manager.get', {
+                                    account_id: data.id,
+                                    api_url: winkstart.apps['accounts'].api_url
+                                },
+                                function(_data, status) {
+                                    THIS.migrate_data(_data);
+                                    THIS.format_data(_data);
 
-                            var render_data = $.extend(true, defaults, _data)
+                                    var render_data = $.extend(true, defaults, _data);
+                                        
+                                    render_data.field_data.available_apps = [];
 
-                            THIS.render_accounts_manager(render_data, target, callbacks);
+                                    $.each(_data_account.data.available_apps, function(k, v) {
+                                        var tmp = {},
+                                            available = $.inArray(v, _data.data.available_apps);
 
-                            if(typeof callbacks.after_render == 'function') {
-                                callbacks.after_render();
+                                        if(available > -1){
+                                            tmp.enabled = true;
+                                        } else {
+                                            tmp.enabled = false;
+                                        }
+
+                                        $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                        
+                                        render_data.field_data.available_apps.push(tmp);
+                                    });
+
+                                    THIS.render_accounts_manager(render_data, target, callbacks);
+
+                                    if(typeof callbacks.after_render == 'function') {
+                                        callbacks.after_render();
+                                    }
+                                },
+                                winkstart.error_message.process_error()
+                            );
+                        };
+
+                        winkstart.request('whitelabel.get', {
+                                account_id: data.id,
+                                api_url: winkstart.apps['accounts'].api_url
+                            },
+                            function(_data_wl, status) {
+                                defaults.field_data.whitelabel = _data_wl.data;
+                                defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
+
+                                render();
+                            },
+                            function(_data_wl, status) {
+                                if(status === 404) {
+                                    render();
+                                }
                             }
-                        },
-                        winkstart.error_message.process_error()
-                    );
-                };
+                        );
+                    } else {
+                        defaults.field_data.available_apps = [];
 
-                winkstart.request('whitelabel.get', {
-                        account_id: data.id,
-                        api_url: winkstart.apps['accounts'].api_url
-                    },
-                    function(_data_wl, status) {
-                        defaults.field_data.whitelabel = _data_wl.data;
-                        defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
+                        $.each(_data_account.data.available_apps, function(k, v) {
+                            defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                        });
+                        
+                        THIS.render_accounts_manager(defaults, target, callbacks);
 
-                        render();
-                    },
-                    function(_data_wl, status) {
-                        if(status === 404) {
-                            render();
-                        }
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }  
                     }
-                );
-            }
-            else {
-                THIS.render_accounts_manager(defaults, target, callbacks);
-
-                if(typeof callbacks.after_render == 'function') {
-                    callbacks.after_render();
                 }
-            }
+            );
         },
 
         delete_accounts_manager: function(data, success, error) {
@@ -308,6 +338,16 @@ winkstart.module('accounts', 'accounts_manager', {
         },
 
         clean_form_data: function(form_data) {
+            var available_apps = [];
+
+            $.each(form_data.available_apps, function(k, v) {
+                if(v){
+                    available_apps.push(v);
+                }
+            });
+
+            form_data.available_apps = available_apps;
+
             if(form_data.extra.deregistration_notify === false) {
                 form_data.notifications.deregister.send_to = '';
             }

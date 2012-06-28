@@ -22,7 +22,12 @@ winkstart.module('myaccount', 'app_store', {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
                 verb: 'POST'
-            }
+            },
+            'app_store.account_get': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
         }
     },
 
@@ -73,75 +78,106 @@ winkstart.module('myaccount', 'app_store', {
                 user_id: winkstart.apps['myaccount'].user_id
             },
             function(user_info, status) {
-                var data = $.extend({}, data, {
-                        available_app: winkstart.config.available_app,
-                        apps: user_info.data.apps
-                    }),
-                    app_store_html = THIS.templates.app_store.tmpl(data),
-                    count = 0,
-                    total = $('.app-store-ul li', app_store_html).length;
 
-                $('*[rel=popover]:not([type="text"])', app_store_html).popover({
-                    trigger: 'hover'
-                });
+                winkstart.request('app_store.account_get', {
+                        api_url: winkstart.apps['myaccount'].api_url,
+                        account_id: winkstart.apps['myaccount'].account_id,
+                    },
+                    function(_data, status) {
+                        var data = $.extend({}, data, {
+                            available_apps: {},
+                            apps: user_info.data.apps
+                        });
 
-                $('*[rel=popover][type="text"]', app_store_html).popover({
-                    trigger: 'focus'
-                });
+                        $.each(_data.data.available_apps, function(k, v) {
+                            data.available_apps[k] = winkstart.config.available_apps[v];
+                        });
 
-                $('.switch', app_store_html).switch();
-                    
-                $('#left_scroll', app_store_html).click(function() {
-                    if(count > 0){
-                        var width = $('.app-store-ul li', app_store_html).outerWidth();
-                        $('.app-store-ul').animate(
-                            {left: '+=' + width},
-                            500
-                        );
-                        count--;
+                        var app_store_html = THIS.templates.app_store.tmpl(data),
+                            count = 0,
+                            total = $('.app-store-ul li', app_store_html).length;
+
+                        $('*[rel=popover]:not([type="text"])', app_store_html).popover({
+                            trigger: 'hover'
+                        });
+
+                        $('*[rel=popover][type="text"]', app_store_html).popover({
+                            trigger: 'focus'
+                        });
+
+                        $('.switch', app_store_html).switch();
+                            
+                        $('#left_scroll', app_store_html).click(function() {
+                            if(count > 0){
+                                var width = $('.app-store-ul li', app_store_html).outerWidth();
+                                $('.app-store-ul').animate(
+                                    {left: '+=' + width},
+                                    500
+                                );
+                                count--;
+                            }
+                        });
+
+                        $('#right_scroll', app_store_html).click(function() {
+                            if(count+5 < total) {
+                                var width = $('.app-store-ul li', app_store_html).outerWidth();
+                                $('.app-store-ul').animate(
+                                    {left: '-=' + width},
+                                    500
+                                );
+                                count++;
+                            }
+                        });
+
+                        $('#app_store_save', app_store_html).click(function(e) {
+                            e.preventDefault();
+
+                            winkstart.confirm(
+                                'Warning! This is going to refresh the page.',
+                                function(){
+
+                                    winkstart.request('app_store.user_get', {
+                                            account_id: winkstart.apps['myaccount'].account_id,
+                                            api_url: winkstart.apps['myaccount'].api_url,
+                                            user_id: winkstart.apps['myaccount'].user_id
+                                        },
+                                        function(_user_data, status) {
+                                            var apps = {},
+                                                tmp = _user_data.data;
+
+                                            $('.app', app_store_html).find('[checked]').each(function() {
+                                                var id = $(this).attr('name');
+                                                
+                                                if(_user_data.data.apps[id]) {
+                                                    apps[id] = _user_data.data.apps[id];
+                                                } else {
+                                                    apps[id] = winkstart.config.available_apps[id];
+                                                    apps[id].api_url = _data.data.default_api_url || winkstart.config.default_api_url;
+                                                }
+                                                
+                                            });
+                                            tmp.apps = apps;
+
+                                            
+                                            THIS.update_acct(tmp, {}, function() {
+                                                window.location.reload();
+                                            });
+
+                                        }
+                                    );
+                                }
+                            );
+                        });
+
+                        (target)
+                            .empty()
+                            .append(app_store_html);
+
+                        if(typeof callback == "function") {
+                            callback();
+                        } 
                     }
-                });
-
-                $('#right_scroll', app_store_html).click(function() {
-                    if(count+5 < total) {
-                        var width = $('.app-store-ul li', app_store_html).outerWidth();
-                        $('.app-store-ul').animate(
-                            {left: '-=' + width},
-                            500
-                        );
-                        count++;
-                    }
-                });
-
-                $('#app_store_save', app_store_html).click(function(e) {
-                    e.preventDefault();
-
-                    winkstart.confirm(
-                        'Warning! This is going to refresh the page.',
-                        function(){
-                           var apps = {},
-                                tmp = user_info.data;
-
-                            $('.app', app_store_html).find('[checked]').each(function() {
-                                var id = $(this).attr('name');
-                                apps[id] = winkstart.config.available_app[id];
-                            });
-                            tmp.apps = apps;
-
-                            THIS.update_acct(tmp, {}, function() {
-                                window.location.reload();
-                            }); 
-                        }
-                    );
-                });
-
-                (target)
-                    .empty()
-                    .append(app_store_html);
-
-                if(typeof callback == "function") {
-                    callback();
-                } 
+                );
             });
         },
 

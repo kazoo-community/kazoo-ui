@@ -18,7 +18,7 @@
             <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
             <li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
             <li><a href="#options"><span class="icon sip"></span>Options</a></li>
-            <!--<li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>-->
+            <li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>
             <li><a href="#white_labeling"><span class="icon sip"></span>White labeling</a></li>
         </ul>
         <form action="#" id="accounts_manager-form">
@@ -139,6 +139,32 @@
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div id="applications">
+
+                    <div class="clearfix">
+                        <label for="">Avalaible Apps</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                {{each(i, app) field_data.available_apps}}
+                                    <li>
+                                        <label>
+                                            <span rel="popover" data-content="${app.desc}">
+                                                {{if app.enabled}}
+                                                    <input type="checkbox" id="available_apps_${app.id}" name="available_apps[]" value="${app.id}" checked="checked"/>
+                                                {{else}}
+                                                    <input type="checkbox" id="available_apps_${app.id}" name="available_apps[]" value="${app.id}"/>
+                                                {{/if}}
+                                                <span>${app.label}</span>
+                                            </span>
+                                        </label>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div id="white_labeling">
