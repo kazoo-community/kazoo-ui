@@ -64,7 +64,7 @@ winkstart.module('myaccount', 'credits', {
                     user_id: winkstart.apps['myaccount'].user_id
                 },
                 function(_data, status) {
-                    if(_data.data.priv_level === 'admin') {
+                    if(!_data.data.priv_level || _data.data.priv_level === 'admin') {
                         winkstart.publish('statistics.add_stat', THIS.define_stats());
                     }
                 }

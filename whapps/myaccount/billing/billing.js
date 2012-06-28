@@ -65,11 +65,10 @@ winkstart.module('myaccount', 'billing', {
         },
 
         myaccount_loaded: function(user_data) {
+            if(winkstart.config.display_billing || (!user_data.priv_level || user_data.priv_level === 'admin')){
+                var publish = '';
 
-            if(winkstart.config.display_billing || user_data.priv_level != "user"){
-                var publish = "";
-
-                (winkstart.config.nav.billing) ? publish = "billing.ext_link" : publish = "billing.popup";
+                (winkstart.config.nav.billing) ? publish = 'billing.ext_link' : publish = 'billing.popup';
 
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
