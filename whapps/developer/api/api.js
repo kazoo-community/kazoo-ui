@@ -460,10 +460,6 @@ winkstart.module('developer', 'api', {
                         title: 'Temporal Rules',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
-                    connectivity: {
-                        title: 'Connectivity',
-                        verbs: ['get_all', 'get', 'put', 'post']
-                    },
                     phone_numbers: {
                         title: 'Phone Numbers',
                         verbs: ['get_all', 'get', 'post', 'delete']
