@@ -410,7 +410,6 @@ winkstart.module('voip', 'device', {
 
                 winkstart.validate.set(THIS.config.validation[data.data.device_type], device_html);
 
-
                 if(!$('#owner_id', device_html).val()) {
                     $('#edit_link', device_html).hide();
                 }
@@ -509,7 +508,8 @@ winkstart.module('voip', 'device', {
                         }
                     });
                 });
-            } else {
+            }
+            else {
                 device_html = THIS.templates.general_edit.tmpl();
 
                 $('.media_pane', device_html).hide();
@@ -524,6 +524,8 @@ winkstart.module('voip', 'device', {
                         $(this).siblings('.buttons').animate({ top:'0px' }, 300);
 
                         data.data.device_type = $(this).attr('device_type');
+
+                        THIS.format_data(data);
 
                         THIS.render_device(data, $('.media_pane', device_html), callbacks);
                     }
@@ -556,6 +558,21 @@ winkstart.module('voip', 'device', {
                 render();
 
                 $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
+            }
+        },
+
+        format_data: function(data) {
+            if(data.data.device_type === 'cellphone') {
+                data.data.call_forward = {
+                    enabled: true,
+                    require_keypress: true,
+                    keep_caller_id: true
+                };
+            }
+            else {
+                data.data.call_forward = {
+                    enabled: false
+                };
             }
         },
 
