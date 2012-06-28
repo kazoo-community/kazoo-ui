@@ -8,6 +8,8 @@
 
         register_type: 'onboard',
 
+        device_threshold: [5, 20, 50, 100],
+
         /* web server used by the cdr module to show the link to the logs */
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 

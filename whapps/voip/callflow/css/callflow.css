@@ -3,10 +3,11 @@
 }
 
 #callflow-view .callflow_help, .popup_help .callflow_help {
-    background: url(../images/callflow_help.png) no-repeat center;
-    height: 657px;
-    width: 766px;
+    background: url(../images/callflow_help.gif) no-repeat center;
+    height: 644px;
+    width: 847px;
     margin: auto;
+    border-radius: 10px;
 }
 
 #ws_callflow {
