@@ -147,9 +147,9 @@ winkstart.module('developer', 'api', {
                                 print_result = function(_data) {
                                     $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
+                                        .append('<pre>URL: ' + url + '</pre>')
                                         .append(
                                             "<pre>{\n" + 
-                                            "    'url': " + url + "\n" + 
                                             THIS.print_r(_data) + 
                                             "\n}</pre>");
                                     
