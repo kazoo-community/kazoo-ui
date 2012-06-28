@@ -60,20 +60,27 @@ winkstart.module('myaccount', 'app_store', {
         myaccount_loaded: function(user_data) {
             var THIS = this;
 
-            if(user_data.priv_level != "user") {
-                winkstart.publish('nav.add_sublink', {
-                    link: 'nav',
-                    sublink: 'app_store',
-                    label: 'App Store',
-                    weight: '20',
-                    publish: 'app_store.popup'
-                });
-            }
+            winkstart.request('app_store.account_get', {
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    account_id: winkstart.apps['myaccount'].account_id,
+                },
+                function(_data, status) {
+                    if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
+                        winkstart.publish('nav.add_sublink', {
+                            link: 'nav',
+                            sublink: 'app_store',
+                            label: 'App Store',
+                            weight: '20',
+                            publish: 'app_store.popup'
+                        });
+                    }
+                }
+            );
         },
 
         render_app_store: function(data, target, callback) {
             var THIS = this;
-               
+
             winkstart.request('app_store.user_get', {
                 account_id: winkstart.apps['myaccount'].account_id,
                 api_url: winkstart.apps['myaccount'].api_url,
@@ -108,7 +115,7 @@ winkstart.module('myaccount', 'app_store', {
                         });
 
                         $('.switch', app_store_html).switch();
-                            
+
                         $('#left_scroll', app_store_html).click(function() {
                             if(count > 0){
                                 var width = $('.app-store-ul li', app_store_html).outerWidth();
@@ -149,18 +156,18 @@ winkstart.module('myaccount', 'app_store', {
 
                                             $('.app', app_store_html).find('[checked]').each(function() {
                                                 var id = $(this).attr('name');
-                                                
+
                                                 if(_user_data.data.apps[id]) {
                                                     apps[id] = _user_data.data.apps[id];
                                                 } else {
                                                     apps[id] = winkstart.config.available_apps[id];
                                                     apps[id].api_url = _data.data.default_api_url || winkstart.config.default_api_url;
                                                 }
-                                                
+
                                             });
                                             tmp.apps = apps;
 
-                                            
+
                                             THIS.update_acct(tmp, {}, function() {
                                                 window.location.reload();
                                             });
@@ -177,7 +184,7 @@ winkstart.module('myaccount', 'app_store', {
 
                         if(typeof callback == "function") {
                             callback();
-                        } 
+                        }
                     }
                 );
             });
@@ -187,7 +194,7 @@ winkstart.module('myaccount', 'app_store', {
             var THIS = this,
                 popup_html = $('<div class="inline_popup"><div class="inline_content main_content app-store"/></div>');
 
-            THIS.render_app_store({}, $('.inline_content', popup_html), 
+            THIS.render_app_store({}, $('.inline_content', popup_html),
                 function() {
                     winkstart.dialog(popup_html, {
                         height: 'auto',
@@ -197,8 +204,6 @@ winkstart.module('myaccount', 'app_store', {
                     });
                 }
             );
-
-            
         }
     }
 );

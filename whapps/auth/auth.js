@@ -85,7 +85,8 @@ winkstart.module('auth', 'auth',
         }
     },
     function() {
-        var cookie_data;
+        var cookie_data,
+            THIS = this;
 
         winkstart.registerResources(this.__whapp, this.config.resources);
 
@@ -109,8 +110,7 @@ winkstart.module('auth', 'auth',
                 }
             }
         }
-        winkstart.module.loadModule('auth', 'onboarding', function() {
-            this.init();
+        winkstart.module(THIS.__module, 'onboarding').init(function() {
             winkstart.log('Core: Loaded Onboarding');
         });
     },
@@ -352,7 +352,7 @@ winkstart.module('auth', 'auth',
             $('button.register', code_html).click(function(e) {
                 e.preventDefault();
 
-                winkstart.publish('onboard.register');      
+                winkstart.publish('onboard.register');
             });
 
             $('.apply', code_html).click(function(e) {
