@@ -329,9 +329,9 @@ winkstart.module('developer', 'api', {
                     $('#api-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Apis',
+                            label: 'APIs Developer',
                             identifier: 'api-listview',
-                            new_entity_label: 'APIs',
+                            new_entity_label: 'APIs Developer',
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'api.render',
