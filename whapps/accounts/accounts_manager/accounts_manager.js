@@ -191,7 +191,8 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        whitelabel: {}
+                        whitelabel: {},
+                        available_apps: []
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -220,12 +221,12 @@ winkstart.module('accounts', 'accounts_manager', {
                                     THIS.format_data(_data);
 
                                     var render_data = $.extend(true, defaults, _data);
-                                        
-                                    render_data.field_data.available_apps = [];
+
+                                    _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
 
                                     $.each(_data_account.data.available_apps, function(k, v) {
                                         var tmp = {},
-                                            available = $.inArray(v, _data.data.available_apps);
+                                            available = $.inArray(v, _data.data.available_apps || []);
 
                                         if(available > -1){
                                             tmp.enabled = true;
