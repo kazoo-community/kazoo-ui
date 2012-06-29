@@ -93,6 +93,19 @@ winkstart.module('core', 'linknav', {
                     .append(link_html);
 
             }
+
+            var topbar = $('body > .topbar'),
+                data_nb = topbar.data('nb') || 0,
+                nb = Math.round(parseInt(link_html.css('width'))/140);
+
+            topbar.data('nb', data_nb + nb);
+
+            if(topbar.data('nb') > 6) {
+                var tmp = 140*nb;
+                topbar.css({
+                    'min-width': '+= ' + tmp
+                });
+            }
         },
 
         sub_add: function(data) {

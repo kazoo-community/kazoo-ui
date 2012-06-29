@@ -99,12 +99,16 @@ winkstart.module('core', 'whappnav', {
                     .prepend(whapp_divider_html);
             }
 
-            if($('.whapp', whapp_list_html).length > 4){
-                $('body > .topbar').css({
-                    'min-width': '+=' + 140
-                }); 
+            var topbar = $('body > .topbar'),
+                nb = topbar.data('nb') || 0;
+
+            topbar.data('nb', nb + 1);
+
+            if(topbar.data('nb') > 6) {
+                topbar.css({
+                    'min-width': '+= 140'
+                });
             }
-            
         },
 
         disable_whapp: function(whapp_name) {
