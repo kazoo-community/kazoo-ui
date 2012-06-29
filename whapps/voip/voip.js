@@ -59,7 +59,7 @@ winkstart.module('voip', 'voip', {
          * The format is as follows:
          * <module name>: <initialization status>
          */
-        modules: {
+        modules: winkstart.config.voip_modules || {
             'account': false,
             'media': false,
             'device': false,
