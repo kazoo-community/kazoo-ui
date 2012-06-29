@@ -345,12 +345,17 @@ winkstart.module('auth', 'auth',
             $('button.register', contentDiv).click(function(e) {
                 e.preventDefault();
 
-                if(winkstart.config.register_type == "onboard") {
-                    $('#ws-content')
-                        .empty()
-                        .append(code_html);
-                } else {
-                    winkstart.publish('auth.register');
+                if(!winkstart.config.nav.register) {
+                    if(winkstart.config.register_type == "onboard") {
+                        $('#ws-content')
+                            .empty()
+                            .append(code_html);
+                    } else {
+                        winkstart.publish('auth.register');
+                    }
+                }
+                else {
+                    window.location.href = winkstart.config.nav.register;
                 }
             });
 
@@ -370,10 +375,10 @@ winkstart.module('auth', 'auth',
                     },
                     function(_data, status) {
                         switch(_data['error']) {
-                            case '404': 
+                            case '404':
                                 winkstart.alert('error', 'Invalid invite code !');
                                 break;
-                            case '410': 
+                            case '410':
                                 winkstart.alert('error', 'Invite code already used !');
                                 break;
                             default:
