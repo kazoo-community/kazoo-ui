@@ -101,8 +101,8 @@ winkstart.module('core', 'whappnav', {
 
             if($('.whapp', whapp_list_html).length > 4){
                 $('body > .topbar').css({
-                    'min-width': '+=' + (whapp_html).css('width')
-                });
+                    'min-width': '+=' + 140
+                }); 
             }
             
         },
