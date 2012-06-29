@@ -24,6 +24,7 @@ winkstart.module('voip', 'callflow', {
             ring_group_element: 'tmpl/ring_group_element.html',
             buttons: 'tmpl/buttons.html',
             help_callflow: 'tmpl/help_callflow.html',
+            fax_callflow: 'tmpl/fax_callflow.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -1593,6 +1594,80 @@ winkstart.module('voip', 'callflow', {
                                 }
                             }
                         });
+                    }
+                },
+                'receive_fax[]': {
+                    name: 'Receive Fax',
+                    icon: 'sip',
+                    category: 'Advanced',
+                    module: 'receive_fax',
+                    tip: 'Directs a fax to a specific user',
+                    data: {
+                        owner_id: null
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request('user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                $.each(data.data, function() {
+                                    this.name = this.first_name + ' ' + this.last_name;
+                                });
+
+                                popup_html = THIS.templates.fax_callflow.tmpl({
+                                    objects: {
+                                        items: data.data,
+                                        selected: node.getMetadata('owner_id') || ''
+                                    }
+                                });
+
+                                if($('#user_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#user_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('user.popup_edit', _data, function(_data) {
+                                        node.setMetadata('owner_id', _data.data.id || 'null');
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('owner_id', $('#user_selector', popup_html).val());
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Select User',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
                     }
                 },
                 'disa[]': {
