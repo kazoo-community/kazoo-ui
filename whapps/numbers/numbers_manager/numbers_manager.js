@@ -11,11 +11,13 @@ winkstart.module('numbers', 'numbers_manager', {
             e911_dialog: 'tmpl/e911_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
             add_number_search_results: 'tmpl/add_number_search_results.html',
-            port_dialog: 'tmpl/port_dialog.html'
+            port_dialog: 'tmpl/port_dialog.html',
+            fields: 'tmpl/fields.html'
         },
 
         subscribe: {
-            'numbers_manager.activate' : 'activate'
+            'numbers_manager.activate' : 'activate',
+            'numbers_manager.render_fields' : 'render_fields'
         },
 
         resources: {
@@ -296,6 +298,30 @@ winkstart.module('numbers', 'numbers_manager', {
                     callback();
                 }
             }
+        },
+
+        render_fields: function(parent, callback, callback_after_buying) {
+            var THIS = this,
+            fields_html = THIS.templates.fields.tmpl();
+
+            $(fields_html, parent).click(function() {
+                THIS.render_add_number_dialog(function() {
+                    if(typeof callback_after_buying === 'function') {
+                        callback_after_buying();
+                    }
+                });
+            });
+
+            (parent)
+                .empty()
+                .append(fields_html);
+
+            if(typeof callback == 'function') {
+                callback();
+            }
+
+            /* Nice hack for amplify.publish */
+            return false;
         },
 
         clean_phone_number_data: function(data) {

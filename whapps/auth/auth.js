@@ -81,6 +81,11 @@ winkstart.module('auth', 'auth',
                 url: '{api_url}/user_auth/recovery',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'auth.invite_code': {
+                url: '{api_url}/onboard/invite/{invite_code}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -351,14 +356,33 @@ winkstart.module('auth', 'auth',
 
             $('button.register', code_html).click(function(e) {
                 e.preventDefault();
+                var code = $('input#code', code_html).val();
 
-                winkstart.publish('onboard.register');
+
+                winkstart.request('auth.invite_code', {
+                        api_url: winkstart.apps.auth.api_url,
+                        invite_code: code,
+                    },
+                    function(_data, status) {
+                        winkstart.publish('onboard.register', {
+                            invite_code: code
+                        });
+                    },
+                    function(_data, status) {
+                        switch(_data['error']) {
+                            case '404': 
+                                winkstart.alert('error', 'Invalid invite code !');
+                                break;
+                            case '410': 
+                                winkstart.alert('error', 'Invite code already used !');
+                                break;
+                            default:
+                                winkstart.alert('error', winkstart.print_r(_data));
+                                break;
+                        }
+                    }
+                );
             });
-
-            $('.apply', code_html).click(function(e) {
-
-            });
-
 
             $('a.recover_password', contentDiv).click(function(e) {
                 e.preventDefault();

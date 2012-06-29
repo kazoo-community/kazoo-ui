@@ -42,6 +42,11 @@ winkstart.module('voip', 'callflow', {
         },
 
         resources: {
+            'callflow.list_numbers': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'callflow.list': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -110,6 +115,24 @@ winkstart.module('voip', 'callflow', {
             });
 
             winkstart.publish('callflow.define_callflow_nodes', THIS.actions);
+        },
+
+        list_numbers: function(success, error) {
+            winkstart.request('callflow.list_numbers', {
+                    api_url: winkstart.apps['voip'].api_url,
+                    account_id: winkstart.apps['voip'].account_id
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
         },
 
         renderButtons: function() {
@@ -462,46 +485,85 @@ winkstart.module('voip', 'callflow', {
                     }
 
                     $('.number_column.empty', node_html).click(function() {
-                        var popup_html = THIS.templates.add_number.tmpl({}),
-                            popup;
+                        THIS.list_numbers(function(_data) {
+                            var phone_numbers = [];
 
-                        popup = winkstart.dialog(popup_html, {
-                                title: 'Add number'
-                        });
+                            $.each(_data.data, function(k,v) {
+                                if(k != 'id') {
+                                    phone_numbers.push(k);
+                                }
+                            });
+                            phone_numbers.sort();
 
-                        $('#add_number_text', popup).blur();
+                            var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers}),
+                                popup;
 
-                        $('button.add_number', popup).click(function(event) {
-                            event.preventDefault();
-                            var number = $('#add_number_text', popup).val(),
-                                add_number = function() {
-                                    THIS.flow.numbers.push(number);
-                                    popup.dialog('close');
+                            var render = function() {
+                                popup = winkstart.dialog(popup_html, {
+                                        title: 'Add number'
+                                });
+                            };
 
-                                    THIS.renderFlow();
-                                };
+                            var refresh_numbers = function() {
+                                 THIS.list_numbers(function(_data) {
+                                    phone_numbers = [];
 
-                            if(number == '') {
-                                winkstart.confirm('Are you sure that you want to add an empty number?', function() {
-                                        add_number();
-                                    },
-                                    function() {
-                                        return;
-                                    }
-                                );
-                            }
-                            else {
-                                add_number();
-                            }
-                        });
+                                    $.each(_data.data, function(k,v) {
+                                        if(k != 'id') {
+                                            phone_numbers.push(k);
+                                        }
+                                    });
 
-                        $('#create_no_match', popup).click(function(event) {
-                            event.preventDefault();
-                            THIS.flow.numbers.push('no_match');
+                                    phone_numbers.sort();
 
-                            popup.dialog('close');
+                                    $('#list_numbers', popup).empty();
 
-                            THIS.renderFlow();
+                                    $.each(phone_numbers, function(k, v) {
+                                        $('<option value="'+v+'">'+v+'</option>').appendTo($('#list_numbers', popup));
+                                    });
+                                });
+                            };
+
+                            if(winkstart.publish('numbers_manager.render_fields', $('#number_manager_fields', popup_html), render, refresh_numbers)) {
+                                render();
+                            };
+
+                            $('.extensions_content', popup).hide();
+
+                            $('input[name="number_type"]', popup).click(function() {
+                                if($(this).val() === 'your_numbers') {
+                                    $('.list_numbers_content', popup).show();
+                                    $('.extensions_content', popup).hide();
+                                }
+                                else {
+                                    $('.extensions_content', popup).show();
+                                    $('.list_numbers_content', popup).hide();
+                                }
+                            });
+
+                            $('button.add_number', popup).click(function(event) {
+                                event.preventDefault();
+                                var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val(),
+                                    add_number = function() {
+                                        THIS.flow.numbers.push(number);
+                                        popup.dialog('close');
+
+                                        THIS.renderFlow();
+                                    };
+
+                                if(number == '') {
+                                    winkstart.confirm('Are you sure that you want to add an empty number?', function() {
+                                            add_number();
+                                        },
+                                        function() {
+                                            return;
+                                        }
+                                    );
+                                }
+                                else {
+                                    add_number();
+                                }
+                            });
                         });
                     });
 
