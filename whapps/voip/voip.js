@@ -53,19 +53,6 @@ winkstart.module('voip', 'voip', {
         THIS.whapp_config();
 
         winkstart.publish('voip.loaded');
-
-        // THIS IS STRICTLY OOB
-        if(!('accounts' in winkstart.apps)) {
-            winkstart.module.loadApp('accounts', function() {
-                winkstart.apps['accounts'] = {
-                    label: 'Accounts',
-                    icon: 'account',
-                    api_url: winkstart.apps['voip'].api_url
-                };
-
-                this.init();
-            });
-        }
     },
     {
         /* A modules object is required for the loading routine.
@@ -255,6 +242,7 @@ winkstart.module('voip', 'voip', {
                             api_url: winkstart.apps.voip.api_url
                         },
                         function(_data, status) {
+
                             var data_registered = [];
 
                             /* Only check the registered devices from VoIP Services */
@@ -281,6 +269,11 @@ winkstart.module('voip', 'voip', {
                                     sliceVisibilityThreshold: 0
                                 },
                                 chart = new winkstart.chart('pie_chart_wrapper', data, opt);
+                        },
+                        function(_data, status) {
+                            $('#pie_chart_wrapper').html(winkstart.print_r({
+                                error: 'Request failed'
+                            }));
                         }
                     );
                 }

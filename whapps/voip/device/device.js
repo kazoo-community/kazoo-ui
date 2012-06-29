@@ -873,7 +873,7 @@ winkstart.module('voip', 'device', {
                 'device[id=*]': {
                     name: 'Device',
                     icon: 'phone',
-                    category: 'Basic',
+                    category: 'Advanced',
                     module: 'device',
                     tip: 'Ring a VoIP or cell phone or other device',
                     data: {

@@ -210,6 +210,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     api_url: winkstart.apps['accounts'].api_url
                 },
                 function(_data_account, status) {
+                    _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
                     if(typeof data == 'object' && data.id) {
                         var render = function() {
                             winkstart.request(true, 'accounts_manager.get', {
@@ -222,8 +223,6 @@ winkstart.module('accounts', 'accounts_manager', {
 
                                     var render_data = $.extend(true, defaults, _data);
 
-                                    _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
-
                                     $.each(_data_account.data.available_apps, function(k, v) {
                                         var tmp = {},
                                             available = $.inArray(v, _data.data.available_apps || []);
@@ -235,7 +234,7 @@ winkstart.module('accounts', 'accounts_manager', {
                                         }
 
                                         $.extend(true, tmp, winkstart.config.available_apps[v]);
-                                        
+
                                         render_data.field_data.available_apps.push(tmp);
                                     });
 
@@ -271,12 +270,12 @@ winkstart.module('accounts', 'accounts_manager', {
                         $.each(_data_account.data.available_apps, function(k, v) {
                             defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
                         });
-                        
+
                         THIS.render_accounts_manager(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
                             callbacks.after_render();
-                        }  
+                        }
                     }
                 }
             );

@@ -1,3 +1,7 @@
+#api-content .plus_btn {
+	display: none;
+}
+
 #api-view > .row {
 	margin-bottom: 20px;
 }
