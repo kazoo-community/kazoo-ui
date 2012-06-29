@@ -442,7 +442,7 @@ winkstart.module('voip', 'user', {
                                 function(_data, status) {
 
                                     if(form_data.priv_level == 'admin') {
-                                        if(!('voip' in form_data.apps) && $.inArray('voip', _data.data.available_apps) > -1) {
+                                        if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {
                                             form_data.apps['voip'] = {
                                                 label: 'VoIP Services',
                                                 icon: 'phone',
@@ -450,7 +450,7 @@ winkstart.module('voip', 'user', {
                                             }
                                         }
                                     }
-                                    else if(form_data.priv_level == 'user' && $.inArray('userportal', _data.data.available_apps) > -1) {
+                                    else if(form_data.priv_level == 'user' && $.inArray('userportal', (_data.data.available_apps || [])) > -1) {
                                         if(!('userportal' in form_data.apps)) {
                                             form_data.apps['userportal'] = {
                                                 label: 'User Portal',
@@ -480,7 +480,7 @@ winkstart.module('voip', 'user', {
                                     }, winkstart.error_message.process_error(callbacks.save_error));
                                 }
                             );
-                            
+
                         }
                     },
                     function() {
