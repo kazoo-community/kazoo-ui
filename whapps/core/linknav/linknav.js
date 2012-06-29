@@ -98,6 +98,7 @@ winkstart.module('core', 'linknav', {
                 data_nb = topbar.data('nb') || 0,
                 nb = Math.round(parseInt(link_html.css('width'))/140);
 
+            (nb == 0) ? nb = 1 : nb = nb;
             topbar.data('nb', data_nb + nb);
 
             if(topbar.data('nb') > 6) {
