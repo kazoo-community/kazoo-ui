@@ -378,7 +378,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
@@ -406,7 +406,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
@@ -434,7 +434,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
@@ -496,7 +496,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 THIS.render_port_dialog(function(port_data, popup) {
                     var ports_done = 0;
 
-                    winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
                         function() {
                             $.each(port_data.phone_numbers, function(i, val) {
                                 var number_data = {
@@ -694,7 +694,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $('#add_numbers_button', popup_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Your on-file on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
                     function() {
                         $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
                             numbers_data.push($(this).dataset());

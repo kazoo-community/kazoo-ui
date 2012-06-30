@@ -100,6 +100,8 @@ winkstart.module('myaccount', 'app_store', {
                             apps: user_info.data.apps
                         });
 
+                        _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
+
                         $.each(_data.data.available_apps, function(k, v) {
                             data.available_apps[k] = winkstart.config.available_apps[v];
                         });
