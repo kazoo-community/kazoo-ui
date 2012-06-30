@@ -499,6 +499,11 @@ winkstart.module('voip', 'callflow', {
                             var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers}),
                                 popup;
 
+                            if(phone_numbers.length === 0) {
+                                $('#list_numbers', popup_html).attr('disabled', 'disabled');
+                                $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup_html));
+                            }
+
                             var render = function() {
                                 popup = winkstart.dialog(popup_html, {
                                         title: 'Add number'
@@ -519,9 +524,16 @@ winkstart.module('voip', 'callflow', {
 
                                     $('#list_numbers', popup).empty();
 
-                                    $.each(phone_numbers, function(k, v) {
-                                        $('<option value="'+v+'">'+v+'</option>').appendTo($('#list_numbers', popup));
-                                    });
+                                    if(phone_numbers.length === 0) {
+                                        $('#list_numbers', popup).attr('disabled', 'disabled');
+                                        $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup));
+                                    }
+                                    else {
+                                        $('#list_numbers', popup).removeAttr('disabled');
+                                        $.each(phone_numbers, function(k, v) {
+                                            $('<option value="'+v+'">'+v+'</option>').appendTo($('#list_numbers', popup));
+                                        });
+                                    }
                                 });
                             };
 
@@ -552,17 +564,22 @@ winkstart.module('voip', 'callflow', {
                                         THIS.renderFlow();
                                     };
 
-                                if(number == '') {
-                                    winkstart.confirm('Are you sure that you want to add an empty number?', function() {
-                                            add_number();
-                                        },
-                                        function() {
-                                            return;
-                                        }
-                                    );
+                                if(number !== 'select_none') {
+                                    if(number == '') {
+                                        winkstart.confirm('Are you sure that you want to add an empty number?', function() {
+                                                add_number();
+                                            },
+                                            function() {
+                                                return;
+                                            }
+                                        );
+                                    }
+                                    else {
+                                        add_number();
+                                    }
                                 }
                                 else {
-                                    add_number();
+                                    winkstart.alert('You didn\'t select a valid phone number.');
                                 }
                             });
                         });
