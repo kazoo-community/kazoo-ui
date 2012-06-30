@@ -68,6 +68,7 @@ winkstart.module('myaccount', 'app_store', {
                     _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
 
                     if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
+                        console.log(_data.data.available_apps);
                         winkstart.publish('nav.add_sublink', {
                             link: 'nav',
                             sublink: 'app_store',
@@ -99,6 +100,8 @@ winkstart.module('myaccount', 'app_store', {
                             available_apps: {},
                             apps: user_info.data.apps
                         });
+
+                        _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
 
                         $.each(_data.data.available_apps, function(k, v) {
                             data.available_apps[k] = winkstart.config.available_apps[v];

@@ -441,16 +441,19 @@ winkstart.module('voip', 'user', {
                                 },
                                 function(_data, status) {
 
+                                        console.log(form_data);
                                     if(form_data.priv_level == 'admin') {
+                                        form_data.apps = form_data.apps || {};
                                         if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {
                                             form_data.apps['voip'] = {
                                                 label: 'VoIP Services',
-                                                icon: 'phone',
+                                                icon: 'device',
                                                 api_url: winkstart.apps['voip'].api_url
                                             }
                                         }
                                     }
                                     else if(form_data.priv_level == 'user' && $.inArray('userportal', (_data.data.available_apps || [])) > -1) {
+                                        form_data.apps = form_data.apps || {};
                                         if(!('userportal' in form_data.apps)) {
                                             form_data.apps['userportal'] = {
                                                 label: 'User Portal',
