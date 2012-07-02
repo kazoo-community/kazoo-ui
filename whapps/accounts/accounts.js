@@ -32,7 +32,7 @@
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
         THIS.whapp_auth(function() {
-            winkstart.publish('whappnav.add', { 
+            winkstart.publish('whappnav.add', {
                 name : THIS.__module,
                 weight: 10
             });
@@ -55,7 +55,7 @@
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['accounts'].default){
+            if(winkstart.apps['accounts']['default']){
                 THIS.setup_page();
                 $('[data-whapp="accounts"] > a').addClass('activate');
             }
@@ -77,14 +77,12 @@
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;
-                        winkstart.module.loadModule(THIS.__module, k, function() {
-                            this.init(function() {
-                                winkstart.log(THIS.__module + ': Initialized ' + k);
+                        winkstart.module(THIS.__module, k).init(function() {
+                            winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                                if(!--THIS.uninitialized_count) {
-                                    winkstart.publish(THIS.__module + '.initialized', {});
-                                }
-                            });
+                            if(!--THIS.uninitialized_count) {
+                                winkstart.publish(THIS.__module + '.initialized', {});
+                            }
                         });
                     }
                 });

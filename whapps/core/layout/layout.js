@@ -46,9 +46,9 @@ winkstart.module('core', 'layout', {
             THIS.render_welcome();
         }
 
-        $('#ws-content .welcomediv').click(function() {
-            winkstart.publish('nav.my_logout_click');
-        });
+        /*$('#ws-content .welcomediv').click(function() {
+            winkstart.publish('nav.get_started');
+        });*/
 
         $('#ws-topbar .links .help').click(function() {
             winkstart.publish('nav.my_help_click');
@@ -116,7 +116,7 @@ winkstart.module('core', 'layout', {
             else {
                 layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
                 var data_welcome = { company_name: winkstart.config.company_name, company_website: winkstart.config.company_website };
-                THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.left_div', layout_welcome_html));
+                THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.welcome-page-top .left_div', layout_welcome_html));
             }
         },
 

@@ -13,6 +13,11 @@ winkstart.module('myaccount', 'credits', {
         },
 
         resources: {
+            'myaccount_credits.get_user': {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'myaccount_credits.update': {
                 url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
                 contentType: 'application/json',
@@ -53,7 +58,17 @@ winkstart.module('myaccount', 'credits', {
         nav_activate: function() {
             var THIS = this;
 
-            winkstart.publish('statistics.add_stat', THIS.define_stats());
+            winkstart.request('myaccount_credits.get_user', {
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    account_id: winkstart.apps['myaccount'].account_id,
+                    user_id: winkstart.apps['myaccount'].user_id
+                },
+                function(_data, status) {
+                    if(!_data.data.priv_level || _data.data.priv_level === 'admin') {
+                        winkstart.publish('statistics.add_stat', THIS.define_stats());
+                    }
+                }
+            );
         },
 
         get_credits: function(success, error) {
@@ -183,30 +198,38 @@ winkstart.module('myaccount', 'credits', {
 
             $('.purchase_credits', credits_html).click(function(ev) {
                 ev.preventDefault();
-                var credits_to_add = parseFloat($('#add_credits', credits_html).val().replace(',','.'));
+                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    function() {
+                        var credits_to_add = parseFloat($('#add_credits', credits_html).val().replace(',','.'));
 
-                THIS.add_credits(credits_to_add, function() {
-                    $('.current_balance', credits_html).html((parseFloat($('.current_balance', credits_html).html()) + credits_to_add).toFixed(2));
+                        THIS.add_credits(credits_to_add, function() {
+                            $('.current_balance', credits_html).html((parseFloat($('.current_balance', credits_html).html()) + credits_to_add).toFixed(2));
 
-                    winkstart.publish('statistics.update_stat', 'credits');
-                });
+                            winkstart.publish('statistics.update_stat', 'credits');
+                        });
+                    }
+                );
             });
 
             $('.submit_channels', credits_html).click(function(ev) {
                 ev.preventDefault();
 
-                var limits_data = {
-                    twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
-                    inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
-                };
+                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    function() {
+                        var limits_data = {
+                            twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
+                            inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
+                        };
 
-                limits_data = $.extend({}, data.limits, limits_data);
+                        limits_data = $.extend({}, data.limits, limits_data);
 
-                THIS.update_limits(limits_data, function(_data) {
-                    popup.dialog('close');
+                        THIS.update_limits(limits_data, function(_data) {
+                            popup.dialog('close');
 
-                    winkstart.alert('info', 'Your changes have been saved!');
-                });
+                            winkstart.alert('info', 'Your changes have been saved!');
+                        });
+                    }
+                );
             });
 
             popup = winkstart.dialog(credits_html, { title: 'Add Credits' });

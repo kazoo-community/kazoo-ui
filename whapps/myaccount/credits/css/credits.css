@@ -1,3 +1,13 @@
+#statistics_navbar .stat_wrapper[data-name="credits"] #credits_label {
+    height: 18px;
+}
+
+#statistics_navbar .stat_wrapper[data-name="credits"] .add_credits_label {
+    height: 10px;
+    font-size: 10px;
+    color: #919191;
+}
+
 #statistics_navbar .stat_wrapper[data-name="credits"] .green {
     color: #33cc44;
 }
@@ -8,6 +18,11 @@
 
 #statistics_navbar .stat_wrapper[data-name="credits"] .red {
     color: #ff3322;
+}
+
+#statistics_navbar .stat_wrapper[data-name="credits"] .amount_wrapper {
+    height: 51px;
+    max-height: 51px;
 }
 
 #credit_form .dollar {

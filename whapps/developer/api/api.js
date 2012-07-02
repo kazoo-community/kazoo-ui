@@ -147,11 +147,8 @@ winkstart.module('developer', 'api', {
                                 print_result = function(_data) {
                                     $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
-                                        .append(
-                                            "<pre>{\n" + 
-                                            "    'url': " + url + "\n" + 
-                                            THIS.print_r(_data) + 
-                                            "\n}</pre>");
+                                        .append('<pre>URL: ' + url + '</pre>')
+                                        .append(winkstart.print_r(_data));
                                     
                                     $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
@@ -170,8 +167,23 @@ winkstart.module('developer', 'api', {
 
                         $('.details', form_html).click(function(e){
                             e.preventDefault();
-                            $('#' + $(this).data('id') + ' .hide', form_html)
-                                .slideToggle();
+
+                            var id = $(this).data('id'),
+                                state = $(this).data('state'),
+                                div = $('#' + id  + ' .hide', form_html);
+
+                            
+                                if(!state) {
+                                    $(this)
+                                        .data('state', true)
+                                        .text('Hide Advanced');
+                                    div.slideDown();
+                                } else {
+                                     $(this)
+                                        .data('state', false)
+                                        .text('Show Advanced');
+                                    div.slideUp();
+                                }
                         });
 
                         $('.clean', form_html).click(function(e){
@@ -241,7 +253,7 @@ winkstart.module('developer', 'api', {
                                     }
                                     break;
                                 case 'array':
-                                    if(o.enum || !o.items || !o.items.properties ){
+                                    if(o["enum"] || !o.items || !o.items.properties ){
                                         new_schema[k] = o;
                                     } else {
                                         target[k] = {};
@@ -329,9 +341,9 @@ winkstart.module('developer', 'api', {
                     $('#api-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Apis',
+                            label: 'APIs Developer',
                             identifier: 'api-listview',
-                            new_entity_label: 'APIs',
+                            new_entity_label: 'APIs Developer',
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'api.render',
@@ -340,34 +352,6 @@ winkstart.module('developer', 'api', {
                         });
                 }
             );         
-        },
-
-        print_r: function(arr, level) {
-            var THIS = this,
-                dumped_text = "",
-                level_padding = "";
-
-            if(!level) level = 0;
-            
-            for(var j=0; j< level+1; j++) level_padding += "    ";
-
-            if(typeof(arr) == 'object') { 
-                for(var item in arr) {
-                    var value = arr[item];
-             
-                    if(typeof(value) == 'object') { 
-                       dumped_text += level_padding + "'" + item + "': { \n";
-                       dumped_text += THIS.print_r(value, level+1);
-                       dumped_text += level_padding + "}\n";
-                    } else {
-                       dumped_text += level_padding + "'" + item + "': \"" + value + "\"\n";
-                    }
-                }
-            } else { 
-                dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
-            }
-
-            return dumped_text;
         },
 
         activate: function(parent) {
@@ -389,7 +373,7 @@ winkstart.module('developer', 'api', {
                         get: 'GET',
                         put: 'PUT',
                         post: 'POST',
-                        delete: 'DELETE' 
+                        'delete': 'DELETE' 
                     };
 
                     THIS.apis[id] = {
@@ -460,13 +444,17 @@ winkstart.module('developer', 'api', {
                         title: 'Temporal Rules',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
-                    connectivity: {
-                        title: 'Connectivity',
-                        verbs: ['get_all', 'get', 'put', 'post']
-                    },
                     phone_numbers: {
                         title: 'Phone Numbers',
                         verbs: ['get_all', 'get', 'post', 'delete']
+                    },
+                    limits: {
+                        title: 'Limits',
+                        verbs: ['get_all']
+                    },
+                    user_auth: {
+                        title: 'User Auth',
+                        verbs: ['put']
                     }
                 };
 
@@ -476,19 +464,19 @@ winkstart.module('developer', 'api', {
                 },
                 'get': {
                     btn: 'info',
-                    class: ['id']
+                    'class': ['id']
                 },
                 'put': {
                     btn: 'success',
-                    class: ['schema']
+                    'class': ['schema']
                 },
                 'post': {
                     btn: '',
-                    class: ['id', 'schema']
+                    'class': ['id', 'schema']
                 },
                 'delete': {
                     btn: 'danger',
-                    class: ['id']
+                    'class': ['id']
                 }
             };
 

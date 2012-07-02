@@ -3,7 +3,7 @@
 		<h1 class="api-urls">
 			${title.toUpperCase()}
 			<small>
-				Click to get infos ...
+				Click to get info ...
 			</small>
 		</h1>
 		<div class="buttons-right">
@@ -23,7 +23,24 @@
 						{{/if}}
 					</button>
 					<small>${ressources['developer.' + k + '.' + verb].url.substr(9)}</small>
-					<small>${api.title}</small>
+					<small>
+						{{if verb == "get_all"}}
+							Get All
+						{{/if}}
+						{{if verb == "post"}}
+							Update
+						{{/if}}
+						{{if verb == "put"}}
+							Add
+						{{/if}}
+						{{if verb == "delete"}}
+							Delete
+						{{/if}}
+						{{if verb == "get"}}
+							Get
+						{{/if}}
+						${api.title}
+					</small>
 				</div>
 				<div class="toggled" id="${k}_${verb}">
 					<form action="#" id="${k}_${verb}_form">

@@ -65,11 +65,10 @@ winkstart.module('myaccount', 'billing', {
         },
 
         myaccount_loaded: function(user_data) {
+            if(winkstart.config.display_billing || (!user_data.priv_level || user_data.priv_level === 'admin')){
+                var publish = '';
 
-            if(winkstart.config.display_billing || user_data.priv_level == "admin"){
-                var publish = "";
-
-                (winkstart.config.nav.billing) ? publish = "billing.ext_link" : publish = "billing.popup";
+                (winkstart.config.nav.billing) ? publish = 'billing.ext_link' : publish = 'billing.popup';
 
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
@@ -119,8 +118,8 @@ winkstart.module('myaccount', 'billing', {
                         winkstart.alert('info', 'Credit card updated!');
                     },
                     function(_data, status) {
-                        if(status == 400) {
-                            winkstart.alert('error', 'The following errors occurred:<br/><br/>' + _data.data.message.replace(/\./g, '<br/>'));
+                        if(status == 400 && _data.message) {
+                            winkstart.alert('error', 'The following errors occurred:<br/><br/>' + _data.message.replace(/\./g, '<br/>'));
                         }
                         else {
                             winkstart.alert('error', 'There was an unspecified server error, please try again later.');

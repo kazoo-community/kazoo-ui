@@ -80,7 +80,12 @@ winkstart.module('voip', 'user', {
                 url: '{api_url}/accounts/{account_id}/devices?filter_new_user={owner_id}',
                 contentType: 'application/json',
                 verb: 'GET'
-            }
+            },
+            'user.account_get': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
         }
     },
 
@@ -429,24 +434,56 @@ winkstart.module('voip', 'user', {
 
 
                         if(form_data.password === undefined || winkstart.is_password_valid(form_data.password)) {
-                            THIS.save_user(form_data, data, function(data, status, action) {
-                                if(action == 'create') {
-                                    THIS.acquire_device(data, function() {
-                                        if(typeof callbacks.save_success == 'function') {
-                                            callbacks.save_success(data, status, action);
+
+                            winkstart.request('user.account_get', {
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    account_id: winkstart.apps['voip'].account_id,
+                                },
+                                function(_data, status) {
+
+                                        console.log(form_data);
+                                    if(form_data.priv_level == 'admin') {
+                                        form_data.apps = form_data.apps || {};
+                                        if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {
+                                            form_data.apps['voip'] = {
+                                                label: 'VoIP Services',
+                                                icon: 'device',
+                                                api_url: winkstart.apps['voip'].api_url
+                                            }
                                         }
-                                    }, function() {
-                                        if(typeof callbacks.save_error == 'function') {
-                                            callbacks.save_error(data, status, action);
-                                        }
-                                    });
-                                }
-                                else {
-                                    if(typeof callbacks.save_success == 'function') {
-                                        callbacks.save_success(data, status, action);
                                     }
+                                    else if(form_data.priv_level == 'user' && $.inArray('userportal', (_data.data.available_apps || [])) > -1) {
+                                        form_data.apps = form_data.apps || {};
+                                        if(!('userportal' in form_data.apps)) {
+                                            form_data.apps['userportal'] = {
+                                                label: 'User Portal',
+                                                icon: 'userportal',
+                                                api_url: winkstart.apps['voip'].api_url
+                                            }
+                                        }
+                                    }
+
+                                    THIS.save_user(form_data, data, function(data, status, action) {
+                                        if(action == 'create') {
+                                            THIS.acquire_device(data, function() {
+                                                if(typeof callbacks.save_success == 'function') {
+                                                    callbacks.save_success(data, status, action);
+                                                }
+                                            }, function() {
+                                                if(typeof callbacks.save_error == 'function') {
+                                                    callbacks.save_error(data, status, action);
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            if(typeof callbacks.save_success == 'function') {
+                                                callbacks.save_success(data, status, action);
+                                            }
+                                        }
+                                    }, winkstart.error_message.process_error(callbacks.save_error));
                                 }
-                            }, winkstart.error_message.process_error(callbacks.save_error));
+                            );
+
                         }
                     },
                     function() {
@@ -673,6 +710,7 @@ winkstart.module('voip', 'user', {
         },
 
         normalize_data: function(data) {
+
             if($.isArray(data.directories)) {
                 data.directories = {};
             }
@@ -702,30 +740,6 @@ winkstart.module('voip', 'user', {
             }
 
             delete data.enable_pin;
-
-            /* Yes, I am aware that the admin does not lose access to the userportal (if switched) */
-            if(data.priv_level == 'admin') {
-                if(!('voip' in data.apps)) {
-                    data.apps['voip'] = {
-                        label: 'VoIP Services',
-                        icon: 'phone',
-                        api_url: winkstart.apps['voip'].api_url
-                    }
-                }
-            }
-            else if(data.priv_level == 'user') {
-                if(!('userportal' in data.apps)) {
-                    data.apps['userportal'] = {
-                        label: 'User Portal',
-                        icon: 'userportal',
-                        api_url: winkstart.apps['voip'].api_url
-                    }
-                }
-
-                if('voip' in data.apps) {
-                    delete voip;
-                }
-            }
 
             return data;
         },

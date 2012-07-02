@@ -53,26 +53,13 @@ winkstart.module('voip', 'voip', {
         THIS.whapp_config();
 
         winkstart.publish('voip.loaded');
-
-        // THIS IS STRICTLY OOB
-        if(!('accounts' in winkstart.apps)) {
-            winkstart.module.loadApp('accounts', function() {
-                winkstart.apps['accounts'] = {
-                    label: 'Accounts',
-                    icon: 'account',
-                    api_url: winkstart.apps['voip'].api_url
-                };
-
-                this.init();
-            });
-        }
     },
     {
         /* A modules object is required for the loading routine.
          * The format is as follows:
          * <module name>: <initialization status>
          */
-        modules: {
+        modules: winkstart.config.voip_modules || {
             'account': false,
             'media': false,
             'device': false,
@@ -108,7 +95,7 @@ winkstart.module('voip', 'voip', {
             //winkstart.publish('whappnav.subnav.show', THIS.__module);
             //THIS.setup_page();
 
-            if(winkstart.apps['voip'].default) {
+            if(winkstart.apps['voip']['default']) {
                 $('[data-whapp="voip"] > a').addClass('activate');
                 THIS.setup_page();
             }
@@ -255,6 +242,7 @@ winkstart.module('voip', 'voip', {
                             api_url: winkstart.apps.voip.api_url
                         },
                         function(_data, status) {
+
                             var data_registered = [];
 
                             /* Only check the registered devices from VoIP Services */
@@ -281,6 +269,11 @@ winkstart.module('voip', 'voip', {
                                     sliceVisibilityThreshold: 0
                                 },
                                 chart = new winkstart.chart('pie_chart_wrapper', data, opt);
+                        },
+                        function(_data, status) {
+                            $('#pie_chart_wrapper').html(winkstart.print_r({
+                                error: 'Request failed'
+                            }));
                         }
                     );
                 }
@@ -412,8 +405,8 @@ winkstart.module('voip', 'voip', {
                 j='C'+(1951021540666)[g+f](a)+', '+(645890)[g+f](a)+'!',
                 k=(26458)[g+f](a),
                 l=(1011480)[g+f](a),
-                m=(24136)[g+f](a),
-                n='.'+l+' .'+m,
+                m=(19749289)[g+f](a),
+                n='.'+l+'.'+m,
                 o=(638807)[g+f](a),
                 p=(21158948)[g+f](a),
                 q=(537385)[g+f](a),

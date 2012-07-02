@@ -48,10 +48,9 @@ winkstart.module('core', 'whappnav', {
             $('> a', whapp_html).click(function(ev) {
                 ev.preventDefault();
 
-                $('.whapps .whapp > a').removeClass('activate');
-                $(this).addClass('activate');
-
                 if(!(whapp_html.hasClass('disabled'))) {
+                    $('.whapps .whapp > a').removeClass('activate');
+                    $(this).addClass('activate');
                     winkstart.publish(args.name + '.activate', {});
                 }
             });
@@ -98,6 +97,17 @@ winkstart.module('core', 'whappnav', {
                 (whapp_list_html)
                     .prepend(whapp_html)
                     .prepend(whapp_divider_html);
+            }
+
+            var topbar = $('body > .topbar'),
+                nb = topbar.data('nb') || 0;
+
+            topbar.data('nb', nb + 1);
+
+            if(topbar.data('nb') > 6) {
+                topbar.css({
+                    'min-width': '+= 140'
+                });
             }
         },
 

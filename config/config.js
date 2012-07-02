@@ -6,6 +6,119 @@
 
         advancedView: false,
 
+        register_type: 'onboard',
+
+        onboard_roles: {
+            'default': {
+                apps: {
+                    voip: {
+                        label: 'Hosted PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    pbxs: {
+                        label: 'PBX Connector',
+                        icon: 'device',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'reseller': {
+                apps: {
+                    voip: {
+                        label: 'Hosted PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    accounts: {
+                        label: 'Accounts',
+                        icon: 'account',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'small_office': {
+                apps: {
+                    voip: {
+                        label: 'Hosted PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'single_phone': {
+                apps: {
+                    voip: {
+                        label: 'Hosted PBX',
+                        icon: 'phone',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'api_developer': {
+                apps: {
+                    developer: {
+                        label: 'Developer Tool',
+                        icon: 'connectivity',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            },
+            'voip_minutes': {
+                apps: {
+                    pbxs: {
+                        label: 'PBX Connector',
+                        icon: 'device',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Number Manager',
+                        icon: 'menu1',
+                        api_url: 'http://api.2600hz.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://api.2600hz.com:8000/v1'
+            }
+        },
+
+        device_threshold: [5, 20, 50, 100],
+
         /* web server used by the cdr module to show the link to the logs */
         logs_web_server_url: 'http://cdrs.2600hz.com/',
 
@@ -38,12 +151,12 @@
             voip: {
                 label: 'Trial PBX',
                 icon: 'phone',
-                api_url: 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                api_url: 'http://apps.2600hz.com:8000/v1'
             },
             accounts: {
                 label: 'Accounts',
                 icon: 'account',
-                api_url: 'http://apps001-demo-ord.2600hz.com:8000/v1'
+                api_url: 'http://apps.2600hz.com:8000/v1'
             }
         },
 
@@ -53,8 +166,52 @@
             /* logout: ''*/
         },
 
-        /* Uncomment the following line ONLY IF you want whitelabeling pulled from a different server */
-        /* whitelabel_api_url: 'http://apps.2600hz.com:8000/v1' */
+        default_api_url: 'http://apps.2600hz.com:8000/v1',
+
+        available_apps: {
+            'voip': {
+                id: 'voip',
+                label: 'Hosted PBX',
+                icon: 'device',
+                desc: 'Manage vmboxes, callflows ...'
+            },
+            'cluster': {
+                id: 'cluster',
+                label: 'Cluster Manager',
+                icon: 'cluster_manager',
+                desc: 'Manage Servers and Infrastructure'
+            },
+            'userportal': {
+                id: 'userportal',
+                label: 'Userportal',
+                icon: 'user',
+                desc: 'Let the user manage is own vmbox ...'
+            },
+            'accounts': {
+                id: 'accounts',
+                label: 'Accounts',
+                icon: 'account',
+                desc: 'Manage your sub-accounts'
+            },
+            'developer': {
+                id: 'developer',
+                label: 'Developer',
+                icon: 'connectivity',
+                desc: 'Api Developer Tool'
+            },
+            'pbxs': {
+                id: 'pbxs',
+                label: 'PBX Connector',
+                icon: 'device',
+                desc: 'Manage your pbxs'
+            },
+            'numbers': {
+                id: 'numbers',
+                label: 'Number Manager',
+                icon: 'menu1',
+                desc: 'Manage your numbers'
+            }
+        }
     };
 
     winkstart.apps = {

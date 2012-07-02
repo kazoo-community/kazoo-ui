@@ -10,7 +10,8 @@ winkstart.module('auth', 'auth',
             login: 'tmpl/login.html',
             new_login: 'tmpl/new_login.html',
             register: 'tmpl/register.html',
-            new_password: 'tmpl/new_password.html'
+            new_password: 'tmpl/new_password.html',
+            code: 'tmpl/code.html'
         },
 
         subscribe: {
@@ -80,11 +81,17 @@ winkstart.module('auth', 'auth',
                 url: '{api_url}/user_auth/recovery',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'auth.invite_code': {
+                url: '{api_url}/onboard/invite/{invite_code}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
     function() {
-        var cookie_data;
+        var cookie_data,
+            THIS = this;
 
         winkstart.registerResources(this.__whapp, this.config.resources);
 
@@ -108,6 +115,9 @@ winkstart.module('auth', 'auth',
                 }
             }
         }
+        winkstart.module(THIS.__module, 'onboarding').init(function() {
+            winkstart.log('Core: Loaded Onboarding');
+        });
     },
 
     {
@@ -250,12 +260,12 @@ winkstart.module('auth', 'auth',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name || cookie_login.account_name || '',
                     remember_me: cookie_login.login || cookie_login.account_name ? true : false
-                };
-
-            var login_html = THIS.templates.new_login.tmpl(data_tmpl);
-
-            var contentDiv = $('.right_div', '#content_welcome_page').empty()
-                                                                     .append(login_html);
+                },
+                login_html = THIS.templates.new_login.tmpl(data_tmpl),
+                code_html = THIS.templates.code.tmpl(),
+                contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
+                                .empty()
+                                .append(login_html);
 
             if(data_tmpl.username != '') {
                 $('#password', contentDiv).focus();
@@ -332,14 +342,57 @@ winkstart.module('auth', 'auth',
                 );
             });
 
-            $('button.register', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('button.register', contentDiv).click(function(e) {
+                e.preventDefault();
 
-                winkstart.publish('auth.register');
+                if(!winkstart.config.nav.register) {
+                    if(winkstart.config.register_type == "onboard") {
+                        $('#ws-content')
+                            .empty()
+                            .append(code_html);
+                    } else {
+                        winkstart.publish('auth.register');
+                    }
+                }
+                else {
+                    window.location.href = winkstart.config.nav.register;
+                }
             });
 
-            $('a.recover_password', contentDiv).click(function(event) {
-                event.preventDefault(); // Don't run the usual "click" handler
+            $('button.register', code_html).click(function(e) {
+                e.preventDefault();
+                var code = $('input#code', code_html).val();
+
+                if(code != "" && code != null) {
+                    winkstart.request('auth.invite_code', {
+                            api_url: winkstart.apps.auth.api_url,
+                            invite_code: code,
+                        },
+                        function(_data, status) {
+                            winkstart.publish('onboard.register', {
+                                invite_code: code
+                            });
+                        },
+                        function(_data, status) {
+                            switch(_data['error']) {
+                                case '404':
+                                    winkstart.alert('error', 'Invalid invite code !');
+                                    break;
+                                case '410':
+                                    winkstart.alert('error', 'Invite code already used !');
+                                    break;
+                                default:
+                                    winkstart.alert('error', '<p>An error occurred</p>' + winkstart.print_r(_data));
+                                    break;
+                            }
+                        }
+                    );
+                }
+                
+            });
+
+            $('a.recover_password', contentDiv).click(function(e) {
+                e.preventDefault();
 
                 winkstart.publish('auth.recover_password');
             });
@@ -573,7 +626,6 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                width: '320px',
                 title: 'Recover Password'
             });
 

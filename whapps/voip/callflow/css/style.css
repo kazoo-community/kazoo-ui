@@ -286,3 +286,36 @@
     margin-top: -10px;
     overflow: hidden;
 }
+
+.add_number_popup {
+    min-width: 400px;
+}
+
+.add_number_popup .popup_field {
+    height: 30px;
+}
+
+.add_number_popup input[type=radio] {
+    margin: 8px 5px 0 0;
+    float: left;
+}
+
+.add_number_popup #list_numbers {
+    width: 157px;
+    float: left;
+}
+
+.add_number_popup #add_number_text {
+    width: 172px;
+}
+
+.add_number_popup .extensions_content, .add_number_popup .list_numbers_content {
+    display: inline-block;
+}
+
+.add_number_popup #number_manager_fields {
+    float: right;
+    line-height: 27px;
+    height: 27px;
+    margin-left: 5px;
+}

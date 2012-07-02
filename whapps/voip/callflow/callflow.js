@@ -24,6 +24,7 @@ winkstart.module('voip', 'callflow', {
             ring_group_element: 'tmpl/ring_group_element.html',
             buttons: 'tmpl/buttons.html',
             help_callflow: 'tmpl/help_callflow.html',
+            fax_callflow: 'tmpl/fax_callflow.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -42,6 +43,11 @@ winkstart.module('voip', 'callflow', {
         },
 
         resources: {
+            'callflow.list_numbers': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'callflow.list': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -110,6 +116,24 @@ winkstart.module('voip', 'callflow', {
             });
 
             winkstart.publish('callflow.define_callflow_nodes', THIS.actions);
+        },
+
+        list_numbers: function(success, error) {
+            winkstart.request('callflow.list_numbers', {
+                    api_url: winkstart.apps['voip'].api_url,
+                    account_id: winkstart.apps['voip'].account_id
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
         },
 
         renderButtons: function() {
@@ -462,46 +486,102 @@ winkstart.module('voip', 'callflow', {
                     }
 
                     $('.number_column.empty', node_html).click(function() {
-                        var popup_html = THIS.templates.add_number.tmpl({}),
-                            popup;
+                        THIS.list_numbers(function(_data) {
+                            var phone_numbers = [];
 
-                        popup = winkstart.dialog(popup_html, {
-                                title: 'Add number'
-                        });
+                            $.each(_data.data, function(k,v) {
+                                if(k != 'id') {
+                                    phone_numbers.push(k);
+                                }
+                            });
+                            phone_numbers.sort();
 
-                        $('#add_number_text', popup).blur();
+                            var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers}),
+                                popup;
 
-                        $('button.add_number', popup).click(function(event) {
-                            event.preventDefault();
-                            var number = $('#add_number_text', popup).val(),
-                                add_number = function() {
-                                    THIS.flow.numbers.push(number);
-                                    popup.dialog('close');
+                            if(phone_numbers.length === 0) {
+                                $('#list_numbers', popup_html).attr('disabled', 'disabled');
+                                $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup_html));
+                            }
 
-                                    THIS.renderFlow();
-                                };
+                            var render = function() {
+                                popup = winkstart.dialog(popup_html, {
+                                        title: 'Add number'
+                                });
+                            };
 
-                            if(number == '') {
-                                winkstart.confirm('Are you sure that you want to add an empty number?', function() {
-                                        add_number();
-                                    },
-                                    function() {
-                                        return;
+                            var refresh_numbers = function() {
+                                 THIS.list_numbers(function(_data) {
+                                    phone_numbers = [];
+
+                                    $.each(_data.data, function(k,v) {
+                                        if(k != 'id') {
+                                            phone_numbers.push(k);
+                                        }
+                                    });
+
+                                    phone_numbers.sort();
+
+                                    $('#list_numbers', popup).empty();
+
+                                    if(phone_numbers.length === 0) {
+                                        $('#list_numbers', popup).attr('disabled', 'disabled');
+                                        $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup));
                                     }
-                                );
-                            }
-                            else {
-                                add_number();
-                            }
-                        });
+                                    else {
+                                        $('#list_numbers', popup).removeAttr('disabled');
+                                        $.each(phone_numbers, function(k, v) {
+                                            $('<option value="'+v+'">'+v+'</option>').appendTo($('#list_numbers', popup));
+                                        });
+                                    }
+                                });
+                            };
 
-                        $('#create_no_match', popup).click(function(event) {
-                            event.preventDefault();
-                            THIS.flow.numbers.push('no_match');
+                            if(winkstart.publish('numbers_manager.render_fields', $('#number_manager_fields', popup_html), render, refresh_numbers)) {
+                                render();
+                            };
 
-                            popup.dialog('close');
+                            $('.extensions_content', popup).hide();
 
-                            THIS.renderFlow();
+                            $('input[name="number_type"]', popup).click(function() {
+                                if($(this).val() === 'your_numbers') {
+                                    $('.list_numbers_content', popup).show();
+                                    $('.extensions_content', popup).hide();
+                                }
+                                else {
+                                    $('.extensions_content', popup).show();
+                                    $('.list_numbers_content', popup).hide();
+                                }
+                            });
+
+                            $('button.add_number', popup).click(function(event) {
+                                event.preventDefault();
+                                var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val(),
+                                    add_number = function() {
+                                        THIS.flow.numbers.push(number);
+                                        popup.dialog('close');
+
+                                        THIS.renderFlow();
+                                    };
+
+                                if(number !== 'select_none') {
+                                    if(number == '') {
+                                        winkstart.confirm('Are you sure that you want to add an empty number?', function() {
+                                                add_number();
+                                            },
+                                            function() {
+                                                return;
+                                            }
+                                        );
+                                    }
+                                    else {
+                                        add_number();
+                                    }
+                                }
+                                else {
+                                    winkstart.alert('You didn\'t select a valid phone number.');
+                                }
+                            });
                         });
                     });
 
@@ -1531,6 +1611,80 @@ winkstart.module('voip', 'callflow', {
                                 }
                             }
                         });
+                    }
+                },
+                'receive_fax[]': {
+                    name: 'Receive Fax',
+                    icon: 'sip',
+                    category: 'Advanced',
+                    module: 'receive_fax',
+                    tip: 'Directs a fax to a specific user',
+                    data: {
+                        owner_id: null
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request('user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                $.each(data.data, function() {
+                                    this.name = this.first_name + ' ' + this.last_name;
+                                });
+
+                                popup_html = THIS.templates.fax_callflow.tmpl({
+                                    objects: {
+                                        items: data.data,
+                                        selected: node.getMetadata('owner_id') || ''
+                                    }
+                                });
+
+                                if($('#user_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#user_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('user.popup_edit', _data, function(_data) {
+                                        node.setMetadata('owner_id', _data.data.id || 'null');
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('owner_id', $('#user_selector', popup_html).val());
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Select User',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
                     }
                 },
                 'disa[]': {
