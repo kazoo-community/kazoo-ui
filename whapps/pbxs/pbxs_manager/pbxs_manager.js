@@ -633,7 +633,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
         popup_endpoint_settings: function(data, endpoint_data, callbacks) {
             var THIS = this,
                 popup = winkstart.dialog($('<div class="inline_popup"><div class="inline_content main_content"/></div>'), {
-                    title: 'Edit Settings of '+endpoint_data.server_name,
+                    title: 'Edit Settings of '+ endpoint_data.server_name,
                     position: ['center', 100]
                 });
 
@@ -656,6 +656,11 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         render_endpoint: function(data, endpoint_data, target, callbacks) {
+
+            if(!endpoint_data.server_name) {
+                endpoint_data.server_name = null;
+            }
+
             var THIS = this,
                 endpoint_html = THIS.templates.endpoint.tmpl(endpoint_data);
 
@@ -696,7 +701,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $('.endpoint.delete', endpoint_html).click(function(ev) {
                 ev.preventDefault();
 
-                data.data.servers.splice(endpoint_data.extra.id,1);
+                data.data.servers.splice(endpoint_data.extra.id, 1);
 
                 THIS.update_old_trunkstore(data.data, callbacks.delete_success);
             });
@@ -721,8 +726,9 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 }
             });
 
-            (target).empty()
-                    .append(endpoint_html);
+            (target)
+                .empty()
+                .append(endpoint_html);
 
             /* Hack to display the selected PBX first in the list
                Or if new, scroll to the first pbx */
