@@ -279,7 +279,7 @@
 						<div class="input">
 							<select name="media.fax_option" id="media_fax_option" class="medium" rel="popover" data-content="Do you want to enable T-38 for this device">
 								{{each(key, val) field_data.media.fax.options}}
-                                    {{if data.media.fax.option == key}}
+                                    {{if data.media.fax_option == key}}
                                         <option value="${key}" selected="selected">${val}</option>
                                     {{else}}
                                         <option value="${key}">${val}</option>
