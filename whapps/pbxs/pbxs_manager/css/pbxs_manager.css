@@ -57,3 +57,14 @@
     margin-left: 5px;
     padding: 7px 2px;
 }
+
+.inline_popup.assign_number  {
+    padding: 30px;
+    font-family: helvetica;
+    overflow-y: auto;
+    max-height: 700px;
+}
+
+.inline_popup.assign_number .buttons-right  {
+    margin-bottom: 15px;
+}

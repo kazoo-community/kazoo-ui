@@ -10,6 +10,8 @@ winkstart.module('pbxs', 'pbxs_manager', {
             failover_dialog: 'tmpl/failover_dialog.html',
             cnam_dialog: 'tmpl/cnam_dialog.html',
             e911_dialog: 'tmpl/e911_dialog.html',
+            assign_number_dialog: 'tmpl/assign_number_dialog.html',
+            move_number_dialog: 'tmpl/move_number_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
             add_number_search_results: 'tmpl/add_number_search_results.html',
             port_dialog: 'tmpl/port_dialog.html',
@@ -23,6 +25,11 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         resources: {
+            'pbxs_manager.list_callflows': {
+                url: '{api_url}/accounts/{account_id}/callflows',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'pbxs_manager.get_account': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
@@ -99,11 +106,29 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
     {
         list_available_pbxs: function() {
-            return ['allworks', 'altigen', 'asterisk', 'avaya', 'bluebox', 'cisco', 'digium', 'epygi', 'freepbx', 'freeswitch', 'mitel', 'objectworld', 'other', 'pingtel', 'responsepoint', 'samsung', 'shortel', 'sutus', 'talkswitch', 'threecom', 'tradium'];
+            return ['allworks', 'altigen', 'asterisk', 'avaya', 'bluebox', 'cisco', 'digium', 'epygi', 'freepbx', 'freeswitch', 'mitel', 'objectworld', 'other', 'pingtel', 'responsepoint', 'samsung', 'shoretel', 'sutus', 'talkswitch', 'threecom', 'tradium'];
         },
 
         list_all_numbers: function(success, error) {
             winkstart.request('pbxs_manager.list_numbers', {
+                    account_id: winkstart.apps['pbxs'].account_id,
+                    api_url: winkstart.apps['pbxs'].api_url
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        list_callflows: function(success, error) {
+            winkstart.request('pbxs_manager.list_callflows', {
                     account_id: winkstart.apps['pbxs'].account_id,
                     api_url: winkstart.apps['pbxs'].api_url
                 },
@@ -734,7 +759,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                Or if new, scroll to the first pbx */
             $('.pbxs', endpoint_html).animate({ scrollLeft: 0 }, 0);
 
-            var pbx_type = (endpoint_data.server_type || 'other').replace('.', '').toLowerCase();
+            var pbx_type = (endpoint_data.server_type || 'other').replace(/\.|\s/g, '').toLowerCase();
 
             $.inArray(pbx_type, THIS.list_available_pbxs()) < 0 ? pbx_type = 'other' : true;
 
@@ -759,9 +784,28 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 THIS.popup_endpoint_settings(data, endpoint_data, callbacks);
             });
 
-            $(pbxs_manager_html).delegate('#add_number', 'click', function() {
+            $('#add_number', pbxs_manager_html).click(function() {
                 THIS.render_add_number_dialog(data, server_id, function() {
                     THIS.list_numbers_by_pbx(server_id);
+                });
+            });
+
+            $('#assign_number', pbxs_manager_html).click(function() {
+                THIS.render_assign_number_dialog(server_id, function() {
+                    THIS.list_numbers_by_pbx(server_id);
+                });
+            });
+
+            $('#move_numbers', pbxs_manager_html).click(function(ev) {
+                var list_numbers = [];
+                $('.select_number:checked', pbxs_manager_html).each(function() {
+                    list_numbers.push($(this).parents('tr').attr('id'));
+                });
+
+                THIS.get_account(function(_global_data) {
+                    THIS.render_move_number_dialog(list_numbers, _global_data, server_id, function() {
+                        THIS.list_numbers_by_pbx(server_id);
+                    });
                 });
             });
 
@@ -849,7 +893,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 }
             });
 
-            $(pbxs_manager_html).delegate('#delete_number', 'click', function() {
+            $('#delete_number', pbxs_manager_html).click(function() {
                 var data_phone_number,
                     phone_number,
                     $selected_checkboxes = $('.select_number:checked', pbxs_manager_html),
@@ -895,7 +939,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 }
             });
 
-            $(pbxs_manager_html).delegate('#port_numbers', 'click', function(ev) {
+            $('#port_numbers', pbxs_manager_html).click(function(ev) {
                 ev.preventDefault();
 
                 THIS.render_port_dialog(function(port_data, popup) {
@@ -973,6 +1017,82 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
             popup = winkstart.dialog(popup_html, {
                 title: 'Edit CID'
+            });
+        },
+
+        render_move_number_dialog: function(list_numbers, data, index, callback) {
+            var THIS = this,
+                popup,
+                servers = {};
+
+            $.each(data.data.servers, function(k, v) {
+                if(k != index) {
+                    servers[k] = v;
+                }
+            });
+
+            var popup_html = THIS.templates.move_number_dialog.tmpl({ servers: servers });
+
+            $('.move', popup_html).click(function(ev) {
+                ev.preventDefault();
+
+                var new_index = parseInt($('#select_pbxs option:selected', popup_html).val());
+
+                THIS.get_account(function(global_data) {
+                    $.each(list_numbers, function(k, v) {
+                        global_data.data.servers[new_index].DIDs[v] = global_data.data.servers[index].DIDs[v];
+                        delete global_data.data.servers[index].DIDs[v];
+                    });
+
+                    THIS.update_old_trunkstore(global_data.data, function() {
+                        if(typeof callback === 'function') {
+                            callback();
+                        }
+
+                        popup.dialog('close');
+                    });
+                });
+            });
+
+            popup = winkstart.dialog(popup_html, {
+                title: 'Move selected numbers to another PBX'
+            });
+        },
+
+        render_assign_number_dialog: function(index, callback) {
+            var THIS = this,
+                popup_html = THIS.templates.assign_number_dialog.tmpl(),
+                popup;
+
+            THIS.setup_assign_number_table(popup_html);
+
+            $('.submit_btn', popup_html).click(function(ev) {
+                ev.preventDefault();
+                var numbers_data = [];
+
+                $('#assign_number-grid .select_number:checked', popup_html).each(function() {
+                    numbers_data.push($(this).parents('tr').first().attr('id'));
+                });
+
+                THIS.get_account(function(global_data) {
+                    $.each(numbers_data, function(k, v) {
+                        global_data.data.servers[index].DIDs[v] = {};
+                    });
+
+                    THIS.update_old_trunkstore(global_data.data, function() {
+                        if(typeof callback === 'function') {
+                            callback();
+                        }
+
+                        popup.dialog('close');
+                    });
+                });
+            });
+
+            THIS.list_available_numbers(function() {
+                popup = winkstart.dialog(popup_html, {
+                    title: 'Assign your available phone numbers to this PBX'
+                });
             });
         },
 
@@ -1438,6 +1558,86 @@ winkstart.module('pbxs', 'pbxs_manager', {
             }
         },
 
+        list_available_numbers: function(callback) {
+            var THIS = this;
+
+            THIS.list_all_numbers(function(_data_numbers) {
+                THIS.get_account(function(_data) {
+                    THIS.list_callflows(function(_data_callflows) {
+                        winkstart.table.assign_number.fnClearTable();
+
+                        var tab_data = [];
+
+                        //Remove numbers used in trunkstore
+                        $.each(_data.data.servers, function(k, v) {
+                            $.each(this.DIDs, function(k2, v2) {
+                                delete _data_numbers.data[k2];
+                            });
+                        });
+
+                        //Remove numbers used in callflows
+                        $.each(_data_callflows.data, function(k, v) {
+                            if(this.numbers) {
+                                $.each(this.numbers, function(k2, v2) {
+                                    delete _data_numbers.data[v2];
+                                });
+                            }
+                        });
+
+                        //Build available numbers list
+                        $.each(_data_numbers.data, function(k, v) {
+                            if(k !== 'id') {
+                                tab_data.push(['lol', k]);
+                            }
+                        });
+
+                        winkstart.table.assign_number.fnAddData(tab_data);
+
+                        if(typeof callback === 'function') {
+                            callback();
+                        }
+                    });
+                });
+            });
+        },
+
+        setup_assign_number_table: function(parent) {
+            var THIS = this,
+                assign_number_html = parent,
+                columns = [
+                    {
+                        'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
+                        'fnRender': function(obj) {
+                            return '<input type="checkbox" class="select_number"/>';
+                        },
+                        'bSortable': false
+                    },
+                    {
+                        'sTitle': 'Phone Number'
+                    }
+                ];
+
+            winkstart.table.create('assign_number', $('#assign_number-grid', assign_number_html), columns, {}, {
+                sDom: 'frtlip',
+                aaSorting: [[1, 'desc']],
+                fnRowCallback: function(nRow, aaData, iDisplayIndex) {
+                    $(nRow).attr('id', aaData[1]);
+                    return nRow;
+                }
+            });
+
+            $('#assign_number-grid_filter input[type=text]', assign_number_html).first().focus();
+
+            $('.cancel-search', assign_number_html).click(function(){
+                $('#assign_number-grid_filter input[type=text]', assign_number_html).val('');
+                winkstart.table.assign_number.fnFilter('');
+            });
+
+            $('#select_all_numbers', assign_number_html).click(function() {
+                $('.select_number', assign_number_html).prop('checked', $(this).is(':checked'));
+            });
+        },
+
         setup_table: function(parent) {
             var THIS = this,
                 pbxs_manager_html = parent,
@@ -1493,8 +1693,6 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     return nRow;
                 }
             });
-
-            $('div.action_number', pbxs_manager_html).html('<button class="btn success" id="add_number">Add Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Remove Selected Numbers</button>');
 
             $('#pbxs_manager-grid_filter input[type=text]', pbxs_manager_html).first().focus();
 
