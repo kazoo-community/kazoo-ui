@@ -130,7 +130,9 @@ winkstart.module('accounts', 'accounts_manager', {
                             success(_data, status);
                         }
                     },
-                    winkstart.error_message.process_error()
+                    function(_data, status) {
+                        winkstart.alert('error', 'Credit Card missing or invalid !')
+                    }
                 );
             }
 
