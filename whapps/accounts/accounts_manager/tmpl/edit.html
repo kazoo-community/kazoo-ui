@@ -17,7 +17,7 @@
             <li class="active"><a href="#basic">Basic</a></li>
             <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
             <li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
-            <li><a href="#options"><span class="icon sip"></span>Options</a></li>
+            <li><a href="#billing"><span class="icon sip"></span>Billing</a></li>
             <li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>
             <li><a href="#white_labeling"><span class="icon sip"></span>White labeling</a></li>
         </ul>
@@ -37,6 +37,7 @@
                              rel="popover" data-content="Realm of this account" />
                         </div>
                     </div>
+
                 </div>
 
                 <div id="voicemail_to_email">
@@ -116,7 +117,7 @@
                     </div>
                 </div>
 
-                <div id="options">
+                <div id="billing">
                     <div class="clearfix">
                         <label>Billing Account</label>
                         <div class="input">
@@ -137,6 +138,35 @@
                                     {{/if}}
                                 </select>
                             </span>
+                        </div>
+                    </div>
+
+                    <h3>Credits (Per-Minute Calling)</h3>
+
+                    <div class="clearfix">
+                        <label for="billing_balance">Balance</label>
+                        <div class="input">
+                            <div class="inline-inputs">
+                                <input class="mini disabled" id="billing_balance_dis" type="text" disabled="disabled" value="${credits.amount}"/>
+                                <input class="mini" id="billing_balance" name="billing.balance" type="text" value="" rel="popover" data-content="Pay-per-minute allows you to pay only for what you use. Deposit money into your account to get started, then pay-as-you-go for usage."/>
+                                <span class="help-block">Current / Add</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Limits (Flat-Rate Calling)</h3>
+
+                    <div class="clearfix">
+                        <label for="billing_inbound_trunks">Inbound Calling</label>
+                        <div class="input">
+                            <input class="mini" id="billing_inbound_trunks" name="billing.inbound_trunks" type="text" value="${limits.inbound_trunks}" rel="popover" data-content="Allow up to {} simultaneous outbound calls to the US-48 at $29.99/month per line" />
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="billing_twoway_trunks">Outbound Calling</label>
+                        <div class="input">
+                            <input class="mini" id="billing_twoway_trunks" name="billing.twoway_trunks" type="text" value="${limits.twoway_trunks}" rel="popover" data-content="Allow up to simultaneous inbound calls at $6.99/month per line" />
                         </div>
                     </div>
                 </div>
