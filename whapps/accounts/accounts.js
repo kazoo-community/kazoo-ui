@@ -42,6 +42,9 @@
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
     {
+        
+        billing_provider: 'braintree',
+
         modules: {
             'accounts_manager': false
         },
@@ -63,6 +66,8 @@
 
         activate: function() {
             var THIS = this;
+
+
 
             THIS.whapp_auth(function() {
                 THIS.initialization_check();

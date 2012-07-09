@@ -281,7 +281,7 @@ winkstart.module('auth', 'onboarding', {
                 }
             ]
 
-            if(form_data.account.role == 'small_office') {
+            if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
                 extension = $('#extension_1', target).val();
                 form_data.extensions[0].callflow.numbers = [ extension ];
 

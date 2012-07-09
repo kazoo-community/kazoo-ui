@@ -60,24 +60,34 @@ winkstart.module('myaccount', 'app_store', {
         myaccount_loaded: function(user_data) {
             var THIS = this;
 
-            winkstart.request('app_store.account_get', {
-                    api_url: winkstart.apps['myaccount'].api_url,
-                    account_id: winkstart.apps['myaccount'].account_id,
-                },
-                function(_data, status) {
-                    _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
+            if(winkstart.config.available_apps) {
+                winkstart.request('app_store.account_get', {
+                        api_url: winkstart.apps['myaccount'].api_url,
+                        account_id: winkstart.apps['myaccount'].account_id,
+                    },
+                    function(_data, status) {
+                        var tmp_available_apps = [];
 
-                    if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
-                        winkstart.publish('nav.add_sublink', {
-                            link: 'nav',
-                            sublink: 'app_store',
-                            label: 'App Store',
-                            weight: '20',
-                            publish: 'app_store.popup'
-                        });
+                        if(!_data.data.available_apps) {
+                            $.each(winkstart.config.available_apps, function(k, v){
+                                tmp_available_apps.push(k);
+                            });
+                        }
+                        
+                        _data.data.available_apps = _data.data.available_apps || tmp_available_apps || [];
+
+                        if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
+                            winkstart.publish('nav.add_sublink', {
+                                link: 'nav',
+                                sublink: 'app_store',
+                                label: 'App Store',
+                                weight: '20',
+                                publish: 'app_store.popup'
+                            });
+                        }
                     }
-                }
-            );
+                );
+            }
         },
 
         render_app_store: function(data, target, callback) {

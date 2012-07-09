@@ -72,6 +72,26 @@ winkstart.module('accounts', 'accounts_manager', {
                 url: '{api_url}/accounts/{account_id}/whitelabel/logo',
                 contentType: 'application/x-base64',
                 verb: 'POST'
+            },
+            'accounts_manager.credits.get': {
+                url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'accounts_manager.limits.get': {
+                url: '{api_url}/accounts/{account_id}/limits',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'accounts_manager.credits.update': {
+                url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
+            'accounts_manager.limits.update': {
+                url: '{api_url}/accounts/{account_id}/limits',
+                contentType: 'application/json',
+                verb: 'POST'
             }
         }
     },
@@ -91,11 +111,57 @@ winkstart.module('accounts', 'accounts_manager', {
     },
 
     {
+        billing_provider: 'braintree',
+
+        update_credits_limits: function(account_id, data, success) {
+            var THIS = this;
+
+            if(data.balance && data.balance > 0) {
+                winkstart.request('accounts_manager.credits.update', {
+                        account_id: account_id,
+                        api_url: winkstart.apps['accounts'].api_url,
+                        billing_provider: THIS.billing_provider,
+                        data: {
+                            'amount': data.balance
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        winkstart.alert('error', 'Credit Card missing or invalid !')
+                    }
+                );
+            }
+
+            if((data.inbound_trunks && data.inbound_trunks >= 0) || (data.twoway_trunks && data.twoway_trunks >= 0))  {
+                winkstart.request('accounts_manager.limits.update', {
+                        account_id: account_id,
+                        api_url: winkstart.apps['accounts'].api_url,
+                        data: {
+                            'inbound_trunks': data.inbound_trunks,
+                            'twoway_trunks': data.twoway_trunks
+                        }
+                    },
+                    function(_data, status) { 
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    }
+                );
+            }
+        },
+
         save_accounts_manager: function(form_data, data, success, error) {
             delete data.data.available_apps;
 
             var THIS = this,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data)),
+                billing = normalized_data.billing;
+
+            delete normalized_data.billing;
 
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'accounts_manager.update', {
@@ -104,6 +170,8 @@ winkstart.module('accounts', 'accounts_manager', {
                         data: normalized_data
                     },
                     function(_data, status) {
+
+                        THIS.update_credits_limits(data.data.id, billing);
                         if(typeof success == 'function') {
                             success(_data, status, 'update');
                         }
@@ -124,6 +192,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     function(_data, status) {
                         THIS.update_billing_account(_data, function() {
                             if(typeof success == 'function') {
+                                THIS.update_credits_limits(_data.data.id, billing);
                                 success(_data, status, 'create');
                             }
                         });
@@ -238,11 +307,35 @@ winkstart.module('accounts', 'accounts_manager', {
                                         render_data.field_data.available_apps.push(tmp);
                                     });
 
-                                    THIS.render_accounts_manager(render_data, target, callbacks);
+                                    winkstart.request('accounts_manager.credits.get', {
+                                            account_id: data.id,
+                                            api_url: winkstart.apps['accounts'].api_url,
+                                            billing_provider: THIS.billing_provider,
+                                        },
+                                        function(_data_c, status) {
+                                            render_data.credits = _data_c.data;
 
-                                    if(typeof callbacks.after_render == 'function') {
-                                        callbacks.after_render();
-                                    }
+                                            winkstart.request('accounts_manager.limits.get', {
+                                                    account_id: data.id,
+                                                    api_url: winkstart.apps['accounts'].api_url
+                                                },
+                                                function(_data_l, status) {
+                                                    var limits = {
+                                                        inbound_trunks: 0,
+                                                        twoway_trunks: 0
+                                                    };
+                                                    $.extend(true, limits, _data_l.data);
+                                                    render_data.limits = limits;
+
+                                                    THIS.render_accounts_manager(render_data, target, callbacks);
+
+                                                    if(typeof callbacks.after_render == 'function') {
+                                                        callbacks.after_render();
+                                                    }  
+                                                }
+                                            );
+                                        }
+                                    );
                                 },
                                 winkstart.error_message.process_error()
                             );
@@ -264,12 +357,22 @@ winkstart.module('accounts', 'accounts_manager', {
                                 }
                             }
                         );
+
                     } else {
                         defaults.field_data.available_apps = [];
 
                         $.each(_data_account.data.available_apps, function(k, v) {
                             defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
                         });
+
+                        defaults.limits = {
+                            inbound_trunks: 0,
+                            twoway_trunks: 0
+                        };
+
+                        defaults.credits = {
+                            amount: 0
+                        };
 
                         THIS.render_accounts_manager(defaults, target, callbacks);
 
