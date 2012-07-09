@@ -74,3 +74,10 @@
     padding: 0 10px 10px 10px;
 }
 
+.inline_popup.small .main_content {
+    width: 450px;
+}
+
+.inline_popup.small .main_content .pill-content .clearfix {
+    display: block;
+}
