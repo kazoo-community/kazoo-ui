@@ -614,7 +614,7 @@ winkstart.module('voip', 'device', {
             else {
                 render();
 
-                //$('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
+                $('.media_tabs .buttons[device_type="sip_device"]', device_html).trigger('click');
             }
         },
 
