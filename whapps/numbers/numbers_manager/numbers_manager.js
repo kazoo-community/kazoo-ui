@@ -10,6 +10,7 @@ winkstart.module('numbers', 'numbers_manager', {
             cnam_dialog: 'tmpl/cnam_dialog.html',
             e911_dialog: 'tmpl/e911_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
+            freeform_number_dialog: 'tmpl/freeform_number_dialog.html',
             add_number_search_results: 'tmpl/add_number_search_results.html',
             port_dialog: 'tmpl/port_dialog.html',
             fields: 'tmpl/fields.html'
@@ -25,6 +26,16 @@ winkstart.module('numbers', 'numbers_manager', {
                 url: '{api_url}/accounts/{account_id}/phone_numbers',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'numbers_manager.get_account': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'numbers_manager.create': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}',
+                contentType: 'application/json',
+                verb: 'PUT'
             },
             'numbers_manager.get': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}',
@@ -56,7 +67,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
-            'numbers_manager.create': {
+            'numbers_manager.create_doc': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/docs/{file_name}',
                 contentType: 'application/x-base64',
                 verb: 'PUT'
@@ -118,6 +129,28 @@ winkstart.module('numbers', 'numbers_manager', {
                     api_url: winkstart.apps['numbers'].api_url,
                     phone_number: encodeURIComponent(data.phone_number),
                     data: data.options || {}
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        create_number: function(phone_number, success, error) {
+            var THIS = this;
+
+            winkstart.request(false, 'numbers_manager.create', {
+                    account_id: winkstart.apps['numbers'].account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                    phone_number: encodeURIComponent(phone_number),
+                    data: {}
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
@@ -199,7 +232,7 @@ winkstart.module('numbers', 'numbers_manager', {
         create_number_doc: function(data, success, error) {
             var THIS = this;
 
-            winkstart.request('numbers_manager.create', {
+            winkstart.request('numbers_manager.create_doc', {
                     account_id: winkstart.apps['numbers'].account_id,
                     api_url: winkstart.apps['numbers'].api_url,
                     phone_number: encodeURIComponent(data.phone_number),
@@ -258,6 +291,52 @@ winkstart.module('numbers', 'numbers_manager', {
             }
             else{
                 put_port_data();
+            }
+        },
+
+        add_freeform_numbers: function(numbers_data, callback) {
+            var THIS = this,
+                number_data;
+
+            if(numbers_data.length > 0) {
+                var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
+                    error_function = function() {
+                        winkstart.confirm('There was an error when trying to acquire ' + numbers_data[0].phone_number +
+                            ', would you like to retry?',
+                            function() {
+                                THIS.add_freeform_numbers(numbers_data, callback);
+                            },
+                            function() {
+                                THIS.add_freeform_numbers(numbers_data.slice(1), callback);
+                            }
+                        );
+                    };
+
+                if(phone_number && phone_number[1]) {
+                    THIS.create_number(phone_number[1],
+                        function() {
+                            THIS.activate_number(phone_number[1],
+                                function(_data, status) {
+                                    THIS.add_freeform_numbers(numbers_data.slice(1), callback);
+                                },
+                                function(_data, status) {
+                                    error_function();
+                                }
+                            );
+                        },
+                        function() {
+                            error_function();
+                        }
+                    );
+                }
+                else {
+                    error_function();
+                }
+            }
+            else {
+                if(typeof callback === 'function') {
+                    callback();
+                }
             }
         },
 
@@ -360,8 +439,14 @@ winkstart.module('numbers', 'numbers_manager', {
                 $('.select_number', numbers_manager_html).prop('checked', $(this).is(':checked'));
             });
 
-            $(numbers_manager_html).delegate('#add_number', 'click', function() {
+            $(numbers_manager_html).delegate('#buy_number', 'click', function() {
                 THIS.render_add_number_dialog(function() {
+                    THIS.list_numbers();
+                });
+            });
+
+            $(numbers_manager_html).delegate('#add_number', 'click', function() {
+                THIS.render_freeform_number_dialog(function() {
                     THIS.list_numbers();
                 });
             });
@@ -659,6 +744,49 @@ winkstart.module('numbers', 'numbers_manager', {
                 title: e911_data.phone_number ? 'Edit Location for ' + e911_data.phone_number : 'Edit 911 Location',
                 width: '465px'
             });
+        },
+
+        render_freeform_number_dialog: function(callback) {
+            var THIS = this,
+                popup_html = THIS.templates.freeform_number_dialog.tmpl(),
+                popup;
+
+            $('.add', popup_html).click(function(ev) {
+                ev.preventDefault();
+
+                var phone_numbers = $('#freeform_numbers', popup_html).val().replace(/\n/g,',');
+                phone_numbers = phone_numbers.replace(/[\s-\(\)\.]/g, '').split(',');
+
+                var numbers_data = [];
+
+                if(phone_numbers.length > 0) {
+                    var phone_number;
+                    $.each(phone_numbers, function(k, v) {
+                        phone_number = v.match(/^\+?1?([2-9]\d{9})$/);
+                        if(phone_number && phone_number[1]) {
+                            numbers_data.push({phone_number: v});
+                        }
+                    });
+
+                    THIS.add_freeform_numbers(numbers_data, function() {
+                        if(typeof callback === 'function') {
+                            callback();
+                        }
+
+                        popup.dialog('close');
+                    });
+                }
+                else {
+                    winkstart.alert('You didn\'t enter any valid phone number.');
+                }
+            });
+
+            popup = winkstart.dialog(popup_html, {
+                title: 'Add your phone numbers to the platform',
+                position: ['center', 20]
+            });
+
+            $('.add', popup).focus();
         },
 
         render_add_number_dialog: function(callback) {
@@ -1007,7 +1135,18 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
-            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="add_number">Add Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
+            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="buy_number">Buy Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
+
+            winkstart.request('numbers_manager.get_account', {
+                    account_id: winkstart.apps['numbers'].account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                },
+                function(_data, status) {
+                    if(_data.data && _data.data.wnm_allow_additions) {
+                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">Add Number</button>');
+                    }
+                }
+            );
 
             $('#numbers_manager-grid_filter input[type=text]', numbers_manager_html).first().focus();
 
