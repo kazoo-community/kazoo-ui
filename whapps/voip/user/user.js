@@ -347,7 +347,7 @@ winkstart.module('voip', 'user', {
                     device_id: device_id
                 },
                 function(_data, status) {
-                    if(_data.data.device_type == 'smartphone' || _data.data.device_type == 'landline') {
+                    if($.inArray(_data.data.device_type, ['cellphone', 'smartphone', 'landline']) > -1) {
                         _data.data.call_forward.enabled = enabled;
                     }
                     _data.data.enabled = enabled;

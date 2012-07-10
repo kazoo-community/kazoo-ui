@@ -641,6 +641,10 @@ winkstart.module('voip', 'device', {
 
         migrate_data: function(data) {
 
+            if(data.data.device_type == 'cell_phone') {
+                data.data.device_type = 'cellphone';
+            }
+
             if(typeof data.data.caller_id == 'object') {
                 if('default' in data.data.caller_id) {
                     data.data.caller_id.external = data.data.caller_id['default'];
