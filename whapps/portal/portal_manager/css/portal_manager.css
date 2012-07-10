@@ -40,6 +40,11 @@
     border-top: 1px solid #555;
 }
 
+.portal-view .buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
 .portal-view #settings-view form label {
     width: 160px;
 }
@@ -80,6 +85,18 @@
     margin-top: 5px;
 }
 
+.portal-view .dataTables_length{
+    width: 25%;
+}
+
+.portal-view .dataTables_info{
+    width: 35%;
+}
+
+.portal-view .dataTables_paginate{
+    width: 40%;
+}
+
 .portal-view #voicemail-grid_wrapper .actions_voicemail {
     display: inline-block;
 }
@@ -115,4 +132,101 @@
 
 .portal-view tr:last-child td:last-child {
     border-bottom-right-radius: 5px;
+}
+
+.portal-view .devices_wrapper .list_devices {
+    background: #222;
+    border: 1px solid #888;
+    border-radius: 5px;
+    padding: 10px 0;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.portal-view .devices_wrapper .list_devices .device_line {
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+}
+
+.portal-view .devices_wrapper .list_devices .device_line > * {
+    margin: 0 5px;
+    float: left;
+}
+
+.portal-view .devices_wrapper .list_devices .device_line .edit_icon {
+    background: url('images/edit_icon.png') no-repeat scroll center center transparent;
+    cursor: pointer;
+    height: 25px;
+    width: 20px;
+}
+
+.portal-view .devices_wrapper .list_devices .device_line .device_name {
+    font-weight: bold;
+    color: #05addc;
+}
+/**************************
+----TOP TABS MEDIA---------
+****************************/
+.inline_popup.userportal_device .media_tabs {
+	background-color: #555555;
+    border: 1px solid #363636;
+	min-height: 90px;
+	padding: 10px 0 10px 10px;
+	position:relative;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.inline_popup.userportal_device .media_tabs .buttons {
+	width: 128px;
+	height: 90px;
+
+	line-height: 90px;
+    display: inline-block;
+	position: relative;
+	margin: 0 3px;
+
+    text-align: center;
+
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+
+    cursor: pointer;
+    opacity: 0.4;
+
+    background: #05addc;
+    background: -moz-linear-gradient(top,  #05addc 0%, #0099b7 25%, #008ca8 50%, #0099b7 75%, #05addc 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#05addc), color-stop(25%,#0099b7), color-stop(50%,#008ca8), color-stop(75%,#0099b7), color-stop(100%,#05addc));
+    background: -webkit-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: -o-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: -ms-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: linear-gradient(to bottom,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05addc', endColorstr='#05addc',GradientType=0 );
+
+}
+
+.inline_popup.userportal_device .media_tabs .buttons:hover {
+    -moz-box-shadow: 3px 5px 10px #383838;
+    -webkit-box-shadow: 3px 5px 10px #383838;
+    box-shadow: 3px 5px 10px #383838;
+}
+
+.inline_popup.userportal_device .media_tabs .buttons.current, .media_tabs .buttons.current:hover {
+    -moz-box-shadow: 3px 5px 10px #383838;
+    -webkit-box-shadow: 3px 5px 10px #383838;
+    box-shadow: 3px 5px 10px #383838;
+    opacity: 1;
+}
+
+.inline_popup.userportal_device .media_tabs .buttons .label_device {
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
 }

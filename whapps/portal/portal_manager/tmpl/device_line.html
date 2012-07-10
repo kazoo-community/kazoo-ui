@@ -1,0 +1,23 @@
+<div>
+    <div class="device_line">
+        <span class="icon medium ${device_type}"/>
+        {{if device_type === "sip_device"}}
+        <div class="device_name">${name} (VoIP)</div>
+        {{else}}
+            {{if device_type === "cellphone"}}
+                <div class="device_name">${name} (Cell)</div>
+            {{else}}
+                {{if device_type === "fax"}}
+                    <div class="device_name">${name} (Fax)</div>
+                {{else}}
+                    {{if device_type === "softphone"}}
+                        <div class="device_name">${name} (Softphone)</div>
+                    {{else}}
+                    <div class="device_name">${name}</div>
+                    {{/if}}
+                {{/if}}
+            {{/if}}
+        {{/if}}
+        <div class="edit_icon" data-id="${id}"/>
+    </div>
+</div>
