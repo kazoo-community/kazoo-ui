@@ -186,7 +186,7 @@
     background-color: #05addc;
 }
 
-.list-panel-anchor ul li a{
+.list-panel-anchor ul li a {
     line-height:26px;
     display:block;
     height: 27px;
@@ -195,6 +195,7 @@
     overflow: hidden;
     color: #ffffff;
     text-decoration: none;
+    white-space: nowrap;
     /*border-right: 1px solid #7a7a7a;*/
 }
 
