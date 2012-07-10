@@ -24,41 +24,57 @@
 .media_tabs {
 	background-color: #555555;
     border: 1px solid #363636;
-	height: 130px;
-	padding: 9px 0 10px 10px;
-    /*text-align: center;*/
+	min-height: 90px;
+	padding: 10px 0 10px 10px;
 	position:relative;
-	z-index:600;
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
     border-radius: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .media_tabs .buttons {
-	width: 191px;
-	height: 130px;
-	line-height: 130px;
+	width: 128px;
+	height: 90px;
+
+	line-height: 90px;
     display: inline-block;
 	position: relative;
 	margin: 0 3px;
-	background-image:url(../images/blank_btn.png);
-	background-position: 0px 0px;
+
     text-align: center;
+
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+
+    cursor: pointer;
+    opacity: 0.4;
+
+    background: #05addc;
+    background: -moz-linear-gradient(top,  #05addc 0%, #0099b7 25%, #008ca8 50%, #0099b7 75%, #05addc 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#05addc), color-stop(25%,#0099b7), color-stop(50%,#008ca8), color-stop(75%,#0099b7), color-stop(100%,#05addc));
+    background: -webkit-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: -o-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: -ms-linear-gradient(top,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    background: linear-gradient(to bottom,  #05addc 0%,#0099b7 25%,#008ca8 50%,#0099b7 75%,#05addc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05addc', endColorstr='#05addc',GradientType=0 );
+
 }
 
 .media_tabs .buttons:hover {
-	background-position: 0px -130px;
+    -moz-box-shadow: 3px 5px 10px #383838;
+    -webkit-box-shadow: 3px 5px 10px #383838;
+    box-shadow: 3px 5px 10px #383838;
+    opacity: 0.6;
 }
 
 .media_tabs .buttons.current, .media_tabs .buttons.current:hover {
-	background-position: 0px -130px;
-	cursor:default !important;
 	-moz-box-shadow: 3px 5px 10px #383838;
 	-webkit-box-shadow: 3px 5px 10px #383838;
 	box-shadow: 3px 5px 10px #383838;
-	-moz-border-radius: 12px;
-	-webkit-border-radius: 12px;
-	border-radius: 12px;
+    opacity: 1;
 }
 
 .media_tabs .buttons .label_device {
