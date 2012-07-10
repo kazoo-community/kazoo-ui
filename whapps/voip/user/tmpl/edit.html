@@ -69,6 +69,7 @@
 					</div>
 
 					<div class="clearfix">
+						<label for="vm_to_email_enabled">Email Notifications</label>
 						<div class="input">
 							<ul class="inputs-list">
               					<li>
@@ -79,31 +80,26 @@
 			                                {{else}}
 			                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" />
 			                                {{/if}}
-			                                <span>Voicemail to Email</span>
+			                                <span>Voicemail</span>
 		                                </span>
                             		</label>
                                 </li>
-                            </ul>
-						</div>
-					</div>
-					<div class="clearfix">
-						<div class="input">
-							<ul class="inputs-list">
-              					<li>
-	              					<label>
-	              						<span rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time you get a Fax.">
+                                <li>
+                                	<label>
+                                		<span rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time you get a Fax.">
 											{{if data.fax_to_email_enabled}}
 			                                <input id="fax_to_email_enabled" type="checkbox" name="fax_to_email_enabled" checked="checked" />
 			                                {{else}}
 			                                <input id="fax_to_email_enabled" type="checkbox" name="fax_to_email_enabled" />
 			                                {{/if}}
-			                                <span>Fax to Email</span>
+			                                <span>Fax</span>
 		                                </span>
-                            		</label>
+                                	</label>
                                 </li>
                             </ul>
 						</div>
 					</div>
+
 					<hr />
 
 					<h3>In-House Calls</h3>
