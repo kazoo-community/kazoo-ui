@@ -139,6 +139,7 @@
             hide: { effect : 'fade', duration : 200 },
             zIndex: 20000,
             close: function() {
+                $('div.popover').remove();
                 $(newDiv).dialog('destroy');
                 $(newDiv).remove();
 
