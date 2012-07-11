@@ -246,6 +246,8 @@ winkstart.module('voip', 'user', {
                             sip_device: 'SIP Device',
                             cellphone: 'Cell Phone',
                             fax: 'Fax',
+                            smartphone: 'Smartphone',
+                            landline: 'landline',
                             softphone: 'Softphone',
                             sip_uri: 'SIP URI'
                         }
@@ -345,7 +347,7 @@ winkstart.module('voip', 'user', {
                     device_id: device_id
                 },
                 function(_data, status) {
-                    if(_data.data.device_type == 'cellphone') {
+                    if(_data.data.device_type == 'smartphone' || _data.data.device_type == 'landline') {
                         _data.data.call_forward.enabled = enabled;
                     }
                     _data.data.enabled = enabled;
