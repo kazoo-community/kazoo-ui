@@ -141,7 +141,7 @@
 
 .portal-view .devices_wrapper .list_devices {
     background: #222;
-    border: 1px solid #888;
+    border: 1px solid #05addc;
     border-radius: 5px;
     padding: 10px 0;
     margin: 10px 0;
@@ -171,6 +171,19 @@
     font-weight: bold;
     color: #05addc;
 }
+
+.portal-view .devices_wrapper .list_devices .device_line .device_name.registered {
+    color: #5AB05A;
+}
+
+.portal-view .devices_wrapper .list_devices .device_line .device_name.unregistered {
+    color: #DD272A;
+}
+
+.portal-view .devices_wrapper .help_devices {
+    color: #bbb;
+    font-style: italic;
+}
 /**************************
 ----TOP TABS MEDIA---------
 ****************************/
@@ -188,7 +201,7 @@
 }
 
 .inline_popup.userportal_device .media_tabs .buttons {
-	width: 128px;
+	width: 120px;
 	height: 90px;
 
 	line-height: 90px;

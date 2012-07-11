@@ -7,6 +7,8 @@ winkstart.module('portal', 'portal_manager', {
             portal_manager: 'tmpl/portal_manager.html',
             device_line: 'tmpl/device_line.html',
             general_edit: 'tmpl/general_edit.html',
+            smartphone: 'tmpl/smartphone.html',
+            landline: 'tmpl/landline.html',
             cellphone: 'tmpl/cellphone.html',
             softphone: 'tmpl/softphone.html',
             sip_device: 'tmpl/edit.html',
@@ -18,6 +20,14 @@ winkstart.module('portal', 'portal_manager', {
         },
 
         validation_device: {
+            landline: [
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
+            ],
+            smartphone: [
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
+            ],
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
@@ -89,6 +99,11 @@ winkstart.module('portal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
+            'account_devices.status': {
+                url: '{api_url}/accounts/{account_id}/devices/status',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'account_devices.list': {
                 url: '{api_url}/accounts/{account_id}/devices',
                 contentType: 'application/json',
@@ -140,6 +155,24 @@ winkstart.module('portal', 'portal_manager', {
 
     {
         user_cdr_range: 7,
+
+        get_registered_devices: function(success, error) {
+            winkstart.request('account_devices.status', {
+                    api_url: winkstart.apps['portal'].api_url,
+                    account_id: winkstart.apps['portal'].account_id
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
+        },
 
         get_user_devices: function(success, error) {
             winkstart.request('user_device.list', {
@@ -293,31 +326,27 @@ winkstart.module('portal', 'portal_manager', {
                 parent = parent || $('#ws-content');
 
             THIS.get_settings(function(_data_settings) {
-                THIS.get_user_devices(function(_data_devices) {
-                    var portal_manager_html = THIS.templates.portal_manager.tmpl(_data_settings);
+                var portal_manager_html = THIS.templates.portal_manager.tmpl(_data_settings);
 
-                    $.each(_data_devices.data, function(k, v) {
-                        $('.list_devices', portal_manager_html).prepend(THIS.templates.device_line.tmpl({name: v.name, device_type: v.device_type, id: v.id}));
-                    });
+                THIS.refresh_list_devices(portal_manager_html);
 
-                    THIS.setup_page(portal_manager_html);
+                THIS.setup_page(portal_manager_html);
 
-                    /* Settings part */
-                    if(!_data_settings.data.vm_to_email_enabled) {
-                        $('.email-field', portal_manager_html).hide();
-                    }
+                /* Settings part */
+                if(!_data_settings.data.vm_to_email_enabled) {
+                    $('.email-field', portal_manager_html).hide();
+                }
 
-                    if(!('call_forward' in _data_settings.data) || !_data_settings.data.call_forward.enabled) {
-                        $('.device-field', portal_manager_html).hide();
-                    }
+                if(!('call_forward' in _data_settings.data) || !_data_settings.data.call_forward.enabled) {
+                    $('.device-field', portal_manager_html).hide();
+                }
 
-                    (parent)
-                        .empty()
-                        .append(portal_manager_html);
+                (parent)
+                    .empty()
+                    .append(portal_manager_html);
 
-                    //Hack to display columns properly
-                    $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', portal_manager_html).attr('style', 'width:100%');
-                });
+                //Hack to display columns properly
+                $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', portal_manager_html).attr('style', 'width:100%');
             });
         },
 
@@ -391,13 +420,39 @@ winkstart.module('portal', 'portal_manager', {
 
         refresh_list_devices: function(parent) {
             var THIS = this,
-                portal_manager_html = parent;
+                portal_manager_html = parent,
+                friendly_types = {
+                    'cellphone': 'Cell',
+                    'smartphone': 'Smartphone',
+                    'fax': 'Fax',
+                    'sip_device': 'VoIP',
+                    'softphone': 'Softphone',
+                    'landline': 'Landline'
+                };
 
-            THIS.get_user_devices(function(_data_devices) {
-                $('.list_devices', portal_manager_html).html('<div class="clear"/>');
+            $('.list_devices', portal_manager_html).html('<div class="clear"/>');
 
-                $.each(_data_devices.data, function(k, v) {
-                    $('.list_devices', portal_manager_html).prepend(THIS.templates.device_line.tmpl({name: v.name, device_type: v.device_type, id: v.id}));
+            THIS.get_registered_devices(function(_data_registered) {
+                THIS.get_user_devices(function(_data_devices) {
+                    var data_device,
+                        registered_data = {};
+
+                    $.each(_data_registered.data, function(k, v) {
+                        registered_data[v.device_id] = true;
+                    });
+
+                    $.each(_data_devices.data, function(k, v) {
+                        v.registered = v.id in registered_data || $.inArray(v.device_type, ['cellphone', 'smartphone', 'landline']) > -1 ? 'registered' : 'unregistered';
+                        data_device = {
+                            status: v.registered,
+                            name: v.name,
+                            device_type: v.device_type,
+                            friendly_type: friendly_types[v.device_type],
+                            id: v.id
+                        };
+
+                        $('.list_devices', portal_manager_html).prepend(THIS.templates.device_line.tmpl(data_device));
+                    });
                 });
             });
         },
@@ -610,7 +665,6 @@ winkstart.module('portal', 'portal_manager', {
                 var humanDate = year != new Date().getFullYear() ? month+'/'+day+'/'+year : month+'/'+day,
                     humanTime = hours + ':' + minutes + suffix;
 
-                console.log(today_year, year, today_month, month, today_day, day);
                 if(today_year === year && today_month === month && today_day === day) {
                     humanDate = 'Today';
                 }
@@ -731,7 +785,7 @@ winkstart.module('portal', 'portal_manager', {
                                  '<param name="quality" value="high" />' +
                                  '<param name="wmode" value="transparent">' +
                                  '<param name="menu" value="false" />' +
-                                 '<embed src="whapps/userportal/voicemail/assets/flash/xspf_player.swf?' +
+                                 '<embed src="whapps/portal/portal_manager/assets/flash/xspf_player.swf?' +
                                  'player_mode=mini&skin_mode=on&song_url=' + THIS.voicemail_uri(msg_uri) +
                                  '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
                                  '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
@@ -948,6 +1002,7 @@ winkstart.module('portal', 'portal_manager', {
                 defaults = {
                     data: $.extend(true, {
                         enabled: true,
+                        owner_id: winkstart.apps['portal'].user_id,
                         caller_id: {
                             external: {},
                             internal: {}
@@ -1019,7 +1074,7 @@ winkstart.module('portal', 'portal_manager', {
                                 }
                             }
                         },
-                        hide_owner: data.hide_owner || false
+                        hide_owner: true
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -1282,7 +1337,7 @@ winkstart.module('portal', 'portal_manager', {
         },
 
         format_data: function(data) {
-            if(data.data.device_type === 'cellphone') {
+            if($.inArray(data.data.device_type, ['cellphone', 'smartphone', 'landline']) > -1) {
                 data.data.call_forward = {
                     enabled: true,
                     require_keypress: true,
@@ -1294,7 +1349,6 @@ winkstart.module('portal', 'portal_manager', {
                     enabled: false
                 };
             }
-
         },
 
         migrate_data: function(data) {
@@ -1383,7 +1437,7 @@ winkstart.module('portal', 'portal_manager', {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
-            if(form_data.device_type == 'cellphone') {
+            if($.inArray(form_data.device_type, ['cellphone', 'smartphone', 'landline']) > -1) {
                 form_data.call_forward.number = form_data.call_forward.number.replace(/\s|\(|\)|\-|\./g,'');
                 form_data.enabled = form_data.call_forward.enabled;
             }
