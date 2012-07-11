@@ -72,6 +72,11 @@
     margin: -6px 5px 0 0;
 }
 
+.portal-view table.display td {
+    font-size: 11px;
+    padding: 1px;
+}
+
 .portal-view #voicemail-grid, .portal-view #user_cdr-grid {
     width: 100% !important;
 }

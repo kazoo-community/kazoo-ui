@@ -89,6 +89,11 @@ winkstart.module('portal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
+            'account_devices.list': {
+                url: '{api_url}/accounts/{account_id}/devices',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'user_device.list': {
                 url: '{api_url}/accounts/{account_id}/devices?filter_owner_id={user_id}',
                 contentType: 'application/json',
@@ -371,17 +376,30 @@ winkstart.module('portal', 'portal_manager', {
             THIS.setup_cdr_table(parent);
 
             /* My devices part */
-            $('.edit_icon', parent).click(function() {
-                THIS.popup_edit_device({id: $(this).dataset('id')});
+            $(parent).delegate('.edit_icon', 'click', function() {
+                THIS.popup_edit_device({id: $(this).dataset('id')}, function() {
+                    THIS.refresh_list_devices(parent);
+                });
             });
 
             $('.add_device', parent).click(function() {
-                THIS.popup_edit_device({});
+                THIS.popup_edit_device({}, function() {
+                    THIS.refresh_list_devices(parent);
+                });
             });
         },
 
-        edit_device_popup: function(device_id) {
+        refresh_list_devices: function(parent) {
+            var THIS = this,
+                portal_manager_html = parent;
 
+            THIS.get_user_devices(function(_data_devices) {
+                $('.list_devices', portal_manager_html).html('<div class="clear"/>');
+
+                $.each(_data_devices.data, function(k, v) {
+                    $('.list_devices', portal_manager_html).prepend(THIS.templates.device_line.tmpl({name: v.name, device_type: v.device_type, id: v.id}));
+                });
+            });
         },
 
         setup_cdr_table: function(parent) {
@@ -561,6 +579,48 @@ winkstart.module('portal', 'portal_manager', {
             return month+'/'+day+'/'+year;
         },
 
+        friendly_date: function(timestamp) {
+            var parsed_date = '-';
+
+            if(timestamp) {
+                var today = new Date(),
+                    today_year = today.getFullYear(),
+                    today_month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1,
+                    today_day = today.getDate() < 10 ? '0' + today.getDate() : today.getDate(),
+                    date = new Date((timestamp - 62167219200)*1000),
+                    month = date.getMonth() +1,
+                    year = date.getFullYear(),
+                    day = date.getDate(),
+                    hours = date.getHours(),
+                    minutes = date.getMinutes();
+
+                if(hours >= 12) {
+                    hours-=12;
+                    suffix = 'pm';
+                }
+                else {
+                    suffix = 'am';
+                }
+
+                day = day < 10 ? '0' + day : day;
+                month = month < 10 ? '0' + month : month;
+                hours = hours < 10 ? '0'+ hours : hours;
+                minutes = minutes < 10 ? '0'+ minutes : minutes;
+
+                var humanDate = year != new Date().getFullYear() ? month+'/'+day+'/'+year : month+'/'+day,
+                    humanTime = hours + ':' + minutes + suffix;
+
+                console.log(today_year, year, today_month, month, today_day, day);
+                if(today_year === year && today_month === month && today_day === day) {
+                    humanDate = 'Today';
+                }
+
+                parsed_date = humanDate + ' ' + humanTime;
+            }
+
+            return parsed_date;
+        },
+
         list_by_date: function(start_date, end_date) {
             var THIS = this,
                 parse_duration = function(duration, type) {
@@ -584,26 +644,10 @@ winkstart.module('portal', 'portal_manager', {
                         duration = hours+' hours '+minutes+' minutes and '+seconds+' seconds';
                     }
                     else {
-                        duration = hours+':'+minutes+':'+seconds;
+                        duration = hours != '00' ? hours+':'+minutes+':'+seconds : minutes+':'+seconds;
                     }
 
                     return duration;
-                },
-                parse_date = function(timestamp) {
-                    var parsed_date = '-';
-
-                    if(timestamp) {
-                        var date = new Date((timestamp - 62167219200)*1000),
-                            month = date.getMonth() +1,
-                            year = date.getFullYear(),
-                            day = date.getDate(),
-                            humanDate = month+'/'+day+'/'+year,
-                            humanTime = date.toLocaleTimeString();
-
-                        parsed_date = humanDate + ' ' + humanTime;
-                    }
-
-                    return parsed_date;
                 };
 
             winkstart.request('user_cdr.list', {
@@ -623,7 +667,7 @@ winkstart.module('portal', 'portal_manager', {
                     $.each(_data.data, function() {
                         if(this.duration_seconds > 0) {
                             duration = this.duration_seconds >= 0 ? parse_duration(this.duration_seconds) : '--';
-                            humanFullDate = parse_date(this.timestamp);
+                            humanFullDate = THIS.friendly_date(this.timestamp);
                             call_duration += this.duration_seconds >= 0 ? parseFloat(this.duration_seconds) : 0;
 
                             tab_data.push([
@@ -667,12 +711,12 @@ winkstart.module('portal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
+                    { 'sTitle': 'Date',
+                      'sWidth': '220px'
+                    },
                     {
                       'sTitle': 'Caller ID',
                       'sWidth': '150px'
-                    },
-                    { 'sTitle': 'Date',
-                      'sWidth': '220px'
                     },
                     { 'sTitle': 'Status',
                       'sWidth': '130px'
@@ -689,7 +733,7 @@ winkstart.module('portal', 'portal_manager', {
                                  '<param name="menu" value="false" />' +
                                  '<embed src="whapps/userportal/voicemail/assets/flash/xspf_player.swf?' +
                                  'player_mode=mini&skin_mode=on&song_url=' + THIS.voicemail_uri(msg_uri) +
-                                 '&song_title=.&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
+                                 '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
                                  '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
                       }
                     }
@@ -698,7 +742,7 @@ winkstart.module('portal', 'portal_manager', {
             winkstart.table.create('voicemail', $('#voicemail-grid', parent), columns, {}, {
                 sDom: '<"actions_voicemail">frtlip',
                 sScrollY: '150px',
-                aaSorting: [[4, 'desc']]
+                aaSorting: [[3, 'desc']]
             });
 
             $.fn.dataTableExt.afnFiltering.pop();
@@ -786,7 +830,9 @@ winkstart.module('portal', 'portal_manager', {
                                         humanTime = date.toLocaleTimeString(),
                                         humanFullDate = humanDate + ' ' + humanTime;
 
-                                    tab_messages.push(['0', index, vmbox_id, msg.caller_id_number, humanFullDate, msg.folder, msg_uri]);
+                                    humanFullDate = THIS.friendly_date(msg.timestamp);
+
+                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri]);
                                 }
                             });
 
@@ -840,7 +886,7 @@ winkstart.module('portal', 'portal_manager', {
                 );
             }
             else {
-                winkstart.request('device.list', {
+                winkstart.request('account_devices.list', {
                         account_id: winkstart.apps['portal'].account_id,
                         api_url: winkstart.apps['portal'].api_url
                     },
@@ -865,7 +911,7 @@ winkstart.module('portal', 'portal_manager', {
                         };
 
                         if($.inArray(_data.data.length, winkstart.config.device_threshold || []) > -1) {
-                            THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
+                            winkstart.alert('Your account has reached the limit of available devices. In order to add more devices, contact your administrator.');
                         }
                         else {
                             create_device();
@@ -875,32 +921,6 @@ winkstart.module('portal', 'portal_manager', {
             }
         },
 
-        render_alert_threshold: function(data, success, error) {
-            var THIS = this,
-                threshold_html = THIS.templates.device_threshold.tmpl(data);
-
-            $('.save-device', threshold_html).click(function() {
-                dialog.dialog('destroy');
-
-                if(typeof success === 'function') {
-                    success();
-                }
-            });
-
-            $('.cancel-device', threshold_html).click(function() {
-                if(typeof error === 'function') {
-                    error();
-                }
-                else {
-                    dialog.dialog('destroy');
-                }
-            });
-
-            var dialog = winkstart.dialog(threshold_html, {
-                title: 'Maximum number of devices for your current service plan reached'
-            });
-        },
-
         edit_device: function(data, _parent, _target, _callbacks, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#device-content'),
@@ -908,8 +928,6 @@ winkstart.module('portal', 'portal_manager', {
                 _callbacks = _callbacks || {},
                 callbacks = {
                     save_success: _callbacks.save_success || function(_data) {
-                        THIS.render_list(parent);
-
                         THIS.edit_device({ id: _data.data.id }, parent, target, callbacks);
                     },
 
@@ -921,8 +939,6 @@ winkstart.module('portal', 'portal_manager', {
 
                     delete_success: _callbacks.delete_success || function(_data) {
                         target.empty();
-
-                        THIS.render_list(parent);
                     },
 
                     delete_error: _callbacks.delete_error,
@@ -1049,7 +1065,6 @@ winkstart.module('portal', 'portal_manager', {
 
                                     defaults.field_data.music_on_hold = _data.data;
 
-                                    console.log(data);
                                     if(typeof data == 'object' && data.id) {
                                         winkstart.request('user_device.get', {
                                                 account_id: winkstart.apps['portal'].account_id,
