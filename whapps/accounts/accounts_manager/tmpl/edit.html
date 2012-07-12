@@ -141,34 +141,39 @@
                         </div>
                     </div>
 
-                    <h3>Credits (Per-Minute Calling)</h3>
+                    {{if data.id}}
 
-                    <div class="clearfix">
-                        <label for="billing_balance">Balance</label>
-                        <div class="input">
-                            <div class="inline-inputs">
-                                <input class="mini disabled" id="billing_balance_dis" type="text" disabled="disabled" value="${credits.amount}"/>
-                                <input class="mini" id="billing_balance" name="billing.balance" type="text" value="" rel="popover" data-content="Pay-per-minute allows you to pay only for what you use. Deposit money into your account to get started, then pay-as-you-go for usage."/>
-                                <span class="help-block">Current / Add</span>
+                        <h3>Credit / Limits</h3>
+
+                        <div class="clearfix">
+                            <label for="billing_balance">Balance</label>
+                            <div class="input">
+                                <span class="uneditable-input mini">${credits.amount}</span>
                             </div>
                         </div>
-                    </div>
 
-                    <h3>Limits (Flat-Rate Calling)</h3>
-
-                    <div class="clearfix">
-                        <label for="billing_inbound_trunks">Inbound Calling</label>
-                        <div class="input">
-                            <input class="mini" id="billing_inbound_trunks" name="billing.inbound_trunks" type="text" value="${limits.inbound_trunks}" rel="popover" data-content="Allow up to {} simultaneous outbound calls to the US-48 at $29.99/month per line" />
+                        <div class="clearfix">
+                            <label for="billing_inbound_trunks">Inbound Calling</label>
+                            <div class="input">
+                                <span class="uneditable-input mini">${limits.inbound_trunks}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="clearfix">
-                        <label for="billing_twoway_trunks">Two-Way Calling</label>
-                        <div class="input">
-                            <input class="mini" id="billing_twoway_trunks" name="billing.twoway_trunks" type="text" value="${limits.twoway_trunks}" rel="popover" data-content="Allow up to simultaneous inbound calls at $6.99/month per line" />
+                        <div class="clearfix">
+                            <label for="billing_twoway_trunks">Two-Way Calling</label>
+                            <div class="input">
+                                <span class="uneditable-input mini">${limits.twoway_trunks}</span>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="clearfix">
+                            <label></label>
+                            <div class="input">
+                                <button id="manage" class="btn small"> Manage Credit / Limits</button>
+                            </div>
+                        </div>
+
+                    {{/if}}
                 </div>
 
                 <div id="applications">

@@ -24,3 +24,7 @@
 #accounts_manager-form .refresh_text {
     margin-left: 150px;
 }
+
+#accounts_manager-form span.mini {
+    width: 50px;
+}
