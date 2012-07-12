@@ -119,8 +119,13 @@
     width: 70px;
 }
 
+.portal-view .dataTables_scrollHeadInner {
+    width: 100% !important;
+}
+
 .portal-view .dataTables_scrollHeadInner .display {
     border-collapse: collapse;
+    width: 100% !important;
 }
 
 .portal-view tr:first-child td:first-child {

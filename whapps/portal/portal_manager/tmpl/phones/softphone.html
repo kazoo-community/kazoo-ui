@@ -2,9 +2,9 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit SIP Device</h1>
+                <h1>Edit Softphone</h1>
             {{else}}
-            	<h1>Create SIP Device</h1>
+            	<h1>Create Softphone</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
 				<button class="btn black basic activate">Basic</button>
@@ -18,7 +18,6 @@
 		 	<li><a href="#caller_id">Caller ID</a></li>
 		 	<li><a href="#sip_settings">SIP Settings</a></li>
 		 	<li><a href="#audio_settings">Audio Settings</a></li>
-		 	<li><a href="#video_settings">Video Settings</a></li>
 		 	<li><a href="#fax_support">Fax Support</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
@@ -56,10 +55,23 @@
 					{{/if}}
 
 					<div class="clearfix">
-						<label for="mac_address">Device MAC Address</label>
+						<label for="sip_realm">Realm</label>
 						<div class="input">
-							<input class="span4" id="mac_address" name="mac_address" type="text" placeholder="01:23:45:67:89:AB" value="${data.mac_address}" rel="popover" data-content="Enter the MAC Address of this device formatted like: 1A:B2:C6:78:F0:3B"/>
-                            <span class="provisioner"></span>
+							<span class="uneditable-input">${field_data.sip.realm}</span>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_username">Username</label>
+						<div class="input">
+							<input class="span4" id="sip_username" name="sip.username" type="text" placeholder="Username" value="${data.sip.username}" rel="popover" data-content="Enter your SIP Username"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_password">Password</label>
+						<div class="input">
+							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
 						</div>
 					</div>
 
@@ -69,10 +81,10 @@
 								<li>
 									<label>
 										<span rel="popover" data-content="Do you want this device enabled">
-											{{if data.enabled == true}}
+											{{if  data.enabled == true}}
 							                    <input type="checkbox" id="enabled" name="enabled" checked="checked" />
 							                {{else}}
-							                    <input type="checkbox" id="enabled" name="enabled" />
+							                    <input type="checkbox" id="enabled" name="enabled"/>
 							                {{/if}}
 							                <span>Enabled</span>
 						                </span>
@@ -82,24 +94,7 @@
 						</div>
 					</div>
 
-					<div class="clearfix">
-						<div class="input">
-							<ul class="inputs-list">
-								<li>
-									<label>
-										<span rel="popover" data-content="Do you want to notify the administrator each time this device unregisters">
-											{{if data.suppress_unregister_notifications === false}}
-							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" checked="checked" />
-							                {{else}}
-							                    <input type="checkbox" id="suppress_unregister_notifications" name="extra.notify_unregister" />
-							                {{/if}}
-							                <span>Notify when unregistered</span>
-						                </span>
-						            </label>
-						        </li>
-						    </ul>
-						</div>
-					</div>
+					<input type="hidden" value="${data.device_type}" name="device_type"/>
 				</div>
 
 				<div id="caller_id">
@@ -137,13 +132,6 @@
 
 				<div id="sip_settings">
 					<div class="clearfix">
-						<label for="sip_realm">Realm</label>
-						<div class="input">
-							<span class="uneditable-input">${field_data.sip.realm}</span>
-						</div>
-					</div>
-
-					<div class="clearfix">
 						<label for="sip_method">Authentication Method</label>
 						<div class="input">
 							<select name="sip.method" id="sip_method" class="medium" rel="popover" data-content="Select your authentication method">
@@ -155,20 +143,6 @@
                                     {{/if}}
                                 {{/each}}
 							</select>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_username">Username</label>
-						<div class="input">
-							<input class="span4" id="sip_username" name="sip.username" type="text" placeholder="Username" value="${data.sip.username}" rel="popover" data-content="Enter your SIP Username"/>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_password">Password</label>
-						<div class="input">
-							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
 						</div>
 					</div>
 
@@ -199,7 +173,7 @@
 					<div class="clearfix">
 						<label for="music_on_hold">Music on Hold</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
+							<span rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
 								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
 									{{each field_data.music_on_hold}}
 	                                    {{if data.music_on_hold.media_id == id}}
@@ -231,46 +205,6 @@
 							</select>
 						</div>
 					</div>
-
-					{{each(key, val) field_data.media.audio.codecs}}
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-									<li>
-										<label>
-											{{if functions.inArray(key, data.media.audio.codecs) }}
-							                    <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" checked="checked" rel="popover" data-content="" value="${key}"/>
-							                {{else}}
-							                    <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" rel="popover" data-content="" value="${key}"/>
-							                {{/if}}
-							                <span>${val}</span>
-							            </label>
-							        </li>
-							    </ul>
-							</div>
-						</div>
-					{{/each}}
-				</div>
-
-				<div id="video_settings">
-					{{each(key, val) field_data.media.video.codecs}}
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-									<li>
-										<label>
-											{{if functions.inArray(key, data.media.video.codecs) }}
-							                    <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" checked="checked" rel="popover" data-content="" value="${key}"/>
-							                {{else}}
-							                    <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" rel="popover" data-content="" value="${key}"/>
-							                {{/if}}
-							                <span>${val}</span>
-							            </label>
-							        </li>
-							    </ul>
-							</div>
-						</div>
-					{{/each}}
 				</div>
 
 				<div id="fax_support">
@@ -279,7 +213,7 @@
 						<div class="input">
 							<select name="media.fax_option" id="media_fax_option" class="medium" rel="popover" data-content="Do you want to enable T-38 for this device">
 								{{each(key, val) field_data.media.fax.options}}
-                                    {{if data.media.fax_option == key}}
+                                    {{if data.media.fax.option == key}}
                                         <option value="${key}" selected="selected">${val}</option>
                                     {{else}}
                                         <option value="${key}">${val}</option>
@@ -289,7 +223,7 @@
 						</div>
 					</div>
 
-					
+					<input type="hidden" name="extra.notify_unregister" value="false"/>
                 	<input type="hidden" name="media.fax.option" value="false"/>
 				</div>
 			</div>

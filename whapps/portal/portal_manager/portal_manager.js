@@ -6,13 +6,13 @@ winkstart.module('portal', 'portal_manager', {
         templates: {
             portal_manager: 'tmpl/portal_manager.html',
             device_line: 'tmpl/device_line.html',
-            general_edit: 'tmpl/general_edit.html',
-            smartphone: 'tmpl/smartphone.html',
-            landline: 'tmpl/landline.html',
-            cellphone: 'tmpl/cellphone.html',
-            softphone: 'tmpl/softphone.html',
-            sip_device: 'tmpl/edit.html',
-            fax: 'tmpl/fax.html'
+            general_edit: 'tmpl/phones/general_edit.html',
+            smartphone: 'tmpl/phones/smartphone.html',
+            landline: 'tmpl/phones/landline.html',
+            cellphone: 'tmpl/phones/cellphone.html',
+            softphone: 'tmpl/phones/softphone.html',
+            sip_device: 'tmpl/phones/sip_device.html',
+            fax: 'tmpl/phones/fax.html'
         },
 
         subscribe: {
@@ -907,10 +907,11 @@ winkstart.module('portal', 'portal_manager', {
 
         /* beginning copy and paste of device module */
         fix_codecs: function(data, data2) {
-            if(typeof data.media == 'object' && typeof data2.media == 'object') {
+            //Comment it because we're currently hiding the codecs from the users.
+            /*if(typeof data.media == 'object' && typeof data2.media == 'object') {
                 (data.media.audio || {}).codecs = (data2.media.audio || {}).codecs;
                 (data.media.video || {}).codecs = (data2.media.video || {}).codecs;
-            }
+            }*/
 
             return data;
         },
@@ -920,6 +921,8 @@ winkstart.module('portal', 'portal_manager', {
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
                 normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
+            console.log(normalized_data);
+            $.error('stop');
             if(id) {
                 winkstart.request('user_device.update', {
                         account_id: winkstart.apps['portal'].account_id,
