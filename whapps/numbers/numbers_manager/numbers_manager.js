@@ -1137,8 +1137,15 @@ winkstart.module('numbers', 'numbers_manager', {
 
             $('div.action_number', numbers_manager_html).html('<button class="btn success" id="buy_number">Buy Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
 
+            /* Check if the flag is in the current account OR in the master account if masquerading */
+            var account_id = winkstart.apps['numbers'].account_id;
+
+            if('accounts' in winkstart.apps && winkstart.apps['accounts'].masquerade) {
+                account_id = winkstart.apps['accounts'].masquerade[0];
+            }
+
             winkstart.request('numbers_manager.get_account', {
-                    account_id: winkstart.apps['numbers'].account_id,
+                    account_id: account_id,
                     api_url: winkstart.apps['numbers'].api_url,
                 },
                 function(_data, status) {

@@ -19,7 +19,7 @@ winkstart.module('voip', 'vmbox', {
         validation : [
             { name: '#name',    regex: /^[a-zA-Z0-9\s_']+$/ },
             { name: '#mailbox', regex: /^[0-9]+$/ },
-            { name: '#pin',     regex: /^[0-9]+$/ }
+            { name: '#pin',     regex: /^[0-9]{4,}$/ }
         ],
 
         resources: {

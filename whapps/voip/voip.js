@@ -4,8 +4,7 @@ winkstart.module('voip', 'voip', {
         },
 
         templates: {
-            voip: 'tmpl/voip.html',
-            voip_welcome: 'tmpl/voip_welcome.html'
+            voip: 'tmpl/voip.html'
         },
 
         subscribe: {
@@ -207,7 +206,7 @@ winkstart.module('voip', 'voip', {
                     }
                 },
                 welcome_html = $('#ws-content').empty()
-                                               .append(THIS.templates.voip_welcome.tmpl(data_default)),
+                                               .append(THIS.templates.voip.tmpl(data_default)),
                 account_id = data.account_id;
 
             $('[data-module]', welcome_html).click(function() {
