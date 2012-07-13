@@ -10,7 +10,9 @@
                                 {{if selected == key}}
                                     <option value="${key}" SELECTED>${val}</option>
                                 {{else}}
+                                    {{if val != '#'}}
                                     <option value="${key}">${val}</option>
+                                    {{/if}}
                                 {{/if}}
                             {{/each}}
                         </select>

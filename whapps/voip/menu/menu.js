@@ -511,6 +511,10 @@ winkstart.module('voip', 'menu', {
                     key_edit: function(child_node, callback) {
                         var popup, popup_html;
 
+                        /* The '#' Key is not available anymore but we let it here so that it doesn't break existing callflows.
+                           The '#' Key is only displayed if it exists in the callflow, otherwise it is hidden by the template (see /tmpl/menu_key_callflow.html)
+                        */
+
                         popup_html = THIS.templates.menu_key_callflow.tmpl({
                             items: {
                                 '_': 'Default action',
