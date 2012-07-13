@@ -285,7 +285,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
                                                     if(typeof callbacks.after_render == 'function') {
                                                         callbacks.after_render();
-                                                    }  
+                                                    }
                                                 }
                                             );
                                         }
@@ -511,7 +511,11 @@ winkstart.module('accounts', 'accounts_manager', {
             var THIS = this,
                 data_tmpl = {
                     credits: data.credits.amount,
-                    limits: data.limits
+                    limits: data.limits,
+                    extra: {
+                        inbound_trunks_price: winkstart.config.inbound_trunks_price || '$6.99',
+                        twoway_trunks_price: winkstart.config.twoway_trunks_price || '$29.99'
+                    }
                 },
                 credits_html = THIS.templates.credits.tmpl(data_tmpl),
                 popup;
