@@ -397,6 +397,39 @@
         str += "\n}</pre>";
 
         return str;  
+    },
+
+    winkstart.jsonToString = function(obj) {
+
+        var objToString = function(arr, level) {
+                var dumped_text = "";
+
+                if(!level) level = 0;
+
+                if(typeof(arr) == 'object') { 
+                    for(var item in arr) {
+                        var value = arr[item];
+                 
+                        if(typeof(value) == 'object') { 
+                           dumped_text +=  '"' + item + '": {';
+                           dumped_text += objToString(value, level+1);
+                           dumped_text +=  "}, ";
+                        } else {
+                           dumped_text += '"' + item + '": "' + value + '", ';
+                        }
+                    }
+                } else { 
+                    dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
+                }
+
+                return dumped_text;
+            },
+            str = "";
+
+        str += objToString(obj);
+
+        return str;
+
     }
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

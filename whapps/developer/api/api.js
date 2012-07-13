@@ -68,19 +68,21 @@ winkstart.module('developer', 'api', {
             return obj;
         },
 
-        send_request: function(api, verb, success, failed) {
+        send_request: function(api, verb, data, success, failed) {
             var THIS = this,
                 request = {
                     account_id: winkstart.apps['developer'].account_id,
                     api_url: winkstart.apps['developer'].api_url,
                 },
-                data = THIS.clean_form(form2object(api + "_" + verb + "_form"));
+                _data = {};
+                
+            $.extend(true, _data, data);
 
-            if(data.id) {
-                request.id = data.id;
-                delete data.id;
+            if(_data.id) {
+                request.id = _data.id;
+                delete _data.id;
             }
-            request.data = data
+            request.data = _data
 
             if(typeof success == "function" && typeof failed == "function") {
                 winkstart.request('developer.' + api + '.' + verb, 
@@ -89,6 +91,51 @@ winkstart.module('developer', 'api', {
                     failed
                 );
             }    
+        },
+
+        build_url: function(api, id, verb, data) {
+            var THIS = this,
+                url = "";
+
+            url += winkstart.apps['developer'].api_url;
+            url += THIS.apis[api].ressources['developer.' + id + "." + verb].url
+                        .substr(9)
+                        .replace("{account_id}", winkstart.apps['developer'].account_id)
+                        .replace("{id}", data.id);
+
+            return url;
+        },
+
+        build_curl: function(verb, url, data) {
+            var THIS = this,
+                curl = "",
+                rest = {
+                    get_all: 'GET',
+                    get: 'GET',
+                    put: 'PUT',
+                    post: 'POST',
+                    'delete': 'DELETE' 
+                },
+                _data = {};
+
+            curl += 'curl -i -H "Accept: application/json" -H "Content-Type: application/json"'; 
+            curl += ' -H "X-Auth-Token: ' + winkstart.apps['developer'].auth_token + '"';
+            curl += ' -X ' + rest[verb];
+
+            $.extend(true, _data, data);
+            delete _data.id;
+
+            if(Object.getOwnPropertyNames(_data).length != 0) {
+                var obj = {
+                    "data": data, 
+                    "verb": rest[verb]
+                };
+                curl += ' -d \' {' + winkstart.jsonToString(obj) + '}\'';
+            }
+
+            curl += ' ' + url;
+
+            return curl;
         },
 
         render_api: function(args) {
@@ -139,24 +186,28 @@ winkstart.module('developer', 'api', {
 
                         $('.try', form_html).click(function(e) {
                             e.preventDefault();
+
                             var id = $(this).data('id'),
                                 verb = $(this).data('verb'),
                                 id_verb = id + "_" + verb,
-                                url = winkstart.apps['developer'].api_url + 
-                                    THIS.apis[data.data.id].ressources['developer.' + id + "." + verb].url.substr(9),
-                                print_result = function(_data) {
+                                form_data = THIS.clean_form(form2object(id_verb + "_form")),
+                                url = THIS.build_url(data.data.id, id, verb, form_data),
+                                curl = THIS.build_curl(verb, url, form_data);
+                                
+                            var print_result = function(_data) {
                                     $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
                                         .append('<pre>URL: ' + url + '</pre>')
-                                        .append(winkstart.print_r(_data));
+                                        .append(winkstart.print_r(_data))
+                                        .append('<pre>' + curl + '</pre>');
                                     
                                     $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
                                 };
 
-                            winkstart.publish('api.request', $(this).data('id'), $(this).data('verb'), 
+                            winkstart.publish('api.request', id, verb, form_data,
                                 function(_data, status) {
-                                     print_result(_data);
+                                    print_result(_data);
                                 },
                                 function(_data, status) {
                                     print_result(_data);
@@ -207,6 +258,7 @@ winkstart.module('developer', 'api', {
 
                     });
 
+                    //Uggly Fix ...
                     $('#accounts_get .id', form_html).remove();
 
                     $('#api-view')
