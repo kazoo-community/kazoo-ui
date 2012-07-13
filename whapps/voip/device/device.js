@@ -13,7 +13,8 @@ winkstart.module('voip', 'device', {
             sip_device: 'tmpl/edit.html',
             fax: 'tmpl/fax.html',
             device_callflow: 'tmpl/device_callflow.html',
-            device_threshold: 'tmpl/device_threshold.html'
+            device_threshold: 'tmpl/device_threshold.html',
+            sip_uri: 'tmpl/sip_uri.html'
         },
 
         subscribe: {
@@ -24,6 +25,13 @@ winkstart.module('voip', 'device', {
         },
 
         validation: {
+            sip_uri: [
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#sip_url',             regex: /^(sip:)(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/}
+
+
+            ],
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mac_address',               regex: /^(((\d|([a-f]|[A-F])){2}:){5}(\d|([a-f]|[A-F])){2})$|^$|^(((\d|([a-f]|[A-F])){2}-){5}(\d|([a-f]|[A-F])){2})$|^(((\d|([a-f]|[A-F])){2}){5}(\d|([a-f]|[A-F])){2})$/ },
