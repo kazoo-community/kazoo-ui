@@ -56,7 +56,7 @@
 .dataTables_length {
 	width: 40%;
 	float: left;
-    margin-bottom: 18px;
+    margin: 5px 0 18px 0;
     color: #BCB5AB;
 }
 
