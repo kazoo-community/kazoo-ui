@@ -236,7 +236,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
                     if(typeof data == 'object' && data.id) {
                         var render = function() {
-                            winkstart.request(true, 'accounts_manager.get', {
+                            winkstart.request('accounts_manager.get', {
                                     account_id: data.id,
                                     api_url: winkstart.apps['accounts'].api_url
                                 },
