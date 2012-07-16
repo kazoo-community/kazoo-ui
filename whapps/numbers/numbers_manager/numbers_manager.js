@@ -211,7 +211,7 @@ winkstart.module('numbers', 'numbers_manager', {
         search_numbers: function(data, success, error) {
             var THIS = this;
 
-            winkstart.request('numbers_manager.search', {
+            winkstart.request(true, 'numbers_manager.search', {
                     api_url: winkstart.apps['numbers'].api_url,
                     prefix: data.prefix,
                     quantity: data.quantity || 15
