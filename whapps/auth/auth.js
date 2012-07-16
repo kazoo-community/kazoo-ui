@@ -11,7 +11,8 @@ winkstart.module('auth', 'auth',
             new_login: 'tmpl/new_login.html',
             register: 'tmpl/register.html',
             new_password: 'tmpl/new_password.html',
-            code: 'tmpl/code.html'
+            code: 'tmpl/code.html',
+            landing: 'tmpl/landing.html'
         },
 
         subscribe: {
@@ -25,6 +26,7 @@ winkstart.module('auth', 'auth',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
             'auth.save_registration' : 'save_registration',
+            'auth.landing': 'landing',
             'core.loaded': 'core_loaded'
         },
 
@@ -520,6 +522,16 @@ winkstart.module('auth', 'auth',
             });
         },
 
+        landing: function(parent) {
+            var THIS = this,
+                parent = parent || $('.ws-content'),
+                landing_html = THIS.templates.landing.tmpl();
+
+            parent
+                .empty()
+                .append(landing_html);
+        },
+
         load_account: function(args) {
             winkstart.log('Loading your apps!');
             var THIS = this,
@@ -529,6 +541,9 @@ winkstart.module('auth', 'auth',
                     api_url : winkstart.apps['auth'].api_url,
                     user_id : winkstart.apps['auth'].user_id
                 };
+
+
+            winkstart.publish('auth.landing', $('.ws-content'));
 
             THIS.get_account(
                 function(_data) {

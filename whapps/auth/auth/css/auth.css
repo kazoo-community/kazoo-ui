@@ -155,6 +155,11 @@
     color: #05ADDC;
 }
 
+#landing_page {
+    margin: 30px auto auto;
+    width: 940px;
+}
 
-
-
+#landing_page .title p {
+    width: 853px;
+}

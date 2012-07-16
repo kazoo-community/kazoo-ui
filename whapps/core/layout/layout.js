@@ -84,13 +84,17 @@ winkstart.module('core', 'layout', {
 
             $("#loading").ajaxStart(function(){
                 $(this).show();
-             }).ajaxStop(function(){
+            }).ajaxStop(function(){
                 $(this).hide();
-             }).ajaxError(function(){
+            }).ajaxError(function(){
                 if($.active === 0) {
                     $(this).hide();
                 }
-             });
+            });
+
+            $('#ws-topbar .brand.logo', layout_html).click(function() {
+                winkstart.publish('auth.landing');
+            });
 
             winkstart.request('layout.get_logo', {
                     api_url: api_url,
