@@ -485,7 +485,28 @@ winkstart.module('auth', 'onboarding', {
         load_step3: function(data, parent) {
             var THIS = this,
                 current_step = 3,
-                onboard_html = parent;
+                onboard_html = parent,
+                valid_email = function() {
+                    var e1 = $('#email', onboard_html),
+                        e2 = $('#verify_email', onboard_html);
+
+                    if(e1.val() != e2.val()) {
+                        e2.parent('.validated')
+                            .removeClass('valid')
+                            .addClass('invalid');
+                    } else {
+                        e2.parent('.validated').removeClass('invalid');
+                    }
+                };
+
+
+            $('#email', onboard_html).bind('keyup blur onchange', function() {
+                valid_email();
+            });
+
+            $('#verify_email', onboard_html).bind('keyup blur onchange', function() {
+                valid_email();
+            });
 
             $('#name', onboard_html).bind('keyup blur onchange', function() {
                 $('.your_extension', onboard_html).text($(this).val());
