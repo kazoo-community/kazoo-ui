@@ -2,9 +2,9 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit VoIP Phone</h1>
+                <h1>Edit Fax</h1>
             {{else}}
-            	<h1>Add a VoIP Phone</h1>
+            	<h1>Create Fax</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
 				<button class="btn black basic activate">Basic</button>
@@ -17,9 +17,6 @@
 		 	<li class="active"><a href="#basic">Basic</a></li>
 		 	<li><a href="#caller_id">Caller ID</a></li>
 		 	<li><a href="#sip_settings">SIP Settings</a></li>
-		 	<li><a href="#audio_settings">Audio Settings</a></li>
-		 	<li><a href="#video_settings">Video Settings</a></li>
-		 	<li><a href="#fax_support">Fax Support</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
 			<div class="pill-content">
@@ -194,105 +191,9 @@
 						</div>
 					</div>
 				</div>
-
-				<div id="audio_settings">
-					<div class="clearfix">
-						<label for="music_on_hold">Music on Hold</label>
-						<div class="input">
-							<span rel="popover" data-content="Select the media file that you want to be played by default when it\'s not set on a user or a device.">
-								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
-									{{each field_data.music_on_hold}}
-	                                    {{if data.music_on_hold.media_id == id}}
-	                                    <option id="${id}" value="${id}" selected="selected">${name}</option>
-	                                    {{else}}
-	                                    <option id="${id}" value="${id}">${name}</option>
-	                                    {{/if}}
-	                            	{{/each}}
-								</select>
-								<div class="edit_create">
-									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
-								</div>
-							</span>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="media_bypass_media">Peer to Peer Audio</label>
-						<div class="input">
-							<select name="media.bypass_media" id="media_bypass_media" class="medium" rel="popover" data-content="Select the kind of Peer-to-Peer that you would like to set on this device">
-								{{each(key, val) field_data.media.bypass_media_options}}
-                                    {{if data.media.bypass_media == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
-                                    {{/if}}
-                                {{/each}}
-							</select>
-						</div>
-					</div>
-
-					{{each(key, val) field_data.media.audio.codecs}}
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-									<li>
-										<label>
-											{{if functions.inArray(key, data.media.audio.codecs) }}
-							                    <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" checked="checked" rel="popover" data-content="" value="${key}"/>
-							                {{else}}
-							                    <input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" rel="popover" data-content="" value="${key}"/>
-							                {{/if}}
-							                <span>${val}</span>
-							            </label>
-							        </li>
-							    </ul>
-							</div>
-						</div>
-					{{/each}}
-				</div>
-
-				<div id="video_settings">
-					{{each(key, val) field_data.media.video.codecs}}
-						<div class="clearfix">
-							<div class="input">
-								<ul class="inputs-list">
-									<li>
-										<label>
-											{{if functions.inArray(key, data.media.video.codecs) }}
-							                    <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" checked="checked" rel="popover" data-content="" value="${key}"/>
-							                {{else}}
-							                    <input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" rel="popover" data-content="" value="${key}"/>
-							                {{/if}}
-							                <span>${val}</span>
-							            </label>
-							        </li>
-							    </ul>
-							</div>
-						</div>
-					{{/each}}
-				</div>
-
-				<div id="fax_support">
-					<div class="clearfix">
-						<label for="media_fax_option">T.38</label>
-						<div class="input">
-							<select name="media.fax_option" id="media_fax_option" class="medium" rel="popover" data-content="Do you want to enable T-38 for this device">
-								{{each(key, val) field_data.media.fax.options}}
-                                    {{if data.media.fax_option == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
-                                    {{/if}}
-                                {{/each}}
-							</select>
-						</div>
-					</div>
-
-					
-                	<input type="hidden" name="media.fax.option" value="false"/>
-				</div>
 			</div>
+
+			<input type="hidden" value="true" name="media.fax.option"/>
 		</form>
 		<div class="buttons-right">
 	        {{if data.id}}

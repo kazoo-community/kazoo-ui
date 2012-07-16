@@ -87,7 +87,9 @@ winkstart.module('core', 'layout', {
              }).ajaxStop(function(){
                 $(this).hide();
              }).ajaxError(function(){
-                $(this).hide();
+                if($.active === 0) {
+                    $(this).hide();
+                }
              });
 
             winkstart.request('layout.get_logo', {

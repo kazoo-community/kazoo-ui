@@ -2,9 +2,9 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Smartphone</h1>
+                <h1>Edit Smart Phone</h1>
             {{else}}
-            	<h1>Create Smartphone</h1>
+            	<h1>Add a Smart Phone</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
 				<button class="btn black basic activate">Basic</button>
@@ -16,6 +16,7 @@
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
 		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li><a href="#sip_settings">Wifi Calling</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
 			<div class="pill-content">
@@ -119,7 +120,67 @@
 						    </ul>
 						</div>
 					</div>
-				</div>	
+				</div>
+
+				<div id="sip_settings">
+					<div class="clearfix">
+						<label for="sip_realm">Realm</label>
+						<div class="input">
+							<span class="uneditable-input">${field_data.sip.realm}</span>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_method">Authentication Method</label>
+						<div class="input">
+							<select name="sip.method" id="sip_method" class="medium" rel="popover" data-content="Select your authentication method">
+								{{each(key, val) field_data.sip.methods}}
+                                    {{if data.sip.method == key}}
+                                        <option value="${key}" selected="selected">${val}</option>
+                                    {{else}}
+                                        <option value="${key}">${val}</option>
+                                    {{/if}}
+                                {{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_username">Username</label>
+						<div class="input">
+							<input class="span4" id="sip_username" name="sip.username" type="text" placeholder="Username" value="${data.sip.username}" rel="popover" data-content="Enter your SIP Username"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_password">Password</label>
+						<div class="input">
+							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_invite_format">Invite Format</label>
+						<div class="input">
+							<select name="sip.invite_format" id="sip_invite_format" class="medium" rel="popover" data-content="Enter your SIP Invite Format">
+								{{each(key, val) field_data.sip.invite_formats}}
+                                    {{if data.sip.invite_format == key}}
+                                        <option value="${key}" selected="selected">${val}</option>
+                                    {{else}}
+                                        <option value="${key}">${val}</option>
+                                    {{/if}}
+                                {{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_expire_seconds">Expire Seconds</label>
+						<div class="input">
+							<input class="span4" id="sip_expire_seconds" name="sip.expire_seconds" type="text" placeholder="Expire Seconds" value="${data.sip.expire_seconds}" rel="popover" data-content="Enter the expiration time of this device (in seconds)"/>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 		<div class="buttons-right">

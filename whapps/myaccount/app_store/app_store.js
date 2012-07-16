@@ -113,7 +113,10 @@ winkstart.module('myaccount', 'app_store', {
                         _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
 
                         $.each(_data.data.available_apps, function(k, v) {
-                            data.available_apps[k] = winkstart.config.available_apps[v];
+                            if(v in winkstart.config.available_apps) {
+                                data.available_apps[k] = winkstart.config.available_apps[v];
+                            }
+                            
                         });
 
                         var app_store_html = THIS.templates.app_store.tmpl(data),

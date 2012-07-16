@@ -181,6 +181,22 @@
     background-position: -192px -163px;
 }
 
+.icon.cellphone {
+    background-position: 5px -163px;
+}
+
+.icon.landline {
+    background-position: -192px -165px;
+}
+
+.icon.sip_device {
+    background-position: -511px -165px;
+}
+
+.icon.softphone {
+    background-position: -640px -165px;
+}
+
 .icon.legal {
     background-position: -736px -323px;
 }
