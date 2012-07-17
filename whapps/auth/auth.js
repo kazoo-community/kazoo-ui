@@ -5,7 +5,6 @@ winkstart.module('auth', 'auth',
         ],
 
         templates: {
-            thankyou: 'tmpl/thankyou.html',
             recover_password: 'tmpl/recover_password.html',
             login: 'tmpl/login.html',
             new_login: 'tmpl/new_login.html',

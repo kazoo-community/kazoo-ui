@@ -214,7 +214,10 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        whitelabel: {},
+                        whitelabel: {
+                            nav: {},
+                            port: {}
+                        },
                         available_apps: []
                     },
                     functions: {
@@ -719,23 +722,18 @@ winkstart.module('accounts', 'accounts_manager', {
                                         api_url: winkstart.apps['accounts'].api_url
                                     },
                                     function(_data, status) {
-                                        if(_data.data.domain != whitelabel_data.domain || _data.data.company_name != whitelabel_data.company_name) {
-                                            whitelabel_data = $.extend({}, _data.data, whitelabel_data);
+                                        whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
-                                            winkstart.request('whitelabel.update', {
-                                                    account_id: account_id,
-                                                    api_url: winkstart.apps['accounts'].api_url,
-                                                    data: whitelabel_data
-                                                },
-                                                function(_data, status) {
-                                                    upload_file();
-                                                },
-                                                winkstart.error_message.process_error()
-                                            );
-                                        }
-                                        else {
-                                            upload_file();
-                                        }
+                                        winkstart.request('whitelabel.update', {
+                                                account_id: account_id,
+                                                api_url: winkstart.apps['accounts'].api_url,
+                                                data: whitelabel_data
+                                            },
+                                            function(_data, status) {
+                                                upload_file();
+                                            },
+                                            winkstart.error_message.process_error()
+                                        );
                                     },
                                     function(_data, status) {
                                         if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
