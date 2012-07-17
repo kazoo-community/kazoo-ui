@@ -20,14 +20,12 @@ winkstart.module('myaccount', 'nav', {
     },
     {
         activate: function(user_data) {
-            var THIS = this;
-
-            (user_data.first_name) ? user_name = user_data.first_name + ' ' + user_data.last_name : user_name = user_data;
-
-            var container = THIS.templates.myaccount_navbar.tmpl({
-                user_name: user_name,
-                company_name: winkstart.config.company_name
-            });
+            var THIS = this,
+                user_name = (user_data.first_name) ? user_data.first_name + ' ' + user_data.last_name : user_data,
+                container = THIS.templates.myaccount_navbar.tmpl({
+                    user_name: user_name,
+                    company_name: user_data.account_name
+                });
 
             $('#help_link', container).attr('href', winkstart.config.nav.help || 'http://www.2600hz.org/support.html');
 

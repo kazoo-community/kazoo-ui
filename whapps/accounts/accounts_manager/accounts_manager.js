@@ -214,7 +214,10 @@ winkstart.module('accounts', 'accounts_manager', {
                     }, data_defaults || {}),
                     field_data: {
                         billing_account: 'parent',
-                        whitelabel: {},
+                        whitelabel: {
+                            nav: {},
+                            port: {}
+                        },
                         available_apps: []
                     },
                     functions: {
@@ -236,7 +239,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
                     if(typeof data == 'object' && data.id) {
                         var render = function() {
-                            winkstart.request(true, 'accounts_manager.get', {
+                            winkstart.request('accounts_manager.get', {
                                     account_id: data.id,
                                     api_url: winkstart.apps['accounts'].api_url
                                 },
@@ -256,7 +259,10 @@ winkstart.module('accounts', 'accounts_manager', {
                                             tmp.enabled = false;
                                         }
 
-                                        $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                        if(winkstart.config.available_apps[v]) {
+                                            $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                        }
+                                        
 
                                         render_data.field_data.available_apps.push(tmp);
                                     });
@@ -285,7 +291,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
                                                     if(typeof callbacks.after_render == 'function') {
                                                         callbacks.after_render();
-                                                    }  
+                                                    }
                                                 }
                                             );
                                         }
@@ -316,7 +322,9 @@ winkstart.module('accounts', 'accounts_manager', {
                         defaults.field_data.available_apps = [];
 
                         $.each(_data_account.data.available_apps, function(k, v) {
-                            defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                            if(winkstart.config.available_apps[v]) {
+                                defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                            }
                         });
 
                         defaults.limits = {
@@ -511,7 +519,11 @@ winkstart.module('accounts', 'accounts_manager', {
             var THIS = this,
                 data_tmpl = {
                     credits: data.credits.amount,
-                    limits: data.limits
+                    limits: data.limits,
+                    extra: {
+                        inbound_trunks_price: winkstart.config.inbound_trunks_price || '$6.99',
+                        twoway_trunks_price: winkstart.config.twoway_trunks_price || '$29.99'
+                    }
                 },
                 credits_html = THIS.templates.credits.tmpl(data_tmpl),
                 popup;
@@ -715,23 +727,18 @@ winkstart.module('accounts', 'accounts_manager', {
                                         api_url: winkstart.apps['accounts'].api_url
                                     },
                                     function(_data, status) {
-                                        if(_data.data.domain != whitelabel_data.domain || _data.data.company_name != whitelabel_data.company_name) {
-                                            whitelabel_data = $.extend({}, _data.data, whitelabel_data);
+                                        whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
-                                            winkstart.request('whitelabel.update', {
-                                                    account_id: account_id,
-                                                    api_url: winkstart.apps['accounts'].api_url,
-                                                    data: whitelabel_data
-                                                },
-                                                function(_data, status) {
-                                                    upload_file();
-                                                },
-                                                winkstart.error_message.process_error()
-                                            );
-                                        }
-                                        else {
-                                            upload_file();
-                                        }
+                                        winkstart.request('whitelabel.update', {
+                                                account_id: account_id,
+                                                api_url: winkstart.apps['accounts'].api_url,
+                                                data: whitelabel_data
+                                            },
+                                            function(_data, status) {
+                                                upload_file();
+                                            },
+                                            winkstart.error_message.process_error()
+                                        );
                                     },
                                     function(_data, status) {
                                         if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {

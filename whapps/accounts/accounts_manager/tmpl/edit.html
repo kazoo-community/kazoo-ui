@@ -199,16 +199,25 @@
                             </ul>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div id="white_labeling">
+                    <h3>General</h3>
                     <div class="clearfix">
                         <label for="white_label_company_name">Company Name</label>
                         <div class="input">
                             <input class="span4" id="white_label_company_name" name="whitelabel.company_name" type="text" placeholder="Company Name" value="${field_data.whitelabel.company_name}" rel="popover" data-content="The company name that you want to display wherever a company name is used in the GUI."/>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_nav_help">Help link</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_nav_help" name="whitelabel.nav.help" type="text" placeholder="http://mycompany.com/help" value="${field_data.whitelabel.nav.help}" rel="popover" data-content="The link you want to go to when a user click on the top right Help image."/>
+                        </div>
+                    </div>
+
                     <div class="clearfix">
                         <label for="white_label_domain">Domain</label>
                         <div class="input">
@@ -236,8 +245,57 @@
                     {{else}}
                     </div>
                     {{/if}}
+
+                    <hr/>
+                    <h3>Porting</h3>
+
                     <div class="clearfix">
-                        <span class="refresh_text">In order to see these changes, refresh the page!</span>
+                        <label for="white_label_port_loa">Letter of Authorization</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_port_loa" name="whitelabel.port.loa" type="text" placeholder="http://mycompany.com/loa" value="${field_data.whitelabel.port.loa}" rel="popover" data-content="The link to access the letter of authorization in order to port a number (from PBX Connector or Number Manager)."/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_port_support_email">Support Email</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_port_support_email" name="whitelabel.port.support_email" type="text" placeholder="support@mycompany.com" value="${field_data.whitelabel.port.support_email}" rel="popover" data-content="Support Email to display in the Port Number popup."/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_port_features">Features</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_port_features" name="whitelabel.port.features" type="text" placeholder="http://mycompany.com/features" value="${field_data.whitelabel.port.features}" rel="popover" data-content="Address explaining what is a feature in the Port Number popup."/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_port_terms">Terms</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_port_terms" name="whitelabel.port.terms" type="text" placeholder="http://mycompany.com/terms" value="${field_data.whitelabel.port.terms}" rel="popover" data-content="The link to access the Terms and Conditions related to porting."/>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <h3>Trunks</h3>
+
+                    <div class="clearfix">
+                        <label for="white_label_inbound_trunks_price">Inbound Trunks Price</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_inbound_trunks_price" name="whitelabel.inbound_trunks_price" type="text" placeholder="$6.99" value="${field_data.whitelabel.inbound_trunks_price}" rel="popover" data-content="Price displayed for inbound trunks in the popup to manage your limits."/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_twoway_trunks_price">Twoway Trunks Price</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_twoway_trunks_price" name="whitelabel.twoway_trunks_price" type="text" placeholder="$29.99" value="${field_data.whitelabel.twoway_trunks_price}" rel="popover" data-content="Price displayed for twoway trunks in the popup to manage your limits."/>
+                        </div>
+                    </div>
+
+                    <div class="refresh_text clearfix">
+                        In order to see these changes, refresh the page once you saved this account!
                     </div>
                 </div>
 

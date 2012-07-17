@@ -211,7 +211,7 @@ winkstart.module('numbers', 'numbers_manager', {
         search_numbers: function(data, success, error) {
             var THIS = this;
 
-            winkstart.request('numbers_manager.search', {
+            winkstart.request(true, 'numbers_manager.search', {
                     api_url: winkstart.apps['numbers'].api_url,
                     prefix: data.prefix,
                     quantity: data.quantity || 15
@@ -864,6 +864,8 @@ winkstart.module('numbers', 'numbers_manager', {
             var THIS = this,
                 port_form_data = {},
                 popup_html = THIS.templates.port_dialog.tmpl({
+                    company_name: winkstart.config.company_name || '2600hz',
+                    support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
                     support_file_upload: (File && FileReader)
                 }),
                 popup,
@@ -875,6 +877,11 @@ winkstart.module('numbers', 'numbers_manager', {
                 $prev_step = $('.prev_step', popup_html),
                 $next_step = $('.next_step', popup_html),
                 $submit_btn = $('.submit_btn', popup_html);
+
+            /* White label links, have to do it in JS because template doesn't eval variables in href :( */
+            $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://www.2600hz.com/loa');
+            $('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
+            $('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
             $('.step_div:not(.first)', popup_html).hide();
             $prev_step.hide();

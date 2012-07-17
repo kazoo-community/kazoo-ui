@@ -1,19 +1,13 @@
-winkstart.module('skeleton', 'skeleton', {
-        css: {
-            skeleton: 'css/skeleton.css'
-        },
-
-        templates: {
-            skeleton: 'tmpl/skeleton.html'
-        },
-
+    winkstart.module('portal', 'portal', {
         subscribe: {
-            'skeleton.activate' : 'activate',
-            'skeleton.initialized' : 'initialized',
-            'skeleton.module_activate': 'module_activate'
+            'portal.activate' : 'activate',
+            'portal.initialized' : 'initialized',
+            'portal.module_activate': 'module_activate'
         }
     },
-
+    /* The code in this initialization function is required for
+     * loading routine.
+     */
     function() {
         var THIS = this;
 
@@ -40,32 +34,20 @@ winkstart.module('skeleton', 'skeleton', {
         THIS.whapp_auth(function() {
             winkstart.publish('whappnav.add', {
                 name: THIS.__module,
-                weight: 0 /* TODO: Whapps are displayed from left to right depending on their weight (higher weight are on the right) */
+                weight: 30
             });
 
-            //This disables lazy loading
             THIS.initialization_check();
         });
 
-        THIS.whapp_config();
-
-        winkstart.publish('skeleton.loaded');
+        //THIS.whapp_config();
+        //winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
     {
-        /* A modules object is required for the loading routine.
-         * The format is as follows:
-         * <module name>: <initialization status>
-         */
         modules: {
-            'sub_module': false
+            'portal_manager': false
         },
 
-        /* The following code is generic and should be abstracted.
-         * For the time being, you can just copy and paste this
-         * into other whapps.
-         *
-         * BEGIN COPY AND PASTE CODE
-         */
         is_initialized: false,
 
         uninitialized_count: 1337,
@@ -75,8 +57,7 @@ winkstart.module('skeleton', 'skeleton', {
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['skeleton']['default']) {
-                $('[data-whapp="skeleton"] > a').addClass('activate');
+            if(winkstart.apps['portal'].default){
                 THIS.setup_page();
             }
         },
@@ -100,7 +81,7 @@ winkstart.module('skeleton', 'skeleton', {
                         winkstart.module(THIS.__module, k).init(function() {
                             winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                            if(!(--THIS.uninitialized_count)) {
+                            if(!--THIS.uninitialized_count) {
                                 winkstart.publish(THIS.__module + '.initialized', {});
                             }
                         });
@@ -109,6 +90,7 @@ winkstart.module('skeleton', 'skeleton', {
             } else {
                 THIS.setup_page();
             }
+
         },
 
         module_activate: function(args) {
@@ -143,23 +125,13 @@ winkstart.module('skeleton', 'skeleton', {
             return count;
         },
 
-        whapp_config: function() {
-            var THIS = this;
-
-            /* Uncomment if you want this whapp to be masqueradable
-            winkstart.apps['skeleton'] = $.extend(true, {
-                is_masqueradable: true
-            }, winkstart.apps['skeleton']);
-            */
-        },
-
-        /* A setup_page function is required for the copy and paste code */
         setup_page: function() {
             var THIS = this;
 
-            $('#ws-content').empty()
-                            .append(THIS.templates.skeleton.tmpl());
+            $('#ws-content').empty();
+
+            //We want to load the voicemail module as the opening page of the portal
+            winkstart.publish('portal.module_activate', {name: 'portal_manager'});
         }
-        /* End copy and paste */
     }
 );

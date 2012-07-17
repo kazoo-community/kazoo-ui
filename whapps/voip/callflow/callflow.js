@@ -143,7 +143,12 @@ winkstart.module('voip', 'callflow', {
             $('.buttons').empty();
 
             $('.save', buttons_html).click(function() {
-                THIS.save();
+                if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
+                    THIS.save();
+                }
+                else {
+                    winkstart.alert('Invalid number! <br/><br/>Please select a valid number by click in the grey boxes of the Callflow box.');
+                }
             });
 
             $('.delete', buttons_html).click(function() {
@@ -564,19 +569,8 @@ winkstart.module('voip', 'callflow', {
                                         THIS.renderFlow();
                                     };
 
-                                if(number !== 'select_none') {
-                                    if(number == '') {
-                                        winkstart.confirm('Are you sure that you want to add an empty number?', function() {
-                                                add_number();
-                                            },
-                                            function() {
-                                                return;
-                                            }
-                                        );
-                                    }
-                                    else {
-                                        add_number();
-                                    }
+                                if(number !== 'select_none' && number !== '') {
+                                    add_number();
                                 }
                                 else {
                                     winkstart.alert('You didn\'t select a valid phone number.');
