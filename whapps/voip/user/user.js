@@ -445,8 +445,6 @@ winkstart.module('voip', 'user', {
                                     account_id: winkstart.apps['voip'].account_id,
                                 },
                                 function(_data, status) {
-
-                                        console.log(form_data);
                                     if(form_data.priv_level == 'admin') {
                                         form_data.apps = form_data.apps || {};
                                         if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {

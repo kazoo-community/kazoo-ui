@@ -143,7 +143,6 @@ winkstart.module('voip', 'callflow', {
             $('.buttons').empty();
 
             $('.save', buttons_html).click(function() {
-                console.log(THIS.flow.numbers);
                 if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
                     THIS.save();
                 }

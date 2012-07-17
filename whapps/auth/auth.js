@@ -86,6 +86,11 @@ winkstart.module('auth', 'auth',
                 url: '{api_url}/onboard/invite/{invite_code}',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'auth.get_account': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -122,6 +127,24 @@ winkstart.module('auth', 'auth',
 
     {
         request_realm : false,
+
+        get_account: function(success, error) {
+            winkstart.request('auth.get_account', {
+                    api_url: winkstart.apps['auth'].api_url,
+                    account_id: winkstart.apps['auth'].account_id
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
+        },
 
         core_loaded: function() {
             if(URL_DATA['activation_key']) {
@@ -388,7 +411,7 @@ winkstart.module('auth', 'auth',
                         }
                     );
                 }
-                
+
             });
 
             $('a.recover_password', contentDiv).click(function(e) {
@@ -499,40 +522,55 @@ winkstart.module('auth', 'auth',
 
         load_account: function(args) {
             winkstart.log('Loading your apps!');
-            rest_data = {
-                crossbar : true,
-                account_id : winkstart.apps['auth'].account_id,
-                api_url : winkstart.apps['auth'].api_url,
-                user_id : winkstart.apps['auth'].user_id
-            }
+            var THIS = this,
+                rest_data = {
+                    crossbar : true,
+                    account_id : winkstart.apps['auth'].account_id,
+                    api_url : winkstart.apps['auth'].api_url,
+                    user_id : winkstart.apps['auth'].user_id
+                };
 
-            winkstart.getJSON('auth.get_user', rest_data,
-                function (json, xhr) {
-                    winkstart.publish('auth.account.loaded', json.data);
+            THIS.get_account(
+                function(_data) {
+                    winkstart.getJSON('auth.get_user', rest_data,
+                        function (json, xhr) {
+                            json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
 
-                    $.each(json.data.apps, function(k, v) {
-                        winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
-                        winkstart.apps[k] = v;
+                            winkstart.publish('auth.account.loaded', json.data);
 
-                        if(!('account_id' in v)) {
-                            winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+                            $.each(json.data.apps, function(k, v) {
+                                winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
+                                winkstart.apps[k] = v;
+
+                                if(!('account_id' in v)) {
+                                    winkstart.apps[k].account_id = winkstart.apps['auth'].account_id;
+                                }
+
+                                if(!('user_id' in v)) {
+                                    winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
+                                }
+
+                                winkstart.module.loadApp(k, function() {
+                                    this.init();
+                                    winkstart.log('WhApps: Initializing ' + k);
+                                });
+                            });
+
+                            if(json.data.require_password_update) {
+                                winkstart.publish('auth.new_password', json.data);
+                            }
+                        },
+                        function(data, status) {
+                            winkstart.alert('error', 'An error occurred while loading your account.',
+                                function() {
+                                    $.cookie('c_winkstart_auth', null);
+                                    window.location.reload();
+                                }
+                            );
                         }
-
-                        if(!('user_id' in v)) {
-                            winkstart.apps[k].user_id = winkstart.apps['auth'].user_id;
-                        }
-
-                        winkstart.module.loadApp(k, function() {
-                            this.init();
-                            winkstart.log('WhApps: Initializing ' + k);
-                        });
-                    });
-
-                    if(json.data.require_password_update) {
-                        winkstart.publish('auth.new_password', json.data);
-                    }
+                    );
                 },
-                function(data, status) {
+                function(_data) {
                     winkstart.alert('error', 'An error occurred while loading your account.',
                         function() {
                             $.cookie('c_winkstart_auth', null);
@@ -541,7 +579,6 @@ winkstart.module('auth', 'auth',
                     );
                 }
             );
-
         },
 
         shared_auth: function(args) {

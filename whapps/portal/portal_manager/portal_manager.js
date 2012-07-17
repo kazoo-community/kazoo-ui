@@ -921,8 +921,6 @@ winkstart.module('portal', 'portal_manager', {
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
                 normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
-            console.log(normalized_data);
-            $.error('stop');
             if(id) {
                 winkstart.request('user_device.update', {
                         account_id: winkstart.apps['portal'].account_id,
