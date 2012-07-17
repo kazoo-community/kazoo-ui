@@ -259,7 +259,10 @@ winkstart.module('accounts', 'accounts_manager', {
                                             tmp.enabled = false;
                                         }
 
-                                        $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                        if(winkstart.config.available_apps[v]) {
+                                            $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                        }
+                                        
 
                                         render_data.field_data.available_apps.push(tmp);
                                     });
@@ -319,7 +322,9 @@ winkstart.module('accounts', 'accounts_manager', {
                         defaults.field_data.available_apps = [];
 
                         $.each(_data_account.data.available_apps, function(k, v) {
-                            defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                            if(winkstart.config.available_apps[v]) {
+                                defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                            }
                         });
 
                         defaults.limits = {
