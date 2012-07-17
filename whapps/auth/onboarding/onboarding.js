@@ -486,27 +486,30 @@ winkstart.module('auth', 'onboarding', {
             var THIS = this,
                 current_step = 3,
                 onboard_html = parent,
-                valid_email = function() {
-                    var e1 = $('#email', onboard_html),
-                        e2 = $('#verify_email', onboard_html);
+                same = function(arr) {
+                    var e1 = arr[0],
+                        e2 = arr[1],
+                        valid = function() {
+                            if(e1.val() != e2.val()) {
+                                e2.parent('.validated')
+                                    .removeClass('valid')
+                                    .addClass('invalid');
+                            } else {
+                                e2.parent('.validated').removeClass('invalid');
+                            }
+                        };
 
-                    if(e1.val() != e2.val()) {
-                        e2.parent('.validated')
-                            .removeClass('valid')
-                            .addClass('invalid');
-                    } else {
-                        e2.parent('.validated').removeClass('invalid');
-                    }
+                    e1.bind('keyup blur onchange', function() {
+                        valid();
+                    });
+
+                    e2.bind('keyup blur onchange', function() {
+                        valid();
+                    });
                 };
 
-
-            $('#email', onboard_html).bind('keyup blur onchange', function() {
-                valid_email();
-            });
-
-            $('#verify_email', onboard_html).bind('keyup blur onchange', function() {
-                valid_email();
-            });
+            same([$('#email', onboard_html), $('#verify_email', onboard_html)]);
+            same([$('#password', onboard_html), $('#verify_password', onboard_html)]);
 
             $('#name', onboard_html).bind('keyup blur onchange', function() {
                 $('.your_extension', onboard_html).text($(this).val());
