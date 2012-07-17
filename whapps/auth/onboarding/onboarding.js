@@ -371,8 +371,9 @@ winkstart.module('auth', 'onboarding', {
                                     nb_result = _data.data.length;
                                     list_number = _data.data;
                                     prev_random = 0;
+                                    random = Math.floor(Math.random()*nb_result);
                                     prev_area_code = area_code;
-                                    number = list_number[0];
+                                    number = list_number[random];
                                     $('.pick_number_left', onboard_html).css('float', 'left');
                                     $('#picked_number', onboard_html).attr('data-number', number);
                                     $('#picked_number', onboard_html).show()
@@ -669,7 +670,7 @@ winkstart.module('auth', 'onboarding', {
                         THIS.clean_form_data(form_data, onboard_html);
 
                         form_data.invite_code = args.invite_code;
-                        
+
                         winkstart.request(true, 'onboard.create', {
                                 api_url: winkstart.apps['auth'].api_url,
                                 data: form_data
@@ -679,7 +680,7 @@ winkstart.module('auth', 'onboarding', {
                                     callback_fn;
 
                                 if(_data && _data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
-                                    
+
                                     var success = function() {
                                         $('#ws-content').empty();
                                         winkstart.apps['auth'].user_id = _data.data.owner_id;
@@ -710,14 +711,14 @@ winkstart.module('auth', 'onboarding', {
                                         */
                                         current_step = 1;
                                         THIS.move_to_step(1, onboard_html);
-                                        winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>' 
+                                        winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>'
                                             + winkstart.print_r(_data.data.errors));
 
-                                    } 
+                                    }
                                     else {
                                         success();
                                     }
-                                } 
+                                }
                                 else {
                                     winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
                                 }
@@ -725,7 +726,7 @@ winkstart.module('auth', 'onboarding', {
                             function (_data, status) {
                                 current_step = 1;
                                 THIS.move_to_step(1, onboard_html);
-                                winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>' 
+                                winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>'
                                             + winkstart.print_r(_data));
                             }
                         );
