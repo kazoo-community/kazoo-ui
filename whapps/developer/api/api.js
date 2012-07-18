@@ -195,11 +195,20 @@ winkstart.module('developer', 'api', {
                                 curl = THIS.build_curl(verb, url, form_data);
                                 
                             var print_result = function(_data) {
+                                var $curl = $('<pre>')
+                                                .append(curl)
+                                                .css({
+                                                    cursor: 'pointer'
+                                                })
+                                                .click(function() {
+                                                    prompt('Copy/Paste CURL Command', curl);
+                                                });
+
                                     $('#' + id_verb + ' .result_content', form_html)
                                         .empty()
                                         .append('<pre>URL: ' + url + '</pre>')
                                         .append(winkstart.print_r(_data))
-                                        .append('<pre>' + curl + '</pre>');
+                                        .append($curl);
                                     
                                     $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
