@@ -724,6 +724,10 @@ winkstart.module('voip', 'device', {
                 delete data.mac_address;
             }
 
+            if(data.sip.method != 'ip') {
+                delete data.sip.ip;
+            }
+
             return data;
         },
 
