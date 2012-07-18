@@ -128,6 +128,37 @@ winkstart.module('myaccount', 'billing', {
                 );
             });
 
+            $('#edit-billing', billing_html).click(function() {
+                var arr = ['company', 'phone', 'postal_code', 'firstname', 'lastname']
+                    billing_form_html = $('#billing-form');
+
+                
+                    billing_form_html
+                        .find('input')
+                        .each(function() {
+                            var $this = $(this);
+
+                            if($.inArray(this.id, arr) == -1 ) {
+                                $this
+                                    .val('')
+                                    .empty();
+                            }
+                            $this
+                                .removeClass("hide");
+                        });
+
+                billing_form_html
+                    .find('.uneditable-input')
+                    .each(function() {
+                        $(this).remove();
+                    });
+
+                $('#save-billing', billing_html)
+                    .removeClass("disabled")
+                    .removeAttr("disabled");
+            });
+
+
             $('#cardnbr', billing_html).change(function(){
                 var re = new RegExp("^4"),
                     number = $(this).val();
