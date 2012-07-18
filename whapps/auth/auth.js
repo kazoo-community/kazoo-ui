@@ -541,9 +541,6 @@ winkstart.module('auth', 'auth',
                     user_id : winkstart.apps['auth'].user_id
                 };
 
-
-            winkstart.publish('auth.landing', $('.ws-content'));
-
             THIS.get_account(
                 function(_data) {
                     winkstart.getJSON('auth.get_user', rest_data,
@@ -573,6 +570,18 @@ winkstart.module('auth', 'auth',
                             if(json.data.require_password_update) {
                                 winkstart.publish('auth.new_password', json.data);
                             }
+
+                            var landing = true;
+                            $.each(json.data.apps, function(k, v) {
+                                if(v['default']) {
+                                    landing = false;
+                                }
+                            });
+
+                            if(landing) {
+                                winkstart.publish('auth.landing', $('.ws-content'));
+                            }
+                            
                         },
                         function(data, status) {
                             winkstart.alert('error', 'An error occurred while loading your account.',
