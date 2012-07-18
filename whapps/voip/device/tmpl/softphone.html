@@ -137,10 +137,12 @@
 						<div class="input">
 							<select name="sip.method" id="sip_method" class="medium" rel="popover" data-content="Select your authentication method">
 								{{each(key, val) field_data.sip.methods}}
-                                    {{if data.sip.method == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
+                                    {{if key != 'ip'}}
+                                        {{if data.sip.method == key}}
+                                            <option value="${key}" selected="selected">${val}</option>
+                                        {{else}}
+                                            <option value="${key}">${val}</option>
+                                        {{/if}}
                                     {{/if}}
                                 {{/each}}
 							</select>

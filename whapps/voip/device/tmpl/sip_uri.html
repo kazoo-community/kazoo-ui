@@ -15,7 +15,6 @@
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#sip_settings"><span class="icon wrench_screw"></span>SIP Settings</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
 			<div class="pill-content">
@@ -51,10 +50,10 @@
 						</div>
 					{{/if}}
 
-					<div class="clearfix">
-						<label for="call_forward_number">Number</label>
+                    <div class="clearfix">
+						<label for="sip_url">URL</label>
 						<div class="input">
-							<input class="span4" id="call_forward_number" name="call_forward.number" type="text" placeholder="Number" value="${data.call_forward.number}" rel="popover" data-content="Outside number you wish to reach"/>
+							<input class="span4" id="sip_url" name="sip.route" type="text" placeholder="sip:support@company.com" value="${data.sip.route}" rel="popover" data-content="Enter the SIP url. Must look like 'sip:support@company.com'" />
 						</div>
 					</div>
 
@@ -64,10 +63,10 @@
 								<li>
 									<label>
 										<span  rel="popover" data-content="Do you want this device enabled">
-											{{if data.call_forward.enabled == true}}
-							                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" checked="checked"/>
+											{{if data.enabled == true}}
+							                    <input type="checkbox" id="enabled" name="enabled" checked="checked"/>
 							                {{else}}
-							                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" />
+							                    <input type="checkbox" id="enabled" name="enabled" />
 							                {{/if}}
 							                <span>Enabled</span>
 						                </span>
@@ -77,61 +76,9 @@
 						</div>
 					</div>
 					<input type="hidden" value="${data.device_type}" name="device_type"/>
+					<input type="hidden" value="${data.sip.invite_format}" name="sip.invite_format"/>
 	                <input type="hidden" value="false" name="media.fax.option"/>
 	                <input type="hidden" value="false" name="extra.notify_unregister"/>
-				</div>
-
-				<div id="sip_settings">
-					<div class="clearfix">
-						<label for="sip_realm">Realm</label>
-						<div class="input">
-							<span class="uneditable-input">${field_data.sip.realm}</span>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_method">Authentication Method</label>
-						<div class="input">
-							<select name="sip.method" id="sip_method" class="medium" rel="popover" data-content="Select your authentication method">
-								{{each(key, val) field_data.sip.methods}}
-                                    {{if data.sip.method == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
-                                    {{/if}}
-                                {{/each}}
-							</select>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_url">URL</label>
-						<div class="input">
-							<input class="span4" id="sip_url" name="sip.url" type="text" placeholder="sip:support@company.com" value="${data.sip.url}" rel="popover" data-content="Enter the SIP url. Must look like 'sip:support@company.com'" />
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_invite_format">Invite Format</label>
-						<div class="input">
-							<select name="sip.invite_format" id="sip_invite_format" class="medium" rel="popover" data-content="Enter your SIP Invite Format">
-								{{each(key, val) field_data.sip.invite_formats}}
-                                    {{if data.sip.invite_format == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
-                                    {{/if}}
-                                {{/each}}
-							</select>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="sip_expire_seconds">Expire Seconds</label>
-						<div class="input">
-							<input class="span4" id="sip_expire_seconds" name="sip.expire_seconds" type="text" placeholder="Expire Seconds" value="${data.sip.expire_seconds}" rel="popover" data-content="Enter the expiration time of this device (in seconds)"/>
-						</div>
-					</div>
 				</div>
 			</div>
 		</form>
