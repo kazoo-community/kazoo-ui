@@ -56,6 +56,7 @@ winkstart.module('myaccount', 'myaccount', {
         modules: {
             'app_store': false,
             'billing': false,
+            'past_purchases': false,
             'personal_info': false,
             'nav': false,
             'statistics': false,
@@ -93,7 +94,7 @@ winkstart.module('myaccount', 'myaccount', {
 
             if (!THIS.is_initialized) {
                 // Load the modules
-                
+
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;
