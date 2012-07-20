@@ -26,11 +26,7 @@ winkstart.module('voip', 'device', {
 
         validation: {
             sip_uri: [
-                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
-                { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#sip_url',             regex: /^(sip:)(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/}
-
-
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ }
             ],
             sip_device : [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
@@ -306,7 +302,8 @@ winkstart.module('voip', 'device', {
                         users: [],
                         sip: {
                             methods: {
-                                'password': 'Password'
+                                'password': 'Password',
+                                'ip': 'IP'
                             },
                             invite_formats: {
                                 'username': 'Username',
@@ -463,7 +460,7 @@ winkstart.module('voip', 'device', {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
 
                 /* Do device type specific things here */
-                if($.inArray(data.data.device_type, ['softphone', 'sip_device']) > -1) {
+                if($.inArray(data.data.device_type, ['fax', 'softphone', 'sip_device', 'smartphone']) > -1) {
                     device_html.delegate('#sip_password[type="password"]', 'focus', function() {
                         var value = $(this).val();
                         $('<input id="sip_password" name="sip.password" type="text"/>').insertBefore($(this)).val(value).focus();
@@ -549,6 +546,24 @@ winkstart.module('voip', 'device', {
                 if(!$('#music_on_hold_media_id', device_html).val()) {
                     $('#edit_link_media', device_html).hide();
                 }
+
+                if(data.data.sip && data.data.sip.method === 'ip') {
+                    $('#username_block', device_html).hide();
+                }
+                else {
+                    $('#ip_block', device_html).hide();
+                }
+
+                $('#sip_method', device_html).change(function() {
+                    if($('#sip_method option:selected', device_html).val() === 'ip') {
+                        $('#ip_block', device_html).slideDown();
+                        $('#username_block', device_html).slideUp();
+                    }
+                    else {
+                        $('#username_block', device_html).slideDown();
+                        $('#ip_block', device_html).slideUp();
+                    }
+                });
 
                 $('#music_on_hold_media_id', device_html).change(function() {
                     !$('#music_on_hold_media_id option:selected', device_html).val() ? $('#edit_link_media', device_html).hide() : $('#edit_link_media', device_html).show();
@@ -645,6 +660,9 @@ winkstart.module('voip', 'device', {
                 };
             }
 
+            if(data.data.device_type === 'sip_uri') {
+                data.data.sip.invite_format = 'route';
+            }
         },
 
         migrate_data: function(data) {
@@ -704,6 +722,10 @@ winkstart.module('voip', 'device', {
 
             if(!data.mac_address) {
                 delete data.mac_address;
+            }
+
+            if(data.sip.method != 'ip') {
+                delete data.sip.ip;
             }
 
             return data;
@@ -802,9 +824,9 @@ winkstart.module('voip', 'device', {
                         }
                     );
 
-                    /* Cell Phones are always registered */
+                    /* Cell/SmartPhones, SIP URIs, Landlines are always registered */
                     $.each(data.data, function(k, v) {
-                        if($.inArray(v.device_type, ['smartphone', 'landline', 'cellphone']) > -1) {
+                        if($.inArray(v.device_type, ['smartphone', 'landline', 'cellphone', 'sip_uri']) > -1) {
                             if(v.enabled === false) {
                                 $('#' + v.id, $('#device-listpanel', parent)).addClass('disabled');
                             }

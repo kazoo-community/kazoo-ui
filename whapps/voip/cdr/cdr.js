@@ -125,18 +125,20 @@ function(args) {
                             duration,
                             humanFullDate,
                             web_browser_id,
-                            call_duration = 0;
+                            call_duration = 0,
+                            cost;
 
                         var tab_data = [];
 
                         $.each(_data.data, function() {
-                            if(this.inception) {
+                            //if(this.inception) {
                                 cdr_id = this.cid || this.id;
                                 user_name = this.owner_id ? find_user_name(this.owner_id) : '',
                                 duration = this.duration_seconds >= 0 ? parse_duration(this.duration_seconds) : '--';
                                 humanFullDate = parse_date(this.timestamp);
                                 web_browser_id = parse_cdr_id(cdr_id);
                                 call_duration += this.billing_seconds >= 0 ? parseFloat(this.billing_seconds) : 0;
+                                cost = '$' + parseFloat(this.cost/10000).toFixed(2);
 
                                 tab_data.push([
                                     this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
@@ -144,13 +146,14 @@ function(args) {
                                     user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
                                     duration || '-',
                                     this.hangup_cause || '-',
-                                    '<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +
+                                    /*'<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +*/
                                     '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
+                                    cost,
                                     humanFullDate,
                                     cdr_id,
                                     this.billing_seconds
                                 ]);
-                            }
+                            //}
                         });
 
                         call_duration = 'Total duration : ' + parse_duration(call_duration, 'verbose');
@@ -190,6 +193,9 @@ function(args) {
                 'sTitle': 'Actions',
                 'sWidth': '80px',
                 'bSortable': false
+            },
+            {
+                'sTitle': 'Cost'
             },
             {
                 'sTitle': 'Date'

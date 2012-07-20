@@ -145,19 +145,30 @@
 						</div>
 					</div>
 
-					<div class="clearfix">
-						<label for="sip_username">Username</label>
-						<div class="input">
-							<input class="span4" id="sip_username" name="sip.username" type="text" placeholder="Username" value="${data.sip.username}" rel="popover" data-content="Enter your SIP Username"/>
-						</div>
-					</div>
+                    <div id="ip_block" class="clearfix">
+                        <div class="clearfix">
+                            <label for="sip_ip">IP Address</label>
+                            <div class="input">
+                                <input class="span4" id="sip_ip" name="sip.ip" type="text" placeholder="255.255.255.255" value="${data.sip.ip}" rel="popover" data-content="Enter the IP Address"/>
+                            </div>
+                        </div>
+                    </div>
 
-					<div class="clearfix">
-						<label for="sip_password">Password</label>
-						<div class="input">
-							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
-						</div>
-					</div>
+                    <div class="clearfix" id="username_block">
+                        <div class="clearfix">
+                            <label for="sip_username">Username</label>
+                            <div class="input">
+                                <input class="span4" id="sip_username" name="sip.username" type="text" placeholder="Username" value="${data.sip.username}" rel="popover" data-content="Enter your SIP Username"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="sip_password">Password</label>
+                            <div class="input">
+                                <input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}"/>
+                            </div>
+                        </div>
+                    </div>
 
 					<div class="clearfix">
 						<label for="sip_invite_format">Invite Format</label>

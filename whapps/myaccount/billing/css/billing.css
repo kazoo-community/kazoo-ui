@@ -32,3 +32,16 @@
 	color: #E6E6E6;
 }
 
+#billing-form span.uneditable-input {
+	border: none;
+	background-color: transparent;
+	display: inline-block;
+	width: auto;
+	color: #05ADDC;
+}
+
+#billing-form .hide {
+	display: none;
+}
+
+

@@ -84,8 +84,6 @@ winkstart.module('skeleton', 'skeleton', {
         activate: function() {
             var THIS = this;
 
-            console.log('whapp.activate');
-
             THIS.whapp_auth(function() {
                 THIS.initialization_check();
             });
@@ -95,7 +93,6 @@ winkstart.module('skeleton', 'skeleton', {
             var THIS = this;
 
             if (!THIS.is_initialized) {
-                console.log('no');
                 // Load the modules
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {
@@ -110,7 +107,6 @@ winkstart.module('skeleton', 'skeleton', {
                     }
                 });
             } else {
-                console.log('yes');
                 THIS.setup_page();
             }
         },
@@ -161,7 +157,6 @@ winkstart.module('skeleton', 'skeleton', {
         setup_page: function() {
             var THIS = this;
 
-            console.log('setup_page_skeleton');
             $('#ws-content').empty()
                             .append(THIS.templates.skeleton.tmpl());
         }

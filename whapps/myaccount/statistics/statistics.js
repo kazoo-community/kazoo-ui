@@ -89,11 +89,11 @@ winkstart.module('myaccount', 'statistics', {
             var THIS = this,
                 current_stat = THIS.stats[stat_name];
 
-            if(!current_stat.error || current_stat.error < 3) {
+            if(!('nb_error' in current_stat) || current_stat.nb_error < 3) {
                 THIS.stats[stat_name].get_stat(function(args) {
                     current_stat = $.extend(current_stat, args);
                     if(!args.error) {
-                        delete current_stat.error;
+                        delete current_stat.nb_error;
 
                         winkstart.publish('statistics.get_nav', {name: stat_name}, function(stat_html) {
                             if('container' in current_stat) {
@@ -114,7 +114,12 @@ winkstart.module('myaccount', 'statistics', {
                         });
                     }
                     else {
-                        current_stat.error = current_stat.error ? current_stat.error++ : 1;
+                        if('nb_error' in current_stat && typeof current_stat.nb_error === 'number') {
+                            current_stat.nb_error++;
+                        }
+                        else {
+                            current_stat.nb_error = 1;
+                        }
                     }
                 });
             }
