@@ -93,6 +93,7 @@ winkstart.module('core', 'layout', {
             });
 
             $('#ws-topbar .brand.logo', layout_html).click(function() {
+                $('.whapps .whapp > a').removeClass('activate');
                 winkstart.publish('auth.landing');
             });
 
