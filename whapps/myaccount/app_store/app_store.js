@@ -66,16 +66,6 @@ winkstart.module('myaccount', 'app_store', {
                         account_id: winkstart.apps['myaccount'].account_id,
                     },
                     function(_data, status) {
-                        var tmp_available_apps = [];
-
-                        if(!_data.data.available_apps) {
-                            $.each(winkstart.config.available_apps, function(k, v){
-                                tmp_available_apps.push(k);
-                            });
-                        }
-                        
-                        _data.data.available_apps = _data.data.available_apps || tmp_available_apps || [];
-
                         if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
                             winkstart.publish('nav.add_sublink', {
                                 link: 'nav',
@@ -116,7 +106,6 @@ winkstart.module('myaccount', 'app_store', {
                             if(v in winkstart.config.available_apps) {
                                 data.available_apps[k] = winkstart.config.available_apps[v];
                             }
-                            
                         });
 
                         var app_store_html = THIS.templates.app_store.tmpl(data),
