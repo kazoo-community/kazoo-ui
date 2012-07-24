@@ -262,7 +262,6 @@ winkstart.module('accounts', 'accounts_manager', {
                                         if(winkstart.config.available_apps[v]) {
                                             $.extend(true, tmp, winkstart.config.available_apps[v]);
                                         }
-                                        
 
                                         render_data.field_data.available_apps.push(tmp);
                                     });
@@ -306,7 +305,7 @@ winkstart.module('accounts', 'accounts_manager', {
                                 api_url: winkstart.apps['accounts'].api_url
                             },
                             function(_data_wl, status) {
-                                defaults.field_data.whitelabel = _data_wl.data;
+                                defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
                                 defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 
                                 render();
