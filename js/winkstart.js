@@ -4,6 +4,16 @@
         locked_topics = {},
         slice = [].slice;
 
+    winkstart.get_version = function(callback) {
+        $.ajax({
+            url: 'VERSION',
+            cache: false,
+            success: function(template) {
+                callback(template);
+            }
+        });
+    },
+
     winkstart.publish = function(locking) {
         var args = arguments,
             ret;
@@ -36,7 +46,7 @@
 
     winkstart.subscribe   = amplify.subscribe;
     winkstart.unsubscribe = amplify.unsubscribe;
-    
+
     winkstart.templates = {};
     winkstart.css = {};
 
