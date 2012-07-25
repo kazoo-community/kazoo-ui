@@ -56,7 +56,6 @@ winkstart.module('myaccount', 'myaccount', {
         modules: {
             'app_store': false,
             'billing': false,
-            'past_purchases': false,
             'personal_info': false,
             'nav': false,
             'statistics': false,

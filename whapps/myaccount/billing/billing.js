@@ -14,6 +14,16 @@ winkstart.module('myaccount', 'billing', {
         },
 
         resources: {
+            'past_purchases.get': {
+                url: '{api_url}/accounts/{account_id}/braintree/transactions',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'past_purchases.list_accounts': {
+                url: '{api_url}/accounts/{account_id}/descendants',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'billing.user_get': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
@@ -33,7 +43,7 @@ winkstart.module('myaccount', 'billing', {
                 url: '{api_url}/accounts/{account_id}/braintree/customer',
                 contentType: 'application/json',
                 verb: 'GET'
-            },
+            }
         }
     },
 
@@ -44,6 +54,8 @@ winkstart.module('myaccount', 'billing', {
     },
 
     {
+        addons: {},
+
         update_acct: function(data, new_data, success, error) {
             winkstart.request('billing.user_update', {
                     account_id: winkstart.apps['myaccount'].account_id,
@@ -62,26 +74,6 @@ winkstart.module('myaccount', 'billing', {
                     }
                 }
             );
-        },
-
-        myaccount_loaded: function(user_data) {
-            if(winkstart.config.display_billing || (!user_data.priv_level || user_data.priv_level === 'admin')){
-                var publish = '';
-
-                (winkstart.config.nav.billing) ? publish = 'billing.ext_link' : publish = 'billing.popup';
-
-                winkstart.publish('nav.add_sublink', {
-                    link: 'nav',
-                    sublink: 'billing',
-                    label: 'Billing',
-                    weight: '15',
-                    publish: publish
-                });
-            }
-        },
-
-        ext_link: function() {
-            window.open(winkstart.config.nav.billing);
         },
 
         update_billing: function(data, new_data, success, error) {
@@ -103,11 +95,47 @@ winkstart.module('myaccount', 'billing', {
             );
         },
 
+        list_accounts: function(success, error) {
+            winkstart.request('past_purchases.list_accounts', {
+                    api_url: winkstart.apps['myaccount'].api_url,
+                    account_id: winkstart.apps['myaccount'].account_id
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        myaccount_loaded: function(user_data) {
+            if(winkstart.config.display_billing || (!user_data.priv_level || user_data.priv_level === 'admin')){
+                winkstart.publish('nav.add_sublink', {
+                    link: 'nav',
+                    sublink: 'billing',
+                    label: 'Billing',
+                    weight: '15',
+                    publish: (winkstart.config.nav.billing) ? 'billing.ext_link' : 'billing.popup'
+                });
+            }
+        },
+
+        ext_link: function() {
+            window.open(winkstart.config.nav.billing);
+        },
+
         render_billing: function(data, target) {
             var THIS = this,
                 billing_html = THIS.templates.billing.tmpl(data);
 
-            $('#save-billing', billing_html).click(function() {
+            $('#save-billing', billing_html).click(function(ev) {
+                ev.preventDefault();
+
                 var form_data = form2object('billing-form');
 
                 THIS.clean_billing_form_data(form_data);
@@ -128,11 +156,13 @@ winkstart.module('myaccount', 'billing', {
                 );
             });
 
-            $('#edit-billing', billing_html).click(function() {
+            $('#edit-billing', billing_html).click(function(ev) {
+                ev.preventDefault();
+
                 var arr = ['company', 'phone', 'postal_code', 'firstname', 'lastname']
                     billing_form_html = $('#billing-form');
 
-                
+
                     billing_form_html
                         .find('input')
                         .each(function() {
@@ -178,8 +208,12 @@ winkstart.module('myaccount', 'billing', {
                 if (number.match(re) != null){
                     $('#mastercard', billing_html).css('opacity', 1);
                 }
-
             });
+
+            THIS.setup_transactions(billing_html);
+            THIS.setup_subscriptions(data.past_purchases, billing_html);
+
+            THIS.list_payments(data.past_purchases, billing_html);
 
             (target)
                 .empty()
@@ -188,9 +222,9 @@ winkstart.module('myaccount', 'billing', {
 
         popup: function() {
             var THIS = this,
-                popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
+                popup_html = $('<div class="inline_popup billing"><div class="inline_content main_content"/></div>');
 
-             winkstart.request('billing.get', {
+            winkstart.request('billing.get', {
                     account_id: winkstart.apps['myaccount'].account_id,
                     api_url: winkstart.apps['myaccount'].api_url
                 },
@@ -203,17 +237,165 @@ winkstart.module('myaccount', 'billing', {
                         }
                     };
 
-                    THIS.render_billing($.extend(true, defaults, data), $('.inline_content', popup_html));
+                    winkstart.request('past_purchases.get', {
+                            account_id: winkstart.apps['myaccount'].account_id,
+                            api_url: winkstart.apps['myaccount'].api_url
+                        },
+                        function(data_pp, status) {
+                            data.past_purchases = data_pp;
+                            THIS.render_billing(data, $('.inline_content', popup_html));
 
-                    winkstart.dialog(popup_html, {
-                        modal: true,
-                        title: 'Billing',
-                        autoOpen: true,
-                        position: 'top'
-                    });
+                            winkstart.dialog(popup_html, {
+                                modal: true,
+                                title: 'Billing',
+                                position: 'top',
+                                width: '1000px'
+                            });
+                        }
+                    );
                 }
             );
 
+        },
+
+        setup_transactions: function(parent) {
+            var THIS = this,
+                columns = [
+                {
+                    'sTitle': 'Date'
+                },
+                {
+                    'sTitle': 'Status'
+                },
+                {
+                    'sTitle': 'Amount ($)'
+                }
+            ];
+
+            winkstart.table.create('transactions', $('#transactions-grid', parent), columns, {}, {
+                sDom: 'frtlip',
+                aaSorting: [[0, 'desc']]
+            });
+
+            $('#transactions-grid_filter input[type=text]', parent).first().focus();
+
+            $('.cancel-search', parent).click(function(){
+                $('#transactions-grid_filter input[type=text]', parent).val('');
+                winkstart.table.transactions.fnFilter('');
+            });
+        },
+
+        setup_subscriptions: function(data, parent) {
+            var THIS = this,
+                columns = [
+                    {
+                        'sTitle': 'Date',
+                        'sWidth': '10%'
+                    },
+                    {
+                        'sTitle': 'Subscription',
+                        'sWidth': '20%'
+                    },
+                    {
+                        'sTitle': 'Status',
+                        'sWidth': '10%'
+                    }
+                ],
+                array_addons = [];
+
+            /* We need to check the number of add-ons to display first */
+            $.each(data.data, function() {
+                $.each(this.add_ons, function(k ,v) {
+                    if(array_addons.indexOf(v.id) < 0) {
+                        array_addons.push(v.id);
+                    }
+                });
+            });
+
+            THIS.addons = array_addons;
+
+            var column_width = (40 / array_addons.length) + '%';
+            $.each(array_addons, function(k, v) {
+                columns.push({'sTitle': v, 'sWidth': column_width });
+            });
+
+            columns.push({'sTitle': 'Discount ($)', 'sWidth': '10%'},{ 'sTitle': 'Amount ($)', 'sWidth': '10%' });
+
+            winkstart.table.create('subscriptions', $('#subscriptions-grid', parent), columns, {}, {
+                sDom: 'frtlip',
+                aaSorting: [[0, 'desc']],
+                bAutoWidth: false
+            });
+
+            $('#subscriptions-grid_filter input[type=text]', parent).first().focus();
+
+            $('.cancel-search', parent).click(function(){
+                $('#subscriptions-grid_filter input[type=text]', parent).val('');
+                winkstart.table.subscriptions.fnFilter('');
+            });
+        },
+
+        list_payments: function(data, parent) {
+            var THIS = this,
+                tab_transactions = [],
+                tab_subscriptions = [],
+                payment,
+                account_name;
+
+            THIS.list_accounts(function(_data_accounts) {
+                var map_accounts = {};
+
+
+                $.each(_data_accounts.data, function(k, v) {
+                    map_accounts[v.id] = v;
+                });
+
+                $.each(data.data, function(k, v) {
+                    v.created_at = v.created_at.replace(/-/g,'/').replace('T', ' - ').replace('Z', '');
+                    v.created_at = v.created_at.substring(0, v.created_at.length - 11);
+
+                    if(v.subscription_id) {
+                        var account_id = v.subscription_id.split('_')[0];
+                        account_name = account_id.length === 32 ? map_accounts[v.subscription_id.split('_')[0]].name : 'Account not found';
+                        payment = [v.created_at, account_name, v.status];
+
+                        $.each(THIS.addons, function() {
+                            payment.push('0');
+                        });
+
+                        if(v.add_ons) {
+                            $.each(v.add_ons, function(index_addon, addon) {
+                                var indexof = THIS.addons.indexOf(addon.id);
+                                if(indexof >= 0) {
+                                    indexof += 3; //List of Add-ons start at column 3
+                                    payment[indexof] = addon.quantity;
+                                }
+                            });
+                        }
+
+                        var total_discount = 0;
+                        if(v.discounts) {
+                            $.each(v.discounts, function(index_discount, discount) {
+                                total_discount += (discount.quantity * discount.amount);
+                            });
+                        }
+
+                        payment.push(total_discount.toFixed(2), v.amount);
+                        tab_subscriptions.push(payment);
+                    }
+                    else {
+                        payment = [v.created_at, v.status, v.amount];
+
+                        tab_transactions.push(payment);
+                    }
+                });
+
+                winkstart.table.transactions.fnClearTable();
+                winkstart.table.subscriptions.fnClearTable();
+
+                winkstart.table.transactions.fnAddData(tab_transactions);
+                winkstart.table.subscriptions.fnAddData(tab_subscriptions);
+            });
         },
 
         clean_billing_form_data: function(form_data) {
