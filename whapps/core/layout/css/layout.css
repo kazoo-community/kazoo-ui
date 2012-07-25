@@ -132,6 +132,11 @@ body > .topbar .topbar-inner > .container-fluid {
     color: #ffffff;
 }
 
+.footer_wrapper .tag_version {
+    font-size: 10px;
+    color: #bfbfbf;
+}
+
 #loading {
     font-size: large;
     color: #EBEBEB;

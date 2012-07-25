@@ -253,3 +253,8 @@
     font-weight: bold;
     color: white;
 }
+
+.portal-view .sorting_asc, .portal-view .sorting_desc, .portal-view .sorting {
+    background: #222;
+}
+

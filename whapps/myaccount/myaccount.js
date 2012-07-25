@@ -93,7 +93,7 @@ winkstart.module('myaccount', 'myaccount', {
 
             if (!THIS.is_initialized) {
                 // Load the modules
-                
+
                 $.each(THIS.modules, function(k, v) {
                     if(!v) {
                         THIS.modules[k] = true;

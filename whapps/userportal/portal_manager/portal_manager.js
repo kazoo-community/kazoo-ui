@@ -1,4 +1,4 @@
-winkstart.module('portal', 'portal_manager', {
+winkstart.module('userportal', 'portal_manager', {
         css: [
             'css/portal_manager.css'
         ],
@@ -158,8 +158,8 @@ winkstart.module('portal', 'portal_manager', {
 
         get_registered_devices: function(success, error) {
             winkstart.request('account_devices.status', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id
                 },
                 function(_data, status) {
                     if(typeof success === 'function') {
@@ -176,9 +176,9 @@ winkstart.module('portal', 'portal_manager', {
 
         get_user_devices: function(success, error) {
             winkstart.request('user_device.list', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id,
-                    user_id: winkstart.apps['portal'].user_id
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    user_id: winkstart.apps['userportal'].user_id
                 },
                 function(_data, status) {
                     if(typeof success === 'function') {
@@ -195,8 +195,8 @@ winkstart.module('portal', 'portal_manager', {
 
         get_vmbox_by_owner: function(owner_id, success, error) {
             winkstart.request('user_vmbox.list', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id
                 },
                 function(_data, status) {
                     var list_vmbox = [];
@@ -219,8 +219,8 @@ winkstart.module('portal', 'portal_manager', {
 
         get_vmbox: function(vmbox_id, success, error) {
             winkstart.request('user_vmbox.get', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
                     vmbox_id: vmbox_id
                 },
                 function(_data, status) {
@@ -238,8 +238,8 @@ winkstart.module('portal', 'portal_manager', {
 
         update_vmbox: function(data, success, error) {
             winkstart.request('user_vmbox.update', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
                     vmbox_id: data.data.id,
                     data: data.data
                 },
@@ -258,9 +258,9 @@ winkstart.module('portal', 'portal_manager', {
 
         get_settings: function(success, error) {
             winkstart.request('user_settings.get', {
-                    api_url: winkstart.apps['portal'].api_url,
-                    account_id: winkstart.apps['portal'].account_id,
-                    user_id: winkstart.apps['portal'].user_id
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    user_id: winkstart.apps['userportal'].user_id
                 },
                 function(_data, status) {
                     if(typeof success === 'function') {
@@ -282,9 +282,9 @@ winkstart.module('portal', 'portal_manager', {
                 var normalized_data = THIS.normalize_data($.extend(true, {}, _data.data, data));
 
                 winkstart.request('user_settings.post', {
-                        api_url: winkstart.apps['portal'].api_url,
-                        account_id: winkstart.apps['portal'].account_id,
-                        user_id: winkstart.apps['portal'].user_id,
+                        api_url: winkstart.apps['userportal'].api_url,
+                        account_id: winkstart.apps['userportal'].account_id,
+                        user_id: winkstart.apps['userportal'].user_id,
                         data: normalized_data
                     },
                     function(_data, status) {
@@ -705,9 +705,9 @@ winkstart.module('portal', 'portal_manager', {
                 };
 
             winkstart.request('user_cdr.list', {
-                    account_id: winkstart.apps['portal'].account_id,
-                    api_url: winkstart.apps['portal'].api_url,
-                    user_id: winkstart.apps['portal'].user_id,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url,
+                    user_id: winkstart.apps['userportal'].user_id,
                     created_from: start_date,
                     created_to: end_date
                 },
@@ -785,7 +785,7 @@ winkstart.module('portal', 'portal_manager', {
                                  '<param name="quality" value="high" />' +
                                  '<param name="wmode" value="transparent">' +
                                  '<param name="menu" value="false" />' +
-                                 '<embed src="whapps/portal/portal_manager/assets/flash/xspf_player.swf?' +
+                                 '<embed src="whapps/userportal/portal_manager/assets/flash/xspf_player.swf?' +
                                  'player_mode=mini&skin_mode=on&song_url=' + THIS.voicemail_uri(msg_uri) +
                                  '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
                                  '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
@@ -865,7 +865,7 @@ winkstart.module('portal', 'portal_manager', {
                 $('.select-checkbox', parent).prop('checked', $(this).is(':checked'));
             });
 
-            THIS.get_vmbox_by_owner(winkstart.apps['portal'].user_id, function(_data_list) {
+            THIS.get_vmbox_by_owner(winkstart.apps['userportal'].user_id, function(_data_list) {
                 if(_data_list.data.length > 0) {
                     var vmbox_id = _data_list.data[0].id;
                     THIS.get_vmbox(vmbox_id, function(_data_vmbox) {
@@ -900,9 +900,9 @@ winkstart.module('portal', 'portal_manager', {
         },
 
         voicemail_uri: function(msg_uri) {
-            return winkstart.apps['portal'].api_url + '/accounts/' +
-                   winkstart.apps['portal'].account_id + '/vmboxes/' +
-                   msg_uri + '/raw?auth_token=' + winkstart.apps['portal'].auth_token;
+            return winkstart.apps['userportal'].api_url + '/accounts/' +
+                   winkstart.apps['userportal'].account_id + '/vmboxes/' +
+                   msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token;
         },
 
         /* beginning copy and paste of device module */
@@ -923,8 +923,8 @@ winkstart.module('portal', 'portal_manager', {
 
             if(id) {
                 winkstart.request('user_device.update', {
-                        account_id: winkstart.apps['portal'].account_id,
-                        api_url: winkstart.apps['portal'].api_url,
+                        account_id: winkstart.apps['userportal'].account_id,
+                        api_url: winkstart.apps['userportal'].api_url,
                         device_id: id,
                         data: normalized_data
                     },
@@ -942,14 +942,14 @@ winkstart.module('portal', 'portal_manager', {
             }
             else {
                 winkstart.request('account_devices.list', {
-                        account_id: winkstart.apps['portal'].account_id,
-                        api_url: winkstart.apps['portal'].api_url
+                        account_id: winkstart.apps['userportal'].account_id,
+                        api_url: winkstart.apps['userportal'].api_url
                     },
                     function(_data, status) {
                         var create_device = function() {
                             winkstart.request('user_device.create', {
-                                    account_id: winkstart.apps['portal'].account_id,
-                                    api_url: winkstart.apps['portal'].api_url,
+                                    account_id: winkstart.apps['userportal'].account_id,
+                                    api_url: winkstart.apps['userportal'].api_url,
                                     data: normalized_data
                                 },
                                 function(_data, status) {
@@ -1003,7 +1003,7 @@ winkstart.module('portal', 'portal_manager', {
                 defaults = {
                     data: $.extend(true, {
                         enabled: true,
-                        owner_id: winkstart.apps['portal'].user_id,
+                        owner_id: winkstart.apps['userportal'].user_id,
                         caller_id: {
                             external: {},
                             internal: {}
@@ -1088,8 +1088,8 @@ winkstart.module('portal', 'portal_manager', {
                 };
 
             winkstart.request('portal_account.get', {
-                    account_id: winkstart.apps['portal'].account_id,
-                    api_url: winkstart.apps['portal'].api_url
+                    account_id: winkstart.apps['userportal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url
                 },
                 function(_data, status) {
                     $.extend(defaults.field_data.sip, {
@@ -1097,8 +1097,8 @@ winkstart.module('portal', 'portal_manager', {
                     });
 
                     winkstart.request('portal_user.list', {
-                            account_id: winkstart.apps['portal'].account_id,
-                            api_url: winkstart.apps['portal'].api_url
+                            account_id: winkstart.apps['userportal'].account_id,
+                            api_url: winkstart.apps['userportal'].api_url
                         },
                         function(_data, status) {
                             _data.data.unshift({
@@ -1110,8 +1110,8 @@ winkstart.module('portal', 'portal_manager', {
                             defaults.field_data.users = _data.data;
 
                             winkstart.request('portal_media.list', {
-                                    account_id: winkstart.apps['portal'].account_id,
-                                    api_url: winkstart.apps['portal'].api_url
+                                    account_id: winkstart.apps['userportal'].account_id,
+                                    api_url: winkstart.apps['userportal'].api_url
                                 },
                                 function(_data, status) {
                                     _data.data.unshift({
@@ -1123,8 +1123,8 @@ winkstart.module('portal', 'portal_manager', {
 
                                     if(typeof data == 'object' && data.id) {
                                         winkstart.request('user_device.get', {
-                                                account_id: winkstart.apps['portal'].account_id,
-                                                api_url: winkstart.apps['portal'].api_url,
+                                                account_id: winkstart.apps['userportal'].account_id,
+                                                api_url: winkstart.apps['userportal'].api_url,
                                                 device_id: data.id
                                             },
                                             function(_data, status) {

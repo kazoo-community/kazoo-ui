@@ -106,7 +106,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
     {
         list_available_pbxs: function() {
-            return ['allworks', 'altigen', 'asterisk', 'avaya', 'bluebox', 'cisco', 'digium', 'epygi', 'freepbx', 'freeswitch', 'mitel', 'objectworld', 'other', 'pingtel', 'responsepoint', 'samsung', 'shoretel', 'sutus', 'talkswitch', 'threecom', 'tradium'];
+            return ['allworks', 'altigen', 'asterisk', 'avaya', 'bluebox', 'cisco', 'digium', 'epygi', 'freepbx', 'freeswitch', 'mitel', 'objectworld', 'other', 'pingtel', 'responsepoint', 'samsung', 'shoretel', 'sutus', 'talkswitch', 'threecom', 'taridium'];
         },
 
         list_all_numbers: function(success, error) {
@@ -662,6 +662,8 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     position: ['center', 100]
                 });
 
+            console.log(data);
+            console.log(endpoint_data);
             THIS.render_endpoint(data, endpoint_data, $('.main_content', popup), {
                 save_success: function(_data) {
                     popup.dialog('close');
