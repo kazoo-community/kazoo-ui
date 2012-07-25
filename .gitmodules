@@ -6,4 +6,4 @@
 	url = git@github.com:2600hz/phone.git
 [submodule "whapps/userportal"]
 	path = whapps/userportal
-	url = git@2600hz.com:2600hz/userportal.git
+	url = git@github.com:2600hz/userportal.git
