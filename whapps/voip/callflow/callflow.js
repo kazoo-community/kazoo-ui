@@ -1080,7 +1080,10 @@ winkstart.module('voip', 'callflow', {
                                     });
 
                                     $.each(selected_endpoints, function() {
-                                        $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                        //Check if user/device exists.
+                                        if(this.endpoint_type) {
+                                            $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                        }
                                     });
 
                                     $('#name', popup_html).bind('keyup blur change', function() {
