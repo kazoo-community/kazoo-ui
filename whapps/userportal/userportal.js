@@ -64,7 +64,6 @@
 
         activate: function() {
             var THIS = this;
-            console.log('activate');
 
             THIS.whapp_auth(function() {
                 THIS.initialization_check();
