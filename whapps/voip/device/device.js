@@ -343,7 +343,8 @@ winkstart.module('voip', 'device', {
                                 }
                             }
                         },
-                        hide_owner: data.hide_owner || false
+                        hide_owner: data.hide_owner || false,
+                        outbound_flags: data.outbound_flags ? data.outbound_flags.join(", ") : data.outbound_flags
                     },
                     functions: {
                         inArray: function(value, array) {
@@ -726,6 +727,10 @@ winkstart.module('voip', 'device', {
 
             if(data.sip.method != 'ip') {
                 delete data.sip.ip;
+            }
+
+            if(data.outbound_flags) {
+                data.outbound_flags = data.outbound_flags.split(/,/);
             }
 
             return data;
