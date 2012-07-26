@@ -2,8 +2,7 @@
 *.cache
 test/
 nbproject/
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/development
-
+origin/development
+.idea/
+atlassian-ide-plugin.xml
+tmp/
