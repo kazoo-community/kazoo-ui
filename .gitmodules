@@ -4,6 +4,3 @@
 [submodule "whapps/voip/phone"]
 	path = whapps/voip/phone
 	url = git@github.com:2600hz/phone.git
-[submodule "whapps/userportal"]
-	path = whapps/userportal
-	url = git@github.com:2600hz/userportal.git
