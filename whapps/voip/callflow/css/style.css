@@ -56,13 +56,25 @@
     position: relative;
 }
 
+#ws_callflow .callflow .root > .content .number_column.full {
+    width: 312px;
+    text-align: center;
+}
+
+#ws_callflow .callflow .root > .content .number_column.second {
+    width: 163px;
+    background-image: url(../../../core/layout/images/nav_line.jpg);
+    background-position: left;
+    background-repeat: repeat-y;
+}
+
+#ws_callflow .callflow .root > .content .number_column.first {
+    width: 159px;
+}
+
 #ws_callflow .callflow .root > .content .number_column.empty {
     color: #A0A0A0;
     cursor: default;
-}
-
-#ws_callflow .callflow .root > .content .number_column:first-child {
-    width: 159px;
 }
 
 #ws_callflow .callflow .root > .content .number_column .delete {
@@ -83,24 +95,27 @@
     background-image: url(../images/btn_delete_blue.png);
 }
 
-#ws_callflow .callflow .root > .content .number_column:nth-last-child(2) {
-    background-image: url(../../../core/layout/images/nav_line.jpg);
-    background-position: left;
-    background-repeat: repeat-y;
-    width: 163px;
-}
-
 #ws_callflow .callflow .node {
     display: inline-block;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
 }
+
+#ws_callflow .callflow .node[name="root"] {
+    cursor: default;
+}
+
 #ws_callflow .callflow .node .node-options .delete {
     background-image: url(../images/btn_delete.png);
     background-repeat: no-repeat;
+    background-position: center;
     width: 6px;
     height: 6px;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0px;
+    right: 0px;
+    padding: 5px;
     cursor: pointer;
 }
 
@@ -156,6 +171,9 @@
     width: 82px;
     padding-left: 1px;
     padding-top: 1px;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
 }
 
 #ws_callflow .destination {
@@ -272,7 +290,7 @@
 #ws_callflow .module {
     font-size: 13px;
     height: 59px;
-    padding-top: 25px;
+    margin-top: 25px;
     cursor: default;
 }
 
@@ -318,4 +336,16 @@
     line-height: 27px;
     height: 27px;
     margin-left: 5px;
+}
+
+#ws-callflow .ui-draggable {
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+#callflow-content .ui-draggable-dragging {
+    cursor: -moz-grabbing !important;
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
 }

@@ -657,29 +657,34 @@ winkstart.module('voip', 'callflow', {
                 });
 
                 // dragging the whole branch
-                $(this).draggable({
-                    start: function () {
-                        var children = $(this).next(),
-                            t = children.offset().top - $(this).offset().top,
-                            l = children.offset().left - $(this).offset().left;
+                console.log($(this).attr('id'));
+                if($(this).attr('name') != 'root') {
+                    $(this).draggable({
+                        start: function () {
+                            console.log($(this));
+                            var children = $(this).next(),
+                                t = children.offset().top - $(this).offset().top,
+                                l = children.offset().left - $(this).offset().left;
 
-                        THIS._enableDestinations($(this));
+                            THIS._enableDestinations($(this));
 
-                        $(this).attr('t', t); $(this).attr('l', l);
-                    },
-                    drag: function () {
-                        var children = $(this).next(),
-                            t = $(this).offset().top + parseInt($(this).attr('t')),
-                            l = $(this).offset().left + parseInt($(this).attr('l'));
+                            $(this).attr('t', t); $(this).attr('l', l);
+                        },
+                        drag: function () {
+                            console.log($(this));
+                            var children = $(this).next(),
+                                t = $(this).offset().top + parseInt($(this).attr('t')),
+                                l = $(this).offset().left + parseInt($(this).attr('l'));
 
-                        children.offset({ top: t, left: l });
-                    },
-                    stop: function () {
-                        THIS._disableDestinations();
+                            children.offset({ top: t, left: l });
+                        },
+                        stop: function () {
+                            THIS._disableDestinations();
 
-                        THIS.renderFlow();
-                    }
-                });
+                            THIS.renderFlow();
+                        }
+                    });
+                }
             });
 
             $('.node-options .delete', layout).click(function() {

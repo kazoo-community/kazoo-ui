@@ -71,8 +71,6 @@
 }
 
 #ws_callflow .tool_name {
-    text-transform: capitalize;
-    cursor: default;
     font-size: 11px;
     line-height: 11px;
 }
