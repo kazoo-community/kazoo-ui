@@ -902,7 +902,7 @@ winkstart.module('userportal', 'portal_manager', {
         voicemail_uri: function(msg_uri) {
             return winkstart.apps['userportal'].api_url + '/accounts/' +
                    winkstart.apps['userportal'].account_id + '/vmboxes/' +
-                   msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token;
+                   msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token + '&folder=saved';
         },
 
         /* beginning copy and paste of device module */
