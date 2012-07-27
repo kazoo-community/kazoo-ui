@@ -25,6 +25,7 @@ winkstart.module('voip', 'callflow', {
             buttons: 'tmpl/buttons.html',
             help_callflow: 'tmpl/help_callflow.html',
             fax_callflow: 'tmpl/fax_callflow.html',
+            edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
         },
 
@@ -194,6 +195,7 @@ winkstart.module('voip', 'callflow', {
                     function(json) {
                         THIS._resetFlow();
                         THIS.flow.id = json.data.id;
+                        THIS.flow.name = json.data.name;
                         THIS.flow.caption_map = json.data.metadata;
 
                         if(json.data.flow.module != undefined) {
@@ -477,7 +479,28 @@ winkstart.module('voip', 'callflow', {
 
                 if (node.actionName == 'root') {
                     $node.removeClass('icons_black root');
-                    node_html = THIS.templates.root.tmpl({});
+                    node_html = THIS.templates.root.tmpl({name: THIS.flow.name || 'Callflow'});
+
+                    $('.edit_icon', node_html).click(function() {
+                        var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name}), {
+                            width: '310px',
+                            title: 'Edit Callflow Name'
+                        });
+
+                        $('#add', popup).click(function() {
+                            var $callflow_name = $('#callflow_name', popup);
+                            if($callflow_name.val() != '') {
+                                THIS.flow.name = $callflow_name.val();
+                                $('.root .top_bar .name', layout).html(THIS.flow.name);
+                            }
+                            else {
+                                THIS.flow.name = '';
+                                $('.root .top_bar .name', layout).html('Callflow');
+                            }
+
+                            popup.dialog('close');
+                        });
+                    });
 
                     $('.tooltip', node_html).click(function() {
                         winkstart.dialog(THIS.templates.help_callflow.tmpl());
@@ -657,11 +680,9 @@ winkstart.module('voip', 'callflow', {
                 });
 
                 // dragging the whole branch
-                console.log($(this).attr('id'));
                 if($(this).attr('name') != 'root') {
                     $(this).draggable({
                         start: function () {
-                            console.log($(this));
                             var children = $(this).next(),
                                 t = children.offset().top - $(this).offset().top,
                                 l = children.offset().left - $(this).offset().left;
@@ -671,7 +692,6 @@ winkstart.module('voip', 'callflow', {
                             $(this).attr('t', t); $(this).attr('l', l);
                         },
                         drag: function () {
-                            console.log($(this));
                             var children = $(this).next(),
                                 t = $(this).offset().top + parseInt($(this).attr('t')),
                                 l = $(this).offset().left + parseInt($(this).attr('l'));
@@ -755,6 +775,7 @@ winkstart.module('voip', 'callflow', {
             $('.tooltip', tools).click(function() {
                 winkstart.dialog(THIS.templates.help_callflow.tmpl());
             });
+
             // Set the basic drawer to open
             $('#basic', tools).removeClass('inactive').addClass('active');
             $('#basic .content', tools).show();
@@ -862,38 +883,49 @@ winkstart.module('voip', 'callflow', {
         save: function() {
             var THIS = this;
 
-            if(THIS.flow.id) {
-                winkstart.postJSON('callflow.update', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        callflow_id: THIS.flow.id,
-                        data: {
-                            numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
-                        }
-                    },
-                    function(json) {
-                        THIS.renderList();
-                        THIS.editCallflow({id: json.data.id});
-                    },
-                    winkstart.error_message.process_error()
-                );
+            if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
+                if(THIS.flow.id) {
+                    var data_post = {
+                        numbers: THIS.flow.numbers,
+                        flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
+                    };
+
+                    if(THIS.flow.name != '') {
+                        data_post.name = THIS.flow.name;
+                    }
+
+                    winkstart.postJSON('callflow.update', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            callflow_id: THIS.flow.id,
+                            data: data_post
+                        },
+                        function(json) {
+                            THIS.renderList();
+                            THIS.editCallflow({id: json.data.id});
+                        },
+                        winkstart.error_message.process_error()
+                    );
+                }
+                else {
+                    winkstart.putJSON('callflow.create', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            data: {
+                                numbers: THIS.flow.numbers,
+                                flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
+                            }
+                        },
+                        function(json) {
+                            THIS.renderList();
+                            THIS.editCallflow({id: json.data.id});
+                        },
+                        winkstart.error_message.process_error()
+                    );
+                }
             }
             else {
-                winkstart.putJSON('callflow.create', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        data: {
-                            numbers: THIS.flow.numbers,
-                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
-                        }
-                    },
-                    function(json) {
-                        THIS.renderList();
-                        THIS.editCallflow({id: json.data.id});
-                    },
-                    winkstart.error_message.process_error()
-                );
+                winkstart.alert('You need to select a number for this callflow before saving it.');
             }
         },
 
@@ -921,7 +953,7 @@ winkstart.module('voip', 'callflow', {
                                 if($.isArray(elem.numbers) && elem.featurecode == false) {
                                     new_list.push({
                                         id: elem.id,
-                                        title: (elem.numbers) ? elem.numbers.toString() : ''
+                                        title: (elem.name) ? elem.name : (elem.numbers ? elem.numbers.toString() : '')
                                     });
                                 }
                             });

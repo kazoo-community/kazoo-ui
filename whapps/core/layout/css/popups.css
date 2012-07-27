@@ -81,3 +81,7 @@
 .inline_popup.small .main_content .pill-content .clearfix {
     display: block;
 }
+
+.dialog_popup .fancy_help_text {
+    font-size: 12px;
+}

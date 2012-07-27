@@ -14,6 +14,7 @@
 #ws_callflow .callflow .root > .top_bar {
     background-image: url(../images/blue_bar.png);
     height: 25px;
+    text-align: left;
 }
 
 #ws_callflow .callflow .root > .top_bar > span {
@@ -338,14 +339,17 @@
     margin-left: 5px;
 }
 
-#ws-callflow .ui-draggable {
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
-    cursor: grab;
-}
-
 #callflow-content .ui-draggable-dragging {
     cursor: -moz-grabbing !important;
     cursor: -webkit-grabbing !important;
     cursor: grabbing !important;
+}
+
+#ws_callflow .root .top_bar .edit_icon {
+    background: url('../images/edit_icon.png') no-repeat scroll center center transparent;
+    cursor: pointer;
+    display: inline-block;
+    height: 18px;
+    margin: 3px 0px 0px 7px;
+    width: 20px;
 }
