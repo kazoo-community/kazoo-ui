@@ -75,15 +75,38 @@ winkstart.module('voip', 'callflow', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
+            'callflow.create_no_loading': {
+                url: '{api_url}/accounts/{account_id}/callflows',
+                contentType: 'application/json',
+                verb: 'PUT',
+                trigger_events: false
+            },
             'callflow.update': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'POST'
             },
+            'callflow.update_no_loading': {
+                url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
+                contentType: 'application/json',
+                verb: 'POST',
+                trigger_events: false
+            },
+
             'callflow.delete': {
                 url: '{api_url}/accounts/{account_id}/callflows/{callflow_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
+            },
+            'callflow.list_trunkstore_accounts': {
+                url: '{api_url}/accounts/{account_id}/connectivity/',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'callflow.get_trunkstore_account': {
+                url: '{api_url}/accounts/{account_id}/connectivity/{connectivity_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -105,6 +128,115 @@ winkstart.module('voip', 'callflow', {
     {
         actions: {},
 
+        list_accounts: function(success, error) {
+            winkstart.request('callflow.list_trunkstore_accounts', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        get_account: function(success, error) {
+            var THIS = this;
+
+            winkstart.request('callflow.get_trunkstore_account', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    connectivity_id: winkstart.apps['voip'].connectivity_id
+                },
+                function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
+        list_numbers_callflow: function(success, error) {
+            var THIS = this;
+
+            winkstart.request('callflow.list', {
+                    api_url: winkstart.apps['voip'].api_url,
+                    account_id: winkstart.apps['voip'].account_id
+                },
+                function(_data_callflows, status) {
+                    var map_numbers = {};
+
+                    $.each(_data_callflows.data, function(k, v) {
+                        if(v.numbers) {
+                            $.each(v.numbers, function(k2, v2) {
+                                map_numbers[v2] = true;
+                            });
+                        }
+                    });
+
+                    if(typeof success == 'function') {
+                        success(map_numbers);
+                    }
+                },
+                function(_data_callflows, status) {
+                    if(typeof error == 'function') {
+                        error(_data_callflows);
+                    }
+                }
+            );
+        },
+
+        list_numbers_trunkstore: function(success, error) {
+            var THIS = this;
+
+            THIS.list_accounts(
+                function(data, status) {
+                    var map_numbers = {};
+
+                    if(data.data.length) {
+                        winkstart.apps['voip'].connectivity_id = data.data[0];
+
+                        THIS.get_account(
+                            function(_data, status) {
+                                if(typeof success == 'function') {
+                                    $.each(_data.data.servers, function(k, v) {
+                                        $.each(this.DIDs, function(k2, v2) {
+                                            map_numbers[k2] = true;
+                                        });
+                                    });
+                                    success(map_numbers, status);
+                                }
+                            },
+                            function(_data, status) {
+                                if(typeof error == 'function') {
+                                    error(data, status);
+                                }
+                            }
+                        );
+                    }
+                    else {
+                        success(map_numbers, status);
+                    }
+                },
+                function(data, status) {
+                    if(typeof error == 'function') {
+                        error(data, status);
+                    }
+                }
+            );
+        },
+
         activate: function () {
             var THIS = this,
                 callflow_html = THIS.templates.callflow_main.tmpl();
@@ -120,18 +252,44 @@ winkstart.module('voip', 'callflow', {
         },
 
         list_numbers: function(success, error) {
+            var THIS = this;
+
             winkstart.request('callflow.list_numbers', {
                     api_url: winkstart.apps['voip'].api_url,
                     account_id: winkstart.apps['voip'].account_id
                 },
-                function(_data, status) {
-                    if(typeof success === 'function') {
-                        success(_data);
-                    }
+                function(_data_numbers, status) {
+                    THIS.list_numbers_callflow(
+                        function(number_callflows, status) {
+                            $.each(number_callflows, function(k, v) {
+                                delete _data_numbers.data[k];
+                            });
+
+                            if(typeof success === 'function') {
+                                THIS.list_numbers_trunkstore(
+                                    function(numbers_trunkstore) {
+                                        $.each(numbers_trunkstore, function(k, v) {
+                                            delete _data_numbers.data[k];
+                                        });
+
+                                        success(_data_numbers);
+                                    },
+                                    function(data) {
+                                        success(_data_numbers);
+                                    }
+                                );
+                            }
+                        },
+                        function(_data_callflows, status) {
+                            if(typeof error === 'function') {
+                                error(_data_callflows);
+                            }
+                        }
+                    );
                 },
                 function(_data, status) {
                     if(typeof error === 'function') {
-                        error(_data);
+                        error(_data_numbers);
                     }
                 }
             );
@@ -264,6 +422,15 @@ winkstart.module('voip', 'callflow', {
         },
 
         renderFlow: function() {
+            var THIS = this;
+
+            // Let it there for now, if we need to save callflows automatically again.
+            /*if('savable' in THIS.flow) {
+                THIS.save_callflow_no_loading();
+            }*/
+
+            THIS.flow.savable = true;
+
             var target = $(this.config.elements.flow).empty();
 
             target.append(this._renderFlow());
@@ -497,6 +664,8 @@ winkstart.module('voip', 'callflow', {
                                 THIS.flow.name = '';
                                 $('.root .top_bar .name', layout).html('Callflow');
                             }
+                            //THIS.save_callflow_no_loading();
+                            THIS.renderFlow();
 
                             popup.dialog('close');
                         });
@@ -585,19 +754,44 @@ winkstart.module('voip', 'callflow', {
                             $('button.add_number', popup).click(function(event) {
                                 event.preventDefault();
                                 var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val(),
+                                    map_numbers = {},
                                     add_number = function() {
-                                        THIS.flow.numbers.push(number);
-                                        popup.dialog('close');
+                                        if(number !== 'select_none' && number !== '') {
+                                            THIS.flow.numbers.push(number);
+                                            popup.dialog('close');
 
-                                        THIS.renderFlow();
+                                            THIS.renderFlow();
+                                        }
+                                        else {
+                                            winkstart.alert('You didn\'t select a valid phone number.');
+                                        }
+                                    },
+                                    check_and_add_number = function() {
+                                        THIS.list_numbers_callflow(
+                                            function(data_numbers, status) {
+                                                map_numbers = $.extend(true, map_numbers, data_numbers);
+                                                if(number in map_numbers) {
+                                                    winkstart.alert('This number is already attached to a callflow');
+                                                }
+                                                else {
+                                                    add_number();
+                                                }
+                                            },
+                                            function(data_numbers, status) {
+                                                add_number();
+                                            }
+                                        );
                                     };
 
-                                if(number !== 'select_none' && number !== '') {
-                                    add_number();
-                                }
-                                else {
-                                    winkstart.alert('You didn\'t select a valid phone number.');
-                                }
+                                THIS.list_numbers_trunkstore(
+                                    function(data_numbers_trunkstore) {
+                                        map_numbers = data_numbers_trunkstore;
+                                        check_and_add_number();
+                                    },
+                                    function(data_numbers_trunkstore) {
+                                        check_and_add_number();
+                                    }
+                                );
                             });
                         });
                     });
@@ -880,6 +1074,57 @@ winkstart.module('voip', 'callflow', {
             $('.tool').removeClass('active');
         },
 
+        save_callflow_no_loading: function() {
+            var THIS = this;
+
+            /* If there is at least one number */
+            if(THIS.flow && THIS.flow.numbers && THIS.flow.numbers.length > 0) {
+                /* And at least one module inside the callflow */
+                if(THIS.flow.nodes && THIS.flow.nodes[0] && THIS.flow.nodes[0].children && THIS.flow.nodes[0].children[0] && THIS.flow.nodes[0].children[0].module != '') {
+                    /* If this is an existing callflow, update it */
+                    if(THIS.flow.id) {
+                        var data_post = {
+                            numbers: THIS.flow.numbers,
+                            flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
+                        };
+
+                        if(THIS.flow.name != '') {
+                            data_post.name = THIS.flow.name;
+                        }
+
+                        winkstart.postJSON('callflow.update_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                callflow_id: THIS.flow.id,
+                                data: data_post
+                            },
+                            function(json) {
+                                THIS.renderList(null, true);
+                            },
+                            winkstart.error_message.process_error()
+                        );
+                    }
+                    /* Otherwise create the callflow */
+                    else {
+                        winkstart.putJSON('callflow.create_no_loading', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                data: {
+                                    numbers: THIS.flow.numbers,
+                                    flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
+                                }
+                            },
+                            function(json) {
+                                THIS.flow.id = json.data.id;
+                                THIS.renderList(null, true);
+                            },
+                            winkstart.error_message.process_error()
+                        );
+                    }
+                }
+            }
+        },
+
         save: function() {
             var THIS = this;
 
@@ -929,10 +1174,11 @@ winkstart.module('voip', 'callflow', {
             }
         },
 
-        renderList: function(callback){
-            var THIS = this;
+        renderList: function(callback, no_loading){
+            var THIS = this,
+                request = no_loading ? 'callflow.list_no_loading' : 'callflow.list';
 
-            winkstart.request(true,'callflow.list', {
+            winkstart.request(true, request, {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 },
