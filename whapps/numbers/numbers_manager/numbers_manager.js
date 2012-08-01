@@ -880,6 +880,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
             /* White label links, have to do it in JS because template doesn't eval variables in href :( */
             $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://www.2600hz.com/loa');
+            $('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://www.2600hz.com/resporg');
             $('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
             $('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
@@ -1033,8 +1034,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
                 port_form_data.phone_numbers = phone_numbers;
 
-                port_form_data.files = files;
-                port_form_data.loa = loa;
+                files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request';
+                loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request';
 
                 if(string_alert === '') {
                     delete port_form_data.extra;
