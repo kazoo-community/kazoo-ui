@@ -581,7 +581,7 @@ winkstart.module('auth', 'auth',
                             if(landing) {
                                 winkstart.publish('auth.landing', $('.ws-content'));
                             }
-                            
+
                         },
                         function(data, status) {
                             winkstart.alert('error', 'An error occurred while loading your account.',
@@ -648,7 +648,8 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             var dialog_new_password = winkstart.dialog(THIS.templates.new_password.tmpl(), {
-                title: 'Please set a new password'
+                title: 'Please set a new password',
+                width: '500px'
             });
 
             winkstart.validate.set(THIS.config.validation_new_password, dialog_new_password);
@@ -658,7 +659,7 @@ winkstart.module('auth', 'auth',
                 var data_new_password = form2object('new_password_form');
 
                 winkstart.validate.is_valid(THIS.config.validation_new_password, dialog_new_password, function() {
-                    if(data_new_password.new_password1 == data_new_password.new_password2) {
+                    if(data_new_password.new_password1 === data_new_password.new_password2) {
                         user_data.password = data_new_password.new_password1;
                         user_data.require_password_update = false;
 
@@ -676,6 +677,11 @@ winkstart.module('auth', 'auth',
                                 winkstart.alert('error', 'Error :' + status);
                             }
                         );
+                    }
+                    else {
+                        $('#new_password1', dialog_new_password).val('');
+                        $('#new_password2', dialog_new_password).val('');
+                        winkstart.alert('Password typed don\'t match. Please retype your new password');
                     }
                 });
             });
