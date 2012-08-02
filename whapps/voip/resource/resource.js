@@ -480,31 +480,7 @@ winkstart.module('voip', 'resource', {
             return form_data;
         },
 
-        update_nomatch_route: function(parent, module_name) {
-            var THIS = this,
-                create_nomatch = function(parent, module_name) {
-                    winkstart.request('callflow.create', {
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url,
-                            data: {
-                                featurecode: {},
-                                numbers: ['no_match'],
-                                flow: {
-                                    children: {},
-                                    data: {},
-                                    module: module_name
-                                }
-                            }
-                        },
-                        function(json) {
-                            THIS.render_landing_resource(parent, module_name);
-                        },
-                        function(json, status) {
-                            winkstart.alert('Error: ' + status);
-                        }
-                    );
-                };
-
+        delete_nomatch_route: function(success, error) {
             winkstart.request('callflow.get_no_match', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
@@ -517,34 +493,71 @@ winkstart.module('voip', 'resource', {
                                 callflow_id: _data.data[0].id
                             },
                             function(_data, status) {
-                                create_nomatch(parent, module_name);
+                                success(_data, status);
                             }
                         );
                     }
                     else {
-                        create_nomatch(parent, module_name);
+                        success(_data, status);
                     }
+                },
+                function(_data, status) {
+                    error(_data, status);
                 }
             );
+        },
+
+        update_nomatch_route: function(parent, module_name) {
+            var THIS = this;
+
+            THIS.delete_nomatch_route(function() {
+                winkstart.request('callflow.create', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url,
+                        data: {
+                            featurecode: {},
+                            numbers: ['no_match'],
+                            flow: {
+                                children: {},
+                                data: {},
+                                module: module_name
+                            }
+                        }
+                    },
+                    function(json) {
+                        THIS.render_landing_resource(parent, module_name);
+                    },
+                    function(json, status) {
+                        winkstart.alert('Error: ' + status);
+                    }
+                );
+            });
         },
 
         render_landing_resource: function(parent, resource_type) {
             var THIS = this,
                 resource_type = resource_type || 'none',
+                module_name,
                 init_events = function() {
                     $('.resource_btn', resource_html).click(function() {
                         if(!$(this).hasClass('pressed')) {
-                            var module_name = 'resources';
-
                             if($(this).hasClass('hosted_btn')) {
                                 module_name = 'offnet';
                                 THIS.update_nomatch_route(parent, module_name);
                             }
                             else {
                                 winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                                    module_name = 'resources';
                                     THIS.update_nomatch_route(parent, module_name);
                                 });
                             }
+                        }
+                        else {
+                            THIS.delete_nomatch_route(function() {
+                                module_name = 'none';
+                                THIS.render_landing_resource(parent, module_name);
+                                $('.resource_btn', resource_html).removeClass('pressed');
+                            });
                         }
                     });
                 },
