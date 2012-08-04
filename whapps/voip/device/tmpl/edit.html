@@ -20,6 +20,7 @@
             <li><a href="#audio_settings">Audio Settings</a></li>
             <li><a href="#video_settings">Video Settings</a></li>
             <li><a href="#fax_support">Fax Support</a></li>
+            <li><a href="#ringtones">Ringtones</a></li>
         </ul>
         <form id="device-form" action="" method="post">
             <div class="pill-content">
@@ -308,6 +309,22 @@
                     </div>
 
                     <input type="hidden" name="media.fax.option" value="false"/>
+                </div>
+
+                <div id="ringtones">
+                    <div class="clearfix">
+                        <label for="ringtones_internal">Internal Ringtones</label>
+                        <div class="input">
+                            <input class="span4" id="ringtones_internal" name="ringtones.internal" type="text" placeholder="" value="${data.ringtones.internal}" rel="popover" data-content="The alert info SIP header added when the call is from internal sources"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="ringtones_external">External Ringtones</label>
+                        <div class="input">
+                            <input class="span4" id="ringtones_external" name="ringtones.external" type="text" placeholder="" value="${data.ringtones.external}" rel="popover" data-content="The alert info SIP header added when the call is from external sources"/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>

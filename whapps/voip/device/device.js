@@ -275,6 +275,7 @@ winkstart.module('voip', 'device', {
                             external: {},
                             internal: {}
                         },
+                        ringtones: {},
                         media: {
                             bypass_media: 'auto',
                             audio: {
@@ -731,6 +732,14 @@ winkstart.module('voip', 'device', {
 
             if(data.outbound_flags) {
                 data.outbound_flags = data.outbound_flags.split(/,/);
+            }
+
+            if(data.ringtones && 'internal' in data.ringtones && data.ringtones.internal === '') {
+                delete data.ringtones.internal;
+            }
+
+            if(data.ringtones && 'external' in data.ringtones && data.ringtones.external === '') {
+                delete data.ringtones.external;
             }
 
             return data;
