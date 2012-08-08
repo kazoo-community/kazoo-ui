@@ -1,6 +1,6 @@
 #myaccount_navbar {
    cursor: pointer;
-   min-width: 230px;
+   min-width: 160px;
 }
 
 .nav.secondary-nav.links .open #myaccount_navbar .arrow {
@@ -40,12 +40,15 @@
 
 #myaccount_help {
     float: right;
+    width: 73px;
+    height: 73px;
 }
 
 #myaccount_help > a {
-    padding: 0;
     background-image: url('../img/help_btn.png');
+    background-repeat: no-repeat;
     width: 73px;
     height: 73px;
     margin-top: -1px;
+    padding: 0;
 }

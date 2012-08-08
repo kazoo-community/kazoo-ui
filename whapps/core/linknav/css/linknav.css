@@ -6,19 +6,6 @@
     background-repeat: repeat-y;
 }
 */
-#ws-topbar .links > .link {
-    text-align: center;
-    border-left: 1px solid #6a6a6a;
-    border-right: 1px solid #171717;
-}
-
-#ws-topbar .links > .link:last-child {
-    border-right: 0px;
-}
-
-#ws-topbar .links > li:nth-child(2){
-    border-left: 0px;
-}
 
 #ws-topbar .links > .link > .dropdown-toggle::after {
     display: none;

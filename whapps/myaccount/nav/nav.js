@@ -4,7 +4,8 @@ winkstart.module('myaccount', 'nav', {
         ],
 
         templates: {
-            myaccount_navbar: 'tmpl/myaccount_navbar.html'
+            myaccount_navbar: 'tmpl/myaccount_navbar.html',
+            help: 'tmpl/help.html'
         },
 
         subscribe: {
@@ -25,9 +26,10 @@ winkstart.module('myaccount', 'nav', {
                 container = THIS.templates.myaccount_navbar.tmpl({
                     user_name: user_name,
                     company_name: user_data.account_name
-                });
+                }),
+                help_html = THIS.templates.help.tmpl();
 
-            $('#help_link', container).attr('href', winkstart.config.nav.help || 'http://www.2600hz.org/support.html');
+            $('#help_link', help_html).attr('href', winkstart.config.nav.help || 'http://wiki.2600hz.com');
 
             $('.masquerade', container).click(function() {
                 winkstart.publish('nav.company_name_click');
@@ -39,7 +41,12 @@ winkstart.module('myaccount', 'nav', {
                 content: container,
                 modifier: function(link_html) {
                     $('> a', link_html).css('padding', 0);
-                    $('> .dropdown-menu', link_html).css('width', '100%');
+                    $('> .dropdown-menu', link_html)
+                        .css('width', '100%')
+                        .css({
+                            'width': '+=73',
+                            'margin-right': '-73px'
+                        });
                 }
             });
 
@@ -51,6 +58,16 @@ winkstart.module('myaccount', 'nav', {
                 label: 'Sign out',
                 weight: '25',
                 publish: 'auth.activate'
+            });
+
+            winkstart.publish('linknav.add', {
+                name: 'help',
+                weight: 15,
+                content: help_html,
+                modifier: function(link_html) {
+                    $('> a', link_html).css('padding', 0);
+                    link_html.prev('li.divider').remove();
+                }
             });
         },
 
