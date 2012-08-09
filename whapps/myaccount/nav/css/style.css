@@ -52,3 +52,7 @@
     margin-top: -1px;
     padding: 0;
 }
+
+#myaccount_help > a:hover {
+    background-image: url('../img/help_btn_hover.png');
+}
