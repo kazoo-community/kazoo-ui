@@ -442,6 +442,10 @@ winkstart.module('call_center', 'queue', {
                 THIS.refresh_table(user_data);
             }
 
+            $('#select_all_agents', parent).click(function() {
+                $('.select_agent', parent).prop('checked', $(this).is(':checked'));
+            });
+
             $('#add_agents', parent).click(function(ev) {
                 ev.preventDefault();
 
@@ -529,14 +533,14 @@ winkstart.module('call_center', 'queue', {
             $('#remove_agents', parent).click(function(ev) {
                 ev.preventDefault();
 
-                if($('.select_number:checked', parent).size() > 0) {
+                if($('.select_agent:checked', parent).size() > 0) {
                     var map_agents = {};
 
                     $.each(data.data.agents, function(k, v) {
                         map_agents[v] = true;
                     });
 
-                    $('.select_number:checked', parent).each(function(k, v) {
+                    $('.select_agent:checked', parent).each(function(k, v) {
                         delete map_agents[$(this).dataset('id')];
                     });
 
@@ -594,7 +598,7 @@ winkstart.module('call_center', 'queue', {
                     'sTitle': '<input type="checkbox" id="select_all_agents"/>',
                     'fnRender': function(obj) {
                         var id = obj.aData[obj.iDataColumn];
-                        return '<input data-id="'+ id +'" type="checkbox" class="select_number"/>';
+                        return '<input data-id="'+ id +'" type="checkbox" class="select_agent"/>';
                     },
                     'bSortable': false,
                     'sWidth': '5%'
