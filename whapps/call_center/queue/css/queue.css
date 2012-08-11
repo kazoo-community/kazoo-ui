@@ -34,6 +34,9 @@
     overflow: hidden;
     cursor: pointer;
     white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 .add_agents_popup .right_part {
@@ -58,6 +61,9 @@
     overflow: hidden;
     cursor: pointer;
     white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 .add_agents_popup .box_header {
@@ -70,7 +76,13 @@
     text-align: center;
     border-bottom: 1px solid #05addc;
     font-weight: bold;
+    font-size: 15px;
+}
+
+.add_agents_popup .left_part .box_header .count_agents {
     font-size: 16px;
+    color: #05addc;
+    display: inline-block;
 }
 
 .add_agents_popup .right_part .box_header {

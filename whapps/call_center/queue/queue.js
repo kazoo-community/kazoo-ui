@@ -21,7 +21,7 @@ winkstart.module('call_center', 'queue', {
         },
 
         validation: [
-            { name: '#name',      regex: /^.*/ },
+            { name: '#name', regex: /.+/ },
             { name: '#connection_timeout',  regex: /^[0-9]+$/ },
             { name: '#member_timeout',  regex: /^[0-9]+$/ }
             /*{ name: '#caller_exit_key',  regex: /^.{1}/ }*/
@@ -348,7 +348,7 @@ winkstart.module('call_center', 'queue', {
             $('.queue-delete', queue_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this queue?', function() {
+                winkstart.confirm('This will remove this queue and all the agents and reports attached to this queue as well. Are you sure you want to delete it?', function() {
                     THIS.delete_queue(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -424,9 +424,39 @@ winkstart.module('call_center', 'queue', {
 
         render_user_list: function(data, parent) {
             var THIS = this,
-                user_data = {};
+                user_data = {},
+                sorted_users = [],
+                list_names = [];
 
             THIS.setup_table(parent);
+
+            /* First we're going through the list of users to get the last names */
+            $.each(data.field_data.users, function(k, v) {
+                if(list_names.indexOf(v.last_name.toLowerCase()) < 0) {
+                    list_names.push(v.last_name.toLowerCase());
+                }
+            });
+
+            /* Then we sort the array */
+            list_names.sort();
+
+            /* We build the function which will be use the second time we'll loop over users */
+            var build_sort_users = function(k, user) {
+                if(sorted_users[list_names.indexOf(user.last_name.toLowerCase())]) {
+                    sorted_users[list_names.indexOf(user.last_name.toLowerCase())].push({
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        id: user.id
+                    });
+                }
+                else {
+                    sorted_users[list_names.indexOf(user.last_name.toLowerCase())] = [{
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        id: user.id
+                    }];
+                }
+            };
 
             if(data.data.id && 'agents' in data.data && data.data.agents.length > 0) {
                 $.each(data.field_data.users, function(k, v) {
@@ -437,9 +467,16 @@ winkstart.module('call_center', 'queue', {
                             id: v.id
                         }
                     }
+
+                    build_sort_users(k, v);
                 });
 
                 THIS.refresh_table(user_data);
+            }
+            else {
+                $.each(data.field_data.users, function(k, v) {
+                    build_sort_users(k, v);
+                });
             }
 
             $('#select_all_agents', parent).click(function() {
@@ -454,15 +491,31 @@ winkstart.module('call_center', 'queue', {
                         title: 'Select Agents'
                     });
 
-                $.each(data.field_data.users, function(k, v) {
+                var count_agents = 0;
+                $.each(sorted_users, function(k, v) {
+                    $.each(v, function(k2, v2) {
+                        if(!(v2.id in user_data)) {
+                            $('.unassigned_users', popup_agents).append(THIS.templates.available_user.tmpl(v2));
+                        }
+                        else {
+                            count_agents++;
+                            $('.list_agents', popup_agents).append(THIS.templates.selected_agent.tmpl(v2))
+                        }
+                    });
+                });
+
+                /*$.each(data.field_data.users, function(k, v) {
                     if(!(v.id in user_data)) {
                         $('.unassigned_users', popup_agents).append(THIS.templates.available_user.tmpl(v));
                     }
-                });
+                });*/
 
-                $.each(user_data, function(k, v) {
+                /*$.each(user_data, function(k, v) {
                     $('.list_agents', popup_agents).append(THIS.templates.selected_agent.tmpl(v));
-                });
+                    count_agents++;
+                });*/
+
+                $('.count_agents', popup_agents).html(count_agents);
 
                 $('.new_searchfield', popup_agents).keyup(function() {
                     var input = $(this),
@@ -501,11 +554,13 @@ winkstart.module('call_center', 'queue', {
                 $(popup_agents).delegate('.queue_agent', 'click', function() {
                     $('.unassigned_users', popup_agents).prepend(THIS.templates.available_user.tmpl($(this).dataset()));
                     $(this).remove();
+                    $('.count_agents', popup_agents).html(--count_agents);
                 });
 
                 $(popup_agents).delegate('.user_box', 'click', function() {
                     $('.list_agents', popup_agents).prepend(THIS.templates.selected_agent.tmpl($(this).dataset()));
                     $(this).remove();
+                    $('.count_agents', popup_agents).html(++count_agents);
                 });
 
                 $('.add-agents', popup_agents).click(function() {
@@ -608,7 +663,7 @@ winkstart.module('call_center', 'queue', {
                     'bVisible': false
                 },
                 {
-                    'sTitle': 'User <span class="icon medium user"></span>',
+                    'sTitle': '<span class="icon medium user"></span> User',
                     'sWidth': '80%'
                 },
                 {

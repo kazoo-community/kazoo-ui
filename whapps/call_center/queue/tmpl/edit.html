@@ -58,8 +58,10 @@
 		<div class="buttons-right">
 	        {{if data.id}}
 	            <button class="btn danger queue-delete">Delete</button>
-	        {{/if}}
-            <button class="btn success queue-save">Save</button>
+                <button class="btn success queue-save">Save</button>
+	        {{else}}
+                <button class="btn success queue-save">Add Agents</button>
+            {{/if}}
 		</div>
 	</div>
 </div>
