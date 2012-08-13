@@ -30,6 +30,7 @@
 						<div class="input">
                             {{if data.username}}
                                 <label id="username_label">${data.username}</label>
+                                <input id="username" name="username" type="hidden"value="${data.username}" />
                             {{else}}
                                 <input class="span4" id="username" name="username" type="text" placeholder="Username" value="${data.username}" rel="popover" data-content="Username"/>
                             {{/if}}
