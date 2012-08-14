@@ -8,11 +8,9 @@ winkstart.module('auth', 'onboarding', {
             step1: 'tmpl/step1.html',
             step2: 'tmpl/step2.html',
             step3: 'tmpl/step3.html',
-            /*api_developer: 'tmpl/api_developer.html',
-            single_phone: 'tmpl/single_phone.html',
-            voip_minutes: 'tmpl/voip_minutes.html',*/
             small_office: 'tmpl/small_office.html',
-            reseller: 'tmpl/reseller.html'
+            reseller: 'tmpl/reseller.html',
+            error: 'tmpl/error.html'
         },
 
         subscribe: {
@@ -90,19 +88,39 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
-        error_handling: function(errors, callback) {
-            var THIS = this
-                alert = "<p>Error while creating your account, please verify information and try again.</p>";
+        error_handling: function(data, number) {
+            var THIS = this,
+                wrapper = $('#onboarding-view'),
+                formated_data = winkstart.print_r(data),
+                msg = 'Errors: ',
+                errors = data.data.errors;
 
-            if(errors.braintree && errors.braintree.data) {
-                alert += "<p>" + errors.braintree.data.api_error.message + "</p>";
-            }
+            $.each(errors, function(key, v) {
+                if(key == 'braintree') {
+                    msg += errors.braintree.data.api_error.message;
+                }
+                if(key == 'phone_numbers') {
+                    if(errors.phone_numbers[number].data.provider_fault) {
+                        msg += 'Incorrect address';
+                    }
+                    if(errors.phone_numbers[number].data.carrier_fault) {
+                        msg += 'Number already used! Please select another one.'
+                    }
+                    
+                }
+            });
 
-            winkstart.alert('error', alert);
+            var error_html = THIS.templates.error.tmpl({
+                    msg: msg 
+                }),
+                alert = winkstart.alert('error', error_html.html());
 
-            if(typeof callback == 'function') {
-                callback();
-            }
+            $('.json_error', alert).append(formated_data);
+
+            $('.json', alert).click(function(e){
+                e.preventDefault();
+               $('.json_error', alert).toggle();
+            });       
         },
 
         parse_username: function(username) {
@@ -582,28 +600,19 @@ winkstart.module('auth', 'onboarding', {
                                         winkstart.publish('auth.load_account');
                                     };
 
-                                    if(_data.data.errors) {
-
-                                        current_step = 1;
-                                        THIS.move_to_step(1, onboard_html);
-                                        winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>'
-                                            + winkstart.print_r(_data.data.errors));
-
-                                    }
-                                    else {
-                                        success();
-                                    }
+                                    success();
                                 }
                                 else {
                                     winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
                                 }
                             },
                             function (_data, status) {
-                            
-                                winkstart.publish('onboard.error_handling', _data.data.errors, function() {
-                                    current_step = 1;
-                                    THIS.move_to_step(1, onboard_html);
-                                });
+                                _data.data.errors = _data.data.errors || {};
+
+                                winkstart.publish('onboard.error_handling', _data, number);
+
+                                current_step = 1;
+                                THIS.move_to_step(1, onboard_html);
                             }
                         );
                     },
