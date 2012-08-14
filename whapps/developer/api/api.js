@@ -494,11 +494,11 @@ winkstart.module('developer', 'api', {
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     local_resources: {
-                        title: 'Local Ressources',
+                        title: 'Local "Ressources"',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     global_resources: {
-                        title: 'Global Ressources',
+                        title: 'Global "Ressources"',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     temporal_rules: {
