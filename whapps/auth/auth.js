@@ -546,6 +546,7 @@ winkstart.module('auth', 'auth',
                     winkstart.getJSON('auth.get_user', rest_data,
                         function (json, xhr) {
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
+                            json.data.apps = json.data.apps || {};
 
                             winkstart.publish('auth.account.loaded', json.data);
 
