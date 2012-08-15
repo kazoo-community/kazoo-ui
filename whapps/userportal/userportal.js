@@ -1,8 +1,8 @@
-    winkstart.module('portal', 'portal', {
+    winkstart.module('userportal', 'userportal', {
         subscribe: {
-            'portal.activate' : 'activate',
-            'portal.initialized' : 'initialized',
-            'portal.module_activate': 'module_activate'
+            'userportal.activate' : 'activate',
+            'userportal.initialized' : 'initialized',
+            'userportal.module_activate': 'module_activate'
         }
     },
     /* The code in this initialization function is required for
@@ -57,7 +57,7 @@
 
             THIS.is_initialized = true;
 
-            if(winkstart.apps['portal'].default){
+            if(winkstart.apps['userportal'].default){
                 THIS.setup_page();
             }
         },
@@ -130,8 +130,8 @@
 
             $('#ws-content').empty();
 
-            //We want to load the voicemail module as the opening page of the portal
-            winkstart.publish('portal.module_activate', {name: 'portal_manager'});
+            //We want to load the voicemail module as the opening page of the userportal
+            winkstart.publish('userportal.module_activate', {name: 'portal_manager'});
         }
     }
 );

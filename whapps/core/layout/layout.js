@@ -92,7 +92,12 @@ winkstart.module('core', 'layout', {
                 }
             });
 
+            winkstart.get_version(function(version) {
+                $('.footer_wrapper .tag_version').html('('+version.replace(/\s/g,'')+')');
+            });
+
             $('#ws-topbar .brand.logo', layout_html).click(function() {
+                $('.whapps .whapp > a').removeClass('activate');
                 winkstart.publish('auth.landing');
             });
 

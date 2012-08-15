@@ -494,11 +494,11 @@ winkstart.module('developer', 'api', {
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     local_resources: {
-                        title: 'Local Ressources',
+                        title: 'Local Resources',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     global_resources: {
-                        title: 'Global Ressources',
+                        title: 'Global Resources',
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     temporal_rules: {
@@ -507,7 +507,7 @@ winkstart.module('developer', 'api', {
                     },
                     phone_numbers: {
                         title: 'Phone Numbers',
-                        verbs: ['get_all', 'get', 'post', 'delete']
+                        verbs: ['get_all', 'post', 'delete']
                     },
                     limits: {
                         title: 'Limits',

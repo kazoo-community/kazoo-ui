@@ -134,3 +134,9 @@
 #user-form #equipment #tab_devices .row:nth-child(even) {
     background-color: #dddddd;
 }
+
+#user-form #username_label {
+    color: #05addc;
+    text-align: left;
+    font-weight: bold;
+}

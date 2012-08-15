@@ -173,7 +173,7 @@ winkstart.module('auth', 'onboarding', {
 
             if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
                 extension = $('#extension_1', target).val();
-                form_data.extensions[0].callflow.numbers = [ extension ];
+                form_data.extensions[0].callflow.numbers.push(extension);
 
                 for(i=2; i<6; i++) {
                     username = THIS.parse_username($('#name_'+i, target).val());

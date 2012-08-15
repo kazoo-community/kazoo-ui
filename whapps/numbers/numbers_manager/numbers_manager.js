@@ -6,7 +6,6 @@ winkstart.module('numbers', 'numbers_manager', {
 
         templates: {
             numbers_manager: 'tmpl/numbers_manager.html',
-            failover_dialog: 'tmpl/failover_dialog.html',
             cnam_dialog: 'tmpl/cnam_dialog.html',
             e911_dialog: 'tmpl/e911_dialog.html',
             add_number_dialog: 'tmpl/add_number_dialog.html',
@@ -404,19 +403,6 @@ winkstart.module('numbers', 'numbers_manager', {
         },
 
         clean_phone_number_data: function(data) {
-            /* Clean Failover */
-            if('failover' in data && 'sip' in data.failover && data.failover.sip === '') {
-                delete data.failover.sip;
-            }
-
-            if('failover' in data && 'e164' in data.failover && data.failover.e164 === '') {
-                delete data.failover.e164;
-            }
-
-            if(data.failover && $.isEmptyObject(data.failover)) {
-                delete data.failover;
-            }
-
             /* Clean Caller-ID */
             if('cnam' in data && 'display_name' in data.cnam && data.cnam.display_name === '') {
                 delete data.cnam.display_name;
@@ -449,34 +435,6 @@ winkstart.module('numbers', 'numbers_manager', {
                 THIS.render_freeform_number_dialog(function() {
                     THIS.list_numbers();
                 });
-            });
-
-            $(numbers_manager_html).delegate('.failover', 'click', function() {
-                var $failover_cell = $(this),
-                    data_phone_number = $failover_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
-
-                if(phone_number[1]) {
-                    THIS.get_number(phone_number[1], function(_data) {
-                        THIS.render_failover_dialog(_data.data.failover || {}, function(failover_data) {
-                            _data.data.failover = $.extend({}, _data.data.failover, failover_data);
-
-                            THIS.clean_phone_number_data(_data.data);
-
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert('Failed to update the Failover for this phone number<br/>Error: '+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
-                        });
-                    });
-                }
             });
 
             $(numbers_manager_html).delegate('.cid', 'click', function() {
@@ -635,72 +593,6 @@ winkstart.module('numbers', 'numbers_manager', {
 
             popup = winkstart.dialog(popup_html, {
                 title: 'Edit CID'
-            });
-        },
-
-        render_failover_dialog: function(failover_data, callback) {
-            var THIS = this,
-                tmpl_data = {
-                    radio: (failover_data || {}).e164 ? 'number' : ((failover_data || {}).sip ? 'sip' : ''),
-                    failover: (failover_data || {}).e164 || (failover_data || {}).sip || '',
-                    phone_number: failover_data.phone_number || ''
-                },
-                popup_html = THIS.templates.failover_dialog.tmpl(tmpl_data),
-                popup,
-                result,
-                popup_title = failover_data.phone_number ? 'Setup Failover for ' + failover_data.phone_number : 'Setup Failover';
-
-            $('.radio_block input[type="radio"]', popup_html).click(function() {
-                $('.radio_block input[type="text"]', popup_html).hide();
-
-                $(this).siblings('input[type="text"]').show('fast');
-
-                $('.header', popup_html).removeClass('number sip').addClass($('.radio_block input[type="radio"]:checked', popup_html).val());
-            });
-
-            $('.submit_btn', popup_html).click(function(ev) {
-                ev.preventDefault();
-
-                var failover_form_data = {};
-
-                failover_form_data.raw_input = $('input[name="failover_type"]:checked', popup_html).val() === 'number' ? $('.failover_number', popup_html).val() : $('.failover_sip', popup_html).val();
-
-                if(failover_form_data.raw_input.match(/^sip:/)) {
-                    failover_form_data.sip = failover_form_data.raw_input;
-                }
-                else if(result = failover_form_data.raw_input.replace(/-|\(|\)|\s/g,'').match(/^\+?1?([2-9]\d{9})$/)) {
-                    failover_form_data.e164 = '+1' + result[1];
-                }
-                else {
-                    failover_form_data.e164 = '';
-                }
-
-                delete failover_form_data.raw_input;
-
-                if(failover_form_data.e164 || failover_form_data.sip) {
-                    if(typeof callback === 'function') {
-                        callback(failover_form_data);
-                    }
-
-                    popup.dialog('close');
-                }
-                else {
-                    winkstart.alert('Invalid Failover Number, please type it again.');
-                }
-            });
-
-            $('.remove_failover', popup_html).click(function(ev) {
-                ev.preventDefault();
-                if(typeof callback === 'function') {
-                    callback({ e164: '', sip: '' });
-                }
-
-                popup.dialog('close');
-            });
-
-            popup = winkstart.dialog(popup_html, {
-                title: popup_title,
-                width: '640px'
             });
         },
 
@@ -880,6 +772,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
             /* White label links, have to do it in JS because template doesn't eval variables in href :( */
             $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://www.2600hz.com/loa');
+            $('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://www.2600hz.com/resporg');
             $('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
             $('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
@@ -1033,8 +926,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
                 port_form_data.phone_numbers = phone_numbers;
 
-                port_form_data.files = files;
-                port_form_data.loa = loa;
+                files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request';
+                loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request';
 
                 if(string_alert === '') {
                     delete port_form_data.extra;
@@ -1071,9 +964,8 @@ winkstart.module('numbers', 'numbers_manager', {
                     $.each(_data.data, function(k, v) {
                         if(k != 'id') {
                             v.cnam = $.inArray('cnam', v.features) >= 0 ? true : false;
-                            v.failover = $.inArray('failover', v.features) >= 0 ? true : false;
                             v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
-                            tab_data.push(['', k, v.failover, v.cnam, v.e911, v.state]);
+                            tab_data.push(['', k, v.cnam, v.e911, v.state]);
                         }
                     });
 
@@ -1099,14 +991,6 @@ winkstart.module('numbers', 'numbers_manager', {
                 },
                 {
                     'sTitle': 'Phone Number'
-                },
-                {
-                    'sTitle': 'Failover',
-                    'fnRender': function(obj) {
-                        var failover = 'failover ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ failover  +'">Failover</a>';
-                    },
-                    'bSortable': false
                 },
                 {
                     'sTitle': 'Caller-ID',

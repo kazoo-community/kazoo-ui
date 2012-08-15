@@ -130,11 +130,11 @@
     margin-top: 15px;
 }
 
-.popup_recover_password div, .popup_register div {
+.popup_recover_password div, .popup_register div, .popup_new_password div {
     display: block;
 }
 
-.popup_recover_password .main_content, .popup_register .main_content{
+.popup_recover_password .main_content, .popup_register .main_content, .popup_new_password .main_content{
     width: auto;
 }
 

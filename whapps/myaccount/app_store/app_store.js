@@ -28,6 +28,11 @@ winkstart.module('myaccount', 'app_store', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'app_store.account_update': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
         }
     },
 
@@ -66,17 +71,40 @@ winkstart.module('myaccount', 'app_store', {
                         account_id: winkstart.apps['myaccount'].account_id,
                     },
                     function(_data, status) {
-                        if((_data.data.available_apps && _data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
-                            winkstart.publish('nav.add_sublink', {
-                                link: 'nav',
-                                sublink: 'app_store',
-                                label: 'App Store',
-                                weight: '20',
-                                publish: 'app_store.popup'
+
+                        if(!_data.data.available_apps) {
+                            _data.data.available_apps = [];
+
+                            $.each(winkstart.config.available_apps, function(k, v) {
+                                _data.data.available_apps.push(v.id);
                             });
+
+                            winkstart.request('app_store.account_update', {
+                                    api_url: winkstart.apps['myaccount'].api_url,
+                                    account_id: winkstart.apps['myaccount'].account_id,
+                                    data: _data.data
+                                },
+                                function(_data_updated, status) {
+                                    THIS.add_sublink(_data_updated, user_data);
+                                }
+                            );
+                        } else {
+                            THIS.add_sublink(_data, user_data);
                         }
                     }
                 );
+            }
+        },
+
+        add_sublink: function(data, user_data) {
+            if((data.data.available_apps && data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
+                winkstart.publish('nav.add_sublink', {
+                    link: 'nav',
+                    sublink: 'app_store',
+                    label: 'App Store',
+                    weight: '20',
+                    publish: 'app_store.popup'
+                });
             }
         },
 
@@ -95,9 +123,10 @@ winkstart.module('myaccount', 'app_store', {
                         account_id: winkstart.apps['myaccount'].account_id,
                     },
                     function(_data, status) {
+
                         var data = $.extend({}, data, {
                             available_apps: {},
-                            apps: user_info.data.apps
+                            apps: user_info.data.apps || {}
                         });
 
                         _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
@@ -160,6 +189,8 @@ winkstart.module('myaccount', 'app_store', {
                                             var apps = {},
                                                 tmp = _user_data.data;
 
+                                            _user_data.data.apps = _user_data.data.apps || {};
+
                                             $('.app', app_store_html).find('[checked]').each(function() {
                                                 var id = $(this).attr('name');
 
@@ -172,7 +203,6 @@ winkstart.module('myaccount', 'app_store', {
 
                                             });
                                             tmp.apps = apps;
-
 
                                             THIS.update_acct(tmp, {}, function() {
                                                 window.location.reload();

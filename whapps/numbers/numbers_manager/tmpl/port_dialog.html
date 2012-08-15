@@ -81,7 +81,7 @@
 
                     <div class="fancy_help border">
                         <div class="wrapper_icon"><span class="note_icon"/></div>
-                        <div class="help_text">All numbers should be on the same bill from your current carrier. If you have multiple bills or more than one carrier you'd like to port numbers away from please submit each request separately.</div>
+                        <div class="help_text">All numbers should be on the same bill from your current carrier. While you can port regular phone numbers (DIDs) and toll-free numbers, they cannot be listed on the same port request. If you have multiple bills or more than one carrier you'd like to port numbers away from please submit each request separately.</div>
                         <div class="clear"/>
                     </div>
                 </div>
@@ -124,14 +124,17 @@
 
                 <div class="step_div third">
                     <div class="title">
-                        <span class="icon receipt"/>Please submit a letter of authorization
+                        <span class="icon receipt"/>Please submit a Letter of Authorization / Resporg form
                     </div>
 
                     <div class="loa_block">
-                        1. <a id="loa_link" href="http://www.2600hz.com/loa" target="_blank">Download LoA form</a>
+                        1. Download <a id="loa_link" href="http://www.2600hz.com/loa" target="_blank">LoA form</a> / <a id="resporg_link" href="http://wwww.2600hz.com/resporg" target="_blank">Resporg form</a>
                         <div class="fancy_help">
                             <div class="wrapper_icon"><span class="note_icon"/></div>
-                            <div class="help_text">This form is quick to fill out and is required to port your number.</div>
+                            <div class="help_text">
+                                If you are porting a regular phone number (DID) please fill out the Letter of Authorization (LoA).<br/>
+                                If you are porting a toll-free number, please fill out the Resporg form. (Toll-free numbers are numbers that begin with one of the following three-digit codes: 800, 888, 877, 866 or 855).
+                            </div>
                             <div class="clear"/>
                         </div>
                     </div>
@@ -140,14 +143,14 @@
                         2. Fill out the information and sign it
                         <div class="fancy_help">
                             <div class="wrapper_icon"><span class="note_icon"/></div>
-                            <div class="help_text">The port will fail if the address or authorized signature on the bill and the LoA do not match what the carrier has on file.</div>
+                            <div class="help_text">The port will fail if the address or authorized signature on the bill and the LoA/Resporg form do not match what the carrier has on file.</div>
                             <div class="clear"/>
                         </div>
                     </div>
 
                     <div class="loa_block">
                         3. Upload it here
-                        <div class="upload_block">Upload signed letter of authorization:&nbsp;&nbsp;<input name="loa" class="loa" type="file"/></div>
+                        <div class="upload_block">Upload signed Letter of Authorization / Resporg form:&nbsp;&nbsp;<input name="loa" class="loa" type="file"/></div>
                         <div class="fancy_help">
                             <div class="wrapper_icon"><span class="note_icon"/></div>
                             <div class="help_text">Having trouble uploading a PDF? Please contact ${company_name} at ${support_email}</div>

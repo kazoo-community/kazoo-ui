@@ -149,10 +149,16 @@ winkstart.module('myaccount', 'personal_info', {
             },
             function(data, status) {
                 THIS.render_info(data, $('.inline_content', popup_html));
-                winkstart.dialog(popup_html, {
+
+                var personal_info_dialog = winkstart.dialog(popup_html, {
                     modal: true,
                     title: 'My Account',
                     autoOpen: true
+                });
+
+                $('.personal_info-close', popup_html).click(function(e) {
+                    e.preventDefault();
+                    personal_info_dialog.dialog('close');
                 });
             });
         },

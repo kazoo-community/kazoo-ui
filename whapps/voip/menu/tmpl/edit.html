@@ -42,7 +42,7 @@
 		 					<ul class="inputs-list">
 		 						<li>
 		 							<label>
-		 								<span rel="popover" data-content="Do you want to allow the user to dial extensions from this menu">
+		 								<span rel="popover" data-content="Check to allow the user to dial extensions from this menu">
 			 								{{if data.hunt}}
 			 				                    <input type="checkbox" id="hunt" name="hunt" checked="checked" />
 			 				                {{else}}
@@ -59,7 +59,7 @@
 		 			<div class="clearfix">
 						<label for="media_greeting">Greeting Message</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the Greeting message that you want to use for this this menu. If you select - Not set -, then no media file will be played.">
+							<span rel="popover" data-content="Select the Greeting message that you want to use for this menu. If you select - Not set -, then no media file will be played.">
 								<select name="media.greeting" id="media_greeting" class="medium">
 									{{each field_data.media}}
 	                                    {{if data.media.greeting == id}}
@@ -98,14 +98,14 @@
 		 			<div class="clearfix">
 		 				<label for="retries">Number of retries on misdial</label>
 		 				<div class="input">
-		 					<input class="span4" id="retries" name="retries" type="text" placeholder="Retries" value="${data.retries}" rel="popover" data-content="Number of allowed retries on misdial on this menus"/>
+		 					<input class="span4" id="retries" name="retries" type="text" placeholder="Retries" value="${data.retries}" rel="popover" data-content="Number of allowed retries when misdialing in this menu."/>
 		 				</div>
 		 			</div>
 
 		 			<div class="clearfix">
 		 				<label for="timeout">Timeout for dialing (s)</label>
 		 				<div class="input">
-		 					<input class="span4" id="timeout" name="timeout" type="text" placeholder="Timeout in seconds" value="${data.timeout / 1000}" rel="popover" data-content="Allowed number of seconds without any key pressed"/>
+		 					<input class="span4" id="timeout" name="timeout" type="text" placeholder="Timeout in seconds" value="${data.timeout / 1000}" rel="popover" data-content="Number of seconds allowed without pressing any key."/>
 		 				</div>
 		 			</div>
 
