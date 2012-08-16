@@ -6,7 +6,11 @@
 
         advancedView: false,
 
+        /* Registration Type */
         register_type: 'onboard',
+
+        /* Do you want the signup button or not ? default to false if not set */
+        hide_registration: false,
 
         onboard_roles: {
             'default': {
@@ -162,8 +166,10 @@
 
         /* Custom links */
         nav: {
-            help: 'http://wiki.2600hz.com'
-            /* logout: ''*/
+            help: 'http://wiki.2600hz.com',
+            /* Other Whitelabel Links
+            learn_more: 'http://www.google.com/'
+            */
         },
 
         default_api_url: 'http://api.2600hz.com:8000/v1',
