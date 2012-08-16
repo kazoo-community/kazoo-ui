@@ -432,7 +432,7 @@
 	            	<div class="clearfix">
 	            		<label for="hotdesk_id">ID</label>
 	            		<div class="input">
-	            			<input class="span4" id="hotdesk_id" name="hotdesk.id" type="text" placeholder="ID" value="${data.hotdesk.id}" rel="popover" data-content="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN."/>
+	            			<input class="span4" id="hotdesk_id" name="hotdesk.id" type="text" placeholder="ID" value="${data.hotdesk.id}" rel="popover" data-content="In order to enable Hot Desking from another device, you'll need to provide an ID"/>
 	            		</div>
 	            	</div>
 
@@ -441,7 +441,7 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						<span  rel="popover" data-content="Check to require a PIN">
+	            						<span  rel="popover" data-content="If checked the user will be required to enter their ID and a PIN">
 		            						{{if data.hotdesk.require_pin}}
 		            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin" checked="checked"/>
 		            		                {{else}}
@@ -458,7 +458,7 @@
 	            	<div class="clearfix hotdesk_pin">
 	            		<label for="">PIN</label>
 	            		<div class="input">
-	            			<input class="span4" id="hotdesk_pin" name="hotdesk.pin" type="text" placeholder="PIN" value="${data.hotdesk.pin}" rel="popover" data-content="In order to enable Hot Desking from another device, you'll need to provide an ID and a PIN."/>
+	            			<input class="span4" id="hotdesk_pin" name="hotdesk.pin" type="text" placeholder="PIN" value="${data.hotdesk.pin}" rel="popover" data-content="PIN required to sign into a device."/>
 	            		</div>
 	            	</div>
 
