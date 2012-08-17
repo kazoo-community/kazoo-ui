@@ -91,6 +91,7 @@ winkstart.module('voip', 'registration',
                         stringToDisplay += '<br/>From-User: ' + this.from_user;
                         stringToDisplay += '<br/>Network-IP: ' + this.network_ip;
                         stringToDisplay += '<br/>Contact-IP: ' + this.contact_ip;
+                        stringToDisplay += '<br/>Contact-Port: ' + this.contact_port;
                         stringToDisplay += '<br/>Network-Port: ' + this.network_port;
                         stringToDisplay += '<br/>Presence-Hosts: ' + this.presence_hosts;
                         stringToDisplay += '<br/>Profile-Name: ' + this.profile_name;
@@ -104,7 +105,7 @@ winkstart.module('voip', 'registration',
                         stringToDisplay += '<br/>Username: ' + this.username;
                         stringToDisplay += '<br/>Date: ' + humanTime;
 
-                        tab_data.push([this.username, this.contact_ip, this.network_port, humanTime, stringToDisplay]);
+                        tab_data.push([this.username, this.contact_ip, this.contact_port, humanTime, stringToDisplay]);
                     });
 
                     winkstart.table.registration.fnAddData(tab_data);
