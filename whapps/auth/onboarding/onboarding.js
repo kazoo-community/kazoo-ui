@@ -189,6 +189,10 @@ winkstart.module('auth', 'onboarding', {
                 }
             ]
 
+            if(form_data.account.role == 'api_developer' || form_data.account.role == 'voip_minutes') {
+                delete form_data.extensions[0].callflow;
+            }
+
             if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
                 extension = $('#extension_1', target).val();
                 form_data.extensions[0].callflow.numbers.push(extension);
