@@ -9,8 +9,7 @@ winkstart.module('auth', 'onboarding', {
             step2: 'tmpl/step2.html',
             step3: 'tmpl/step3.html',
             small_office: 'tmpl/small_office.html',
-            reseller: 'tmpl/reseller.html',
-            error: 'tmpl/error.html'
+            reseller: 'tmpl/reseller.html'
         },
 
         subscribe: {
@@ -110,17 +109,10 @@ winkstart.module('auth', 'onboarding', {
                 }
             });
 
-            var error_html = THIS.templates.error.tmpl({
-                    msg: msg 
-                }),
-                alert = winkstart.alert('error', error_html.html());
-
-            $('.json_error', alert).append(formated_data);
-
-            $('.json', alert).click(function(e){
-                e.preventDefault();
-               $('.json_error', alert).toggle();
-            });       
+            winkstart.alert('error', {
+                'text': msg,
+                data: formated_data
+            });     
         },
 
         parse_username: function(username) {
