@@ -90,10 +90,25 @@
         var html,
             popup,
             options = {},
-            type_temp = type.toLowerCase();
+            type_temp = type.toLowerCase(),
+            f_data = {};
+
+        if(content.data) {
+            f_data = winkstart.print_r(content.data);
+        }
 
         if(type_temp == 'error') {
-            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + 
+                content +
+                '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+            if(content.data) {
+                html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' + 
+                    content.text +
+                    '<p>' + 
+                    '<p><button class="btn small danger json">Show Errors</button>' +
+                    '</p><p style="display:none" class="json_error"></p>' +
+                    '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+            }
         }
         else if(type_temp == 'info'){
             html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
@@ -107,7 +122,6 @@
 
         options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);
         options.maxWidth = '600px';
-        //options.width = '400px';
         options.onClose = function() {
             if(typeof callback == 'function') {
                 callback();
@@ -116,9 +130,25 @@
 
         popup = winkstart.dialog(html, options);
 
-        $('.btn', html).click(function() {
+        $('.btn.alert_button', html).click(function() {
             popup.dialog('close');
         });
+
+        if(content.data) {
+            $('.json_error', popup)
+                .css({
+                    'cursor': 'pointer'
+                })
+                .append(f_data);
+
+            $('.json', popup)
+                .css('min-width', 0)
+                .click(function(e){
+                    e.preventDefault();
+                   $('.json_error', popup).toggle();
+                });
+        }
+        
 
         return popup;
     };

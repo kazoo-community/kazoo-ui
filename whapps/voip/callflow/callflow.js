@@ -1296,7 +1296,7 @@ winkstart.module('voip', 'callflow', {
                                 // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
                                 // we also need to clone to prevent managing of objects
                                 $.each($.extend(true, {}, endpoints), function(i, obj) {
-                                    obj.name = 'Undefined';
+                                    obj.name = 'Undefined Device';
                                     selected_endpoints[obj.id] = obj;
                                 });
                             }

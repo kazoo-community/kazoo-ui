@@ -8,9 +8,6 @@ winkstart.module('auth', 'onboarding', {
             step1: 'tmpl/step1.html',
             step2: 'tmpl/step2.html',
             step3: 'tmpl/step3.html',
-            /*api_developer: 'tmpl/api_developer.html',
-            single_phone: 'tmpl/single_phone.html',
-            voip_minutes: 'tmpl/voip_minutes.html',*/
             small_office: 'tmpl/small_office.html',
             reseller: 'tmpl/reseller.html'
         },
@@ -18,8 +15,7 @@ winkstart.module('auth', 'onboarding', {
         subscribe: {
             'nav.get_started': 'render_onboarding',
             'onboard.register': 'render_onboarding',
-            'onboard.error_braintree': 'error_braintree',
-            'onboard.error_phone_numbers': 'error_phone_numbers'
+            'onboard.error_handling': 'error_handling'
         },
 
         validation: {
@@ -91,128 +87,32 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
-        error_braintree: function(errors, callbacks) {
+        error_handling: function(data, number) {
             var THIS = this,
                 wrapper = $('#onboarding-view'),
-                error_message = 'Please correct the following errors:<br/>';
+                formated_data = winkstart.print_r(data),
+                msg = 'Errors: ',
+                errors = data.data.errors;
 
-            THIS.move_to_step(2, wrapper, 'Credit Card Information');
-
-            $.each(errors.data.errors, function() {
-                error_message += 'Error ' + this.code + ': ' + this.message + '<br/>';
-            });
-
-            winkstart.alert('error', error_message);
-
-            $('#save_account', wrapper).unbind().click(function() {
-                winkstart.validate.is_valid(THIS.config.validation['step2'], function() {
-                        $('html, body').scrollTop(0);
-
-                        var form_data = form2object('fast_onboarding_form');
-
-                        THIS.clean_form_data(form_data);
-
-                        winkstart.request(true, 'braintree.create', {
-                                api_url: winkstart.apps['auth'].api_url,
-                                account_id: winkstart.apps['auth'].account_id,
-                                data: form_data.braintree
-                            },
-                            function (_data, status) {
-                                if(callbacks.length > 0) {
-                                    var fn = callbacks.splice(0,1);
-                                    fn[0]();
-                                }
-                            },
-                            function (_data, status) {
-                                error_message = 'Please correct the following errors:<br/>';
-                                $.each(_data.data.errors, function() {
-                                    error_message += 'Error ' + this.code + ': ' + this.message + '<br/>';
-                                });
-                                winkstart.alert('error', error_message);
-                            }
-                        );
-                    },
-                    function() {
-                        winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
+            $.each(errors, function(key, v) {
+                if(key == 'braintree') {
+                    msg += errors.braintree.data.api_error.message;
+                }
+                if(key == 'phone_numbers') {
+                    if(errors.phone_numbers[number].data.provider_fault) {
+                        msg += 'Incorrect address';
                     }
-                );
-            });
-        },
-
-        error_phone_numbers: function(errors, callbacks) {
-            var THIS = this,
-                wrapper = $('#onboarding-view'),
-                new_number = $('#picked_number', wrapper).dataset('number');
-
-            THIS.move_to_step(1, wrapper, 'Phone number and e911 Information');
-
-            winkstart.alert('error', 'Please correct the following errors:<br/>'+ errors[new_number].message+'<br/>'+errors[new_number].data.dash_e911||' ');
-
-            if(errors[new_number].data.dash_e911) {
-                $('#pick_number_block', wrapper).hide();
-                $('#e911_block', wrapper).show();
-            }
-
-            $('#save_account', wrapper).unbind().click(function() {
-                winkstart.validate.is_valid(THIS.config.validation['step1'], function() {
-                        $('html, body').scrollTop(0);
-
-                        var form_data = form2object('fast_onboarding_form');
-
-                        if(errors[new_number].data.dash_e911) {
-                            number = new_number;
-                            form_data.extra.number = new_number;
-
-                            THIS.clean_form_data(form_data);
-
-                            winkstart.request(true, 'phone_number.update', {
-                                    api_url: winkstart.apps['auth'].api_url,
-                                    account_id: winkstart.apps['auth'].account_id,
-                                    number: number,
-                                    data: form_data.phone_numbers[number]
-                                },
-                                function (_data, status) {
-                                    if(callbacks.length > 0) {
-                                        var fn = callbacks.splice(0,1);
-                                        fn[0]();
-                                    }
-                                },
-                                function (_data, status) {
-                                    winkstart.alert('error', _data.message ||_data.data.message || _data.data.dash_e911 || ' ');
-                                }
-                            );
-                        }
-                        else {
-                            form_data.extra.number = $('#picked_number', wrapper).html().replace(/\s|\-|\(|\)/g,'');
-                            number = form_data.extra.number;
-
-                            THIS.clean_form_data(form_data);
-
-                            form_data.phone_numbers[number].replaces = new_number;
-
-                            winkstart.request(true, 'phone_number.create', {
-                                    api_url: winkstart.apps['auth'].api_url,
-                                    account_id: winkstart.apps['auth'].account_id,
-                                    number: number,
-                                    data: form_data.phone_numbers[number]
-                                },
-                                function (_data, status) {
-                                    if(callbacks.length > 0) {
-                                        var fn = callbacks.splice(0,1);
-                                        fn[0]();
-                                    }
-                                },
-                                function (_data, status) {
-                                    winkstart.alert('error', _data.message || _data.data.message || _data.data.dash_e911 || ' ');
-                                }
-                            );
-                        }
-                    },
-                    function() {
-                        winkstart.alert('error', 'Please correct the form errors to finish the creation of this account.');
+                    if(errors.phone_numbers[number].data.carrier_fault) {
+                        msg += 'Number already used! Please select another one.'
                     }
-                );
+                    
+                }
             });
+
+            winkstart.alert('error', {
+                'text': msg,
+                data: formated_data
+            });     
         },
 
         parse_username: function(username) {
@@ -280,6 +180,10 @@ winkstart.module('auth', 'onboarding', {
                     }
                 }
             ]
+
+            if(form_data.account.role == 'api_developer' || form_data.account.role == 'voip_minutes') {
+                delete form_data.extensions[0].callflow;
+            }
 
             if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
                 extension = $('#extension_1', target).val();
@@ -692,42 +596,19 @@ winkstart.module('auth', 'onboarding', {
                                         winkstart.publish('auth.load_account');
                                     };
 
-                                    if(_data.data.errors) {
-                                        /*
-                                        $.each(_data.data.errors, function(key, val) {
-                                            callbacks.push(function() {
-                                                winkstart.publish('onboard.error_' + key, val, callbacks);
-                                            });
-                                        });
-
-                                        callbacks.push(function() {
-                                            winkstart.alert('info', 'You fixed the errors properly and your account has been created!');
-                                            success();
-                                        });
-
-                                        callback_fn = callbacks.splice(0, 1);
-
-                                        callback_fn[0]();
-                                        */
-                                        current_step = 1;
-                                        THIS.move_to_step(1, onboard_html);
-                                        winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>'
-                                            + winkstart.print_r(_data.data.errors));
-
-                                    }
-                                    else {
-                                        success();
-                                    }
+                                    success();
                                 }
                                 else {
                                     winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
                                 }
                             },
                             function (_data, status) {
+                                _data.data.errors = _data.data.errors || {};
+
+                                winkstart.publish('onboard.error_handling', _data, number);
+
                                 current_step = 1;
                                 THIS.move_to_step(1, onboard_html);
-                                winkstart.alert('error', '<p>Error while creating your account, please verify information and try again.</p>'
-                                            + winkstart.print_r(_data));
                             }
                         );
                     },

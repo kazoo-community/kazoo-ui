@@ -808,6 +808,11 @@ winkstart.module('voip', 'user', {
 
             popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
+            popup_html.css({
+                height: 500,
+                'overflow-y': 'scroll'
+            });
+
             winkstart.publish('user.edit', data, popup_html, $('.inline_content', popup_html), {
                 save_success: function(_data) {
                     popup.dialog('close');

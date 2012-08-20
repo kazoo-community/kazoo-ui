@@ -283,7 +283,8 @@ winkstart.module('auth', 'auth',
                     username: username || cookie_login.login || '',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name || cookie_login.account_name || '',
-                    remember_me: cookie_login.login || cookie_login.account_name ? true : false
+                    remember_me: cookie_login.login || cookie_login.account_name ? true : false,
+                    register_btn: winkstart.config.hide_registration || false
                 },
                 login_html = THIS.templates.new_login.tmpl(data_tmpl),
                 code_html = THIS.templates.code.tmpl(),
@@ -546,6 +547,7 @@ winkstart.module('auth', 'auth',
                     winkstart.getJSON('auth.get_user', rest_data,
                         function (json, xhr) {
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
+                            json.data.apps = json.data.apps || {};
 
                             winkstart.publish('auth.account.loaded', json.data);
 

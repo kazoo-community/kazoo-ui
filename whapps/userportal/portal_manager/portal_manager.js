@@ -1386,11 +1386,12 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         normalize_data: function(data) {
-            if(data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
+
+            if(data.caller_id.internal && data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
                 delete data.caller_id.internal;
             }
 
-            if(data.caller_id.external.number == '' && data.caller_id.external.name == '') {
+            if(data.caller_id.external && data.caller_id.external.number == '' && data.caller_id.external.name == '') {
                 delete data.caller_id.external;
             }
 

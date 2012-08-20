@@ -62,24 +62,21 @@ winkstart.module('core', 'linknav', {
                     }
                 });
 
-            if(normalized_args.modifier) {
-                if(typeof normalized_args.modifier == 'function') {
-                    //No, this is not a typo. Let the dev chose if they want 'this' or a param
-                    normalized_args.modifier.call(link_html, link_html);
-                }
-            }
-
             (link_list_html).each(function(index) {
                 var weight = $(this).dataset('weight');
                 if(normalized_args.weight < weight) {
-                    $(this).before(link_html);
+                    $(this)
+                        .before(link_html)
+                        .before(link_divider_html);
 
                     inserted = true;
 
                     return false;
                 }
                 else if(index >= link_list_html.length - 1) {
-                    $(this).after(link_html);
+                    $(this)
+                        .after(link_html)
+                        .after(link_divider_html);
 
                     inserted = true;
 
@@ -106,6 +103,13 @@ winkstart.module('core', 'linknav', {
                 topbar.css({
                     'min-width': '+= ' + tmp
                 });
+            }
+
+            if(normalized_args.modifier) {
+                if(typeof normalized_args.modifier == 'function') {
+                    //No, this is not a typo. Let the dev chose if they want 'this' or a param
+                    normalized_args.modifier.call(link_html, link_html);
+                }
             }
         },
 
