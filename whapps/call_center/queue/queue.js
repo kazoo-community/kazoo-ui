@@ -617,7 +617,7 @@ winkstart.module('call_center', 'queue', {
                 }
             });
 
-            $('.edit', parent).click(function() {
+            $(parent).delegate('.edit', 'click', function() {
                 var _data = {
                     id: $(this).dataset('id')
                 };
