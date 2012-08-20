@@ -167,9 +167,7 @@
         /* Custom links */
         nav: {
             help: 'http://wiki.2600hz.com',
-            /* Other Whitelabel Links
-            learn_more: 'http://www.google.com/'
-            */
+            learn_more: 'http://www.2600hz.com/'
         },
 
         default_api_url: 'http://api.2600hz.com:8000/v1',
