@@ -93,18 +93,18 @@
             type_temp = type.toLowerCase(),
             f_data = {};
 
-        if(content.data) {
+        if(content && content.data) {
             f_data = winkstart.print_r(content.data);
         }
 
         if(type_temp == 'error') {
-            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' + 
+            html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' +
                 content +
                 '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
             if(content.data) {
-                html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' + 
+                html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' +
                     content.text +
-                    '<p>' + 
+                    '<p>' +
                     '<p><button class="btn small danger json">Show Errors</button>' +
                     '</p><p style="display:none" class="json_error"></p>' +
                     '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
@@ -148,7 +148,7 @@
                    $('.json_error', popup).toggle();
                 });
         }
-        
+
 
         return popup;
     };
@@ -352,22 +352,24 @@
             }
 
             google.load("visualization", "1", {
-                packages:["corechart"],
+                packages:["corechart", "gauge"],
                 callback: loadChart
             });
         },
-
 
         loadChart: function(THIS){
             switch(THIS.type) {
                 case 'line':
                     THIS.chart = new google.visualization.LineChart(document.getElementById(THIS.target));
                     break;
+                case 'gauge':
+                    THIS.chart = new google.visualization.Gauge(document.getElementById(THIS.target));
+                    break;
                 default:
                     THIS.chart = new google.visualization.PieChart(document.getElementById(THIS.target));
                     break;
             }
-            THIS.chart.draw(google.visualization.arrayToDataTable(THIS.data), THIS.options);  
+            THIS.chart.draw(google.visualization.arrayToDataTable(THIS.data), THIS.options);
         },
 
         setData: function(data, push) {
@@ -399,14 +401,14 @@
                     level_padding = "";
 
                 if(!level) level = 0;
-                
+
                 for(var j=0; j< level+1; j++) level_padding += "    ";
 
-                if(typeof(arr) == 'object') { 
+                if(typeof(arr) == 'object') {
                     for(var item in arr) {
                         var value = arr[item];
-                 
-                        if(typeof(value) == 'object') { 
+
+                        if(typeof(value) == 'object') {
                            dumped_text += level_padding + "'" + item + "': { \n";
                            dumped_text += arrayToString(value, level+1);
                            dumped_text += level_padding + "}\n";
@@ -414,7 +416,7 @@
                            dumped_text += level_padding + "'" + item + "': \"" + value + "\"\n";
                         }
                     }
-                } else { 
+                } else {
                     dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
                 }
 
@@ -426,7 +428,7 @@
         str += arrayToString(arr);
         str += "\n}</pre>";
 
-        return str;  
+        return str;
     },
 
     winkstart.jsonToString = function(obj) {
@@ -436,11 +438,11 @@
 
                 if(!level) level = 0;
 
-                if(typeof(arr) == 'object') { 
+                if(typeof(arr) == 'object') {
                     for(var item in arr) {
                         var value = arr[item];
-                 
-                        if(typeof(value) == 'object') { 
+
+                        if(typeof(value) == 'object') {
                            dumped_text +=  '"' + item + '": {';
                            dumped_text += objToString(value, level+1);
                            dumped_text +=  "}, ";
@@ -448,7 +450,7 @@
                            dumped_text += '"' + item + '": "' + value + '", ';
                         }
                     }
-                } else { 
+                } else {
                     dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
                 }
 

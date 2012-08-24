@@ -65,6 +65,14 @@ winkstart.module('call_center', 'queue', {
         var THIS = this;
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+        winkstart.publish('whappnav.subnav.add', {
+            whapp: 'call_center',
+            module: THIS.__module,
+            label: 'Manage Queues',
+            icon: 'wrench_left',
+            weight: '10',
+        });
     },
 
     {
@@ -196,7 +204,7 @@ winkstart.module('call_center', 'queue', {
                 }
             }
 
-            /* If no users has been updated, we still need to refresh the view for the other attributes */
+            /* If no users have been updated, we still need to refresh the view for the other attributes */
             if(users_count == 0) {
                 success();
             }
@@ -504,17 +512,6 @@ winkstart.module('call_center', 'queue', {
                     });
                 });
 
-                /*$.each(data.field_data.users, function(k, v) {
-                    if(!(v.id in user_data)) {
-                        $('.unassigned_users', popup_agents).append(THIS.templates.available_user.tmpl(v));
-                    }
-                });*/
-
-                /*$.each(user_data, function(k, v) {
-                    $('.list_agents', popup_agents).append(THIS.templates.selected_agent.tmpl(v));
-                    count_agents++;
-                });*/
-
                 $('.count_agents', popup_agents).html(count_agents);
 
                 $('.new_searchfield', popup_agents).keyup(function() {
@@ -561,6 +558,22 @@ winkstart.module('call_center', 'queue', {
                     $('.list_agents', popup_agents).prepend(THIS.templates.selected_agent.tmpl($(this).dataset()));
                     $(this).remove();
                     $('.count_agents', popup_agents).html(++count_agents);
+                });
+
+                $('.create-agent', popup_agents).click(function() {
+                    var _data = {};
+
+                    ev.preventDefault();
+
+                    winkstart.publish('user.popup_edit', _data, function(_data) {
+                        var data_user = {
+                            first_name: _data.data.first_name,
+                            last_name: _data.data.last_name,
+                            id: _data.data.id
+                        };
+
+                        $('.unassigned_users', popup_agents).prepend(THIS.templates.available_user.tmpl(data_user));
+                    });
                 });
 
                 $('.add-agents', popup_agents).click(function() {

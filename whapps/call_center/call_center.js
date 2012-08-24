@@ -46,7 +46,8 @@
         billing_provider: 'braintree',
 
         modules: {
-            'queue': false
+            'queue': false,
+            'dashboard': false
         },
 
         is_initialized: false,
@@ -132,7 +133,7 @@
         setup_page: function() {
             var THIS = this;
 
-            winkstart.publish('call_center.module_activate', {name: 'queue'});
+            winkstart.publish('call_center.module_activate', {name: 'dashboard'});
         }
     }
 );

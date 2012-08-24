@@ -613,7 +613,8 @@
 }
 
 .icon.thumb_down {
-    background-position: -832px -96px;
+    /* background-position: -832px -96px; */
+    background-position: -832px -99px;
 }
 
 .icon.peace_sign {
@@ -621,7 +622,8 @@
 }
 
 .icon.hand {
-    background-position: -960px -96px;
+    /* background-position: -960px -96px; */
+    background-position: -960px -99px;
 }
 
 .icon.wrench_left {
@@ -781,7 +783,8 @@
 }
 
 .icon.head1 {
-    background-position: -480px -192px;
+    /* background-position: -480px -192px; */
+    background-position: -478px -196px;
 }
 
 .icon.head2 {
@@ -1197,7 +1200,8 @@
 }
 
 .icon.graph1_box {
-    background-position: 0px -416px;
+    /*background-position: 0px -416px;*/
+    background-position: -3px -420px;
 }
 
 .icon.barcode {
