@@ -99,6 +99,11 @@ winkstart.module('userportal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
+            'user_device.delete': {
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
+            },
             'account_devices.status': {
                 url: '{api_url}/accounts/{account_id}/devices/status',
                 contentType: 'application/json',
@@ -916,6 +921,25 @@ winkstart.module('userportal', 'portal_manager', {
             return data;
         },
 
+        delete_device: function(data, success, error) {
+            winkstart.request('user_device.delete', {
+                    account_id: winkstart.apps['userportal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url,
+                    device_id: data.data.id,
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status, 'update');
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status, 'update');
+                    }
+                }
+            );
+        },
+
         save_device: function(form_data, data, success, error) {
             var THIS = this,
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
@@ -1386,13 +1410,14 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         normalize_data: function(data) {
+            if('caller_id' in data) {
+                if(data.caller_id.internal && data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
+                    delete data.caller_id.internal;
+                }
 
-            if(data.caller_id.internal && data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
-                delete data.caller_id.internal;
-            }
-
-            if(data.caller_id.external && data.caller_id.external.number == '' && data.caller_id.external.name == '') {
-                delete data.caller_id.external;
+                if(data.caller_id.external && data.caller_id.external.number == '' && data.caller_id.external.name == '') {
+                    delete data.caller_id.external;
+                }
             }
 
             if(!data.music_on_hold.media_id) {
@@ -1471,7 +1496,7 @@ winkstart.module('userportal', 'portal_manager', {
                         callback(_data);
                     }
                 },
-                delete_success: function() {
+                delete_success: function(_data) {
                     popup.dialog('close');
 
                     if(typeof callback == 'function') {
