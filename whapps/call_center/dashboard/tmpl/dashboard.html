@@ -2,13 +2,22 @@
     <div id="dashboard-content" class="container-fluid page">
         <div id="dashboard-topbar">
             <div class="topbar-left">
-                <div id="gauge_calls"></div>
+                <!--<div id="gauge_calls"></div>-->
+                <div id="gauge_total_calls">
+                    <div class="top_part"></div>
+                    <div class="bottom_part">
+                        <div class="min_calls">${active_calls}</div>
+                        <div class="max_calls">${total_calls}</div>
+
+                        <div class="gauge_title">Total Calls</div>
+                    </div>
+                </div>
             </div>
             <div class="topbar-right">
                 <div class="list_queues">
                     <ul class="list_queues_inner">
                         {{each queues}}
-                            <li id="${id}">
+                            <li id="${id}" data-current_calls="${current_calls}" data-total_calls="${max_calls}">
                                 <div class="box_title">
                                     ${name}
                                 </div>
@@ -34,7 +43,7 @@
                                         </div>
                                         <div class="box hold_time">
                                             <div class="icon_wrapper"><span class="icon medium hand"></div>
-                                            <div class="timer orange" data-seconds="${average_hold_time}"></div>
+                                            <div class="orange">${average_hold_time}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -50,7 +59,7 @@
                 <div id="dashboard-view">
                     <div id="agents-view">
                         {{each agents}}
-                            <div class="agent_wrapper ${status}" id="${id}" data-queue_id="${queue_id}">
+                            <div class="agent_wrapper ${status}" id="${id}" data-queues="${queues}">
                                 <div class="agent_header">
                                     <span class="icon medium head1"/>
                                     ${first_name} ${last_name}

@@ -335,6 +335,10 @@ winkstart.module('call_center', 'queue', {
                 trigger: 'focus'
             });
 
+            $('*[rel=popover]:not([type="text"])', queue_html).popover({
+                trigger: 'hover'
+            });
+
             winkstart.tabs($('.view-buttons', queue_html), $('.tabs', queue_html));
 
             $('.queue-save', queue_html).click(function(ev) {

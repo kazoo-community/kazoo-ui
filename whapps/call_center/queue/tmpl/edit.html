@@ -16,6 +16,7 @@
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
 		 	<li><a href="#options"><span class="icon wrench_screw"></span>Queue Configuration</a></li>
+		 	<li><a href="#notifications"><span class="icon lightbulb_on"></span>Notifications</a></li>
 		</ul>
 		 <form id="queue-form" action="" method="post" >
 			<div class="pill-content">
@@ -29,7 +30,6 @@
 				</div>
 
 				<div id="options">
-                    <h3>Options</h3>
 					<div class="clearfix">
 						<label for="connection_timeout">Queue timeout (s)</label>
 						<div class="input">
@@ -44,12 +44,97 @@
 						</div>
 					</div>
 
-                    <hr/>
-                    <h3>Notifications</h3>
+                    <div class="clearfix">
+						<label for="call_wrapup_time">Call Wrap-up Time (s)</label>
+						<div class="input">
+							<input class="span4" id="call_wrapup_time" name="call_wrapup_time" type="text" placeholder="30" value="${data.call_wrapup_time}" rel="popover" data-content="Automatic break time between calls for the agents in this queue."/>
+						</div>
+					</div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="You can also change individual agent's recording settings under the Agent's section">
+                                            {{if data.call_recording === true}}
+                                                <input type="checkbox" id="call_recording" name="call_recording" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="call_recording" name="call_recording" />
+                                            {{/if}}
+                                            <span>Call Recording</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+						<label for="max_calls">Max Number of Calls:</label>
+						<div class="input">
+							<input class="span4" id="max_calls" name="max_calls" type="text" placeholder="10000" value="${data.max_calls}" rel="popover" data-content="Allow a maximum number of calls to this queue."/>
+						</div>
+					</div>
+
+                    <div class="clearfix">
+						<label for="max_hold_time">Max Hold Time:</label>
+						<div class="input">
+							<input class="span4" id="max_hold_time" name="max_hold_time" type="text" placeholder="10000" value="${data.max_hold_time}" rel="popover" data-content=""/>
+						</div>
+					</div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
+                                            {{if data.no_calls_agents_busy === true}}
+                                                <input type="checkbox" id="no_calls_agents_busy" name="no_calls_agents_busy" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="no_calls_agents_busy" name="no_calls_agents_busy" />
+                                            {{/if}}
+                                            <span>Do not add calls to this queue if all agents are busy/unavailable.</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
+                                            {{if data.no_calls_agents_empty === true}}
+                                                <input type="checkbox" id="no_calls_agents_empty" name="no_calls_agents_empty" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="no_calls_agents_empty" name="no_calls_agents_empty" />
+                                            {{/if}}
+                                            <span>Do not add calls to this queue if agent's list is empty.</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="notifications">
                     <div class="clearfix">
                         <label for="notification_on_hangup">Notification on Hangup</label>
                         <div class="input">
-                            <input class="span4" id="notification_on_hangup" name="notification_on_hangup" type="text" placeholder="http:///xxx.yyy.com/script.php" value="${data.notification_on_hangup}" rel="popover" data-content="URL for a callback when the call ends to tell the customer on their own servers that a call has ended."/>
+                            <input class="span4" id="notification_on_hangup" name="notification_on_hangup" type="text" placeholder="http://xxx.yyy/script_hangup.php" value="${data.notification_on_hangup}" rel="popover" data-content="URL for a callback when the call ends to tell the customer on their own servers that a call has ended."/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="notification_on_answer">Notification on Answer</label>
+                        <div class="input">
+                            <input class="span4" id="notification_on_answer" name="notification_on_answer" type="text" placeholder="http://xxx.yyy/script_answer.php" value="${data.notification_on_answer}" rel="popover" data-content="URL for a callback when the call is answered to tell the customer on their own servers that a call has been answered."/>
                         </div>
                     </div>
 				</div>
