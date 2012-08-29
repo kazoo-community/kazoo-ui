@@ -771,8 +771,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 $submit_btn = $('.submit_btn', popup_html);
 
             /* White label links, have to do it in JS because template doesn't eval variables in href :( */
-            $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://www.2600hz.com/loa');
-            $('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://www.2600hz.com/resporg');
+            $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://2600hz.com/porting/2600hz_loa.pdf');
+            $('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://2600hz.com/porting/2600hz_resporg.pdf');
             $('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
             $('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
@@ -909,14 +909,22 @@ winkstart.module('numbers', 'numbers_manager', {
                 var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
                 res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += 'You need to enter a main number.<br/>';
 
+                var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
+
                 port_form_data.phone_numbers.push(port_form_data.port.main_number);
 
                 phone_numbers = [];
+                var error_toll_free = [];
                 $.each(port_form_data.phone_numbers, function(i, val) {
                     var result = val.match(/^\+?1?([2-9]\d{9})$/);
 
                     if(result) {
-                        phone_numbers.push('+1' + result[1]);
+                        if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
+                            phone_numbers.push('+1' + result[1]);
+                        }
+                        else {
+                            error_toll_free.push(result[1]);
+                        }
                     }
                     else {
                         if(val !== '') {
@@ -924,10 +932,24 @@ winkstart.module('numbers', 'numbers_manager', {
                         }
                     }
                 });
+
+                if(error_toll_free.length > 0) {
+                    $.each(error_toll_free, function(k, v) {
+                        string_alert += v + ', ';
+                    });
+
+                    if(is_toll_free_main) {
+                        string_alert += 'these numbers are not toll-free numbers.<br/>As the main number is a toll-free number, you need to file another port request for these numbers.<br/>To complete this port request, please remove those numbers (Step 1).<br/><br/>';
+                    }
+                    else {
+                        string_alert += 'these numbers are toll-free numbers.<br/>As the main number is a regular phone number, you need to file another port request for these numbers.<br/>To complete this port request, please remove those numbers from (Step 1).<br/><br/>';
+                    }
+                }
+
                 port_form_data.phone_numbers = phone_numbers;
 
-                files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request';
-                loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request';
+                files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request.<br/>';
+                loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request.<br/>';
 
                 if(string_alert === '') {
                     delete port_form_data.extra;
@@ -944,6 +966,17 @@ winkstart.module('numbers', 'numbers_manager', {
             popup = winkstart.dialog(popup_html, {
                 title: 'Port a number'
             });
+        },
+
+        check_toll_free: function(number) {
+            var toll_free = false,
+                toll_free_number = number.match(/^(\+?1)?(8(00|55|66|77|88)[2-9]\d{6})$/);
+
+            if(toll_free_number && toll_free_number[0]) {
+                toll_free = true;
+            }
+
+            return toll_free;
         },
 
         activate: function() {
