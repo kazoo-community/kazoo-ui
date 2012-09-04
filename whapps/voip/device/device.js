@@ -730,7 +730,7 @@ winkstart.module('voip', 'device', {
                 delete data.sip.ip;
             }
 
-            if(data.outbound_flags) {
+            if(typeof data.outbound_flags == "string") {
                 data.outbound_flags = data.outbound_flags.split(/,/);
             }
 
