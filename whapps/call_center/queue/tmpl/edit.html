@@ -30,37 +30,16 @@
 				</div>
 
 				<div id="options">
-					<div class="clearfix">
-						<label for="connection_timeout">Queue timeout (s)</label>
-						<div class="input">
-							<input class="span4" id="connection_timeout" name="connection_timeout" type="text" placeholder="Queue timeout (s)" value="${data.connection_timeout}" rel="popover" data-content="How long caller stays in queue, in seconds"/>
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="member_timeout">Member timeout (s)</label>
-						<div class="input">
-							<input class="span4" id="member_timeout" name="member_timeout" type="text" placeholder="Member timeout (s)" value="${data.member_timeout}" rel="popover" data-content="How long to ring an agent's phone before moving to the next agent"/>
-						</div>
-					</div>
-
-                    <div class="clearfix">
-						<label for="call_wrapup_time">Call Wrap-up Time (s)</label>
-						<div class="input">
-							<input class="span4" id="call_wrapup_time" name="call_wrapup_time" type="text" placeholder="30" value="${data.call_wrapup_time}" rel="popover" data-content="Automatic break time between calls for the agents in this queue."/>
-						</div>
-					</div>
-
                     <div class="clearfix">
                         <div class="input">
                             <ul class="inputs-list">
                                 <li>
                                     <label>
                                         <span rel="popover" data-content="You can also change individual agent's recording settings under the Agent's section">
-                                            {{if data.call_recording === true}}
-                                                <input type="checkbox" id="call_recording" name="call_recording" checked="checked" />
+                                            {{if data.record_caller === true}}
+                                                <input type="checkbox" id="record_caller" name="record_caller" checked="checked" />
                                             {{else}}
-                                                <input type="checkbox" id="call_recording" name="call_recording" />
+                                                <input type="checkbox" id="record_caller" name="record_caller" />
                                             {{/if}}
                                             <span>Call Recording</span>
                                         </span>
@@ -71,16 +50,23 @@
                     </div>
 
                     <div class="clearfix">
-						<label for="max_calls">Max Number of Calls:</label>
+						<label for="agent_wrapup_time">Call Wrap-up Time (s)</label>
 						<div class="input">
-							<input class="span4" id="max_calls" name="max_calls" type="text" placeholder="10000" value="${data.max_calls}" rel="popover" data-content="Allow a maximum number of calls to this queue."/>
+							<input class="span2" id="agent_wrapup_time" name="agent_wrapup_time" type="text" placeholder="30" value="${data.agent_wrapup_time}" rel="popover" data-content="Automatic break time between calls for the agents in this queue."/>
 						</div>
 					</div>
 
                     <div class="clearfix">
-						<label for="max_hold_time">Max Hold Time:</label>
+						<label for="max_queue_size">Max Number of Calls:</label>
 						<div class="input">
-							<input class="span4" id="max_hold_time" name="max_hold_time" type="text" placeholder="10000" value="${data.max_hold_time}" rel="popover" data-content=""/>
+							<input class="span2" id="max_queue_size" name="max_queue_size" type="text" placeholder="10000" value="${data.max_queue_size}" rel="popover" data-content="How many callers are allowed to wait on hold in the queue (0 for no limit)."/>
+						</div>
+					</div>
+
+                    <div class="clearfix">
+						<label for="connection_timeout">Max Hold Time (s)</label>
+						<div class="input">
+							<input class="span2" id="connection_timeout" name="connection_timeout" type="text" placeholder="30" value="${data.connection_timeout}" rel="popover" data-content="In seconds, how long to try to connect the caller before progressing past the queue callflow action (0 for no limit)."/>
 						</div>
 					</div>
 
@@ -90,31 +76,12 @@
                                 <li>
                                     <label>
                                         <span rel="popover" data-content="">
-                                            {{if data.no_calls_agents_busy === true}}
-                                                <input type="checkbox" id="no_calls_agents_busy" name="no_calls_agents_busy" checked="checked" />
+                                            {{if data.enter_when_empty === true}}
+                                                <input type="checkbox" id="enter_when_empty" name="enter_when_empty" checked="checked" />
                                             {{else}}
-                                                <input type="checkbox" id="no_calls_agents_busy" name="no_calls_agents_busy" />
+                                                <input type="checkbox" id="enter_when_empty" name="enter_when_empty" />
                                             {{/if}}
-                                            <span>Do not add calls to this queue if all agents are busy/unavailable.</span>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <div class="input">
-                            <ul class="inputs-list">
-                                <li>
-                                    <label>
-                                        <span rel="popover" data-content="">
-                                            {{if data.no_calls_agents_empty === true}}
-                                                <input type="checkbox" id="no_calls_agents_empty" name="no_calls_agents_empty" checked="checked" />
-                                            {{else}}
-                                                <input type="checkbox" id="no_calls_agents_empty" name="no_calls_agents_empty" />
-                                            {{/if}}
-                                            <span>Do not add calls to this queue if agent's list is empty.</span>
+                                            <span>Allows a caller to enter this queue when no agents are available.</span>
                                         </span>
                                     </label>
                                 </li>
@@ -125,16 +92,9 @@
 
                 <div id="notifications">
                     <div class="clearfix">
-                        <label for="notification_on_hangup">Notification on Hangup</label>
+                        <label for="cdr_url">Notification on Hangup</label>
                         <div class="input">
-                            <input class="span4" id="notification_on_hangup" name="notification_on_hangup" type="text" placeholder="http://xxx.yyy/script_hangup.php" value="${data.notification_on_hangup}" rel="popover" data-content="URL for a callback when the call ends to tell the customer on their own servers that a call has ended."/>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <label for="notification_on_answer">Notification on Answer</label>
-                        <div class="input">
-                            <input class="span4" id="notification_on_answer" name="notification_on_answer" type="text" placeholder="http://xxx.yyy/script_answer.php" value="${data.notification_on_answer}" rel="popover" data-content="URL for a callback when the call is answered to tell the customer on their own servers that a call has been answered."/>
+                            <input class="span4" id="cdr_url" name="cdr_url" type="text" placeholder="http://xxx.yyy/script_hangup.php" value="${data.cdr_url}" rel="popover" data-content="URL for a callback when the call ends to tell the customer on their own servers that a call has ended."/>
                         </div>
                     </div>
 				</div>

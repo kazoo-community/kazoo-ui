@@ -9,19 +9,22 @@ winkstart.module('call_center', 'dashboard', {
 
         subscribe: {
             'dashboard.activate': 'activate',
+            'dashboard.activate_queue_stat': 'activate_queue_stat'
         },
 
-        validation: [
-        ],
-
         resources: {
-            'dashboard.queue.list': {
+            'dashboard.queues.list': {
                 url: '{api_url}/accounts/{account_id}/queues',
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            'dashboard.queue.get': {
+            'dashboard.queues.get': {
                 url: '{api_url}/accounts/{account_id}/queues/{queue_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'dashboard.agents.get': {
+                url: '{api_url}/accounts/{account_id}/agents',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -78,15 +81,6 @@ winkstart.module('call_center', 'dashboard', {
                 { id: 'bl0', title: '107.88.123.120', wait_time: 32, queue_id: 'queue_1' },
                 { id: 'bl1', title: '107.88.123.121', wait_time: 135, queue_id: 'queue_2' },
                 { id: 'bl2', title: '107.88.123.122', wait_time: 637, queue_id: 'queue_3' },
-                { id: 'bl3', title: '107.88.123.88', wait_time: 2, queue_id: 'queue_4' },
-                { id: 'bl4', title: '107.88.123.124', wait_time: 292, queue_id: 'queue_3' },
-                { id: 'bl5', title: '107.88.123.125', wait_time: 282, queue_id: 'queue_1' },
-                { id: 'bl6', title: '107.123.123.126', wait_time: 870, queue_id: 'queue_2' },
-                { id: 'bl7', title: '123.107.88.127', wait_time: 95, queue_id: 'queue_3' },
-                { id: 'bl8', title: '123.107.123.128', wait_time: 14, queue_id: 'queue_4' },
-                { id: 'bl9', title: '123.107.88.129', wait_time: 547, queue_id: 'queue_1' },
-                { id: 'bl10', title: '123.107.88.130', wait_time: 32, queue_id: 'queue_2' },
-                { id: 'bl11', title: '123.107.123.131', wait_time: 135, queue_id: 'queue_1' },
                 { id: 'bl12', title: '123.107.88.132', wait_time: 637, queue_id: 'queue_1' },
                 { id: 'bl13', title: '123.88.107.133', wait_time: 2, queue_id: 'queue_1' },
                 { id: 'bl14', title: '123.88.107.134', wait_time: 292, queue_id: 'queue_1' },
@@ -168,19 +162,23 @@ winkstart.module('call_center', 'dashboard', {
                 total_calls = 0,
                 active_calls = 0;
 
-            data.agents.sort(function(a , b) {
-                return map_sort_status[a.status] < map_sort_status[b.status] ? -1 : 1;
-            });
-
             $.each(data.agents, function(k, v) {
                 var queue_string = '';
+                //TODO remove
+                $.extend(true, v, THIS.get_agent_random_data());
                 $.each(v.queues, function(k2, v2) {
                     queue_string += v2 + ' ';
                 });
                 v.queues = queue_string;
             });
 
+            data.agents.sort(function(a , b) {
+                return map_sort_status[a.status] < map_sort_status[b.status] ? -1 : 1;
+            });
+
             $.each(data.queues, function(k, v) {
+                //TODO remove
+                $.extend(true, v, THIS.get_queue_random_data());
                 if(v.average_hold_time) {
                     v.average_hold_time = THIS.get_time_seconds(v.average_hold_time);
                     total_calls += v.max_calls;
@@ -194,95 +192,162 @@ winkstart.module('call_center', 'dashboard', {
             return data;
         },
 
-        render_dashboard: function(_parent) {
+        get_agent_random_data: function() {
+            var THIS = this,
+                status_array = ['calling', 'slacking', 'break', 'off'],
+                status_random = status_array[THIS.random(3)];
+
+            return {
+                status: status_random,
+                call_time: status_random === 'calling' ? THIS.random(1000) : 0,
+                break_time: status_random === 'break' ? THIS.random(2000) : 0,
+                call_per_hour: THIS.random(5, 10),
+                call_per_day: THIS.random(30, 100)
+            };
+        },
+
+        get_queue_random_data: function() {
+            var THIS = this;
+
+            return {
+                current_calls: THIS.random(10, 20),
+                max_calls: THIS.random(30,50),
+                current_agents: THIS.random(10,20),
+                max_agents: THIS.random(20,50),
+                dropped_calls: THIS.random(5),
+                average_hold_time: THIS.random(1000)
+            };
+        },
+
+        random: function(param_min, param_max) {
+            var min = param_max ? param_min : 0,
+                max = param_max ? param_max+1 : param_min+1;
+
+            var random = Math.floor(min + (Math.random() * (max - min)));
+
+            return random;
+        },
+
+        render_dashboard: function(_parent, callback) {
             var THIS = this,
                 parent = _parent;
 
-            /*winkstart.request('queues.get', {
+            winkstart.request('dashboard.queues.list', {
                     api_url: winkstart.apps['call_center'].api_url,
                     account_id: winkstart.apps['call_center'].account_id
                 },
-                function(_data, status) {*/
-                    var _data = {
-                        queues: [
-                            { id: 'queue_1', name: 'Sales Queue', current_calls: 50, max_calls: 200, current_agents: 10, max_agents: 20, dropped_calls: 2, average_hold_time: 202 },
-                            { id: 'queue_2', name: 'Tech Queue', current_calls: 15, max_calls: 20, current_agents: 18, max_agents: 20, dropped_calls: 7, average_hold_time: 431 },
-                            { id: 'queue_3', name: 'QA Queue', current_calls: 2, max_calls: 5, current_agents: 2, max_agents: 5, dropped_calls: 7, average_hold_time: 1207 },
-                            { id: 'queue_4', name: 'Executives Queue', current_calls: 1, max_calls: 1, current_agents: 1, max_agents: 1, dropped_calls: 232, average_hold_time: 23202 }
-                        ],
-                        agents: [
-                            { id: 'agent_9', first_name: 'Erik', last_name: 'Muramoto', call_time: 1, break_time: 0, call_per_hour: 9, call_per_day: 47, status: 'calling', queues: ['queue_4'] },
-                            { id: 'agent_3', first_name: 'Xavier', last_name: 'De la Grange', call_time: 0, break_time: 442, call_per_hour: 6, call_per_day: 42, status: 'break', queues: ['queue_4'] },
-                            { id: 'agent_8', first_name: 'Richard', last_name: 'Hurlock', call_time: 0, break_time: 332, call_per_hour: 4, call_per_day: 24, status: 'break', queues: ['queue_4', 'queue_3'] },
-                            { id: 'agent_4', first_name: 'Rachel', last_name: 'Lee', call_time: 194, break_time: 0, call_per_hour: 6, call_per_day: 37, status: 'calling', queues: ['queue_4', 'queue_2'] },
-                            { id: 'agent_2', first_name: 'Jon', last_name: 'Blanton', call_time: 25, break_time: 0, call_per_hour: 2, call_per_day: 13, status: 'slacking', queues: ['queue_4', 'queue_1'] },
-                            { id: 'agent_7', first_name: 'Patrick', last_name: 'Sullivan', call_time: 29, break_time: 0, call_per_hour: 5, call_per_day: 33, status: 'slacking', queues: ['queue_3', 'queue_2', 'queue_1', 'queue_4'] },
-                            { id: 'agent_6', first_name: 'Dhruvi', last_name: 'Shah', call_time: 118, break_time: 0, call_per_hour: 12, call_per_day: 129, status: 'off', queues: ['queue_2', 'queue_1'] },
-                            { id: 'agent_1', first_name: 'Jean-Roch', last_name: 'Maitre', call_time: 321, break_time: 0, call_per_hour: 3, call_per_day: 21, status: 'calling', queues: ['queue_3', 'queue_1'] },
-                            { id: 'agent_5', first_name: 'Kate', last_name: 'Zucchino', call_time: 222, break_time: 0, call_per_hour: 1, call_per_day: 2, status: 'calling', queues: ['queue_2'] },
-                            { id: 'agent_10', first_name: 'James', last_name: 'Aimonetti', call_time: 534, break_time: 0, call_per_hour: 1, call_per_day: 4, status: 'off', queues: ['queue_1'] }
-                        ]
-                    };
+                function(_data_queues, status) {
+                    winkstart.request('dashboard.agents.get', {
+                            api_url: winkstart.apps['call_center'].api_url,
+                            account_id: winkstart.apps['call_center'].account_id
+                        },
+                        function(_data_agents, status) {
+                            var _data = {
+                                queues: _data_queues.data,
+                                agents: _data_agents.data
+                            };
 
-                    _data = THIS.format_data(_data);
+                            _data = THIS.format_data(_data);
 
-                    dashboard_html = THIS.templates.dashboard.tmpl(_data);
+                            dashboard_html = THIS.templates.dashboard.tmpl(_data);
 
-                    $('.list_queues_inner > li', dashboard_html).click(function() {
-                        var $this_queue = $(this),
-                            queue_id = $this_queue.attr('id');
+                            THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
 
-                        if($this_queue.hasClass('active')) {
-                            THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
-                            $('.agent_wrapper', dashboard_html).show();
-                            $('#callwaiting-list li', dashboard_html).show();
+                            (parent)
+                                .empty()
+                                .append(dashboard_html);
 
-                            $('.list_queues_inner > li', dashboard_html).removeClass('active');
-                        }
-                        else {
-                            THIS.move_gauge($this_queue.dataset('current_calls'), $this_queue.dataset('total_calls'), parent);
+                            THIS.render_callwaiting_list(dashboard_html);
+                            THIS.render_timers(dashboard_html);
 
-                            $('.list_queues_inner > li', dashboard_html).removeClass('active');
-                            $this_queue.addClass('active');
+                            $('*[rel=popover]:not([type="text"])', parent).popover({
+                                trigger: 'hover'
+                            });
 
-                            $('#callwaiting-list li', dashboard_html).each(function(k, v) {
-                                var $v = $(v);
+                            $('.icon.edit_queue', dashboard_html).hide();
 
-                                if($v.dataset('queue_id') !== queue_id) {
-                                    $v.hide();
+                            $('.list_queues_inner > li', dashboard_html).click(function() {
+                                var $this_queue = $(this),
+                                    queue_id = $this_queue.attr('id');
+
+                                if($this_queue.hasClass('active')) {
+                                    THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
+                                    $('.agent_wrapper', dashboard_html).show();
+                                    $('#callwaiting-list li', dashboard_html).show();
+                                    $('.icon.edit_queue', dashboard_html).hide();
+                                    $('.list_queues_inner > li', dashboard_html).removeClass('active');
                                 }
                                 else {
-                                    $v.show();
+                                    THIS.detail_stat($this_queue, parent);
                                 }
                             });
 
-                            $('.agent_wrapper', dashboard_html).each(function(k, v) {
-                                var $v = $(v);
+                            $('.list_queues_inner > li .edit_queue', dashboard_html).click(function() {
+                                //THIS IS A HACK. :)
+                                $('.popover').remove();
 
-                                if($v.dataset('queues').indexOf(queue_id) < 0) {
-                                    $v.hide();
-                                }
-                                else {
-                                    $v.show();
-                                }
+                                var dom_id = $(this).parents('li').first().attr('id');
+                                winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
+                                    $('#' + dom_id, parent).addClass('selected');
+
+                                    winkstart.publish('queue.edit', { id: dom_id });
+                                }});
                             });
+
+                            if(typeof callback === 'function') {
+                                callback()
+                            }
                         }
-                    });
-
-                    THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
-
-                    (parent)
-                        .empty()
-                        .append(dashboard_html);
-
-                    THIS.render_callwaiting_list(dashboard_html);
-
-                    THIS.render_timers(dashboard_html);
-                /*},
-                function(_data, status) {
-
+                    );
                 }
-            );*/
+            );
+        },
+
+        detail_stat: function(container, parent) {
+            var THIS = this,
+                $this_queue = container,
+                queue_id = $this_queue.attr('id');
+
+            THIS.move_gauge($this_queue.dataset('current_calls'), $this_queue.dataset('total_calls'), parent);
+
+            $('.list_queues_inner > li', parent).removeClass('active');
+            $('.icon.edit_queue', parent).hide();
+
+            $('.icon.edit_queue', $this_queue).show();
+            $this_queue.addClass('active');
+
+            $('#callwaiting-list li', parent).each(function(k, v) {
+                var $v = $(v);
+
+                if($v.dataset('queue_id') !== queue_id) {
+                    $v.hide();
+                }
+                else {
+                    $v.show();
+                }
+            });
+
+            $('.agent_wrapper', parent).each(function(k, v) {
+                var $v = $(v);
+
+                if($v.dataset('queues').indexOf(queue_id) < 0) {
+                    $v.hide();
+                }
+                else {
+                    $v.show();
+                }
+            });
+        },
+
+        activate_queue_stat: function(args) {
+            var THIS = this,
+                parent = args.parent || $('#ws-content');
+
+            THIS.render_dashboard(parent, function() {
+                var $this_queue = $('#'+args.id, parent);
+
+                THIS.detail_stat($this_queue, parent);
+            });
         },
 
         activate: function(_parent) {

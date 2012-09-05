@@ -182,7 +182,7 @@
     border-top: none;
 }
 
-.list-panel-anchor ul li:hover {
+.list-panel-anchor ul li:hover, .list-panel-anchor ul li.selected {
     background-color: #05addc;
 }
 

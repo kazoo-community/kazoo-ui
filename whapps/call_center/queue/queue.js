@@ -21,9 +21,7 @@ winkstart.module('call_center', 'queue', {
         },
 
         validation: [
-            { name: '#name', regex: /.+/ },
-            { name: '#connection_timeout',  regex: /^[0-9]+$/ },
-            { name: '#member_timeout',  regex: /^[0-9]+$/ }
+            { name: '#name', regex: /.+/ }
             /*{ name: '#caller_exit_key',  regex: /^.{1}/ }*/
         ],
 
@@ -48,13 +46,18 @@ winkstart.module('call_center', 'queue', {
                 contentType: 'application/json',
                 verb: 'POST'
             },
+            'queue.update_users': {
+                url: '{api_url}/accounts/{account_id}/queues/{queue_id}/roster',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
             'queue.delete': {
                 url: '{api_url}/accounts/{account_id}/queues/{queue_id}',
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
             'queue.user_list': {
-                url: '{api_url}/accounts/{account_id}/users',
+                url: '{api_url}/accounts/{account_id}/agents',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -76,6 +79,26 @@ winkstart.module('call_center', 'queue', {
     },
 
     {
+        queue_update_users: function(array_users, queue_id, success, error) {
+            winkstart.request(true, 'queue.update_users', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url,
+                    queue_id: queue_id,
+                    data: array_users
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         save_queue: function(form_data, data, success, error) {
             var THIS = this,
                 normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
@@ -166,48 +189,13 @@ winkstart.module('call_center', 'queue', {
         },
 
         update_users: function(data, queue_id, success) {
-            var old_queue_user_list = data.old_list,
-                new_queue_user_list = data.new_list,
-                THIS = this,
-                users_updated_count = 0,
-                users_count = 0,
-                callback = function() {
-                    users_updated_count++;
-                    if(users_updated_count >= users_count) {
-                        success();
-                    }
-                };
+            var THIS = this;
 
-
-            if(old_queue_user_list) {
-                $.each(old_queue_user_list, function(k, v) {
-                    if(new_queue_user_list.indexOf(v) === -1) {
-                        //Request to update user without this queue.
-                        users_count++;
-                        THIS.update_single_user(v, queue_id, 'remove', callback);
-                    }
-                });
-
-                $.each(new_queue_user_list, function(k, v) {
-                    if(old_queue_user_list.indexOf(v) === -1) {
-                        users_count++;
-                        THIS.update_single_user(v, queue_id, 'add', callback);
-                    }
-                });
-            }
-            else {
-                if(new_queue_user_list) {
-                    $.each(new_queue_user_list, function(k, v) {
-                        users_count++;
-                        THIS.update_single_user(v, queue_id, 'add', callback);
-                    });
+            THIS.queue_update_users(data.new_list, queue_id, function() {
+                if(typeof success === 'function') {
+                    success();
                 }
-            }
-
-            /* If no users have been updated, we still need to refresh the view for the other attributes */
-            if(users_count == 0) {
-                success();
-            }
+            });
         },
 
         edit_queue: function(data, _parent, _target, _callbacks, data_defaults){
@@ -236,9 +224,11 @@ winkstart.module('call_center', 'queue', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        connection_timeout: '300',
+                        connection_timeout: '3600',
                         member_timeout: '5',
-                        /* caller_exit_key: '#' */
+                        agent_wrapup_time: '30',
+                        record_caller: true,
+                        max_queue_size: '0'
                     }, data_defaults || {}),
                     field_data: {
                         sort_by: {
@@ -248,7 +238,7 @@ winkstart.module('call_center', 'queue', {
                     }
                 };
 
-            winkstart.request(true, 'user.list', {
+            winkstart.request(true, 'queue.user_list', {
                     account_id: winkstart.apps['call_center'].account_id,
                     api_url: winkstart.apps['call_center'].api_url
                 },
@@ -319,6 +309,9 @@ winkstart.module('call_center', 'queue', {
                 THIS.popup_edit_queue(data, callbacks);
             });
 
+            $('.view_stats', agents_html).click(function() {
+                winkstart.publish('dashboard.activate_queue_stat', { id: $(this).dataset('id'), parent: $('#ws-content') });
+            });
 
             (target)
                     .empty()
@@ -379,7 +372,7 @@ winkstart.module('call_center', 'queue', {
             delete form_data.user_id;
         },
 
-        render_list: function(_parent){
+        render_list: function(_parent, callback){
             var THIS = this,
                 parent = _parent || $('#queue-content');;
 
@@ -419,19 +412,24 @@ winkstart.module('call_center', 'queue', {
                             notifyCreateMethod: 'queue.edit',
                             notifyParent: parent
                         });
+
+                    if(typeof callback === 'function') {
+                        callback();
+                    }
                 }
             );
         },
 
-        activate: function(parent) {
+        activate: function(args) {
             var THIS = this,
-                queue_html = THIS.templates.queue.tmpl();
+                queue_html = THIS.templates.queue.tmpl(),
+                args = args || {};
 
-            (parent || $('#ws-content'))
+            (args.parent || $('#ws-content'))
                 .empty()
                 .append(queue_html);
 
-            THIS.render_list(queue_html);
+            THIS.render_list(queue_html, args.callback);
         },
 
         render_user_list: function(data, parent) {
@@ -634,9 +632,9 @@ winkstart.module('call_center', 'queue', {
                 }
             });
 
-            $(parent).delegate('.edit', 'click', function() {
+            $(parent).delegate('.action_user.edit', 'click', function() {
                 var _data = {
-                    id: $(this).dataset('id')
+                    id: $(this).parents('tr').first().attr('id')
                 };
 
                 winkstart.publish('user.popup_edit', _data, function(_data) {
@@ -681,7 +679,11 @@ winkstart.module('call_center', 'queue', {
                 },
                 {
                     'sTitle': '<span class="icon medium user"></span> User',
-                    'sWidth': '80%'
+                    'sWidth': '80%',
+                    'fnRender': function(obj) {
+                        var name = obj.aData[obj.iDataColumn];
+                        return '<a class="action_user edit">'+ name +'</a>';
+                    }
                 },
                 {
                     'sTitle': 'Actions',

@@ -437,7 +437,6 @@ winkstart.module('voip', 'user', {
                             delete data.field_data;
                         }
 
-
                         if(form_data.password === undefined || winkstart.is_password_valid(form_data.password)) {
 
                             winkstart.request('user.account_get', {
@@ -703,6 +702,7 @@ winkstart.module('voip', 'user', {
             }
 
             if(form_data.enable_pin === false) {
+                delete form_data.queues;
                 delete form_data.queue_pin;
             }
 
@@ -740,6 +740,17 @@ winkstart.module('voip', 'user', {
 
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
+            }
+
+            if(typeof data.queues === 'undefined') {
+                if(typeof data.queue_pin != 'undefined') {
+                    data.queues = [];
+                }
+            }
+            else {
+                if(typeof data.queue_pin === 'undefined') {
+                    delete data.queues;
+                }
             }
 
             delete data.enable_pin;
