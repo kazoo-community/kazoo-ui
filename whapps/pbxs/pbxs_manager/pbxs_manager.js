@@ -289,24 +289,31 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 };
 
             THIS.get_account(function(_data, status) {
-                var defaults = $.extend(true, {
-                        auth: {},
-                        options: {
-                            e911_info: {}
-                        },
-                        extra: {
-                            realm: _data.data.account.auth_realm,
-                            id: data.id || (data.id === 0 ? 0 : 'new')
-                        }
-                    }, data_defaults || {});
+                 winkstart.request('pbxs_manager.get_account', {
+                        account_id: winkstart.apps['pbxs'].account_id,
+                        api_url: winkstart.apps['pbxs'].api_url
+                    },
+                    function(_data_account, status) {
+                        var defaults = $.extend(true, {
+                                auth: {},
+                                options: {
+                                    e911_info: {}
+                                },
+                                extra: {
+                                    realm: _data_account.data.realm,
+                                    id: data.id || (data.id === 0 ? 0 : 'new')
+                                }
+                            }, data_defaults || {});
 
-                if(typeof data === 'object' && (data.id || data.id === 0)) {
-                    //THIS.render_endpoint(_data, $.extend(true, defaults, _data.data.servers[data.id]), target, callbacks);
-                    THIS.render_pbxs_manager(_data, $.extend(true, defaults, _data.data.servers[data.id]), target, callbacks);
-                }
-                else {
-                    THIS.render_endpoint(_data, defaults, target, callbacks);
-                }
+                        if(typeof data === 'object' && (data.id || data.id === 0)) {
+                            //THIS.render_endpoint(_data, $.extend(true, defaults, _data.data.servers[data.id]), target, callbacks);
+                            THIS.render_pbxs_manager(_data, $.extend(true, defaults, _data.data.servers[data.id]), target, callbacks);
+                        }
+                        else {
+                            THIS.render_endpoint(_data, defaults, target, callbacks);
+                        }
+                    }
+                );
             });
         },
 
