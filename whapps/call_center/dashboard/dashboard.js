@@ -78,17 +78,17 @@ winkstart.module('call_center', 'dashboard', {
             );*/
 
             var array_cw = [
-                { id: 'bl0', title: '107.88.123.120', wait_time: 32, queue_id: 'queue_1' },
-                { id: 'bl1', title: '107.88.123.121', wait_time: 135, queue_id: 'queue_2' },
-                { id: 'bl2', title: '107.88.123.122', wait_time: 637, queue_id: 'queue_3' },
-                { id: 'bl12', title: '123.107.88.132', wait_time: 637, queue_id: 'queue_1' },
-                { id: 'bl13', title: '123.88.107.133', wait_time: 2, queue_id: 'queue_1' },
-                { id: 'bl14', title: '123.88.107.134', wait_time: 292, queue_id: 'queue_1' },
-                { id: 'bl15', title: '123.88.107.135', wait_time: 282, queue_id: 'queue_1' },
-                { id: 'bl16', title: '123.88.107.136', wait_time: 870, queue_id: 'queue_1' },
-                { id: 'bl17', title: '123.88.107.137', wait_time: 95, queue_id: 'queue_1' },
-                { id: 'bl18', title: '123.88.107.138', wait_time: 14, queue_id: 'queue_3' },
-                { id: 'bl19', title: '123.88.107.139', wait_time: 547, queue_id: 'queue_1' }
+                { id: 'bl0', title: '415-202-4335', wait_time: 32, queue_id: 'queue_1' },
+                { id: 'bl1', title: '415-392-4923', wait_time: 135, queue_id: 'queue_2' },
+                { id: 'bl2', title: '415-828-6293', wait_time: 637, queue_id: 'queue_3' },
+                { id: 'bl12', title: '415-929-1284', wait_time: 637, queue_id: 'queue_1' },
+                { id: 'bl13', title: '415-009-3929', wait_time: 2, queue_id: 'queue_1' },
+                { id: 'bl14', title: '415-772-7626', wait_time: 292, queue_id: 'queue_1' },
+                { id: 'bl15', title: '415-441-9929', wait_time: 282, queue_id: 'queue_1' },
+                { id: 'bl16', title: '415-878-0909', wait_time: 870, queue_id: 'queue_1' },
+                { id: 'bl17', title: '415-111-3202', wait_time: 95, queue_id: 'queue_1' },
+                { id: 'bl18', title: '415-636-2933', wait_time: 14, queue_id: 'queue_3' },
+                { id: 'bl19', title: '415-256-3929', wait_time: 547, queue_id: 'queue_1' }
             ];
 
             array_cw.sort(function(a, b) {
