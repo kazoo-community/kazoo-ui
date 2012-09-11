@@ -101,7 +101,8 @@
             html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' +
                 content +
                 '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
-            if(content.data) {
+
+            if(content && content.data) {
                 html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' +
                     content.text +
                     '<p>' +
@@ -134,7 +135,7 @@
             popup.dialog('close');
         });
 
-        if(content.data) {
+        if(content && content.data) {
             $('.json_error', popup)
                 .css({
                     'cursor': 'pointer'
