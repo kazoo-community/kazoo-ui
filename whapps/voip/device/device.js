@@ -732,6 +732,15 @@ winkstart.module('voip', 'device', {
 
             if(typeof data.outbound_flags == "string") {
                 data.outbound_flags = data.outbound_flags.split(/,/);
+
+                /* Get rid of empty string */
+                var new_flags = [];
+                $.each(data.outbound_flags, function(k, v) {
+                    if(v.replace(/\s/g, '') !== '') {
+                        new_flags.push(v);
+                    }
+                });
+                data.outbound_flags = new_flags;
             }
 
             if(data.ringtones && 'internal' in data.ringtones && data.ringtones.internal === '') {
