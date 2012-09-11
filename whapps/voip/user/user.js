@@ -384,7 +384,7 @@ winkstart.module('voip', 'user', {
                 user_html = THIS.templates.edit.tmpl(data),
                 data_devices,
                 enable_pin = $('#enable_pin', user_html),
-                queue_pin = $('.queue_pin', user_html);
+                $queue_block = $('.queue_block', user_html);
                 hotdesk_pin =   $('.hotdesk_pin', user_html),
                 hotdesk_pin_require = $('#hotdesk_require_pin', user_html);
 
@@ -405,11 +405,11 @@ winkstart.module('voip', 'user', {
             winkstart.tabs($('.view-buttons', user_html), $('.tabs', user_html));
             winkstart.link_form(user_html);
 
-            enable_pin.is(':checked') ? queue_pin.show() : queue_pin.hide();
+            enable_pin.is(':checked') ? $queue_block.show() : $queue_block.hide();
             hotdesk_pin_require.is(':checked') ? hotdesk_pin.show() : hotdesk_pin.hide();
 
             enable_pin.change(function() {
-                $(this).is(':checked') ? queue_pin.show('blind') : queue_pin.hide('blind');
+                $(this).is(':checked') ? $queue_block.show('blind') : $queue_block.hide('blind');
             });
 
             hotdesk_pin_require.change(function() {
@@ -429,6 +429,7 @@ winkstart.module('voip', 'user', {
 
                         if(form_data.enable_pin === false) {
                             delete data.data.queue_pin;
+                            delete data.data.record_call;
                         }
 
                         THIS.clean_form_data(form_data);
@@ -704,6 +705,7 @@ winkstart.module('voip', 'user', {
             if(form_data.enable_pin === false) {
                 delete form_data.queues;
                 delete form_data.queue_pin;
+                delete form_data.record_call;
             }
 
             delete form_data.pwd_mngt_pwd1;

@@ -444,6 +444,7 @@ winkstart.module('voip', 'callflow', {
                 var that = this;
                 this.id = -1;
                 this.actionName = actionName;
+                console.log(actionName);
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;

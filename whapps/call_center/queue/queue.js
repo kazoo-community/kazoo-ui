@@ -7,6 +7,7 @@ winkstart.module('call_center', 'queue', {
             queue: 'tmpl/queue.html',
             edit: 'tmpl/edit.html',
             queue_callflow: 'tmpl/queue_callflow.html',
+            agent_pause_callflow: 'tmpl/agent_pause_callflow.html',
             add_agents: 'tmpl/add_agents.html',
             edit_agents: 'tmpl/edit_agents.html',
             selected_agent: 'tmpl/selected_agent.html',
@@ -442,7 +443,7 @@ winkstart.module('call_center', 'queue', {
 
             /* First we're going through the list of users to get the last names */
             $.each(data.field_data.users, function(k, v) {
-                if(list_names.indexOf(v.last_name.toLowerCase()) < 0) {
+                if(v.last_name && list_names.indexOf(v.last_name.toLowerCase()) < 0) {
                     list_names.push(v.last_name.toLowerCase());
                 }
             });
@@ -452,19 +453,21 @@ winkstart.module('call_center', 'queue', {
 
             /* We build the function which will be use the second time we'll loop over users */
             var build_sort_users = function(k, user) {
-                if(sorted_users[list_names.indexOf(user.last_name.toLowerCase())]) {
-                    sorted_users[list_names.indexOf(user.last_name.toLowerCase())].push({
-                        first_name: user.first_name,
-                        last_name: user.last_name,
-                        id: user.id
-                    });
-                }
-                else {
-                    sorted_users[list_names.indexOf(user.last_name.toLowerCase())] = [{
-                        first_name: user.first_name,
-                        last_name: user.last_name,
-                        id: user.id
-                    }];
+                if(user.last_name) {
+                    if(sorted_users[list_names.indexOf(user.last_name.toLowerCase())]) {
+                        sorted_users[list_names.indexOf(user.last_name.toLowerCase())].push({
+                            first_name: user.first_name,
+                            last_name: user.last_name,
+                            id: user.id
+                        });
+                    }
+                    else {
+                        sorted_users[list_names.indexOf(user.last_name.toLowerCase())] = [{
+                            first_name: user.first_name,
+                            last_name: user.last_name,
+                            id: user.id
+                        }];
+                    }
                 }
             };
 
@@ -745,11 +748,11 @@ winkstart.module('call_center', 'queue', {
             var THIS = this;
 
             $.extend(callflow_nodes, {
-                'queue[id=*]': {
+                'acdc_member[id=*]': {
                     name: 'Queue',
                     icon: 'queue',
                     category: 'Call-Center',
-                    module: 'queue',
+                    module: 'acdc_member',
                     tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
                     data: {
                         id: 'null'
@@ -777,6 +780,7 @@ winkstart.module('call_center', 'queue', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.queue_callflow.tmpl({
+                                    title: 'Connect a caller to a queue...',
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -821,20 +825,175 @@ winkstart.module('call_center', 'queue', {
                         );
                     }
                 },
-                'agent[action=resume]': {
+                'acdc_queue[id=*,action=login]': {
+                    name: 'Queue Login',
+                    icon: 'queue',
+                    category: 'Call-Center',
+                    module: 'acdc_queue',
+                    tip: '',
+                    data: {
+                        id: 'null',
+                        action: 'login'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'queue.list',  {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.queue_callflow.tmpl({
+                                    title: 'Connects an agent to a queue...',
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                if($('#queue_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#queue_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('queue.popup_edit', _data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#queue_selector', popup).val());
+
+                                    node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Queue',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'acdc_queue[id=*,action=logout]': {
+                    name: 'Queue Logout',
+                    icon: 'queue',
+                    category: 'Call-Center',
+                    module: 'acdc_queue',
+                    tip: '',
+                    data: {
+                        id: 'null',
+                        action: 'logout'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id');
+
+                        return (id) ? caption_map[id].name : '';
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'queue.list',  {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.queue_callflow.tmpl({
+                                    title: 'Disconnects an agent from a queue...',
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || ''
+                                });
+
+                                if($('#queue_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#queue_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('queue.popup_edit', _data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+
+                                        node.caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#queue_selector', popup).val());
+
+                                    node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Queue',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'acdc_agent[action=resume]': {
                     name: 'Agent Resume',
                     icon: 'rightarrow',
                     category: 'Call-Center',
-                    module: 'agent',
+                    module: 'acdc_agent',
                     tip: '',
                     data: {
-                        action: 'resume',
-                        retries: '3'
+                        action: 'resume'
                     },
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
@@ -847,46 +1006,74 @@ winkstart.module('call_center', 'queue', {
                         }
                     }
                 },
-                'agent[action=break]': {
-                    name: 'Agent Break',
+                'acdc_agent[action=pause]': {
+                    name: 'Agent Pause',
                     icon: 'rightarrow',
                     category: 'Call-Center',
-                    module: 'agent',
+                    module: 'acdc_agent',
                     tip: '',
                     data: {
-                        action: 'break',
-                        retries: '3'
+                        action: 'pause',
+                        timeout: '900'
                     },
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        return '';
+                        var id = node.getMetadata('timeout');
+
+                        return (id) + ' seconds';
                     },
                     edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.agent_pause_callflow.tmpl({
+                            data_logout: {
+                                'timeout': node.getMetadata('timeout') || '900',
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var timeout = $('#timeout', popup_html).val();
+
+                            node.setMetadata('timeout', timeout);
+                            node.caption = timeout + ' seconds';
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Pause Agent',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+
                         if(typeof callback == 'function') {
                             callback();
                         }
                     }
                 },
-                'agent[action=logout]': {
+                'acdc_agent[action=logout]': {
                     name: 'Logout Agent',
                     icon: 'rightarrow',
                     category: 'Call-Center',
-                    module: 'agent',
+                    module: 'acdc_agent',
                     tip: '',
                     data: {
-                        action: 'logout',
-                        retries: '3'
+                        action: 'logout'
                     },
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
@@ -899,46 +1086,19 @@ winkstart.module('call_center', 'queue', {
                         }
                     }
                 },
-                'agent[action=login]': {
+                'acdc_agent[action=login]': {
                     name: 'Login Agent',
                     icon: 'rightarrow',
                     category: 'Call-Center',
-                    module: 'agent',
+                    module: 'acdc_agent',
                     tip: '',
                     data: {
-                        action: 'login',
-                        retries: '3'
+                        action: 'login'
                     },
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                },
-                'agent[action=toggle]': {
-                    name: 'Toggle Agent',
-                    icon: 'rightarrow',
-                    category: 'Call-Center',
-                    module: 'agent',
-                    tip: '',
-                    data: {
-                        action: 'toggle',
-                        retries: '3'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',

@@ -213,6 +213,7 @@
 	            </div>
 
 	            <div id="options">
+                    <h3>Standard Options</h3>
 	            	<div class="clearfix">
 						<div class="input">
 							<ul class="inputs-list">
@@ -260,6 +261,8 @@
 							</span>
 						</div>
 					</div>
+                    <hr/>
+                    <h3>Queue Options</h3>
 
 					<div class="clearfix">
 						<div class="input">
@@ -280,15 +283,35 @@
 						</div>
 					</div>
 
-					<div class="clearfix queue_pin">
-						<label for="queue_pin">PIN</label>
-						<div class="input">
-                            <input id="queue_pin" placeholder="3615" type="text" name="queue_pin" value="${data.queue_pin}" rel="popover" data-content="PIN"/>
+                    <div class="queue_block">
+                        <div class="clearfix queue_pin">
+                            <label for="queue_pin">PIN</label>
+                            <div class="input">
+                                <input id="queue_pin" placeholder="3615" type="text" name="queue_pin" value="${data.queue_pin}" rel="popover" data-content="PIN used by the agent to login to a queue."/>
+                            </div>
+                        </div>
 
-						</div>
-					</div>
+                        <div class="clearfix">
+                            <div class="input">
+                                <ul class="inputs-list">
+                                    <li>
+                                        <label>
+                                            <span rel="popover" data-content="By checking this box, this agent will be recorded even if the global setting for the queue is set to not record agents.">
+                                                {{if data.record_call === true}}
+                                                <input id="record_call" type="checkbox" name="record_call" checked="checked" />
+                                                {{else}}
+                                                <input id="record_call" type="checkbox" name="record_call"/>
+                                                {{/if}}
+                                                <span>Record this agent(user)</span>
+                                            </span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 	            </div>
-	            
+
 	            <div id="call_forward">
 	            	<div class="clearfix">
 						<div class="input">

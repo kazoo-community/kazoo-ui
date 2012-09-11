@@ -13,6 +13,16 @@ winkstart.module('call_center', 'dashboard', {
         },
 
         resources: {
+            'dashboard.queues.stats': {
+                url: '{api_url}/accounts/{account_id}/queues/stats',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'dashboard.agents.stats': {
+                url: '{api_url}/accounts/{account_id}/agents/stats',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'dashboard.queues.list': {
                 url: '{api_url}/accounts/{account_id}/queues',
                 contentType: 'application/json',
@@ -46,6 +56,42 @@ winkstart.module('call_center', 'dashboard', {
     },
 
     {
+        get_agents_stats: function(success, error) {
+            winkstart.request('dashboard.agents.stats', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
+        get_queues_stats: function(success, error) {
+            winkstart.request('dashboard.queues.stats', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         render_callwaiting_list: function(_parent){
             var THIS = this,
                 parent = _parent || $('#dashboard-content');;
@@ -232,75 +278,80 @@ winkstart.module('call_center', 'dashboard', {
             var THIS = this,
                 parent = _parent;
 
-            winkstart.request('dashboard.queues.list', {
-                    api_url: winkstart.apps['call_center'].api_url,
-                    account_id: winkstart.apps['call_center'].account_id
-                },
-                function(_data_queues, status) {
-                    winkstart.request('dashboard.agents.get', {
+            THIS.get_agents_stats(function(_data_stats_agents) {
+                THIS.get_queues_stats(function(_data_stat_queues) {
+                    winkstart.request('dashboard.queues.list', {
                             api_url: winkstart.apps['call_center'].api_url,
                             account_id: winkstart.apps['call_center'].account_id
                         },
-                        function(_data_agents, status) {
-                            var _data = {
-                                queues: _data_queues.data,
-                                agents: _data_agents.data
-                            };
+                        function(_data_queues, status) {
+                            winkstart.request('dashboard.agents.get', {
+                                    api_url: winkstart.apps['call_center'].api_url,
+                                    account_id: winkstart.apps['call_center'].account_id
+                                },
+                                function(_data_agents, status) {
+                                    var _data = {
+                                        queues: _data_queues.data,
+                                        agents: _data_agents.data
+                                    };
 
-                            _data = THIS.format_data(_data);
+                                    _data = THIS.format_data(_data);
 
-                            dashboard_html = THIS.templates.dashboard.tmpl(_data);
+                                    dashboard_html = THIS.templates.dashboard.tmpl(_data);
 
-                            THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
+                                    THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
 
-                            (parent)
-                                .empty()
-                                .append(dashboard_html);
+                                    (parent)
+                                        .empty()
+                                        .append(dashboard_html);
 
-                            THIS.render_callwaiting_list(dashboard_html);
-                            THIS.render_timers(dashboard_html);
+                                    THIS.render_callwaiting_list(dashboard_html);
+                                    THIS.render_timers(dashboard_html);
 
-                            $('*[rel=popover]:not([type="text"])', parent).popover({
-                                trigger: 'hover'
-                            });
+                                    $('*[rel=popover]:not([type="text"])', parent).popover({
+                                        trigger: 'hover'
+                                    });
 
-                            $('.icon.edit_queue', dashboard_html).hide();
-
-                            $('.list_queues_inner > li', dashboard_html).click(function() {
-                                var $this_queue = $(this),
-                                    queue_id = $this_queue.attr('id');
-
-                                if($this_queue.hasClass('active')) {
-                                    THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
-                                    $('.agent_wrapper', dashboard_html).show();
-                                    $('#callwaiting-list li', dashboard_html).show();
                                     $('.icon.edit_queue', dashboard_html).hide();
-                                    $('.list_queues_inner > li', dashboard_html).removeClass('active');
+
+                                    $('.list_queues_inner > li', dashboard_html).click(function() {
+                                        var $this_queue = $(this),
+                                            queue_id = $this_queue.attr('id');
+
+                                        if($this_queue.hasClass('active')) {
+                                            THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
+                                            $('.agent_wrapper', dashboard_html).show();
+                                            $('#callwaiting-list li', dashboard_html).show();
+                                            $('.icon.edit_queue', dashboard_html).hide();
+                                            $('.list_queues_inner > li', dashboard_html).removeClass('active');
+                                        }
+                                        else {
+                                            THIS.detail_stat($this_queue, parent);
+                                        }
+                                    });
+
+                                    $('.list_queues_inner > li .edit_queue', dashboard_html).click(function() {
+                                        //THIS IS A HACK. :)
+                                        $('.popover').remove();
+
+                                        var dom_id = $(this).parents('li').first().attr('id');
+                                        winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
+                                            $('#' + dom_id, parent).addClass('selected');
+
+                                            winkstart.publish('queue.edit', { id: dom_id });
+                                        }});
+                                    });
+
+                                    if(typeof callback === 'function') {
+                                        callback()
+                                    }
                                 }
-                                else {
-                                    THIS.detail_stat($this_queue, parent);
-                                }
-                            });
-
-                            $('.list_queues_inner > li .edit_queue', dashboard_html).click(function() {
-                                //THIS IS A HACK. :)
-                                $('.popover').remove();
-
-                                var dom_id = $(this).parents('li').first().attr('id');
-                                winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
-                                    $('#' + dom_id, parent).addClass('selected');
-
-                                    winkstart.publish('queue.edit', { id: dom_id });
-                                }});
-                            });
-
-                            if(typeof callback === 'function') {
-                                callback()
-                            }
+                            );
                         }
                     );
-                }
-            );
+                });
+            });
+
         },
 
         detail_stat: function(container, parent) {
