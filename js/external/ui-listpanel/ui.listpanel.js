@@ -214,8 +214,8 @@
         _registerViewEvents: function(elements) {
             var self = this;
         	elements.click(function(){
-                elements.removeClass('selected');
-                $(this).addClass('selected');
+                //elements.removeClass('selected');
+                //$(this).addClass('selected');
 
                 if('notifyParent' in self.options) {
                     self.options.publisher(true, self.options.notifyMethod, $.data(this, 'data'), self.options.notifyParent);
