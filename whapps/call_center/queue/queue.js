@@ -37,6 +37,11 @@ winkstart.module('call_center', 'queue', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'queue.get_stats': {
+                url: '{api_url}/accounts/{account_id}/queues/{queue_id}/stats',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'queue.create': {
                 url: '{api_url}/accounts/{account_id}/queues',
                 contentType: 'application/json',
@@ -80,6 +85,25 @@ winkstart.module('call_center', 'queue', {
     },
 
     {
+        queue_get_stats: function(queue_id, success, error) {
+            winkstart.request(true, 'queue.get_stats', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url,
+                    queue_id: queue_id,
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         queue_update_users: function(array_users, queue_id, success, error) {
             winkstart.request(true, 'queue.update_users', {
                     account_id: winkstart.apps['call_center'].account_id,
@@ -232,10 +256,10 @@ winkstart.module('call_center', 'queue', {
                         max_queue_size: '0'
                     }, data_defaults || {}),
                     field_data: {
-                        sort_by: {
+                        /*sort_by: {
                             'first_name': 'First Name',
                             'last_name': 'Last Name'
-                        }
+                        }*/
                     }
                 };
 
@@ -244,27 +268,35 @@ winkstart.module('call_center', 'queue', {
                     api_url: winkstart.apps['call_center'].api_url
                 },
                 function(_data, status) {
-                    defaults.field_data.users = _data.data;
+                    //defaults.field_data.users = _data.data;
+                    defaults.field_data.users = {};
+
+                    $.each(_data.data, function(k, v) {
+                        defaults.field_data.users[v.id] = v;
+                    });
 
                     if(typeof data == 'object' && data.id) {
-                        winkstart.request(true, 'queue.get', {
-                                account_id: winkstart.apps['call_center'].account_id,
-                                api_url: winkstart.apps['call_center'].api_url,
-                                queue_id: data.id
-                            },
-                            function(_data, status) {
-                                var render_data = $.extend(true, defaults, _data);
-                                render_data.field_data.old_list = [];
-                                if('agents' in _data.data) {
-                                    render_data.field_data.old_list = _data.data.agents;
-                                }
-                                THIS.render_edit_agents(render_data, target, callbacks);
+                        THIS.queue_get_stats(data.id, function(_data_stat) {
+                            winkstart.request(true, 'queue.get', {
+                                    account_id: winkstart.apps['call_center'].account_id,
+                                    api_url: winkstart.apps['call_center'].api_url,
+                                    queue_id: data.id
+                                },
+                                function(_data, status) {
+                                    var render_data = $.extend(true, defaults, _data);
+                                    render_data.field_data.old_list = [];
+                                    render_data.stats = _data_stat.data;
+                                    if('agents' in _data.data) {
+                                        render_data.field_data.old_list = _data.data.agents;
+                                    }
+                                    THIS.render_edit_agents(render_data, target, callbacks);
 
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
+                                    if(typeof callbacks.after_render == 'function') {
+                                        callbacks.after_render();
+                                    }
                                 }
-                            }
-                        );
+                            );
+                        });
                     }
                     else {
                         THIS.render_queue(defaults, target, callbacks);
@@ -304,6 +336,7 @@ winkstart.module('call_center', 'queue', {
             var THIS = this,
                 agents_html = THIS.templates.edit_agents.tmpl(data);
 
+            THIS.render_reports(data, agents_html);
             THIS.render_user_list(data, agents_html);
 
             $('.detail_queue', agents_html).click(function() {
@@ -431,6 +464,29 @@ winkstart.module('call_center', 'queue', {
                 .append(queue_html);
 
             THIS.render_list(queue_html, args.callback);
+        },
+
+        render_reports: function(data, parent) {
+            var THIS = this,
+                tab_data = [];
+
+            THIS.setup_reports(parent);
+
+            if(data.stats) {
+                $.each(data.stats, function(k, v) {
+                    $.each(v.calls, function(k2, v2) {
+                        if(v2.duration && v2.wait_time && v2.agent_id) {
+                            console.log(data);
+                            tab_data.push([k2, winkstart.friendly_seconds(v2.duration), data.field_data.users[v2.agent_id].first_name + ' ' + data.field_data.users[v2.agent_id].last_name, v.recorded_at]);
+                        }
+                        else {
+                            tab_data.push([k2, '-', 'None ('+ v2.abandoned +')', v.recorded_at]);
+                        }
+                    });
+                });
+            }
+
+            winkstart.table.reports.fnAddData(tab_data);
         },
 
         render_user_list: function(data, parent) {
@@ -664,6 +720,41 @@ winkstart.module('call_center', 'queue', {
             winkstart.table.agents.fnAddData(tab_data);
         },
 
+        setup_reports: function(parent) {
+            var THIS = this,
+                columns = [
+                {
+                    'sTitle': 'Call-ID'
+                },
+                {
+                    'sTitle': 'Duration'
+                },
+                {
+                    'sTitle': 'Agent'
+                },
+                {
+                    'sTitle': 'Recorded at',
+                    'fnRender': function(obj) {
+                        var timestamp = obj.aData[obj.iDataColumn];
+                        return winkstart.friendly_timestamp(timestamp);
+                    }
+                }
+            ];
+
+            winkstart.table.create('reports', $('#reports-grid', parent), columns, {}, {
+                sDom: '<"buttons_div">frtlip',
+                bAutoWidth: false,
+                aaSorting: [[3, 'desc']],
+            });
+
+            $('#reports-grid_filter input[type=text]', parent).first().focus();
+
+            $('.cancel-search', parent).click(function(){
+                $('#reports-grid_filter input[type=text]', parent).val('');
+                winkstart.table.reports.fnFilter('');
+            });
+        },
+
         setup_table: function(parent) {
             var THIS = this,
                 columns = [
@@ -702,14 +793,14 @@ winkstart.module('call_center', 'queue', {
             winkstart.table.create('agents', $('#agents-grid', parent), columns, {}, {
                 sDom: '<"buttons_div">frtlip',
                 bAutoWidth: false,
-                aaSorting: [[0, 'desc']],
+                aaSorting: [[2, 'asc']],
                 fnRowCallback: function(nRow, aaData, iDisplayIndex) {
                     $(nRow).attr('id', aaData[1]);
                     return nRow;
                 }
             });
 
-            $('.buttons_div', parent).html('<button class="btn primary" id="add_agents">Add Agents</button>&nbsp;<button class="btn danger" id="remove_agents">Remove Selected Agents</button>');
+            $('#agents .buttons_div', parent).html('<button class="btn primary" id="add_agents">Add Agents</button>&nbsp;<button class="btn danger" id="remove_agents">Remove Selected Agents</button>');
 
             $('#agents-grid_filter input[type=text]', parent).first().focus();
 

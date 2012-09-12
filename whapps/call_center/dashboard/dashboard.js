@@ -336,8 +336,6 @@ winkstart.module('call_center', 'dashboard', {
 
                                         var dom_id = $(this).parents('li').first().attr('id');
                                         winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
-                                            $('#' + dom_id, parent).addClass('selected');
-
                                             winkstart.publish('queue.edit', { id: dom_id });
                                         }});
                                     });

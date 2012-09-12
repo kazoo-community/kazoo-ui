@@ -216,6 +216,52 @@
         return random_string;
     };
 
+    winkstart.friendly_timestamp = function(timestamp) {
+        var THIS = this,
+            timestamp = timestamp,
+            parsed_date = '-';
+
+        if(timestamp) {
+            var date = new Date((timestamp - 62167219200)*1000),
+                month = date.getMonth() +1,
+                year = date.getFullYear(),
+                day = date.getDate(),
+                humanDate = month+'/'+day+'/'+year,
+                humanTime = date.toLocaleTimeString();
+
+            parsed_date = humanDate + ' ' + humanTime;
+        }
+
+        return parsed_date;
+    },
+
+    winkstart.friendly_seconds = function(duration, type) {
+        var duration = parseFloat(duration);
+            seconds = duration % 60,
+            minutes = ((duration - seconds) / 60) % 60,
+            hours = Math.floor((duration-seconds)/3600),
+            type = type || 'numbers';
+
+        if(hours < 10 && type == 'numbers') {
+            hours = '0' + hours;
+        }
+        if(minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if(seconds < 10) {
+            seconds = '0' + seconds;
+        }
+
+        if(type == 'verbose') {
+            duration = hours+' hours '+minutes+' minutes and '+seconds+' seconds';
+        }
+        else {
+            duration = hours+':'+minutes+':'+seconds;
+        }
+
+        return duration;
+    },
+
     winkstart.link_form = function(html){
         $('input', html).bind('change.link keyup.link focus.link', function() {
             var name = $(this).attr('name'),
