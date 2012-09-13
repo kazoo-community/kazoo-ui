@@ -19,6 +19,7 @@ winkstart.module('voip', 'callflow', {
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
             disa_callflow: 'tmpl/disa_callflow.html',
+            pivot_callflow: 'tmpl/pivot_callflow.html',
             presence_callflow: 'tmpl/presence_callflow.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
             ring_group_element: 'tmpl/ring_group_element.html',
@@ -1966,6 +1967,59 @@ winkstart.module('voip', 'callflow', {
                                 });
                             }
                         );
+                    }
+                },
+                'pivot[]': {
+                    name: 'Pivot',
+                    icon: 'conference',
+                    category: 'Advanced',
+                    module: 'pivot',
+                    tip: '',
+                    data: {
+                        method: 'get',
+                        req_timeout: '5',
+                        req_format: 'twiml',
+                        voice_url: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.pivot_callflow.tmpl({
+                            data_pivot: {
+                                'method': node.getMetadata('method') || 'get',
+                                'voice_url': node.getMetadata('voice_url') || '',
+                                'req_timeout': node.getMetadata('req_timeout') || '5',
+                                'req_format': node.getMetadata('req_format') || 'twiml'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('voice_url', $('#pivot_voiceurl_input', popup_html).val());
+                            node.setMetadata('method', $('#pivot_method_input', popup_html).val());
+                            node.setMetadata('req_format', $('#pivot_format_input', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Pivot',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 },
                 'disa[]': {
