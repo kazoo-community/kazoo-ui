@@ -23,6 +23,12 @@ winkstart.module('call_center', 'dashboard', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'dashboard.agents.livestats': {
+                url: '{api_url}/accounts/{account_id}/agents/stats/realtime',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'dashboard.queues.list': {
                 url: '{api_url}/accounts/{account_id}/queues',
                 contentType: 'application/json',
@@ -56,6 +62,84 @@ winkstart.module('call_center', 'dashboard', {
     },
 
     {
+        polling: false,
+
+        map_timers: {},
+
+        poll_agents: function(global_data, _parent) {
+            console.log(global_data);
+            var THIS = this,
+                parent = _parent,
+                polling_interval = 2,
+                updated_users = {},
+                map_agents = {},
+                poll = function() {
+                    if($('#dashboard-content').size() === 0) {
+                        clearInterval(interval);
+                        THIS.polling = false;
+                    }
+                    else {
+                        THIS.get_agents_livestats(function(_data_agents) {
+                            console.log(_data_agents);
+                            if(_data_agents.data.current_calls) {
+                                $.each(_data_agents.data.current_calls, function(k, v) {
+                                    if(v.agent_state === 'answered' && !(k in updated_users)) {
+                                        updated_users[k] = true;
+                                        $('.agent_wrapper#'+k, parent).removeClass('slacking break off')
+                                                          .addClass('calling');
+
+                                        THIS.start_timer($('.agent_wrapper#'+k+' .call_time .data_value', parent), v.duration, k);
+                                    }
+                                });
+                            }
+
+                            $.each(updated_users, function(k, v) {
+                                if(!(k in _data_agents.data.current_calls)) {
+                                    $('.agent_wrapper#'+k, parent).removeClass('calling')
+                                                                  .addClass('slacking');
+
+                                    //THIS.stop_timer
+                                    clearInterval(THIS.map_timers[k]);
+                                    $('.agent_wrapper#'+k+' .call_time .data_value', parent).html('-');
+                                    delete THIS.map_timers[k];
+
+                                    delete updated_users[k];
+                                }
+                            });
+                            console.log(updated_users);
+                        });
+                    }
+                };
+
+            $.each(global_data.agents, function(k, v) {
+                map_agents[v.id] = true;
+            });
+
+            if(THIS.polling === false) {
+                interval = setInterval(poll, polling_interval * 1000);
+            }
+
+            THIS.polling = true;
+        },
+
+        get_agents_livestats: function(success, error) {
+            winkstart.request('dashboard.agents.livestats', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         get_agents_stats: function(success, error) {
             winkstart.request('dashboard.agents.stats', {
                     account_id: winkstart.apps['call_center'].account_id,
@@ -177,9 +261,25 @@ winkstart.module('call_center', 'dashboard', {
             return display_time;
         },
 
+        start_timer: function(target, seconds, id) {
+            var THIS = this,
+                render_timer = function(target, seconds) {
+                    if(!(target.hasClass('off'))) {
+                        //var seconds = seconds;//parseFloat(target.dataset('seconds'));
+                        //target.dataset('seconds', ++seconds)
+                          //    .html(THIS.get_time_seconds(seconds));
+                        target.html(THIS.get_time_seconds(seconds));
+                    }
+                };
+
+            if(id) {
+                THIS.map_timers[id] = setInterval(function(){render_timer(target, ++seconds);}, 1000);
+            }
+        },
+
         render_timers: function(_parent) {
             var THIS = this,
-                parent = _parent,
+                parent = _parent;/*,
                 start = function(target) {
                     if(!(target.hasClass('off'))) {
                         var seconds = parseFloat(target.dataset('seconds'));
@@ -187,12 +287,18 @@ winkstart.module('call_center', 'dashboard', {
                         target.dataset('seconds', ++seconds)
                               .html(THIS.get_time_seconds(seconds));
                     }
-                };
+                };*/
 
-            $('.timer', parent).each(function(k, v) {
+            /*$('.timer', parent).each(function(k, v) {
                 setInterval(function(){
                     start($(v));
                 }, 1000);
+            });*/
+
+            $('.timer', parent).each(function(k, v) {
+                //setInterval(function(){
+                    THIS.start_timer($(v), $(v).dataset('seconds'));
+                //}, 1000);
             });
         },
 
@@ -206,12 +312,22 @@ winkstart.module('call_center', 'dashboard', {
                     'off': 4
                 },
                 total_calls = 0,
-                active_calls = 0;
+                active_calls = 0,
+                map_agents_stats = THIS.format_agents_stats(_data),
+                get_agent_stat = function(agent_id) {
+                    return map_agents_stats[agent_id] || {
+                        status: 'off',
+                        call_time: 0,
+                        break_time: 0,
+                        call_per_hour: 0,
+                        call_per_day: 0,
+                        calls_missed: 0
+                    };
+                };
 
             $.each(data.agents, function(k, v) {
                 var queue_string = '';
-                //TODO remove
-                $.extend(true, v, THIS.get_agent_random_data());
+                $.extend(true, v, get_agent_stat(v.id));
                 $.each(v.queues, function(k2, v2) {
                     queue_string += v2 + ' ';
                 });
@@ -236,6 +352,49 @@ winkstart.module('call_center', 'dashboard', {
             data.active_calls = active_calls;
 
             return data;
+        },
+
+        format_agents_stats: function(data) {
+            var THIS = this,
+                map_agents_stats = {},
+                agent;
+
+            $.each(data.agents_stats.data, function(k, v) {
+                agent = map_agents_stats[v.agent_id] || {
+                    status: 'slacking',
+                    call_time: 0,
+                    break_time: 0,
+                    call_per_hour: 0,
+                    call_per_day: 0,
+                    calls_missed: 0
+                };
+
+                if(v.calls_missed) {
+                    $.each(v.calls_missed, function(k2, v2) {
+                        agent.calls_missed++;
+                    });
+                }
+
+                if(v.calls_handled) {
+                    $.each(v.calls_handled, function(k2, v2) {
+                        agent.call_per_day++;
+                        if(THIS.get_diff_seconds(v.recorded_at) < 3600) {
+                            agent.call_per_hour++;
+                        }
+                    });
+                }
+
+                map_agents_stats[v.agent_id] = agent;
+            });
+
+            return map_agents_stats;
+        },
+
+        get_diff_seconds: function(timestamp) {
+            var date_var = new Date((timestamp - 62167219200)*1000).valueOf(),
+                date_now = new Date().valueOf();
+
+            return Math.round((date_now - date_var)/1000);
         },
 
         get_agent_random_data: function() {
@@ -292,13 +451,15 @@ winkstart.module('call_center', 'dashboard', {
                                 function(_data_agents, status) {
                                     var _data = {
                                         queues: _data_queues.data,
-                                        agents: _data_agents.data
+                                        agents: _data_agents.data,
+                                        agents_stats: _data_stats_agents
                                     };
 
                                     _data = THIS.format_data(_data);
 
                                     dashboard_html = THIS.templates.dashboard.tmpl(_data);
 
+                                    THIS.poll_agents(_data, parent);
                                     THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
 
                                     (parent)
@@ -336,8 +497,6 @@ winkstart.module('call_center', 'dashboard', {
 
                                         var dom_id = $(this).parents('li').first().attr('id');
                                         winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
-                                            $('#' + dom_id, parent).addClass('selected');
-
                                             winkstart.publish('queue.edit', { id: dom_id });
                                         }});
                                     });

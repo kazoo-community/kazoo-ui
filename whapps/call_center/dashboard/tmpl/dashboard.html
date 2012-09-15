@@ -68,21 +68,21 @@
                                     <div class="row_data call_time">
                                         {{if status === 'off' || status === 'slacking'}}
                                             <div class="data_title">Call Time</div>
-                                            <div class="data_value timer off">-</div>
+                                            <div class="data_value">-</div>
                                         {{else status === 'break'}}
                                             <div class="data_title">Break Time</div>
-                                            <div class="data_value timer" data-seconds="${break_time}"></div>
+                                            <div class="data_value" data-seconds="${break_time}"></div>
                                         {{else}}
                                             <div class="data_title">Call Time</div>
-                                            <div class="data_value timer" data-seconds="${call_time}"></div>
+                                            <div class="data_value" data-seconds="${call_time}"></div>
                                         {{/if}}
                                     </div>
                                     <div class="row_data call_hours">
-                                        <div class="data_title">Call / hr</div>
+                                        <div class="data_title">Call last hour</div>
                                         <div class="data_value">${call_per_hour}</div>
                                     </div>
                                     <div class="row_data call_day">
-                                        <div class="data_title">Call / day</div>
+                                        <div class="data_title">Calls today</div>
                                         <div class="data_value">${call_per_day}</div>
                                     </div>
                                 </div>
