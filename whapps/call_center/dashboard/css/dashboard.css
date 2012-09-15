@@ -275,13 +275,13 @@
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_title {
-    width: 70px;
+    width: 90px;
     display: inline-block;
     text-align: left;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_value {
-    width: 75px;
+    width: 57px;
     display: inline-block;
     text-align: right;
     font-size: 16px;
