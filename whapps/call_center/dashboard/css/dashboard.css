@@ -267,7 +267,7 @@
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header{
     border-radius: 0px 0px 2px 2px;
     font-weight: bold;
-    color: #444;
+    color: #f4f4f4;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
@@ -290,11 +290,11 @@
 }
 
 /* Color change based on agent's status */
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.calling{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered{
     border: 1px solid #62c462;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.calling .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered .agent_header{
     background: #62c462;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#62c462), to(#57a957));
     background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -306,15 +306,15 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.calling .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered .row_data.call_time .data_value{
     color: #62c462;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.slacking{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing{
     border: 1px solid #05addc;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.slacking .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing .agent_header{
     background: #05addc;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#05addc), to(#049cdb));
     background-image: -moz-linear-gradient(top, #05addc, #049cdb);
@@ -326,7 +326,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#049cdb', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.slacking .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .row_data.call_time .data_value, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing .row_data.call_time .data_value{
     color: #05addc;
 }
 
