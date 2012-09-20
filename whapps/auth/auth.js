@@ -155,7 +155,7 @@ winkstart.module('auth', 'auth',
                        winkstart.publish('auth.welcome', {username: data.data.user.username});
                    });
 
-                   if(data.auth_token != '' && data.auth_token != 'null'){
+                   if(data.auth_token != '' && data.auth_token != 'null' && data.auth_token != 'undefined'){
                         winkstart.apps['auth'].account_id = data.data.account.id;
                         winkstart.apps['auth'].auth_token = data.auth_token;
                         winkstart.apps['auth'].user_id = data.data.user.id;
