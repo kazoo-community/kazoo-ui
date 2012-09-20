@@ -4,7 +4,8 @@ winkstart.module('call_center', 'dashboard', {
         ],
 
         templates: {
-            dashboard: 'tmpl/dashboard.html'
+            dashboard: 'tmpl/dashboard.html',
+            call: 'tmpl/call_list_element.html'
         },
 
         subscribe: {
@@ -25,6 +26,12 @@ winkstart.module('call_center', 'dashboard', {
             },
             'dashboard.agents.livestats': {
                 url: '{api_url}/accounts/{account_id}/agents/stats/realtime',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
+            'dashboard.queues.livestats': {
+                url: '{api_url}/accounts/{account_id}/queues/stats/realtime',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
@@ -76,18 +83,21 @@ winkstart.module('call_center', 'dashboard', {
                         THIS.global_timer = false;
                     }
                     else {
+                        /*
+                        THIS.get_queues_livestats(function(_data_queues) {
+                            console.log(_data_queues);
+                        });*/
+
                         THIS.get_agents_livestats(function(_data_agents) {
                             if(_data_agents.data.current_statuses) {
                                 $.each(_data_agents.data.current_statuses, function(k, v) {
                                     if(!map_agents[k]) {
                                         map_agents[k] = v;
                                     }
-                                    else {
-                                        if(map_agents[k] !== v) {
-                                            $('.agent_wrapper#'+k, parent).removeClass('answered ringing ready break off')
-                                                                      .addClass(v);
-                                            map_agents[k] = v;
-                                        }
+                                    else if(map_agents[k] !== v) {
+                                        $('.agent_wrapper#'+k, parent).removeClass('answered ringing ready break off')
+                                                                  .addClass(v);
+                                        map_agents[k] = v;
                                     }
                                 });
                             }
@@ -95,17 +105,21 @@ winkstart.module('call_center', 'dashboard', {
                             if(_data_agents.data.current_calls) {
                                 $.each(_data_agents.data.current_calls, function(k, v) {
                                     // If it's a new call, then we update the page and update the timer.
-                                    console.log(THIS.map_timers);
                                     if(!(k in THIS.map_timers)) {
+                                        if(v.agent_state !== 'ringing') {
+                                            if(v.call_id in THIS.map_timers) {
+                                                THIS.remove_callwaiting(v.call_id);
+                                            }
+                                        }
+
                                         if(v.agent_state === 'answered') {
                                             $('.agent_wrapper#'+k, parent).removeClass('ready ringing break off')
                                                                           .addClass('answered');
 
                                             THIS.start_timer($('.agent_wrapper#'+k+' .call_time .data_value', parent), v.duration, k);
                                         }
-                                        else if(v.agent_state === 'ringing') {
-                                            console.log('call waiting to add');
-                                            console.log(v);
+                                        else if(v.agent_state === 'ringing' && !(v.call_id in THIS.map_timers)) {
+                                            THIS.add_callwaiting(v);
                                             //addleftlist + timer v.call_id, v.caller_id_name/number TODO: Need duration + queue_id
                                         }
                                     }
@@ -118,6 +132,8 @@ winkstart.module('call_center', 'dashboard', {
                                     $('.agent_wrapper#'+k, parent).removeClass('answered ready ringing break off')
                                                                   .addClass(v);
                                     $('.agent_wrapper#'+k+' .call_time .data_value', parent).html('-');
+
+                                    //TODO Update call hours with last hour stat.
 
                                     clearInterval(THIS.map_timers[k]);
 
@@ -140,6 +156,24 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             THIS.global_timer = setInterval(poll, polling_interval * 1000);
+        },
+
+        get_queues_livestats: function(success, error) {
+            winkstart.request('dashboard.queues.livestats', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
         },
 
         get_agents_livestats: function(success, error) {
@@ -200,45 +234,9 @@ winkstart.module('call_center', 'dashboard', {
             var THIS = this,
                 parent = _parent || $('#dashboard-content');;
 
-            /*winkstart.request(true, 'dashboard.queue.list', {
-                    account_id: winkstart.apps['call_center'].account_id,
-                    api_url: winkstart.apps['call_center'].api_url
-                },
-                function (data, status) {
-                    var map_crossbar_data = function(data) {
-                       var new_list = [];
-
-                        if(data.length > 0) {
-                            $.each(data, function(key, val) {
-                                new_list.push({
-                                    id: val.id,
-                                    title: val.name || '(no name)'
-                                });
-                            });
-                        }
-
-                        new_list.sort(function(a, b) {
-                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-                        });
-
-                        return new_list;
-                    };
-                    //data: map_crossbar_data(data.data),
-                }
-            );*/
-
             var array_cw = [
-                { id: 'bl0', title: '415-202-4335', wait_time: 32, queue_id: 'queue_1' },
-                { id: 'bl1', title: '415-392-4923', wait_time: 135, queue_id: 'queue_2' },
-                { id: 'bl2', title: '415-828-6293', wait_time: 637, queue_id: 'queue_3' },
-                { id: 'bl12', title: '415-929-1284', wait_time: 637, queue_id: 'queue_1' },
-                { id: 'bl13', title: '415-009-3929', wait_time: 2, queue_id: 'queue_1' },
-                { id: 'bl14', title: '415-772-7626', wait_time: 292, queue_id: 'queue_1' },
-                { id: 'bl15', title: '415-441-9929', wait_time: 282, queue_id: 'queue_1' },
-                { id: 'bl16', title: '415-878-0909', wait_time: 870, queue_id: 'queue_1' },
-                { id: 'bl17', title: '415-111-3202', wait_time: 95, queue_id: 'queue_1' },
-                { id: 'bl18', title: '415-636-2933', wait_time: 14, queue_id: 'queue_3' },
-                { id: 'bl19', title: '415-256-3929', wait_time: 547, queue_id: 'queue_1' }
+            /*    { id: 'bl0', title: '415-202-4335', wait_time: 32, queue_id: 'queue_1' },
+                { id: 'bl19', title: '415-256-3929', wait_time: 547, queue_id: 'queue_1' }*/
             ];
 
             array_cw.sort(function(a, b) {
@@ -262,7 +260,31 @@ winkstart.module('call_center', 'dashboard', {
             });
         },
 
-        move_gauge: function(active_calls, total_calls, _parent) {
+        add_callwaiting: function(call) {
+            var THIS = this;
+
+            call.duration = 0;
+            call.friendly_duration = THIS.get_time_seconds(call.duration);
+            var call_html = THIS.templates.call.tmpl(call);
+            $('#callwaiting-list .list-panel-anchor ul').append(call_html);
+
+            THIS.map_timers[call.call_id] = setInterval(function(){$('.timer', call_html).html(THIS.get_time_seconds(++call.duration));}, 1000);
+        },
+
+        remove_callwaiting: function(call_id) {
+            var THIS = this;
+
+            $('#callwaiting-list .list-panel-anchor ul li').each(function(k, v) {
+                if($(v).attr('id') === call_id) {
+                    $(v).remove().hide();
+                }
+            });
+
+            clearInterval(THIS.map_timers[call_id]);
+            delete THIS.map_timers[call_id];
+        },
+
+        /*move_gauge: function(active_calls, total_calls, _parent) {
             var THIS = this,
                 parent = _parent;
 
@@ -270,15 +292,15 @@ winkstart.module('call_center', 'dashboard', {
             $('#gauge_total_calls .min_calls', parent).html(active_calls);
             $('#gauge_total_calls .max_calls', parent).html(total_calls);
             $('#gauge_total_calls .top_part', parent).css({'-moz-transform': rotate_deg, '-webkit-transform': rotate_deg});
-        },
+        },*/
 
         get_time_seconds: function(seconds) {
             var hours = Math.floor(seconds / 3600),
                 minutes = Math.floor(seconds / 60) % 60,
-                seconds = seconds % 60,
-                display_time = (hours < 10 ? '0' + hours : '' + hours) + ':' + (minutes < 10 ? '0' + minutes : '' + minutes) + ':' + (seconds < 10 ? '0' + seconds : '' + seconds);
+                remaining_seconds = seconds % 60,
+                display_time = (hours < 10 ? '0' + hours : '' + hours) + ':' + (minutes < 10 ? '0' + minutes : '' + minutes) + ':' + (remaining_seconds < 10 ? '0' + remaining_seconds : '' + remaining_seconds);
 
-            return display_time;
+            return seconds === 0 ? '00:00:00' : display_time;
         },
 
         start_timer: function(target, seconds, id) {
@@ -318,21 +340,45 @@ winkstart.module('call_center', 'dashboard', {
                 total_calls = 0,
                 active_calls = 0,
                 map_agents_stats = THIS.format_agents_stats(_data),
+                map_queues_stats = THIS.format_queues_stats(_data),
+                get_queue_stat = function(queue_id) {
+                    if(!(queue_id in map_queues_stats)) {
+                        map_queues_stats[queue_id] = {
+                            current_calls: 0,
+                            max_calls: 0,
+                            current_agents: 0,
+                            max_agents: 0,
+                            dropped_calls: 0,
+                            average_hold_time: 0
+                        };
+                    }
+
+                    return map_queues_stats[queue_id];
+                },
                 get_agent_stat = function(agent_id) {
-                    return map_agents_stats[agent_id] || {
-                        status: 'off',
-                        call_time: 0,
-                        break_time: 0,
-                        call_per_hour: 0,
-                        call_per_day: 0,
-                        calls_missed: 0
-                    };
+                    if(!(agent_id in map_agents_stats)) {
+                        map_agents_stats[agent_id] = {
+                            status: 'off',
+                            call_time: 0,
+                            break_time: 0,
+                            call_per_hour: 0,
+                            call_per_day: 0,
+                            calls_missed: 0
+                        };
+                    }
+
+                    return map_agents_stats[agent_id];
                 };
 
             $.each(data.agents, function(k, v) {
                 var queue_string = '';
                 $.extend(true, v, get_agent_stat(v.id));
                 $.each(v.queues, function(k2, v2) {
+                    if(!(v2 in map_queues_stats)) {
+                        $.extend(true, {}, get_queue_stat(v2));
+                    }
+
+                    ++map_queues_stats[v2].max_agents;
                     queue_string += v2 + ' ';
                 });
                 v.queues = queue_string;
@@ -343,10 +389,13 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             $.each(data.queues, function(k, v) {
-                //TODO remove
-                $.extend(true, v, THIS.get_queue_random_data());
-                if(v.average_hold_time) {
-                    v.average_hold_time = THIS.get_time_seconds(v.average_hold_time);
+                $.extend(true, v, get_queue_stat(v.id));
+                if(v.average_hold_time || v.average_hold_time === 0) {
+                    //we store all the wait time in average hold time first, so now we need to divide it by the number of calls to have an average wait time */
+                    if((v.max_calls + v.dropped_calls) !== 0) {
+                        v.average_hold_time /= (v.max_calls + v.dropped_calls);
+                    }
+                    v.average_hold_time = THIS.get_time_seconds(Math.round(v.average_hold_time));
                     total_calls += v.max_calls;
                     active_calls += v.current_calls;
                 }
@@ -356,6 +405,43 @@ winkstart.module('call_center', 'dashboard', {
             data.active_calls = active_calls;
 
             return data;
+        },
+
+        format_queues_stats: function(data) {
+            var THIS = this,
+                map_queues_stats = {},
+                queue;
+
+            $.each(data.queues_stats.data, function(k, v) {
+                queue = map_queues_stats[v.queue_id] || {
+                    current_calls: 0,
+                    max_calls: 0,
+                    current_agents: 0,
+                    max_agents: 0,
+                    dropped_calls: 0,
+                    average_hold_time: 0
+                };
+
+                if(v.calls) {
+                    $.each(v.calls, function(k2, v2) {
+                        queue.max_calls++;
+
+                        if(v2.abandoned) {
+                            queue.dropped_calls++;
+                        }
+                        else if(v2.duration && v2.agent_id) {
+                            if(v2.wait_time) {
+                                queue.average_hold_time+=v2.wait_time;
+                            }
+                            //TODO IF timestamp, add current
+                        }
+                    });
+                }
+
+                map_queues_stats[v.queue_id] = queue;
+            });
+
+            return map_queues_stats;
         },
 
         format_agents_stats: function(data) {
@@ -401,48 +487,12 @@ winkstart.module('call_center', 'dashboard', {
             return Math.round((date_now - date_var)/1000);
         },
 
-        get_agent_random_data: function() {
-            var THIS = this,
-                status_array = ['answered', 'ready', 'break', 'off'],
-                status_random = status_array[THIS.random(3)];
-
-            return {
-                status: status_random,
-                call_time: status_random === 'answered' ? THIS.random(1000) : 0,
-                break_time: status_random === 'break' ? THIS.random(2000) : 0,
-                call_per_hour: THIS.random(5, 10),
-                call_per_day: THIS.random(30, 100)
-            };
-        },
-
-        get_queue_random_data: function() {
-            var THIS = this;
-
-            return {
-                current_calls: THIS.random(10, 20),
-                max_calls: THIS.random(30,50),
-                current_agents: THIS.random(10,20),
-                max_agents: THIS.random(20,50),
-                dropped_calls: THIS.random(5),
-                average_hold_time: THIS.random(1000)
-            };
-        },
-
-        random: function(param_min, param_max) {
-            var min = param_max ? param_min : 0,
-                max = param_max ? param_max+1 : param_min+1;
-
-            var random = Math.floor(min + (Math.random() * (max - min)));
-
-            return random;
-        },
-
         render_dashboard: function(_parent, callback) {
             var THIS = this,
                 parent = _parent;
 
             THIS.get_agents_stats(function(_data_stats_agents) {
-                THIS.get_queues_stats(function(_data_stat_queues) {
+                THIS.get_queues_stats(function(_data_stats_queues) {
                     winkstart.request('dashboard.queues.list', {
                             api_url: winkstart.apps['call_center'].api_url,
                             account_id: winkstart.apps['call_center'].account_id
@@ -456,7 +506,8 @@ winkstart.module('call_center', 'dashboard', {
                                     var _data = {
                                         queues: _data_queues.data,
                                         agents: _data_agents.data,
-                                        agents_stats: _data_stats_agents
+                                        agents_stats: _data_stats_agents,
+                                        queues_stats: _data_stats_queues
                                     };
 
                                     _data = THIS.format_data(_data);
@@ -464,7 +515,7 @@ winkstart.module('call_center', 'dashboard', {
                                     dashboard_html = THIS.templates.dashboard.tmpl(_data);
 
                                     THIS.poll_agents(_data, parent);
-                                    THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
+                                    //THIS.move_gauge(_data.active_calls, _data.total_calls, dashboard_html);
 
                                     (parent)
                                         .empty()
@@ -484,7 +535,7 @@ winkstart.module('call_center', 'dashboard', {
                                             queue_id = $this_queue.attr('id');
 
                                         if($this_queue.hasClass('active')) {
-                                            THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
+                                            //THIS.move_gauge(_data.active_calls, _data.total_calls, parent);
                                             $('.agent_wrapper', dashboard_html).show();
                                             $('#callwaiting-list li', dashboard_html).show();
                                             $('.icon.edit_queue', dashboard_html).hide();
@@ -522,7 +573,7 @@ winkstart.module('call_center', 'dashboard', {
                 $this_queue = container,
                 queue_id = $this_queue.attr('id');
 
-            THIS.move_gauge($this_queue.dataset('current_calls'), $this_queue.dataset('total_calls'), parent);
+            //THIS.move_gauge($this_queue.dataset('current_calls'), $this_queue.dataset('total_calls'), parent);
 
             $('.list_queues_inner > li', parent).removeClass('active');
             $('.icon.edit_queue', parent).hide();
