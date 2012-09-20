@@ -103,3 +103,11 @@
 .add_agents_popup .right_part .box_header .new_search_box .new_searchfield {
     width: 464px;
 }
+
+#queue-view #agents-form #reports-grid_wrapper .dataTables_length{
+    width: 30%;
+}
+
+#queue-view #agents-form #reports-grid_wrapper .dataTables_paginate{
+    width: 40%;
+}
