@@ -77,7 +77,8 @@
 /* Top-Right queues */
 #dashboard-content #dashboard-topbar .topbar-right {
     height: 220px;
-    padding: 15px 10px 15px 250px;
+    /*padding: 15px 10px 15px 250px;*/
+    padding: 15px 10px 15px 0px;
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues {
@@ -223,6 +224,8 @@
     padding-left: 5px;
     width: 110px;
     float: left;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #dashboard-content #callwaiting-list .list-panel-anchor ul li:hover, #dashboard-content #callwaiting-list .list-panel-anchor ul li.selected {
