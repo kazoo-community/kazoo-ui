@@ -36,6 +36,8 @@ winkstart.module('developer', 'developer', {
             });
             THIS.initialization_check();
         });
+
+        THIS.whapp_config();
     },
     {
         modules: {
@@ -122,6 +124,14 @@ winkstart.module('developer', 'developer', {
             var THIS = this;
 
             winkstart.publish('developer.module_activate', {name: 'api'});
+        },
+
+        whapp_config: function() {
+            var THIS = this;
+
+            winkstart.apps['developer'] = $.extend(true, {
+                is_masqueradable: true
+            }, winkstart.apps['developer']);
         }
     }
 );
