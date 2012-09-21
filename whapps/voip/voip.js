@@ -353,7 +353,9 @@ winkstart.module('voip', 'voip', {
                 function(_data, status) {
                     var cpt_callflows = 0;
                     $.each(_data.data, function() {
-                        this.featurecode === false ? cpt_callflows++ : true;
+                        if(!(this.featurecode && 'name' in this.featurecode)) {
+                            cpt_callflows++;
+                        }
                     });
 
                     $('.feature_codes', welcome_html).html(_data.data.length - cpt_callflows);
