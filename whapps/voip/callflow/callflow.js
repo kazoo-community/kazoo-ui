@@ -445,7 +445,6 @@ winkstart.module('voip', 'callflow', {
                 var that = this;
                 this.id = -1;
                 this.actionName = actionName;
-                console.log(actionName);
                 this.module = THIS.actions[this.actionName].module;
                 this.key = '_';
                 this.parent = null;
@@ -1131,21 +1130,21 @@ winkstart.module('voip', 'callflow', {
             var THIS = this;
 
             if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
-                if(THIS.flow.id) {
-                    var data_post = {
+                var data_request = {
                         numbers: THIS.flow.numbers,
                         flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
                     };
 
-                    if(THIS.flow.name != '') {
-                        data_post.name = THIS.flow.name;
-                    }
+                if(THIS.flow.name !== '') {
+                    data_request.name = THIS.flow.name;
+                }
 
+                if(THIS.flow.id) {
                     winkstart.postJSON('callflow.update', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url,
                             callflow_id: THIS.flow.id,
-                            data: data_post
+                            data: data_request
                         },
                         function(json) {
                             THIS.renderList();
@@ -1158,10 +1157,7 @@ winkstart.module('voip', 'callflow', {
                     winkstart.putJSON('callflow.create', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url,
-                            data: {
-                                numbers: THIS.flow.numbers,
-                                flow: (THIS.flow.root.children[0] == undefined) ? {} : THIS.flow.root.children[0].serialize()
-                            }
+                            data: data_request
                         },
                         function(json) {
                             THIS.renderList();
