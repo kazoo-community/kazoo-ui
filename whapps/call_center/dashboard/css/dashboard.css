@@ -333,11 +333,11 @@
     color: #05addc;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.break{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused{
     border: 1px solid #ff9933;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.break .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .agent_header{
     background: #ff9933;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#ff9933), to(#FF8833));
     background-image: -moz-linear-gradient(top, #ff9933, #FF8833);
@@ -349,7 +349,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff9933', endColorstr='#FF8833', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.break .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .row_data.call_time .data_value{
     color: #ff9933;
 }
 
