@@ -1616,7 +1616,7 @@ winkstart.module('voip', 'callflow', {
 
                                 $.each(data.data, function() {
                                     if(!this.featurecode && this.id != THIS.flow.id) {
-                                        this.name = (this.numbers) ? this.numbers.toString() : '(no numbers)';
+                                        this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : '(no numbers)');
 
                                         _data.push(this);
                                     }
