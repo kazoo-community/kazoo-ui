@@ -527,6 +527,61 @@ winkstart.module('accounts', 'accounts_manager', {
                 credits_html = THIS.templates.credits.tmpl(data_tmpl),
                 popup;
 
+            winkstart.request('accounts_manager.get', {
+                    api_url: winkstart.apps['accounts'].api_url,
+                    account_id: data.account_id
+                },
+                function(data_account, status) {
+                    if(data_account.data.billing_mode && data_account.data.billing_mode == "limits_only") {
+                        $('.price', credits_html).remove();
+
+                        $('.submit_channels', credits_html).click(function(ev) {
+                            ev.preventDefault();
+
+                            var limits_data = {
+                                twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
+                                inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
+                            };
+
+                            limits_data = $.extend({}, data.limits, limits_data);
+
+                            THIS.update_limits(limits_data, data.account_id, function(_data) {
+                                popup.dialog('close');
+
+                                winkstart.alert('info', 'Your changes have been saved!');
+
+                                THIS.edit_accounts_manager({id: data.account_id});
+                            });
+                                
+                        });
+
+                    } else {
+                        $('.submit_channels', credits_html).click(function(ev) {
+                            ev.preventDefault();
+
+                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                                function() {
+                                    var limits_data = {
+                                        twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
+                                        inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
+                                    };
+
+                                    limits_data = $.extend({}, data.limits, limits_data);
+
+                                    THIS.update_limits(limits_data, data.account_id, function(_data) {
+                                        popup.dialog('close');
+
+                                        winkstart.alert('info', 'Your changes have been saved!');
+
+                                        THIS.edit_accounts_manager({id: data.account_id});
+                                    });
+                                }
+                            );
+                        });
+                    }
+                } 
+            );
+
             $('ul.settings1 > li', credits_html).click(function(item) {
                 $('.pane_content', credits_html).hide();
 
@@ -554,29 +609,6 @@ winkstart.module('accounts', 'accounts_manager', {
                             $('.current_balance', credits_html).html((parseFloat($('.current_balance', credits_html).html()) + credits_to_add).toFixed(2));
 
                             winkstart.publish('statistics.update_stat', 'credits');
-                            THIS.edit_accounts_manager({id: data.account_id});
-                        });
-                    }
-                );
-            });
-
-            $('.submit_channels', credits_html).click(function(ev) {
-                ev.preventDefault();
-
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-                    function() {
-                        var limits_data = {
-                            twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
-                            inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
-                        };
-
-                        limits_data = $.extend({}, data.limits, limits_data);
-
-                        THIS.update_limits(limits_data, data.account_id, function(_data) {
-                            popup.dialog('close');
-
-                            winkstart.alert('info', 'Your changes have been saved!');
-
                             THIS.edit_accounts_manager({id: data.account_id});
                         });
                     }
