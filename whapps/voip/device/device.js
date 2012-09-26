@@ -35,6 +35,8 @@ winkstart.module('voip', 'device', {
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ],
@@ -45,6 +47,8 @@ winkstart.module('voip', 'device', {
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ],
@@ -66,6 +70,8 @@ winkstart.module('voip', 'device', {
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ]
@@ -273,7 +279,8 @@ winkstart.module('voip', 'device', {
                         enabled: true,
                         caller_id: {
                             external: {},
-                            internal: {}
+                            internal: {},
+                            emergency: {}
                         },
                         ringtones: {},
                         media: {
@@ -673,18 +680,6 @@ winkstart.module('voip', 'device', {
                 data.data.device_type = 'cellphone';
             }
 
-            if(typeof data.data.caller_id == 'object') {
-                if('default' in data.data.caller_id) {
-                    data.data.caller_id.external = data.data.caller_id['default'];
-                    delete data.data.caller_id['default'];
-                }
-
-                if('emergency' in data.data.caller_id) {
-                    data.data.caller_id.internal = data.data.caller_id.emergency;
-                    delete data.data.caller_id.emergency;
-                }
-            }
-
             if(typeof data.data.media == 'object' && typeof data.data.media.fax == 'object' && 'codecs' in data.data.media.fax) {
                 delete data.data.media.fax.codecs;
             }
@@ -708,6 +703,10 @@ winkstart.module('voip', 'device', {
 
             if(data.caller_id.external.number == '' && data.caller_id.external.name == '') {
                 delete data.caller_id.external;
+            }
+
+            if(data.caller_id.emergency.number == '' && data.caller_id.emergency.name == '') {
+                delete data.caller_id.emergency;
             }
 
             if(!data.music_on_hold.media_id) {
@@ -769,6 +768,7 @@ winkstart.module('voip', 'device', {
             if(form_data.caller_id) {
                 form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,'');
                 form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
+                form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g,'');
             }
 
             if(form_data.media.audio) {

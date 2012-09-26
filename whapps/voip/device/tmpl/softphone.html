@@ -103,14 +103,14 @@
 					<div class="clearfix">
 						<label for="caller_id_name_internal">Caller ID Name</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this User for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Device for In-House Calls." />
 						</div>
 					</div>
 
 					<div class="clearfix">
 						<label for="caller_id_number_internal">Caller ID Number</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this User for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Device for In-House Calls."/>
 						</div>
 					</div>
 					<hr />
@@ -119,16 +119,33 @@
 					<div class="clearfix">
 						<label for="caller_id_name_external">Caller ID Name</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this User for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Device for Outbound Calls."/>
 						</div>
 					</div>
 
 					<div class="clearfix">
 						<label for="caller_id_number_external">Caller ID Number</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this User for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Device for Outbound Calls."/>
 						</div>
 					</div>
+
+                    <hr />
+
+                    <h3>Emergency</h3>
+                    <div class="clearfix">
+                        <label for="caller_id_name_emergency">Caller ID Name</label>
+                        <div class="input">
+                            <input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="Define the Caller ID Name of this Device for Emergency Calls." />
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="caller_id_number_emergency">Caller ID Number</label>
+                        <div class="input">
+                            <input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="Define the Caller ID Number of this Device for Emergency Calls."/>
+                        </div>
+                    </div>
 				</div>
 
 				<div id="sip_settings">
