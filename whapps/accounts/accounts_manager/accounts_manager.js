@@ -497,7 +497,7 @@ winkstart.module('accounts', 'accounts_manager', {
         add_credits: function(credits, account_id, success, error) {
             var THIS = this;
 
-            winkstart.request('accounts_manager.limits.update', {
+            winkstart.request('accounts_manager.credits.update', {
                     account_id: account_id,
                     api_url: winkstart.apps['accounts'].api_url,
                     billing_provider: THIS.billing_provider,
