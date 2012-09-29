@@ -91,7 +91,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 2,
+                polling_interval = 5,
                 map_agents = {},
                 /*poll = function() {
                     var data_template = $.extend(true, {}, global_data.template); //copy without reference;
