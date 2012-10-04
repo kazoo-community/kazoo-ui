@@ -14,6 +14,9 @@
                         {{else status === 'paused'}}
                             <div class="data_title">Break Time</div>
                             <div class="data_value" data-seconds="${break_time}"></div>
+                        {{else status === 'wrapup'}}
+                            <div class="data_title">Wrapping up</div>
+                            <div class="data_value"></div>
                         {{else}}
                             <div class="data_title">Call Time</div>
                             <div class="data_value" data-seconds="${call_time}">${call_time}</div>
