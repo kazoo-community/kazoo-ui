@@ -271,6 +271,7 @@
     border-radius: 0px 0px 2px 2px;
     font-weight: bold;
     color: #f4f4f4;
+    text-shadow: 1px 1px 0px #555;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
@@ -334,23 +335,43 @@
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused{
-    border: 1px solid #ff9933;
+    border: 1px solid #ff7733;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .agent_header{
-    background: #ff9933;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#ff9933), to(#FF8833));
-    background-image: -moz-linear-gradient(top, #ff9933, #FF8833);
-    background-image: -ms-linear-gradient(top, #ff9933, #FF8833);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff9933), color-stop(100%, #FF8833));
-    background-image: -webkit-linear-gradient(top, #ff9933, #FF8833);
-    background-image: -o-linear-gradient(top, #ff9933, #FF8833);
-    background-image: linear-gradient(top, #ff9933, #FF8833);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff9933', endColorstr='#FF8833', GradientType=0);
+    background: #ff7733;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#ff7733), to(#FF5533));
+    background-image: -moz-linear-gradient(top, #ff7733, #FF5533);
+    background-image: -ms-linear-gradient(top, #ff7733, #FF5533);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7733), color-stop(100%, #FF5533));
+    background-image: -webkit-linear-gradient(top, #ff7733, #FF5533);
+    background-image: -o-linear-gradient(top, #ff7733, #FF5533);
+    background-image: linear-gradient(top, #ff7733, #FF5533);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff7733', endColorstr='#FF5533', GradientType=0);
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .row_data.call_time .data_value{
-    color: #ff9933;
+    color: #ff7733;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup{
+    border: 1px solid #ffbb33;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .agent_header {
+    background: #ffbb33;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#ffbb33), to(#FF9933));
+    background-image: -moz-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -ms-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffbb33), color-stop(100%, #FF9933));
+    background-image: -webkit-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -o-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: linear-gradient(top, #ffbb33, #FF9933);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbb33', endColorstr='#FF9933', GradientType=0);
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .row_data.call_time .data_value{
+    color: #ffbb33;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.off{
