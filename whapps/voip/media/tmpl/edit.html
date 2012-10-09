@@ -27,7 +27,7 @@
 						</div>
 					</div>
 
-					<div class="clearfix">
+					<div class="clearfix file">
 			            <label for="fileInput">File input</label>
 			            <div id="upload_div" class="input">
 				            <input class="input-file" id="file" name="upload_media" type="file">
@@ -37,7 +37,7 @@
 			            		<span class="uneditable-input">${data.description}</span>
 				            </div>
 				    </div>
-				        <div class="clearfix player_file">
+				        <div class="clearfix player_file file">
 				        	<div class="input">
 				        		<button class="btn" id="change_link">Change File</button>
 				            	<button class="btn" id="download_link">Download File</button>
@@ -47,6 +47,50 @@
 				    </div>
 			            {{/if}}
           			
+          			<div class="clearfix tts_input">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="Check to enable text to speach.">
+											{{if data.tts}}
+							                    <input type="checkbox" id="tts" name="tts.enable" checked="checked" />
+							                {{else}}
+							                    <input type="checkbox" id="tts" name="tts.enable" />
+							                {{/if}}
+							                <span>TTS</span>
+						                </span>
+						            </label>
+						        </li>
+						    </ul>
+						</div>
+					</div>
+
+					<div class="clearfix tts">
+			            <label for="tts_text">Text</label>
+			            <div class="input">
+			            	{{if data.tts}}
+			            		<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="Text To Speach" value="${data.tts.text}"/>
+			                {{else}}
+			                   	<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="Text To Speach" />
+			                {{/if}}
+			            </div>
+			        </div>
+
+			        <div class="clearfix tts">
+			            <label for="tts_voice">Select</label>
+			            <div class="input">
+			            	<select class="medium" name="tts.voice" id="tts_voice">
+			            		{{if data.tts}}
+				                    <option selected="selected">${data.tts.voice}</option>
+				                {{/if}}
+			                	<option>female/en-US</option>
+			                	<option>male/en-US</option>
+			                	<option>female/en-GB</option>
+			                	<option>male/en-GB</option>	
+			            	</select>
+			            </div>
+			        </div>
 
           			<input name="auth_token" id="auth_token" type="hidden" value="${auth_token}"/>
 				</div>

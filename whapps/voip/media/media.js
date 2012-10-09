@@ -214,6 +214,11 @@ winkstart.module('voip', 'media', {
                 media_html = THIS.templates.edit.tmpl(data),
                 file;
 
+            //Delete tts default option on every media if not a specific TTS media
+            if(!data.data.tts.text) {
+                delete data.data.tts;
+            }
+
             winkstart.validate.set(THIS.config.validation, media_html);
 
             $('*[rel=popover]:not([type="text"])', media_html).popover({
@@ -228,6 +233,16 @@ winkstart.module('voip', 'media', {
 
             if(data.data.id) {
                 $('#upload_div', media_html).hide();
+
+                if(data.data.tts) {
+                    $('.file', media_html).remove();
+                    $('.tts_input', media_html).hide();
+                } else {
+                    $('.file', media_html).show();
+                    $('.tts', media_html).remove();
+                    $('.tts_input', media_html).remove();
+                }
+
             }
 
             $('#change_link', media_html).click(function(ev) {
@@ -260,6 +275,11 @@ winkstart.module('voip', 'media', {
                 }
             });
 
+            $('#tts', media_html).click(function() {
+                ($(this).attr('checked')) ? $('.tts', media_html).show() : $('.tts', media_html).hide();
+                ($(this).attr('checked')) ? $('.file', media_html).hide() : $('.file', media_html).show();
+            });
+
             $('.media-save', media_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -269,19 +289,25 @@ winkstart.module('voip', 'media', {
                         form_data = THIS.clean_form_data(form_data);
 
                         THIS.save_media(form_data, data, function(_data, status) {
-                                if($('#upload_div', media_html).is(':visible') && $('#file').val() != '') {
-                                    if(file === 'updating') {
-                                        winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                if(!form_data.tts) {
+                                    if($('#upload_div', media_html).is(':visible') && $('#file').val() != '') {
+                                        if(file === 'updating') {
+                                            winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                        }
+                                        else {
+                                            THIS.upload_file(file, _data.data.id, function() {
+                                                if(typeof callbacks.save_success == 'function') {
+                                                    callbacks.save_success(_data, status);
+                                                }
+                                            });
+                                        }
                                     }
                                     else {
-                                        THIS.upload_file(file, _data.data.id, function() {
-                                            if(typeof callbacks.save_success == 'function') {
-                                                callbacks.save_success(_data, status);
-                                            }
-                                        });
+                                        if(typeof callbacks.save_success == 'function') {
+                                            callbacks.save_success(_data, status);
+                                        }
                                     }
-                                }
-                                else {
+                                } else {
                                     if(typeof callbacks.save_success == 'function') {
                                         callbacks.save_success(_data, status);
                                     }
@@ -314,6 +340,13 @@ winkstart.module('voip', 'media', {
 
             if(form_data.description == '') {
                 delete form_data.description;
+            }
+
+            if(form_data.tts && form_data.tts.enable == true) {
+                delete form_data.tts.enable;
+                delete form_data.description;
+            } else {
+                delete form_data.tts;
             }
 
             return form_data;
