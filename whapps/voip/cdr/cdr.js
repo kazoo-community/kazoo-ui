@@ -142,7 +142,7 @@ function(args) {
 
                                 tab_data.push([
                                     this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
-                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
+                                    this.callee_id_number === this.callee_id_name ? this.callee_id_number || (this.to) ? this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) : '(empty)' || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
                                     user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
                                     duration || '-',
                                     this.hangup_cause || '-',
