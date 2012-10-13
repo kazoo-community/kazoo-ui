@@ -333,14 +333,11 @@ winkstart.module('call_center', 'queue', {
         },
 
         render_edit_agents: function(data, target, callbacks) {
-            console.log('render_edit_agents');
             var THIS = this,
                 agents_html = THIS.templates.edit_agents.tmpl(data);
 
             THIS.render_reports(data, agents_html);
-            console.log('reports done');
             THIS.render_user_list(data, agents_html);
-            console.log('users done');
 
             $('.detail_queue', agents_html).click(function() {
                 THIS.popup_edit_queue(data, callbacks);
@@ -475,14 +472,11 @@ winkstart.module('call_center', 'queue', {
 
             THIS.setup_reports(parent);
 
-            console.log(data);
             if(data.stats) {
                 $.each(data.stats, function(k, v) {
                     if(v.calls) {
                         $.each(v.calls, function(k2, v2) {
-                            console.log(v2);
                             if(v2.duration && v2.wait_time && v2.agent_id) {
-                                console.log(data);
                                 if(v2.agent_id in data.field_data.users) {
                                     tab_data.push([k2, winkstart.friendly_seconds(v2.duration), data.field_data.users[v2.agent_id].first_name + ' ' + data.field_data.users[v2.agent_id].last_name, v.recorded_at]);
                                 }

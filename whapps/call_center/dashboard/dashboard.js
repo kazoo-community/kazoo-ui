@@ -128,7 +128,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 2,
+                polling_interval = 10,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -164,13 +164,15 @@ winkstart.module('call_center', 'dashboard', {
                                     if(k in _data_agents.data.current_stats && _data_agents.data.current_stats[k].calls_handled) {
                                         var map_cpt = {};
                                         $.each(_data_agents.data.current_stats[k].calls_handled, function(k2, v2) {
-                                            map_cpt[v2.queue_id] = map_cpt[v2.queue_id] || 0;
-                                            if(++map_cpt[v2.queue_id] > data_template.agents[k].queues_list[v2.queue_id].new_calls) {
-                                                data_template.agents[k].call_per_hour++;
-                                                data_template.agents[k].call_per_day++;
-                                                data_template.agents[k].queues_list[v2.queue_id].call_per_hour++;
-                                                data_template.agents[k].queues_list[v2.queue_id].call_per_day++;
-                                                data_template.queues[v2.queue_id].max_calls++;
+                                            if(v2.queue_id in data_template.agents[k].queues_list) {
+                                                map_cpt[v2.queue_id] = map_cpt[v2.queue_id] || 0;
+                                                if(++map_cpt[v2.queue_id] > data_template.agents[k].queues_list[v2.queue_id].new_calls) {
+                                                    data_template.agents[k].call_per_hour++;
+                                                    data_template.agents[k].call_per_day++;
+                                                    data_template.agents[k].queues_list[v2.queue_id].call_per_hour++;
+                                                    data_template.agents[k].queues_list[v2.queue_id].call_per_day++;
+                                                    data_template.queues[v2.queue_id].max_calls++;
+                                                }
                                             }
                                         });
                                     }
@@ -429,20 +431,6 @@ winkstart.module('call_center', 'dashboard', {
                 active_calls = 0,
                 map_agents_stats = THIS.format_agents_stats(_data),
                 map_queues_stats = THIS.format_queues_stats(_data),
-                get_queue_stat = function(queue_id) {
-                    if(!(queue_id in map_queues_stats)) {
-                        map_queues_stats[queue_id] = {
-                            current_calls: 0,
-                            max_calls: 0,
-                            current_agents: 0,
-                            max_agents: 0,
-                            dropped_calls: 0,
-                            average_hold_time: 0
-                        };
-                    }
-
-                    return map_queues_stats[queue_id];
-                },
                 get_agent_stat = function(agent_id) {
                     if(!(agent_id in map_agents_stats)) {
                         map_agents_stats[agent_id] = {
@@ -513,30 +501,28 @@ winkstart.module('call_center', 'dashboard', {
                 }
 
                 $.each(v.queues, function(k2, v2) {
-                    if(!(v2 in map_queues_stats)) {
-                        $.extend(true, {}, get_queue_stat(v2));
-                    }
+                    if(v2 in map_queues_stats) {
+                        ++map_queues_stats[v2].max_agents;
+                        v.status !== 'off' ? ++map_queues_stats[v2].current_agents : true;
+                        v.status === 'answered' ? ++map_queues_stats[v2].current_calls : true;
 
-                    ++map_queues_stats[v2].max_agents;
-                    v.status !== 'off' ? ++map_queues_stats[v2].current_agents : true;
-                    v.status === 'answered' ? ++map_queues_stats[v2].current_calls : true;
+                        queue_string += queue_string === '' ? v2 : ' ' + v2;
 
-                    queue_string += queue_string === '' ? v2 : ' ' + v2;
-
-                    if(!(v2 in v.queues_list)) {
-                        v.queues_list[v2] = {
-                            calls_missed: 0,
-                            call_per_hour: 0,
-                            call_per_day: 0,
-                            new_calls: 0
+                        if(!(v2 in v.queues_list)) {
+                            v.queues_list[v2] = {
+                                calls_missed: 0,
+                                call_per_hour: 0,
+                                call_per_day: 0,
+                                new_calls: 0
+                            }
                         }
-                    }
 
-                    if(v.id in map_current_stat && 'queues_list' in map_current_stat[v.id] && v2 in map_current_stat[v.id].queues_list) {
-                        v.new_calls += map_current_stat[v.id].queues_list[v2].new_calls;
-                        v.queues_list[v2].call_per_hour += map_current_stat[v.id].queues_list[v2].new_calls;
-                        v.queues_list[v2].call_per_day += map_current_stat[v.id].queues_list[v2].new_calls;
-                        v.queues_list[v2].new_calls = map_current_stat[v.id].queues_list[v2].new_calls + (v.queues_list[v2].new_calls || 0);
+                        if(v.id in map_current_stat && 'queues_list' in map_current_stat[v.id] && v2 in map_current_stat[v.id].queues_list) {
+                            v.new_calls += map_current_stat[v.id].queues_list[v2].new_calls;
+                            v.queues_list[v2].call_per_hour += map_current_stat[v.id].queues_list[v2].new_calls;
+                            v.queues_list[v2].call_per_day += map_current_stat[v.id].queues_list[v2].new_calls;
+                            v.queues_list[v2].new_calls = map_current_stat[v.id].queues_list[v2].new_calls + (v.queues_list[v2].new_calls || 0);
+                        }
                     }
                 });
                 v.queues = queue_string;
@@ -549,24 +535,21 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             $.each(data.queues_live_stats.data.current_stats, function(k, v) {
-                if(v.calls) {
-                    $.each(v.calls, function(k2, call) {
-                        if(!(k in map_queues_stats)) {
-                            $.extend(true, {}, get_queue_stat(k));
-                        }
-
-                        if(call.abandoned) {
-                            map_queues_stats[k].dropped_calls++;
-                        }
-                        else if(call.agent_id) {
-                            map_queues_stats[k].max_calls++;
-                        }
-                    });
+                if(k in map_queues_stats) {
+                    if(v.calls) {
+                        $.each(v.calls, function(k2, call) {
+                            if(call.abandoned) {
+                                map_queues_stats[k].dropped_calls++;
+                            }
+                            else if(call.agent_id) {
+                                map_queues_stats[k].max_calls++;
+                            }
+                        });
+                    }
                 }
             });
 
-            $.each(data.queues, function(k, v) {
-                $.extend(true, v, get_queue_stat(v.id));
+            $.each(map_queues_stats, function(k, v) {
                 if(v.average_hold_time || v.average_hold_time === 0) {
                     //we sum all the wait time in average hold time first, so now we need to divide it by the number of calls to have an average wait time */
                     if((v.max_calls + v.dropped_calls) !== 0) {
@@ -580,7 +563,6 @@ winkstart.module('call_center', 'dashboard', {
                     total_calls += v.max_calls;
                     active_calls += v.current_calls;
                 }
-                map_queues_stats[v.id] = v;
             });
 
             data.total_calls = total_calls;
@@ -596,32 +578,40 @@ winkstart.module('call_center', 'dashboard', {
                 map_queues_stats = {},
                 queue;
 
-            $.each(data.queues_stats.data, function(k, v) {
-                queue = map_queues_stats[v.queue_id] || {
+            $.each(data.queues, function(k, v) {
+                map_queues_stats[v.id] = {
                     current_calls: 0,
                     max_calls: 0,
                     current_agents: 0,
                     max_agents: 0,
                     dropped_calls: 0,
-                    average_hold_time: 0
-                };
-
-                if(v.calls) {
-                    $.each(v.calls, function(k2, v2) {
-                        queue.max_calls++;
-
-                        if(v2.abandoned) {
-                            queue.dropped_calls++;
-                        }
-                        else if(v2.duration && v2.agent_id) {
-                            if(v2.wait_time) {
-                                queue.average_hold_time+=v2.wait_time;
-                            }
-                        }
-                    });
+                    average_hold_time: 0,
+                    name: v.name,
+                    id: v.id
                 }
+            });
 
-                map_queues_stats[v.queue_id] = queue;
+            $.each(data.queues_stats.data, function(k, v) {
+                if(v.queue_id in map_queues_stats) {
+                    queue = map_queues_stats[v.queue_id];
+
+                    if(v.calls) {
+                        $.each(v.calls, function(k2, v2) {
+                            queue.max_calls++;
+
+                            if(v2.abandoned) {
+                                queue.dropped_calls++;
+                            }
+                            else if(v2.duration && v2.agent_id) {
+                                if(v2.wait_time) {
+                                    queue.average_hold_time+=v2.wait_time;
+                                }
+                            }
+                        });
+                    }
+
+                    map_queues_stats[v.queue_id] = queue;
+                }
             });
 
             return map_queues_stats;
