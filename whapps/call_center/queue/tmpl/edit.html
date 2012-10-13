@@ -50,6 +50,23 @@
                     </div>
 
                     <div class="clearfix">
+                        <label>Strategy</label>
+                        <div class="input">
+                            <span rel="popover" data-content="The queue strategy for connecting agents to caller">
+                                <select name="strategy">
+                                    {{if data.strategy === 'most_idle'}}
+                                        <option value="round_robin">Round Robin</option>
+                                        <option value="most_idle" selected="selected">Most Idle</option>
+                                    {{else}}
+                                        <option value="round_robin" selected="selected">Round Robin</option>
+                                        <option value="most_idle">Most Idle</option>
+                                    {{/if}}
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
 						<label for="agent_wrapup_time">Call Wrap-up Time (s)</label>
 						<div class="input">
 							<input class="span2" id="agent_wrapup_time" name="agent_wrapup_time" type="text" placeholder="30" value="${data.agent_wrapup_time}" rel="popover" data-content="Automatic break time between calls for the agents in this queue."/>
