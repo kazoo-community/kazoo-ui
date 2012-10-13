@@ -407,13 +407,15 @@ winkstart.module('voip', 'user', {
 
             enable_pin.is(':checked') ? $queue_block.show() : $queue_block.hide();
             hotdesk_pin_require.is(':checked') ? hotdesk_pin.show() : hotdesk_pin.hide();
+                //TODO Temporary hack to hide PIN
+                $('.queue_pin', user_html).hide();
 
             enable_pin.change(function() {
                 $(this).is(':checked') ? $queue_block.show('blind') : $queue_block.hide('blind');
             });
 
             hotdesk_pin_require.change(function() {
-                $(this).is(':checked') ? hotdesk_pin.show('bind') : hotdesk_pin.hide('bind');
+                $(this).is(':checked') ? hotdesk_pin.show('blind') : hotdesk_pin.hide('blind');
             });
 
             $('.user-save', user_html).click(function(ev) {
