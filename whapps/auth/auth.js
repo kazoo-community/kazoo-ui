@@ -573,16 +573,20 @@ winkstart.module('auth', 'auth',
                                 winkstart.publish('auth.new_password', json.data);
                             }
 
-                            var landing = true;
-                            $.each(json.data.apps, function(k, v) {
-                                if(v['default']) {
-                                    landing = false;
-                                }
-                            });
+                            if(winkstart.config.hide_video) {
+                                var landing = true;
+                                $.each(json.data.apps, function(k, v) {
+                                    if(v['default']) {
+                                        landing = false;
+                                    }
+                                });
 
-                            if(landing) {
-                                winkstart.publish('auth.landing', $('.ws-content'));
+                                if(landing) {
+
+                                    winkstart.publish('auth.landing', $('.ws-content'));
+                                }
                             }
+                            
 
                         },
                         function(data, status) {

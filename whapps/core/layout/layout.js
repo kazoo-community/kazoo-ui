@@ -82,6 +82,10 @@ winkstart.module('core', 'layout', {
                 layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent),
                 api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url;
 
+            if(winkstart.config.hide_powered) {
+                $('#powered', layout_html).remove();
+            }
+
             $("#loading").ajaxStart(function(){
                 $(this).show();
             }).ajaxStop(function(){
