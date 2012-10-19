@@ -105,14 +105,14 @@ winkstart.module('auth', 'onboarding', {
                     if(errors.phone_numbers[number].data.carrier_fault) {
                         msg += 'Number already used! Please select another one.'
                     }
-                    
+
                 }
             });
 
             winkstart.alert('error', {
                 'text': msg,
                 data: formated_data
-            });     
+            });
         },
 
         parse_username: function(username) {
@@ -218,7 +218,6 @@ winkstart.module('auth', 'onboarding', {
             };
 
             form_data.account.available_apps = winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].available_apps : [];
-            form_data.account.default_api_url = winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].default_api_url : '' ;
 
             form_data.phone_numbers = {};
             form_data.phone_numbers[number] = { dash_e911: form_data.e911 };
