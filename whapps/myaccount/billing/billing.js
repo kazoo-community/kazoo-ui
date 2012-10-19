@@ -356,7 +356,8 @@ winkstart.module('myaccount', 'billing', {
 
                     if(v.subscription_id) {
                         var account_id = v.subscription_id.split('_')[0];
-                        account_name = account_id.length === 32 ? map_accounts[v.subscription_id.split('_')[0]].name : 'Account not found';
+
+                        account_name = account_id.length === 32 && account_id in map_accounts ? map_accounts[account_id].name : '-';
                         payment = [v.created_at, account_name, v.status];
 
                         $.each(THIS.addons, function() {
