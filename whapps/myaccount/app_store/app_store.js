@@ -198,7 +198,7 @@ winkstart.module('myaccount', 'app_store', {
                                                     apps[id] = _user_data.data.apps[id];
                                                 } else {
                                                     apps[id] = winkstart.config.available_apps[id];
-                                                    apps[id].api_url = _data.data.default_api_url || winkstart.config.default_api_url;
+                                                    apps[id].api_url = winkstart.config.default_api_url;
                                                 }
 
                                             });
