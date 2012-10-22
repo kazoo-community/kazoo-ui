@@ -37,7 +37,6 @@
                              rel="popover" data-content="Realm of this account" />
                         </div>
                     </div>
-
                 </div>
 
                 <div id="voicemail_to_email">
@@ -145,12 +144,14 @@
 
                         <h3>Credit / Limits</h3>
 
-                        <div class="clearfix">
-                            <label for="billing_balance">Balance</label>
-                            <div class="input">
-                                <span class="uneditable-input mini">${credits.amount}</span>
+                        {{if credits}}
+                            <div class="clearfix">
+                                <label for="billing_balance">Balance</label>
+                                <div class="input">
+                                    <span class="uneditable-input mini">${credits.amount}</span>
+                                </div>
                             </div>
-                        </div>
+                        {{/if}}
 
                         <div class="clearfix">
                             <label for="billing_inbound_trunks">Inbound Calling</label>

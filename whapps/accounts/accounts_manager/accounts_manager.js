@@ -293,6 +293,27 @@ winkstart.module('accounts', 'accounts_manager', {
                                                     }
                                                 }
                                             );
+                                        },
+                                        function() {
+                                            winkstart.request('accounts_manager.limits.get', {
+                                                    account_id: data.id,
+                                                    api_url: winkstart.apps['accounts'].api_url
+                                                },
+                                                function(_data_l, status) {
+                                                    var limits = {
+                                                        inbound_trunks: 0,
+                                                        twoway_trunks: 0
+                                                    };
+                                                    $.extend(true, limits, _data_l.data);
+                                                    render_data.limits = limits;
+
+                                                    THIS.render_accounts_manager(render_data, target, callbacks);
+
+                                                    if(typeof callbacks.after_render == 'function') {
+                                                        callbacks.after_render();
+                                                    }
+                                                }
+                                            );
                                         }
                                     );
                                 },
@@ -950,7 +971,6 @@ winkstart.module('accounts', 'accounts_manager', {
 
                 winkstart.publish('accounts_manager.activate');
             }
-
         },
 
         masquerade_account: function(account_name) {
