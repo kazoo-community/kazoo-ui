@@ -215,7 +215,7 @@ winkstart.module('voip', 'media', {
                 file;
 
             //Delete tts default option on every media if not a specific TTS media
-            if(!data.data.tts.text) {
+            if(data.data.tts && !data.data.tts.text) {
                 delete data.data.tts;
             }
 
