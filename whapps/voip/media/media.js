@@ -209,15 +209,10 @@ winkstart.module('voip', 'media', {
             );
         },
 
-        render_media: function(data, target, callbacks){
+        render_media: function(data, target, callbacks) {
             var THIS = this,
                 media_html = THIS.templates.edit.tmpl(data),
                 file;
-
-            //Delete tts default option on every media if not a specific TTS media
-            if(data.data.tts && !data.data.tts.text) {
-                delete data.data.tts;
-            }
 
             winkstart.validate.set(THIS.config.validation, media_html);
 
@@ -233,16 +228,6 @@ winkstart.module('voip', 'media', {
 
             if(data.data.id) {
                 $('#upload_div', media_html).hide();
-
-                if(data.data.tts) {
-                    $('.file', media_html).remove();
-                    $('.tts_input', media_html).hide();
-                } else {
-                    $('.file', media_html).show();
-                    $('.tts', media_html).remove();
-                    $('.tts_input', media_html).remove();
-                }
-
             }
 
             $('#change_link', media_html).click(function(ev) {
@@ -275,9 +260,25 @@ winkstart.module('voip', 'media', {
                 }
             });
 
-            $('#tts', media_html).click(function() {
-                ($(this).attr('checked')) ? $('.tts', media_html).show() : $('.tts', media_html).hide();
-                ($(this).attr('checked')) ? $('.file', media_html).hide() : $('.file', media_html).show();
+            function changeType($select) {
+                var type = $select.val();
+                
+                switch(type) {
+                    case 'tts':
+                        $('.tts', media_html).show();
+                        $('.file', media_html).hide();
+                        break;
+                    case 'upload':
+                        $('.tts', media_html).hide();
+                        $('.file', media_html).show();
+                        break;
+                }
+            }
+
+            changeType($('#media_type', media_html));
+
+            $('#media_type', media_html).change(function() {
+                changeType($(this));
             });
 
             $('.media-save', media_html).click(function(ev) {
@@ -342,12 +343,13 @@ winkstart.module('voip', 'media', {
                 delete form_data.description;
             }
 
-            if(form_data.tts && form_data.tts.enable == true) {
-                delete form_data.tts.enable;
-                delete form_data.description;
+            if(form_data.media_source == 'tts') {
+                form_data.description = "tts file";
             } else {
                 delete form_data.tts;
             }
+
+            delete form_data.media_type;
 
             return form_data;
         },
@@ -376,6 +378,10 @@ winkstart.module('voip', 'media', {
 
             if('field_data' in form_data) {
                 delete form_data.field_data;
+            }
+
+            if(form_data.media_source == 'upload') {
+                delete form_data.tts;
             }
 
             return form_data;
