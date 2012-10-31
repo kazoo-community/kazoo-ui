@@ -261,11 +261,13 @@ winkstart.module('voip', 'user', {
                     api_url: winkstart.apps['voip'].api_url
                 },
                 function(_data, status) {
-                    _data.data.unshift({
-                        id: '',
-                        name: '- Not set -'
-                    });
-
+                    if(_data.data) {
+                        _data.data.unshift({
+                            id: '',
+                            name: '- Not set -'
+                        });
+                    }
+                    
                     defaults.field_data.media = _data.data;
 
                     if(typeof data == 'object' && data.id) {
