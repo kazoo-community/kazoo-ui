@@ -130,7 +130,7 @@ winkstart.module('developer', 'api', {
                     "data": data, 
                     "verb": rest[verb]
                 };
-                curl += ' -d \' {' + winkstart.jsonToString(obj) + '}\'';
+                curl += ' -d \'' + winkstart.jsonToString(obj) + '\'';
             }
 
             curl += ' ' + url;
