@@ -527,6 +527,8 @@ winkstart.module('auth', 'auth',
                 parent = parent || $('.ws-content'),
                 landing_html = THIS.templates.landing.tmpl();
 
+            console.log('dsa');
+
             parent
                 .empty()
                 .append(landing_html);
@@ -572,22 +574,6 @@ winkstart.module('auth', 'auth',
                             if(json.data.require_password_update) {
                                 winkstart.publish('auth.new_password', json.data);
                             }
-
-                            if(winkstart.config.hide_video) {
-                                var landing = true;
-                                $.each(json.data.apps, function(k, v) {
-                                    if(v['default']) {
-                                        landing = false;
-                                    }
-                                });
-
-                                if(landing) {
-
-                                    winkstart.publish('auth.landing', $('.ws-content'));
-                                }
-                            }
-                            
-
                         },
                         function(data, status) {
                             winkstart.alert('error', 'An error occurred while loading your account.',
