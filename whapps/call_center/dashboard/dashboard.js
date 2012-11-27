@@ -534,20 +534,22 @@ winkstart.module('call_center', 'dashboard', {
                 return map_sort_status[a.status] < map_sort_status[b.status] ? -1 : 1;
             });
 
-            $.each(data.queues_live_stats.data.current_stats, function(k, v) {
-                if(k in map_queues_stats) {
-                    if(v.calls) {
-                        $.each(v.calls, function(k2, call) {
-                            if(call.abandoned) {
-                                map_queues_stats[k].dropped_calls++;
-                            }
-                            else if(call.agent_id) {
-                                map_queues_stats[k].max_calls++;
-                            }
-                        });
+            if(data.queues_live_stats.data && 'current_stats' in data.queues_live_stats.data) {
+                $.each(data.queues_live_stats.data.current_stats, function(k, v) {
+                    if(k in map_queues_stats) {
+                        if(v.calls) {
+                            $.each(v.calls, function(k2, call) {
+                                if(call.abandoned) {
+                                    map_queues_stats[k].dropped_calls++;
+                                }
+                                else if(call.agent_id) {
+                                    map_queues_stats[k].max_calls++;
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
 
             $.each(map_queues_stats, function(k, v) {
                 if(v.average_hold_time || v.average_hold_time === 0) {
