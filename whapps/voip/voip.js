@@ -183,7 +183,6 @@ winkstart.module('voip', 'voip', {
         execute_request: function(data) {
             var THIS = this,
                 data_default = {
-                    api_url: winkstart.apps.voip.api_url,
                     account_id: winkstart.apps.voip.account_id,
                     account_name: 'N/A',
                     account_realm: 'N/A',
