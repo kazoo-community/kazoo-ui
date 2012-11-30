@@ -121,10 +121,16 @@ winkstart.module('voip', 'account', {
                     api_url: winkstart.apps['voip'].api_url
                 },
                 function(_data, status) {
-                    _data.data.unshift({
-                        id: '',
-                        name: '- Not set -'
-                    });
+                    _data.data.unshift(
+                        {
+                            id: '',
+                            name: 'Default Music'
+                        },
+                        {
+                            id: 'silence_stream://300000',
+                            name: 'Silence'
+                        }
+                    );
 
                     defaults.field_data.media = _data.data;
 

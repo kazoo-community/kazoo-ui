@@ -262,12 +262,18 @@ winkstart.module('voip', 'user', {
                 },
                 function(_data, status) {
                     if(_data.data) {
-                        _data.data.unshift({
-                            id: '',
-                            name: '- Not set -'
-                        });
+                        _data.data.unshift(
+                            {
+                                id: '',
+                                name: 'Default Music'
+                            },
+                            {
+                                id: 'silence_stream://300000',
+                                name: 'Silence'
+                            }
+                        );
                     }
-                    
+
                     defaults.field_data.media = _data.data;
 
                     if(typeof data == 'object' && data.id) {
