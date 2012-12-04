@@ -53,15 +53,15 @@ winkstart.module('voip', 'device', {
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ],
             cellphone: [
-                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ],
             smartphone: [
-                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ],
             landline: [
-                { name: '#name',                regex: /^[a-zA-Z0-9\s_']+$/ },
+                { name: '#name',                regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ],
             softphone: [
