@@ -13,7 +13,7 @@ TODO:
 
 Caution:
 
-Atm default accounts CID is used as Fax Sendr's number
+Atm default account's CID is used as Fax Sendr's number
 
 So be aware to set it up in your account's DB and doc
 
