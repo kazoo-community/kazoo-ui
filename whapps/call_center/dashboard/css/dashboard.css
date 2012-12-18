@@ -294,11 +294,11 @@
 }
 
 /* Color change based on agent's status */
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling{
     border: 1px solid #62c462;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling .agent_header{
     background: #62c462;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#62c462), to(#57a957));
     background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -310,7 +310,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.answered .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling .row_data.call_time .data_value{
     color: #62c462;
 }
 
@@ -354,7 +354,27 @@
     color: #ff7733;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy {
+    border: 1px solid #ffbb33;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .agent_header {
+    background: #ffbb33;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#ffbb33), to(#FF9933));
+    background-image: -moz-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -ms-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffbb33), color-stop(100%, #FF9933));
+    background-image: -webkit-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: -o-linear-gradient(top, #ffbb33, #FF9933);
+    background-image: linear-gradient(top, #ffbb33, #FF9933);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbb33', endColorstr='#FF9933', GradientType=0);
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .row_data.call_time .data_value{
+    color: #ffbb33;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup {
     border: 1px solid #ffbb33;
 }
 

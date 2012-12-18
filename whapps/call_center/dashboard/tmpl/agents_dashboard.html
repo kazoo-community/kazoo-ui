@@ -24,24 +24,24 @@
                     </div>
                     <div class="all_data">
                         <div class="row_data call_hours">
-                            <div class="data_title">Call last hour</div>
-                            <div class="data_value">${call_per_hour}</div>
+                            <div class="data_title">Total Calls</div>
+                            <div class="data_value">${total_calls}</div>
                         </div>
                         <div class="row_data call_day">
-                            <div class="data_title">Calls today</div>
-                            <div class="data_value">${call_per_day}</div>
+                            <div class="data_title">Missed Calls</div>
+                            <div class="data_value">${missed_calls}</div>
                         </div>
                     </div>
                     <div class="queue_data" style="display: none;">
                         {{each(k, v) queues_list}}
                             <div class="queue_stat" data-id="${k}">
                                 <div class="row_data call_hours">
-                                    <div class="data_title">Call last hour</div>
-                                    <div class="data_value">${call_per_hour}</div>
+                                    <div class="data_title">Total Calls</div>
+                                    <div class="data_value">${total_calls}</div>
                                 </div>
                                 <div class="row_data call_day">
-                                    <div class="data_title">Calls today</div>
-                                    <div class="data_value">${call_per_day}</div>
+                                    <div class="data_title">Missed Calls</div>
+                                    <div class="data_value">${missed_calls}</div>
                                 </div>
                             </div>
                         {{/each}}

@@ -276,7 +276,7 @@ winkstart.module('call_center', 'queue', {
                     });
 
                     if(typeof data == 'object' && data.id) {
-                        THIS.queue_get_stats(data.id, function(_data_stat) {
+                        //THIS.queue_get_stats(data.id, function(_data_stat) {
                             winkstart.request(true, 'queue.get', {
                                     account_id: winkstart.apps['call_center'].account_id,
                                     api_url: winkstart.apps['call_center'].api_url,
@@ -285,7 +285,7 @@ winkstart.module('call_center', 'queue', {
                                 function(_data, status) {
                                     var render_data = $.extend(true, defaults, _data);
                                     render_data.field_data.old_list = [];
-                                    render_data.stats = _data_stat.data;
+                                    render_data.stats = {};// _data_stat.data;
                                     if('agents' in _data.data) {
                                         render_data.field_data.old_list = _data.data.agents;
                                     }
@@ -296,7 +296,7 @@ winkstart.module('call_center', 'queue', {
                                     }
                                 }
                             );
-                        });
+                        //});
                     }
                     else {
                         THIS.render_queue(defaults, target, callbacks);
