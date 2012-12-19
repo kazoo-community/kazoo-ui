@@ -394,11 +394,11 @@
     color: #ffbb33;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.off{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout{
     border: 1px solid #aaa;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.off .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout .agent_header{
     background: #aaa;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#aaa), to(#888));
     background-image: -moz-linear-gradient(top, #aaa, #888);
@@ -410,6 +410,6 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.off .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout .row_data.call_time .data_value{
     color: #aaa;
 }
