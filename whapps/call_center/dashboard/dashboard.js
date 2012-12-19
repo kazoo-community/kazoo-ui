@@ -134,7 +134,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 10,
+                polling_interval = 3,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -158,7 +158,7 @@ winkstart.module('call_center', 'dashboard', {
                         THIS.clean_timers();
                     }
                     else {
-                        if(++cpt % 3 === 0) {
+                        if(++cpt % 30 === 0) {
                             THIS.fetch_all_data(false, function(data) {
                                 THIS.render_global_data(data, THIS.current_queue_id);
                                 current_global_data = data;
