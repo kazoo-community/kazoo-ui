@@ -23,7 +23,6 @@ winkstart.module('call_center', 'queue', {
 
         validation: [
             { name: '#name', regex: /.+/ }
-            /*{ name: '#caller_exit_key',  regex: /^.{1}/ }*/
         ],
 
         resources: {
@@ -63,7 +62,7 @@ winkstart.module('call_center', 'queue', {
                 verb: 'DELETE'
             },
             'queue.user_list': {
-                url: '{api_url}/accounts/{account_id}/agents',
+                url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -253,6 +252,7 @@ winkstart.module('call_center', 'queue', {
                         member_timeout: '5',
                         agent_wrapup_time: '30',
                         record_caller: true,
+                        moh: {},
                         max_queue_size: '0'
                     }, data_defaults || {}),
                     field_data: {
@@ -263,48 +263,68 @@ winkstart.module('call_center', 'queue', {
                     }
                 };
 
-            winkstart.request(true, 'queue.user_list', {
+            winkstart.request(true, 'media.list', {
                     account_id: winkstart.apps['call_center'].account_id,
                     api_url: winkstart.apps['call_center'].api_url
                 },
-                function(_data, status) {
-                    //defaults.field_data.users = _data.data;
-                    defaults.field_data.users = {};
-
-                    $.each(_data.data, function(k, v) {
-                        defaults.field_data.users[v.id] = v;
-                    });
-
-                    if(typeof data == 'object' && data.id) {
-                        //THIS.queue_get_stats(data.id, function(_data_stat) {
-                            winkstart.request(true, 'queue.get', {
-                                    account_id: winkstart.apps['call_center'].account_id,
-                                    api_url: winkstart.apps['call_center'].api_url,
-                                    queue_id: data.id
-                                },
-                                function(_data, status) {
-                                    var render_data = $.extend(true, defaults, _data);
-                                    render_data.field_data.old_list = [];
-                                    render_data.stats = {};// _data_stat.data;
-                                    if('agents' in _data.data) {
-                                        render_data.field_data.old_list = _data.data.agents;
-                                    }
-                                    THIS.render_edit_agents(render_data, target, callbacks);
-
-                                    if(typeof callbacks.after_render == 'function') {
-                                        callbacks.after_render();
-                                    }
-                                }
-                            );
-                        //});
-                    }
-                    else {
-                        THIS.render_queue(defaults, target, callbacks);
-
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                function(_data_media, status) {
+                    _data_media.data.unshift(
+                        {
+                            id: '',
+                            name: 'Default Music'
+                        },
+                        {
+                            id: 'silence_stream://300000',
+                            name: 'Silence'
                         }
-                    }
+                    );
+
+                    defaults.field_data.media = _data_media.data;
+
+                    winkstart.request(true, 'queue.user_list', {
+                            account_id: winkstart.apps['call_center'].account_id,
+                            api_url: winkstart.apps['call_center'].api_url
+                        },
+                        function(_data, status) {
+                            //defaults.field_data.users = _data.data;
+                            defaults.field_data.users = {};
+
+                            $.each(_data.data, function(k, v) {
+                                defaults.field_data.users[v.id] = v;
+                            });
+
+                            if(typeof data == 'object' && data.id) {
+                                //THIS.queue_get_stats(data.id, function(_data_stat) {
+                                    winkstart.request(true, 'queue.get', {
+                                            account_id: winkstart.apps['call_center'].account_id,
+                                            api_url: winkstart.apps['call_center'].api_url,
+                                            queue_id: data.id
+                                        },
+                                        function(_data, status) {
+                                            var render_data = $.extend(true, defaults, _data);
+                                            render_data.field_data.old_list = [];
+                                            render_data.stats = {};// _data_stat.data;
+                                            if('agents' in _data.data) {
+                                                render_data.field_data.old_list = _data.data.agents;
+                                            }
+                                            THIS.render_edit_agents(render_data, target, callbacks);
+
+                                            if(typeof callbacks.after_render == 'function') {
+                                                callbacks.after_render();
+                                            }
+                                        }
+                                    );
+                                //});
+                            }
+                            else {
+                                THIS.render_queue(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
+                        }
+                    );
                 }
             );
         },
@@ -367,6 +387,43 @@ winkstart.module('call_center', 'queue', {
             });
 
             winkstart.tabs($('.view-buttons', queue_html), $('.tabs', queue_html));
+
+            if(!$('#moh', queue_html).val()) {
+                $('#edit_link_media', queue_html).hide();
+            }
+
+            $('#moh', queue_html).change(function() {
+                !$('#moh option:selected', queue_html).val() ? $('#edit_link_media', queue_html).hide() : $('#edit_link_media', queue_html).show();
+            });
+
+            $('.inline_action_media', queue_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#moh', queue_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#moh', queue_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#moh', queue_html).val(_data.data.id);
+
+                        $('#edit_link_media', queue_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#moh #'+_data.data.id, queue_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#moh #'+_id, queue_html).remove();
+                            $('#edit_link_media', queue_html).hide();
+                        }
+                    }
+                });
+            });
+
 
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();

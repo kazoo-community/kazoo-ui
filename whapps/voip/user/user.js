@@ -30,7 +30,6 @@ winkstart.module('voip', 'user', {
                 { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
-                { name: '#queue_pin',                 regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
         ],
 
@@ -293,8 +292,6 @@ winkstart.module('voip', 'user', {
                                     function(_data, status) {
                                         THIS.migrate_data(_data);
 
-                                        THIS.format_data(_data);
-
                                         THIS.render_user($.extend(true, defaults, _data), target, callbacks);
 
                                         if(typeof callbacks.after_render == 'function') {
@@ -391,8 +388,6 @@ winkstart.module('voip', 'user', {
             var THIS = this,
                 user_html = THIS.templates.edit.tmpl(data),
                 data_devices,
-                enable_pin = $('#enable_pin', user_html),
-                $queue_block = $('.queue_block', user_html);
                 hotdesk_pin =   $('.hotdesk_pin', user_html),
                 hotdesk_pin_require = $('#hotdesk_require_pin', user_html);
 
@@ -413,14 +408,7 @@ winkstart.module('voip', 'user', {
             winkstart.tabs($('.view-buttons', user_html), $('.tabs', user_html));
             winkstart.link_form(user_html);
 
-            enable_pin.is(':checked') ? $queue_block.show() : $queue_block.hide();
             hotdesk_pin_require.is(':checked') ? hotdesk_pin.show() : hotdesk_pin.hide();
-                //TODO Temporary hack to hide PIN
-                $('.queue_pin', user_html).hide();
-
-            enable_pin.change(function() {
-                $(this).is(':checked') ? $queue_block.show('blind') : $queue_block.hide('blind');
-            });
 
             hotdesk_pin_require.change(function() {
                 $(this).is(':checked') ? hotdesk_pin.show('blind') : hotdesk_pin.hide('blind');
@@ -692,13 +680,6 @@ winkstart.module('voip', 'user', {
             return data;
         },
 
-        format_data: function(data) {
-            // Do work
-            data.data.queue_pin === undefined ? data.data.enable_pin = false : data.data.enable_pin = true;
-
-            return data;
-        },
-
         clean_form_data: function(form_data){
             form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g,'');
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
@@ -710,12 +691,6 @@ winkstart.module('voip', 'user', {
 
             if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
                 form_data.password = form_data.pwd_mngt_pwd1;
-            }
-
-            if(form_data.enable_pin === false) {
-                delete form_data.queues;
-                delete form_data.queue_pin;
-                delete form_data.record_call;
             }
 
             delete form_data.pwd_mngt_pwd1;
@@ -753,19 +728,6 @@ winkstart.module('voip', 'user', {
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
             }
-
-            if(typeof data.queues === 'undefined') {
-                if(typeof data.queue_pin != 'undefined') {
-                    data.queues = [];
-                }
-            }
-            else {
-                if(typeof data.queue_pin === 'undefined') {
-                    delete data.queues;
-                }
-            }
-
-            delete data.enable_pin;
 
             return data;
         },

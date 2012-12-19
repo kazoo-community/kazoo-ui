@@ -104,9 +104,8 @@ winkstart.module('call_center', 'dashboard', {
         global_timer: false,
         current_queue_id: undefined,
         map_timers: {
-            users: {},
-            breaks: {},
-            calls: {}
+            calls_waiting: {},
+            calls_in_progress: {}
         },
 
         render_global_data: function(data, id, _parent) {
@@ -126,6 +125,7 @@ winkstart.module('call_center', 'dashboard', {
                                                                 .append(calls_html);
 
             THIS.render_timers(data);
+
             if(id) {
                 THIS.detail_stat(id, parent);
             }
@@ -334,7 +334,7 @@ winkstart.module('call_center', 'dashboard', {
                 console.log($target);
             }
             else if(type === 'waiting') {
-                $target = $('.call-waiting#'+id+' .timer');
+                $target = $('.call-waiting[data-call_id="'+id+'"] .timer');
             }
 
             if(!THIS.map_timers[type]) {
@@ -441,16 +441,17 @@ winkstart.module('call_center', 'dashboard', {
                         $.each(queue_stats.calls_waiting, function(k2, v2) {
                             /* As Jquery selector don't work with . for IDs, we strip it from the id */
                             //TODO Improve this ^
-                            formatted_data.calls_waiting[v2.replace('.','')] = queue_stats.calls[v2];
-                            formatted_data.calls_waiting[v2.replace('.','')].queue_id = k;
-                            formatted_data.calls_waiting[v2.replace('.','')].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].start_timestamp);
+                            formatted_data.calls_waiting[v2] = queue_stats.calls[v2];
+                            formatted_data.calls_waiting[v2].queue_id = k;
+                            formatted_data.calls_waiting[v2].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].start_timestamp);
                         });
                     }
 
                     if(queue_stats.calls_in_progress) {
                         $.each(queue_stats.calls_in_progress, function(k2, v2) {
-                            formatted_data.calls_in_progress[v2.replace('.','')] = queue_stats.calls[v2];
+                            formatted_data.calls_in_progress[v2] = queue_stats.calls[v2];
                             formatted_data.agents[queue_stats.calls[v2].agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].connected_with_agent);
+                            formatted_data.queues[k].current_calls++;
                         });
                     }
                 });
@@ -499,13 +500,6 @@ winkstart.module('call_center', 'dashboard', {
             formatted_data = THIS.format_live_data(formatted_data, data);
 
             return formatted_data;
-        },
-
-        get_diff_seconds: function(timestamp) {
-            var date_var = new Date((timestamp - 62167219200)*1000).valueOf(),
-                date_now = new Date().valueOf();
-
-            return Math.round((date_now - date_var)/1000);
         },
 
         render_dashboard: function(_parent, callback) {
@@ -571,14 +565,8 @@ winkstart.module('call_center', 'dashboard', {
 
         bind_live_events: function(parent) {
             var THIS = this;
-            //TODO After first display, tooltip are not showing up anymore
-            $('*[rel=popover]:not([type="text"])', parent).popover({
-                trigger: 'hover'
-            });
 
             $('.list_queues_inner > li', parent).die().live('click', function() {
-                //THIS IS A HACK. :)
-                $('.popover').remove();
                 var $this_queue = $(this),
                     queue_id = $this_queue.attr('id');
 
@@ -597,9 +585,6 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             $('.list_queues_inner > li .edit_queue', parent).die().live('click', function() {
-                //THIS IS A HACK. :)
-                $('.popover').remove();
-
                 var dom_id = $(this).parents('li').first().attr('id');
                 winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
                     winkstart.publish('queue.edit', { id: dom_id });
@@ -661,9 +646,8 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             THIS.map_timers = {
-                users: {},
-                breaks: {},
-                calls: {}
+                calls_waiting: {},
+                calls_in_progress: {}
             };
         },
 
