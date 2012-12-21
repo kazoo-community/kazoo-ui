@@ -12,72 +12,9 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222222', endColorstr='#222222',GradientType=0 ); /* IE6-9 */
 }
 
-/* Top-Left Gauge */
-#dashboard-content #dashboard-topbar .topbar-left {
-    height: 200px;
-    width: 200px;
-    padding: 25px;
-    float: left;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls {
-    background: #414141; /* Old browsers */
-    width: 176px;
-    height: 176px;
-    box-shadow: 0 0 10px 0px #222 inset;
-    margin: 17px 0 0 17px;
-    border-radius: 88px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .top_part {
-    background: url(images/Gauge.png) no-repeat scroll 0 0 transparent;
-    position: absolute;
-    margin: 18px 15px;
-    height: 146px;
-    width: 146px;
-    border-radius: 73px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .bottom_part {
-    height: 65px;
-    width: 145px;
-    margin: 91px 0 0 20px;
-    position: absolute;
-    color: #05addc;
-    font-weight: bold;
-    font-size: 18px;
-    background: #414141;
-    border-radius: 0 0 60px 60px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .bottom_part > * {
-    display: inline-block;
-    float: left;
-    text-shadow: 1px 1px 1px #333;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .bottom_part .min_calls{
-    width: 60px;
-    text-align: left;
-    margin-left: 10px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .bottom_part .max_calls{
-    width: 60px;
-    text-align: right;
-}
-
-#dashboard-content #dashboard-topbar .topbar-left #gauge_total_calls .bottom_part .gauge_title{
-    font-size: 14px;
-    color: #999;
-    width: 135px;
-    margin-top: 10px;
-    text-align: center;
-}
 /* Top-Right queues */
 #dashboard-content #dashboard-topbar .topbar-right {
     height: 220px;
-    /*padding: 15px 10px 15px 250px;*/
     padding: 15px 10px 15px 0px;
 }
 
@@ -255,7 +192,7 @@
     margin: 0 10px 20px;
     padding: 0 5px 5px;
     border-radius: 5px;
-    width: 160px;
+    width: 210px;
     border: 1px solid #333;
     background: rgb(34,34,34); /* Old browsers */
     background: -moz-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(68,68,68,1) 25%, rgba(85,85,85,1) 50%, rgba(68,68,68,1) 75%, rgba(34,34,34,1) 100%); /* FF3.6+ */
@@ -276,6 +213,7 @@
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
     padding: 5px 5px 0;
+    line-height: 27px;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_title {
@@ -285,12 +223,26 @@
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_value {
-    width: 57px;
+    width: 107px;
     display: inline-block;
     text-align: right;
     font-size: 16px;
     font-weight: bold;
     color: #bbb;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call {
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call .data_title {
+    width: 157px;
+    overflow: hidden;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call .icon {
+    cursor: pointer;
+    display: block;
+    float: right;
 }
 
 /* Color change based on agent's status */
@@ -370,7 +322,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbb33', endColorstr='#FF9933', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .row_data.call_time .data_value {
     color: #ffbb33;
 }
 

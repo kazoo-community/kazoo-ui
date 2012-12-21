@@ -8,18 +8,29 @@
                 </div>
                 <div class="agent_data">
                     <div class="row_data call_time">
-                        {{if status === 'logout' || status === 'ready' || status === 'ringing'}}
-                            <div class="data_title">Call Time</div>
-                            <div class="data_value">-</div>
-                        {{else status === 'paused'}}
+                        {{if status === 'paused'}}
                             <div class="data_title">Break Time</div>
-                            <div class="data_value" data-seconds="${break_time}"></div>
+                            <div class="data_value">${call_time}</div>
                         {{else status === 'wrapup'}}
                             <div class="data_title">Wrapping up</div>
-                            <div class="data_value"></div>
+                            <div class="data_value">${call_time}</div>
+                        {{else status === 'handling'}}
+                            <div class="data_title">Call Time</div>
+                            <div class="data_value">${call_time}</div>
+                        {{else status === 'busy'}}
+                            <div class="data_title">Busy since</div>
+                            <div class="data_value">${call_time}</div>
                         {{else}}
                             <div class="data_title">Call Time</div>
-                            <div class="data_value" data-seconds="${call_time}">${call_time}</div>
+                            <div class="data_value">-</div>
+                        {{/if}}
+                    </div>
+                    <div class="row_data call">
+                        {{if status === 'handling'}}
+                        <div class="data_title">${current_call.call_id}</div>
+                        <span data-call_id="${current_call.call_id}" class="icon tech_support eavesdrop"/>
+                        {{else}}
+                        <div class="data_title">No active call...</div>
                         {{/if}}
                     </div>
                     <div class="all_data">
