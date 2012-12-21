@@ -1138,10 +1138,16 @@ winkstart.module('userportal', 'portal_manager', {
                                     api_url: winkstart.apps['userportal'].api_url
                                 },
                                 function(_data, status) {
-                                    _data.data.unshift({
-                                        id: '',
-                                        name: '- Not set -'
-                                    });
+                                    _data.data.unshift(
+                                        {
+                                            id: '',
+                                            name: 'Default Music'
+                                        },
+                                        {
+                                            id: 'silence_stream://300000',
+                                            name: 'Silence'
+                                        }
+                                    );
 
                                     defaults.field_data.music_on_hold = _data.data;
 

@@ -6,7 +6,9 @@ winkstart.module('call_center', 'dashboard', {
         templates: {
             dashboard: 'tmpl/dashboard.html',
             agents_dashboard: 'tmpl/agents_dashboard.html',
+            calls_dashboard: 'tmpl/calls_dashboard.html',
             queues_dashboard: 'tmpl/queues_dashboard.html',
+            list_devices: 'tmpl/list_devices.html',
             call: 'tmpl/call_list_element.html'
         },
 
@@ -16,14 +18,29 @@ winkstart.module('call_center', 'dashboard', {
         },
 
         resources: {
+            'dashboard.queue_eavesdrop': {
+                url: '{api_url}/accounts/{account_id}/queues/{queue_id}/eavesdrop',
+                contentType: 'application/json',
+                verb: 'PUT',
+            },
+            'dashboard.call_eavesdrop': {
+                url: '{api_url}/accounts/{account_id}/queues/eavesdrop',
+                contentType: 'application/json',
+                verb: 'PUT',
+            },
+            'dashboard.list_devices': {
+                url: '{api_url}/accounts/{account_id}/devices',
+                contentType: 'application/json',
+                verb: 'GET',
+            },
             'dashboard.agents.livestats': {
-                url: '{api_url}/accounts/{account_id}/agents/stats/realtime',
+                url: '{api_url}/accounts/{account_id}/agents/stats',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
             },
             'dashboard.queues.livestats': {
-                url: '{api_url}/accounts/{account_id}/queues/stats/realtime',
+                url: '{api_url}/accounts/{account_id}/queues/stats',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
@@ -73,12 +90,12 @@ winkstart.module('call_center', 'dashboard', {
                 verb: 'GET'
             },
             'dashboard.agents.livestats_loading': {
-                url: '{api_url}/accounts/{account_id}/agents/stats/realtime',
+                url: '{api_url}/accounts/{account_id}/agents/stats',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             'dashboard.queues.livestats_loading': {
-                url: '{api_url}/accounts/{account_id}/queues/stats/realtime',
+                url: '{api_url}/accounts/{account_id}/queues/stats',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -103,22 +120,27 @@ winkstart.module('call_center', 'dashboard', {
         global_timer: false,
         current_queue_id: undefined,
         map_timers: {
-            users: {},
-            breaks: {},
-            calls: {}
+            calls_waiting: {},
+            calls_in_progress: {}
         },
 
         render_global_data: function(data, id, _parent) {
             var THIS = this,
                 agents_html = THIS.templates.agents_dashboard.tmpl(data),
                 queues_html = THIS.templates.queues_dashboard.tmpl(data),
+                calls_html = THIS.templates.calls_dashboard.tmpl(data),
                 parent = _parent || $('#ws-content');
 
-            $('#ws-content #dashboard-view').empty()
+            $('#dashboard-view', parent).empty()
                                             .append(agents_html);
 
-            $('#ws-content .topbar-right').empty()
+            $('.topbar-right', parent).empty()
                                           .append(queues_html);
+
+            $('#callwaiting-list .list-panel-anchor ul', parent).empty()
+                                                                .append(calls_html);
+
+            THIS.render_timers(data);
 
             if(id) {
                 THIS.detail_stat(id, parent);
@@ -128,7 +150,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 10,
+                polling_interval = 3,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -141,55 +163,8 @@ winkstart.module('call_center', 'dashboard', {
                         THIS.get_queues_livestats(false, function(_data_queues) {
                             THIS.get_agents_livestats(false, function(_data_agents) {
                                 /* agents */
-                                $.each(global_data.agents, function(k, v) {
-                                    data_template.agents[k].status = _data_agents.data.current_statuses[k] || 'off';
-
-                                    /* Update # of active agents */
-                                    if(current_global_data.agents[k].status === 'off' && data_template.agents[k].status !== 'off') {
-                                        current_global_data.agents[k].status = data_template.agents[k].status;
-                                        $.each(data_template.agents[k].queues_list, function(queue_id, queue) {
-                                            current_global_data.queues[queue_id].current_agents++;
-                                            data_template.queues[queue_id].current_agents++;
-                                        });
-                                    }
-                                    else if(data_template.agents[k].status === 'off' && current_global_data.agents[k].status !== 'off') {
-                                        current_global_data.agents[k].status = 'off';
-                                        $.each(data_template.agents[k].queues_list, function(queue_id, queue) {
-                                            current_global_data.queues[queue_id].current_agents--;
-                                            data_template.queues[queue_id].current_agents--;
-                                        });
-                                    }
-
-                                    /* Update # of call_per_hour and per day, per agent. Also update the # of Max calls of a queue */
-                                    if(k in _data_agents.data.current_stats && _data_agents.data.current_stats[k].calls_handled) {
-                                        var map_cpt = {};
-                                        $.each(_data_agents.data.current_stats[k].calls_handled, function(k2, v2) {
-                                            if(v2.queue_id in data_template.agents[k].queues_list) {
-                                                map_cpt[v2.queue_id] = map_cpt[v2.queue_id] || 0;
-                                                if(++map_cpt[v2.queue_id] > data_template.agents[k].queues_list[v2.queue_id].new_calls) {
-                                                    data_template.agents[k].call_per_hour++;
-                                                    data_template.agents[k].call_per_day++;
-                                                    data_template.agents[k].queues_list[v2.queue_id].call_per_hour++;
-                                                    data_template.agents[k].queues_list[v2.queue_id].call_per_day++;
-                                                    data_template.queues[v2.queue_id].max_calls++;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if(k in THIS.map_timers.users && THIS.map_timers.users[k].duration) {
-                                        data_template.agents[k].call_time = THIS.get_time_seconds(THIS.map_timers.users[k].duration);
-                                    }
-                                    else if(k in _data_agents.data.current_calls && _data_agents.data.current_calls[k].agent_state === 'answered') {
-                                        data_template.agents[k].call_time = THIS.get_time_seconds(_data_agents.data.current_calls[k].duration);
-                                    }
-                                    else {
-                                        data_template.agents[k].call_time = 0;
-                                    }
-                                });
-
+                                data_template = THIS.format_live_data(data_template, {queues_live_stats: _data_queues.data, agents_live_stats: _data_agents.data});
                                 THIS.render_global_data(data_template, THIS.current_queue_id);
-                                THIS.render_timers({active_calls: _data_agents.data.current_calls, waiting_calls: _data_queues.data.current_calls, current_statuses: _data_agents.data.current_statuses});
                             });
                         });
                     }
@@ -197,14 +172,11 @@ winkstart.module('call_center', 'dashboard', {
                 huge_poll = function() {
                     if($('#dashboard-content').size() === 0) {
                         THIS.clean_timers();
-                        //clearInterval(THIS.global_timer);
-                        //THIS.global_timer = false;
                     }
                     else {
                         if(++cpt % 30 === 0) {
                             THIS.fetch_all_data(false, function(data) {
                                 THIS.render_global_data(data, THIS.current_queue_id);
-                                THIS.render_timers({active_calls: data.agents_live_stats.data.current_calls, waiting_calls: data.queues_live_stats.data.current_calls, current_statuses: data.agents_live_stats.data.current_statuses});
                                 current_global_data = data;
                             });
                         }
@@ -215,7 +187,7 @@ winkstart.module('call_center', 'dashboard', {
                 };
 
             $.each(global_data.agents, function(k, v) {
-                map_agents[v.id] = 'off';
+                map_agents[v.id] = 'logout';
             });
 
             THIS.global_timer = setInterval(huge_poll, polling_interval * 1000);
@@ -350,37 +322,11 @@ winkstart.module('call_center', 'dashboard', {
                 .listpanel({
                     label: 'Call Waiting',
                     identifier: 'callwaiting-listview',
-                    data: []//array_cw
+                    data: []
                 });
 
             $('.add_flow', parent).empty()
                                   .html('Call Waiting Log...');
-        },
-
-        add_callwaiting: function(call) {
-            var THIS = this;
-
-            call.friendly_duration = THIS.get_time_seconds(call.wait_time);
-            var call_html = THIS.templates.call.tmpl(call);
-            $('#callwaiting-list .list-panel-anchor ul').append(call_html);
-
-            THIS.map_timers.calls[call.call_id.toLowerCase()] = {};
-            THIS.map_timers.calls[call.call_id.toLowerCase()].timer = setInterval(function(){
-                $('.timer', call_html).html(THIS.get_time_seconds(++call.wait_time));
-            }, 1000);
-        },
-
-        remove_callwaiting: function(call_id) {
-            var THIS = this;
-
-            $('#callwaiting-list .list-panel-anchor ul li').each(function(k, v) {
-                if($(v).attr('id').toLowerCase() === call_id) {
-                    $(v).remove().hide();
-                }
-            });
-
-            clearInterval(THIS.map_timers.calls[call_id.toLowerCase()].timer);
-            delete THIS.map_timers.calls[call_id.toLowerCase()];
         },
 
         get_time_seconds: function(seconds) {
@@ -393,358 +339,230 @@ winkstart.module('call_center', 'dashboard', {
             return display_time;
         },
 
-        start_timer: function(target, seconds, id, state) {
-            var THIS = this;
+        start_timer: function(type, _data, _timer_type) {
+            var THIS = this,
+                $target,
+                id = _data.id,
+                data = _data.data,
+                timer_type = _timer_type || 'increment';
 
-            if(target.size() > 0 && id) {
-                var timer_type = state === 'paused' ? 'breaks' : 'users';
+            if(type === 'in_progress' || type === 'agent_status') {
+                $target = $('.agent_wrapper#'+id+' .call_time .data_value');
+            }
+            else if(type === 'waiting') {
+                $target = $('.call-waiting[data-call_id="'+id+'"] .timer');
+            }
 
-                THIS.map_timers[timer_type][id] = {};
+            if(!THIS.map_timers[type]) {
+                THIS.map_timers[type] = {};
+            }
 
-                target.html(THIS.get_time_seconds(seconds));
-                THIS.map_timers[timer_type][id].duration = seconds;
+            THIS.map_timers[type][id] = data;
 
-                THIS.map_timers[timer_type][id].timer = setInterval(function(){
-                    target = $('.agent_wrapper#'+id+' .call_time .data_value');
-                    if(target.size() > 0) {
-                        target.html(THIS.get_time_seconds(++seconds));
-                        THIS.map_timers[timer_type][id].duration = seconds;
+            THIS.map_timers[type][id].timer = setInterval(function(){
+                if($target.size() > 0) {
+                    if(timer_type === 'decrement') {
+                        var new_duration = --THIS.map_timers[type][id].duration;
+                        $target.html(THIS.get_time_seconds(new_duration > 0 ? new_duration : 0));
                     }
                     else {
-                        clearInterval(THIS.map_timers[timer_type][id].timer);
-                        delete THIS.map_timers[timer_type][id];
+                        $target.html(THIS.get_time_seconds(++THIS.map_timers[type][id].duration));
                     }
-                }, 1000);
+                }
+                else {
+                    clearInterval(THIS.map_timers[type][id].timer);
+                    delete THIS.map_timers[type][id];
+                }
+            }, 1000);
+        },
+
+        render_timers: function(data) {
+            var THIS = this;
+            //Replace by clean timers
+            $.each(THIS.map_timers, function(type, list_timers) {
+                $.each(list_timers, function(k, v) {
+                    clearInterval(v.timer);
+                });
+            });
+
+            THIS.map_timers = {
+                waiting: {},
+                in_progress: {}
+            };
+
+            if(data.calls_waiting) {
+                $.each(data.calls_waiting, function(k, v) {
+                    v.duration = data.current_timestamp - v.caller_entered_queue;
+                    THIS.start_timer('waiting', {data: v, id: k});
+                });
+            }
+
+            if(data.calls_in_progress) {
+                $.each(data.calls_in_progress, function(k, v) {
+                    v.duration = data.current_timestamp - v.connected_with_agent;
+                    THIS.start_timer('in_progress', {data: v, id: v.agent_id});
+                });
+            }
+
+            if(data.agent_status) {
+                if('busy' in data.agent_status) {
+                    $.each(data.agent_status.busy, function(agent_id, data_status) {
+                        data_status.duration = data.current_timestamp - data_status.status_started;
+                        THIS.start_timer('agent_status', {data: data_status, id: agent_id});
+                    });
+                }
+
+                if('wrapup' in data.agent_status) {
+                    $.each(data.agent_status.wrapup, function(agent_id, data_status) {
+                        data_status.duration = data_status.wait_time - (data.current_timestamp - data_status.status_started);
+                        THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+                    });
+                }
+
+                if('paused' in data.agent_status) {
+                    $.each(data.agent_status.paused, function(agent_id, data_status) {
+                        data_status.duration = data_status.wait_time - (data.current_timestamp - data_status.status_started);
+                        THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+                    });
+                }
             }
         },
 
-        format_data: function(_data) {
+        format_live_data: function(formatted_data, data) {
             var THIS = this,
-                data = _data,
-                map_sort_status = {
-                    'ready': 1,
-                    'answered': 2,
-                    'paused': 3,
-                    'off': 4
-                },
-                total_calls = 0,
-                active_calls = 0,
-                map_agents_stats = THIS.format_agents_stats(_data),
-                map_queues_stats = THIS.format_queues_stats(_data),
-                get_agent_stat = function(agent_id) {
-                    if(!(agent_id in map_agents_stats)) {
-                        map_agents_stats[agent_id] = {
-                            status: 'off',
-                            call_time: 0,
-                            break_time: 0,
-                            call_per_hour: 0,
-                            new_calls: 0,
-                            call_per_day: 0,
-                            calls_missed: 0,
-                            queues_list: {}
-                        };
-                    }
+                current_agents_by_queue = {};
 
-                    return map_agents_stats[agent_id];
-                },
-                map_current_stat = {};
+            formatted_data.current_timestamp = data.queues_live_stats.current_timestamp;
 
-            if(data.agents_live_stats.data.current_statuses) {
-                $.each(data.agents_live_stats.data.current_statuses, function(agent_id, agent_status) {
-                    map_current_stat[agent_id] = { agent_status: agent_status };
-                });
-            }
+            formatted_data.calls_waiting = {};
+            formatted_data.calls_in_progress = {};
+            formatted_data.agent_status = {
+                busy: {},
+                wrapup: {},
+                paused: {}
+            };
 
-            if(data.agents_live_stats.data.current_stats) {
-                $.each(data.agents_live_stats.data.current_stats, function(agent_id, calls) {
-                    if(calls.calls_handled) {
-                        map_current_stat[agent_id] = map_current_stat[agent_id] || {};
-                        map_current_stat[agent_id].new_calls = 0;
-                        map_current_stat[agent_id].queues_list = {};
+            $.each(data.agents_live_stats.agents, function(k, agent_stats) {
+                if(!(k in formatted_data.agents)) {
+                    formatted_data.agents[k] = {};
+                }
 
-                        $.each(calls.calls_handled, function(k, v) {
-                            if(!(v.queue_id in map_current_stat[agent_id].queues_list)) {
-                                map_current_stat[agent_id].queues_list[v.queue_id] = {
-                                    new_calls: 0,
-                                };
-                            }
+                if('current' in agent_stats) {
+                    var current_status = agent_stats.current.status;
+                    formatted_data.agents[k].status = current_status;
 
-                            map_current_stat[agent_id].new_calls++;
-                            map_current_stat[agent_id].queues_list[v.queue_id].new_calls++;
-                        });
-                    }
-                });
-            }
-
-            if(data.agents_live_stats.data.current_calls) {
-                $.each(data.agents_live_stats.data.current_calls, function(agent_id, call) {
-                    if(call.agent_state === 'answered') {
-                        if(agent_id in THIS.map_timers.users) {
-                            map_current_stat[agent_id].call_time = THIS.get_time_seconds(THIS.map_timers.users[agent_id].duration);
+                    if($.inArray(current_status, ['busy', 'wrapup', 'paused']) >= 0) {
+                        formatted_data.agent_status[current_status][k] = agent_stats.current;
+                        if(current_status === 'busy') {
+                            formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_stats.current.status_started)
                         }
                         else {
-                            map_current_stat[agent_id].call_time = THIS.get_time_seconds(call.duration);
+                            formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_stats.current.wait_time - (formatted_data.current_timestamp - agent_stats.current.status_started));
                         }
                     }
-                });
-            }
 
-            $.each(data.agents, function(k, v) {
-                var queue_string = '';
-                $.extend(true, v, get_agent_stat(v.id));
-
-                if(v.id in map_current_stat) {
-                    v.call_per_day += map_current_stat[v.id].new_calls || 0;
-                    v.call_per_hour += map_current_stat[v.id].new_calls || 0;
-                    v.status = map_current_stat[v.id].agent_status || 'off';
-                    v.call_time = map_current_stat[v.id].call_time || 0;
-                }
-
-                $.each(v.queues, function(k2, v2) {
-                    if(v2 in map_queues_stats) {
-                        ++map_queues_stats[v2].max_agents;
-                        v.status !== 'off' ? ++map_queues_stats[v2].current_agents : true;
-                        v.status === 'answered' ? ++map_queues_stats[v2].current_calls : true;
-
-                        queue_string += queue_string === '' ? v2 : ' ' + v2;
-
-                        if(!(v2 in v.queues_list)) {
-                            v.queues_list[v2] = {
-                                calls_missed: 0,
-                                call_per_hour: 0,
-                                call_per_day: 0,
-                                new_calls: 0
+                    if(current_status !== 'logout') {
+                        $.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
+                            if(!(queue_id in current_agents_by_queue)) {
+                                current_agents_by_queue[queue_id] = 1;
                             }
-                        }
-
-                        if(v.id in map_current_stat && 'queues_list' in map_current_stat[v.id] && v2 in map_current_stat[v.id].queues_list) {
-                            v.new_calls += map_current_stat[v.id].queues_list[v2].new_calls;
-                            v.queues_list[v2].call_per_hour += map_current_stat[v.id].queues_list[v2].new_calls;
-                            v.queues_list[v2].call_per_day += map_current_stat[v.id].queues_list[v2].new_calls;
-                            v.queues_list[v2].new_calls = map_current_stat[v.id].queues_list[v2].new_calls + (v.queues_list[v2].new_calls || 0);
-                        }
-                    }
-                });
-                v.queues = queue_string;
-
-                map_agents_stats[v.id] = v;
-            });
-
-            data.agents.sort(function(a, b) {
-                return map_sort_status[a.status] < map_sort_status[b.status] ? -1 : 1;
-            });
-
-            if(data.queues_live_stats.data && 'current_stats' in data.queues_live_stats.data) {
-                $.each(data.queues_live_stats.data.current_stats, function(k, v) {
-                    if(k in map_queues_stats) {
-                        if(v.calls) {
-                            $.each(v.calls, function(k2, call) {
-                                if(call.abandoned) {
-                                    map_queues_stats[k].dropped_calls++;
-                                }
-                                else if(call.agent_id) {
-                                    map_queues_stats[k].max_calls++;
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-
-            $.each(map_queues_stats, function(k, v) {
-                if(v.average_hold_time || v.average_hold_time === 0) {
-                    //we sum all the wait time in average hold time first, so now we need to divide it by the number of calls to have an average wait time */
-                    if((v.max_calls + v.dropped_calls) !== 0) {
-                        v.average_hold_time /= (v.max_calls + v.dropped_calls);
-                    }
-                    else {
-                        v.average_hold_time = 0;
-                    }
-
-                    v.average_hold_time = THIS.get_time_seconds(Math.round(v.average_hold_time));
-                    total_calls += v.max_calls;
-                    active_calls += v.current_calls;
-                }
-            });
-
-            data.total_calls = total_calls;
-            data.active_calls = active_calls;
-
-            data.agents = map_agents_stats;
-            data.queues = map_queues_stats;
-            return data;
-        },
-
-        format_queues_stats: function(data) {
-            var THIS = this,
-                map_queues_stats = {},
-                queue;
-
-            $.each(data.queues, function(k, v) {
-                map_queues_stats[v.id] = {
-                    current_calls: 0,
-                    max_calls: 0,
-                    current_agents: 0,
-                    max_agents: 0,
-                    dropped_calls: 0,
-                    average_hold_time: 0,
-                    name: v.name,
-                    id: v.id
-                }
-            });
-
-            $.each(data.queues_stats.data, function(k, v) {
-                if(v.queue_id in map_queues_stats) {
-                    queue = map_queues_stats[v.queue_id];
-
-                    if(v.calls) {
-                        $.each(v.calls, function(k2, v2) {
-                            queue.max_calls++;
-
-                            if(v2.abandoned) {
-                                queue.dropped_calls++;
-                            }
-                            else if(v2.duration && v2.agent_id) {
-                                if(v2.wait_time) {
-                                    queue.average_hold_time+=v2.wait_time;
-                                }
+                            else {
+                                current_agents_by_queue[queue_id]++;
                             }
                         });
                     }
+                }
 
-                    map_queues_stats[v.queue_id] = queue;
+                if('totals' in agent_stats) {
+                    formatted_data.agents[k].missed_calls = agent_stats.totals.missed_calls;
+                    formatted_data.agents[k].total_calls = agent_stats.totals.total_calls;
+                }
+
+                if('queues' in agent_stats) {
+                    $.each(agent_stats.queues, function(queue_id, queue_stat) {
+                        if('totals' in queue_stat) {
+                            formatted_data.agents[k].queues_list[queue_id] = {
+                                missed_calls: queue_stat.totals.missed_calls || 0,
+                                total_calls: queue_stat.totals.total_calls || 0
+                            };
+                        }
+                    });
                 }
             });
 
-            return map_queues_stats;
+            $.each(data.queues_live_stats.queues, function(k, queue_stats) {
+                if('totals' in queue_stats) {
+                    formatted_data.queues[k].abandoned_calls = queue_stats.totals.abandoned_calls;
+                    formatted_data.queues[k].total_calls = queue_stats.totals.total_calls;
+                    formatted_data.queues[k].average_hold_time = THIS.get_time_seconds((queue_stats.totals.wait_time || 0) / queue_stats.totals.total_calls);
+                }
+
+                formatted_data.queues[k].current_calls = 0;
+                formatted_data.queues[k].current_agents = current_agents_by_queue[k] || 0;
+                if(queue_stats.calls_waiting) {
+                    $.each(queue_stats.calls_waiting, function(k2, v2) {
+                        formatted_data.calls_waiting[v2] = queue_stats.calls[v2];
+                        formatted_data.calls_waiting[v2].queue_id = k;
+                        formatted_data.calls_waiting[v2].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].start_timestamp);
+                        formatted_data.queues[k].current_calls++;
+                    });
+                }
+
+                if(queue_stats.calls_in_progress) {
+                    $.each(queue_stats.calls_in_progress, function(k2, v2) {
+                        formatted_data.calls_in_progress[v2] = queue_stats.calls[v2];
+                        formatted_data.agents[queue_stats.calls[v2].agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].connected_with_agent);
+                        formatted_data.agents[queue_stats.calls[v2].agent_id].current_call = queue_stats.calls[v2];
+                        formatted_data.agents[queue_stats.calls[v2].agent_id].current_call.call_id = v2;
+                        formatted_data.queues[k].current_calls++;
+                    });
+                }
+            });
+
+            return formatted_data;
         },
 
-        format_agents_stats: function(data) {
+        format_data: function(data) {
             var THIS = this,
-                map_agents_stats = {},
-                agent;
+                formatted_data = {};
 
-            $.each(data.agents_stats.data, function(k, v) {
-                agent = map_agents_stats[v.agent_id] || {
-                    status: 'off',
-                    call_time: 0,
-                    break_time: 0,
-                    new_calls: 0,
-                    call_per_hour: 0,
-                    call_per_day: 0,
-                    calls_missed: 0,
+            /* Formatting Queues */
+            formatted_data.queues = {};
+
+            $.each(data.queues, function(k, v) {
+                formatted_data.queues[v.id] = $.extend(true, {
+                    current_calls: 0,
+                    total_calls: 0,
+                    current_agents: 0,
+                    max_agents: 0,
+                    average_hold_time: THIS.get_time_seconds(0),
+                    abandoned_calls: 0
+                }, v);
+            });
+
+            /* Formatting Agents */
+            formatted_data.agents = {};
+
+            $.each(data.agents, function(k, v) {
+                formatted_data.agents[v.id] = $.extend(true, {
+                    status: 'logout',
+                    missed_calls: 0,
+                    total_calls: 0,
                     queues_list: {}
-                };
+                }, v);
 
-                if(v.calls_missed) {
-                    $.each(v.calls_missed, function(k2, v2) {
-                        agent.calls_missed++;
-
-                        if(v2.queue_id && !(v2.queue_id in agent.queues_list)) {
-                            agent.queues_list[v2.queue_id] = {
-                                calls_missed: 0,
-                                call_per_hour: 0,
-                                call_per_day: 0
-                            }
-                        }
-
-                        agent.queues_list[v2.queue_id].calls_missed++;
-                    });
-                }
-
-                if(v.calls_handled) {
-                    $.each(v.calls_handled, function(k2, v2) {
-                        if(v2.queue_id && !(v2.queue_id in agent.queues_list)) {
-                            agent.queues_list[v2.queue_id] = {
-                                calls_missed: 0,
-                                call_per_hour: 0,
-                                call_per_day: 0
-                            }
-                        }
-
-                        if(THIS.get_diff_seconds(v.recorded_at) < 3600) {
-                            agent.call_per_hour++;
-                            agent.queues_list[v2.queue_id].call_per_hour++;
-                        }
-                        agent.call_per_day++;
-                        agent.queues_list[v2.queue_id].call_per_day++;
-                    });
-                }
-
-                map_agents_stats[v.agent_id] = agent;
+                $.each(v.queues, function(k, queue_id) {
+                    formatted_data.queues[queue_id].max_agents++;
+                    formatted_data.agents[v.id].queues_list[queue_id] = {
+                        missed_calls: 0,
+                        total_calls: 0
+                    };
+                });
             });
 
-            return map_agents_stats;
-        },
+            formatted_data = THIS.format_live_data(formatted_data, data);
 
-        get_diff_seconds: function(timestamp) {
-            var date_var = new Date((timestamp - 62167219200)*1000).valueOf(),
-                date_now = new Date().valueOf();
-
-            return Math.round((date_now - date_var)/1000);
-        },
-
-        render_timers: function(data, parent) {
-            var THIS = this,
-                map_new_calls = {};
-
-            if(data.waiting_calls) {
-                $.each(data.waiting_calls, function(queue_id, queue_calls) {
-                    $.each(queue_calls, function(call_id, call) {
-                        call.queue_id = queue_id;
-                        map_new_calls[call_id.toLowerCase()] = call;
-                    });
-                });
-
-                $.each(map_new_calls, function(k, v) {
-                    if(!(k in THIS.map_timers.calls)) {
-                        THIS.add_callwaiting(v);
-                    }
-                });
-            }
-
-            if(data.current_statuses) {
-                $.each(data.current_statuses, function(k, v) {
-                    if(v === 'paused' && !(k in THIS.map_timers.breaks)) {
-                        //TODO We don't have the duration of a break for now so we won't display the timer.
-                        //THIS.start_timer($('.agent_wrapper#'+k+' .call_time .data_value'), 0, k, 'paused');
-                    }
-                    else if(v !== 'paused' && k in THIS.map_timers.breaks) {
-                        clearInterval(THIS.map_timers.breaks[k].timer);
-                        delete THIS.map_timers.breaks[k];
-                    }
-                });
-            }
-
-            if(data.active_calls) {
-                $.each(data.active_calls, function(k, v) {
-                    if(v.agent_state === 'answered' && !(k in THIS.map_timers.users)) {
-                        THIS.start_timer($('.agent_wrapper#'+k+' .call_time .data_value'), v.duration, k);
-                    }
-                });
-            }
-
-            if(THIS.map_timers) {
-                $.each(THIS.map_timers.calls, function(k, v) {
-                    if(!(k in map_new_calls)) {
-                        THIS.remove_callwaiting(k);
-                    }
-                });
-
-                $.each(THIS.map_timers.breaks, function(k, v) {
-                    if(!(k in data.current_statuses)) {
-                        clearInterval(THIS.map_timers.breaks[k].timer);
-                        delete THIS.map_timers.breaks[k];
-                    }
-                });
-
-                $.each(THIS.map_timers.users, function(k, v) {
-                    if(!(k in data.active_calls) || data.active_calls[k].agent_state === 'wrapup') {
-                        clearInterval(THIS.map_timers.users[k].timer);
-                        delete THIS.map_timers.users[k];
-                    }
-                });
-            }
+            return formatted_data;
         },
 
         render_dashboard: function(_parent, callback) {
@@ -754,7 +572,12 @@ winkstart.module('call_center', 'dashboard', {
             THIS.clean_timers();
 
             THIS.fetch_all_data(true, function(data) {
-                dashboard_html = THIS.templates.dashboard.tmpl(data);
+                console.log(data);
+                dashboard_html = THIS.templates.dashboard.tmpl();
+
+                THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
+                THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));
+                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
 
                 THIS.poll_agents(data, parent);
 
@@ -765,8 +588,7 @@ winkstart.module('call_center', 'dashboard', {
                 THIS.render_callwaiting_list(dashboard_html);
 
                 THIS.bind_live_events(parent);
-
-                THIS.render_timers({active_calls: data.agents_live_stats.data.current_calls, waiting_calls: data.queues_live_stats.data.current_calls, current_statuses: data.agents_live_stats.data.current_statuses});
+                THIS.render_timers(data);
 
                 if(typeof callback === 'function') {
                     callback()
@@ -777,8 +599,8 @@ winkstart.module('call_center', 'dashboard', {
         fetch_all_data: function(loading, callback) {
             var THIS = this;
 
-            THIS.get_agents_stats(loading, function(_data_stats_agents) {
-                THIS.get_queues_stats(loading, function(_data_stats_queues) {
+            //THIS.get_agents_stats(loading, function(_data_stats_agents) {
+                //THIS.get_queues_stats(loading, function(_data_stats_queues) {
                     THIS.get_queues_livestats(loading, function(_data_live_queues) {
                         THIS.get_agents_livestats(loading, function(_data_live_agents) {
                             THIS.get_queues(loading, function(_data_queues) {
@@ -786,10 +608,10 @@ winkstart.module('call_center', 'dashboard', {
                                     var _data = {
                                         queues: _data_queues.data,
                                         agents: _data_agents.data,
-                                        agents_stats: _data_stats_agents,
-                                        queues_stats: _data_stats_queues,
-                                        agents_live_stats: _data_live_agents,
-                                        queues_live_stats: _data_live_queues,
+                                        //agents_stats: _data_stats_agents,
+                                        //queues_stats: _data_stats_queues,
+                                        agents_live_stats: _data_live_agents.data,
+                                        queues_live_stats: _data_live_queues.data,
                                     };
 
                                     _data = THIS.format_data(_data);
@@ -801,41 +623,109 @@ winkstart.module('call_center', 'dashboard', {
                             });
                         });
                     });
-                });
-            });
+                //});
+            //});
+        },
+
+        eavesdrop_popup: function(mode, data_options) {
+            var THIS = this;
+
+            winkstart.request('dashboard.list_devices', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url
+                },
+                function(_data, status) {
+                    var popup_html = THIS.templates.list_devices.tmpl({
+                        objects: {
+                            items: _data.data,
+                        }
+                    });
+
+                    $('#ring', popup_html).click(function() {
+                        var options = {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url,
+                                data: {
+                                    id: $('#object-selector', popup_html).val()
+                               }
+                        };
+
+                        if(mode === 'call') {
+                            options.data.call_id = data_options.call_id;
+                        }
+                        else if(mode === 'queue') {
+                            options.queue_id = data_options.queue_id;
+                        }
+
+                        console.log(options);
+                        console.log(_data);
+                        winkstart.request('dashboard.'+ mode +'_eavesdrop', options,
+                            function(_data, status) {
+                                popup.dialog('close');
+                            },
+                            function(_data, status) {
+                                winkstart.alert('Eavesdrop Request failed. Error #'+status);
+                            }
+                        );
+                    });
+
+                    $('#cancel', popup_html).click(function() {
+                        popup.dialog('close');
+                    });
+
+                    popup = winkstart.dialog(popup_html, {
+                        title: 'Devices'
+                    });
+                }
+            );
         },
 
         bind_live_events: function(parent) {
             var THIS = this;
-            //TODO After first display, tooltip are not showing up anymore
-            $('*[rel=popover]:not([type="text"])', parent).popover({
-                trigger: 'hover'
-            });
 
-            $('.list_queues_inner > li', parent).die().live('click', function() {
-                //THIS IS A HACK. :)
-                $('.popover').remove();
-                var $this_queue = $(this),
-                    queue_id = $this_queue.attr('id');
+            $('.list_queues_inner > li', parent).die().live('click', function(event) {
+                console.log($(event.target));
+                if($(event.target).hasClass('eavesdrop_queue')) {
 
-                if($this_queue.hasClass('active')) {
-                    THIS.current_queue_id = undefined;
-                    $('.agent_wrapper', parent).show();
-                    $('.all_data', parent).show();
-                    $('.queue_data', parent).hide();
-                    $('#callwaiting-list li', parent).show();
-                    $('.icon.edit_queue', parent).hide();
-                    $('.list_queues_inner > li', parent).removeClass('active');
                 }
                 else {
-                    THIS.detail_stat(queue_id, parent);
+                    var $this_queue = $(this),
+                        queue_id = $this_queue.attr('id');
+
+                    if($this_queue.hasClass('active')) {
+                        THIS.current_queue_id = undefined;
+                        $('.agent_wrapper', parent).show();
+                        $('.all_data', parent).show();
+                        $('.queue_data', parent).hide();
+                        $('#callwaiting-list li', parent).show();
+                        $('.icon.edit_queue', parent).hide();
+                        $('.icon.eavesdrop_queue', parent).hide();
+                        $('.list_queues_inner > li', parent).removeClass('active');
+                    }
+                    else {
+                        THIS.detail_stat(queue_id, parent);
+                    }
                 }
+            });
+
+            $('.agent_wrapper .call .eavesdrop', parent).die().live('click', function() {
+                var data = {
+                    call_id: $(this).data('call_id')
+                };
+
+                THIS.eavesdrop_popup('call', data);
+            });
+
+            $('.list_queues_inner > li .eavesdrop_queue', parent).die().live('click', function() {
+                console.log($(this).parents('li').first().attr('id'));
+                var data = {
+                    queue_id: $(this).parents('li').first().attr('id')
+                };
+
+                THIS.eavesdrop_popup('queue', data);
             });
 
             $('.list_queues_inner > li .edit_queue', parent).die().live('click', function() {
-                //THIS IS A HACK. :)
-                $('.popover').remove();
-
                 var dom_id = $(this).parents('li').first().attr('id');
                 winkstart.publish('queue.activate', { parent: $('#ws-content'), callback: function() {
                     winkstart.publish('queue.edit', { id: dom_id });
@@ -851,8 +741,10 @@ winkstart.module('call_center', 'dashboard', {
 
             $('.list_queues_inner > li', parent).removeClass('active');
             $('.icon.edit_queue', parent).hide();
+            $('.icon.eavesdrop_queue', parent).hide();
 
             $('.icon.edit_queue', $this_queue).show();
+            $('.icon.eavesdrop_queue', $this_queue).show();
             $this_queue.addClass('active');
 
             $('#callwaiting-list li', parent).each(function(k, v) {
@@ -896,14 +788,11 @@ winkstart.module('call_center', 'dashboard', {
                 });
             });
 
-            THIS.map_timers = {
-                users: {},
-                breaks: {},
-                calls: {}
-            };
+            THIS.map_timers = {};
         },
 
         activate_queue_stat: function(args) {
+            //TODO check render global data
             var THIS = this,
                 parent = args.parent || $('#ws-content');
 
@@ -922,6 +811,7 @@ winkstart.module('call_center', 'dashboard', {
 
             parent.empty();
 
+            //TODO check render global data
             THIS.render_dashboard(parent);
         }
     }

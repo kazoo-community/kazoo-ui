@@ -50,6 +50,27 @@
                     </div>
 
                     <div class="clearfix">
+                        <label for="moh">Music on Hold</label>
+                        <div class="input">
+                            <span rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
+                                <select name="moh" id="moh" class="medium">
+                                    {{each field_data.media}}
+                                        {{if data.moh == id}}
+                                        <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                        {{else}}
+                                        <option id="${id}" value="${id}">${name}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                                <div class="edit_create">
+                                    <a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+                                    <a class="inline_action_media" data-action="create" href="#">Create</a>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
                         <label>Strategy</label>
                         <div class="input">
                             <span rel="popover" data-content="The queue strategy for connecting agents to caller">
