@@ -552,11 +552,13 @@ winkstart.module('call_center', 'dashboard', {
                 }, v);
 
                 $.each(v.queues, function(k, queue_id) {
-                    formatted_data.queues[queue_id].max_agents++;
-                    formatted_data.agents[v.id].queues_list[queue_id] = {
-                        missed_calls: 0,
-                        total_calls: 0
-                    };
+                    if(queue_id in formatted_data.queues) {
+                        formatted_data.queues[queue_id].max_agents++;
+                        formatted_data.agents[v.id].queues_list[queue_id] = {
+                            missed_calls: 0,
+                            total_calls: 0
+                        };
+                    }
                 });
             });
 
