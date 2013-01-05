@@ -236,6 +236,7 @@
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call .data_title {
     width: 157px;
+    font-weight: bold;
     overflow: hidden;
 }
 
