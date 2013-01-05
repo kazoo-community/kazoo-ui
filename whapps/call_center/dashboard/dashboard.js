@@ -574,7 +574,6 @@ winkstart.module('call_center', 'dashboard', {
             THIS.clean_timers();
 
             THIS.fetch_all_data(true, function(data) {
-                console.log(data);
                 dashboard_html = THIS.templates.dashboard.tmpl();
 
                 THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
@@ -659,8 +658,6 @@ winkstart.module('call_center', 'dashboard', {
                             options.queue_id = data_options.queue_id;
                         }
 
-                        console.log(options);
-                        console.log(_data);
                         winkstart.request('dashboard.'+ mode +'_eavesdrop', options,
                             function(_data, status) {
                                 popup.dialog('close');
@@ -686,7 +683,6 @@ winkstart.module('call_center', 'dashboard', {
             var THIS = this;
 
             $('.list_queues_inner > li', parent).die().live('click', function(event) {
-                console.log($(event.target));
                 if($(event.target).hasClass('eavesdrop_queue')) {
 
                 }
@@ -719,7 +715,6 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             $('.list_queues_inner > li .eavesdrop_queue', parent).die().live('click', function() {
-                console.log($(this).parents('li').first().attr('id'));
                 var data = {
                     queue_id: $(this).parents('li').first().attr('id')
                 };
