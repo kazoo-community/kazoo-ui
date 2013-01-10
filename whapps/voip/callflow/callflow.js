@@ -1602,9 +1602,14 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            return_value = '';
 
-                        return (id) ? caption_map[id].numbers.toString() : '';
+                        if(id in caption_map && 'numbers' in caption_map[id]) {
+                            return_value = caption_map[id].numbers.toString();
+                        }
+
+                        return return_value;
                     },
                     edit: function(node, callback) {
                         winkstart.request(true, 'callflow.list', {
