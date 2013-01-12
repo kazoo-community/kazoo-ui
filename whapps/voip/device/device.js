@@ -209,7 +209,7 @@ winkstart.module('voip', 'device', {
                         };
 
                         if($.inArray(_data.data.length, winkstart.config.device_threshold || []) > -1) {
-                            if(winkstart.apps['auth'].reseller_id === winkstart.config.reseller_id) {
+                            if(!('reseller_id' in winkstart.config) || winkstart.apps['auth'].reseller_id === winkstart.config.reseller_id) {
                                 THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
                             }
                             else {
