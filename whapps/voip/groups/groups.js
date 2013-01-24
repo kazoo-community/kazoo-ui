@@ -141,59 +141,81 @@ winkstart.module('voip', 'groups', {
                 },
                 defaults = {
                     data: $.extend(true, {
-
+                        music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
                 },
                 render_group = function() {
-                    winkstart.request(true, 'device.list', {
+                    winkstart.request(true, 'media.list', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url
                         },
-                        function(_data_devices, status) {
-                            defaults.field_data.devices = _data_devices.data;
+                        function(_data_media, status) {
+                            if(_data_media.data) {
+                                _data_media.data.unshift(
+                                    {
+                                        id: '',
+                                        name: 'Default Music'
+                                    },
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: 'Silence'
+                                    }
+                                );
+                            }
 
-                            winkstart.request(true, 'user.list', {
+                            defaults.field_data.media = _data_media.data;
+
+                            winkstart.request(true, 'device.list', {
                                     account_id: winkstart.apps['voip'].account_id,
                                     api_url: winkstart.apps['voip'].api_url
                                 },
-                                function(_data, status) {
-                                    defaults.field_data.users = _data.data;
+                                function(_data_devices, status) {
+                                    defaults.field_data.devices = _data_devices.data;
 
-                                    if(typeof data == 'object' && data.id) {
-                                        winkstart.request(true, 'groups.get', {
-                                                account_id: winkstart.apps['voip'].account_id,
-                                                api_url: winkstart.apps['voip'].api_url,
-                                                groups_id: data.id
-                                            },
-                                            function(_data, status) {
-                                                var render_data = $.extend(true, defaults, _data);
+                                    winkstart.request(true, 'user.list', {
+                                            account_id: winkstart.apps['voip'].account_id,
+                                            api_url: winkstart.apps['voip'].api_url
+                                        },
+                                        function(_data, status) {
+                                            defaults.field_data.users = _data.data;
 
-                                                if('resources' in render_data.data) {
-                                                    $.each(render_data.field_data.resources, function(key, type) {
-                                                        $.each(type, function(k, resource) {
-                                                            if(render_data.data.resources[resource.id]) {
-                                                                resource.checked = true;
-                                                            }
-                                                        });
-                                                    });
-                                                }
+                                            if(typeof data == 'object' && data.id) {
+                                                winkstart.request(true, 'groups.get', {
+                                                        account_id: winkstart.apps['voip'].account_id,
+                                                        api_url: winkstart.apps['voip'].api_url,
+                                                        groups_id: data.id
+                                                    },
+                                                    function(_data, status) {
+                                                        var render_data = $.extend(true, defaults, _data);
 
-                                                THIS.render_groups(render_data, target, callbacks);
+                                                        if('resources' in render_data.data) {
+                                                            $.each(render_data.field_data.resources, function(key, type) {
+                                                                $.each(type, function(k, resource) {
+                                                                    if(render_data.data.resources[resource.id]) {
+                                                                        resource.checked = true;
+                                                                    }
+                                                                });
+                                                            });
+                                                        }
+
+                                                        THIS.render_groups(render_data, target, callbacks);
+
+                                                        if(typeof callbacks.after_render == 'function') {
+                                                            callbacks.after_render();
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                            else {
+                                                THIS.render_groups(defaults, target, callbacks);
 
                                                 if(typeof callbacks.after_render == 'function') {
                                                     callbacks.after_render();
                                                 }
                                             }
-                                        );
-                                    }
-                                    else {
-                                        THIS.render_groups(defaults, target, callbacks);
-
-                                        if(typeof callbacks.after_render == 'function') {
-                                            callbacks.after_render();
                                         }
-                                    }
+                                    );
                                 }
                             );
                         }
@@ -262,6 +284,8 @@ winkstart.module('voip', 'groups', {
             THIS.render_endpoint_list(data, groups_html);
 
             winkstart.validate.set(THIS.config.validation, groups_html);
+
+            winkstart.timezone.populate_dropdown($('#timezone', groups_html), data.data.timezone);
 
             $('*[rel=popover]:not([type="text"])', groups_html).popover({
                 trigger: 'hover'
@@ -349,6 +373,42 @@ winkstart.module('voip', 'groups', {
                 }
             });
 
+            if(!$('#music_on_hold_media_id', groups_html).val()) {
+                $('#edit_link_media', groups_html).hide();
+            }
+
+            $('#music_on_hold_media_id', groups_html).change(function() {
+                !$('#music_on_hold_media_id option:selected', groups_html).val() ? $('#edit_link_media', groups_html).hide() : $('#edit_link_media', groups_html).show();
+            });
+
+            $('.inline_action_media', groups_html).click(function(ev) {
+                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#music_on_hold_media_id', groups_html).val() } : {},
+                    _id = _data.id;
+
+                ev.preventDefault();
+
+                winkstart.publish('media.popup_edit', _data, function(_data) {
+                    /* Create */
+                    if(!_id) {
+                        $('#music_on_hold_media_id', groups_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.name +'</option>')
+                        $('#music_on_hold_media_id', groups_html).val(_data.data.id);
+
+                        $('#edit_link_media', groups_html).show();
+                    }
+                    else {
+                        /* Update */
+                        if('id' in _data.data) {
+                            $('#music_on_hold_media_id #'+_data.data.id, groups_html).text(_data.data.name);
+                        }
+                        /* Delete */
+                        else {
+                            $('#music_on_hold_media_id #'+_id, groups_html).remove();
+                            $('#edit_link_media', groups_html).hide();
+                        }
+                    }
+                });
+            });
+
             $(groups_html).delegate('.action_endpoint.delete', 'click', function() {
                 var endpoint_id = $(this).dataset('id');
                 //removes it from the grid
@@ -376,10 +436,10 @@ winkstart.module('voip', 'groups', {
             $.each(form_data.resources, function(k, v) {
                 if(v !== false) {
                     if(v in field_data.resources['local']) {
-                        new_resource[v] = 'local';
+                        new_resource[v] = { type: 'local' };
                     }
                     else {
-                        new_resource[v] = 'global';
+                        new_resource[v] = { type: 'global' };
                     }
                 }
             });
