@@ -655,7 +655,7 @@ winkstart.module('voip', 'device', {
             };
 
             if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
-                if(winkstart.publish('phone.render_fields', $('.provisioner', device_html), data.data.provision || (data.data.provision = {}), render)) {
+                if(winkstart.publish('phone.render_fields', $(device_html), data.data.provision || (data.data.provision = {}), render)) {
                     render();
                 }
             }
