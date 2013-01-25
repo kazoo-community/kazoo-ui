@@ -608,7 +608,7 @@ winkstart.module('voip', 'groups', {
                                     selected: node.getMetadata('id') || ''
                                 });
 
-                                if($('#group_selector option:selected', popup_html).val() == undefined) {
+                                if($('#groups_selector option:selected', popup_html).val() == undefined) {
                                     $('#edit_link', popup_html).hide();
                                 }
 

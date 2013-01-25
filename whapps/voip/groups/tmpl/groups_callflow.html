@@ -4,9 +4,9 @@
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="group_selector">Directory</label>
+                    <label for="groups_selector">Directory</label>
                     <div class="select_wrapper">
-                        <select id="group_selector">
+                        <select id="groups_selector">
                             {{each(i, item) items}}
                                 {{if selected == item.id}}
                                     <option value="${item.id}" SELECTED>${item.name}</option>
