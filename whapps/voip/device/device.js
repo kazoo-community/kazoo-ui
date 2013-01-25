@@ -543,6 +543,13 @@ winkstart.module('voip', 'device', {
 
                             THIS.clean_form_data(form_data);
 
+                            if(form_data.provision && form_data.provision.endpoint_brand) {
+                                form_data.provision.endpoint_model = $('.dropdown_family[data-brand="'+form_data.provision.endpoint_brand+'"]', device_html).val();
+                                if($('#'+form_data.provision.endpoint_model, device_html).size() > 0) {
+                                    form_data.provision.endpoint_family = $('#'+form_data.provision.endpoint_model, device_html).data('family');
+                                }
+                            }
+
                             if('field_data' in data) {
                                 delete data.field_data;
                             }
