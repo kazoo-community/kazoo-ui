@@ -504,6 +504,7 @@ winkstart.module('call_center', 'dashboard', {
                         formatted_data.calls_waiting[v2] = queue_stats.calls[v2];
                         formatted_data.calls_waiting[v2].queue_id = k;
                         formatted_data.calls_waiting[v2].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].start_timestamp);
+                        formatted_data.calls_waiting[v2].friendly_title = queue_stats.calls[v2].caller_id_name || queue_stats.calls[v2].caller_id_number || v2;
                         formatted_data.queues[k].current_calls++;
                     });
                 }
@@ -513,6 +514,7 @@ winkstart.module('call_center', 'dashboard', {
                         formatted_data.calls_in_progress[v2] = queue_stats.calls[v2];
                         formatted_data.agents[queue_stats.calls[v2].agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.calls[v2].connected_with_agent);
                         formatted_data.agents[queue_stats.calls[v2].agent_id].current_call = queue_stats.calls[v2];
+                        formatted_data.agents[queue_stats.calls[v2].agent_id].current_call.friendly_title = queue_stats.calls[v2].caller_id_name || queue_stats.calls[v2].caller_id_number || v2;
                         formatted_data.agents[queue_stats.calls[v2].agent_id].current_call.call_id = v2;
                         formatted_data.queues[k].current_calls++;
                     });

@@ -1,7 +1,7 @@
 <div>
     {{each(call_id, call) calls_waiting}}
         <li title="${call_id}" class="call-waiting list-element" style="display: block;" data-call_id="${call_id}" data-queue_id="${call.queue_id}">
-            <a href="#" data-module="activate" data-action="media">${call_id}</a>
+            <a href="#" data-module="activate" data-action="media">${call.friendly_title}</a>
             <span class="timer">${call.friendly_duration}</span>
         </li>
     {{/each}}
