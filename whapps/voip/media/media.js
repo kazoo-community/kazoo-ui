@@ -262,7 +262,7 @@ winkstart.module('voip', 'media', {
 
             function changeType($select) {
                 var type = $select.val();
-                
+
                 switch(type) {
                     case 'tts':
                         $('.tts', media_html).show();
@@ -490,9 +490,14 @@ winkstart.module('voip', 'media', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
 
-                        return (id) ? caption_map[id].name : '';
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         var _this = this;

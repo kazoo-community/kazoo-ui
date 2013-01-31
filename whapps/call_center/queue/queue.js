@@ -907,7 +907,7 @@ winkstart.module('call_center', 'queue', {
                     icon: 'queue',
                     category: 'Call-Center',
                     module: 'acdc_member',
-                    tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
+                    tip: 'Direct a Caller to a Queue.',
                     data: {
                         id: 'null'
                     },
@@ -919,9 +919,14 @@ winkstart.module('call_center', 'queue', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
 
-                        return (id) ? caption_map[id].name : '';
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         var _this = this;
@@ -997,9 +1002,14 @@ winkstart.module('call_center', 'queue', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
 
-                        return (id) ? caption_map[id].name : '';
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         var _this = this;
@@ -1075,9 +1085,14 @@ winkstart.module('call_center', 'queue', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
 
-                        return (id) ? caption_map[id].name : '';
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         var _this = this;

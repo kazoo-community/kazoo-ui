@@ -551,9 +551,14 @@ winkstart.module('voip', 'queue', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
 
-                        return (id) ? caption_map[id].name : '';
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         var _this = this;

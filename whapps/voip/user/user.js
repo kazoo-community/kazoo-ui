@@ -879,8 +879,14 @@ winkstart.module('voip', 'user', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        var id = node.getMetadata('id');
-                        return (id && id != '') ? caption_map[id].name : '';
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
                     },
                     edit: function(node, callback) {
                         winkstart.request(true, 'user.list', {
