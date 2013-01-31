@@ -27,10 +27,14 @@
                     </div>
                     <div class="row_data call">
                         {{if status === 'handling'}}
-                        <div class="data_title">${current_call.caller_id_name}</div>
-                        <span data-call_id="${current_call.call_id}" class="icon tech_support eavesdrop"/>
+                            {{if current_call}}
+                                <div class="data_title">${current_call.friendly_title}</div>
+                                <span data-call_id="${current_call.call_id}" class="icon tech_support eavesdrop"/>
+                            {{else}}
+                                <div class="data_title">No active call...</div>
+                            {{/if}}
                         {{else}}
-                        <div class="data_title">No active call...</div>
+                            <div class="data_title">No active call...</div>
                         {{/if}}
                     </div>
                     <div class="all_data">
