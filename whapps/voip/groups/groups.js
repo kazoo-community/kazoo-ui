@@ -329,7 +329,7 @@ winkstart.module('voip', 'groups', {
                 });
             });
 
-            $('#add_user', groups_html).click(function() {
+            var add_user = function() {
                 var $user = $('#select_user_id', groups_html);
 
                 if($user.val() != 'empty_option_user') {
@@ -349,9 +349,8 @@ winkstart.module('voip', 'groups', {
 
                     $user.val('empty_option_user');
                 }
-            });
-
-            $('#add_device', groups_html).click(function() {
+            },
+            add_device = function() {
                 var $device = $('#select_device_id', groups_html);
 
                 if($device.val() != 'empty_option_device') {
@@ -371,6 +370,13 @@ winkstart.module('voip', 'groups', {
 
                     $device.val('empty_option_device');
                 }
+            };
+
+            $('#select_user_id', groups_html).change(function() {
+                add_user();
+            });
+            $('#select_device_id', groups_html).change(function() {
+                add_device();
             });
 
             if(!$('#music_on_hold_media_id', groups_html).val()) {
