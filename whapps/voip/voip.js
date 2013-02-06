@@ -16,7 +16,6 @@ winkstart.module('voip', 'voip', {
 
     function() {
         var THIS = this;
-
         if('modules' in winkstart.apps[THIS.__module]) {
             if('whitelist' in winkstart.apps[THIS.__module].modules) {
                 THIS.modules = {};
@@ -64,6 +63,7 @@ winkstart.module('voip', 'voip', {
             'device': false,
             'callflow': false,
             'conference': false,
+            'groups': false,
             'user': false,
             'vmbox': false,
             'menu': false,

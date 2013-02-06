@@ -1,0 +1,144 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			{{if data.id}}
+                <h1>Edit Group</h1>
+            {{else}}
+                <h1>Create Group</h1>
+            {{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">Basic</button>
+				<button class="btn black advanced">Advanced</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li><a href="#resources"><span class="icon resource"></span>Resources</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		</ul>
+		<form id="group-form" action="" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">Name</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this Group"/>
+						</div>
+					</div>
+
+					<div class="row">
+                        <div id="table_wrapper">
+                            <div id="tab_users">
+                                <div class="row title">
+                                    <div class="column first">Endpoints</div>
+                                    <div class="column second">Remove</div>
+                                </div>
+                                <div class="rows">
+                                </div>
+                            </div>
+
+                            <div class="add_endpoint_wrapper">
+                                <div class="add_endpoint">
+                                    <div class="add_endpoint_title"><span class="icon user"/>Add User</div>
+                                    <div class="add_content_wrapper">
+                                        <select name="extra.select_user_id" id="select_user_id">
+                                            <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+                                            {{each field_data.users}}
+                                                <option value="${id}" id="option_endpoint_${id}">${first_name} ${last_name}</option>
+                                            {{/each}}
+                                        </select>
+                                        <div id="add_user" class="add_endpoint_div">
+                                            <span class="add_endpoint_icon"/>
+                                            <a class="add_endpoint_link" href="javascript:void(0);" data-group_id="${data.id}">Add this user to the group</a>
+                                            <div class="clear"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="add_endpoint">
+                                    <div class="add_endpoint_title"><span class="icon device"/>Add Device</div>
+                                    <div class="add_content_wrapper">
+                                        <select name="extra.select_device_id" id="select_device_id">
+                                            <option id="empty_option_device" value="empty_option_device">-- Select --</option>
+                                            {{each field_data.devices}}
+                                                <option value="${id}" id="option_endpoint_${id}">${name}</option>
+                                            {{/each}}
+                                        </select>
+                                        <div id="add_device" class="add_endpoint_div">
+                                            <span class="add_endpoint_icon"/>
+                                            <a class="add_endpoint_link" href="javascript:void(0);" data-group_id="${data.id}">Add this device to the group</a>
+                                            <div class="clear"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+
+                <div id="options">
+                    <div class="clearfix">
+                        <label for="timezone">Time zone</label>
+                        <div class="input">
+                            <select name="timezone" id="timezone" rel="popover" data-content="Select the time zone of this group."></select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="music_on_hold_media_id">Music on Hold</label>
+                        <div class="input">
+                            <span rel="popover" data-content="Select the media file that you want to be played by default when it 's not set on a user or a device.">
+                                <select name="music_on_hold.media_id" id="music_on_hold_media_id">
+                                    {{each field_data.media}}
+                                        {{if data.music_on_hold.media_id == id}}
+                                        <option id="${id}" value="${id}" selected="selected">${name}</option>
+                                        {{else}}
+                                        <option id="${id}" value="${id}">${name}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
+                                <div class="edit_create">
+                                    <a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
+                                    <a class="inline_action_media" data-action="create" href="#">Create</a>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="resources">
+                    <h3>Please select the list of Resources to use for this group.</h3>
+
+                    {{each(type, resources) field_data.resources}}
+                        {{each(k, v) resources}}
+                            <div class="clearfix">
+                                <div class="input">
+                                    <ul class="inputs-list">
+                                        <li>
+                                            <label>
+                                                {{if v.checked }}
+                                                    <input type="checkbox" name="resources[]" checked="checked" value="${v.id}"/>
+                                                {{else}}
+                                                    <input type="checkbox" name="resources[]" value="${v.id}"/>
+                                                {{/if}}
+                                                <span>${v.name}</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {{/each}}
+                    {{/each}}
+                </div>
+			</div>
+		</form>
+		<div class="buttons-right">
+	        {{if data.id}}
+	            <button class="btn danger group-delete">Delete</button>
+	        {{/if}}
+            <button class="btn success group-save">Save</button>
+		</div>
+	</div>
+</div>

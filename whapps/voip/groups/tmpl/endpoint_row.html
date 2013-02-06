@@ -1,0 +1,12 @@
+<div>
+    {{if endpoint_id}}
+        <div class="row" id="row_endpoint_${endpoint_id}" data-id="${endpoint_id}" data-type="${endpoint_type}">
+            <div class="column first">{{if endpoint_type === 'user'}}<span class="icon medium userportal">{{else}}<span class="icon medium device">{{/if}}</span>&nbsp;&nbsp;${endpoint_name}</div>
+            <div class="column second"><a class="action_endpoint delete icon medium trash" data-id="${endpoint_id}"></a></div>
+    {{else}}
+        <div class="row" id="row_no_data">
+            <div class="column merged">There are currently no endpoint in this group</div>
+    {{/if}}
+        <div class="clear"/>
+    </div>
+</div>
