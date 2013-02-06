@@ -238,6 +238,9 @@ winkstart.module('voip', 'user', {
                             emergency: {}
                         },
                         hotdesk: {},
+                        contact_list: {
+                            exclude: false,
+                        },
                         music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {
