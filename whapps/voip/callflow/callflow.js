@@ -21,6 +21,8 @@ winkstart.module('voip', 'callflow', {
             disa_callflow: 'tmpl/disa_callflow.html',
             pivot_callflow: 'tmpl/pivot_callflow.html',
             presence_callflow: 'tmpl/presence_callflow.html',
+            page_group_dialog: 'tmpl/page_group_dialog.html',
+            page_group_element: 'tmpl/page_group_element.html',
             ring_group_dialog: 'tmpl/ring_group_dialog.html',
             ring_group_element: 'tmpl/ring_group_element.html',
             buttons: 'tmpl/buttons.html',
@@ -1273,6 +1275,297 @@ winkstart.module('voip', 'callflow', {
 
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this,
+                edit_page_group = function(node, callback) {
+                    var node = node,
+                    callback = callback;
+
+                    winkstart.request(true, 'device.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(data, status) {
+                            var popup, popup_html, index, endpoints
+                                selected_endpoints = {},
+                                unselected_endpoints = [],
+                                unselected_groups = [],
+                                unselected_devices = [],
+                                unselected_users = [];
+
+                            if(endpoints = node.getMetadata('endpoints')) {
+                                // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
+                                // we also need to clone to prevent managing of objects
+                                $.each($.extend(true, {}, endpoints), function(i, obj) {
+                                    obj.name = 'Undefined Device';
+                                    selected_endpoints[obj.id] = obj;
+                                });
+                            }
+
+                            $.each(data.data, function(i, obj) {
+                                obj.endpoint_type = 'device';
+                                if(obj.id in selected_endpoints) {
+                                    selected_endpoints[obj.id].endpoint_type = 'device';
+                                    selected_endpoints[obj.id].owner_id = obj.owner_id;
+                                    selected_endpoints[obj.id].name = obj.name;
+                                }
+                                else {
+                                    unselected_devices.push(obj);
+                                }
+                            });
+
+                            winkstart.request('groups.list', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url
+                                },
+                                function(_data, status) {
+                                    $.each(_data.data, function(i, obj) {
+                                        obj.endpoint_type = 'group';
+                                        if(obj.id in selected_endpoints) {
+                                            selected_endpoints[obj.id].endpoint_type = 'group',
+                                            selected_endpoints[obj.id].name = obj.name;
+                                        }
+                                        else {
+                                            unselected_groups.push(obj);
+                                        }
+                                    });
+
+                                    winkstart.request('user.list', {
+                                            account_id: winkstart.apps['voip'].account_id,
+                                            api_url: winkstart.apps['voip'].api_url
+                                        },
+                                        function(_data, status) {
+                                            $.each(_data.data, function(i, obj) {
+                                                obj.name = obj.first_name + ' ' + obj.last_name;
+                                                obj.endpoint_type = 'user';
+                                                if(obj.id in selected_endpoints) {
+                                                    selected_endpoints[obj.id].endpoint_type = 'user',
+                                                    selected_endpoints[obj.id].name = obj.name;
+                                                }
+                                                else {
+                                                    unselected_users.push(obj);
+                                                }
+                                            });
+
+                                            popup_html = THIS.templates.page_group_dialog.tmpl({
+                                                form: {
+                                                    name: node.getMetadata('name') || ''
+                                                }
+                                            });
+                                            $.each(unselected_groups, function() {
+                                                $('#groups_pane .connect.left', popup_html).append(THIS.templates.page_group_element.tmpl(this));
+                                            });
+
+                                            $.each(unselected_devices, function() {
+                                                $('#devices_pane .connect.left', popup_html).append(THIS.templates.page_group_element.tmpl(this));
+                                            });
+
+                                            $.each(unselected_users, function() {
+                                                $('#users_pane .connect.left', popup_html).append(THIS.templates.page_group_element.tmpl(this));
+                                            });
+
+                                            $.each(selected_endpoints, function() {
+                                                //Check if user/device exists.
+                                                if(this.endpoint_type) {
+                                                    $('.connect.right', popup_html).append(THIS.templates.page_group_element.tmpl(this));
+                                                }
+                                            });
+
+                                            $('#name', popup_html).bind('keyup blur change', function() {
+                                                $('.column.right .title', popup_html).html('Page Group - ' + $(this).val());
+                                            });
+
+                                            $('ul.settings1 > li > a', popup_html).click(function(item) {
+                                                $('.pane_content', popup_html).hide();
+
+                                                //Reset Search field
+                                                $('.searchfield', popup_html).val('');
+                                                $('.column.left li', popup_html).show();
+
+                                                $('ul.settings1 > li', popup_html).removeClass('current');
+
+                                                var tab_id = $(this).attr('id');
+
+                                                if(tab_id  === 'users_tab_link') {
+                                                    $('#users_pane', popup_html).show();
+                                                }
+                                                else if(tab_id === 'devices_tab_link') {
+                                                    $('#devices_pane', popup_html).show();
+                                                }
+                                                else if(tab_id === 'groups_tab_link') {
+                                                    $('#groups_pane', popup_html).show();
+                                                }
+
+                                                $(this).parent().addClass('current');
+                                            });
+
+                                            $('.searchsubmit2', popup_html).click(function() {
+                                                $('.searchfield', popup_html).val('');
+                                                $('.column li', popup_html).show();
+                                            });
+
+                                            $('#devices_pane .searchfield', popup_html).keyup(function() {
+                                                $('#devices_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
+                                                    }
+                                                });
+                                            });
+
+                                            $('#users_pane .searchfield', popup_html).keyup(function() {
+                                                $('#users_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
+                                                    }
+                                                });
+                                            });
+
+                                            $('#groups_pane .searchfield', popup_html).keyup(function() {
+                                                $('#groups_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#groups_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
+                                                    }
+                                                });
+                                            });
+
+                                            if(jQuery.isEmptyObject(selected_endpoints)) {
+                                                $('.column.right .connect', popup_html).addClass('no_element');
+                                            }
+                                            else {
+                                                $('.column.right .connect', popup_html).removeClass('no_element');
+                                            }
+
+                                            $('.column.left .options', popup_html).hide();
+                                            $('.column.left .actions', popup_html).hide();
+
+                                            $('.options .option.delay', popup_html).bind('keyup', function() {
+                                                $(this).parents('li').dataset('delay', $(this).val());
+                                            });
+
+                                            $('.options .option.timeout', popup_html).bind('keyup', function() {
+                                                $(this).parents('li').dataset('timeout', $(this).val());
+                                            });
+
+                                            $('#save_ring_group', popup_html).click(function() {
+                                                var name = $('#name', popup_html).val();
+
+                                                endpoints = [];
+
+                                                $('.right .connect li', popup_html).each(function() {
+                                                    var item_data = $(this).dataset();
+                                                    delete item_data.owner_id;
+                                                    endpoints.push(item_data);
+                                                });
+
+                                                node.setMetadata('endpoints', endpoints);
+                                                node.setMetadata('name', name);
+
+                                                node.caption = name;
+
+                                                popup.dialog('close');
+                                            });
+
+                                            popup = winkstart.dialog(popup_html, {
+                                                title: 'Page Group',
+                                                beforeClose: function() {
+                                                    if(typeof callback == 'function') {
+                                                        callback();
+                                                    }
+                                                }
+                                            });
+
+                                            $('.scrollable', popup).jScrollPane({
+                                                horizontalDragMinWidth: 0,
+                                                horizontalDragMaxWidth: 0
+                                            });
+
+                                            $('.connect', popup).sortable({
+                                                connectWith: $('.connect.right', popup),
+                                                zIndex: 2000,
+                                                helper: 'clone',
+                                                appendTo: $('.wrapper', popup),
+                                                scroll: false,
+                                                receive: function(ev, ui) {
+                                                    var data = ui.item.dataset(),
+                                                        list_li = [],
+                                                        confirm_text;
+
+                                                    if(data.endpoint_type === 'device') {
+                                                        confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
+                                                        $('.connect.right li', popup_html).each(function() {
+                                                            if($(this).dataset('id') === data.owner_id) {
+                                                                list_li.push($(this));
+                                                            }
+                                                        });
+                                                    }
+                                                    else if(data.endpoint_type === 'user') {
+                                                        confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
+                                                        $('.connect.right li', popup_html).each(function() {
+                                                            if($(this).dataset('owner_id') === data.id) {
+                                                                list_li.push($(this));
+                                                            }
+                                                        });
+                                                    }
+
+                                                    if(list_li.length > 0) {
+                                                        winkstart.confirm(confirm_text,
+                                                            function() {
+                                                                $.each(list_li, function() {
+                                                                    remove_element(this);
+                                                                });
+                                                            },
+                                                            function() {
+                                                                remove_element(ui.item);
+                                                            }
+                                                        );
+                                                    }
+
+                                                    if($(this).hasClass('right')) {
+                                                        $('.options', ui.item).show();
+                                                        $('.actions', ui.item).show();
+                                                        //$('.item_name', ui.item).addClass('right');
+                                                        $('.column.right .connect', popup).removeClass('no_element');
+                                                    }
+                                                }
+                                            });
+
+                                            $(popup_html).delegate('.trash', 'click', function() {
+                                                var $parent_li = $(this).parents('li').first();
+                                                remove_element($parent_li);
+                                            });
+
+                                            $('.pane_content', popup_html).hide();
+                                            $('#users_pane', popup_html).show();
+
+                                            var remove_element = function(li) {
+                                                var $parent_li = li;
+                                                var data = $parent_li.dataset();
+                                                data.name = jQuery.trim($('.item_name', $parent_li).html());
+                                                $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.page_group_element.tmpl(data));
+                                                $parent_li.remove();
+
+                                                if($('.connect.right li', popup_html).size() == 0) {
+                                                    $('.column.right .connect', popup).addClass('no_element');
+                                                }
+
+                                                if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                    $('#'+data.id, popup_html).hide();
+                                                }
+                                            };
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    );
+                },
                 edit_ring_group = function(node, callback) {
                     var default_timeout = '20',
                         default_delay = '0',
@@ -1287,6 +1580,7 @@ winkstart.module('voip', 'callflow', {
                             var popup, popup_html, index, endpoints
                                 selected_endpoints = {},
                                 unselected_endpoints = [],
+                                unselected_groups = [],
                                 unselected_devices = [],
                                 unselected_users = [];
 
@@ -1313,260 +1607,297 @@ winkstart.module('voip', 'callflow', {
                                 }
                             });
 
-                            winkstart.request('user.list', {
+                            winkstart.request('groups.list', {
                                     account_id: winkstart.apps['voip'].account_id,
                                     api_url: winkstart.apps['voip'].api_url
                                 },
                                 function(_data, status) {
                                     $.each(_data.data, function(i, obj) {
-                                        obj.name = obj.first_name + ' ' + obj.last_name;
-                                        obj.endpoint_type = 'user';
+                                        obj.endpoint_type = 'group';
                                         if(obj.id in selected_endpoints) {
-                                            selected_endpoints[obj.id].endpoint_type = 'user',
+                                            selected_endpoints[obj.id].endpoint_type = 'group',
                                             selected_endpoints[obj.id].name = obj.name;
                                         }
                                         else {
                                             obj.delay = default_delay;
                                             obj.timeout = default_timeout;
-                                            unselected_users.push(obj);
+                                            unselected_groups.push(obj);
                                         }
                                     });
 
-                                    popup_html = THIS.templates.ring_group_dialog.tmpl({
-                                        form: {
-                                            name: node.getMetadata('name') || '',
-                                            strategy: {
-                                                items: [
-                                                    {
-                                                        id: 'simultaneous',
-                                                        name: 'At the same time'
+                                    winkstart.request('user.list', {
+                                            account_id: winkstart.apps['voip'].account_id,
+                                            api_url: winkstart.apps['voip'].api_url
+                                        },
+                                        function(_data, status) {
+                                            $.each(_data.data, function(i, obj) {
+                                                obj.name = obj.first_name + ' ' + obj.last_name;
+                                                obj.endpoint_type = 'user';
+                                                if(obj.id in selected_endpoints) {
+                                                    selected_endpoints[obj.id].endpoint_type = 'user',
+                                                    selected_endpoints[obj.id].name = obj.name;
+                                                }
+                                                else {
+                                                    obj.delay = default_delay;
+                                                    obj.timeout = default_timeout;
+                                                    unselected_users.push(obj);
+                                                }
+                                            });
+
+                                            popup_html = THIS.templates.ring_group_dialog.tmpl({
+                                                form: {
+                                                    name: node.getMetadata('name') || '',
+                                                    strategy: {
+                                                        items: [
+                                                            {
+                                                                id: 'simultaneous',
+                                                                name: 'At the same time'
+                                                            },
+                                                            {
+                                                                id: 'single',
+                                                                name: 'In order'
+                                                            }
+                                                        ],
+                                                        selected: node.getMetadata('strategy') || 'simultaneous'
                                                     },
-                                                    {
-                                                        id: 'single',
-                                                        name: 'In order'
-                                                    }
-                                                ],
-                                                selected: node.getMetadata('strategy') || 'simultaneous'
-                                            },
-                                            timeout: node.getMetadata('timeout') || '30'
-                                        }
-                                    });
+                                                    timeout: node.getMetadata('timeout') || '30'
+                                                }
+                                            });
+                                            $.each(unselected_groups, function() {
+                                                $('#groups_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                            });
 
-                                    $.each(unselected_devices, function() {
-                                        $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                    });
+                                            $.each(unselected_devices, function() {
+                                                $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                            });
 
-                                    $.each(unselected_users, function() {
-                                        $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                    });
+                                            $.each(unselected_users, function() {
+                                                $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                            });
 
-                                    $.each(selected_endpoints, function() {
-                                        //Check if user/device exists.
-                                        if(this.endpoint_type) {
-                                            $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                        }
-                                    });
+                                            $.each(selected_endpoints, function() {
+                                                //Check if user/device exists.
+                                                if(this.endpoint_type) {
+                                                    $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                                }
+                                            });
 
-                                    $('#name', popup_html).bind('keyup blur change', function() {
-                                        $('.column.right .title', popup_html).html('Ring Group - ' + $(this).val());
-                                    });
+                                            $('#name', popup_html).bind('keyup blur change', function() {
+                                                $('.column.right .title', popup_html).html('Ring Group - ' + $(this).val());
+                                            });
 
-                                    $('ul.settings1 > li > a', popup_html).click(function(item) {
-                                        $('.pane_content', popup_html).hide();
+                                            $('ul.settings1 > li > a', popup_html).click(function(item) {
+                                                $('.pane_content', popup_html).hide();
 
-                                        //Reset Search field
-                                        $('.searchfield', popup_html).val('');
-                                        $('.column.left li', popup_html).show();
+                                                //Reset Search field
+                                                $('.searchfield', popup_html).val('');
+                                                $('.column.left li', popup_html).show();
 
-                                        $('ul.settings1 > li', popup_html).removeClass('current');
+                                                $('ul.settings1 > li', popup_html).removeClass('current');
 
-                                        var tab_id = $(this).attr('id');
+                                                var tab_id = $(this).attr('id');
 
-                                        if(tab_id  === 'users_tab_link') {
-                                            $('#users_pane', popup_html).show();
-                                        }
-                                        else if(tab_id === 'devices_tab_link') {
-                                            $('#devices_pane', popup_html).show();
-                                        }
-
-                                        $(this).parent().addClass('current');
-                                    });
-
-                                    $('.searchsubmit2', popup_html).click(function() {
-                                        $('.searchfield', popup_html).val('');
-                                        $('.column li', popup_html).show();
-                                    });
-
-                                    $('#devices_pane .searchfield', popup_html).keyup(function() {
-                                        $('#devices_pane .column.left li').each(function() {
-                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                $(this).hide();
-                                            }
-                                            else {
-                                                $(this).show();
-                                            }
-                                        });
-                                    });
-
-                                    $('#users_pane .searchfield', popup_html).keyup(function() {
-                                        $('#users_pane .column.left li').each(function() {
-                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                $(this).hide();
-                                            }
-                                            else {
-                                                $(this).show();
-                                            }
-                                        });
-                                    });
-
-                                    if(jQuery.isEmptyObject(selected_endpoints)) {
-                                        $('.column.right .connect', popup_html).addClass('no_element');
-                                    }
-                                    else {
-                                        $('.column.right .connect', popup_html).removeClass('no_element');
-                                    }
-
-                                    $('.column.left .options', popup_html).hide();
-                                    $('.column.left .actions', popup_html).hide();
-
-                                    $('.options .option.delay', popup_html).bind('keyup', function() {
-                                        $(this).parents('li').dataset('delay', $(this).val());
-                                    });
-
-                                    $('.options .option.timeout', popup_html).bind('keyup', function() {
-                                        $(this).parents('li').dataset('timeout', $(this).val());
-                                    });
-
-                                    $('#save_ring_group', popup_html).click(function() {
-                                        var name = $('#name', popup_html).val(),
-                                            global_timeout = 0,
-                                            strategy = $('#strategy', popup_html).val();
-
-                                        endpoints = [];
-
-                                        if(strategy === 'simultaneous') {
-                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
-                                                var duration = delay + local_timeout;
-
-                                                if(duration > global_timeout) {
-                                                    global_timeout = duration;
+                                                if(tab_id  === 'users_tab_link') {
+                                                    $('#users_pane', popup_html).show();
+                                                }
+                                                else if(tab_id === 'devices_tab_link') {
+                                                    $('#devices_pane', popup_html).show();
+                                                }
+                                                else if(tab_id === 'groups_tab_link') {
+                                                    $('#groups_pane', popup_html).show();
                                                 }
 
-                                                return global_timeout;
-                                            }
-                                        }
-                                        else {
-                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
-                                                global_timeout += delay + local_timeout;
+                                                $(this).parent().addClass('current');
+                                            });
 
-                                                return global_timeout;
-                                            }
-                                        }
+                                            $('.searchsubmit2', popup_html).click(function() {
+                                                $('.searchfield', popup_html).val('');
+                                                $('.column li', popup_html).show();
+                                            });
 
-                                        $('.right .connect li', popup_html).each(function() {
-                                            var item_data = $(this).dataset();
-                                            delete item_data.owner_id;
-                                            endpoints.push(item_data);
-                                            global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
-                                        });
-
-                                        node.setMetadata('endpoints', endpoints);
-                                        node.setMetadata('name', name);
-                                        node.setMetadata('strategy', strategy);
-                                        node.setMetadata('timeout', global_timeout);
-
-                                        node.caption = name;
-
-                                        popup.dialog('close');
-                                    });
-
-                                    popup = winkstart.dialog(popup_html, {
-                                        title: 'Ring Group',
-                                        beforeClose: function() {
-                                            if(typeof callback == 'function') {
-                                                callback();
-                                            }
-                                        }
-                                    });
-
-                                    $('.scrollable', popup).jScrollPane({
-                                        horizontalDragMinWidth: 0,
-                                        horizontalDragMaxWidth: 0
-                                    });
-
-                                    $('.connect', popup).sortable({
-                                        connectWith: $('.connect.right', popup),
-                                        zIndex: 2000,
-                                        helper: 'clone',
-                                        appendTo: $('.wrapper', popup),
-                                        scroll: false,
-                                        receive: function(ev, ui) {
-                                            var data = ui.item.dataset(),
-                                                list_li = [],
-                                                confirm_text;
-
-                                            if(data.endpoint_type === 'device') {
-                                                confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
-                                                $('.connect.right li', popup_html).each(function() {
-                                                    if($(this).dataset('id') === data.owner_id) {
-                                                        list_li.push($(this));
+                                            $('#devices_pane .searchfield', popup_html).keyup(function() {
+                                                $('#devices_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
                                                     }
                                                 });
-                                            }
-                                            else if(data.endpoint_type === 'user') {
-                                                confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
-                                                $('.connect.right li', popup_html).each(function() {
-                                                    if($(this).dataset('owner_id') === data.id) {
-                                                        list_li.push($(this));
+                                            });
+
+                                            $('#users_pane .searchfield', popup_html).keyup(function() {
+                                                $('#users_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
                                                     }
                                                 });
+                                            });
+
+                                            $('#groups_pane .searchfield', popup_html).keyup(function() {
+                                                $('#groups_pane .column.left li').each(function() {
+                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#groups_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                        $(this).hide();
+                                                    }
+                                                    else {
+                                                        $(this).show();
+                                                    }
+                                                });
+                                            });
+
+                                            if(jQuery.isEmptyObject(selected_endpoints)) {
+                                                $('.column.right .connect', popup_html).addClass('no_element');
+                                            }
+                                            else {
+                                                $('.column.right .connect', popup_html).removeClass('no_element');
                                             }
 
-                                            if(list_li.length > 0) {
-                                                winkstart.confirm(confirm_text,
-                                                    function() {
-                                                        $.each(list_li, function() {
-                                                            remove_element(this);
+                                            $('.column.left .options', popup_html).hide();
+                                            $('.column.left .actions', popup_html).hide();
+
+                                            $('.options .option.delay', popup_html).bind('keyup', function() {
+                                                $(this).parents('li').dataset('delay', $(this).val());
+                                            });
+
+                                            $('.options .option.timeout', popup_html).bind('keyup', function() {
+                                                $(this).parents('li').dataset('timeout', $(this).val());
+                                            });
+
+                                            $('#save_ring_group', popup_html).click(function() {
+                                                var name = $('#name', popup_html).val(),
+                                                    global_timeout = 0,
+                                                    strategy = $('#strategy', popup_html).val();
+
+                                                endpoints = [];
+
+                                                if(strategy === 'simultaneous') {
+                                                    var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                        var duration = delay + local_timeout;
+
+                                                        if(duration > global_timeout) {
+                                                            global_timeout = duration;
+                                                        }
+
+                                                        return global_timeout;
+                                                    }
+                                                }
+                                                else {
+                                                    var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                        global_timeout += delay + local_timeout;
+
+                                                        return global_timeout;
+                                                    }
+                                                }
+
+                                                $('.right .connect li', popup_html).each(function() {
+                                                    var item_data = $(this).dataset();
+                                                    delete item_data.owner_id;
+                                                    endpoints.push(item_data);
+                                                    global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
+                                                });
+
+                                                node.setMetadata('endpoints', endpoints);
+                                                node.setMetadata('name', name);
+                                                node.setMetadata('strategy', strategy);
+                                                node.setMetadata('timeout', global_timeout);
+
+                                                node.caption = name;
+
+                                                popup.dialog('close');
+                                            });
+
+                                            popup = winkstart.dialog(popup_html, {
+                                                title: 'Ring Group',
+                                                beforeClose: function() {
+                                                    if(typeof callback == 'function') {
+                                                        callback();
+                                                    }
+                                                }
+                                            });
+
+                                            $('.scrollable', popup).jScrollPane({
+                                                horizontalDragMinWidth: 0,
+                                                horizontalDragMaxWidth: 0
+                                            });
+
+                                            $('.connect', popup).sortable({
+                                                connectWith: $('.connect.right', popup),
+                                                zIndex: 2000,
+                                                helper: 'clone',
+                                                appendTo: $('.wrapper', popup),
+                                                scroll: false,
+                                                receive: function(ev, ui) {
+                                                    var data = ui.item.dataset(),
+                                                        list_li = [],
+                                                        confirm_text;
+
+                                                    if(data.endpoint_type === 'device') {
+                                                        confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
+                                                        $('.connect.right li', popup_html).each(function() {
+                                                            if($(this).dataset('id') === data.owner_id) {
+                                                                list_li.push($(this));
+                                                            }
                                                         });
-                                                    },
-                                                    function() {
-                                                        remove_element(ui.item);
                                                     }
-                                                );
-                                            }
+                                                    else if(data.endpoint_type === 'user') {
+                                                        confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
+                                                        $('.connect.right li', popup_html).each(function() {
+                                                            if($(this).dataset('owner_id') === data.id) {
+                                                                list_li.push($(this));
+                                                            }
+                                                        });
+                                                    }
 
-                                            if($(this).hasClass('right')) {
-                                                $('.options', ui.item).show();
-                                                $('.actions', ui.item).show();
-                                                //$('.item_name', ui.item).addClass('right');
-                                                $('.column.right .connect', popup).removeClass('no_element');
-                                            }
+                                                    if(list_li.length > 0) {
+                                                        winkstart.confirm(confirm_text,
+                                                            function() {
+                                                                $.each(list_li, function() {
+                                                                    remove_element(this);
+                                                                });
+                                                            },
+                                                            function() {
+                                                                remove_element(ui.item);
+                                                            }
+                                                        );
+                                                    }
+
+                                                    if($(this).hasClass('right')) {
+                                                        $('.options', ui.item).show();
+                                                        $('.actions', ui.item).show();
+                                                        //$('.item_name', ui.item).addClass('right');
+                                                        $('.column.right .connect', popup).removeClass('no_element');
+                                                    }
+                                                }
+                                            });
+
+                                            $(popup_html).delegate('.trash', 'click', function() {
+                                                var $parent_li = $(this).parents('li').first();
+                                                remove_element($parent_li);
+                                            });
+
+                                            $('.pane_content', popup_html).hide();
+                                            $('#users_pane', popup_html).show();
+
+                                            var remove_element = function(li) {
+                                                var $parent_li = li;
+                                                var data = $parent_li.dataset();
+                                                data.name = jQuery.trim($('.item_name', $parent_li).html());
+                                                $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
+                                                $parent_li.remove();
+
+                                                if($('.connect.right li', popup_html).size() == 0) {
+                                                    $('.column.right .connect', popup).addClass('no_element');
+                                                }
+
+                                                if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                    $('#'+data.id, popup_html).hide();
+                                                }
+                                            };
                                         }
-                                    });
-
-                                    $(popup_html).delegate('.trash', 'click', function() {
-                                        var $parent_li = $(this).parents('li').first();
-                                        remove_element($parent_li);
-                                    });
-
-                                    $('.pane_content', popup_html).hide();
-                                    $('#users_pane', popup_html).show();
-
-                                    var remove_element = function(li) {
-                                        var $parent_li = li;
-                                        var data = $parent_li.dataset();
-                                        data.name = jQuery.trim($('.item_name', $parent_li).html());
-                                        $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
-                                        $parent_li.remove();
-
-                                        if($('.connect.right li', popup_html).size() == 0) {
-                                            $('.column.right .connect', popup).addClass('no_element');
-                                        }
-
-                                        if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                            $('#'+data.id, popup_html).hide();
-                                        }
-                                    };
+                                    );
                                 }
                             );
                         }
@@ -1655,7 +1986,29 @@ winkstart.module('voip', 'callflow', {
                         );
                     }
                 },
-
+                'page_group[]': {
+                    name: 'Page Group',
+                    icon: 'ring_group',
+                    category: 'Advanced',
+                    module: 'page_group',
+                    tip: 'Ring several VoIP or cell phones',
+                    data: {
+                        name: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('name') || '';
+                    },
+                    edit: function(node, callback) {
+                        edit_page_group(node, callback);
+                    }
+                },
                 'ring_group[]': {
                     name: 'Ring Group',
                     icon: 'ring_group',
