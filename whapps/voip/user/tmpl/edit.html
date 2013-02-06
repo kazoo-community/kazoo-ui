@@ -214,6 +214,7 @@
 
 	            <div id="options">
                     <h3>Standard Options</h3>
+
 	            	<div class="clearfix">
 						<div class="input">
 							<ul class="inputs-list">
@@ -261,6 +262,25 @@
 							</span>
 						</div>
 					</div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                           <ul class="inputs-list">
+                               <li>
+                                    <label>
+                                        <span rel="popover" data-content="By checking this box, this endpoint will not be displayed in the Contact List of the Devices">
+                                            {{if data.contact_list.exclude === true}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" checked="checked" />
+                                            {{else}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" />
+                                            {{/if}}
+                                            <span>Hide from Contact List</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
                     <hr/>
                     <h3>Queue Options</h3>
 

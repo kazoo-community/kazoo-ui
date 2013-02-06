@@ -42,6 +42,10 @@
     width: 420px;
 }
 
+#ring_group_popup.page_group #two_columns .column.right .item_name {
+    width: 315px;
+}
+
 #ring_group_popup #two_columns .column.right .item_name {
     width: 205px;
     padding-left: 6px;
@@ -84,6 +88,10 @@
     line-height: 28px;
 }
 
+#ring_group_popup.page_group #two_columns .column.right .title_column .title{
+    width: 353px;
+}
+
 #ring_group_popup .form_content .popup_field select {
     width: auto;
 }
@@ -97,12 +105,12 @@
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li {
-    width: 108px;
+    width: 71px;
     height: 22px;
     line-height: 22px;
     border: 1px solid #888;
     float: left;
-    border-radius: 0px 5px 0px 0px;
+    border-radius: 0px;
     color: #fff;
     background: #b2b2b2; /* Old browsers */
     background: -moz-linear-gradient(top, #b2b2b2 1%, #7c7c7c 50%, #333333 100%); /* FF3.6+ */
@@ -116,6 +124,11 @@
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li:first-child {
     border-radius: 5px 0px 0px 0px;
+}
+
+#ring_group_popup #two_columns .wrapper .settings_tabs > li:last-of-type {
+    border-radius: 0px 5px 0px 0px;
+    width: 72px;
 }
 
 #ring_group_popup #two_columns .wrapper .settings_tabs > li.current{
@@ -134,7 +147,6 @@
     text-decoration: none;
     color: #fff;
     display: block;
-    width: 108px;
     height: 22px;
 }
 
