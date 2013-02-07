@@ -138,6 +138,7 @@ function(args) {
             delete form_data.extra;
 
             var data_api = {
+                operation: 'update',
                 endpoints: selected_endpoints,
                 settings: form_data
             };
