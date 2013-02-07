@@ -176,12 +176,12 @@ table.display thead th {
 }
 
 table.display thead th:first-child {
-    border-radius: 5px 0 0 0;
+    border-top-left-radius: 5px;
 }
 
 table.display thead th:last-child {
     border-right: none;
-    border-radius: 0 5px 0 0;
+    border-top-right-radius: 5px;
 }
 
 table.display tfoot th {

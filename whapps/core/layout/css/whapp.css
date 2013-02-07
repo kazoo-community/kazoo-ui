@@ -343,7 +343,8 @@ form .clearfix:last-child {
 }
 
 .buttons-right {
-	float:right;
+    margin-bottom: 25px;
+    text-align: right;
 }
 
 .buttons-right>.btn:not(:last-child) {
