@@ -439,16 +439,20 @@ winkstart.module('voip', 'groups', {
 
         clean_form_data: function(form_data, field_data) {
             var new_resource = {};
-            $.each(form_data.resources, function(k, v) {
-                if(v !== false) {
-                    if(v in field_data.resources['local']) {
-                        new_resource[v] = { type: 'local' };
+
+            if('resources' in form_data) {
+                $.each(form_data.resources, function(k, v) {
+                    if(v !== false) {
+                        if(v in field_data.resources['local']) {
+                            new_resource[v] = { type: 'local' };
+                        }
+                        else {
+                            new_resource[v] = { type: 'global' };
+                        }
                     }
-                    else {
-                        new_resource[v] = { type: 'global' };
-                    }
-                }
-            });
+                });
+            }
+
             form_data.resources = new_resource;
 
             delete form_data.extra;
