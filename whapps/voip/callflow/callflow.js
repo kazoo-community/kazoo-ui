@@ -357,6 +357,7 @@ winkstart.module('voip', 'callflow', {
                         THIS._resetFlow();
                         THIS.flow.id = json.data.id;
                         THIS.flow.name = json.data.name;
+                        THIS.flow.contact_list = { exclude: 'contact_list' in json.data ? json.data.contact_list.exclude || false : false };
                         THIS.flow.caption_map = json.data.metadata;
 
                         if(json.data.flow.module != undefined) {
@@ -652,7 +653,7 @@ winkstart.module('voip', 'callflow', {
                     node_html = THIS.templates.root.tmpl({name: THIS.flow.name || 'Callflow'});
 
                     $('.edit_icon', node_html).click(function() {
-                        var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name}), {
+                        var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name, exclude: THIS.flow.contact_list.exclude}), {
                             width: '310px',
                             title: 'Edit Callflow Name'
                         });
@@ -667,6 +668,9 @@ winkstart.module('voip', 'callflow', {
                                 THIS.flow.name = '';
                                 $('.root .top_bar .name', layout).html('Callflow');
                             }
+                            THIS.flow.contact_list = {
+                                exclude: $('#callflow_exclude', popup).prop('checked')
+                            };
                             //THIS.save_callflow_no_loading();
                             THIS.renderFlow();
 
@@ -1139,6 +1143,10 @@ winkstart.module('voip', 'callflow', {
 
                 if(THIS.flow.name !== '') {
                     data_request.name = THIS.flow.name;
+                }
+
+                if('contact_list' in THIS.flow) {
+                    data_request.contact_list = { exclude: THIS.flow.contact_list.exclude || false };
                 }
 
                 if(THIS.flow.id) {

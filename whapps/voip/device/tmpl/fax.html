@@ -17,6 +17,7 @@
 		 	<li class="active"><a href="#basic">Basic</a></li>
 		 	<li><a href="#caller_id">Caller ID</a></li>
 		 	<li><a href="#sip_settings">SIP Settings</a></li>
+		 	<li><a href="#options">Options</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
 			<div class="pill-content">
@@ -148,6 +149,7 @@
                     </div>
 				</div>
 
+
 				<div id="sip_settings">
 					<div class="clearfix">
 						<label for="sip_realm">Realm</label>
@@ -218,6 +220,27 @@
 						</div>
 					</div>
 				</div>
+
+                <div id="options">
+                    <div class="clearfix">
+                        <div class="input">
+                           <ul class="inputs-list">
+                               <li>
+                                    <label>
+                                        <span rel="popover" data-content="By checking this box, this endpoint will not be added automatically to the contact list of the devices of this platform">
+                                            {{if data.contact_list.exclude === true}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" checked="checked" />
+                                            {{else}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" />
+                                            {{/if}}
+                                            <span>Hide from Contact List</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
+                </div>
 			</div>
 
 			<input type="hidden" value="true" name="media.fax.option"/>

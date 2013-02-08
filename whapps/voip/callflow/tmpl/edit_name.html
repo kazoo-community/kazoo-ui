@@ -6,6 +6,22 @@
                     <label for="callflow_name">Callflow Name: </label>
                     <input type="text" id="callflow_name" class="medium" value="${name}"/>
                 </div>
+                <div class="popup_field">
+                   <ul class="inputs-list">
+                       <li>
+                           <label>
+                               <span rel="popover" data-content="By checking this box, this endpoint will not be added automatically to the contact list of the devices of this platform">
+                                   {{if exclude}}
+                                       <input type="checkbox" id="callflow_exclude" checked/>
+                                   {{else}}
+                                       <input type="checkbox" id="callflow_exclude"/>
+                                   {{/if}}
+                                   <span>Hide from Contact List</span>
+                               </span>
+                           </label>
+                        </li>
+                    </ul>
+                </div>
                 <div class="fancy_help_text">Giving a name to a callflow isn't mandatory. Leave the field blank and the callflow will be displayed in the left listing as the list of numbers used in this callflow.</div>
             </div>
         </form>
