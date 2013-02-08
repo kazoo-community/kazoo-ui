@@ -307,6 +307,9 @@ winkstart.module('voip', 'device', {
                             password: winkstart.random_string(12),
                             expire_seconds: '360'
                         },
+                        contact_list: {
+                            exclude: false
+                        },
                         call_forward: {},
                         music_on_hold: {}
                     }, data_defaults || {}),

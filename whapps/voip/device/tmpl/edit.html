@@ -19,8 +19,7 @@
             <li><a href="#sip_settings">SIP Settings</a></li>
             <li><a href="#audio_settings">Audio Settings</a></li>
             <li><a href="#video_settings">Video Settings</a></li>
-            <li><a href="#fax_support">Fax Support</a></li>
-            <li><a href="#ringtones">Ringtones</a></li>
+            <li><a href="#options">Options</a></li>
         </ul>
         <form id="device-form" action="" method="post">
             <div class="pill-content">
@@ -308,7 +307,7 @@
                     {{/each}}
                 </div>
 
-                <div id="fax_support">
+                <div id="options">
                     <div class="clearfix">
                         <label for="media_fax_option">T.38</label>
                         <div class="input">
@@ -324,10 +323,6 @@
                         </div>
                     </div>
 
-                    <input type="hidden" name="media.fax.option" value="false"/>
-                </div>
-
-                <div id="ringtones">
                     <div class="clearfix">
                         <label for="ringtones_internal">Internal Ringtones</label>
                         <div class="input">
@@ -341,6 +336,26 @@
                             <input class="span4" id="ringtones_external" name="ringtones.external" type="text" placeholder="" value="${data.ringtones.external}" rel="popover" data-content="The alert info SIP header added when the call is from external sources"/>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                           <ul class="inputs-list">
+                               <li>
+                                    <label>
+                                        <span rel="popover" data-content="By checking this box, this endpoint will not be added automatically to the contact list of the devices of this platform">
+                                            {{if data.contact_list.exclude === true}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" checked="checked" />
+                                            {{else}}
+                                            <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" />
+                                            {{/if}}
+                                            <span>Hide from Contact List</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
+                    <input type="hidden" name="media.fax.option" value="false"/>
                 </div>
             </div>
         </form>
