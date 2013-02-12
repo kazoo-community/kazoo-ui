@@ -15,11 +15,12 @@
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>
-		 	<li><a href="#options"><span class="icon conference"></span>Options</a></li>
-		 	<li><a href="#call_forward"><span class="icon cdr"></span>Call Forward</a></li>
-		 	<li><a href="#password_management"><span class="icon sip"></span>Password Management</a></li>
-		 	<li><a href="#hot_desking"><span class="icon phone"></span>Hot Desking</a></li>
+		 	<li><a href="#caller_id">Caller ID</a></li>
+		 	<li><a href="#options">Options</a></li>
+		 	<li><a href="#call_forward">Call Forward</a></li>
+		 	<li><a href="#password_management">Password Management</a></li>
+		 	<li><a href="#hot_desking">Hot Desking</a></li>
+            <li><a href="#restrictions">Restrictions</a></li>
 		</ul>
 		<form id="user-form" action="#" method="post">
 			<div class="pill-content">
@@ -522,8 +523,32 @@
 	            		    </ul>
 	            		</div>
 	            	</div>
-
 	            </div>
+
+                <div id="restrictions">
+                    {{each(k, v) field_data.call_restriction}}
+                    <div class="clearfix">
+						<label>${v.friendly_name}</label>
+						<div class="input">
+							 <select name="call_restriction.${k}.action" class="medium" rel="popover">
+                                {{if data.call_restriction[k].action === 'allow'}}
+                                    <option value="allow" selected>Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else data.call_restriction[k].action === 'deny'}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny" selected>Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit" selected>Inherit</option>
+                                {{/if}}
+                            </select>
+						</div>
+					</div>
+                    {{/each}}
+                </div>
 			</div>
 		</form>
 		<div class="buttons-right">

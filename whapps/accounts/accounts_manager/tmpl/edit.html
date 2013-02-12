@@ -15,11 +15,14 @@
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
             <li class="active"><a href="#basic">Basic</a></li>
-            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email Template</a></li>
-            <li><a href="#monitoring"><span class="icon fax"></span>Monitoring</a></li>
-            <li><a href="#billing"><span class="icon sip"></span>Billing</a></li>
-            <li><a href="#applications"><span class="icon sip"></span>Available Apps</a></li>
-            <li><a href="#white_labeling"><span class="icon sip"></span>White labeling</a></li>
+            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email</a></li>
+            <li><a href="#monitoring"></span>Monitoring</a></li>
+            <li><a href="#billing">Billing</a></li>
+            <li><a href="#applications">Available Apps</a></li>
+            <li><a href="#white_labeling">White labeling</a></li>
+            {{if field_data.enable_call_restriction}}
+                <li><a href="#restrictions">Restrictions</a></li>
+            {{/if}}
         </ul>
         <form action="#" id="accounts_manager-form">
             <div class="pill-content">
@@ -347,7 +350,32 @@
                         In order to see these changes, refresh the page once you saved this account!
                     </div>
                 </div>
-
+                {{if field_data.enable_call_restriction}}
+                    <div id="restrictions">
+                        {{each(k, v) field_data.call_restriction}}
+                        <div class="clearfix">
+                            <label>${v.friendly_name}</label>
+                            <div class="input">
+                                 <select name="call_restriction.${k}.action" class="medium" rel="popover">
+                                    {{if data.call_restriction[k].action === 'allow'}}
+                                        <option value="allow" selected>Allow</option>
+                                        <option value="deny">Deny</option>
+                                        <option value="inherit">Inherit</option>
+                                    {{else data.call_restriction[k].action === 'deny'}}
+                                        <option value="allow">Allow</option>
+                                        <option value="deny" selected>Deny</option>
+                                        <option value="inherit">Inherit</option>
+                                    {{else}}
+                                        <option value="allow">Allow</option>
+                                        <option value="deny">Deny</option>
+                                        <option value="inherit" selected>Inherit</option>
+                                    {{/if}}
+                                </select>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
             </div>
         </form>
         <div class="buttons-right">
