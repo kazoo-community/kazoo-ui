@@ -69,6 +69,11 @@ winkstart.module('userportal', 'portal_manager', {
         ],
 
         resources: {
+            'portal_manager.contact_list': {
+                url: '{api_url}/accounts/{account_id}/contact_list',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'portal_account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
@@ -355,6 +360,56 @@ winkstart.module('userportal', 'portal_manager', {
             });
         },
 
+        setup_contact_list_table: function(parent) {
+            var THIS = this,
+                parent = $('.bottom_part', parent);
+
+            var columns = [
+                {
+                    'sTitle': 'Name',
+                    'sWidth': '350px'
+                },
+                {
+                    'sTitle': 'Number',
+                    'sWidth': '350px'
+                }
+            ];
+
+            winkstart.table.create('contact_list', $('#contact_list_grid', parent), columns, {}, {
+                sDom: '<"date">frtlip',
+                bAutoWidth: false,
+                aaSorting: [[1, 'desc']]
+            });
+
+            $('.cancel-search', parent).click(function(){
+                $('#contact_list-grid_filter input[type=text]', parent).val('');
+                winkstart.table.contact_list.fnFilter('');
+            });
+
+            winkstart.request(true, 'portal_manager.contact_list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    if(_data.data) {
+
+                        $.fn.dataTableExt.afnFiltering.pop();
+
+                        var tab_data = [];
+
+                        $.each(_data.data, function(k, v) {
+                            tab_data.push([
+                                v.name,
+                                v.internal_number,
+                            ]);
+                        });
+
+                        winkstart.table.contact_list.fnAddData(tab_data);
+                    }
+                }
+            );
+        },
+
         setup_page: function(parent) {
             var THIS = this,
                 portal_manager_html = parent;
@@ -372,6 +427,12 @@ winkstart.module('userportal', 'portal_manager', {
 
             $('#vm-to-email-checkbox', portal_manager_html).change(function() {
                 $('#vm-to-email-checkbox', portal_manager_html).attr('checked') ? $('.email-field', portal_manager_html).slideDown() : $('.email-field', portal_manager_html).slideUp();
+            });
+
+            $('#contact_list_btn', portal_manager_html).click(function(e) {
+                e.preventDefault();
+
+                THIS.popup_contact_list();
             });
 
             $('#save-settings-link', portal_manager_html).click(function(e) {
@@ -408,6 +469,9 @@ winkstart.module('userportal', 'portal_manager', {
 
             /*CDRs Part*/
             THIS.setup_cdr_table(parent);
+
+            /* Contact List Part */
+            THIS.setup_contact_list_table(parent);
 
             /* My devices part */
             $(parent).delegate('.edit_icon', 'click', function() {

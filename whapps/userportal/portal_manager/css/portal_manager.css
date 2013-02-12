@@ -22,9 +22,16 @@
 }
 
 .portal-view .right_part {
-    width: 388px;
+    width: 400px;
     float: left;
     border-left: 1px solid #333;
+}
+
+.portal-view .bottom_part {
+    border-top: 1px solid #555;
+    float: left;
+    width: 1000px;
+    padding: 20px;
 }
 
 .portal-view .block {
@@ -34,10 +41,12 @@
 
 .portal-view .left_part .block:first-child, .portal-view .right_part .block:first-child {
     border-bottom: 1px solid #333;
+    border-top: 1px solid #555;
 }
 
 .portal-view .left_part .block:last-child, .portal-view .right_part .block:last-child {
     border-top: 1px solid #555;
+    border-bottom: 1px solid #333;
 }
 
 .portal-view .buttons {
@@ -257,4 +266,3 @@
 .portal-view .sorting_asc, .portal-view .sorting_desc, .portal-view .sorting {
     background: #222;
 }
-
