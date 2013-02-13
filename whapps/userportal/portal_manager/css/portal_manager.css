@@ -43,6 +43,11 @@
     text-decoration: underline;
 }
 
+.portal-view .bottom_part #manual_number {
+    margin: 0 10px;
+    width: 140px;
+}
+
 .portal-view .block {
     height: 320px;
     padding: 20px;
