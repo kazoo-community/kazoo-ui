@@ -12,6 +12,11 @@ winkstart.module('voip', 'bulk', {
 	},
 
 	resources: {
+        'bulk.list_classifiers': {
+			url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
 		'bulk.list': {
 			url: '{api_url}/accounts/{account_id}/bulk',
 			contentType: 'application/json',
@@ -80,39 +85,61 @@ function(args) {
 	activate: function(data) {
 		var THIS = this,
             defaults = {
-                field_data: {}
+                data: {
+                    call_restriction: {}
+                },
+                field_data: {
+                    call_restriction: {}
+                }
             };
 
-        winkstart.request(true, 'media.list', {
+        winkstart.request('bulk.list_classifiers', {
                 account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
+                api_url: winkstart.apps['voip'].api_url,
             },
-            function(_data, status) {
-                if(_data.data) {
-                    _data.data.unshift(
-                        {
-                            id: '',
-                            name: 'Default Music'
-                        },
-                        {
-                            id: 'silence_stream://300000',
-                            name: 'Silence'
-                        }
-                    );
-                    defaults.field_data.media = _data.data;
+            function(_data_classifiers, status) {
+                if('data' in _data_classifiers) {
+                    $.each(_data_classifiers.data, function(k, v) {
+                        defaults.field_data.call_restriction[k] = {
+                            friendly_name: v.friendly_name
+                        };
 
-                    var bulk_html = THIS.templates.bulk.tmpl(defaults);
-
-                    THIS.bind_events(bulk_html);
-
-                    $('#ws-content').empty().append(bulk_html);
-
-                    THIS.init_table(bulk_html);
-
-                    $.fn.dataTableExt.afnFiltering.pop();
-
-                    THIS.list_endpoints();
+                        defaults.data.call_restriction[k] = { action: 'inherit' };
+                    });
                 }
+
+                winkstart.request(true, 'media.list', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.apps['voip'].api_url
+                    },
+                    function(_data, status) {
+                        if(_data.data) {
+                            _data.data.unshift(
+                                {
+                                    id: '',
+                                    name: 'Default Music'
+                                },
+                                {
+                                    id: 'silence_stream://300000',
+                                    name: 'Silence'
+                                }
+                            );
+                            defaults.field_data.media = _data.data;
+
+                            var bulk_html = THIS.templates.bulk.tmpl(defaults);
+
+                            THIS.bind_events(bulk_html);
+
+                            $('#ws-content').empty().append(bulk_html);
+
+                            THIS.init_table(bulk_html);
+
+                            $.fn.dataTableExt.afnFiltering.pop();
+
+                            THIS.list_endpoints();
+                        }
+                    }
+                );
             }
         );
 	},

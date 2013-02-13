@@ -357,16 +357,10 @@
                             <label>${v.friendly_name}</label>
                             <div class="input">
                                  <select name="call_restriction.${k}.action" class="medium" rel="popover">
-                                    {{if data.call_restriction[k].action === 'allow'}}
-                                        <option value="allow" selected>Allow</option>
-                                        <option value="deny">Deny</option>
-                                        <option value="inherit">Inherit</option>
-                                    {{else data.call_restriction[k].action === 'deny'}}
-                                        <option value="allow">Allow</option>
+                                    {{if data.call_restriction[k].action === 'deny'}}
                                         <option value="deny" selected>Deny</option>
                                         <option value="inherit">Inherit</option>
                                     {{else}}
-                                        <option value="allow">Allow</option>
                                         <option value="deny">Deny</option>
                                         <option value="inherit" selected>Inherit</option>
                                     {{/if}}
