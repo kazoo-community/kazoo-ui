@@ -17,6 +17,7 @@
 		 	<li class="active"><a href="#basic">Basic</a></li>
 		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
 		 	<li><a href="#sip_settings">Wifi Calling</a></li>
+		 	<li><a href="#restrictions">Restrictions</a></li>
 		</ul>
 		<form id="device-form" action="" method="post">
 			<div class="pill-content">
@@ -211,6 +212,30 @@
 						</div>
 					</div>
 				</div>
+                <div id="restrictions">
+                    {{each(k, v) field_data.call_restriction}}
+                    <div class="clearfix">
+                        <label>${v.friendly_name}</label>
+                        <div class="input">
+                             <select name="call_restriction.${k}.action" class="medium" rel="popover">
+                                {{if data.call_restriction[k].action === 'allow'}}
+                                    <option value="allow" selected>Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else data.call_restriction[k].action === 'deny'}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny" selected>Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit" selected>Inherit</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
 			</div>
 		</form>
 		<div class="buttons-right">

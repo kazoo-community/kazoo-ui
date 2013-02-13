@@ -29,6 +29,11 @@ winkstart.module('accounts', 'accounts_manager', {
         ],
 
         resources: {
+            'accounts_manager.list_classifiers': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'accounts_manager.list': {
                 url: '{api_url}/accounts/{account_id}/children',
                 contentType: 'application/json',
@@ -208,6 +213,7 @@ winkstart.module('accounts', 'accounts_manager', {
                 },
                 defaults = {
                     data: $.extend(true, {
+                        call_restriction: {},
                         notifications: {
                             voicemail_to_email: {}
                         }
@@ -218,6 +224,8 @@ winkstart.module('accounts', 'accounts_manager', {
                             nav: {},
                             port: {}
                         },
+                        call_restriction: {},
+                        enable_call_restriction: false,
                         available_apps: []
                     },
                     functions: {
@@ -228,142 +236,169 @@ winkstart.module('accounts', 'accounts_manager', {
                             else return false;
                         }
                     }
-                };
-
-
-            winkstart.request(true, 'accounts_manager.get', {
-                    account_id: winkstart.apps['accounts'].account_id,
-                    api_url: winkstart.apps['accounts'].api_url
                 },
-                function(_data_account, status) {
-                    _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
-                    if(typeof data == 'object' && data.id) {
-                        var render = function() {
-                            winkstart.request('accounts_manager.get', {
-                                    account_id: data.id,
-                                    api_url: winkstart.apps['accounts'].api_url
-                                },
-                                function(_data, status) {
-                                    THIS.migrate_data(_data);
-                                    THIS.format_data(_data);
-
-                                    var render_data = $.extend(true, defaults, _data);
-
-                                    $.each(_data_account.data.available_apps, function(k, v) {
-                                        var tmp = {},
-                                            available = $.inArray(v, _data.data.available_apps || []);
-
-                                        if(available > -1){
-                                            tmp.enabled = true;
-                                        } else {
-                                            tmp.enabled = false;
-                                        }
-
-                                        if(winkstart.config.available_apps[v]) {
-                                            $.extend(true, tmp, winkstart.config.available_apps[v]);
-                                        }
-
-                                        render_data.field_data.available_apps.push(tmp);
-                                    });
-
-                                    winkstart.request('accounts_manager.credits.get', {
+                get_account = function() {
+                    winkstart.request(true, 'accounts_manager.get', {
+                            account_id: winkstart.apps['accounts'].account_id,
+                            api_url: winkstart.apps['accounts'].api_url
+                        },
+                        function(_data_account, status) {
+                            _data_account.data.available_apps = _data_account.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
+                            if(typeof data == 'object' && data.id) {
+                                var render = function() {
+                                    winkstart.request('accounts_manager.get', {
                                             account_id: data.id,
-                                            api_url: winkstart.apps['accounts'].api_url,
-                                            billing_provider: THIS.billing_provider,
+                                            api_url: winkstart.apps['accounts'].api_url
                                         },
-                                        function(_data_c, status) {
-                                            render_data.credits = _data_c.data;
+                                        function(_data, status) {
+                                            THIS.migrate_data(_data);
+                                            THIS.format_data(_data);
 
-                                            winkstart.request('accounts_manager.limits.get', {
+                                            var render_data = $.extend(true, defaults, _data);
+
+                                            $.each(_data_account.data.available_apps, function(k, v) {
+                                                var tmp = {},
+                                                    available = $.inArray(v, _data.data.available_apps || []);
+
+                                                if(available > -1){
+                                                    tmp.enabled = true;
+                                                } else {
+                                                    tmp.enabled = false;
+                                                }
+
+                                                if(winkstart.config.available_apps[v]) {
+                                                    $.extend(true, tmp, winkstart.config.available_apps[v]);
+                                                }
+
+                                                render_data.field_data.available_apps.push(tmp);
+                                            });
+
+                                            winkstart.request('accounts_manager.credits.get', {
                                                     account_id: data.id,
-                                                    api_url: winkstart.apps['accounts'].api_url
+                                                    api_url: winkstart.apps['accounts'].api_url,
+                                                    billing_provider: THIS.billing_provider,
                                                 },
-                                                function(_data_l, status) {
-                                                    var limits = {
-                                                        inbound_trunks: 0,
-                                                        twoway_trunks: 0
-                                                    };
-                                                    $.extend(true, limits, _data_l.data);
-                                                    render_data.limits = limits;
+                                                function(_data_c, status) {
+                                                    render_data.credits = _data_c.data;
 
-                                                    THIS.render_accounts_manager(render_data, target, callbacks);
+                                                    winkstart.request('accounts_manager.limits.get', {
+                                                            account_id: data.id,
+                                                            api_url: winkstart.apps['accounts'].api_url
+                                                        },
+                                                        function(_data_l, status) {
+                                                            var limits = {
+                                                                inbound_trunks: 0,
+                                                                twoway_trunks: 0
+                                                            };
+                                                            $.extend(true, limits, _data_l.data);
+                                                            render_data.limits = limits;
 
-                                                    if(typeof callbacks.after_render == 'function') {
-                                                        callbacks.after_render();
-                                                    }
+                                                            THIS.render_accounts_manager(render_data, target, callbacks);
+
+                                                            if(typeof callbacks.after_render == 'function') {
+                                                                callbacks.after_render();
+                                                            }
+                                                        }
+                                                    );
+                                                },
+                                                function() {
+                                                    winkstart.request('accounts_manager.limits.get', {
+                                                            account_id: data.id,
+                                                            api_url: winkstart.apps['accounts'].api_url
+                                                        },
+                                                        function(_data_l, status) {
+                                                            var limits = {
+                                                                inbound_trunks: 0,
+                                                                twoway_trunks: 0
+                                                            };
+                                                            $.extend(true, limits, _data_l.data);
+                                                            render_data.limits = limits;
+
+                                                            THIS.render_accounts_manager(render_data, target, callbacks);
+
+                                                            if(typeof callbacks.after_render == 'function') {
+                                                                callbacks.after_render();
+                                                            }
+                                                        }
+                                                    );
                                                 }
                                             );
                                         },
-                                        function() {
-                                            winkstart.request('accounts_manager.limits.get', {
-                                                    account_id: data.id,
-                                                    api_url: winkstart.apps['accounts'].api_url
-                                                },
-                                                function(_data_l, status) {
-                                                    var limits = {
-                                                        inbound_trunks: 0,
-                                                        twoway_trunks: 0
-                                                    };
-                                                    $.extend(true, limits, _data_l.data);
-                                                    render_data.limits = limits;
-
-                                                    THIS.render_accounts_manager(render_data, target, callbacks);
-
-                                                    if(typeof callbacks.after_render == 'function') {
-                                                        callbacks.after_render();
-                                                    }
-                                                }
-                                            );
-                                        }
+                                        winkstart.error_message.process_error()
                                     );
-                                },
-                                winkstart.error_message.process_error()
-                            );
-                        };
+                                };
 
-                        winkstart.request('whitelabel.get', {
-                                account_id: data.id,
-                                api_url: winkstart.apps['accounts'].api_url
-                            },
-                            function(_data_wl, status) {
-                                defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
-                                defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
+                                winkstart.request('whitelabel.get', {
+                                        account_id: data.id,
+                                        api_url: winkstart.apps['accounts'].api_url
+                                    },
+                                    function(_data_wl, status) {
+                                        defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
+                                        defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 
-                                render();
-                            },
-                            function(_data_wl, status) {
-                                if(status === 404) {
-                                    render();
+                                        render();
+                                    },
+                                    function(_data_wl, status) {
+                                        if(status === 404) {
+                                            render();
+                                        }
+                                    }
+                                );
+
+                            } else {
+                                defaults.field_data.available_apps = [];
+
+                                $.each(_data_account.data.available_apps, function(k, v) {
+                                    if(winkstart.config.available_apps[v]) {
+                                        defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
+                                    }
+                                });
+
+                                defaults.limits = {
+                                    inbound_trunks: 0,
+                                    twoway_trunks: 0
+                                };
+
+                                defaults.credits = {
+                                    amount: 0
+                                };
+
+                                THIS.render_accounts_manager(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
                                 }
                             }
-                        );
-
-                    } else {
-                        defaults.field_data.available_apps = [];
-
-                        $.each(_data_account.data.available_apps, function(k, v) {
-                            if(winkstart.config.available_apps[v]) {
-                                defaults.field_data.available_apps.push(winkstart.config.available_apps[v]);
-                            }
-                        });
-
-                        defaults.limits = {
-                            inbound_trunks: 0,
-                            twoway_trunks: 0
-                        };
-
-                        defaults.credits = {
-                            amount: 0
-                        };
-
-                        THIS.render_accounts_manager(defaults, target, callbacks);
-
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
                         }
+                    );
+                };
+
+            if(!('reseller_id' in winkstart.config) || winkstart.apps['auth'].reseller_id === winkstart.config.reseller_id) {
+                get_account();
+            }
+            else {
+                winkstart.request('accounts_manager.list_classifiers', {
+                        api_url: winkstart.apps['accounts'].api_url,
+                        account_id: winkstart.apps['accounts'].account_id
+                    },
+                    function(_data_classifiers, status) {
+                        if('data' in _data_classifiers) {
+                            defaults.field_data.enable_call_restriction = true;
+                            $.each(_data_classifiers.data, function(k, v) {
+                                defaults.field_data.call_restriction[k] = {
+                                    friendly_name: v.friendly_name
+                                };
+
+                                defaults.data.call_restriction[k] = {
+                                    action: 'inherit',
+                                }
+                            });
+                        }
+
+                        get_account();
                     }
-                }
-            );
+                );
+            }
         },
 
         delete_accounts_manager: function(data, success, error) {

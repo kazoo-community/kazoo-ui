@@ -20,6 +20,7 @@
             <li><a href="#audio_settings">Audio Settings</a></li>
             <li><a href="#video_settings">Video Settings</a></li>
             <li><a href="#options">Options</a></li>
+            <li><a href="#restrictions">Restrictions</a></li>
         </ul>
         <form id="device-form" action="" method="post">
             <div class="pill-content">
@@ -356,6 +357,31 @@
                        </div>
                     </div>
                     <input type="hidden" name="media.fax.option" value="false"/>
+                </div>
+
+                <div id="restrictions">
+                    {{each(k, v) field_data.call_restriction}}
+                    <div class="clearfix">
+                        <label>${v.friendly_name}</label>
+                        <div class="input">
+                             <select name="call_restriction.${k}.action" class="medium" rel="popover">
+                                {{if data.call_restriction[k].action === 'allow'}}
+                                    <option value="allow" selected>Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else data.call_restriction[k].action === 'deny'}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny" selected>Deny</option>
+                                    <option value="inherit">Inherit</option>
+                                {{else}}
+                                    <option value="allow">Allow</option>
+                                    <option value="deny">Deny</option>
+                                    <option value="inherit" selected>Inherit</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                    </div>
+                    {{/each}}
                 </div>
             </div>
         </form>

@@ -34,6 +34,11 @@ winkstart.module('voip', 'user', {
         ],
 
         resources: {
+            'user.list_classifiers': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'user.list': {
                 url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
@@ -232,6 +237,7 @@ winkstart.module('voip', 'user', {
                         call_forward: {
                             substitute: true
                         },
+                        call_restriction: {},
                         caller_id: {
                             internal: {},
                             external: {},
@@ -252,70 +258,88 @@ winkstart.module('voip', 'user', {
                             landline: 'landline',
                             softphone: 'Softphone',
                             sip_uri: 'SIP URI'
-                        }
+                        },
+                        call_restriction: {}
                     }
                 };
 
             THIS.random_id = false;
 
-            winkstart.request(true, 'media.list', {
+            winkstart.request('user.list_classifiers', {
                     account_id: winkstart.apps['voip'].account_id,
                     api_url: winkstart.apps['voip'].api_url
                 },
-                function(_data, status) {
-                    if(_data.data) {
-                        _data.data.unshift(
-                            {
-                                id: '',
-                                name: 'Default Music'
-                            },
-                            {
-                                id: 'silence_stream://300000',
-                                name: 'Silence'
-                            }
-                        );
+                function(_data_classifiers, status) {
+                    if('data' in _data_classifiers) {
+                        $.each(_data_classifiers.data, function(k, v) {
+                            defaults.field_data.call_restriction[k] = {
+                                friendly_name: v.friendly_name
+                            };
+
+                            defaults.data.call_restriction[k] = { action: 'inherit' };
+                        });
                     }
 
-                    defaults.field_data.media = _data.data;
-
-                    if(typeof data == 'object' && data.id) {
-                        winkstart.request(true, 'user.device_list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                owner_id: data.id
-                            },
-                            function(_data, status) {
-                                defaults.field_data.device_list = _data.data;
-
-                                winkstart.request(true, 'user.get', {
-                                        account_id: winkstart.apps['voip'].account_id,
-                                        api_url: winkstart.apps['voip'].api_url,
-                                        user_id: data.id
+                    winkstart.request(true, 'media.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            if(_data.data) {
+                                _data.data.unshift(
+                                    {
+                                        id: '',
+                                        name: 'Default Music'
                                     },
-                                    function(_data, status) {
-                                        THIS.migrate_data(_data);
-
-                                        THIS.render_user($.extend(true, defaults, _data), target, callbacks);
-
-                                        if(typeof callbacks.after_render == 'function') {
-                                            callbacks.after_render();
-                                        }
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: 'Silence'
                                     }
                                 );
                             }
-                        );
-                    }
-                    else {
-                        defaults.field_data.device_list = {};
-                        THIS.random_id = $.md5(winkstart.random_string(10)+new Date().toString());
-                        defaults.field_data.new_user = THIS.random_id;
 
-                        THIS.render_user(defaults, target, callbacks);
+                            defaults.field_data.media = _data.data;
 
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                            if(typeof data == 'object' && data.id) {
+                                winkstart.request(true, 'user.device_list', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url,
+                                        owner_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        defaults.field_data.device_list = _data.data;
+
+                                        winkstart.request(true, 'user.get', {
+                                                account_id: winkstart.apps['voip'].account_id,
+                                                api_url: winkstart.apps['voip'].api_url,
+                                                user_id: data.id
+                                            },
+                                            function(_data, status) {
+                                                THIS.migrate_data(_data);
+
+                                                THIS.render_user($.extend(true, defaults, _data), target, callbacks);
+
+                                                if(typeof callbacks.after_render == 'function') {
+                                                    callbacks.after_render();
+                                                }
+                                            }
+                                        );
+                                    }
+                                );
+                            }
+                            else {
+                                defaults.field_data.device_list = {};
+                                THIS.random_id = $.md5(winkstart.random_string(10)+new Date().toString());
+                                defaults.field_data.new_user = THIS.random_id;
+
+                                THIS.render_user(defaults, target, callbacks);
+
+                                if(typeof callbacks.after_render == 'function') {
+                                    callbacks.after_render();
+                                }
+                            }
                         }
-                    }
+                    );
                 }
             );
         },
