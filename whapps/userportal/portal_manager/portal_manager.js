@@ -69,6 +69,16 @@ winkstart.module('userportal', 'portal_manager', {
         ],
 
         resources: {
+            'portal_manager.quickcall': {
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}/quickcall/{number}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'portal_manager.contact_list': {
+                url: '{api_url}/accounts/{account_id}/contact_list',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'portal_account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
@@ -355,6 +365,133 @@ winkstart.module('userportal', 'portal_manager', {
             });
         },
 
+        setup_contact_list_table: function(parent, data_devices) {
+            var THIS = this,
+                parent = $('.bottom_part', parent),
+                data_devices = data_devices || {};
+
+            var columns = [
+                {
+                    'sTitle': 'Name',
+                    'sWidth': '300px'
+                },
+                {
+                    'sTitle': 'Internal Number',
+                    'fnRender': function(obj) {
+                        var link = '-',
+                            number_sent = obj.aData[obj.iDataColumn];
+
+                        if(number_sent !== '-') {
+                            link = '<a class="link-quickcall" data-number="'+number_sent+'">'+number_sent+'</a>'
+                        }
+                        return link;
+                    },
+                    'sWidth': '200px'
+                },
+                {
+                    'sTitle': 'External Number',
+                    'fnRender': function(obj) {
+                        var link = '-',
+                            number_sent = obj.aData[obj.iDataColumn];
+
+                        if(number_sent !== '-') {
+                            link = '<a class="link-quickcall" data-number="'+number_sent+'">'+number_sent+'</a>'
+                        }
+                        return link;
+                    },
+                    'sWidth': '200px'
+                }
+            ];
+
+            winkstart.table.create('contact_list', $('#contact_list_grid', parent), columns, {}, {
+                sDom: '<"contact_title">frtlip',
+                bAutoWidth: false,
+                aaSorting: [[0, 'desc']]
+            });
+
+            $(parent).delegate('.link-quickcall', 'click', function() {
+                var device_id = $('#device_quickcall', parent).val(),
+                    number = $(this).data('number');
+
+                if(device_id && device_id.length === 32) {
+                    winkstart.request('portal_manager.quickcall', {
+                            api_url: winkstart.apps['userportal'].api_url,
+                            account_id: winkstart.apps['userportal'].account_id,
+                            device_id: device_id,
+                            number: number
+                        },
+                        function(data) {
+                            console.log(data);
+                        }
+                    );
+                }
+                else {
+                    winkstart.alert('You need to select a registered device from the dropdown in order to use the QuickCall Feature!');
+                }
+            });
+
+            $('div.contact_title', parent).html('<div class="device-selector">Quickcall Device: <select class="medium" id="device_quickcall"></select><input type="text" id="manual_number" placeholder="2000"></input><button id="quickcall_btn" style="display: none;" class="btn primary">Call</button></div>');
+
+            $('#manual_number', parent).keyup(function() {
+                if($(this).val() !== '') {
+                    $('#quickcall_btn', parent).show();
+                }
+                else {
+                    $('#quickcall_btn', parent).hide();
+                }
+            });
+
+            $('#quickcall_btn', parent).click(function() {
+                var device_id = $('#device_quickcall', parent).val(),
+                    number = $('#manual_number', parent).val();
+
+                if(device_id && device_id.length === 32) {
+                    winkstart.request('portal_manager.quickcall', {
+                            api_url: winkstart.apps['userportal'].api_url,
+                            account_id: winkstart.apps['userportal'].account_id,
+                            device_id: device_id,
+                            number: number
+                        },
+                        function(data) {
+                            console.log(data);
+                        }
+                    );
+                }
+                else {
+                    winkstart.alert('You need to select a registered device from the dropdown in order to use the QuickCall Feature!');
+                }
+            });
+
+            $('.cancel-search', parent).click(function(){
+                $('#contact_list-grid_filter input[type=text]', parent).val('');
+                winkstart.table.contact_list.fnFilter('');
+            });
+
+            winkstart.request(true, 'portal_manager.contact_list', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                function(_data, status) {
+                    if(_data.data) {
+
+                        $.fn.dataTableExt.afnFiltering.pop();
+
+                        var tab_data = [];
+
+                        $.each(_data.data, function(k, v) {
+                            tab_data.push([
+                                v.name,
+                                v.internal_number,
+                                v.external_number ? v.external_number : '-'
+                            ]);
+                        });
+
+                        winkstart.table.contact_list.fnAddData(tab_data);
+                    }
+                }
+            );
+        },
+
         setup_page: function(parent) {
             var THIS = this,
                 portal_manager_html = parent;
@@ -372,6 +509,12 @@ winkstart.module('userportal', 'portal_manager', {
 
             $('#vm-to-email-checkbox', portal_manager_html).change(function() {
                 $('#vm-to-email-checkbox', portal_manager_html).attr('checked') ? $('.email-field', portal_manager_html).slideDown() : $('.email-field', portal_manager_html).slideUp();
+            });
+
+            $('#contact_list_btn', portal_manager_html).click(function(e) {
+                e.preventDefault();
+
+                THIS.popup_contact_list();
             });
 
             $('#save-settings-link', portal_manager_html).click(function(e) {
@@ -409,6 +552,9 @@ winkstart.module('userportal', 'portal_manager', {
             /*CDRs Part*/
             THIS.setup_cdr_table(parent);
 
+            /* Contact List Part */
+            THIS.setup_contact_list_table(parent);
+
             /* My devices part */
             $(parent).delegate('.edit_icon', 'click', function() {
                 THIS.popup_edit_device({id: $(this).dataset('id')}, function() {
@@ -435,10 +581,11 @@ winkstart.module('userportal', 'portal_manager', {
                     'landline': 'Landline'
                 };
 
-            $('.list_devices', portal_manager_html).html('<div class="clear"/>');
-
             THIS.get_registered_devices(function(_data_registered) {
                 THIS.get_user_devices(function(_data_devices) {
+                    $('.list_devices', portal_manager_html).html('<div class="clear"/>');
+                    $('#device_quickcall', portal_manager_html).empty();
+
                     var data_device,
                         registered_data = {};
 
@@ -456,6 +603,9 @@ winkstart.module('userportal', 'portal_manager', {
                             id: v.id
                         };
 
+                        if(v.registered === 'registered') {
+                            $('#device_quickcall', portal_manager_html).append('<option value="'+v.id+'">'+v.name+'</option>');
+                        }
                         $('.list_devices', portal_manager_html).prepend(THIS.templates.device_line.tmpl(data_device));
                     });
                 });
