@@ -38,6 +38,11 @@
     float: left;
 }
 
+.portal-view .bottom_part .link-quickcall {
+    color: #05addc;
+    text-decoration: underline;
+}
+
 .portal-view .block {
     height: 320px;
     padding: 20px;
@@ -163,7 +168,7 @@
     border-radius: 5px;
     padding: 10px 0;
     margin: 10px 0;
-    max-height: 200px;
+    max-height: 170px;
     overflow: auto;
 }
 

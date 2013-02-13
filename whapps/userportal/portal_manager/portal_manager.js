@@ -360,9 +360,10 @@ winkstart.module('userportal', 'portal_manager', {
             });
         },
 
-        setup_contact_list_table: function(parent) {
+        setup_contact_list_table: function(parent, data_devices) {
             var THIS = this,
-                parent = $('.bottom_part', parent);
+                parent = $('.bottom_part', parent),
+                data_devices = data_devices || {};
 
             var columns = [
                 {
@@ -376,7 +377,7 @@ winkstart.module('userportal', 'portal_manager', {
                             number_sent = obj.aData[obj.iDataColumn];
 
                         if(number_sent !== '-') {
-                            link = '<a data-number="'+number_sent+'">'+number_sent+'</a>'
+                            link = '<a class="link-quickcall" data-number="'+number_sent+'">'+number_sent+'</a>'
                         }
                         return link;
                     },
@@ -389,7 +390,7 @@ winkstart.module('userportal', 'portal_manager', {
                             number_sent = obj.aData[obj.iDataColumn];
 
                         if(number_sent !== '-') {
-                            link = '<a data-number="'+number_sent+'">'+number_sent+'</a>'
+                            link = '<a class="link-quickcall" data-number="'+number_sent+'">'+number_sent+'</a>'
                         }
                         return link;
                     },
@@ -403,7 +404,11 @@ winkstart.module('userportal', 'portal_manager', {
                 aaSorting: [[0, 'desc']]
             });
 
-            $('div.contact_title', parent).html('<h1>My Contact List</h1>');
+            $(parent).delegate('.link-quickcall', 'click', function() {
+                console.log($(this).data('number'));
+            });
+
+            $('div.contact_title', parent).html('<div class="device-selector">Quickcall Device: <select class="medium" id="device_quickcall"></select></div>');
 
             $('.cancel-search', parent).click(function(){
                 $('#contact_list-grid_filter input[type=text]', parent).val('');
