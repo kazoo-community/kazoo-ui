@@ -385,14 +385,11 @@ winkstart.module('accounts', 'accounts_manager', {
                         if('data' in _data_classifiers) {
                             defaults.field_data.enable_call_restriction = true;
                             $.each(_data_classifiers.data, function(k, v) {
-                                var friendly_name = v.replace(/_/g,' '),
-                                    capitalized = friendly_name.charAt(0).toUpperCase() + friendly_name.slice(1);
-
-                                defaults.field_data.call_restriction[v] = {
-                                    friendly_name: capitalized
+                                defaults.field_data.call_restriction[k] = {
+                                    friendly_name: v.friendly_name
                                 };
 
-                                defaults.data.call_restriction[v] = {
+                                defaults.data.call_restriction[k] = {
                                     action: 'inherit',
                                 }
                             });
