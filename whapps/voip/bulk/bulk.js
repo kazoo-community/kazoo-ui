@@ -13,10 +13,15 @@ winkstart.module('voip', 'bulk', {
 
 	resources: {
 		'bulk.list': {
-			url: '{api_url}/accounts/{account_id}/bulks',
+			url: '{api_url}/accounts/{account_id}/bulk',
 			contentType: 'application/json',
 			verb: 'GET'
-		}
+		},
+        'bulk.update': {
+			url: '{api_url}/accounts/{account_id}/bulk',
+			contentType: 'application/json',
+			verb: 'POST'
+        }
 	}
 },
 function(args) {
@@ -138,45 +143,77 @@ function(args) {
             delete form_data.extra;
 
             var data_api = {
-                operation: 'update',
-                endpoints: selected_endpoints,
-                settings: form_data
+                ids: selected_endpoints,
+                updates: form_data
             };
+
+            winkstart.request('bulk.update', {
+                    api_url: winkstart.apps['voip'].api_url,
+                    account_id: winkstart.apps['voip'].account_id,
+                    data: data_api
+                },
+                function(data) {
+                    var error = false;
+
+                    $.each(data.data, function(k, v) {
+                        if(v.status !== 'success') {
+                            error = true;
+                        }
+                    });
+
+                    if(error === true) {
+                        winkstart.alert('An error occured during the bulk update...');
+                    }
+                    else {
+                        winkstart.alert('info','The endpoints selected were updated successfuly!');
+                    }
+                }
+            );
         });
     },
 
     list_endpoints: function() {
         var map_endpoints = {};
 
-        winkstart.request(true, 'user.list', {
+        winkstart.request(true, 'groups.list', {
                 account_id: winkstart.apps['voip'].account_id,
                 api_url: winkstart.apps['voip'].api_url
             },
             function(_data, status) {
                 $.each(_data.data, function() {
-                    map_endpoints[this.id] = $.extend(true, { name: this.first_name + ' ' + this.last_name, endpoint_type: 'user'}, this);
+                    map_endpoints[this.id] = $.extend(true, { endpoint_type: 'group'}, this);
                 });
-
-                winkstart.request(true, 'device.list', {
+                winkstart.request(true, 'user.list', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url
                     },
                     function(_data, status) {
                         $.each(_data.data, function() {
-                            map_endpoints[this.id] = $.extend(true, { endpoint_type: 'device'}, this);
-                        });
-                        var tab_data = [];
-
-                        $.each(map_endpoints, function(k, v) {
-                            tab_data.push([
-                                k,
-                                v.name,
-                                v.endpoint_type,
-                                k
-                            ]);
+                            map_endpoints[this.id] = $.extend(true, { name: this.first_name + ' ' + this.last_name, endpoint_type: 'user'}, this);
                         });
 
-                        winkstart.table.bulk.fnAddData(tab_data);
+                        winkstart.request(true, 'device.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                $.each(_data.data, function() {
+                                    map_endpoints[this.id] = $.extend(true, { endpoint_type: 'device'}, this);
+                                });
+                                var tab_data = [];
+
+                                $.each(map_endpoints, function(k, v) {
+                                    tab_data.push([
+                                        k,
+                                        v.name,
+                                        v.endpoint_type,
+                                        k
+                                    ]);
+                                });
+
+                                winkstart.table.bulk.fnAddData(tab_data);
+                            }
+                        );
                     }
                 );
             }
