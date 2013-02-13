@@ -34,6 +34,10 @@
     padding: 20px;
 }
 
+.portal-view .bottom_part .contact_title {
+    float: left;
+}
+
 .portal-view .block {
     height: 320px;
     padding: 20px;

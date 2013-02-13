@@ -367,19 +367,43 @@ winkstart.module('userportal', 'portal_manager', {
             var columns = [
                 {
                     'sTitle': 'Name',
-                    'sWidth': '350px'
+                    'sWidth': '300px'
                 },
                 {
-                    'sTitle': 'Number',
-                    'sWidth': '350px'
+                    'sTitle': 'Internal Number',
+                    'fnRender': function(obj) {
+                        var link = '-',
+                            number_sent = obj.aData[obj.iDataColumn];
+
+                        if(number_sent !== '-') {
+                            link = '<a data-number="'+number_sent+'">'+number_sent+'</a>'
+                        }
+                        return link;
+                    },
+                    'sWidth': '200px'
+                },
+                {
+                    'sTitle': 'External Number',
+                    'fnRender': function(obj) {
+                        var link = '-',
+                            number_sent = obj.aData[obj.iDataColumn];
+
+                        if(number_sent !== '-') {
+                            link = '<a data-number="'+number_sent+'">'+number_sent+'</a>'
+                        }
+                        return link;
+                    },
+                    'sWidth': '200px'
                 }
             ];
 
             winkstart.table.create('contact_list', $('#contact_list_grid', parent), columns, {}, {
-                sDom: '<"date">frtlip',
+                sDom: '<"contact_title">frtlip',
                 bAutoWidth: false,
-                aaSorting: [[1, 'desc']]
+                aaSorting: [[0, 'desc']]
             });
+
+            $('div.contact_title', parent).html('<h1>My Contact List</h1>');
 
             $('.cancel-search', parent).click(function(){
                 $('#contact_list-grid_filter input[type=text]', parent).val('');
@@ -401,6 +425,7 @@ winkstart.module('userportal', 'portal_manager', {
                             tab_data.push([
                                 v.name,
                                 v.internal_number,
+                                v.external_number ? v.external_number : '-'
                             ]);
                         });
 
