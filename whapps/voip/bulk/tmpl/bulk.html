@@ -16,6 +16,7 @@
                             3) Press OK
                         </div>
 
+                        <h3>Miscellaneous</h3>
                         <!-- Using ID for each clearfix is mandatory, see form2object to understand this hack -->
                         <div class="clearfix" id="line1">
                             <label class="checkbox checkbox-label">
@@ -38,6 +39,27 @@
                                 <select name="timezone" id="timezone" rel="popover"></select>
                             </div>
                         </div>
+
+                        <hr/>
+                        <h3>Restrictions</h3>
+                        {{each(k, v) field_data.call_restriction}}
+                        <div class="clearfix" id="line_${k}">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${v.friendly_name}
+                            </label>
+                            <div class="input">
+                                 <select name="call_restriction.${k}.action" class="medium" rel="popover">
+                                    {{if data.call_restriction[k].action === 'deny'}}
+                                        <option value="deny" selected>Deny</option>
+                                        <option value="inherit">Inherit</option>
+                                    {{else}}
+                                        <option value="deny">Deny</option>
+                                        <option value="inherit" selected>Inherit</option>
+                                    {{/if}}
+                                </select>
+                            </div>
+                        </div>
+                        {{/each}}
                     </div>
                 </div>
             </form>
