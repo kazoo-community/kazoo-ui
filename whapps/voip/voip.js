@@ -59,6 +59,7 @@ winkstart.module('voip', 'voip', {
          */
         modules: winkstart.config.voip_modules || {
             'account': false,
+            'bulk': false,
             'media': false,
             'device': false,
             'callflow': false,

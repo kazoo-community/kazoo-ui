@@ -1,0 +1,49 @@
+<div>
+    <div id="bulk-view">
+        <div class="table-wrapper">
+            <table id="bulk-grid" class="display">
+            </table>
+        </div>
+
+        <div class="form-wrapper">
+            <form id="bulk-form">
+                <div class="pill-content">
+                    <div class="active basic_view">
+                        <div class="help_box">
+                            How to use this Bulk module:<br/>
+                            1) Select users or/and devices in the table.<br/>
+                            2) Choose what fields you would like to update for the selected devices/users.<br/>
+                            3) Press OK
+                        </div>
+
+                        <!-- Using ID for each clearfix is mandatory, see form2object to understand this hack -->
+                        <div class="clearfix" id="line1">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> Music on Hold
+                            </label>
+                            <div class="input">
+                                <select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
+                                    {{each field_data.media}}
+                                        <option id="${id}" value="${id}">${name}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="clearfix" id="line2">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> Timezone
+                            </label>
+                            <div class="input">
+                                <select name="timezone" id="timezone" rel="popover"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="buttons-right">
+                <button class="btn success bulk-save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
