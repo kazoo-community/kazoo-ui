@@ -468,8 +468,8 @@ winkstart.module('userportal', 'portal_manager', {
             });
 
             winkstart.request(true, 'portal_manager.contact_list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
+                    account_id: winkstart.apps['userportal'].account_id,
+                    api_url: winkstart.apps['userportal'].api_url
                 },
                 function(_data, status) {
                     if(_data.data) {
