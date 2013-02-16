@@ -653,6 +653,8 @@ winkstart.module('voip', 'callflow', {
                     node_html = THIS.templates.root.tmpl({name: THIS.flow.name || 'Callflow'});
 
                     $('.edit_icon', node_html).click(function() {
+                        THIS.flow = $.extend(true, { contact_list: { exclude: false }} , THIS.flow);
+
                         var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name, exclude: THIS.flow.contact_list.exclude}), {
                             width: '310px',
                             title: 'Edit Callflow Name'
