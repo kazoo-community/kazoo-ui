@@ -465,6 +465,41 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
+            $(numbers_manager_html).delegate('.cid_inbound', 'click', function() {
+                var $cnam_cell = $(this),
+                    data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
+                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+
+                if(phone_number[1]) {
+                    THIS.get_number(phone_number[1], function(_data) {
+                        if(typeof _data.data.cnam !== 'undefined' && _data.data.cnam.inbound_lookup) {
+                            _data.data.cnam.inbound_lookup = false;
+                            THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                    $cnam_cell.removeClass('active').addClass('inactive');
+                                },
+                                function(_data_update) {
+                                    winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                }
+                            );
+                        }
+                        else {
+                            winkstart.confirm('If you turn on this feature, the Caller\'s Name will be included in your Caller ID information for everyone who dial this phone number. <br/><br/>Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                                function() {
+                                    _data.data.cnam = $.extend(true,_data.data.cnam || {},{ inbound_lookup: true });
+                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                            $cnam_cell.removeClass('inactive').addClass('active');
+                                        },
+                                        function(_data_update) {
+                                            winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    });
+                }
+            });
+
             $(numbers_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
@@ -996,9 +1031,11 @@ winkstart.module('numbers', 'numbers_manager', {
                     var tab_data = [];
                     $.each(_data.data, function(k, v) {
                         if(k != 'id') {
-                            v.cnam = $.inArray('cnam', v.features) >= 0 ? true : false;
+                            var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false;
+                            var outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
                             v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
-                            tab_data.push(['', k, v.cnam, v.e911, v.state]);
+                            v.caller_id = { inbound: inbound, outbound: outbound };
+                            tab_data.push(['', k, v.caller_id, v.e911, v.state]);
                         }
                     });
 
@@ -1028,8 +1065,14 @@ winkstart.module('numbers', 'numbers_manager', {
                 {
                     'sTitle': 'Caller-ID',
                     'fnRender': function(obj) {
-                        var cid = 'cid ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ cid  +'">CID</a>';
+                        var link = '<a class="cid inactive">Outbound</a>' + ' / ' + '<a class="cid_inbound inactive">Inbound</a>'
+                        if(typeof obj.aData[obj.iDataColumn] === 'object') {
+                            var cid_outbound = 'cid ' + (obj.aData[obj.iDataColumn].outbound ? 'active' : 'inactive');
+                            var cid_inbound = 'cid_inbound ' + (obj.aData[obj.iDataColumn].inbound ? 'active' : 'inactive');
+
+                            link = '<a class="'+cid_outbound+'">Outbound</a>' + ' / ' + '<a class="'+cid_inbound+'">Inbound</a>'
+                        }
+                        return link;
                     },
                     'bSortable': false
                 },

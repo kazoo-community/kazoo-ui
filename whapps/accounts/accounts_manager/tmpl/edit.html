@@ -17,7 +17,9 @@
             <li class="active"><a href="#basic">Basic</a></li>
             <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email</a></li>
             <li><a href="#monitoring"></span>Monitoring</a></li>
-            <li><a href="#billing">Billing</a></li>
+            {{if field_data.is_reseller}}
+                <li><a href="#billing">Limits</a></li>
+            {{/if}}
             <li><a href="#applications">Available Apps</a></li>
             <li><a href="#white_labeling">White labeling</a></li>
             {{if field_data.enable_call_restriction}}
@@ -40,6 +42,12 @@
                              rel="popover" data-content="Realm of this account" />
                         </div>
                     </div>
+                    {{if data.id}}
+                    <div class="clearfix">
+                        <label>Account ID</label>
+                        <div class="input"><label class="text-inline">${data.id}</label></div>
+                    </div>
+                    {{/if}}
                 </div>
 
                 <div id="voicemail_to_email">
@@ -147,36 +155,32 @@
 
                         <h3>Credit / Limits</h3>
 
-                        {{if credits}}
-                            <div class="clearfix">
-                                <label for="billing_balance">Balance</label>
-                                <div class="input">
-                                    <span class="uneditable-input mini">${credits.amount}</span>
-                                </div>
-                            </div>
-                        {{/if}}
-
                         <div class="clearfix">
-                            <label for="billing_inbound_trunks">Inbound Calling</label>
-                            <div class="input">
-                                <span class="uneditable-input mini">${limits.inbound_trunks}</span>
-                            </div>
+                            Allow my customer to make up to <input id="inbound_trunks" name="extra.inbound_trunks" type="text" value="${limits.inbound_trunks}" class="span4 check-value number"/> <span class="highlighted">inbound</span> flat-rate calls at a time.
                         </div>
 
                         <div class="clearfix">
-                            <label for="billing_twoway_trunks">Two-Way Calling</label>
-                            <div class="input">
-                                <span class="uneditable-input mini">${limits.twoway_trunks}</span>
-                            </div>
+                            Allow my customer to make up to <input id="twoway_trunks" name="extra.twoway_trunks" type="text" value="${limits.twoway_trunks}" class="span4 check-value number"/> <span class="highlighted">outbound</span> flat-rate calls at a time.
                         </div>
 
                         <div class="clearfix">
-                            <label></label>
-                            <div class="input">
-                                <button id="manage" class="btn small"> Manage Credit / Limits</button>
-                            </div>
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if limits.allow_prepay}}
+                                        <input id="allow_prepay" type="checkbox" name="extra.allow_prepay" class="check-value" checked="checked"/>
+                                        {{else}}
+                                        <input id="allow_prepay" type="checkbox" name="extra.allow_prepay" class="check-value"/>
+                                        {{/if}}
+                                        <span>In addition to the above if a customer makes an international call, or goes over the above limits, allow the call to proceed and bill per-minute</span>
+                                    </label>
+                                </li>
+                            </ul>
                         </div>
 
+                        <div id="credit_block" class="clearfix">
+                            Customer's available balance for per-minute calls: <span class="highlighted">$</span><input id="amount_balance" name="extra.amount_balance" type="text" value="${credits.amount}" class="span4 check-value number"/>
+                        </div>
                     {{/if}}
                 </div>
 

@@ -79,7 +79,7 @@ winkstart.module('voip', 'featurecode', {
                     api_url: winkstart.apps['voip'].api_url
                 },
                 function(data, status) {
-                    
+
                     $.each(data.data, function() {
                         if('featurecode' in this && this.featurecode != false) {
                             if(this.featurecode.name in THIS.actions) {
@@ -124,7 +124,7 @@ winkstart.module('voip', 'featurecode', {
 
                     $('.featurecode_enabled', featurecode_html).change(function() {
                         var action_wrapper = $(this).parents('.action_wrapper');
-                        
+
                         if(!$(this).is(':checked') && action_wrapper.dataset('enabled') == 'true') {
                             action_wrapper.addClass('disabled');
                         } else if($(this).is(':checked') && action_wrapper.dataset('enabled') == 'false'){
@@ -484,6 +484,22 @@ winkstart.module('voip', 'featurecode', {
                     },
                     enabled: false,
                     default_number: '0',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
+                    }
+                },
+                'privacy[mode=full]': {
+                    name: 'Privacy',
+                    icon: 'phone',
+                    category: 'Miscellaneous',
+                    module: 'privacy',
+                    number_type: 'pattern',
+                    data: {
+                        mode: 'full'
+                    },
+                    enabled: false,
+                    default_number: '67',
                     number: this.default_number,
                     build_regex: function(number) {
                         return '^\\*'+number+'([0-9]*)$';

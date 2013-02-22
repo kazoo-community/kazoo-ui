@@ -421,7 +421,6 @@ winkstart.module('userportal', 'portal_manager', {
                             number: number
                         },
                         function(data) {
-                            console.log(data);
                         }
                     );
                 }
@@ -453,7 +452,6 @@ winkstart.module('userportal', 'portal_manager', {
                             number: number
                         },
                         function(data) {
-                            console.log(data);
                         }
                     );
                 }

@@ -187,6 +187,25 @@
 						    </ul>
 						</div>
 					</div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="Delete the voicemail after the notification has been sent">
+                                            {{if data.delete_after_notify}}
+                                                <input type="checkbox" id="delete_after_notify" name="delete_after_notify" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="delete_after_notify" name="delete_after_notify"/>
+                                            {{/if}}
+                                            <span>Delete After Notification</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		 </form>
