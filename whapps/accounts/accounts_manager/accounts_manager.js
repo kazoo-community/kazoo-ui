@@ -224,6 +224,7 @@ winkstart.module('accounts', 'accounts_manager', {
                             nav: {},
                             port: {}
                         },
+                        is_reseller: ('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['accounts'].account_id === winkstart.apps['auth'].reseller_id),
                         call_restriction: {},
                         enable_call_restriction: false,
                         available_apps: []
@@ -288,7 +289,8 @@ winkstart.module('accounts', 'accounts_manager', {
                                                         function(_data_l, status) {
                                                             var limits = {
                                                                 inbound_trunks: 0,
-                                                                twoway_trunks: 0
+                                                                twoway_trunks: 0,
+                                                                allow_prepay: false
                                                             };
                                                             $.extend(true, limits, _data_l.data);
                                                             render_data.limits = limits;
@@ -309,7 +311,8 @@ winkstart.module('accounts', 'accounts_manager', {
                                                         function(_data_l, status) {
                                                             var limits = {
                                                                 inbound_trunks: 0,
-                                                                twoway_trunks: 0
+                                                                twoway_trunks: 0,
+                                                                allow_prepay: false
                                                             };
                                                             $.extend(true, limits, _data_l.data);
                                                             render_data.limits = limits;
@@ -356,7 +359,8 @@ winkstart.module('accounts', 'accounts_manager', {
 
                                 defaults.limits = {
                                     inbound_trunks: 0,
-                                    twoway_trunks: 0
+                                    twoway_trunks: 0,
+                                    allow_prepay: false
                                 };
 
                                 defaults.credits = {
@@ -570,84 +574,18 @@ winkstart.module('accounts', 'accounts_manager', {
             );
         },
 
-        render_credits_limits_popup: function(data) {
-            var THIS = this,
-                data_tmpl = {
-                    credits: data.credits.amount,
-                    limits: data.limits,
-                    extra: {
-                        inbound_trunks_price: winkstart.config.inbound_trunks_price || '$6.99',
-                        twoway_trunks_price: winkstart.config.twoway_trunks_price || '$29.99'
-                    }
-                },
-                credits_html = THIS.templates.credits.tmpl(data_tmpl),
-                popup;
-
-            $('ul.settings1 > li', credits_html).click(function(item) {
-                $('.pane_content', credits_html).hide();
-
-                $('ul.settings1 > li', credits_html).removeClass('current');
-
-                var tab_id = $(this).attr('id');
-
-                if(tab_id  === 'flat_rate_link') {
-                    $('#flat_rate', credits_html).show();
-                }
-                else if(tab_id === 'per_minute_link') {
-                    $('#per_minute', credits_html).show();
-                }
-
-                $(this).addClass('current');
-            });
-
-            $('.purchase_credits', credits_html).click(function(ev) {
-                ev.preventDefault();
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-                    function() {
-                        var credits_to_add = parseFloat($('#add_credits', credits_html).val().replace(',','.'));
-
-                        THIS.add_credits(credits_to_add, data.account_id, function() {
-                            $('.current_balance', credits_html).html((parseFloat($('.current_balance', credits_html).html()) + credits_to_add).toFixed(2));
-
-                            winkstart.publish('statistics.update_stat', 'credits');
-                            THIS.edit_accounts_manager({id: data.account_id});
-                        });
-                    }
-                );
-            });
-
-            $('.submit_channels', credits_html).click(function(ev) {
-                ev.preventDefault();
-
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-                    function() {
-                        var limits_data = {
-                            twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
-                            inbound_trunks: $('#inbound_calls', credits_html).size() > 0 ? parseInt($('#inbound_calls', credits_html).val() || 0) : -1
-                        };
-
-                        limits_data = $.extend({}, data.limits, limits_data);
-
-                        THIS.update_limits(limits_data, data.account_id, function(_data) {
-                            popup.dialog('close');
-
-                            winkstart.alert('info', 'Your changes have been saved!');
-
-                            THIS.edit_accounts_manager({id: data.account_id});
-                        });
-                    }
-                );
-            });
-
-            popup = winkstart.dialog(credits_html, { title: 'Add Credits' });
-        },
-
         render_accounts_manager: function(data, target, callbacks) {
             var THIS = this,
                 account_html = THIS.templates.edit.tmpl(data),
                 deregister = $('#deregister', account_html),
                 deregister_email = $('.deregister_email', account_html),
-                file;
+                file,
+                starting_values = {
+                    amount_balance: parseFloat(data.credits.amount),
+                    inbound_trunks: data.limits.inbound_trunks,
+                    twoway_trunks: data.limits.twoway_trunks,
+                    allow_prepay: data.limits.allow_prepay
+                };
 
             winkstart.validate.set(THIS.config.validation, account_html);
 
@@ -667,6 +605,22 @@ winkstart.module('accounts', 'accounts_manager', {
                 $('#upload_div', account_html).hide();
                 $('.player_file', account_html).show();
             }
+
+            if(data.limits.allow_prepay === false) {
+                $('#credit_block', account_html).hide();
+            }
+
+            $('#allow_prepay', account_html).change(function() {
+                $(this).is(':checked') !== starting_values['allow_prepay'] ? $(this).addClass('updated') : $(this).removeClass('updated');
+                $(this).is(':checked') ? $('#credit_block', account_html).show() : $('#credit_block', account_html).hide();
+            });
+
+            $('.check-value.number', account_html).keyup(function() {
+                var base_value = parseFloat(starting_values[$(this).attr('id')]),
+                    new_value = parseFloat($(this).val());
+
+                base_value !== new_value ? $(this).addClass('updated') : $(this).removeClass('updated');
+            });
 
             $('#change_link', account_html).click(function(ev) {
                 ev.preventDefault();
@@ -704,36 +658,6 @@ winkstart.module('accounts', 'accounts_manager', {
                 $(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
             });
 
-            $('#manage', account_html).click(function(e) {
-                e.preventDefault();
-
-                var account_id = data.data.id;
-
-                winkstart.request('accounts_manager.credits.get', {
-                        account_id: account_id,
-                        api_url: winkstart.apps['accounts'].api_url,
-                        billing_provider: THIS.billing_provider,
-                    },
-                    function(_data_c, status) {
-                        winkstart.request('accounts_manager.limits.get', {
-                                account_id: account_id,
-                                api_url: winkstart.apps['accounts'].api_url,
-                            },
-                            function(_data_l, status) {
-
-                                var tmp = {
-                                    account_id: account_id,
-                                    limits: _data_l.data,
-                                    credits: _data_c.data
-                                };
-
-                                THIS.render_credits_limits_popup(tmp);
-                            }
-                        );
-                    }
-                );
-            });
-
             $('.accounts_manager-save', account_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -754,50 +678,38 @@ winkstart.module('accounts', 'accounts_manager', {
 
                         data.data.apps = [];
 
-                        THIS.save_accounts_manager(form_data, data,
-                            function(_data_account, status) {
-                                var account_id = _data_account.data.id,
-                                    upload_file = function() {
-                                        if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
-                                            THIS.upload_file(file, account_id, function() {
+                        var save_account = function() {
+                            THIS.save_accounts_manager(form_data, data,
+                                function(_data_account, status) {
+                                    var account_id = _data_account.data.id,
+                                        upload_file = function() {
+                                            if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
+                                                THIS.upload_file(file, account_id, function() {
+                                                    if(typeof callbacks.save_success == 'function') {
+                                                        callbacks.save_success(_data_account, status);
+                                                    }
+                                                });
+                                            }
+                                            else {
                                                 if(typeof callbacks.save_success == 'function') {
                                                     callbacks.save_success(_data_account, status);
                                                 }
-                                            });
-                                        }
-                                        else {
-                                            if(typeof callbacks.save_success == 'function') {
-                                                callbacks.save_success(_data_account, status);
                                             }
-                                        }
-                                    };
+                                        };
 
-                                /*
-                                * We check if the whitelabel exist for this account,
-                                * If yes, then we check if it has been updated and if it was, we update the whitelabel document.
-                                * If it doesn't exist, we check if data is not empty before creating a whitelabel document
-                                */
-                                winkstart.request('whitelabel.get', {
-                                        account_id: account_id,
-                                        api_url: winkstart.apps['accounts'].api_url
-                                    },
-                                    function(_data, status) {
-                                        whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
+                                    /*
+                                    * We check if the whitelabel exist for this account,
+                                    * If yes, then we check if it has been updated and if it was, we update the whitelabel document.
+                                    * If it doesn't exist, we check if data is not empty before creating a whitelabel document
+                                    */
+                                    winkstart.request('whitelabel.get', {
+                                            account_id: account_id,
+                                            api_url: winkstart.apps['accounts'].api_url
+                                        },
+                                        function(_data, status) {
+                                            whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
-                                        winkstart.request('whitelabel.update', {
-                                                account_id: account_id,
-                                                api_url: winkstart.apps['accounts'].api_url,
-                                                data: whitelabel_data
-                                            },
-                                            function(_data, status) {
-                                                upload_file();
-                                            },
-                                            winkstart.error_message.process_error()
-                                        );
-                                    },
-                                    function(_data, status) {
-                                        if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
-                                            winkstart.request('whitelabel.create', {
+                                            winkstart.request('whitelabel.update', {
                                                     account_id: account_id,
                                                     api_url: winkstart.apps['accounts'].api_url,
                                                     data: whitelabel_data
@@ -807,19 +719,67 @@ winkstart.module('accounts', 'accounts_manager', {
                                                 },
                                                 winkstart.error_message.process_error()
                                             );
-                                        }
-                                        else {
-                                            if(typeof callbacks.save_success == 'function') {
-                                                callbacks.save_success(_data_account, status);
+                                        },
+                                        function(_data, status) {
+                                            if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
+                                                winkstart.request('whitelabel.create', {
+                                                        account_id: account_id,
+                                                        api_url: winkstart.apps['accounts'].api_url,
+                                                        data: whitelabel_data
+                                                    },
+                                                    function(_data, status) {
+                                                        upload_file();
+                                                    },
+                                                    winkstart.error_message.process_error()
+                                                );
+                                            }
+                                            else {
+                                                if(typeof callbacks.save_success == 'function') {
+                                                    callbacks.save_success(_data_account, status);
+                                                }
                                             }
                                         }
+                                    );
+                                },
+                                function() {
+                                    winkstart.alert('There were errors on the form, please correct!');
+                                }
+                            );
+                        };
+
+                        if($('.check-value', account_html).hasClass('updated')) {
+                            /* Karl wanted me to remove this from reseller
+                            winkstart.confirm('Your on-file credit card will immediately be charged for the changes your made to the billing options of this account. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    function() {*/
+                                if($('#amount_balance', account_html).hasClass('updated')) {
+                                    var new_credits = parseFloat($('#amount_balance', account_html).val().replace(',','.')),
+                                        credits_to_add = parseFloat(new_credits - starting_values.amount_balance);
+
+                                    if(credits_to_add > 0 && 'id' in data.data) {
+                                        THIS.add_credits(credits_to_add, data.data.id, function() {});
                                     }
-                                );
-                            },
-                            function() {
-                                winkstart.alert('There were errors on the form, please correct!');
-                            }
-                        );
+                                }
+
+                                if($('#inbound_trunks', account_html).hasClass('updated') || $('#twoway_trunks', account_html).hasClass('updated') || $('#allow_prepay', account_html).hasClass('updated')) {
+                                    var limits_data = {
+                                        twoway_trunks: parseInt($('#twoway_trunks', account_html).val()),
+                                        inbound_trunks:  parseInt($('#inbound_trunks', account_html).val()),
+                                        allow_prepay: $('#allow_prepay', account_html).is(':checked')
+                                    };
+
+                                    limits_data = $.extend({}, data.limits, limits_data);
+
+                                    if(limits_data.twoway_trunks >= -1 && limits_data.inbound_trunks >= -1 && 'id' in data.data) {
+                                        THIS.update_limits(limits_data, data.data.id, function(_data) {});
+                                    }
+                                }
+
+                                save_account();
+                           // });
+                        }
+                        else {
+                            save_account();
+                        }
                     }
                 );
             });

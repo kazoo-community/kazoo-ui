@@ -153,6 +153,23 @@
                             <input type="text" name="gateways[0].progress_timeout" id="gateways_progress_timeout" value="${data.gateways[0].progress_timeout}" rel="popover" data-content="In secs, the maximum time to wait for media from a carrier gateway"/>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if data.peer === true}}
+                                            <input type="checkbox" id="peer" name="peer" checked="checked" rel="popover" data-content=""/>
+                                        {{else}}
+                                            <input type="checkbox" id="peer" name="peer" rel="popover" data-content=""/>
+                                        {{/if}}
+                                        <span>Peer</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="audio_settings">

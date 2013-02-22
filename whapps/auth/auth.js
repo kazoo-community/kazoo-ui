@@ -528,8 +528,6 @@ winkstart.module('auth', 'auth',
                 parent = parent || $('.ws-content'),
                 landing_html = THIS.templates.landing.tmpl();
 
-            console.log('dsa');
-
             parent
                 .empty()
                 .append(landing_html);
