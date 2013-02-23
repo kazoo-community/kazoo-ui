@@ -27,6 +27,16 @@ winkstart.module('voip', 'cdr', {
 			url: '{api_url}/accounts/{account_id}/cdrs?created_from={created_from}&created_to={created_to}',
 			contentType: 'application/json',
 			verb: 'GET'
+        },
+        'cdr.from_queue': {
+			url: '{api_url}/accounts/{account_id}/cdrs?created_from={created_from}&created_to={created_to}&has_key={filter}',
+			contentType: 'application/json',
+			verb: 'GET'
+        },
+        'cdr.not_from_queue': {
+			url: '{api_url}/accounts/{account_id}/cdrs?created_from={created_from}&created_to={created_to}&key_missing={filter}',
+			contentType: 'application/json',
+			verb: 'GET'
         }
 	}
 },
@@ -45,8 +55,9 @@ function(args) {
 {
     cdr_range: 7,
 
-    list_by_date: function(start_date, end_date) {
+    list_by_date: function(start_date, end_date, filter) {
         var THIS = this,
+            filter = filter || '',
             map_users = {},
             parse_duration = function(duration, type) {
                 var duration = parseFloat(duration);
@@ -112,12 +123,24 @@ function(args) {
                     map_users[this.id] = this;
                 });
 
-                winkstart.request(true, 'cdr.list_by_week', {
+                var request_string = 'cdr.list_by_week',
+                    data_request = {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
                         created_from: start_date,
                         created_to: end_date
-                    },
+                    };
+
+                if(filter === 'queue') {
+                    request_string = 'cdr.from_queue';
+                    data_request.filter = 'custom_channel_vars.queue_id';
+                }
+                else if(filter === 'non-queue') {
+                    request_string = 'cdr.not_from_queue';
+                    data_request.filter = 'custom_channel_vars.queue_id';
+                }
+
+                winkstart.request(true, request_string, data_request,
                     function(_data, status) {
                         var cdr_id,
                             owner_id,
@@ -257,7 +280,7 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn primary button-search" id="searchLink">Filter</button><label class="call_duration"/>');
+		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<select id="dropdown_filter"><option value="all">All Calls</option><option value="queue">Queue Calls</option><option value="non-queue">Non-Queue Calls</option></select><button class="btn primary button-search" id="searchLink">Filter</button><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });
@@ -271,6 +294,10 @@ function(args) {
                 $('.call_duration', '#cdr-grid_wrapper').show();
             }
         });
+
+        if(!('call_center' in winkstart.apps)) {
+            $('#dropdown_filter', cdr_html).hide();
+        }
 
         $(cdr_html).delegate('.table_detail_link','click', function() {
             var cdr_id = $(this).dataset('cdr_id');
@@ -322,7 +349,7 @@ function(args) {
                     end_date_sec = (new Date(end_date).getTime()/1000) + 62167219200;
 
                 if((end_date_sec - start_date_sec) <= (range*24*60*60)) {
-                    THIS.list_by_date(start_date_sec, end_date_sec);
+                    THIS.list_by_date(start_date_sec, end_date_sec, $('#dropdown_filter', cdr_html).val());
                 }
                 else {
                     winkstart.alert('The range is bigger than 7 days, please correct it.');

@@ -228,7 +228,7 @@ winkstart.module('voip', 'voip', {
                         map_devices = {};
 
                     $.each(_data.data, function(k, v) {
-                        this.enabled === false ? cpt_disabled++ : (this.device_type === 'cellphone' ? cpt_enabled_cell ++ : true);
+                        this.enabled === false ? cpt_disabled++ : ($.inArray(this.device_type, ['cellphone', 'smartphone', 'landline', 'sip_uri']) > -1 ? cpt_enabled_cell ++ : true);
                         map_devices[this.id] = true;
                     });
 

@@ -214,11 +214,11 @@ winkstart.module('voip', 'device', {
                         };
 
                         if($.inArray(_data.data.length, winkstart.config.device_threshold || []) > -1) {
-                            if(!('reseller_id' in winkstart.config) || winkstart.apps['auth'].reseller_id === winkstart.config.reseller_id) {
-                                THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
+                            if(('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['auth'].account_id === winkstart.apps['auth'].reseller_id)) {
+                                create_device();
                             }
                             else {
-                                create_device();
+                                THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
                             }
                         }
                         else {
