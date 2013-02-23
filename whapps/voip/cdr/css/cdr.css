@@ -3,6 +3,12 @@
     width: 90%;
 }
 
+#cdr-view #dropdown_filter {
+    margin-right: 15px;
+    height: 25px;
+    width: 125px;
+}
+
 #cdr-view table.display td {
     padding: 6px 3px;
 }

@@ -377,10 +377,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     );
                 };
 
-            if(!('reseller_id' in winkstart.config) || winkstart.apps['auth'].reseller_id === winkstart.config.reseller_id) {
-                get_account();
-            }
-            else {
+            if(('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['accounts'].account_id === winkstart.apps['auth'].reseller_id)) {
                 winkstart.request('accounts_manager.list_classifiers', {
                         api_url: winkstart.apps['accounts'].api_url,
                         account_id: winkstart.apps['accounts'].account_id
@@ -402,6 +399,9 @@ winkstart.module('accounts', 'accounts_manager', {
                         get_account();
                     }
                 );
+            }
+            else {
+                get_account();
             }
         },
 
