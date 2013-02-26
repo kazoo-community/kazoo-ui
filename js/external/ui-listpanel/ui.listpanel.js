@@ -24,7 +24,6 @@
             animated: 'fast',
             show: 'slideDown',
             hide: 'slideUp',
-            new_entity_label: 'new entity',
             publisher: function(){},
             notifyMethod: ''
         },
@@ -63,7 +62,10 @@
 
             this.pane_wrapper = $('<div class="left_side_bar"></div>').appendTo(this.element);
 
-            this.flow_div = $('<div class="add_flow"><span class="plus_btn" href="#"/><span class="add_flow_text">'+ this.options.new_entity_label +'</span></div>').appendTo(this.pane_wrapper);
+            // Do not create an "add" button if there is no label.
+            if (this.options.new_entity_label) {
+                this.flow_div = $('<div class="add_flow"><span class="plus_btn" href="#"/><span class="add_flow_text">'+ this.options.new_entity_label +'</span></div>').appendTo(this.pane_wrapper);
+            }
 
             var search_html = '';
             search_html += '<div class="new_search_box">';
@@ -90,7 +92,9 @@
 
             //set up click events
             this._registerViewEvents(this.listContainer.find('li'));
-            this._registerAddEvents(this.flow_div);
+            if (this.options.new_entity_label) {
+                this._registerAddEvents(this.flow_div);
+            }
 
             // set up livesearch
             if (this.options.searchable) {
@@ -100,9 +104,17 @@
             }
 
             $(function(){
-                var posX = ($('.sidebar').position() || {}).top || 0;
-                $('.list-panel-anchor').css({'min-height':(($(window).height())-185-posX)+'px'});
-                $('.list-panel-anchor').css({'height':(($(window).height())-185-posX)+'px'});
+                var height = $(window).height();
+                var selectors = ['#ws-content > .container-fluid', '.list-panel-anchor'];
+                for (var i in selectors) {
+                    height -= ($(selectors[i]).position() || {}).top || 0;
+                }
+                height += 'px';
+                $('.list-panel-anchor').css({
+                    'height': height,
+                    'min-height': height
+                });
+
                 var thisSp = $('.list-panel-anchor').jScrollPane({
                     verticalDragMaxHeight: 15
                 });
