@@ -748,13 +748,13 @@ winkstart.module('voip', 'user', {
                 delete data.caller_id;
             }
 
-            if(!data.hotdesk.enable) {
-                delete data.hotdesk;
-            }
-
             if(!data.music_on_hold.media_id) {
                 delete data.music_on_hold.media_id;
             }
+
+            if(data.hotdesk.hasOwnProperty("enable")) {
+                delete data.hotdesk.enable;
+			}
 
             return data;
         },
