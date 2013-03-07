@@ -224,7 +224,7 @@ winkstart.module('accounts', 'accounts_manager', {
                             nav: {},
                             port: {}
                         },
-                        is_reseller: ('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['accounts'].account_id === winkstart.apps['auth'].reseller_id),
+                        display_limits: winkstart.apps['auth'].is_reseller || (winkstart.config.hasOwnProperty('reseller_id') ? (winkstart.config.reseller_id === winkstart.apps['auth'].account_id) : false),
                         call_restriction: {},
                         enable_call_restriction: false,
                         available_apps: []
