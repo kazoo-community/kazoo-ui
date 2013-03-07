@@ -333,6 +333,7 @@ winkstart.module('auth', 'auth',
                         winkstart.apps['auth'].user_id = data.data.owner_id;
                         winkstart.apps['auth'].realm = realm;
                         winkstart.apps['auth'].reseller_id = data.data.reseller_id;
+                        winkstart.apps['auth'].is_reseller = data.data.is_reseller;
 
                         // Deleting the welcome message
                         $('#ws-content').empty();

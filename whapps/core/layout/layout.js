@@ -78,6 +78,7 @@ winkstart.module('core', 'layout', {
     {
         attach: function() {
             var THIS = this,
+                timeout,
                 domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
                 layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent),
                 api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url;
@@ -86,14 +87,29 @@ winkstart.module('core', 'layout', {
                 $('#powered', layout_html).remove();
             }
 
-            $("#loading").ajaxStart(function(){
+            $('#loading').ajaxStart(function(){
+                $('#loading .close-button').hide();
                 $(this).show();
+                timeout = setTimeout(function() {
+                    if($('#loading').is(':visible')) {
+                        $('#loading .close-button').show();
+                    }
+                }, 10000);
             }).ajaxStop(function(){
                 $(this).hide();
+                clearTimeout(timeout);
             }).ajaxError(function(){
                 if($.active === 0) {
                     $(this).hide();
+                    clearTimeout(timeout);
                 }
+            });
+
+            $('#loading .close-button').click(function() {
+                $('#loading').hide();
+                clearTimeout(timeout);
+
+                if($.active > 0) { $.active--; }
             });
 
             winkstart.get_version(function(version) {
@@ -130,8 +146,8 @@ winkstart.module('core', 'layout', {
             }
             else {
                 layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
-                var data_welcome = { 
-                    company_name: winkstart.config.company_name, 
+                var data_welcome = {
+                    company_name: winkstart.config.company_name,
                     company_website: winkstart.config.company_website,
                     learn_more: winkstart.config.nav.learn_more || "http://www.2600hz.com/"
                 };

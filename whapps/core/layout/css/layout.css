@@ -155,6 +155,14 @@ body > .topbar .topbar-inner > .container-fluid {
     display:none;
 }
 
+#loading .close-button {
+    cursor: pointer;
+    font-size: 11px;
+    position: absolute;
+    right: 7px;
+    top: 2px;
+}
+
 #loading .graphic {
     float: left;
 }
