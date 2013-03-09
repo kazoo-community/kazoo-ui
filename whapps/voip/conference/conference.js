@@ -308,6 +308,8 @@ winkstart.module('voip', 'conference', {
 
                         THIS.clean_form_data(form_data);
 
+                        data.data.member.pins = form_data.member.pins;
+
                         if('field_data' in data) {
                             delete data.field_data;
                         }
@@ -404,7 +406,6 @@ winkstart.module('voip', 'conference', {
 
         clean_form_data: function(form_data){
             var THIS = this;
-
             form_data.member.pins_string = THIS.letters_to_numbers(form_data.member.pins_string);
 
             form_data.member.pins = $.map(form_data.member.pins_string.split(','), function(val) {
