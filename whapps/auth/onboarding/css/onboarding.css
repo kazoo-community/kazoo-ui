@@ -266,7 +266,7 @@
     font-size: 12px !important;
 }
 
-#fast_onboarding_form .area_code_wrapper input:-moz-placeholder {
+#fast_onboarding_form .area_code_wrapper input::-moz-placeholder {
     color:    #CCCCCC !important;
     font-size: 12px !important;
 }
