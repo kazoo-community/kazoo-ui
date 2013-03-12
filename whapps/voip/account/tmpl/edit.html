@@ -62,6 +62,52 @@
 				</div>
 
 				<div id="options">
+					
+					<h3>Billing Contact</h3>
+					<div class="clearfix">
+						<label for="contact_billing_email">E-mail</label>
+						<div class="input">
+							<input class="span4" id="contact_billing_email" name="contact.billing.email" type="text" placeholder="E-mail address" value="${data.contact.billing.email}" rel="popover" data-content="Define the contact e-mail address of this Account for billing issues." />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="contact_billing_number">Number</label>
+						<div class="input">
+							<input class="span4" id="contact_billing_number" name="contact.billing.number" type="text" placeholder="555-555-5555" value="${data.contact.billing.number}" rel="popover" data-content="Define the contact number of this Account for billing issues." />
+						</div>
+					</div>
+					<hr />
+					
+					<h3>Technical Contact</h3>
+					<div class="clearfix">
+                        <div class="input">
+                        	<ul class="inputs-list">
+              					<li>
+		                        	<label>
+		          						<span rel="popover" data-content="Check this if Technical and Billing contacts are identical.">
+											<input id="contact_copy_checkbox" class="checkbox" name="extra.contact_copy_checkbox" type="checkbox"/>
+			                                <span>Same contact information</span>
+		                            	</span>
+		                            </label>
+                        		</li>
+                        	</ul>
+                        </div>
+                    </div>
+					<div class="clearfix contact-technical">
+						<label for="contact_technical_email">E-mail</label>
+						<div class="input">
+							<input class="span4" id="contact_technical_email" name="contact.technical.email" type="text" placeholder="E-mail address" value="${data.contact.technical.email}" rel="popover" data-content="Define the contact e-mail address of this Account for technical issues." />
+						</div>
+					</div>
+					<div class="clearfix contact-technical">
+						<label for="contact_technical_number">Number</label>
+						<div class="input">
+							<input class="span4" id="contact_technical_number" name="contact.technical.number" type="text" placeholder="555-555-5555" value="${data.contact.technical.number}" rel="popover" data-content="Define the contact number of this Account for technical issues." />
+						</div>
+					</div>
+					<hr />
+
+					<br />
 					<div class="clearfix">
 						<label for="music_on_hold">Music on Hold</label>
 						<div class="input">

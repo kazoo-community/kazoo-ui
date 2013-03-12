@@ -62,7 +62,14 @@
 	                                        <select name="callflow_id" id="callflow_id">
 	                                            <option id="empty_option_callflow" value="empty_option_callflow">-- Select --</option>
 	                                            {{each field_data.callflows}}
-	                                                <option value="${id}" id="option_callflow_${id}">&nbsp;{{each(k,v) numbers}}${v}&nbsp;{{/each}}</option>
+	                                                <option value="${id}" id="option_callflow_${id}">
+	                                                	&nbsp;
+	                                                	{{if name}}
+	                                                		${name}&nbsp;
+                                                		{{else}}
+	                                                		{{each(k,v) numbers}}${v}&nbsp;{{/each}}
+                                                		{{/if}}
+	                                                </option>
 	                                            {{/each}}
 	                                        </select>
 	                                    </li>
