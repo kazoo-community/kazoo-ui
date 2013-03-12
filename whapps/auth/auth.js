@@ -377,7 +377,11 @@ winkstart.module('auth', 'auth',
                         $('#ws-content')
                             .empty()
                             .append(code_html);
-                    } else {
+                    }
+                    else if(winkstart.config.register_type === 'skip_code') {
+                        winkstart.publish('onboard.register');
+                    }
+                    else {
                         winkstart.publish('auth.register');
                     }
                 }
