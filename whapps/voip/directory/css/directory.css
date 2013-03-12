@@ -3,12 +3,12 @@
     border-radius: 15px 15px 0px 0px;
     color: #666666;
     margin: 20px auto auto;
-    width: 500px;
+    width: 480px;
     max-height: 342px;
     float: left;
 }
 
-#directory-form #basic#tab_users .rows {
+#directory-form #basic #tab_users .rows {
     max-height: 310px;
     overflow: auto;
 }
@@ -17,7 +17,7 @@
     color: #666666;
     cursor: pointer;
     text-decoration: underline;
-    line-height: 30px;
+    line-height: 32px;
 }
 
 #directory-form #basic #tab_users .action_user:not(:first-child) {
@@ -34,16 +34,16 @@
 #directory-form #basic #tab_users .column {
     float: left;
     text-align: center;
-    height: 30px;
-    line-height: 30px;
+    height: 32px;
+    line-height: 32px;
 }
 
 #directory-form #basic #tab_users select {
-    height: 18px;
+    height: 22px;
 }
 
 #directory-form #basic #tab_users .column.first {
-    width: 250px;
+    width: 230px;
     overflow: hidden;
     text-align:center;
 }
@@ -67,7 +67,7 @@
 }
 
 #directory-form #basic #tab_users .row {
-    height: 30px;
+    height: 32px;
     margin-left: 0px;
 }
 
