@@ -71,7 +71,7 @@
     font-size: 12px !important;
 }
 
-#edit_number .header_nav .area_code_wrapper input:-moz-placeholder {
+#edit_number .header_nav .area_code_wrapper input::-moz-placeholder {
     color: #CCCCCC !important;
     font-size: 12px !important;
 }
