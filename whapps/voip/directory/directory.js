@@ -205,6 +205,10 @@ winkstart.module('voip', 'directory', {
                     });
                 }
             }
+
+            if(users_count === 0) {
+                success();
+            }
         },
 
         edit_directory: function(data, _parent, _target, _callbacks, data_defaults){
