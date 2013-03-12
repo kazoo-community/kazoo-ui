@@ -247,10 +247,10 @@ winkstart.module('voip', 'account', {
         render_account: function(data, target, callbacks) {
             var THIS = this,
                 account_html = THIS.templates.edit.tmpl(data),
-                tech_email = $('#contact_technical_email', account_html),
-                tech_number = $('#contact_technical_number', account_html),
-                bill_email = $('#contact_billing_email', account_html),
-                bill_number = $('#contact_billing_number', account_html),
+                $tech_email = $('#contact_technical_email', account_html),
+                $tech_number = $('#contact_technical_number', account_html),
+                $bill_email = $('#contact_billing_email', account_html),
+                $bill_number = $('#contact_billing_number', account_html),
                 is_identical_contact = false;
 
             winkstart.validate.set(THIS.config.validation, account_html);
@@ -295,8 +295,8 @@ winkstart.module('voip', 'account', {
 
             $('#contact_copy_checkbox', account_html).change(function() {
                 if($('#contact_copy_checkbox', account_html).attr('checked')) {
-                    tech_email.val(bill_email.val());
-                    tech_number.val(bill_number.val());
+                    $tech_email.val($bill_email.val());
+                    $tech_number.val($bill_number.val());
                     $('.contact-technical', account_html).slideUp();
                     is_identical_contact = true;
                 } else {
@@ -305,21 +305,21 @@ winkstart.module('voip', 'account', {
                 }
             });
 
-            bill_email.keyup(function() {
+            $bill_email.keyup(function() {
                 if(is_identical_contact) {
-                    tech_email.val(bill_email.val());
+                    $tech_email.val($bill_email.val());
                 }
             });
 
-            bill_number.keyup(function() {
+            $bill_number.keyup(function() {
                 if(is_identical_contact) {
-                    tech_number.val(bill_number.val());
+                    $tech_number.val($bill_number.val());
                 }
             });
 
             // if at least one field isn't empty, and technical fields are equals to billing fields
-            if( (tech_email.val().length>0 || tech_number.val().length>0)
-              && tech_number.val() == bill_number.val() && tech_email.val() == bill_email.val()) {
+            if( ($tech_email.val().length>0 || $tech_number.val().length>0)
+              && $tech_number.val() == $bill_number.val() && $tech_email.val() == $bill_email.val()) {
                 $('#contact_copy_checkbox', account_html).attr('checked','checked');
                 $('.contact-technical', account_html).hide();
                 is_identical_contact = true;
