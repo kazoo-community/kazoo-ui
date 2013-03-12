@@ -353,7 +353,7 @@ winkstart.module('voip', 'voip', {
                 function(_data, status) {
                     var cpt_callflows = 0;
                     $.each(_data.data, function() {
-                        if(!(this.featurecode && 'name' in this.featurecode)) {
+                        if(!(this.featurecode && 'name' in this.featurecode) && !(this.numbers && $.inArray("no_match",this.numbers)>=0)) {
                             cpt_callflows++;
                         }
                     });
