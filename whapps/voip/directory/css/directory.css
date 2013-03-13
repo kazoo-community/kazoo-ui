@@ -8,7 +8,7 @@
     float: left;
 }
 
-#directory-form #basic #tab_users .rows {
+#directory-form #basic#tab_users .rows {
     max-height: 310px;
     overflow: auto;
 }
@@ -63,7 +63,7 @@
 }
 
 #directory-form #basic #tab_users .column.merged {
-    width: 500px;
+    width: 480px;
 }
 
 #directory-form #basic #tab_users .row {
@@ -125,8 +125,13 @@
 #directory-form #basic .add_user .add_user_fields .tooltip-wrapper {
     margin-left: 0px;
 }
+
+#directory-form #basic .add_user .add_user_fields ul {
+    list-style-type: none;
+}
+
 #directory-form #basic .add_user .add_user_div {
-    margin: auto;
+    margin: 10px auto auto auto;
     width: 200px;
     padding-bottom: 15px;
 }

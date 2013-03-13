@@ -26,6 +26,16 @@ a.ui-dialog-titlebar-close {
     margin: -15px 0 0 !important;
 }
 
+.ui-widget { 
+    font-family: Helvetica; 
+    font-size: 1em; 
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { 
+    font-family: Helvetica; 
+}
+
+
 .ui-widget-header {
     background: #2ab9e1;
 }
@@ -35,7 +45,7 @@ a.ui-dialog-titlebar-close {
 }
 
 .ui-dialog-title {
-    font-family: Verdana;
+    font-family: Helvetica;
     font-weight: normal;
 }
 
