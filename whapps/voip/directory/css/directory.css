@@ -3,7 +3,7 @@
     border-radius: 15px 15px 0px 0px;
     color: #666666;
     margin: 20px auto auto;
-    width: 500px;
+    width: 480px;
     max-height: 342px;
     float: left;
 }
@@ -17,7 +17,7 @@
     color: #666666;
     cursor: pointer;
     text-decoration: underline;
-    line-height: 30px;
+    line-height: 32px;
 }
 
 #directory-form #basic #tab_users .action_user:not(:first-child) {
@@ -34,16 +34,16 @@
 #directory-form #basic #tab_users .column {
     float: left;
     text-align: center;
-    height: 30px;
-    line-height: 30px;
+    height: 32px;
+    line-height: 32px;
 }
 
 #directory-form #basic #tab_users select {
-    height: 18px;
+    height: 22px;
 }
 
 #directory-form #basic #tab_users .column.first {
-    width: 250px;
+    width: 230px;
     overflow: hidden;
     text-align:center;
 }
@@ -63,11 +63,11 @@
 }
 
 #directory-form #basic #tab_users .column.merged {
-    width: 500px;
+    width: 480px;
 }
 
 #directory-form #basic #tab_users .row {
-    height: 30px;
+    height: 32px;
     margin-left: 0px;
 }
 
@@ -125,8 +125,13 @@
 #directory-form #basic .add_user .add_user_fields .tooltip-wrapper {
     margin-left: 0px;
 }
+
+#directory-form #basic .add_user .add_user_fields ul {
+    list-style-type: none;
+}
+
 #directory-form #basic .add_user .add_user_div {
-    margin: auto;
+    margin: 10px auto auto auto;
     width: 200px;
     padding-bottom: 15px;
 }
