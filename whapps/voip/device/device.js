@@ -293,7 +293,7 @@ winkstart.module('voip', 'device', {
                             emergency: {}
                         },
                         ringtones: {},
-                        call_restriction: {},
+                        call_restriction: { closed_groups: 'inherit' },
                         media: {
                             bypass_media: 'auto',
                             audio: {
@@ -839,6 +839,8 @@ winkstart.module('voip', 'device', {
             else {
                 form_data.suppress_unregister_notifications = true;
             }
+
+            form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
 
             delete form_data.extra;
 

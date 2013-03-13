@@ -244,6 +244,25 @@
                 </div>
 
                 <div id="restrictions">
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="If checked, this device will only be able to call the devices that are part of the same groups">
+                                            {{if data.call_restriction.closed_groups.action === 'deny'}}
+                                                <input type="checkbox" name="extra.closed_groups" checked="checked"/>
+                                            {{else}}
+                                                <input type="checkbox" name="extra.closed_groups"/>
+                                            {{/if}}
+                                            <span>Closed Groups</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     {{each(k, v) field_data.call_restriction}}
                     <div class="clearfix">
                         <label>${v.friendly_name}</label>

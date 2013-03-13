@@ -237,7 +237,9 @@ winkstart.module('voip', 'user', {
                         call_forward: {
                             substitute: true
                         },
-                        call_restriction: {},
+                        call_restriction: {
+                            closed_groups: { action: 'inherit' }
+                        },
                         caller_id: {
                             internal: {},
                             external: {},
@@ -712,6 +714,8 @@ winkstart.module('voip', 'user', {
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g,'');
             form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g,'');
 
+            form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
+
             if(!form_data.hotdesk.require_pin) {
                 delete form_data.hotdesk.pin;
             }
@@ -722,6 +726,7 @@ winkstart.module('voip', 'user', {
 
             delete form_data.pwd_mngt_pwd1;
             delete form_data.pwd_mngt_pwd2;
+            delete form_data.extra;
 
             return form_data;
         },
