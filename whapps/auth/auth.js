@@ -373,12 +373,12 @@ winkstart.module('auth', 'auth',
                 e.preventDefault();
 
                 if(!winkstart.config.nav.register) {
-                    if(winkstart.config.register_type == "onboard") {
+                    if(winkstart.config.register_type == 'ask_code') {
                         $('#ws-content')
                             .empty()
                             .append(code_html);
                     }
-                    else if(winkstart.config.register_type === 'skip_code') {
+                    else if(winkstart.config.register_type === 'onboard') {
                         winkstart.publish('onboard.register');
                     }
                     else {
