@@ -479,7 +479,7 @@ winkstart.module('userportal', 'portal_manager', {
                         $.each(_data.data, function(k, v) {
                             tab_data.push([
                                 v.name,
-                                v.internal_number,
+                                v.internal_number ? v.internal_number : '-',
                                 v.external_number ? v.external_number : '-'
                             ]);
                         });
