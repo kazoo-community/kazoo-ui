@@ -8,7 +8,7 @@
     float: left;
 }
 
-#directory-form #basic#tab_users .rows {
+#directory-form #basic #tab_users .rows {
     max-height: 310px;
     overflow: auto;
 }
