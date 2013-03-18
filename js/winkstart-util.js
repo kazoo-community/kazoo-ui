@@ -371,21 +371,38 @@
     winkstart.chart = function(target, data, opt, type) {
         this.target = target;
         this.data = data;
-        this.options = {
-            backgroundColor: 'transparent',
-            pieSliceText: 'value',
-            pieSliceBorderColor: 'transparent',
-            legend: {
-                textStyle: {
-                    color: 'white'
+        this.options = { 
+            seriesDefaults: {
+                renderer: jQuery.jqplot.PieRenderer, 
+                rendererOptions: {
+                    showDataLabels: true,
+                    dataLabels: 'value',
+                    startAngle: -90,
+                    padding: 10
                 }
+            },
+            grid: {
+                background: 'transparent',
+                drawBorder: false,
+                shadow: false
+            },
+            gridPadding: { top: 15, right: 0, bottom: 0, left: 0 },
+            legend: { 
+                show: true, 
+                location: 'e',
+                background: 'transparent',
+                border: 'none',
+                fontFamily: 'Helvetica',
+                fontSize: '8pt'
             }
         };
-        if(type){
-            this.type = type;
-        }
 
         $.extend(true, this.options, opt);
+
+        // 'type' not used yet as we only use piecharts for now. To be implemented if other types of charts are needed.
+        if(type) {
+            this.type = type;
+        }
 
         return this.init();
     };
@@ -393,30 +410,17 @@
     winkstart.chart.prototype = {
         init: function() {
             var THIS = this;
-
-            function loadChart() {
-                THIS.loadChart(THIS);
-            }
-
-            google.load("visualization", "1", {
-                packages:["corechart", "gauge"],
-                callback: loadChart
-            });
+            THIS.loadChart(THIS);
         },
 
-        loadChart: function(THIS){
+        loadChart: function(THIS) {
             switch(THIS.type) {
-                case 'line':
-                    THIS.chart = new google.visualization.LineChart(document.getElementById(THIS.target));
-                    break;
-                case 'gauge':
-                    THIS.chart = new google.visualization.Gauge(document.getElementById(THIS.target));
-                    break;
+                case 'line': //TODO: To be implemented if needed
+                case 'gauge': //TODO: To be implemented if needed
                 default:
-                    THIS.chart = new google.visualization.PieChart(document.getElementById(THIS.target));
+                    THIS.chart = jQuery.jqplot(THIS.target, [THIS.data], THIS.options);
                     break;
             }
-            THIS.chart.draw(google.visualization.arrayToDataTable(THIS.data), THIS.options);
         },
 
         setData: function(data, push) {
@@ -436,8 +440,7 @@
         },
 
         refresh: function() {
-            var data = google.visualization.arrayToDataTable(this.data);
-            this.chart.draw(data, this.options);
+            this.chart = jQuery.jqplot(THIS.target, [THIS.data], THIS.options);
         }
     };
 

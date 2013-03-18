@@ -144,10 +144,6 @@
     width: auto;
 }
 
-#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper {
-    height: 100px;
-}
-
 #voip_welcome-view .welcome_div .content .content_block .content_line.account {
     padding: 10px 0;
 }
@@ -191,4 +187,15 @@
     height: 120px;
     margin: auto;
     padding-top: 11px;
+    color: #FFFFFF;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper td {
+    border: none;
+}
+
+#voip_welcome-view .welcome_div .content .content_block .pie_chart_wrapper .jqplot-table-legend-swatch-outline {
+    border: none;
+    padding: 0;
+    box-shadow: 2px 2px 2px #222222;
 }
