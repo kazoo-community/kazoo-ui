@@ -254,18 +254,12 @@ winkstart.module('voip', 'voip', {
                             var cpt_registered = data_registered.length + cpt_enabled_cell,
                                 cpt_unregistered = cpt_devices - cpt_registered - cpt_disabled
                                 data = [
-                                    ['Devices', 'Number'],
                                     ['Disabled', cpt_disabled],
                                     ['Unregistered', cpt_unregistered],
                                     ['Registered', cpt_registered]
                                 ],
                                 opt = {
-                                    slices: {
-                                        0: {color: 'red'},
-                                        1: {color: 'orange'},
-                                        2: {color: 'green'}
-                                    },
-                                    sliceVisibilityThreshold: 0
+                                    seriesColors: ['red', 'orange', 'green']
                                 },
                                 chart = new winkstart.chart('pie_chart_wrapper', data, opt);
                         },
