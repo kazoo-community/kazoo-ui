@@ -443,9 +443,6 @@ winkstart.module('voip', 'callflow', {
             target.append(this._renderFlow());
 
             var current_flow = THIS.stringify_flow(THIS.flow);
-            console.log(THIS.original_flow);
-            console.log(current_flow);
-            console.log(THIS.flow);
             if(!('original_flow' in THIS) || THIS.original_flow.split('|')[0] !== current_flow.split('|')[0]) {
                 THIS.original_flow = current_flow;
                 THIS.show_pending_change(false);
