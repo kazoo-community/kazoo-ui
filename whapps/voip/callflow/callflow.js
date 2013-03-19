@@ -329,6 +329,7 @@ winkstart.module('voip', 'callflow', {
                                 THIS._resetFlow();
                             }
                         );
+                        THIS.show_pending_change(false);
                     });
                 }
                 else {
@@ -341,6 +342,8 @@ winkstart.module('voip', 'callflow', {
 
         editCallflow: function(data) {
             var THIS = this;
+
+            delete THIS.original_flow; // clear original_flow
 
             $('#callflow-view .callflow_help').remove();
 
@@ -438,6 +441,41 @@ winkstart.module('voip', 'callflow', {
             var target = $(this.config.elements.flow).empty();
 
             target.append(this._renderFlow());
+
+            var current_flow = THIS.stringify_flow(THIS.flow);
+            console.log(THIS.original_flow);
+            console.log(current_flow);
+            console.log(THIS.flow);
+            if(!('original_flow' in THIS) || THIS.original_flow.split('|')[0] !== current_flow.split('|')[0]) {
+                THIS.original_flow = current_flow;
+                THIS.show_pending_change(false);
+            } else {
+                THIS.show_pending_change(THIS.original_flow !== current_flow);
+            }
+        },
+
+        show_pending_change: function(pending_change) {
+            var THIS = this;
+            if(pending_change) {
+                $('#pending_change', '#ws_callflow').show();
+                $('.save', '#ws_callflow').addClass('pulse-box');
+            } else {
+                $('#pending_change', '#ws_callflow').hide();
+                $('.save', '#ws_callflow').removeClass('pulse-box');
+            }
+        },
+
+        stringify_flow: function(flow) {
+            var s_flow = flow.id + "|" + (!flow.name ? 'undefined' : flow.name);
+            s_flow += "|NUMBERS";
+            $.each(flow.numbers, function(key, value) {
+                s_flow += "|" + value;
+            });
+            s_flow += "|NODES";
+            $.each(flow.nodes, function(key, value) {
+                s_flow += "|" + key + ":" + value.data.data.id;
+            });
+            return s_flow;
         },
 
         // Create a new branch node for the flow

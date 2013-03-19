@@ -12,7 +12,26 @@
 
 #ws_callflow {
     width: 100%;
-    margin-top: 30px;
+}
+
+#ws_callflow #callflow_header {
+    width: 100%;
+    height: 30px;
+}
+
+#ws_callflow #callflow_header #pending_change {
+    float: left;
+    width: 85%;
+    text-align: center;
+    display: none;
+}
+
+#ws_callflow #callflow_header #pending_change span {
+    text-shadow: 1px 2px #363636;
+    color: #05ADDC;
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 14px;
 }
 
 #ws_callflow #ws_cf_flow {
@@ -132,4 +151,25 @@
     float: right;
     margin-top: 6px;
     cursor: pointer;
+}
+
+#callflow-view .pulse-box {
+    -webkit-animation: "pulse-box" 1s ease-in-out 0 infinite alternate;
+
+    animation-name: pulse-box;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@-webkit-keyframes pulse-box {
+    0% { box-shadow: 0px 0px 0px #73F03C inset, 0px 0px 0px #14FF00; }
+    100% { box-shadow: 0px 0px 30px #73F03C inset, 0px 0px 10px #14FF00; }
+}
+
+@keyframes pulse-box {
+    0% { box-shadow: 0px 0px 0px #73F03C inset, 0px 0px 0px #14FF00; }
+    100% { box-shadow: 0px 0px 30px #73F03C inset, 0px 0px 10px #14FF00; }
 }
