@@ -800,10 +800,8 @@ winkstart.module('accounts', 'accounts_manager', {
                     id: data.data.id
                 };
 
-                winkstart.confirm('Do you really want to use ' + account.name + '\'s account?', function() {
-                    winkstart.publish('accounts_manager.trigger_masquerade', { account: account }, function() {
-                        winkstart.publish('accounts_manager.activate');
-                    });
+                winkstart.publish('accounts_manager.trigger_masquerade', { account: account }, function() {
+                    winkstart.publish('accounts_manager.activate');
                 });
             });
 
@@ -876,12 +874,10 @@ winkstart.module('accounts', 'accounts_manager', {
                                     id: $('#sub_accounts', switch_html).val()
                                 };
 
-                            winkstart.confirm('Do you really want to use ' + account.name + '\'s account?', function() {
-                                THIS.trigger_masquerade({account: account}, function() {
-                                    $(switch_html).dialog('close');
+                            THIS.trigger_masquerade({account: account}, function() {
+                                $(switch_html).dialog('close');
 
-                                    winkstart.publish('accounts_manager.activate');
-                                });
+                                winkstart.publish('accounts_manager.activate');
                             });
                         });
                     }
@@ -962,7 +958,6 @@ winkstart.module('accounts', 'accounts_manager', {
                 THIS.update_apps(id);
 
                 winkstart.publish('nav.company_name', function() { return winkstart.apps['accounts'].account_name });
-                winkstart.alert('info', 'Masquerading finished, you\'re now using your root account.');
 
                 winkstart.publish('accounts_manager.activate');
             }
@@ -971,7 +966,6 @@ winkstart.module('accounts', 'accounts_manager', {
         masquerade_account: function(account_name) {
             var THIS = this;
 
-            winkstart.alert('info', 'You are now using ' + account_name + '\'s account');
             winkstart.publish('nav.company_name', function() { return 'as ' + account_name + ' (restore)' });
         },
 
