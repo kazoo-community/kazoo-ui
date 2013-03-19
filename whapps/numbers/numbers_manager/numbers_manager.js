@@ -986,6 +986,10 @@ winkstart.module('numbers', 'numbers_manager', {
                 files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request.<br/>';
                 loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request.<br/>';
 
+                if(!port_form_data.port.email.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
+                    string_alert += 'The e-mail address you entered for notification doesn\'t have a valid format';
+                }
+
                 if(string_alert === '') {
                     delete port_form_data.extra;
 
