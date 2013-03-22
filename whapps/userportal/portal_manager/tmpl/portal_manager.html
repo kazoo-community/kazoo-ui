@@ -53,6 +53,16 @@
                                 <input id="vm-to-email-txt" name="vm-to-email-txt" type="text" value="${data.email}"/>
                             </div>
                         </div>
+                        <div class="clearfix">
+                            <label>Keep Caller ID:</label>
+                            <div class="input">
+                                {{if data.call_forward.keep_caller_id}}
+                                    <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
+                                {{else}}
+                                    <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox"/>
+                                {{/if}}
+                            </div>
+                        </div>
                         <div class="buttons">
                             <button id="save-settings-link" class="btn success save-btn">Save</button>
                         </div>
