@@ -304,7 +304,8 @@ winkstart.module('voip', 'device', {
                             },
                             fax: {
                                 option: 'auto'
-                            }
+                            },
+                            fax_option: 'auto'
                         },
                         sip: {
                             method: 'password',
@@ -742,6 +743,10 @@ winkstart.module('voip', 'device', {
         },
 
         normalize_data: function(data) {
+            if('media' in data && 'fax' in data.media && 'fax_option' in data.media) {
+                data.media.fax.option = data.media.fax_option;
+            }
+
             if(data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
                 delete data.caller_id.internal;
             }
