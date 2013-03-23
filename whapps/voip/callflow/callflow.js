@@ -29,7 +29,8 @@ winkstart.module('voip', 'callflow', {
             help_callflow: 'tmpl/help_callflow.html',
             fax_callflow: 'tmpl/fax_callflow.html',
             edit_name: 'tmpl/edit_name.html',
-            prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html'
+            prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
+            response_callflow: 'tmpl/response_callflow.html'
         },
 
         elements: {
@@ -108,6 +109,11 @@ winkstart.module('voip', 'callflow', {
             },
             'callflow.get_trunkstore_account': {
                 url: '{api_url}/accounts/{account_id}/connectivity/{connectivity_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'callflow.list_media': {
+                url: '{api_url}/accounts/{account_id}/media',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -443,9 +449,6 @@ winkstart.module('voip', 'callflow', {
             target.append(this._renderFlow());
 
             var current_flow = THIS.stringify_flow(THIS.flow);
-            console.log(THIS.original_flow);
-            console.log(current_flow);
-            console.log(THIS.flow);
             if(!('original_flow' in THIS) || THIS.original_flow.split('|')[0] !== current_flow.split('|')[0]) {
                 THIS.original_flow = current_flow;
                 THIS.show_pending_change(false);
@@ -466,14 +469,21 @@ winkstart.module('voip', 'callflow', {
         },
 
         stringify_flow: function(flow) {
-            var s_flow = flow.id + "|" + (!flow.name ? 'undefined' : flow.name);
+            var s_flow = flow.id + "|" + (!flow.name ? 'undefined' : flow.name),
+                first_iteration;
             s_flow += "|NUMBERS";
             $.each(flow.numbers, function(key, value) {
                 s_flow += "|" + value;
             });
             s_flow += "|NODES";
             $.each(flow.nodes, function(key, value) {
-                s_flow += "|" + key + ":" + value.data.data.id;
+                s_flow += "|" + key + "::";
+                first_iteration = true;
+                $.each(value.data.data, function(k,v) {
+                    if(!first_iteration) { s_flow += '//'; }
+                    else { first_iteration = false; }
+                    s_flow += k+':'+v;
+                });
             });
             return s_flow;
         },
@@ -586,7 +596,7 @@ winkstart.module('voip', 'callflow', {
 
                 this.deleteMetadata = function(key) {
                     if('data' in this.data && key in this.data.data) {
-                        delete node.data.data[key];
+                        delete this.data.data[key];
                     }
                 }
 
@@ -2480,6 +2490,103 @@ winkstart.module('voip', 'callflow', {
                                 }
                             }
                         });
+                    }
+                },
+                'response[]': {
+                    name: 'Response',
+                    icon: 'rightarrow',
+                    category: 'Advanced',
+                    module: 'response',
+                    tip: 'Return a custom SIP error code',
+                    data: {
+                        code: '',
+                        message: '',
+                        media: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return 'SIP Code: ' + node.getMetadata('code');
+                    },
+                    edit: function(node, callback) {
+                        winkstart.request(true, 'callflow.list_media', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.response_callflow.tmpl({
+                                    response_data: {
+                                        items: data.data,
+                                        media_enabled: node.getMetadata('media') ? true : false,
+                                        selected_media: node.getMetadata('media') || '',
+                                        code: node.getMetadata('code') || '',
+                                        message: node.getMetadata('message') || ''
+                                    }
+                                });
+
+                                if($('#media_selector option:selected', popup_html).val() == undefined
+                                || $('#media_selector option:selected', popup_html).val() == 'null') {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('#media_selector', popup_html).change(function() {
+                                    if($('#media_selector option:selected', popup_html).val() == undefined
+                                    || $('#media_selector option:selected', popup_html).val() == 'null') {
+                                        $('#edit_link', popup_html).hide();
+                                    } else {
+                                        $('#edit_link', popup_html).show();
+                                    }
+                                })
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#media_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('media.popup_edit', _data, function(_data) {
+                                        node.setMetadata('media', _data.data.id || 'null');
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    if($('#response_code_input', popup_html).val().match(/^[1-6][0-9]{2}$/)) {
+                                        node.setMetadata('code', parseInt($('#response_code_input', popup_html).val(), 10));
+                                        node.setMetadata('message', $('#response_message_input', popup_html).val());
+                                        if($('#media_selector', popup_html).val() && $('#media_selector', popup_html).val() != 'null') {
+                                            node.setMetadata('media', $('#media_selector', popup_html).val());
+                                        } else {
+                                            node.deleteMetadata('media');
+                                        }
+                                        
+                                        node.caption = 'SIP Code: ' + $('#response_code_input', popup_html).val();
+
+                                        popup.dialog('close');
+                                    } else {
+                                        winkstart.alert('error','Please enter a valide SIP code.');
+                                    }
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Response',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
                     }
                 }
             });
