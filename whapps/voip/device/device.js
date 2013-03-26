@@ -444,6 +444,10 @@ winkstart.module('voip', 'device', {
                                                         var render_data;
                                                         defaults.data.device_type = 'sip_device';
 
+                                                        if('sip' in _data.data && 'realm' in _data.data.sip) {
+                                                            defaults.field_data.sip.realm = _data.data.sip.realm;
+                                                        }
+
                                                         THIS.migrate_data(_data);
 
                                                         render_data = $.extend(true, defaults, _data);
@@ -727,10 +731,6 @@ winkstart.module('voip', 'device', {
 
             if(typeof data.data.media == 'object' && typeof data.data.media.fax == 'object' && 'codecs' in data.data.media.fax) {
                 delete data.data.media.fax.codecs;
-            }
-
-            if('realm' in data.data.sip) {
-                delete data.data.sip.realm;
             }
 
             if('status' in data.data) {
