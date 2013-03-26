@@ -213,11 +213,11 @@
 					</div>
 
 					<div class="clearfix">
-						<label for="media_bypass_media">Peer to Peer Audio</label>
+						<label for="media_peer_to_peer">Peer to Peer Audio</label>
 						<div class="input">
-							<select name="media.bypass_media" id="media_bypass_media" class="medium" rel="popover" data-content="Select the kind of Peer-to-Peer that you would like to set on this device">
-								{{each(key, val) field_data.media.bypass_media_options}}
-                                    {{if data.media.bypass_media == key}}
+							<select name="media.peer_to_peer" id="media_peer_to_peer" class="medium" rel="popover" data-content="Select the kind of Peer-to-Peer that you would like to set on this device">
+								{{each(key, val) field_data.media.peer_to_peer_options}}
+                                    {{if data.media.peer_to_peer == key}}
                                         <option value="${key}" selected="selected">${val}</option>
                                     {{else}}
                                         <option value="${key}">${val}</option>

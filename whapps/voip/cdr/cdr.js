@@ -161,7 +161,7 @@ function(args) {
                                 humanFullDate = parse_date(this.timestamp);
                                 web_browser_id = parse_cdr_id(cdr_id);
                                 call_duration += this.billing_seconds >= 0 ? parseFloat(this.billing_seconds) : 0;
-                                cost = this.cost ? '$' + parseFloat((this.cost)/10000).toFixed(2) : '-';
+                                cost = this.cost ? '$' + parseFloat(this.cost).toFixed(2) : '-';
 
                                 tab_data.push([
                                     this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
