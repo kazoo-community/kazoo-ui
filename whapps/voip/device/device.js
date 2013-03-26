@@ -295,7 +295,7 @@ winkstart.module('voip', 'device', {
                         ringtones: {},
                         call_restriction: { closed_groups: 'inherit' },
                         media: {
-                            bypass_media: 'auto',
+                            peer_to_peer: 'auto',
                             audio: {
                                 codecs: ['PCMU', 'PCMA']
                             },
@@ -336,10 +336,10 @@ winkstart.module('voip', 'device', {
                             }
                         },
                         media: {
-                            bypass_media_options: {
+                            peer_to_peer_options: {
                                 'auto': 'Automatic',
-                                'false': 'Always',
-                                'true': 'Never'
+                                'true': 'Always',
+                                'false': 'Never'
                             },
                             fax: {
                                 options: {
@@ -745,6 +745,10 @@ winkstart.module('voip', 'device', {
         normalize_data: function(data) {
             if('media' in data && 'fax' in data.media && 'fax_option' in data.media) {
                 data.media.fax.option = data.media.fax_option;
+            }
+
+            if('media' in data && 'bypass_media' in data.media) {
+                delete data.media.bypass_media;
             }
 
             if(data.caller_id.internal.number == '' && data.caller_id.internal.name == '') {
