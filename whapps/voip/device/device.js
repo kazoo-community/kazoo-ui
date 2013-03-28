@@ -743,6 +743,10 @@ winkstart.module('voip', 'device', {
         },
 
         normalize_data: function(data) {
+            if('provision' in data && data.provision.voicemail_beep !== 0) {
+                delete data.provision.voicemail_beep;
+            }
+
             if('media' in data && 'fax' in data.media && 'fax_option' in data.media) {
                 data.media.fax.option = data.media.fax_option;
             }
@@ -812,6 +816,10 @@ winkstart.module('voip', 'device', {
         },
 
         clean_form_data: function(form_data) {
+            if('provision' in form_data && form_data.provision.voicemail_beep === true) {
+                form_data.provision.voicemail_beep = 0;
+            }
+
             if(form_data.mac_address) {
                 form_data.mac_address = form_data.mac_address.toLowerCase();
 
