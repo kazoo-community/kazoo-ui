@@ -829,11 +829,11 @@ winkstart.module('voip', 'device', {
                 form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g,'');
             }
 
-            if(form_data.media.audio) {
+            if('media' in form_data && 'audio' in form_data.media) {
                 form_data.media.audio.codecs = $.map(form_data.media.audio.codecs, function(val) { return (val) ? val : null });
             }
 
-            if(form_data.media.video) {
+            if('media' in form_data && 'video' in form_data.media) {
                 form_data.media.video.codecs = $.map(form_data.media.video.codecs, function(val) { return (val) ? val : null });
             }
 
@@ -842,14 +842,16 @@ winkstart.module('voip', 'device', {
                 form_data.enabled = form_data.call_forward.enabled;
             }
 
-            if(form_data.extra.notify_unregister === true) {
+            if('extra' in form_data && form_data.extra.notify_unregister === true) {
                 form_data.suppress_unregister_notifications = false;
             }
             else {
                 form_data.suppress_unregister_notifications = true;
             }
 
-            form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
+            if('extra' in form_data && 'closed_groups' in form_data.extra) {
+                form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
+            }
 
             delete form_data.extra;
 
