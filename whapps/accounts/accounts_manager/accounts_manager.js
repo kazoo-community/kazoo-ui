@@ -807,9 +807,15 @@ winkstart.module('accounts', 'accounts_manager', {
 
             winkstart.link_form(account_html);
 
-            (target)
-                .empty()
-                .append(account_html);
+            var render_acc = function() {
+                (target)
+                    .empty()
+                    .append(account_html);
+            };
+
+            if(winkstart.publish('phone.render_account_fields', $(account_html), data.data.provision || (data.data.provision = {}), render_acc)) {
+                render_acc();
+            }
         },
 
         render_list: function(parent) {
