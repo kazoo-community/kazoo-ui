@@ -523,6 +523,35 @@
 	            		    </ul>
 	            		</div>
 	            	</div>
+
+                    {{if data.id}}
+                        <hr/>
+
+                        <h3>Devices where this user is currently logged in</h3>
+
+                        <div class="help_box">In order to actually log out from the devices listed below, you need to tick the checkbox on the right of the device and then press the Save button!</div>
+
+                        <div id="hotdesk_devices" class="small-table">
+                            <div class="row title">
+                                <div class="column">Devices&nbsp;&nbsp;<span class="icon medium device"/></div>
+                                <div class="column">Log out</div>
+                            </div>
+                            <div class="rows">
+                                {{if data.hotdesk.endpoint_ids}}
+                                    {{each(k, v) data.hotdesk.endpoint_ids}}
+                                        <div class="row" id="row_hotdesk_${v}" data-id="${v}">
+                                            <div class="column">${field_data.device_list[v].name}</div>
+                                            <div class="column"><input type="checkbox" name="hotdesk.log_out[]" value="${v}"></input></a></div>
+                                        </div>
+                                    {{/each}}
+                                {{else}}
+                                    <div class="row" id="row_no_data">
+                                        <div class="column merged">This user is not logged in to any other endpoints.</div>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/if}}
 	            </div>
 
                 <div id="restrictions">

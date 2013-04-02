@@ -140,3 +140,24 @@
     text-align: left;
     font-weight: bold;
 }
+
+/* Hotdesk devices */
+#user-form #hotdesk_devices {
+    width: 400px;
+}
+
+#user-form #hotdesk_devices .row .column:nth-child(1) {
+    width: 300px;
+}
+
+#user-form #hotdesk_devices .row .column:nth-child(2) {
+    width: 80px;
+}
+
+#user-form #hotdesk_devices .row .column.merged {
+    width: 400px;
+}
+
+#user-form #hotdesk_devices .row input[type="checkbox"] {
+    margin-top: 10px;
+}

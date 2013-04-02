@@ -75,6 +75,11 @@ winkstart.module('voip', 'user', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'user.device_full_list': {
+                url: '{api_url}/accounts/{account_id}/devices',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'user.device_list': {
                 url: '{api_url}/accounts/{account_id}/devices?filter_owner_id={owner_id}',
                 contentType: 'application/json',
@@ -303,20 +308,25 @@ winkstart.module('voip', 'user', {
                             defaults.field_data.media = _data.data;
 
                             if(typeof data == 'object' && data.id) {
-                                winkstart.request(true, 'user.device_list', {
+                                winkstart.request(true, 'user.device_full_list', {
                                         account_id: winkstart.apps['voip'].account_id,
-                                        api_url: winkstart.apps['voip'].api_url,
-                                        owner_id: data.id
+                                        api_url: winkstart.apps['voip'].api_url
                                     },
-                                    function(_data, status) {
-                                        defaults.field_data.device_list = _data.data;
-
+                                    function(_data_devices, status) {
                                         winkstart.request(true, 'user.get', {
                                                 account_id: winkstart.apps['voip'].account_id,
                                                 api_url: winkstart.apps['voip'].api_url,
                                                 user_id: data.id
                                             },
                                             function(_data, status) {
+                                                if('hotdesk' in _data.data && 'endpoint_ids' in _data.data.hotdesk) {
+                                                    defaults.field_data.device_list = {};
+
+                                                    $.each(_data_devices.data, function(k, v) {
+                                                        defaults.field_data.device_list[v.id] = v;
+                                                    });
+                                                }
+
                                                 THIS.migrate_data(_data);
 
                                                 THIS.render_user($.extend(true, defaults, _data), target, callbacks);
@@ -330,7 +340,7 @@ winkstart.module('voip', 'user', {
                                 );
                             }
                             else {
-                                defaults.field_data.device_list = {};
+                                //defaults.field_data.device_list = {};
                                 THIS.random_id = $.md5(winkstart.random_string(10)+new Date().toString());
                                 defaults.field_data.new_user = THIS.random_id;
 
@@ -655,7 +665,8 @@ winkstart.module('voip', 'user', {
         },
 
         render_device_list: function(data, parent) {
-            var THIS = this;
+            var THIS = this,
+                parent = $('#tab_devices', parent);
 
             if(data.data.id) {
                 var request_string = data.data.new_user ? 'user.device_new_user' : 'user.device_list';
@@ -760,6 +771,24 @@ winkstart.module('voip', 'user', {
             if(data.hotdesk.hasOwnProperty("enable")) {
                 delete data.hotdesk.enable;
 			}
+
+            if(data.hotdesk.hasOwnProperty('log_out')) {
+                var new_endpoint_ids = [];
+
+                $.each(data.hotdesk.endpoint_ids, function(k, v) {
+                    if(data.hotdesk.log_out.indexOf(v) < 0) {
+                        new_endpoint_ids.push(v);
+                    }
+                });
+
+                data.hotdesk.endpoint_ids = new_endpoint_ids;
+
+                delete data.hotdesk.log_out;
+            }
+
+            if(data.hotdesk.hasOwnProperty('endpoint_ids') && data.hotdesk.endpoint_ids.length === 0) {
+                delete data.hotdesk.endpoint_ids;
+            }
 
             return data;
         },
