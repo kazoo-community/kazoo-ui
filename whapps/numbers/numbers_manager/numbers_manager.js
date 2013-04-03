@@ -298,7 +298,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 number_data;
 
             if(numbers_data.length > 0) {
-                var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
+                //var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
+                var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
                     error_function = function() {
                         winkstart.confirm('There was an error when trying to acquire ' + numbers_data[0].phone_number +
                             ', would you like to retry?',
@@ -689,7 +690,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 if(phone_numbers.length > 0) {
                     var phone_number;
                     $.each(phone_numbers, function(k, v) {
-                        phone_number = v.match(/^\+?1?([2-9]\d{9})$/);
+                        //phone_number = v.match(/^\+?1?([2-9]\d{9})$/);
+                        phone_number = v.match(/^\+(.*)$/);
                         if(phone_number && phone_number[1]) {
                             numbers_data.push({phone_number: v});
                         }
