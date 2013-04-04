@@ -129,13 +129,16 @@ winkstart.module('call_center', 'dashboard', {
                 agents_html = THIS.templates.agents_dashboard.tmpl(data),
                 queues_html = THIS.templates.queues_dashboard.tmpl(data),
                 calls_html = THIS.templates.calls_dashboard.tmpl(data),
-                parent = _parent || $('#ws-content');
+                parent = _parent || $('#ws-content'),
+                scroll_value = $('.topbar-right .list_queues_inner', parent).scrollLeft() || 0;
 
             $('#dashboard-view', parent).empty()
                                             .append(agents_html);
 
             $('.topbar-right', parent).empty()
                                           .append(queues_html);
+
+            $('.topbar-right .list_queues_inner', parent).animate({ scrollLeft: scroll_value }, 0);
 
             $('#callwaiting-list .list-panel-anchor ul', parent).empty()
                                                                 .append(calls_html);
@@ -809,6 +812,8 @@ winkstart.module('call_center', 'dashboard', {
                 parent = _parent || $('#ws-content');
 
             parent.empty();
+
+            THIS.current_queue_id = undefined;
 
             //TODO check render global data
             THIS.render_dashboard(parent);
