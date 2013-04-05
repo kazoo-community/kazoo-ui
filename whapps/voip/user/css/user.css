@@ -143,7 +143,8 @@
 
 /* Hotdesk devices */
 #user-form #hotdesk_devices {
-    width: 400px;
+    /*width: 400px;*/
+    width: 320px;
 }
 
 #user-form #hotdesk_devices .row .column:nth-child(1) {
@@ -155,7 +156,8 @@
 }
 
 #user-form #hotdesk_devices .row .column.merged {
-    width: 400px;
+    /* width: 400px; */
+    width: 320px;
 }
 
 #user-form #hotdesk_devices .row input[type="checkbox"] {
