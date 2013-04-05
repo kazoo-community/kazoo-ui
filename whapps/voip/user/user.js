@@ -70,8 +70,8 @@ winkstart.module('voip', 'user', {
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
-            'hotdesk.list': {
-                url: '{api_url}/accounts/{account_id}/users/hotdesks',
+            'user.hotdesks': {
+                url: '{api_url}/accounts/{account_id}/users/{user_id}/hotdesks',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -308,23 +308,26 @@ winkstart.module('voip', 'user', {
                             defaults.field_data.media = _data.data;
 
                             if(typeof data == 'object' && data.id) {
-                                winkstart.request(true, 'user.device_full_list', {
+                                winkstart.request(true, 'user.get', {
                                         account_id: winkstart.apps['voip'].account_id,
-                                        api_url: winkstart.apps['voip'].api_url
+                                        api_url: winkstart.apps['voip'].api_url,
+                                        user_id: data.id
                                     },
-                                    function(_data_devices, status) {
-                                        winkstart.request(true, 'user.get', {
+                                    function(_data, status) {
+                                        winkstart.request(true, 'user.hotdesks', {
                                                 account_id: winkstart.apps['voip'].account_id,
                                                 api_url: winkstart.apps['voip'].api_url,
                                                 user_id: data.id
                                             },
-                                            function(_data, status) {
-                                                if('hotdesk' in _data.data && 'endpoint_ids' in _data.data.hotdesk) {
-                                                    defaults.field_data.device_list = {};
+                                            function(_data_devices) {
+                                                defaults.field_data.device_list = {};
 
-                                                    $.each(_data_devices.data, function(k, v) {
-                                                        defaults.field_data.device_list[v.id] = v;
-                                                    });
+                                                $.each(_data_devices.data, function(k, v) {
+                                                    defaults.field_data.device_list[v.device_id] = { name: v.device_name };
+                                                });
+
+                                                if($.isEmptyObject(defaults.field_data.device_list)) {
+                                                    delete defaults.field_data.device_list;
                                                 }
 
                                                 THIS.migrate_data(_data);
@@ -336,6 +339,7 @@ winkstart.module('voip', 'user', {
                                                 }
                                             }
                                         );
+
                                     }
                                 );
                             }
