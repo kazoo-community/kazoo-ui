@@ -2200,7 +2200,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        return '';
+                        return (node.getMetadata('caller_id_name_prefix') || '') + ' ' + (node.getMetadata('caller_id_number_prefix') || '');
                     },
                     edit: function(node, callback) {
                         var popup, popup_html;
@@ -2213,8 +2213,13 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         $('#add', popup_html).click(function() {
-                            node.setMetadata('caller_id_name_prefix', $('#cid_name_prefix', popup_html).val());
-                            node.setMetadata('caller_id_number_prefix', $('#cid_number_prefix', popup_html).val());
+                            var cid_name_val = $('#cid_name_prefix', popup_html).val(),
+                                cid_number_val = $('#cid_number_prefix', popup_html).val();
+
+                            node.setMetadata('caller_id_name_prefix', cid_name_val);
+                            node.setMetadata('caller_id_number_prefix', cid_number_val);
+
+                            node.caption = cid_name_val + ' ' + cid_number_val;
 
                             popup.dialog('close');
                         });
@@ -2567,7 +2572,7 @@ winkstart.module('voip', 'callflow', {
                                         } else {
                                             node.deleteMetadata('media');
                                         }
-                                        
+
                                         node.caption = 'SIP Code: ' + $('#response_code_input', popup_html).val();
 
                                         popup.dialog('close');
