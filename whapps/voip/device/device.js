@@ -380,21 +380,27 @@ winkstart.module('voip', 'device', {
                     }
                 };
 
-            winkstart.request('device.list_classifier', {
-                    api_url: winkstart.apps['voip'].api_url,
-                    account_id: winkstart.apps['voip'].account_id
+            async.parallel({
+                list_classifier: function(callback){
+                    winkstart.request('device.list_classifier', {
+                            api_url: winkstart.apps['voip'].api_url,
+                            account_id: winkstart.apps['voip'].account_id
+                        },
+                        function(_data_classifiers) {
+                            if('data' in _data_classifiers) {
+                                $.each(_data_classifiers.data, function(k, v) {
+                                    defaults.field_data.call_restriction[k] = {
+                                        friendly_name: v.friendly_name
+                                    };
+
+                                    defaults.data.call_restriction[k] = { action: 'inherit' };
+                                });
+                            }
+                            callback(null, _data_classifiers);
+                        }
+                    );
                 },
-                function(_data_classifiers) {
-                    if('data' in _data_classifiers) {
-                        $.each(_data_classifiers.data, function(k, v) {
-                            defaults.field_data.call_restriction[k] = {
-                                friendly_name: v.friendly_name
-                            };
-
-                            defaults.data.call_restriction[k] = { action: 'inherit' };
-                        });
-                    }
-
+                account: function(callback){
                     winkstart.request(true, 'account.get', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url
@@ -404,80 +410,89 @@ winkstart.module('voip', 'device', {
                                 realm: _data.data.realm,
                             });
 
-                            winkstart.request(true, 'user.list', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url
-                                },
-                                function(_data, status) {
-                                    _data.data.unshift({
-                                        id: '',
-                                        first_name: '- No',
-                                        last_name: 'owner -',
-                                    });
-
-                                    defaults.field_data.users = _data.data;
-
-                                    winkstart.request(true, 'media.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(_data, status) {
-                                            _data.data.unshift(
-                                                {
-                                                    id: '',
-                                                    name: 'Default Music'
-                                                },
-                                                {
-                                                    id: 'silence_stream://300000',
-                                                    name: 'Silence'
-                                                }
-                                            );
-
-                                            defaults.field_data.music_on_hold = _data.data;
-
-                                            if(typeof data == 'object' && data.id) {
-                                                winkstart.request(true, 'device.get', {
-                                                        account_id: winkstart.apps['voip'].account_id,
-                                                        api_url: winkstart.apps['voip'].api_url,
-                                                        device_id: data.id
-                                                    },
-                                                    function(_data, status) {
-                                                        var render_data;
-                                                        defaults.data.device_type = 'sip_device';
-
-                                                        if('sip' in _data.data && 'realm' in _data.data.sip) {
-                                                            defaults.field_data.sip.realm = _data.data.sip.realm;
-                                                        }
-
-                                                        THIS.migrate_data(_data);
-
-                                                        render_data = $.extend(true, defaults, _data);
-
-                                                        render_data.data = THIS.fix_codecs(render_data.data, _data.data);
-
-                                                        THIS.render_device(render_data, target, callbacks);
-
-                                                        if(typeof callbacks.after_render == 'function') {
-                                                            callbacks.after_render();
-                                                        }
-                                                    }
-                                                );
-                                            }
-                                            else {
-                                                THIS.render_device(defaults, target, callbacks);
-
-                                                if(typeof callbacks.after_render == 'function') {
-                                                    callbacks.after_render();
-                                                }
-                                            }
-                                        }
-                                    );
-                                }
-                            );
+                            callback(null, _data);
                         }
                     );
+                },
+                user_list: function(callback) {
+                    winkstart.request(true, 'user.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            _data.data.unshift({
+                                id: '',
+                                first_name: '- No',
+                                last_name: 'owner -',
+                            });
+
+                            defaults.field_data.users = _data.data;
+
+                            callback(null, _data);
+                        }
+                    );
+                },
+                media_list: function(callback) {
+                    winkstart.request(true, 'media.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            _data.data.unshift(
+                                {
+                                    id: '',
+                                    name: 'Default Music'
+                                },
+                                {
+                                    id: 'silence_stream://300000',
+                                    name: 'Silence'
+                                }
+                            );
+
+                            defaults.field_data.music_on_hold = _data.data;
+
+                            callback(null, _data);
+                        }
+                    );
+                },
+                get_device: function(callback) {
+                    if(typeof data == 'object' && data.id) {
+                        winkstart.request(true, 'device.get', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                device_id: data.id
+                            },
+                            function(_data, status) {
+                                defaults.data.device_type = 'sip_device';
+
+                                if('sip' in _data.data && 'realm' in _data.data.sip) {
+                                    defaults.field_data.sip.realm = _data.data.sip.realm;
+                                }
+
+                                THIS.migrate_data(_data);
+
+                                callback(null, _data);
+                            }
+                        );
+                    }
+                    else {
+                        callback(null, defaults);
+                    }
                 }
-            );
+            },
+            function(err, results){
+                var render_data = defaults;
+
+                if(typeof data === 'object' && data.id) {
+                    render_data = $.extend(true, defaults, results.get_device);
+                }
+
+                THIS.render_device(render_data, target, callbacks);
+
+                if(typeof callbacks.after_render == 'function') {
+                    callbacks.after_render();
+                }
+            });
         },
 
         delete_device: function(data, success, error) {
@@ -906,7 +921,7 @@ winkstart.module('voip', 'device', {
                             notifyParent: parent
                         });
 
-                    winkstart.request(true, 'device.status', {
+                    winkstart.request(true, 'device.status_no_loading', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url
                         },
