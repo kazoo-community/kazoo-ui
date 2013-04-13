@@ -382,6 +382,7 @@ winkstart.module('voip', 'device', {
 
             async.parallel({
                 list_classifier: function(callback){
+                    console.log('classifier');
                     winkstart.request('device.list_classifier', {
                             api_url: winkstart.apps['voip'].api_url,
                             account_id: winkstart.apps['voip'].account_id
@@ -477,6 +478,11 @@ winkstart.module('voip', 'device', {
                     }
                     else {
                         callback(null, defaults);
+                    }
+                },
+                get_models: function(callback) {
+                    if(winkstart.publish('phone.get_models', function(_data_models) { defaults.list_models = _data_models; callback(null, _data_models); } )) {
+                        callback(null, {});
                     }
                 }
             },
@@ -709,7 +715,7 @@ winkstart.module('voip', 'device', {
             };
 
             if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
-                if(winkstart.publish('phone.render_fields', $(device_html), data.data.provision || (data.data.provision = {}), render)) {
+                if(winkstart.publish('phone.render_fields', $(device_html), data.data.provision || (data.data.provision = {}), render, data.list_models || {})) {
                     render();
                 }
             }
