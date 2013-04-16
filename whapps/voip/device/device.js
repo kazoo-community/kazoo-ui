@@ -380,9 +380,8 @@ winkstart.module('voip', 'device', {
                     }
                 };
 
-            async.parallel({
+            winkstart.parallel({
                 list_classifier: function(callback){
-                    console.log('classifier');
                     winkstart.request('device.list_classifier', {
                             api_url: winkstart.apps['voip'].api_url,
                             account_id: winkstart.apps['voip'].account_id

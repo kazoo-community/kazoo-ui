@@ -269,7 +269,7 @@ winkstart.module('voip', 'user', {
 
             THIS.random_id = false;
 
-            async.parallel({
+            winkstart.parallel({
                 list_classifiers: function(callback) {
                     winkstart.request('user.list_classifiers', {
                             account_id: winkstart.apps['voip'].account_id,
@@ -354,6 +354,9 @@ winkstart.module('voip', 'user', {
                                 }
 
                                 callback(null, _data_devices);
+                            },
+                            function(_data, status) {
+                                callback({api_name: 'Hotdesk'}, _data);
                             }
                         );
                     }

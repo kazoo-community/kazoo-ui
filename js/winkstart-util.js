@@ -371,9 +371,9 @@
     winkstart.chart = function(target, data, opt, type) {
         this.target = target;
         this.data = data;
-        this.options = { 
+        this.options = {
             seriesDefaults: {
-                renderer: jQuery.jqplot.PieRenderer, 
+                renderer: jQuery.jqplot.PieRenderer,
                 rendererOptions: {
                     showDataLabels: true,
                     dataLabels: 'value',
@@ -387,8 +387,8 @@
                 shadow: false
             },
             gridPadding: { top: 15, right: 0, bottom: 0, left: 0 },
-            legend: { 
-                show: true, 
+            legend: {
+                show: true,
                 location: 'e',
                 background: 'transparent',
                 border: 'none',
@@ -483,6 +483,23 @@
 
     winkstart.jsonToString = function(obj) {
         return JSON.stringify(obj);
-    }
+    },
+
+    /* If we want to limit the # of simultaneous request, we can use async.parallelLimit(list_functions, LIMIT_# (ex: 3), callback) */
+    winkstart.parallel = function(list_functions, callback) {
+        async.parallel(
+            list_functions,
+            function(err, results) {
+                if(err) {
+                    var error_string = 'An API Call (' + err.api_name + ') failed.';
+
+                    winkstart.alert(error_string);
+                }
+                else {
+                    callback(err, results);
+                }
+            }
+        );
+    };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

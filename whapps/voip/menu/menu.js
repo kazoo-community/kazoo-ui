@@ -160,41 +160,58 @@ winkstart.module('voip', 'menu', {
                     }
                 };
 
-            winkstart.request(true, 'media.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(_data, status) {
-                    _data.data.unshift({
-                        id: '',
-                        name: '- Not set -'
-                    });
-
-                    defaults.field_data.media = _data.data;
-
-                    if(typeof data == 'object' && data.id) {
-                        winkstart.request(true, 'menu.get', {
+            winkstart.parallel({
+                    media_list: function(callback) {
+                        winkstart.request(true, 'media.list', {
                                 account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                menu_id: data.id
+                                api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
-                                THIS.format_data(_data.data);
+                                _data.data.unshift({
+                                    id: '',
+                                    name: '- Not set -'
+                                });
 
-                                THIS.render_menu($.extend(true, defaults, _data), target, callbacks);
+                                defaults.field_data.media = _data.data;
 
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
-                                }
+                                callback(null, _data);
                             }
                         );
-                    }
-                    else {
-                        THIS.render_menu(defaults, target, callbacks);
+                    },
+                    menu_get: function(callback) {
+                        if(typeof data == 'object' && data.id) {
+                            winkstart.request(true, 'menu.get', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    menu_id: data.id
+                                },
+                                function(_data, status) {
+                                    THIS.format_data(_data.data);
 
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                                    callback(null, _data);
+
+                                    if(typeof callbacks.after_render == 'function') {
+                                        callbacks.after_render();
+                                    }
+                                }
+                            );
                         }
+                        else {
+                            callback(null, {});
+                        }
+                    }
+                },
+                function(err, results) {
+                    var render_data = defaults;
+
+                    if(typeof data === 'object' && data.id) {
+                        render_data = $.extend(true, defaults, results.menu_get)
+                    }
+
+                    THIS.render_menu(render_data, target, callbacks);
+
+                    if(typeof callbacks.after_render == 'function') {
+                        callbacks.after_render();
                     }
                 }
             );
