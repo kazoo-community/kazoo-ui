@@ -15,8 +15,6 @@
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<!--<li><a href="#resources"><span class="icon resource"></span>Resources</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>-->
 		</ul>
 		<form id="group-form" action="" method="post">
 			<div class="pill-content">
@@ -67,61 +65,6 @@
                         </div>
                     </div>
 				</div>
-
-                <div id="options">
-                    <div class="clearfix">
-                        <label for="timezone">Time zone</label>
-                        <div class="input">
-                            <select name="timezone" id="timezone" rel="popover" data-content="Select the time zone of this group."></select>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <label for="music_on_hold_media_id">Music on Hold</label>
-                        <div class="input">
-                            <span rel="popover" data-content="Select the media file that you want to be played by default when it 's not set on a user or a device.">
-                                <select name="music_on_hold.media_id" id="music_on_hold_media_id">
-                                    {{each field_data.media}}
-                                        {{if data.music_on_hold.media_id == id}}
-                                        <option id="${id}" value="${id}" selected="selected">${name}</option>
-                                        {{else}}
-                                        <option id="${id}" value="${id}">${name}</option>
-                                        {{/if}}
-                                    {{/each}}
-                                </select>
-                                <div class="edit_create">
-                                    <a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                                    <a class="inline_action_media" data-action="create" href="#">Create</a>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="resources">
-                    <h3>Please select the list of Resources to use for this group.</h3>
-
-                    {{each(type, resources) field_data.resources}}
-                        {{each(k, v) resources}}
-                            <div class="clearfix">
-                                <div class="input">
-                                    <ul class="inputs-list">
-                                        <li>
-                                            <label>
-                                                {{if v.checked }}
-                                                    <input type="checkbox" name="resources[]" checked="checked" value="${v.id}"/>
-                                                {{else}}
-                                                    <input type="checkbox" name="resources[]" value="${v.id}"/>
-                                                {{/if}}
-                                                <span>${v.name}</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        {{/each}}
-                    {{/each}}
-                </div>
 			</div>
 		</form>
 		<div class="buttons-right">

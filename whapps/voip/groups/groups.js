@@ -144,111 +144,61 @@ winkstart.module('voip', 'groups', {
                         music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
-                },
-                render_group = function() {
-                    winkstart.request(true, 'media.list', {
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url
-                        },
-                        function(_data_media, status) {
-                            if(_data_media.data) {
-                                _data_media.data.unshift(
-                                    {
-                                        id: '',
-                                        name: 'Default Music'
-                                    },
-                                    {
-                                        id: 'silence_stream://300000',
-                                        name: 'Silence'
-                                    }
-                                );
-                            }
-
-                            defaults.field_data.media = _data_media.data;
-
-                            winkstart.request(true, 'device.list', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url
-                                },
-                                function(_data_devices, status) {
-                                    defaults.field_data.devices = _data_devices.data;
-
-                                    winkstart.request(true, 'user.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(_data, status) {
-                                            defaults.field_data.users = _data.data;
-
-                                            if(typeof data == 'object' && data.id) {
-                                                winkstart.request(true, 'groups.get', {
-                                                        account_id: winkstart.apps['voip'].account_id,
-                                                        api_url: winkstart.apps['voip'].api_url,
-                                                        groups_id: data.id
-                                                    },
-                                                    function(_data, status) {
-                                                        var render_data = $.extend(true, defaults, _data);
-
-                                                        if('resources' in render_data.data) {
-                                                            $.each(render_data.field_data.resources, function(key, type) {
-                                                                $.each(type, function(k, resource) {
-                                                                    if(render_data.data.resources[resource.id]) {
-                                                                        resource.checked = true;
-                                                                    }
-                                                                });
-                                                            });
-                                                        }
-
-                                                        THIS.render_groups(render_data, target, callbacks);
-
-                                                        if(typeof callbacks.after_render == 'function') {
-                                                            callbacks.after_render();
-                                                        }
-                                                    }
-                                                );
-                                            }
-                                            else {
-                                                THIS.render_groups(defaults, target, callbacks);
-
-                                                if(typeof callbacks.after_render == 'function') {
-                                                    callbacks.after_render();
-                                                }
-                                            }
-                                        }
-                                    );
-                                }
-                            );
-                        }
-                    );
                 };
 
-            winkstart.request(true, 'local_resource.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(_data_local_resources) {
-                    defaults.field_data.resources = { 'local': {}};
-                    $.each(_data_local_resources.data, function(k, v) {
-                        defaults.field_data.resources['local'][v.id] = v;
-                    });
-
-                    if('admin' in winkstart.apps['voip'] && winkstart.apps['voip'].admin === true) {
-                        winkstart.request(true, 'global_resource.list', {
+            winkstart.parallel({
+                    device_list: function(callback) {
+                        winkstart.request(true, 'device.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
-                            function(_data_global_resources) {
-                                defaults.field_data.resources['global'] = {};
-                                $.each(_data_global_resources.data, function(k, v) {
-                                    defaults.field_data.resources['local'][v.id] = v;
-                                });
+                            function(_data_devices, status) {
+                                defaults.field_data.devices = _data_devices.data;
 
-                                render_group();
+                                callback(null, _data_devices);
                             }
                         );
+                    },
+                    user_list: function(callback) {
+                        winkstart.request(true, 'user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                defaults.field_data.users = _data.data;
+
+                                callback(null, _data);
+                            }
+                        );
+                    },
+                    groups_get: function(callback) {
+                        if(typeof data === 'object' && data.id) {
+                            winkstart.request(true, 'groups.get', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    groups_id: data.id
+                                },
+                                function(_data, status) {
+                                    callback(null, _data);
+                                }
+                            );
+                        }
+                        else {
+                            callback(null, {});
+                        }
                     }
-                    else {
-                        render_group();
+                },
+                function(err, results) {
+                    var render_data = defaults;
+
+                    if(typeof data === 'object' && data.id) {
+                        render_data = $.extend(true, defaults, results.groups_get);
+                    }
+
+                    THIS.render_groups(render_data, target, callbacks);
+
+                    if(typeof callbacks.after_render == 'function') {
+                        callbacks.after_render();
                     }
                 }
             );

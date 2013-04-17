@@ -124,48 +124,62 @@ winkstart.module('voip', 'account', {
                     field_data: {}
                 };
 
-             winkstart.request(true, 'media.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(_data, status) {
-                    _data.data.unshift(
-                        {
-                            id: '',
-                            name: 'Default Music'
-                        },
-                        {
-                            id: 'silence_stream://300000',
-                            name: 'Silence'
-                        }
-                    );
-
-                    defaults.field_data.media = _data.data;
-
-                    if(typeof data == 'object' && data.id) {
-                        winkstart.request(true, 'account.get', {
-                                account_id: data.id,
+            winkstart.parallel({
+                    media_list: function(callback) {
+                        winkstart.request(true, 'media.list', {
+                                account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
-                                THIS.migrate_data(_data);
+                                _data.data.unshift(
+                                    {
+                                        id: '',
+                                        name: 'Default Music'
+                                    },
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: 'Silence'
+                                    }
+                                );
 
-                                THIS.format_data(_data);
+                                defaults.field_data.media = _data.data;
 
-                                THIS.render_account($.extend(true, defaults, _data), target, callbacks);
-
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
-                                }
+                                callback(null, _data);
                             }
                         );
-                    }
-                    else {
-                        THIS.render_account(defaults, target, callbacks);
+                    },
 
-                        if(typeof callbacks.after_render == 'function') {
-                            callbacks.after_render();
+                    get_account: function(callback) {
+                        if(typeof data == 'object' && data.id) {
+                            winkstart.request(true, 'account.get', {
+                                    account_id: data.id,
+                                    api_url: winkstart.apps['voip'].api_url
+                                },
+                                function(_data, status) {
+                                    THIS.migrate_data(_data);
+
+                                    THIS.format_data(_data);
+
+                                    callback(null, _data);
+                                }
+                            );
                         }
+                        else {
+                            callback(null, defaults);
+                        }
+                    }
+                },
+                function(err, results) {
+                    var render_data = defaults;
+
+                    if(typeof data == 'object' && data.id) {
+                        render_data = $.extend(true, defaults, results.get_account);
+                    }
+
+                    THIS.render_account(defaults, target, callbacks);
+
+                    if(typeof callbacks.after_render == 'function') {
+                        callbacks.after_render();
                     }
                 }
             );

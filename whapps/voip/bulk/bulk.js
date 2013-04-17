@@ -84,6 +84,7 @@ function(args) {
 
 	activate: function(data) {
 		var THIS = this,
+            map_endpoints = {},
             defaults = {
                 data: {
                     call_restriction: {}
@@ -93,53 +94,116 @@ function(args) {
                 }
             };
 
-        winkstart.request('bulk.list_classifiers', {
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url,
-            },
-            function(_data_classifiers, status) {
-                if('data' in _data_classifiers) {
-                    $.each(_data_classifiers.data, function(k, v) {
-                        defaults.field_data.call_restriction[k] = {
-                            friendly_name: v.friendly_name
-                        };
+        winkstart.parallel({
+                list_classifiers: function(callback) {
+                    winkstart.request('bulk.list_classifiers', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                        },
+                        function(_data_classifiers, status) {
+                            if('data' in _data_classifiers) {
+                                $.each(_data_classifiers.data, function(k, v) {
+                                    defaults.field_data.call_restriction[k] = {
+                                        friendly_name: v.friendly_name
+                                    };
 
-                        defaults.data.call_restriction[k] = { action: 'inherit' };
-                    });
-                }
+                                    defaults.data.call_restriction[k] = { action: 'inherit' };
+                                });
+                            }
 
-                winkstart.request(true, 'media.list', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url
-                    },
-                    function(_data, status) {
-                        if(_data.data) {
-                            _data.data.unshift(
-                                {
-                                    id: '',
-                                    name: 'Default Music'
-                                },
-                                {
-                                    id: 'silence_stream://300000',
-                                    name: 'Silence'
-                                }
-                            );
-                            defaults.field_data.media = _data.data;
-
-                            var bulk_html = THIS.templates.bulk.tmpl(defaults);
-
-                            THIS.bind_events(bulk_html);
-
-                            $('#ws-content').empty().append(bulk_html);
-
-                            THIS.init_table(bulk_html);
-
-                            $.fn.dataTableExt.afnFiltering.pop();
-
-                            THIS.list_endpoints();
+                            callback(null, _data_classifiers);
                         }
-                    }
-                );
+                    );
+                },
+                media_list: function(callback) {
+                     winkstart.request(true, 'media.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            if(_data.data) {
+                                _data.data.unshift(
+                                    {
+                                        id: '',
+                                        name: 'Default Music'
+                                    },
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: 'Silence'
+                                    }
+                                );
+                                defaults.field_data.media = _data.data;
+                            }
+
+                            callback(null, _data);
+                        }
+                    );
+                },
+                device_list: function(callback) {
+                    winkstart.request(true, 'device.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            $.each(_data.data, function() {
+                                map_endpoints[this.id] = $.extend(true, { endpoint_type: 'device'}, this);
+                            });
+
+                            callback(null, _data);
+                        }
+                    );
+                },
+                user_list: function(callback) {
+                    winkstart.request(true, 'user.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            $.each(_data.data, function() {
+                                map_endpoints[this.id] = $.extend(true, { name: this.first_name + ' ' + this.last_name, endpoint_type: 'user'}, this);
+                            });
+
+                            callback(null, _data);
+                        }
+                    );
+                },
+                group_list: function(callback) {
+                     winkstart.request(true, 'groups.list', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
+                        },
+                        function(_data, status) {
+                            $.each(_data.data, function() {
+                                map_endpoints[this.id] = $.extend(true, { endpoint_type: 'group'}, this);
+                            });
+                            callback(null, _data);
+                        }
+                    );
+                }
+            },
+            function(err, results) {
+                var bulk_html = THIS.templates.bulk.tmpl(defaults);
+
+                THIS.bind_events(bulk_html);
+
+                $('#ws-content').empty().append(bulk_html);
+
+                THIS.init_table(bulk_html);
+
+                $.fn.dataTableExt.afnFiltering.pop();
+
+                var tab_data = [];
+
+                $.each(map_endpoints, function(k, v) {
+                    tab_data.push([
+                        k,
+                        v.name,
+                        v.endpoint_type,
+                        k
+                    ]);
+                });
+
+                winkstart.table.bulk.fnAddData(tab_data);
             }
         );
 	},
@@ -197,53 +261,5 @@ function(args) {
                 }
             );
         });
-    },
-
-    list_endpoints: function() {
-        var map_endpoints = {};
-
-        winkstart.request(true, 'groups.list', {
-                account_id: winkstart.apps['voip'].account_id,
-                api_url: winkstart.apps['voip'].api_url
-            },
-            function(_data, status) {
-                $.each(_data.data, function() {
-                    map_endpoints[this.id] = $.extend(true, { endpoint_type: 'group'}, this);
-                });
-                winkstart.request(true, 'user.list', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url
-                    },
-                    function(_data, status) {
-                        $.each(_data.data, function() {
-                            map_endpoints[this.id] = $.extend(true, { name: this.first_name + ' ' + this.last_name, endpoint_type: 'user'}, this);
-                        });
-
-                        winkstart.request(true, 'device.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
-                                $.each(_data.data, function() {
-                                    map_endpoints[this.id] = $.extend(true, { endpoint_type: 'device'}, this);
-                                });
-                                var tab_data = [];
-
-                                $.each(map_endpoints, function(k, v) {
-                                    tab_data.push([
-                                        k,
-                                        v.name,
-                                        v.endpoint_type,
-                                        k
-                                    ]);
-                                });
-
-                                winkstart.table.bulk.fnAddData(tab_data);
-                            }
-                        );
-                    }
-                );
-            }
-        );
     }
 });
