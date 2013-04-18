@@ -75,7 +75,7 @@ winkstart.module('developer', 'api', {
                     api_url: winkstart.apps['developer'].api_url,
                 },
                 _data = {};
-                
+
             $.extend(true, _data, data);
 
             if(_data.id) {
@@ -85,19 +85,19 @@ winkstart.module('developer', 'api', {
             request.data = _data
 
             if(typeof success == "function" && typeof failed == "function") {
-                winkstart.request('developer.' + api + '.' + verb, 
+                winkstart.request('developer.' + api + '.' + verb,
                     request,
                     success,
                     failed
                 );
-            }    
+            }
         },
 
         build_url: function(api, id, verb, data) {
             var THIS = this,
                 url = "";
 
-            url += winkstart.apps['developer'].api_url;
+            url += winkstart.config.fake_api_url || winkstart.apps['developer'].api_url;
             url += THIS.apis[api].ressources['developer.' + id + "." + verb].url
                         .substr(9)
                         .replace("{account_id}", winkstart.apps['developer'].account_id)
@@ -114,11 +114,11 @@ winkstart.module('developer', 'api', {
                     get: 'GET',
                     put: 'PUT',
                     post: 'POST',
-                    'delete': 'DELETE' 
+                    'delete': 'DELETE'
                 },
                 _data = {};
 
-            curl += 'curl -i -H "Accept: application/json" -H "Content-Type: application/json"'; 
+            curl += 'curl -i -H "Accept: application/json" -H "Content-Type: application/json"';
             curl += ' -H "X-Auth-Token: ' + winkstart.apps['developer'].auth_token + '"';
             curl += ' -X ' + rest[verb];
 
@@ -127,7 +127,7 @@ winkstart.module('developer', 'api', {
 
             if(Object.getOwnPropertyNames(_data).length != 0) {
                 var obj = {
-                    "data": data, 
+                    "data": data,
                     "verb": rest[verb]
                 };
                 curl += ' -d \'' + winkstart.jsonToString(obj) + '\'';
@@ -144,7 +144,11 @@ winkstart.module('developer', 'api', {
                 not_required_schema_html = null,
                 required_schema_html = null,
                 info_html = THIS.templates.info.tmpl({
-                    developer: winkstart.apps['developer'],
+                    developer: {
+                        api_url: winkstart.config.fake_api_url || winkstart.apps['developer'].api_url,
+                        auth_token: winkstart.apps['developer'].auth_token,
+                        account_id: winkstart.apps['developer'].account_id
+                    }
                 }),
                 input_id_html = THIS.templates.input_id.tmpl();
 
@@ -193,7 +197,7 @@ winkstart.module('developer', 'api', {
                                 form_data = THIS.clean_form(form2object(id_verb + "_form")),
                                 url = THIS.build_url(data.data.id, id, verb, form_data),
                                 curl = THIS.build_curl(verb, url, form_data);
-                                
+
                             var print_result = function(_data) {
                                 var $curl = $('<pre>')
                                                 .append(curl)
@@ -209,7 +213,7 @@ winkstart.module('developer', 'api', {
                                         .append('<pre>URL: ' + url + '</pre>')
                                         .append(winkstart.print_r(_data))
                                         .append($curl);
-                                    
+
                                     $('#' + id_verb + ' .result', form_html)
                                         .show('fade');
                                 };
@@ -232,7 +236,7 @@ winkstart.module('developer', 'api', {
                                 state = $(this).data('state'),
                                 div = $('#' + id  + ' .hide', form_html);
 
-                            
+
                                 if(!state) {
                                     $(this)
                                         .data('state', true)
@@ -353,7 +357,7 @@ winkstart.module('developer', 'api', {
 
             try {
                 clean(schema, tmp);
-                template(tmp, new_schema); 
+                template(tmp, new_schema);
 
                 $.each(new_schema, function(k, o) {
                     if(o.required) {
@@ -365,7 +369,7 @@ winkstart.module('developer', 'api', {
 
                 if(typeof callback == "function") {
                     callback(required, not_required, new_schema, schema);
-                }  
+                }
             } catch(err) {
                 winkstart.alert('error', 'Something went wrong with the schema!')
             }
@@ -412,7 +416,7 @@ winkstart.module('developer', 'api', {
                             notifyParent: parent
                         });
                 }
-            );         
+            );
         },
 
         activate: function(parent) {
@@ -434,7 +438,7 @@ winkstart.module('developer', 'api', {
                         get: 'GET',
                         put: 'PUT',
                         post: 'POST',
-                        'delete': 'DELETE' 
+                        'delete': 'DELETE'
                     };
 
                     THIS.apis[id] = {
