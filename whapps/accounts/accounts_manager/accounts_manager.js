@@ -221,7 +221,7 @@ winkstart.module('accounts', 'accounts_manager', {
                     limits: {
                         inbound_trunks: 0,
                         twoway_trunks: 0,
-                        allow_prepay: false
+                        allow_prepay: true
                     },
                     credits: {
                         amount: 0
@@ -311,15 +311,7 @@ winkstart.module('accounts', 'accounts_manager', {
                                     api_url: winkstart.apps['accounts'].api_url
                                 },
                                 function(_data_l, status) {
-                                    var limits = {
-                                        inbound_trunks: 0,
-                                        twoway_trunks: 0,
-                                        allow_prepay: false
-                                    };
-
-                                    $.extend(true, limits, _data_l.data);
-
-                                    defaults.limits = limits;
+                                    $.extend(true, defaults.limits, _data_l.data);
 
                                     callback(null, _data_l);
                                 }
