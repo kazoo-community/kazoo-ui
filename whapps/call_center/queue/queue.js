@@ -1207,12 +1207,17 @@ winkstart.module('call_center', 'queue', {
                         });
 
                         $('#add', popup_html).click(function() {
-                            var timeout = $('#timeout', popup_html).val();
+                            var timeout = parseInt($('#timeout', popup_html).val());
 
-                            node.setMetadata('timeout', timeout);
-                            node.caption = timeout + ' seconds';
+                            if(timeout > 0) {
+                                node.setMetadata('timeout', timeout);
+                                node.caption = timeout + ' seconds';
 
-                            popup.dialog('close');
+                                popup.dialog('close');
+                            }
+                            else {
+                                winkstart.alert('Please enter a valid number of seconds. It needs to be greater than 0.');
+                            }
                         });
 
                         popup = winkstart.dialog(popup_html, {
