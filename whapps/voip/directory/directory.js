@@ -282,23 +282,28 @@ winkstart.module('voip', 'directory', {
                         );
                     },
                     directory_get: function(callback) {
-                        winkstart.request(true, 'directory.get', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url,
-                                directory_id: data.id
-                            },
-                            function(_data, status) {
-                                defaults.field_data.old_list = {};
+                        if(typeof data === 'object' && data.id) {
+                            winkstart.request(true, 'directory.get', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url,
+                                    directory_id: data.id
+                                },
+                                function(_data, status) {
+                                    defaults.field_data.old_list = {};
 
-                                if('users' in _data.data) {
-                                    $.each(_data.data.users, function(k, v) {
-                                        defaults.field_data.old_list[v.user_id] = v.callflow_id;
-                                    });
+                                    if('users' in _data.data) {
+                                        $.each(_data.data.users, function(k, v) {
+                                            defaults.field_data.old_list[v.user_id] = v.callflow_id;
+                                        });
+                                    }
+
+                                    callback(null, _data);
                                 }
-
-                                callback(null, _data);
-                            }
-                        );
+                            );
+                        }
+                        else {
+                            callback(null, {});
+                        }
                     }
                 },
                 function(err, results) {
