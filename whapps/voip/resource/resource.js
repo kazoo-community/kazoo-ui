@@ -357,7 +357,7 @@ winkstart.module('voip', 'resource', {
                     from: 0,
                     to: 100,
                     step: 1,
-                    scale: ['Lowest', 'Low', 'Normal', 'High', 'Highest'],
+                    scale: ['Hightest', 'Hight', 'Normal', 'Low', 'Lowest'],
                     limits: false
                 });
             };
