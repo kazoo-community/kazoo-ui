@@ -163,13 +163,23 @@ winkstart.module('call_center', 'dashboard', {
                     var data_template = $.extend(true, {}, {agents: current_global_data.agents, queues: current_global_data.queues}); //copy without reference;
 
                     if(stop_light_polling === false) {
-                        THIS.get_queues_livestats(false, function(_data_queues) {
-                            THIS.get_agents_livestats(false, function(_data_agents) {
-                                /* agents */
-                                data_template = THIS.format_live_data(data_template, {queues_live_stats: _data_queues.data, agents_live_stats: _data_agents.data});
+                        winkstart.parallel({
+                                get_queues: function(callback) {
+                                    THIS.get_queues_livestats(false, function(_data_queues) {
+                                        callback(null, _data_queues);
+                                    });
+                                },
+                                get_agents: function(callback) {
+                                    THIS.get_agents_livestats(false, function(_data_agents) {
+                                        callback(null, _data_agents);
+                                    });
+                                }
+                            },
+                            function(err, results) {
+                                data_template = THIS.format_live_data(data_template, {queues_live_stats: results.get_queues.data, agents_live_stats: results.get_agents.data});
                                 THIS.render_global_data(data_template, THIS.current_queue_id);
-                            });
-                        });
+                            }
+                        );
                     }
                 },
                 huge_poll = function() {
@@ -605,32 +615,43 @@ winkstart.module('call_center', 'dashboard', {
         fetch_all_data: function(loading, callback) {
             var THIS = this;
 
-            //THIS.get_agents_stats(loading, function(_data_stats_agents) {
-                //THIS.get_queues_stats(loading, function(_data_stats_queues) {
-                    THIS.get_queues_livestats(loading, function(_data_live_queues) {
-                        THIS.get_agents_livestats(loading, function(_data_live_agents) {
-                            THIS.get_queues(loading, function(_data_queues) {
-                                THIS.get_agents(loading, function(_data_agents) {
-                                    var _data = {
-                                        queues: _data_queues.data,
-                                        agents: _data_agents.data,
-                                        //agents_stats: _data_stats_agents,
-                                        //queues_stats: _data_stats_queues,
-                                        agents_live_stats: _data_live_agents.data,
-                                        queues_live_stats: _data_live_queues.data,
-                                    };
-
-                                    _data = THIS.format_data(_data);
-
-                                    if(typeof callback === 'function') {
-                                        callback(_data);
-                                    }
-                                });
-                            });
+            winkstart.parallel({
+                    queues_livestats: function(callback) {
+                        THIS.get_queues_livestats(loading, function(_data_live_queues) {
+                            callback(null, _data_live_queues);
                         });
-                    });
-                //});
-            //});
+                    },
+                    agents_livestats: function(callback) {
+                        THIS.get_agents_livestats(loading, function(_data_live_agents) {
+                            callback(null, _data_live_agents);
+                        });
+                    },
+                    queues: function(callback) {
+                        THIS.get_queues(loading, function(_data_queues) {
+                            callback(null, _data_queues);
+                        });
+                    },
+                    agents: function(callback) {
+                        THIS.get_agents(loading, function(_data_agents) {
+                            callback(null, _data_agents);
+                        });
+                    },
+                },
+                function(err, results) {
+                    var _data = {
+                        queues: results.queues.data,
+                        agents: results.agents.data,
+                        agents_live_stats: results.agents_livestats.data,
+                        queues_live_stats: results.queues_livestats.data
+                    };
+
+                    _data = THIS.format_data(_data);
+
+                    if(typeof callback === 'function') {
+                        callback(_data);
+                    }
+                }
+            );
         },
 
         eavesdrop_popup: function(mode, data_options) {
