@@ -545,7 +545,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     winkstart.confirm('Are you sure you want to delete the '+nb_numbers+' number(s) selected?', function() {
                             $selected_checkboxes.each(function() {
                                 data_phone_number = $(this).parents('tr').attr('id'),
-                                phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                                phone_number = data_phone_number.match(/^(.*)$/);
 
                                 if(phone_number[1]) {
                                     THIS.delete_number(phone_number[1],
