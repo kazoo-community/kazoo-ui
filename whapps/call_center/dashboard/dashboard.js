@@ -456,50 +456,50 @@ winkstart.module('call_center', 'dashboard', {
             };
 
             $.each(data.agents_live_stats.agents, function(k, agent_stats) {
-                if(!(k in formatted_data.agents)) {
-                    formatted_data.agents[k] = {};
-                }
+                if(k in formatted_data.agents) {
+                    if('current' in agent_stats) {
+                        var current_status = agent_stats.current.status;
+                        formatted_data.agents[k].status = current_status;
 
-                if('current' in agent_stats) {
-                    var current_status = agent_stats.current.status;
-                    formatted_data.agents[k].status = current_status;
-
-                    if($.inArray(current_status, ['busy', 'wrapup', 'paused']) >= 0) {
-                        formatted_data.agent_status[current_status][k] = agent_stats.current;
-                        if(current_status === 'busy') {
-                            formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_stats.current.status_started)
+                        if($.inArray(current_status, ['busy', 'wrapup', 'paused']) >= 0) {
+                            formatted_data.agent_status[current_status][k] = agent_stats.current;
+                            if(current_status === 'busy') {
+                                formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_stats.current.status_started)
+                            }
+                            else {
+                                formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_stats.current.wait_time - (formatted_data.current_timestamp - agent_stats.current.status_started));
+                            }
                         }
-                        else {
-                            formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_stats.current.wait_time - (formatted_data.current_timestamp - agent_stats.current.status_started));
+
+                        if(current_status !== 'logout') {
+                            $.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
+                                if(!(queue_id in current_agents_by_queue)) {
+                                    current_agents_by_queue[queue_id] = 1;
+                                }
+                                else {
+                                    current_agents_by_queue[queue_id]++;
+                                }
+                            });
                         }
                     }
 
-                    if(current_status !== 'logout') {
-                        $.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
-                            if(!(queue_id in current_agents_by_queue)) {
-                                current_agents_by_queue[queue_id] = 1;
-                            }
-                            else {
-                                current_agents_by_queue[queue_id]++;
+                    if('totals' in agent_stats) {
+                        formatted_data.agents[k].missed_calls = agent_stats.totals.missed_calls;
+                        formatted_data.agents[k].total_calls = agent_stats.totals.total_calls;
+                    }
+
+                    if('queues' in agent_stats) {
+                        $.each(agent_stats.queues, function(queue_id, queue_stat) {
+                            console.log(queue_stat);
+                            if('totals' in queue_stat) {
+                                console.log(formatted_data.agents[k]);
+                                formatted_data.agents[k].queues_list[queue_id] = {
+                                    missed_calls: queue_stat.totals.missed_calls || 0,
+                                    total_calls: queue_stat.totals.total_calls || 0
+                                };
                             }
                         });
                     }
-                }
-
-                if('totals' in agent_stats) {
-                    formatted_data.agents[k].missed_calls = agent_stats.totals.missed_calls;
-                    formatted_data.agents[k].total_calls = agent_stats.totals.total_calls;
-                }
-
-                if('queues' in agent_stats) {
-                    $.each(agent_stats.queues, function(queue_id, queue_stat) {
-                        if('totals' in queue_stat) {
-                            formatted_data.agents[k].queues_list[queue_id] = {
-                                missed_calls: queue_stat.totals.missed_calls || 0,
-                                total_calls: queue_stat.totals.total_calls || 0
-                            };
-                        }
-                    });
                 }
             });
 
