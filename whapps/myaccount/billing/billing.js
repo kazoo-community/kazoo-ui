@@ -304,7 +304,7 @@ winkstart.module('myaccount', 'billing', {
                 array_addons = [];
 
             /* We need to check the number of add-ons to display first */
-            if(data.data) {
+            if(data && data.data) {
                 $.each(data.data, function() {
                     $.each(this.add_ons, function(k ,v) {
                         if(array_addons.indexOf(v.id) < 0) {
@@ -352,46 +352,48 @@ winkstart.module('myaccount', 'billing', {
                     map_accounts[v.id] = v;
                 });
 
-                $.each(data.data, function(k, v) {
-                    v.created_at = v.created_at.replace(/-/g,'/').replace('T', ' - ').replace('Z', '');
-                    v.created_at = v.created_at.substring(0, v.created_at.length - 11);
+                if(data && data.data) {
+                    $.each(data.data, function(k, v) {
+                        v.created_at = v.created_at.replace(/-/g,'/').replace('T', ' - ').replace('Z', '');
+                        v.created_at = v.created_at.substring(0, v.created_at.length - 11);
 
-                    if(v.subscription_id) {
-                        var account_id = v.subscription_id.split('_')[0];
+                        if(v.subscription_id) {
+                            var account_id = v.subscription_id.split('_')[0];
 
-                        account_name = account_id.length === 32 && account_id in map_accounts ? map_accounts[account_id].name : '-';
-                        payment = [v.created_at, account_name, v.status];
+                            account_name = account_id.length === 32 && account_id in map_accounts ? map_accounts[account_id].name : '-';
+                            payment = [v.created_at, account_name, v.status];
 
-                        $.each(THIS.addons, function() {
-                            payment.push('0');
-                        });
-
-                        if(v.add_ons) {
-                            $.each(v.add_ons, function(index_addon, addon) {
-                                var indexof = THIS.addons.indexOf(addon.id);
-                                if(indexof >= 0) {
-                                    indexof += 3; //List of Add-ons start at column 3
-                                    payment[indexof] = addon.quantity;
-                                }
+                            $.each(THIS.addons, function() {
+                                payment.push('0');
                             });
+
+                            if(v.add_ons) {
+                                $.each(v.add_ons, function(index_addon, addon) {
+                                    var indexof = THIS.addons.indexOf(addon.id);
+                                    if(indexof >= 0) {
+                                        indexof += 3; //List of Add-ons start at column 3
+                                        payment[indexof] = addon.quantity;
+                                    }
+                                });
+                            }
+
+                            var total_discount = 0;
+                            if(v.discounts) {
+                                $.each(v.discounts, function(index_discount, discount) {
+                                    total_discount += (discount.quantity * discount.amount);
+                                });
+                            }
+
+                            payment.push(total_discount.toFixed(2), v.amount);
+                            tab_subscriptions.push(payment);
                         }
+                        else {
+                            payment = [v.created_at, v.status, v.amount];
 
-                        var total_discount = 0;
-                        if(v.discounts) {
-                            $.each(v.discounts, function(index_discount, discount) {
-                                total_discount += (discount.quantity * discount.amount);
-                            });
+                            tab_transactions.push(payment);
                         }
-
-                        payment.push(total_discount.toFixed(2), v.amount);
-                        tab_subscriptions.push(payment);
-                    }
-                    else {
-                        payment = [v.created_at, v.status, v.amount];
-
-                        tab_transactions.push(payment);
-                    }
-                });
+                    });
+                }
 
                 winkstart.table.transactions.fnClearTable();
                 winkstart.table.subscriptions.fnClearTable();
