@@ -304,13 +304,15 @@ winkstart.module('myaccount', 'billing', {
                 array_addons = [];
 
             /* We need to check the number of add-ons to display first */
-            $.each(data.data, function() {
-                $.each(this.add_ons, function(k ,v) {
-                    if(array_addons.indexOf(v.id) < 0) {
-                        array_addons.push(v.id);
-                    }
+            if(data.data) {
+                $.each(data.data, function() {
+                    $.each(this.add_ons, function(k ,v) {
+                        if(array_addons.indexOf(v.id) < 0) {
+                            array_addons.push(v.id);
+                        }
+                    });
                 });
-            });
+            }
 
             THIS.addons = array_addons;
 
