@@ -463,11 +463,13 @@ winkstart.module('accounts', 'accounts_manager', {
         clean_form_data: function(form_data) {
             var available_apps = [];
 
-            $.each(form_data.available_apps, function(k, v) {
-                if(v){
-                    available_apps.push(v);
-                }
-            });
+            if('available_apps' in form_data) {
+                $.each(form_data.available_apps, function(k, v) {
+                    if(v){
+                        available_apps.push(v);
+                    }
+                });
+            }
 
             form_data.available_apps = available_apps;
 
@@ -663,6 +665,7 @@ winkstart.module('accounts', 'accounts_manager', {
                 winkstart.validate.is_valid(THIS.config.validation, account_html, function() {
                         var form_data = form2object('accounts_manager-form'),
                             whitelabel_data = {};
+
 
                         THIS.clean_form_data(form_data);
 
