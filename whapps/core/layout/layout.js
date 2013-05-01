@@ -43,7 +43,10 @@ winkstart.module('core', 'layout', {
         THIS.attach();
 
         if(!$.cookie('c_winkstart_auth')) {
-            THIS.render_welcome();
+            //IF NOT EXTERNAL LOGIN
+            if(!('c' in URL_DATA && 'a' in URL_DATA && 'f' in URL_DATA)) {
+                THIS.render_welcome();
+            }
         }
 
         /*$('#ws-content .welcomediv').click(function() {

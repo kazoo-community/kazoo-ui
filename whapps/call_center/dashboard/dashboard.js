@@ -490,9 +490,7 @@ winkstart.module('call_center', 'dashboard', {
 
                     if('queues' in agent_stats) {
                         $.each(agent_stats.queues, function(queue_id, queue_stat) {
-                            console.log(queue_stat);
                             if('totals' in queue_stat) {
-                                console.log(formatted_data.agents[k]);
                                 formatted_data.agents[k].queues_list[queue_id] = {
                                     missed_calls: queue_stat.totals.missed_calls || 0,
                                     total_calls: queue_stat.totals.total_calls || 0

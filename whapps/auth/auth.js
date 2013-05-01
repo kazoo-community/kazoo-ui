@@ -148,6 +148,14 @@ winkstart.module('auth', 'auth',
         },
 
         core_loaded: function() {
+            var THIS = this;
+
+            if('c' in URL_DATA && 'a' in URL_DATA && 'f' in URL_DATA) {
+                if(!$.cookie('c_winkstart_auth')) {
+                    THIS.external_login(URL_DATA['c'], URL_DATA['a'], URL_DATA['f']);
+                }
+            }
+
             if(URL_DATA['activation_key']) {
                 winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
 
@@ -271,6 +279,46 @@ winkstart.module('auth', 'auth',
             }
 
             return account_name;
+        },
+
+        external_login: function(hashed_creds, account_name, url) {
+            winkstart.putJSON('auth.user_auth', {
+                    api_url: winkstart.apps['auth'].api_url,
+                    data: {
+                        credentials: hashed_creds,
+                        account_name: account_name
+                    }
+                },
+                function (data, status) {
+                    winkstart.apps['auth'].account_id = data.data.account_id;
+                    winkstart.apps['auth'].auth_token = data.auth_token;
+                    winkstart.apps['auth'].user_id = data.data.owner_id;
+                    winkstart.apps['auth'].reseller_id = data.data.reseller_id;
+                    winkstart.apps['auth'].is_reseller = data.data.is_reseller;
+
+                    // Deleting the welcome message
+                    $('#ws-content').empty();
+
+                    $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
+
+                    winkstart.publish('auth.load_account');
+                },
+                function(data, status) {
+                    window.location.replace(url+'?error='+status);
+                    /*if(status === 400) {
+                        winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                    }
+                    else if($.inArray(status, [401, 403]) > -1) {
+                        winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
+                    }
+                    else if(status === 'error') {
+                        winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
+                    }
+                    else {
+                        winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
+                    }*/
+                }
+            );
         },
 
         login: function(args) {
@@ -777,7 +825,12 @@ winkstart.module('auth', 'auth',
                     $('#ws-content').empty();
 
                     // Temporary hack until module unloading works properly
-                    window.location.reload();
+                    if(URL_DATA['f']) {
+                        window.location.replace(URL_DATA['f']);
+                    }
+                    else {
+                        window.location.reload();
+                    }
                 });
             }
         }

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
+        <style type="text/css">
+            .loginform ul {list-style:none;}
+            .loginform ul li {margin-top: 10px;}
+            .loginform input[type="text"], .loginform input[type="password"] {margin-left: 10px;}
+        </style>
+    </head>
+    <body>
+        <section class="loginform">
+            <form name="login">
+                <ul>
+                    <li>
+                        <label for="login_username">Username</label>
+                        <input type="text" id="login_username"/>
+                    </li>
+                    <li>
+                        <label for="login_password">Password</label>
+                        <input type="password" id="login_password"/>
+                    </li>
+                    <li>
+                        <input type="button" id="login" value="Login">
+                    </li>
+                </ul>
+            </form>
+        </section>
+
+        <script type="text/javascript">
+            var account_name = 'YOUR_ACCOUNT_NAME', /* Replace 'YOUR_ACCOUNT_NAME' by the account_name you're using to login to portal.2600hz.com */
+                from_url = 'http://YOUR_WEBSITE.com', /* Replace this URL with the URL where you want the user to be forwarded to if the login fails */
+                destination_url = 'http://portal.2600hz.com/', /* Replace this URL with the URL to access the UI, ex: https://portal.2600hz.com/ */
+                button = document.getElementById('login');
+
+            button.addEventListener('click', function() {
+                var username = document.getElementById('login_username').value,
+                    password = document.getElementById('login_password').value,
+                    hash = CryptoJS.MD5(username+':'+password);
+
+                window.location.href = destination_url + '?a='+account_name+'&c='+hash.toString()+'&f='+from_url;
+            });
+        </script>
+    </body>
+</html>
+
