@@ -55,6 +55,7 @@ winkstart.module('myaccount', 'nav', {
             winkstart.publish('nav.add_sublink', {
                 link: 'nav',
                 sublink: 'logout',
+                masqueradable: true,
                 label: 'Sign out',
                 weight: '25',
                 publish: 'auth.activate'

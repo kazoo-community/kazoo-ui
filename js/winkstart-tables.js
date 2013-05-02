@@ -62,7 +62,7 @@
 
             // This is backwards because of the float right
             search.before(btn_cancel);
-            search.after(btn_search);            
+            search.after(btn_search);
         }
     };
 

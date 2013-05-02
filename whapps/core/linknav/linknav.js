@@ -14,7 +14,9 @@ winkstart.module('core', 'linknav', {
         subscribe: {
             'linknav.add': 'add',
             'linknav.sub_add': 'sub_add',
-            'linknav.get': 'get'
+            'linknav.get': 'get',
+            'accounts.start_masquerade': 'masquerade_start',
+            'accounts.end_masquerade': 'masquerade_end'
         },
 
         targets: {
@@ -25,6 +27,22 @@ winkstart.module('core', 'linknav', {
     function() {
     },
     {
+        masquerade_start: function() {
+            var THIS = this;
+
+            $('.sublink', THIS.config.targets.link_nav).each(function(k, v) {
+                if($(v).data('masqueradable') !== true) {
+                    $(v).addClass('disabled');
+                }
+            });
+        },
+
+        masquerade_end: function() {
+            var THIS = this;
+
+            $('.sublink', $(THIS.config.targets.link_nav)).removeClass('disabled');
+        },
+
         add: function(args) {
             var THIS = this,
                 normalized_args = {
@@ -115,11 +133,14 @@ winkstart.module('core', 'linknav', {
 
         sub_add: function(data) {
             var THIS = this,
+                defaults = {
+                    masqueradable: false
+                },
                 link_list_html = $(THIS.config.targets.link_nav),
                 link_html = $('.link[data-link="' + data.link + '"]', link_list_html),
                 link_dropdown_html = $('> .dropdown-menu', link_html),
                 link_sublink_list_html = $('.sublink[data-category="' + (data.category || '') + '"]', link_dropdown_html),
-                link_sublink_html = THIS.templates.sublink.tmpl(data),
+                link_sublink_html = THIS.templates.sublink.tmpl($.extend(true, {}, defaults, data)),
                 inserted = false,
                 module_divider_html,
                 category_html;
@@ -128,7 +149,9 @@ winkstart.module('core', 'linknav', {
 
             $('> a', link_sublink_html).click(function(ev) {
                 ev.preventDefault();
-                winkstart.publish(data.publish || data.link + '.' + data.sublink + '.activate');
+                if(!($(this).parents('li').first().hasClass('disabled'))) {
+                    winkstart.publish(data.publish || data.link + '.' + data.sublink + '.activate');
+                }
             });
 
             (link_sublink_list_html).each(function(index) {

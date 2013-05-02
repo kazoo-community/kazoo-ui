@@ -1,0 +1,35 @@
+<div>
+    <h1>Generate a report for: </h1>
+    <div id="report_filters" class="row half">
+        <label class="radio">
+            <input type="radio" name="filter_account" value="children" checked> Children sub-accounts only
+        </label>
+        <label class="radio">
+            <input type="radio" name="filter_account" value="with_account"> This account and his direct sub-accounts
+        </label>
+        <label class="radio">
+            <input type="radio" name="filter_account" value="descendants"> This account and all his sub-accounts
+        </label>
+
+        <button class="btn primary" id="trigger_report">Generate</button>
+    </div>
+
+    <div class="row half">
+        <ul id="subtotals" style="display: none;">
+            <li>Total Number of Softphones: <span id="amount_softphones"></span>
+            <li>Total Number of SIP Devices: <span id="amount_sip_devices"></span>
+            <li>Total Number of DIDs: <span id="amount_dids"></span>
+            <li>Total Number of Inbound Trunks: <span id="amount_inbound_trunks"></span>
+            <li>Total Number of Outbound Trunks: <span id="amount_outbound_trunks"></span>
+            <li>Total Number of Credits available: <span id="amount_credits"></span>
+        </ul>
+    </div>
+
+    <div class="row table-report" style="display: none;">
+        <div id="report">
+            <table id="report-grid" class="display"></table>
+        </div>
+    </div>
+
+    <div class="clear"/>
+</div>

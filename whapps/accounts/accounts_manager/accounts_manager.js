@@ -20,12 +20,12 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		validation: [
 				{ name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
-				{ name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
-				{ name: '#vm_to_email_send_from',        regex: /^.*$/ },
-				{ name: '#vm_to_email_service_url',      regex: /^.*$/ },
+				{ name: '#vm_to_email_support_email',	regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
+				{ name: '#vm_to_email_send_from',		regex: /^.*$/ },
+				{ name: '#vm_to_email_service_url',	  regex: /^.*$/ },
 				{ name: '#vm_to_email_service_provider', regex: /^.*$/ },
-				{ name: '#vm_to_email_service_name',     regex: /^.*$/ },
-				{ name: '#deregister_email',             regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
+				{ name: '#vm_to_email_service_name',	 regex: /^.*$/ },
+				{ name: '#deregister_email',			 regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
 		],
 
 		resources: {
@@ -73,11 +73,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				url: '{api_url}/accounts/{account_id}/whitelabel',
 				contentType: 'application/json',
 				verb: 'POST'
-			},
-			'whitelabel.delete': {
-				url: '{api_url}/accounts/{account_id}/whitelabel',
-				contentType: 'application/json',
-				verb: 'DELETE'
 			},
 			'whitelabel.update_logo': {
 				url: '{api_url}/accounts/{account_id}/whitelabel/logo',
@@ -130,6 +125,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			var THIS = this,
 				normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+
 			if(typeof data.data == 'object' && data.data.id) {
 				winkstart.request(true, 'accounts_manager.update', {
 						account_id: data.data.id,
@@ -169,8 +165,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				);
 			}
 		},
-
-
 
 		update_billing_account: function(data, callback) {
 			if(data.data.billing_id === 'self') {
@@ -305,9 +299,6 @@ winkstart.module('accounts', 'accounts_manager', {
 									defaults.credits = _data_c.data;
 
 									callback(null, _data_c);
-								},
-								function(data, status) {
-									callback(null, {});
 								}
 							);
 						}
@@ -384,7 +375,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				function(err, results) {
 					var render_data = defaults;
-					defaults.field_data.sameTemplate = true;
+
 					if(typeof data === 'object' && data.id) {
 						$.each(results.get_parent_account.data.available_apps, function(k, v) {
 							var tmp = {},
@@ -404,8 +395,6 @@ winkstart.module('accounts', 'accounts_manager', {
 						});
 
 						render_data = $.extend(true, defaults, results.get_account);
-
-						defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
 					}
 
 					THIS.render_accounts_manager(render_data, target, callbacks);
@@ -431,27 +420,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 					},
 					function(_data, status) {
-						if (typeof error == 'function') {
-							error(_data, status);
-						}
-					}
-				);
-			}
-		},
-
-		delete_whitelabel: function(data, success, error) {
-			if (typeof data.data == 'object' && data.data.id) {
-				winkstart.request(true, 'whitelabel.delete', {
-						account_id: data.data.id,
-						api_url: winkstart.apps['accounts'].api_url
-					},
-					function(_data, status) {
-						if(typeof success == 'function') {
-							success(_data, status);
-						}
-					},
-					function(_data, status) {
-						if (typeof error == 'function') {
+						if(typeof error == 'function') {
 							error(_data, status);
 						}
 					}
@@ -521,22 +490,10 @@ winkstart.module('accounts', 'accounts_manager', {
 				form_data.apps = $.map(form_data.apps, function(val) { return (val) ? val : null });
 			}
 
-			if(form_data.max_connect_failures === '') {
-				delete form_data.max_connect_failures;
-			}
-
 			form_data.whitelabel.description = form_data.extra.upload_media;
 
 			if(form_data.whitelabel.description === '') {
 				delete form_data.whitelabel.description;
-			}
-
-			if(form_data.extra.sameTemplate) {
-				form_data.notifications.fax_to_email = {};
-
-				$.each(form_data.notifications.voicemail_to_email, function(k, v) {
-					form_data.notifications.fax_to_email[k] = v;
-				});
 			}
 
 			delete form_data.extra;
@@ -546,14 +503,8 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		normalize_data: function(data) {
 			$.each(data.notifications.voicemail_to_email, function(key, val) {
-				if(val === '') {
+				if(val == '') {
 					delete data.notifications.voicemail_to_email[key];
-				}
-			});
-
-			$.each(data.notifications.fax_to_email, function(key,val) {
-				if(val === '') {
-					delete data.notifications.fax_to_email[key];
 				}
 			});
 
@@ -632,9 +583,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				deregister = $('#deregister', account_html),
 				deregister_email = $('.deregister_email', account_html),
 				file,
-				checkbox_fax = $('#sameTemplate', account_html),
-				fax_to_email = $('.fax_to_email', account_html),
-
 				starting_values = {
 					amount_balance: parseFloat(data.credits.amount),
 					inbound_trunks: data.limits.inbound_trunks,
@@ -643,10 +591,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				};
 
 			winkstart.validate.set(THIS.config.validation, account_html);
-
-			if(data.field_data.sameTemplate === true) {
-				$('.fax_to_email').hide();
-			}
 
 			$('*[rel=popover]:not([type="text"])', account_html).popover({
 				trigger: 'hover'
@@ -717,30 +661,14 @@ winkstart.module('accounts', 'accounts_manager', {
 				$(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
 			});
 
-			checkbox_fax.is(':checked') ? fax_to_email.hide() : fax_to_email.show();
-
-			$('#sameTemplate', account_html).click(function(evt){
-				if($(this).prop('checked')) {
-					$('.fax_to_email').hide();
-					$('#fax_to_email_support_number', account_html).val($('#vm_to_email_support_number', account_html).val());
-					$('#fax_to_email_support_email', account_html).val($('#vm_to_email_support_email', account_html).val());
-					$('#fax_to_email_send_from', account_html).val($('#vm_to_email_send_from', account_html).val());
-					$('#fax_to_email_service_url', account_html).val($('#vm_to_email_service_url', account_html).val());
-					$('#fax_to_email_service_name', account_html).val($('#vm_to_email_service_name', account_html).val());
-					$('#fax_to_email_service_provider', account_html).val($('#vm_to_email_service_provider', account_html).val());
-				}
-				else {
-					$('.fax_to_email').show();
-					$('.text-val', account_html).val('');
-				}
-			});
-
 			$('.accounts_manager-save', account_html).click(function(ev) {
 				ev.preventDefault();
 
 				winkstart.validate.is_valid(THIS.config.validation, account_html, function() {
 						var form_data = form2object('accounts_manager-form'),
 							whitelabel_data = {};
+
+
 						THIS.clean_form_data(form_data);
 
 						if('field_data' in data) {
@@ -889,25 +817,9 @@ winkstart.module('accounts', 'accounts_manager', {
 					.append(account_html);
 			};
 
-			var render_provision_field = function() {
-				if(winkstart.publish('phone.render_account_fields', $(account_html), data.data.provision || (data.data.provision = {}), render_acc)) {
-					render_acc();
-				}
+			if(winkstart.publish('phone.render_account_fields', $(account_html), data.data.provision || (data.data.provision = {}), render_acc)) {
+				render_acc();
 			}
-
-			if(winkstart.publish('call_center.render_account_fields', $(account_html), data, render_provision_field)) {
-				render_provision_field();
-			};
-
-			$('.whitelabel-delete').click(function(ev) {
-				ev.preventDefault();
-
-				winkstart.confirm('Are you sure you want to delete the white labeling?', function() {
-					THIS.delete_whitelabel(data, function() {
-						THIS.edit_accounts_manager({ id: data.data.id });
-					}, callbacks.delete_error);
-				});
-			});
 		},
 
 		render_list: function(parent) {
