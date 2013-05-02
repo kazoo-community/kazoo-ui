@@ -115,17 +115,16 @@ winkstart.module('myaccount', 'report', {
         },
 
         myaccount_loaded: function(user_data) {
-            //TODO show only to admin
-            //if(winkstart.config.display_report || (!user_data.priv_level || user_data.priv_level === 'admin')){
+            if(winkstart.config.display_report || (!user_data.priv_level || user_data.priv_level === 'admin')){
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
                     sublink: 'report',
                     masqueradable: true,
                     label: 'Report',
-                    weight: '15',
+                    weight: '17',
                     publish: 'report.render'
                 });
-            //}
+            }
         },
 
         render_report: function(target) {
