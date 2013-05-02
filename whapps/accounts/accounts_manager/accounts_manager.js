@@ -108,6 +108,7 @@ winkstart.module('accounts', 'accounts_manager', {
         winkstart.publish('nav.add_sublink', {
             link: 'nav',
             sublink: 'switch_account',
+            masqueradable: true,
             label: 'Switch Account',
             weight: '05',
             publish: 'accounts_manager.switch_account'
@@ -922,6 +923,7 @@ winkstart.module('accounts', 'accounts_manager', {
             winkstart.apps['accounts'].account_id = account_id;
 
             if(winkstart.apps['accounts'].masquerade) {
+                winkstart.publish('accounts.start_masquerade');
                 $.each(winkstart.apps, function(k, v) {
                     if(k != 'accounts' && this.is_masqueradable && this.api_url === winkstart.apps['accounts'].api_url) {
                         this.account_id = winkstart.apps['accounts'].account_id;
@@ -933,6 +935,7 @@ winkstart.module('accounts', 'accounts_manager', {
                 });
             }
             else {
+                winkstart.publish('accounts.end_masquerade');
                 $.each(winkstart.apps, function(k, v) {
                     winkstart.publish('whappnav.subnav.enable', k);
                     if(this.is_masqueradable && this.api_url === winkstart.apps['accounts'].api_url) {

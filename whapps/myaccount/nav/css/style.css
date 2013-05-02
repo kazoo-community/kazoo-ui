@@ -18,7 +18,7 @@
 }
 
 #myaccount_info > .arrow {
-    border-style: solid; 
+    border-style: solid;
     border-width: 10px 6px 0 6px;
     border-color: #BFBFBF transparent transparent transparent;
     float: left;
@@ -55,4 +55,11 @@
 
 #myaccount_help > a:hover {
     background-image: url('../img/help_btn_hover.png');
+}
+
+.dropdown .dropdown-menu .sublink.disabled, .dropdown .dropdown-menu .sublink.disabled a {
+    opacity: 0.5;
+    background: #464646;
+    color: #bfbfbf;
+    cursor: not-allowed;
 }
