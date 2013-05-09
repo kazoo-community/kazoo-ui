@@ -189,10 +189,6 @@ winkstart.module('voip', 'menu', {
                                     THIS.format_data(_data.data);
 
                                     callback(null, _data);
-
-                                    if(typeof callbacks.after_render == 'function') {
-                                        callbacks.after_render();
-                                    }
                                 }
                             );
                         }
