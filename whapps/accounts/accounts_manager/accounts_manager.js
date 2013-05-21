@@ -298,6 +298,9 @@ winkstart.module('accounts', 'accounts_manager', {
                                     defaults.credits = _data_c.data;
 
                                     callback(null, _data_c);
+                                },
+                                function(data, status) {
+                                    callback(null, {});
                                 }
                             );
                         }
