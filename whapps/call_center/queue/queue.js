@@ -65,6 +65,11 @@ winkstart.module('call_center', 'queue', {
                 url: '{api_url}/accounts/{account_id}/users',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'queue.media_list': {
+                url: '{api_url}/accounts/{account_id}/media',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -263,7 +268,7 @@ winkstart.module('call_center', 'queue', {
                     }
                 };
 
-            winkstart.request(true, 'media.list', {
+            winkstart.request(true, 'queue.media_list', {
                     account_id: winkstart.apps['call_center'].account_id,
                     api_url: winkstart.apps['call_center'].api_url
                 },
