@@ -128,9 +128,11 @@
                                 );
                             }
                         } else {
-                            var posX = ($('.sidebar').position() || {}).top || 0;
-                            $('.list-panel-anchor').css({'min-height':(($(window).height())-185-posX)+'px'});
-                            $('.list-panel-anchor').css({'height':(($(window).height())-185-posX)+'px'});
+                            var posX = ($('.sidebar').position() || {}).top || 0,
+                                height = (($(document).height())-185-posX)+'px';
+
+                            $('.list-panel-anchor').css({'min-height':height});
+                            $('.list-panel-anchor').css({'height':height});
                             api.reinitialise();
                         }
                     }

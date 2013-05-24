@@ -1,6 +1,32 @@
 /* Top bar */
+#dashboard-content #dashboard-topbar .settings-bar {
+    background: #222222;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 60px 3px;
+    width: auto;
+}
+
+#dashboard-content #dashboard-topbar .settings-bar label {
+    width: 300px;
+    text-align: left;
+}
+
+#dashboard-content #dashboard-topbar .settings-bar input[type=checkbox] {
+    margin-right: 10px;
+}
+
+#dashboard-content #dashboard-topbar .settings-bar .toggle-button {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#dashboard-content #dashboard-topbar .settings-bar .toggle-button:hover {
+    font-weight: bold;
+}
+
 #dashboard-content #dashboard-topbar {
-    height: 250px;
     width: 100%;
     background: rgb(34,34,34); /* Old browsers */
     background: -moz-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(68,68,68,1) 25%, rgba(85,85,85,1) 50%, rgba(68,68,68,1) 75%, rgba(34,34,34,1) 100%); /* FF3.6+ */
@@ -14,8 +40,7 @@
 
 /* Top-Right queues */
 #dashboard-content #dashboard-topbar .topbar-right {
-    height: 220px;
-    padding: 15px 10px 15px 0px;
+    padding: 15px 0px;
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues {
@@ -185,6 +210,10 @@
 #dashboard-content .dashboard-bottom-right #agents-view {
     padding-left: 22px;
     padding-top: 20px;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper.logout {
+    display: none !important;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper {

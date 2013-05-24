@@ -258,6 +258,7 @@ winkstart.module('call_center', 'queue', {
                         agent_wrapup_time: '30',
                         record_caller: true,
                         moh: {},
+                        notifications: {},
                         max_queue_size: '0'
                     }, data_defaults || {}),
                     field_data: {
