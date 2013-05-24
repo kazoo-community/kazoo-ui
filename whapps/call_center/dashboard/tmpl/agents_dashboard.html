@@ -1,5 +1,9 @@
 <div>
-    <div id="agents-view">
+    {{if hide_logout}}
+        <div id="agents-view" class="hide-logout">
+    {{else}}
+        <div id="agents-view">
+    {{/if}}
         {{each agents}}
             <div class="agent_wrapper ${status}" id="${id}" data-queues="${queues}">
                 <div class="agent_header">
