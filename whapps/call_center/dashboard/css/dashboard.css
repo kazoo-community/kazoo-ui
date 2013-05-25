@@ -212,7 +212,7 @@
     padding-top: 20px;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper.logout {
+#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper.logged_out {
     display: none !important;
 }
 
@@ -376,11 +376,11 @@
     color: #ffbb33;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out{
     border: 1px solid #aaa;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out .agent_header{
     background: #aaa;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#aaa), to(#888));
     background-image: -moz-linear-gradient(top, #aaa, #888);
@@ -392,6 +392,6 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logout .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out .row_data.call_time .data_value{
     color: #aaa;
 }
