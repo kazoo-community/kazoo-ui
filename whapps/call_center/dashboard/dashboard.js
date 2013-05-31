@@ -388,7 +388,7 @@ winkstart.module('call_center', 'dashboard', {
                 remaining_seconds = seconds % 60,
                 display_time = (hours < 10 ? '0' + hours : '' + hours) + ':' + (minutes < 10 ? '0' + minutes : '' + minutes) + ':' + (remaining_seconds < 10 ? '0' + remaining_seconds : '' + remaining_seconds);
 
-            return display_time;
+            return seconds >= 0 ? display_time : '00:00:00';
         },
 
         start_timer: function(type, _data, _timer_type) {
@@ -473,8 +473,14 @@ winkstart.module('call_center', 'dashboard', {
 
                 if('paused' in data.agent_status) {
                     $.each(data.agent_status.paused, function(agent_id, data_status) {
-                        data_status.duration = data_status.wait_time - (data.current_timestamp - data_status.timestamp);
-                        THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+                        if('pause_time' in data_status) {
+                        	data_status.duration = data_status.pause_time - (data.current_timestamp - data_status.timestamp);
+                        	THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+                        }
+                       	else {
+                        	data_status.duration = data.current_timestamp - data_status.timestamp;
+                        	THIS.start_timer('agent_status', {data: data_status, id: agent_id});
+                        }
                     });
                 }
             }
@@ -526,6 +532,14 @@ winkstart.module('call_center', 'dashboard', {
 
                         if(current_status === 'busy') {
                             formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
+                        }
+                        else if(current_status === 'paused') {
+                        	if('pause_time' in agent_status) {
+                            	formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.pause_time - (formatted_data.current_timestamp - agent_status.timestamp))
+                        	}
+                        	else {
+                            	formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
+                            }
                         }
                         else {
                             formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
