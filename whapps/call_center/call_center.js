@@ -39,6 +39,8 @@
             THIS.initialization_check();
         });
 
+        THIS.whapp_config();
+
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
     },
     {
@@ -129,6 +131,14 @@
 
             return count;
         },
+
+		whapp_config: function() {
+			var THIS = this;
+
+			winkstart.apps['call_center'] = $.extend(true, {
+				is_masqueradable: true
+			}, winkstart.apps['call_center']);
+		},
 
         setup_page: function() {
             var THIS = this;
