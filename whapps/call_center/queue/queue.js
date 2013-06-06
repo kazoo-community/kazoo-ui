@@ -11,14 +11,16 @@ winkstart.module('call_center', 'queue', {
             add_agents: 'tmpl/add_agents.html',
             edit_agents: 'tmpl/edit_agents.html',
             selected_agent: 'tmpl/selected_agent.html',
-            available_user: 'tmpl/available_user.html'
+            available_user: 'tmpl/available_user.html',
+            account_fields: 'tmpl/account_fields.html'
         },
 
         subscribe: {
             'queue.activate': 'activate',
             'queue.edit': 'edit_queue',
             'callflow.define_callflow_nodes': 'define_callflow_nodes',
-            'queue.popup_edit': 'popup_edit_queue'
+            'queue.popup_edit': 'popup_edit_queue',
+            'call_center.render_account_fields': 'render_account_fields'
         },
 
         validation: [
@@ -357,6 +359,25 @@ winkstart.module('call_center', 'queue', {
                 );
             }
         },
+
+		render_account_fields: function(parent, data, callback) {
+			var THIS = this,
+				fields_html = THIS.templates.account_fields.tmpl(data);
+
+			$('*[rel=popover]', fields_html).popover({
+                trigger: 'focus'
+            });
+
+            $('*[rel=popover]:not([type="text"])', fields_html).popover({
+                trigger: 'hover'
+            });
+
+			parent.find('#options').append(fields_html);
+
+			callback && callback();
+
+			return false;
+		},
 
         render_edit_agents: function(data, target, callbacks) {
             var THIS = this,

@@ -823,9 +823,16 @@ winkstart.module('accounts', 'accounts_manager', {
                     .append(account_html);
             };
 
-            if(winkstart.publish('phone.render_account_fields', $(account_html), data.data.provision || (data.data.provision = {}), render_acc)) {
-                render_acc();
+			var render_provision_field = function() {
+            	if(winkstart.publish('phone.render_account_fields', $(account_html), data.data.provision || (data.data.provision = {}), render_acc)) {
+                	render_acc();
+            	}
             }
+
+			if(winkstart.publish('call_center.render_account_fields', $(account_html), data, render_provision_field)) {
+			    render_provision_field();
+			};
+
         },
 
         render_list: function(parent) {
