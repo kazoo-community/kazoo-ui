@@ -515,9 +515,6 @@ winkstart.module('call_center', 'dashboard', {
                         agent_status.status = 'busy';
                     }
 
-                    if(agent_status.status === 'connecting') {
-                        agent_status.status = 'ready';
-                    }
                     if(agent_status.status === 'connected') {
                         agent_status.status = 'handling';
                     }
