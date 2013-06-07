@@ -296,11 +296,31 @@
     color: #62c462;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting{
+    border: 1px solid #3366cc;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting .agent_header{
+    background: #3366cc;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#3366cc), to(#3333cc));
+    background-image: -moz-linear-gradient(top, #3366cc, #3333cc);
+    background-image: -ms-linear-gradient(top, #3366cc, #3333cc);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3366cc), color-stop(100%, #3333cc));
+    background-image: -webkit-linear-gradient(top, #3366cc, #3333cc);
+    background-image: -o-linear-gradient(top, #3366cc, #3333cc);
+    background-image: linear-gradient(top, #3366cc, #3333cc);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3366cc', endColorstr='#3333cc', GradientType=0);
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting .row_data.call_time .data_value{
+	color: #3366cc;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready{
     border: 1px solid #05addc;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header{
     background: #05addc;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#05addc), to(#049cdb));
     background-image: -moz-linear-gradient(top, #05addc, #049cdb);
@@ -312,7 +332,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#049cdb', GradientType=0);
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .row_data.call_time .data_value, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ringing .row_data.call_time .data_value{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .row_data.call_time .data_value{
     color: #05addc;
 }
 
