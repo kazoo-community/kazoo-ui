@@ -459,6 +459,10 @@ winkstart.module('voip', 'user', {
 
             winkstart.timezone.populate_dropdown($('#timezone', user_html), data.data.timezone);
 
+			if (data.data.id === winkstart.apps['voip'].user_id){
+				$('.user-delete', user_html).hide();				
+			} 
+				
             $('*[rel=popover]:not([type="text"])', user_html).popover({
                 trigger: 'hover'
             });
