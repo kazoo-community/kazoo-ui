@@ -506,7 +506,7 @@ winkstart.module('call_center', 'dashboard', {
             //Reinitializing previous data;
             $.each(formatted_data.queues, function(k, queue) {
                 queue.abandoned_calls = 0;
-                queue.average_hold_time = 0;
+                queue.average_hold_time = THIS.get_time_seconds(0);
                 queue.current_calls = 0;
                 queue.total_calls = 0;
                 queue.total_wait_time = 0;
