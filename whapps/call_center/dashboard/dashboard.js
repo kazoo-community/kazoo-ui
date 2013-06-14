@@ -166,7 +166,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 30,
+                polling_interval = 2,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -574,10 +574,12 @@ winkstart.module('call_center', 'dashboard', {
 
                     if('queues' in agent_stats) {
                         $.each(agent_stats.queues, function(queue_id, queue_stat) {
-                            formatted_data.agents[k].queues_list[queue_id] = {
-                                missed_calls: queue_stat.missed_calls || 0,
-                                total_calls: queue_stat.total_calls || 0
-                            };
+                        	if(queue_id in formatted_data.agents[k].queues_list) {
+                            	formatted_data.agents[k].queues_list[queue_id] = {
+                                	missed_calls: queue_stat.missed_calls || 0,
+                                	total_calls: queue_stat.total_calls || 0
+                            	};
+                            }
                         });
                     }
                 }
@@ -648,12 +650,14 @@ winkstart.module('call_center', 'dashboard', {
             formatted_data.agents = {};
 
             $.each(data.agents, function(k, v) {
-                formatted_data.agents[v.id] = $.extend(true, {
-                    status: 'logged_out',
-                    missed_calls: 0,
-                    total_calls: 0,
-                    queues_list: {}
-                }, v);
+            	if(v.queues && v.queues.length > 0) {
+                	formatted_data.agents[v.id] = $.extend(true, {
+                    	status: 'logged_out',
+                    	missed_calls: 0,
+                    	total_calls: 0,
+                    	queues_list: {}
+                	}, v);
+                }
 
                 $.each(v.queues, function(k, queue_id) {
                     if(queue_id in formatted_data.queues) {
