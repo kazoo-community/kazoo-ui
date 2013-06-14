@@ -222,7 +222,7 @@
     padding: 0 5px 5px;
     border-radius: 5px;
     width: 210px;
-    border: 1px solid #333;
+    border: 1px solid #aaa;
     background: rgb(34,34,34); /* Old browsers */
     background: -moz-linear-gradient(top, rgba(34,34,34,1) 0%, rgba(68,68,68,1) 25%, rgba(85,85,85,1) 50%, rgba(68,68,68,1) 75%, rgba(34,34,34,1) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(34,34,34,1)), color-stop(25%,rgba(68,68,68,1)), color-stop(50%,rgba(85,85,85,1)), color-stop(75%,rgba(68,68,68,1)), color-stop(100%,rgba(34,34,34,1))); /* Chrome,Safari4+ */
@@ -238,6 +238,16 @@
     font-weight: bold;
     color: #f4f4f4;
     text-shadow: 1px 1px 0px #555;
+
+    background: #aaa;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#aaa), to(#888));
+    background-image: -moz-linear-gradient(top, #aaa, #888);
+    background-image: -ms-linear-gradient(top, #aaa, #888);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #aaa), color-stop(100%, #888));
+    background-image: -webkit-linear-gradient(top, #aaa, #888);
+    background-image: -o-linear-gradient(top, #aaa, #888);
+    background-image: linear-gradient(top, #aaa, #888);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0);
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
@@ -257,7 +267,7 @@
     text-align: right;
     font-size: 16px;
     font-weight: bold;
-    color: #bbb;
+    color: #aaa;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call {
@@ -316,11 +326,11 @@
 	color: #3366cc;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready {
     border: 1px solid #05addc;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header {
     background: #05addc;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#05addc), to(#049cdb));
     background-image: -moz-linear-gradient(top, #05addc, #049cdb);
@@ -394,24 +404,4 @@
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .row_data.call_time .data_value{
     color: #ffbb33;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out{
-    border: 1px solid #aaa;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out .agent_header{
-    background: #aaa;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#aaa), to(#888));
-    background-image: -moz-linear-gradient(top, #aaa, #888);
-    background-image: -ms-linear-gradient(top, #aaa, #888);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #aaa), color-stop(100%, #888));
-    background-image: -webkit-linear-gradient(top, #aaa, #888);
-    background-image: -o-linear-gradient(top, #aaa, #888);
-    background-image: linear-gradient(top, #aaa, #888);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.logged_out .row_data.call_time .data_value{
-    color: #aaa;
 }
