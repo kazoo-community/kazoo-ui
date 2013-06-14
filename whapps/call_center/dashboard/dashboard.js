@@ -546,6 +546,9 @@ winkstart.module('call_center', 'dashboard', {
                             	formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
                         	}
                     	}
+                    	else if(current_status === 'connecting') {
+							formatted_data.agents[k].current_call = { friendly_title: agent_status.caller_id_name || agent_status.caller_id_number || agent_status.call_id };
+                    	}
 
                     	if(current_status !== 'logged_out') {
                         	$.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
