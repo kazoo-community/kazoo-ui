@@ -258,18 +258,24 @@ function(args) {
             return_sub_data,
             THIS = this;
 
+			function hide_fqdn(value) {
+				return value = (winkstart.config.hide_fqdn) ? value.replace('.2600hz.com','') : value;
+			}
+
         $.each(data, function(k, v) {
             if(typeof v == 'object') {
                 return_sub_data = THIS.parse_data_cdr(this);
 
                 $.each(return_sub_data, function(k2, v2) {
                     if(jQuery.inArray(v2.key, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
+						v2.value = hide_fqdn(v2.value);
                         return_data.push({'key': v2.key, 'value': v2.value});
                     }
                 });
             }
             else {
                 if(jQuery.inArray(k, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
+					v = hide_fqdn(v);
                     return_data.push({'key':k, 'value':v});
                 }
             }
