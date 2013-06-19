@@ -37,7 +37,13 @@
                             {{else}}
                                 <div class="data_title">No active call...</div>
                             {{/if}}
-                        {{else}}
+                        {{else status === 'connecting'}}
+                        	{{if current_call}}
+                                <div class="data_title">${current_call.friendly_title}</div>
+                            {{else}}
+                                <div class="data_title">No active call...</div>
+                            {{/if}}
+						{{else}}
                             <div class="data_title">No active call...</div>
                         {{/if}}
                     </div>

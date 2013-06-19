@@ -490,14 +490,7 @@
         async.parallel(
             list_functions,
             function(err, results) {
-                if(err) {
-                    var error_string = 'An API Call (' + err.api_name + ') failed.';
-
-                    winkstart.alert(error_string);
-                }
-                else {
-                    callback(err, results);
-                }
+                callback(err, results);
             }
         );
     };
