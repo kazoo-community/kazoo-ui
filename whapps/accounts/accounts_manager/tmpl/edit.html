@@ -15,7 +15,7 @@
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
             <li class="active"><a href="#basic">Basic</a></li>
-            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Voicemail To Email</a></li>
+            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Notifications Templates</a></li>
             <li><a href="#options"></span>Options</a></li>
             {{if field_data.display_limits}}
                 <li><a href="#billing">Limits</a></li>
@@ -51,11 +51,13 @@
                 </div>
 
                 <div id="voicemail_to_email">
-                    <h3>Template fields</h3>
+
+                    <h2>  Voicemail to email </h2>
+                    <h3 class="notificationsTitle">Template fields</h3>
                     <div class="clearfix">
                         <label for="vm_to_email_support_number">Support Number</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>
+                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>       
                         </div>
                     </div>
 
@@ -72,9 +74,8 @@
                             <input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
                         </div>
                     </div>
-                    <hr />
 
-                    <h3>Template fields for sub-accounts</h3>
+                    <h3 class="notificationsTitle">Template fields for sub-accounts</h3>
                     <div class="clearfix">
                         <label for="vm_to_email_service_url">Service URL</label>
                         <div class="input">
@@ -95,6 +96,63 @@
                             <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="Input the service provider"/>
                         </div>
                     </div>
+                    
+                        <h2>Fax to email</h2>
+                        {{if field_data.sameTemplate}}
+                            <input type="checkbox" name="extra.sameTemplate" checked="checked" id="sameTemplate"/>
+                                Use the same values for the Fax-To-Email template
+                        {{else}}
+                            <input type="checkbox" name="extra.sameTemplate" id="sameTemplate"/>
+                                Use the same values for the Fax-To-Email template 
+                        {{/if}}
+
+                    <div class="fax_to_email">
+                        <h3 class="notificationsTitle">Template fields</h3>
+                        <div class="clearfix">
+                            <label for="fax_to_email_support_number">Support Number</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_support_number" name="notifications.fax_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.fax_to_email.support_number}" />
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="fax_to_email_support_email">Support Email</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_support_email" name="notifications.fax_to_email.support_email" type="text" placeholder="Support Email"  value="${data.notifications.fax_to_email.support_email}"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="fax_to_email_send_from">Send From</label>
+                            <div class="input">
+                                <input  class="span4 text-val" id="fax_to_email_send_from" name="notifications.fax_to_email.send_from" type="text" placeholder="Send From"  value="${data.notifications.fax_to_email.send_from}"/>
+                            </div>
+                        </div>
+
+                        <h3 class="notificationsTitle">Template fields for sub-accounts</h3>
+                        <div class="clearfix">
+                            <label for="fax_to_email_service_url">Service URL</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_service_url" name="notifications.fax_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.fax_to_email.service_url}"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="fax_to_email_service_name">Service Name</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_service_name" name="notifications.fax_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.fax_to_email.service_name}"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="fax_to_email_service_provider">Service Provider</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_service_provider" name="notifications.fax_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.fax_to_email.service_provider}"/>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <div id="options">
