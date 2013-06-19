@@ -48,3 +48,13 @@
     font-weight: bold;
     text-align: left;
 }
+
+#accounts_manager-form #textCheckbox {
+    text-align: right;
+}
+
+.notificationsTitle{
+
+    margin-left: 35px;
+    font-weight: bold;
+}
