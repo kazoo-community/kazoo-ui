@@ -74,6 +74,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/json',
 				verb: 'POST'
 			},
+			'whitelabel.delete': {
+				url: '{api_url}/accounts/{account_id}/whitelabel',
+				contentType: 'application/json',
+				verb: 'DELETE'
+			},
 			'whitelabel.update_logo': {
 				url: '{api_url}/accounts/{account_id}/whitelabel/logo',
 				contentType: 'application/x-base64',
@@ -217,7 +222,8 @@ winkstart.module('accounts', 'accounts_manager', {
 					data: $.extend(true, {
 						call_restriction: {},
 						notifications: {
-							voicemail_to_email: {}
+							voicemail_to_email: {},
+							fax_to_email: {}
 						}
 					}, data_defaults || {}),
 					limits: {
@@ -425,7 +431,27 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 					},
 					function(_data, status) {
-						if(typeof error == 'function') {
+						if (typeof error == 'function') {
+							error(_data, status);
+						}
+					}
+				);
+			}
+		},
+
+		delete_whitelabel: function(data, success, error) {
+			if (typeof data.data == 'object' && data.data.id) {
+				winkstart.request(true, 'whitelabel.delete', {
+						account_id: data.data.id,
+						api_url: winkstart.apps['accounts'].api_url
+					},
+					function(_data, status) {
+						if(typeof success == 'function') {
+							success(_data, status);
+						}
+					},
+					function(_data, status) {
+						if (typeof error == 'function') {
 							error(_data, status);
 						}
 					}
@@ -868,6 +894,16 @@ winkstart.module('accounts', 'accounts_manager', {
 			if(winkstart.publish('call_center.render_account_fields', $(account_html), data, render_provision_field)) {
 				render_provision_field();
 			};
+
+			$('.whitelabel-delete').click(function(ev) {
+				ev.preventDefault();
+
+				winkstart.confirm('Are you sure you want to delete the white labeling?', function() {
+					THIS.delete_whitelabel(data, function() {
+						THIS.edit_accounts_manager({ id: data.data.id });
+					}, callbacks.delete_error);
+				});
+			});
 		},
 
 		render_list: function(parent) {

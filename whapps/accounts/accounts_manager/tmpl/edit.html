@@ -270,6 +270,13 @@
                 </div>
 
                 <div id="white_labeling">
+					{{if field_data.whitelabel.domain}}
+					<div class="clearfix">
+						<div class="input">
+							<button class="btn danger whitelabel-delete">Delete white labeling</button>
+						</div>
+					</div>
+					{{/if}}
                     <h3>General</h3>
                     <div class="clearfix">
                         <label for="white_label_company_name">Company Name</label>
