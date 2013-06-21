@@ -195,6 +195,8 @@ winkstart.module('voip', 'groups', {
                         render_data = $.extend(true, defaults, results.groups_get);
                     }
 
+                    render_data = THIS.format_data(render_data);
+
                     THIS.render_groups(render_data, target, callbacks);
 
                     if(typeof callbacks.after_render == 'function') {
@@ -279,48 +281,63 @@ winkstart.module('voip', 'groups', {
                 });
             });
 
-            var add_user = function() {
+            add_user = function() {
                 var $user = $('#select_user_id', groups_html);
 
                 if($user.val() != 'empty_option_user') {
-                    var user_id = $user.val(),
-                        user_data = {
-                            endpoint_id: user_id,
-                            endpoint_type: 'user',
-                            endpoint_name: $('#option_endpoint_'+user_id, groups_html).text(),
-                        };
+                    var user_id = $user.val();
 
-                    if($('#row_no_data', groups_html).size() > 0) {
-                        $('#row_no_data', groups_html).remove();
-                    }
+                    $.each(data.field_data.users, function(k, v) { 
+                        if(user_id === v.id) {
+                            var user_data = {
+                                endpoint_id: user_id,
+                                endpoint_type: 'user',
+                                endpoint_name: v.first_name + ' ' + v.last_name,
+                            };
 
-                    $('.rows', groups_html).prepend(THIS.templates.endpoint_row.tmpl(user_data));
-                    $('#option_endpoint_'+user_id, groups_html).hide();
+                            data.data.endpoints.push(user_data);
 
-                    $user.val('empty_option_user');
-                }
+                            data.data.endpoints.sort(function(a,b){
+                                return a.endpoint_name.toLowerCase() > b.endpoint_name.toLowerCase();
+                            });
+
+                            THIS.render_endpoint_list(data, groups_html);
+
+                            $user.val('empty_option_user');
+                        }
+                        
+                    });
+                } 
+                   
             },
             add_device = function() {
-                var $device = $('#select_device_id', groups_html);
+                var $device = $('#select_device_id', groups_html);  
 
                 if($device.val() != 'empty_option_device') {
-                    var device_id = $device.val(),
-                        device_data = {
-                            endpoint_id: device_id,
-                            endpoint_type: 'device',
-                            endpoint_name: $('#option_endpoint_'+device_id, groups_html).text(),
-                        };
+                    var device_id = $device.val();
+                        
+                    $.each(data.field_data.devices, function(k, v){ 
+                        if(device_id === v.id) {
+                            var device_data = {
+                                endpoint_id: device_id,
+                                endpoint_type: 'device',
+                                endpoint_name: v.name,
+                            };
 
-                    if($('#row_no_data', groups_html).size() > 0) {
-                        $('#row_no_data', groups_html).remove();
-                    }
+                            data.data.endpoints.push(device_data);
 
-                    $('.rows', groups_html).prepend(THIS.templates.endpoint_row.tmpl(device_data));
-                    $('#option_endpoint_'+device_id, groups_html).hide();
+                            data.data.endpoints.sort(function(a,b){
+                                return a.endpoint_name.toLowerCase() > b.endpoint_name.toLowerCase();
+                            });
 
-                    $device.val('empty_option_device');
+                            THIS.render_endpoint_list(data, groups_html);
+
+                            $device.val('empty_option_device');
+                        } 
+
+                    });
                 }
-            };
+            },
 
             $('#select_user_id', groups_html).change(function() {
                 add_user();
@@ -380,6 +397,43 @@ winkstart.module('voip', 'groups', {
             (target)
                 .empty()
                 .append(groups_html);
+        },
+
+        format_data: function(data){
+	        var user_item, 
+	            list_endpoint = [];
+
+	        $.each(data.field_data.users, function(k, v) {
+	            if(v.id in data.data.endpoints) {
+	                endpoint_item = {
+	                    endpoint_type: 'user',
+	                    endpoint_id: v.id,
+	                    endpoint_name: v.first_name + ' ' + v.last_name,
+	                };
+
+	                list_endpoint.push(endpoint_item);
+	            }
+	        });
+
+	        $.each(data.field_data.devices, function(k, v) {
+	            if(v.id in data.data.endpoints) {
+	                endpoint_item = {
+	                    endpoint_type: 'device',
+	                    endpoint_id: v.id,
+	                    endpoint_name: v.name,
+	                };
+
+	                list_endpoint.push(endpoint_item);
+	            }
+	        });
+
+	        list_endpoint.sort(function(a,b){
+	            return a.endpoint_name.toLowerCase() > b.endpoint_name.toLowerCase();
+	        });
+
+	        data.data.endpoints = list_endpoint;
+
+			return data;
         },
 
         normalize_data: function(form_data) {
@@ -466,32 +520,12 @@ winkstart.module('voip', 'groups', {
         render_endpoint_list: function(data, parent) {
             var THIS = this;
 
-            if('endpoints' in data.data && !($.isEmptyObject(data.data.endpoints))) {
-                var user_item;
-                $.each(data.field_data.users, function(k, v) {
-                    if(v.id in data.data.endpoints) {
-                        endpoint_item = {
-                            endpoint_type: 'user',
-                            endpoint_id: v.id,
-                            endpoint_name: v.first_name + ' ' + v.last_name,
-                        };
+            $('.rows', parent).empty();
 
-                        $('.rows', parent).append(THIS.templates.endpoint_row.tmpl(endpoint_item));
-                        $('#option_endpoint_'+v.id, parent).hide();
-                    }
-                });
-
-                $.each(data.field_data.devices, function(k, v) {
-                    if(v.id in data.data.endpoints) {
-                        endpoint_item = {
-                            endpoint_type: 'device',
-                            endpoint_id: v.id,
-                            endpoint_name: v.name,
-                        };
-
-                        $('.rows', parent).append(THIS.templates.endpoint_row.tmpl(endpoint_item));
-                        $('#option_endpoint_'+v.id, parent).hide();
-                    }
+            if('endpoints' in data.data && data.data.endpoints.length > 0) {
+                $.each(data.data.endpoints, function(k, item){
+                    $('.rows', parent).append(THIS.templates.endpoint_row.tmpl(item));
+                    $('#option_endpoint_'+item.endpoint_id, parent).hide(); 
                 });
             }
             else {
