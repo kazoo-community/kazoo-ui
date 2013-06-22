@@ -287,7 +287,7 @@ winkstart.module('voip', 'groups', {
                 if($user.val() != 'empty_option_user') {
                     var user_id = $user.val();
 
-                    $.each(data.field_data.users, function(k, v) { 
+                    $.each(data.field_data.users, function(k, v) {
                         if(user_id === v.id) {
                             var user_data = {
                                 endpoint_id: user_id,
@@ -305,18 +305,18 @@ winkstart.module('voip', 'groups', {
 
                             $user.val('empty_option_user');
                         }
-                        
+
                     });
-                } 
-                   
+                }
+
             },
             add_device = function() {
-                var $device = $('#select_device_id', groups_html);  
+                var $device = $('#select_device_id', groups_html);
 
                 if($device.val() != 'empty_option_device') {
                     var device_id = $device.val();
-                        
-                    $.each(data.field_data.devices, function(k, v){ 
+
+                    $.each(data.field_data.devices, function(k, v){
                         if(device_id === v.id) {
                             var device_data = {
                                 endpoint_id: device_id,
@@ -333,7 +333,7 @@ winkstart.module('voip', 'groups', {
                             THIS.render_endpoint_list(data, groups_html);
 
                             $device.val('empty_option_device');
-                        } 
+                        }
 
                     });
                 }
@@ -392,6 +392,17 @@ winkstart.module('voip', 'groups', {
                 if($('.rows .row', groups_html).size() === 0) {
                     $('.rows', groups_html).append(THIS.templates.endpoint_row.tmpl());
                 }
+
+				/* TODO For some reason splice doesn't work and I don't have time to make it better for now */
+                var new_list = [];
+
+                $.each(data.data.endpoints, function(k, v) {
+                    if(!(v.endpoint_id === endpoint_id)) {
+                        new_list.push(v);
+                    }
+                });
+
+                data.data.endpoints = new_list;
             });
 
             (target)
@@ -400,7 +411,7 @@ winkstart.module('voip', 'groups', {
         },
 
         format_data: function(data){
-	        var user_item, 
+	        var user_item,
 	            list_endpoint = [];
 
 	        $.each(data.field_data.users, function(k, v) {
@@ -525,7 +536,7 @@ winkstart.module('voip', 'groups', {
             if('endpoints' in data.data && data.data.endpoints.length > 0) {
                 $.each(data.data.endpoints, function(k, item){
                     $('.rows', parent).append(THIS.templates.endpoint_row.tmpl(item));
-                    $('#option_endpoint_'+item.endpoint_id, parent).hide(); 
+                    $('#option_endpoint_'+item.endpoint_id, parent).hide();
                 });
             }
             else {
