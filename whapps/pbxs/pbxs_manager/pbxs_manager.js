@@ -1027,16 +1027,17 @@ winkstart.module('pbxs', 'pbxs_manager', {
                                 dash_e911,
                                 failover;
 
-                            $.each(_data.data.servers[id].DIDs, function(k, v) {
-                                if(_data_numbers.data[k]) {
-                                    cnam = $.inArray('cnam', _data_numbers.data[k].features) > -1 ? true : false;
-                                    failover = $.inArray('failover', _data_numbers.data[k].features) > -1 ? true : false;
-                                    dash_e911 = $.inArray('dash_e911', _data_numbers.data[k].features) > -1 ? true : false;
-                                    if(k != 'id' && _data_numbers.data[k]) {
-                                        tab_data.push(['lol', k, failover, cnam, dash_e911, _data_numbers.data[k].state]);
-                                    }
-                                }
-                            });
+                            if('numbers' in _data_numbers.data) {
+                            	$.each(_data.data.servers[id].DIDs, function(k, v) {
+                                	if(_data_numbers.data.numbers[k]) {
+                                    	cnam = $.inArray('cnam', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+                                    	failover = $.inArray('failover', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+                                    	dash_e911 = $.inArray('dash_e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+
+                                        tab_data.push(['lol', k, failover, cnam, dash_e911, _data_numbers.data.numbers[k].state]);
+                                	}
+                            	});
+                            }
 
                             winkstart.table.pbxs_manager.fnAddData(tab_data);
 
@@ -1062,7 +1063,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         //Remove numbers used in trunkstore
                         $.each(_data.data.servers, function(k, v) {
                             $.each(this.DIDs, function(k2, v2) {
-                                delete _data_numbers.data[k2];
+                                delete _data_numbers.data.numbers[k2];
                             });
                         });
 
@@ -1070,17 +1071,17 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         $.each(_data_callflows.data, function(k, v) {
                             if(this.numbers) {
                                 $.each(this.numbers, function(k2, v2) {
-                                    delete _data_numbers.data[v2];
+                                    delete _data_numbers.data.numbers[v2];
                                 });
                             }
                         });
 
                         //Build available numbers list
-                        $.each(_data_numbers.data, function(k, v) {
-                            if(k !== 'id') {
-                                tab_data.push(['lol', k]);
-                            }
-                        });
+                        if('numbers' in _data_numbers.data) {
+                        	$.each(_data_numbers.data.numbers, function(k, v) {
+                            	tab_data.push(['lol', k]);
+                        	});
+                        }
 
                         winkstart.table.assign_number.fnAddData(tab_data);
 

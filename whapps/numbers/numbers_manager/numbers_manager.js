@@ -1035,15 +1035,15 @@ winkstart.module('numbers', 'numbers_manager', {
                     winkstart.table.numbers_manager.fnClearTable();
 
                     var tab_data = [];
-                    $.each(_data.data, function(k, v) {
-                        if(k != 'id') {
-                            var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false;
-                            var outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
-                            v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
-                            v.caller_id = { inbound: inbound, outbound: outbound };
-                            tab_data.push(['', k, v.caller_id, v.e911, v.state]);
-                        }
-                    });
+                    if('numbers' in _data.data) {
+                    	$.each(_data.data.numbers, function(k, v) {
+                        	var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false;
+                        	var outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
+                        	v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
+                        	v.caller_id = { inbound: inbound, outbound: outbound };
+                        	tab_data.push(['', k, v.caller_id, v.e911, v.state]);
+                    	});
+                    }
 
                     winkstart.table.numbers_manager.fnAddData(tab_data);
 

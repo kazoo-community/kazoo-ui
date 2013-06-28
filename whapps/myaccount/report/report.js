@@ -198,11 +198,11 @@ winkstart.module('myaccount', 'report', {
                                 inbound_trunks = results.limits.inbound_trunks || 0,
                                 twoway_trunks = results.limits.twoway_trunks || 0;
 
-                            $.each(results.dids, function(k, v) {
-                                if(k !== 'id') {
-                                    dids++;
-                                }
-                            });
+							if('numbers' in results.dids) {
+                            	$.each(results.dids.numbers, function(k, v) {
+                                	dids++;
+                            	});
+                            }
 
                             $.each(results.devices, function(k, v) {
                                 if(v.device_type === 'softphone') {

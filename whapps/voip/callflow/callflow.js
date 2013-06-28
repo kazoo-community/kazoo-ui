@@ -270,16 +270,20 @@ winkstart.module('voip', 'callflow', {
                 function(_data_numbers, status) {
                     THIS.list_numbers_callflow(
                         function(number_callflows, status) {
-                            $.each(number_callflows, function(k, v) {
-                                delete _data_numbers.data[k];
-                            });
+                        	if('numbers' in _data_numbers.data) {
+                            	$.each(number_callflows, function(k, v) {
+                                	delete _data_numbers.data.numbers[k];
+                            	});
+                            }
 
                             if(typeof success === 'function') {
                                 THIS.list_numbers_trunkstore(
                                     function(numbers_trunkstore) {
-                                        $.each(numbers_trunkstore, function(k, v) {
-                                            delete _data_numbers.data[k];
-                                        });
+                                    	if('numbers' in _data_numbers.data) {
+                                        	$.each(numbers_trunkstore, function(k, v) {
+                                            	delete _data_numbers.data.numbers[k];
+                                        	});
+                                        }
 
                                         success(_data_numbers);
                                     },
@@ -298,7 +302,7 @@ winkstart.module('voip', 'callflow', {
                 },
                 function(_data, status) {
                     if(typeof error === 'function') {
-                        error(_data_numbers);
+                        error(_data);
                     }
                 }
             );
@@ -743,11 +747,11 @@ winkstart.module('voip', 'callflow', {
                         THIS.list_numbers(function(_data) {
                             var phone_numbers = [];
 
-                            $.each(_data.data, function(k,v) {
-                                if(k != 'id') {
+							if('numbers' in _data.data) {
+                            	$.each(_data.data.numbers, function(k,v) {
                                     phone_numbers.push(k);
-                                }
-                            });
+                            	});
+                            }
                             phone_numbers.sort();
 
                             var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers}),
@@ -768,11 +772,11 @@ winkstart.module('voip', 'callflow', {
                                  THIS.list_numbers(function(_data) {
                                     phone_numbers = [];
 
-                                    $.each(_data.data, function(k,v) {
-                                        if(k != 'id') {
-                                            phone_numbers.push(k);
-                                        }
-                                    });
+									if('numbers' in _data.data) {
+                            			$.each(_data.data.numbers, function(k,v) {
+                                    		phone_numbers.push(k);
+                            			});
+                            		}
 
                                     phone_numbers.sort();
 
