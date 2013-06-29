@@ -186,7 +186,7 @@ function(args) {
                         cost,
                         humanFullDate,
                         cdr_id,
-                        this.billing_seconds
+                        this.billing_seconds || ''
                     ]);
                 });
 
