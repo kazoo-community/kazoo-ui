@@ -521,6 +521,10 @@ winkstart.module('accounts', 'accounts_manager', {
 				form_data.apps = $.map(form_data.apps, function(val) { return (val) ? val : null });
 			}
 
+			if(form_data.max_connect_failures === '') {
+				delete form_data.max_connect_failures;
+			}
+
 			form_data.whitelabel.description = form_data.extra.upload_media;
 
 			if(form_data.whitelabel.description === '') {
