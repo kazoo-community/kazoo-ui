@@ -402,9 +402,9 @@ winkstart.module('accounts', 'accounts_manager', {
 
 							defaults.field_data.available_apps.push(tmp);
 						});
-						
+
 						render_data = $.extend(true, defaults, results.get_account);
-						
+
 						defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
 					}
 
@@ -465,7 +465,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				data.data.notifications.voicemail_to_email = data.data.notifications.voicemail_to_email || {};
 				data.data.notifications.voicemail_to_email.support_number = data.data.vm_to_email.support_number;
 				data.data.notifications.voicemail_to_email.support_email = data.data.vm_to_email.support_email;
-				
+
 				delete data.data.vm_to_email;
 			}
 		},
@@ -519,6 +519,10 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			if(form_data.apps) {
 				form_data.apps = $.map(form_data.apps, function(val) { return (val) ? val : null });
+			}
+
+			if(form_data.max_connect_failures === '') {
+				delete form_data.max_connect_failures;
 			}
 
 			form_data.whitelabel.description = form_data.extra.upload_media;
