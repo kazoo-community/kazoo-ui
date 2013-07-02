@@ -343,6 +343,7 @@ winkstart.module('voip', 'user', {
                                 user_id: data.id
                             },
                             function(_data_devices) {
+                            	defaults.field_data.hotdesk_enabled = true;
                                 defaults.field_data.device_list = {};
 
                                 $.each(_data_devices.data, function(k, v) {
@@ -356,7 +357,8 @@ winkstart.module('voip', 'user', {
                                 callback(null, _data_devices);
                             },
                             function(_data, status) {
-                                callback({api_name: 'Hotdesk'}, _data);
+                                //callback({api_name: 'Hotdesk'}, _data);
+                                callback(null, defaults);
                             }
                         );
                     }
