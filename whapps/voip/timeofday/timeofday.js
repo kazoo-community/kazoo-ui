@@ -449,6 +449,10 @@ winkstart.module('voip', 'timeofday', {
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
 
+			if(form_data.month) {
+				form_data.month = parseInt(form_data.month);
+			}
+
             return form_data;
         },
 
