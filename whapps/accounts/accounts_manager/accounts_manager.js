@@ -345,7 +345,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 					},
 					list_classifiers: function(callback) {
-						if(('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['accounts'].account_id === winkstart.apps['auth'].reseller_id)) {
+						if(winkstart.apps['auth'].is_reseller || (winkstart.config.hasOwnProperty('reseller_id') ? (winkstart.config.reseller_id === winkstart.apps['auth'].account_id) : false)) {
 							winkstart.request('accounts_manager.list_classifiers', {
 									api_url: winkstart.apps['accounts'].api_url,
 									account_id: winkstart.apps['accounts'].account_id
