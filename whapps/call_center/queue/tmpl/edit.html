@@ -148,6 +148,22 @@
                             <input class="span4" id="pickup_url" name="notifications.pickup" type="text" placeholder="http://xxx.yyy/script_pickup.php" value="${data.notifications.pickup}" rel="popover" data-content="URL for a callback when the call is picked up to tell the customer on their own servers that a call has been picked up."/>
                         </div>
                     </div>
+                    <div class="clearfix">
+                        <label>Method</label>
+                        <div class="input">
+                            <span rel="popover" data-content="What HTTP method to use">
+                                <select name="notifications.method">
+                                    {{if data.notifications.method === 'POST'}}
+                                        <option value="GET">GET</option>
+                                        <option value="POST" selected="selected">POST</option>
+                                    {{else}}
+                                        <option value="GET" selected="selected">GET</option>
+                                        <option value="POST">POST</option>
+                                    {{/if}}
+                                </select>
+                            </span>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</form>
