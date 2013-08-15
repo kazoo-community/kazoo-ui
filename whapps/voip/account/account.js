@@ -375,8 +375,6 @@ winkstart.module('voip', 'account', {
                 });
             });
 
-            winkstart.link_form(account_html);
-
             (target)
                 .empty()
                 .append(account_html);

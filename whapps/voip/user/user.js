@@ -26,8 +26,8 @@ winkstart.module('voip', 'user', {
                 { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
-                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#advanced_caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#advanced_caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
@@ -462,9 +462,9 @@ winkstart.module('voip', 'user', {
             winkstart.timezone.populate_dropdown($('#timezone', user_html), data.data.timezone);
 
 			if (data.data.id === winkstart.apps['voip'].user_id){
-				$('.user-delete', user_html).hide();				
-			} 
-				
+				$('.user-delete', user_html).hide();
+			}
+
             $('*[rel=popover]:not([type="text"])', user_html).popover({
                 trigger: 'hover'
             });

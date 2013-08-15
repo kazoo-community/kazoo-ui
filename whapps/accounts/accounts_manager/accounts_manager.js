@@ -881,8 +881,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				});
 			});
 
-			winkstart.link_form(account_html);
-
 			var render_acc = function() {
 				(target)
 					.empty()
