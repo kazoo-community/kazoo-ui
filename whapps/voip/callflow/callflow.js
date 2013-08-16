@@ -18,6 +18,7 @@ winkstart.module('voip', 'callflow', {
             add_number: 'tmpl/add_number.html',
             edit_dialog: 'tmpl/edit_dialog.html',
             two_column: 'tmpl/two_column.html',
+            call_record_callflow: 'tmpl/call_record_callflow.html',
             disa_callflow: 'tmpl/disa_callflow.html',
             pivot_callflow: 'tmpl/pivot_callflow.html',
             presence_callflow: 'tmpl/presence_callflow.html',
@@ -2388,6 +2389,77 @@ winkstart.module('voip', 'callflow', {
                                 });
                             }
                         );
+                    }
+                },
+                'record_call[action=start]': {
+                    name: 'Start Call Recording',
+                    icon: 'conference',
+                    category: 'Call Recording',
+                    module: 'record_call',
+                    tip: 'Start Call Recording',
+                    data: {
+                        action: 'start'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.call_record_callflow.tmpl({
+                            data_call_record: {
+                                'format': node.getMetadata('format') || 'mp3',
+                                'url': node.getMetadata('url') || '',
+                                'time_limit': node.getMetadata('time_limit') || '600'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('url', $('#url', popup_html).val());
+                            node.setMetadata('format', $('#format', popup_html).val());
+                            node.setMetadata('time_limit', $('#time_limit', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Start Call Recording',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+                    }
+                },
+                'record_call[action=stop]': {
+                    name: 'Stop Call Recording',
+                    icon: 'conference',
+                    category: 'Call Recording',
+                    module: 'record_call',
+                    tip: 'Stop Call Recording',
+                    data: {
+                        action: 'stop'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
                     }
                 },
                 'pivot[]': {
