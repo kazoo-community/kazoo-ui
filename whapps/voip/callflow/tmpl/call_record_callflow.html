@@ -1,0 +1,34 @@
+<div>
+    <div class="dialog_popup">
+        <h1>Call Recording</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+				<div class="popup_field">
+                    <label for="format">Format: </label>
+                    <select id="format" style="width: 100px; height: 28px;">
+                        {{if data_call_record.format === 'mp3'}}
+                            <option value="mp3" selected="selected">mp3</option>
+                            <option value="wav">wav</option>
+                        {{else}}
+                            <option value="mp3">mp3</option>
+                            <option value="wav" selected="selected">wav</option>
+                        {{/if}}
+                    </select>
+                </div>
+
+                <div class="popup_field">
+                    <label for="url">URL: </label>
+                    <input type="text" id="url" class="medium" value="${data_call_record.url}" placeholder="http://your.server.com/place/to/store/recordings"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="time_limit">Time Limit (s): </label>
+                    <input type="text" id="time_limit" class="medium" value="${data_call_record.time_limit}"/>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>
