@@ -375,9 +375,15 @@ winkstart.module('voip', 'account', {
                 });
             });
 
-            (target)
-                .empty()
-                .append(account_html);
+            var final_render = function() {
+            	(target)
+                	.empty()
+                	.append(account_html);
+            };
+
+			if(winkstart.publish('call_center.render_account_fields', $(account_html), data, final_render)) {
+				final_render();
+			}
         },
 
         activate: function(parent) {
