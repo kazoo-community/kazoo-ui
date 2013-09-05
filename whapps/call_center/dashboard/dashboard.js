@@ -166,7 +166,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 10,
+                polling_interval = 2,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -595,7 +595,7 @@ winkstart.module('call_center', 'dashboard', {
 
                     formatted_data.queues[k].current_calls = formatted_data.queues[k].current_calls || 0;
 
-                    if('wait_time' in queue_stats) {
+                    if('wait_time' in queue_stats && queue_stats.status !== 'abandoned') {
                         formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
                     }
 
@@ -626,7 +626,9 @@ winkstart.module('call_center', 'dashboard', {
 
             $.each(formatted_data.queues, function(k, v) {
                 if(v.total_calls > 0) {
-                    v.average_hold_time = THIS.get_time_seconds(v.total_wait_time / v.total_calls);
+                	var completed_calls = v.total_calls - v.abandoned_calls;
+
+                    v.average_hold_time = THIS.get_time_seconds(v.total_wait_time / completed_calls);
                 }
             });
 
