@@ -141,6 +141,7 @@ winkstart.module('voip', 'groups', {
                 },
                 defaults = {
                     data: $.extend(true, {
+                    	endpoints: {},
                         music_on_hold: {}
                     }, data_defaults || {}),
                     field_data: {}
