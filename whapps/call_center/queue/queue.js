@@ -256,7 +256,7 @@ winkstart.module('call_center', 'queue', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        connection_timeout: '3600',
+                        connection_timeout: '0',
                         member_timeout: '5',
                         agent_wrapup_time: '30',
                         record_caller: true,
