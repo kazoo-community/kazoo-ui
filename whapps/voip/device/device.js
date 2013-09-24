@@ -13,7 +13,6 @@ winkstart.module('voip', 'device', {
             sip_device: 'tmpl/edit.html',
             fax: 'tmpl/fax.html',
             device_callflow: 'tmpl/device_callflow.html',
-            device_threshold: 'tmpl/device_threshold.html',
             sip_uri: 'tmpl/sip_uri.html'
         },
 
@@ -194,66 +193,25 @@ winkstart.module('voip', 'device', {
                         api_url: winkstart.apps['voip'].api_url
                     },
                     function(_data, status) {
-                        var create_device = function() {
-                            winkstart.request(true, 'device.create', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url,
-                                    data: normalized_data
-                                },
-                                function(_data, status) {
-                                    if(typeof success == 'function') {
-                                        success(_data, status, 'create');
-                                    }
-                                },
-                                function(_data, status) {
-                                    if(typeof error == 'function') {
-                                        error(_data, status, 'create');
-                                    }
+                        winkstart.request(true, 'device.create', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                data: normalized_data
+                            },
+                            function(_data, status) {
+                                if(typeof success == 'function') {
+                                    success(_data, status, 'create');
                                 }
-                            );
-                        };
-
-                        if($.inArray(_data.data.length, winkstart.config.device_threshold || []) > -1) {
-                            if(('reseller_id' in winkstart.config && winkstart.apps['auth'].reseller_id !== winkstart.config.reseller_id) || (winkstart.apps['auth'].account_id === winkstart.apps['auth'].reseller_id)) {
-                                create_device();
+                            },
+                            function(_data, status) {
+                                if(typeof error == 'function') {
+                                    error(_data, status, 'create');
+                                }
                             }
-                            else {
-                                THIS.render_alert_threshold({ nb_devices: _data.data.length}, create_device);
-                            }
-                        }
-                        else {
-                            create_device();
-                        }
+                        );
                     }
                 );
-
             }
-        },
-
-        render_alert_threshold: function(data, success, error) {
-            var THIS = this,
-                threshold_html = THIS.templates.device_threshold.tmpl(data);
-
-            $('.save-device', threshold_html).click(function() {
-                dialog.dialog('destroy');
-
-                if(typeof success === 'function') {
-                    success();
-                }
-            });
-
-            $('.cancel-device', threshold_html).click(function() {
-                if(typeof error === 'function') {
-                    error();
-                }
-                else {
-                    dialog.dialog('destroy');
-                }
-            });
-
-            var dialog = winkstart.dialog(threshold_html, {
-                title: 'Maximum number of devices for your current service plan reached'
-            });
         },
 
         edit_device: function(data, _parent, _target, _callbacks, data_defaults) {
