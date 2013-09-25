@@ -14,36 +14,36 @@ winkstart.module('core', 'core',
             uninitialized_count = 0,
             domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
             api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url,
-            load_modules = function() {
-                // First thing we're going to do is go through is load our layout
-                winkstart.module('core', 'layout').init({ parent: $('body') }, function() {
-                    winkstart.module('core', 'whappnav').init({ parent: $('body') }, function() {
-                        winkstart.module('core', 'linknav').init({ parent: $('body') }, function() {
-                            // Now move onto apps
-                            winkstart.log('WhApps: Loading WhApps...');
+			load_modules = function() {
+				// First thing we're going to do is go through is load our layout
+				winkstart.module('core', 'layout').init({ parent: $('body') }, function() {
+					winkstart.module('core', 'whappnav').init({ parent: $('body') }, function() {
+						winkstart.module('core', 'linknav').init({ parent: $('body') }, function() {
+							// This is not such a great hack.
+							// We need to load auth, and then, myaccount
+							var arrayApps = ['myaccount', 'auth'];
 
-                            // Load any other apps requested (only after core is initialized)
-                            $.each(winkstart.apps, function(k, v) {
-                                uninitialized_count++;
-                            });
+							// Load any other apps requested (only after core is initialized)
+							var loadApps = function(args) {
+								if(!(args.listApps.length)) {
+									winkstart.publish('core.loaded');
+								}
+								else {
+									var appName = args.listApps.pop();
 
-                            $.each(winkstart.apps, function(k, v) {
-                                winkstart.log('WhApps: Would load ' + k + ' from URL ' + v.url);
-                                winkstart.module.loadApp(k, function() {
-                                    this.init(function() {
-                                        if(!(--uninitialized_count)) {
-                                            winkstart.publish('core.loaded');
-                                        }
-                                    });
-                                    winkstart.log('WhApps: Initializing ' + k);
-                                });
-                            });
+									winkstart.module.loadApp(appName, function() {
+										this.init(function() {
+											loadApps(args);
+										});
+									});
+								}
+							};
 
-                            winkstart.log('WhApps: Finished Loading WhApps');
-                        });
-                    });
-                });
-            };
+							loadApps({ listApps: arrayApps });
+						});
+					});
+				});
+			};
 
         winkstart.registerResources('auth', THIS.config.resources);
 
