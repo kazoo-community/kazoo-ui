@@ -4,7 +4,7 @@ winkstart.module('myaccount', 'credits', {
         ],
 
         subscribe: {
-            'nav.activate': 'nav_activate'
+            'credits.activate': 'nav_activate'
         },
 
         templates: {
