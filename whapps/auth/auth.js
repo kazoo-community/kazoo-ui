@@ -101,8 +101,18 @@ winkstart.module('auth', 'auth',
 
         winkstart.registerResources(this.__whapp, this.config.resources);
 
+		var jsonCookie = $.parseJSON($.cookie('c_winkstart_auth'));
+
         if(!$.cookie('c_winkstart_auth')) {
             winkstart.publish('auth.welcome');
+        }
+        else if(jsonCookie && winkstart.apps.auth.api_url !== jsonCookie.api_url) {
+            $.cookie('c_winkstart_auth', null);
+
+            winkstart.publish('layout.render_welcome', { callback: function() {
+            		winkstart.publish('auth.welcome');
+            	}
+            });
         }
 
         if('account_name' in URL_DATA) {
