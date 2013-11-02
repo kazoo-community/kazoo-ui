@@ -18,7 +18,8 @@ winkstart.module('core', 'layout', {
         },
 
         subscribe: {
-            'layout.detect_logo': 'detect_and_set_logo'
+            'layout.detect_logo': 'detect_and_set_logo',
+            'layout.render_welcome': 'render_welcome'
         },
 
         resources: {
@@ -144,7 +145,7 @@ winkstart.module('core', 'layout', {
             );
         },
 
-        render_welcome: function() {
+        render_welcome: function(args) {
             var THIS = this;
             /*if(navigator.appName == 'Microsoft Internet Explorer') {
                 THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
@@ -159,6 +160,8 @@ winkstart.module('core', 'layout', {
                 };
 
                 THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.welcome-page-top .left_div', layout_welcome_html));
+
+                args && args.callback && args.callback();
             //}
         },
 

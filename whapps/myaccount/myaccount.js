@@ -40,7 +40,7 @@ winkstart.module('myaccount', 'myaccount', {
 
         THIS.uninitialized_count = THIS._count(THIS.modules);
 
-        THIS.initialization_check();
+        //THIS.initialization_check();
 
         THIS.whapp_config();
     },
@@ -77,7 +77,8 @@ winkstart.module('myaccount', 'myaccount', {
 
             THIS.is_initialized = true;
             THIS.list_submodules.list.sort();
-            //THIS.setup_page();
+
+            THIS.setup_page(user_data);
         },
 
         activate: function(user_data) {
@@ -153,7 +154,7 @@ winkstart.module('myaccount', 'myaccount', {
             var THIS = this;
 
             winkstart.publish('nav.activate', user_data);
-            //winkstart.publish('myaccount.display');
+            winkstart.publish('credits.activate');
         },
 
         orig_whapp_config: $.extend(true, {}, winkstart.apps['myaccount']),
