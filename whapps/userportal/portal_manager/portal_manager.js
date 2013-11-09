@@ -722,13 +722,20 @@ winkstart.module('userportal', 'portal_manager', {
                     hours = date.getHours(),
                     minutes = date.getMinutes();
 
-                if(hours >= 12) {
-                    hours-=12;
-                    suffix = 'pm';
-                }
-                else {
-                    suffix = 'am';
-                }
+				if(hours >= 12) {
+					if(hours !== 12) {
+						hours -= 12;
+					}
+
+					suffix = 'pm';
+				}
+				else {
+					if(hours === 0) {
+						hours = 12;
+					}
+
+					suffix = 'am';
+				}
 
                 day = day < 10 ? '0' + day : day;
                 month = month < 10 ? '0' + month : month;
