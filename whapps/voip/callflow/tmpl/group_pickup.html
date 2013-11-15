@@ -1,0 +1,30 @@
+<div>
+    <div class="dialog_popup">
+        <h1>Setting group pick-up...</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="endpoint_selector">Which endpoint?</label>
+                    <div class="select_wrapper">
+                        <select id="endpoint_selector">
+                            {{each(i, item) data.items}}
+								<optgroup label="${i}"></optgroup>
+                            	{{each(j, endpoint) item}}
+                                	{{if data.selected == endpoint.id}}
+                                    	<option id="${endpoint.id}" data-type="${i}" value="${endpoint.id}" SELECTED>${endpoint.name || endpoint.first_name + ' ' + endpoint.last_name}</option>
+                                	{{else}}
+                                    	<option id="${endpoint.id}" data-type="${i}" value="${endpoint.id}">${endpoint.name || endpoint.first_name + ' ' + endpoint.last_name}</option>
+                                	{{/if}}
+                            	{{/each}}
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="clear"/>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

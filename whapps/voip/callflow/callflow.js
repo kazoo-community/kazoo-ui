@@ -31,7 +31,8 @@ winkstart.module('voip', 'callflow', {
             fax_callflow: 'tmpl/fax_callflow.html',
             edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
-            response_callflow: 'tmpl/response_callflow.html'
+            response_callflow: 'tmpl/response_callflow.html',
+            group_pickup: 'tmpl/group_pickup.html'
         },
 
         elements: {
@@ -115,6 +116,21 @@ winkstart.module('voip', 'callflow', {
             },
             'callflow.list_media': {
                 url: '{api_url}/accounts/{account_id}/media',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'callflow.list_devices': {
+                url: '{api_url}/accounts/{account_id}/devices',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'callflow.list_users': {
+                url: '{api_url}/accounts/{account_id}/users',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'callflow.list_groups': {
+                url: '{api_url}/accounts/{account_id}/groups',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -1336,6 +1352,39 @@ winkstart.module('voip', 'callflow', {
             return stats;
         },
 
+        groups_list: function(callback) {
+			winkstart.request(true, 'callflow.list_groups', {
+					account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+				},
+				function(data, status) {
+					callback && callback(data.data);
+				}
+			);
+        },
+
+        devices_list: function(callback) {
+			winkstart.request(true, 'callflow.list_devices', {
+					account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+				},
+				function(data, status) {
+					callback && callback(data.data);
+				}
+			);
+        },
+
+        users_list: function(callback) {
+			winkstart.request(true, 'callflow.list_users', {
+					account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+				},
+				function(data, status) {
+					callback && callback(data.data);
+				}
+			);
+        },
+
         define_callflow_nodes: function(callflow_nodes) {
             var THIS = this,
                 edit_page_group = function(node, callback) {
@@ -2315,6 +2364,82 @@ winkstart.module('voip', 'callflow', {
                                 }
                             }
                         });
+                    }
+                },
+                'group_pickup[]': {
+                    name: 'Group Pickup',
+                    icon: 'sip',
+                    category: 'Advanced',
+                    module: 'group_pickup',
+                    tip: 'Setup a numb',
+                    data: {
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '0'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('name') || '';
+                    },
+                    edit: function(node, callback) {
+                    	winkstart.parallel({
+								groups: function(callback) {
+									THIS.groups_list(function(groups) {
+										callback(null, groups);
+									});
+								},
+								users: function(callback) {
+									THIS.users_list(function(users) {
+										callback(null, users);
+									});
+								},
+								devices: function(callback) {
+									THIS.devices_list(function(devices) {
+										callback(null, devices);
+									});
+								}
+							},
+							function(err, results) {
+								var popup, popup_html;
+
+                                popup_html = THIS.templates.group_pickup.tmpl({
+                                    data: {
+                                        items: results,
+                                        selected: node.getMetadata('device_id') || node.getMetadata('group_id') || node.getMetadata('user_id') || ''
+                                    }
+                                });
+
+								$('#add', popup_html).click(function() {
+									var selector = $('#endpoint_selector', popup_html),
+										id = selector.val(),
+										name = selector.find('#'+id).html(),
+										type = $('#'+ id, popup_html).data('type'),
+									    type_id = type.substring(type, type.length - 1) + '_id';
+
+									/* Clear all the useless attributes */
+									node.data.data = {};
+                                    node.setMetadata(type_id, id);
+                                    node.setMetadata('name', name);
+
+                                    node.caption = name;
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: 'Select Endpoint',
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+							}
+                    	);
                     }
                 },
                 'receive_fax[]': {
