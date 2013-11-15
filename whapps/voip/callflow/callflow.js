@@ -2371,7 +2371,7 @@ winkstart.module('voip', 'callflow', {
                     icon: 'sip',
                     category: 'Advanced',
                     module: 'group_pickup',
-                    tip: 'Setup a numb',
+                    tip: 'Setup the group pickup feature for a user, device or a group.',
                     data: {
                     },
                     rules: [
