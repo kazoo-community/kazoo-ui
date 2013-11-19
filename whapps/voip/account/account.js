@@ -215,7 +215,7 @@ winkstart.module('voip', 'account', {
                 data.field_data = {};
             }
 
-            if(data.data.music_on_hold && 'media_id' in data.data.music_on_hold) {
+            if(data.data.music_on_hold && 'media_id' in data.data.music_on_hold && data.data.music_on_hold.media_id !== 'silence_stream://300000') {
                 data.data.music_on_hold.media_id = data.data.music_on_hold.media_id.split('/')[2];
             }
         },
@@ -225,7 +225,7 @@ winkstart.module('voip', 'account', {
             form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g, '');
             form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g, '');
 
-            if(form_data.music_on_hold && form_data.music_on_hold.media_id) {
+            if(form_data.music_on_hold && form_data.music_on_hold.media_id && form_data.music_on_hold.media_id !== 'silence_stream://300000') {
                 form_data.music_on_hold.media_id = '/' + winkstart.apps['voip'].account_id + '/' + form_data.music_on_hold.media_id;
             }
 
