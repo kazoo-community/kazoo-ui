@@ -7,7 +7,8 @@ winkstart.module('voip', 'resource', {
             resource: 'tmpl/resource.html',
             edit: 'tmpl/edit.html',
             gateway: 'tmpl/gateway.html',
-            landing_resource: 'tmpl/landing_resource.html'
+            landing_resource: 'tmpl/landing_resource.html',
+            account_carrier_callflow: 'tmpl/account_carrier_callflow.html'
         },
 
         subscribe: {
@@ -661,10 +662,34 @@ winkstart.module('voip', 'resource', {
                     caption: function(node, caption_map) {
                         return '';
                     },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
+					edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.account_carrier_callflow.tmpl({
+                            data_resource: {
+                                'hunt_account_id': node.getMetadata('hunt_account_id') || '',
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                        	var hunt_id = $('#hunt_account_id', popup_html).val();
+
+                        	if(hunt_id) {
+                            	node.setMetadata('hunt_account_id', hunt_id);
+                            }
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: 'Account Carrier',
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 }
             });
