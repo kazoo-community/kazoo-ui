@@ -373,6 +373,25 @@
                             </ul>
                        </div>
                     </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                           <ul class="inputs-list">
+                               <li>
+                                    <label>
+                                        <span rel="popover" data-content="When checked supporting phones will not show a call missed if it was part of a ring group answered elsewhere.">
+                                            {{if data.ignore_complete_elsewhere === true}}
+                                            <input id="ignore_complete_elsewhere" type="checkbox" name="ignore_complete_elsewhere" checked="checked" />
+                                            {{else}}
+                                            <input id="ignore_complete_elsewhere" type="checkbox" name="ignore_complete_elsewhere"/>
+                                            {{/if}}
+                                            <span>Ignore Complete Elsewhere</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
                 </div>
 
                 <div id="restrictions">
