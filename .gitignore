@@ -1,4 +1,6 @@
 *.esproj
 *.cache
+*.sublime-project
+*.sublime-workspace
 test/
 nbproject/
