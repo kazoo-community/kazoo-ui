@@ -76,6 +76,8 @@
 	};
 
     winkstart.request = function(locking, resource_name, params, success, error) {
+        var THIS = this;
+
         if(typeof locking !== 'boolean') {
             error = success;
             success = params;
@@ -98,28 +100,37 @@
             }
         }
 
-        amplify.request({
-            resourceId: resource_name,
-            data: params,
-            success: function(data, status) {
-                if(typeof success == 'function') {
-                    success(data, status);
-                }
+        var request = {
+                resourceId: resource_name,
+                data: params,
+                success: function(data, status) {
+                    if(typeof success == 'function') {
+                        success(data, status);
+                    }
 
-                if(locking === true) {
-                    delete locked_requests[resource_name];
-                }
-            },
-            error: function(data, status) {
-                if(typeof error == 'function') {
-                    error(data, status);
-                }
+                    if(locking === true) {
+                        delete locked_requests[resource_name];
+                    }
+                },
+                error: function(data, status) {
+                    if(typeof error == 'function') {
+                        if (status  == "402" && typeof request.accept_charges === "undefined") {
+                            winkstart.charges(data.data, request, function(request) {
+                                request["accept_charges"] = true;
+                                amplify.request(request);
+                            });
+                        } else {
+                            error(data, status);
+                        }
+                    }
 
-                if(locking === true) {
-                    delete locked_requests[resource_name];
+                    if(locking === true) {
+                        delete locked_requests[resource_name];
+                    }
                 }
-            }
-        });
+            };
+
+        amplify.request(request);
     };
 
 	winkstart.getJSON = function(locking, resource_name, params, success, error) {
