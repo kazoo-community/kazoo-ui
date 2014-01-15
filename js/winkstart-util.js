@@ -86,6 +86,46 @@
         return popup;
     };
 
+    winkstart.charges = function(data, request, callback_ok, callback_cancel) {
+        var html,
+            popup,
+            options = {},
+            ok = false;
+
+        options.title = 'Please confirm the charges';
+        options.maxWidth = '400px';
+        options.width = '400px';
+        options.onClose = function() {
+            if(ok) {
+                if(typeof callback_ok == 'function') {
+                    callback_ok(request);
+                }
+            }
+            else {
+                if(typeof callback_cancel == 'function') {
+                    callback_cancel();
+                }
+            }
+        };
+
+        var content = data.activation_charges_description + "<br />activation charges: " + data.activation_charges + "<br />monthly charges: " + data.charges + "<br />charges description: " + data.charges_description;
+
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+
+        popup = winkstart.dialog(html, options);
+
+        $('#confirm_button', html).click(function() {
+            ok = true;
+            popup.dialog('close');
+        });
+
+        $('#cancel_button', html).click(function() {
+            popup.dialog('close');
+        });
+
+        return popup;
+    };
+
     winkstart.alert = function(type, content, callback) {
         var html,
             popup,
