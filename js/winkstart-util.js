@@ -86,7 +86,7 @@
         return popup;
     };
 
-    winkstart.charges = function(data, request, callback_ok, callback_cancel) {
+    winkstart.charges = function(data, callback_ok, callback_cancel) {
         var html,
             popup,
             options = {},
@@ -98,7 +98,7 @@
         options.onClose = function() {
             if(ok) {
                 if(typeof callback_ok == 'function') {
-                    callback_ok(request);
+                    callback_ok();
                 }
             }
             else {

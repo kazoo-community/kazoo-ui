@@ -718,6 +718,21 @@ winkstart.module('numbers', 'numbers_manager', {
             $('.add', popup).focus();
         },
 
+		formatBuyNumberData: function(data) {
+			var arrayNumbers = [];
+
+			$.each(data.data, function(k, number) {
+				if(number.number) {
+					arrayNumbers.push(number.number);
+				}
+				else {
+					arrayNumbers.push(number);
+				}
+			});
+
+			return arrayNumbers;
+		},
+
         render_add_number_dialog: function(callback) {
             var THIS = this,
                 numbers_data = [],
@@ -738,7 +753,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 npa_data.prefix = npa + nxx;
 
                 THIS.search_numbers(npa_data, function(results_data) {
-                    var results_html = THIS.templates.add_number_search_results.tmpl(results_data);
+                	var formattedData = THIS.formatBuyNumberData(results_data),
+                    	results_html = THIS.templates.add_number_search_results.tmpl({ data: formattedData });
 
                     $('#foundDIDList', popup_html)
                         .empty()
