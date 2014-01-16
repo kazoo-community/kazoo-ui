@@ -90,11 +90,53 @@
         var html,
             popup,
             options = {},
-            ok = false;
+            ok = false,
+            activation_charges = data.activation_charges,
+            activation_charges_description = data.activation_charges_description.replace("_", " "),
+            renderData,
+            formatData = function(data) {
+                var dataArray = [],
+                    totalAmount = 0,
+                    charges_description = data.activation_charges_description,
+                    renderData = {};
 
-        options.title = 'Please confirm the charges';
-        options.maxWidth = '400px';
-        options.width = '400px';
+                delete data.activation_charges;
+                delete data.activation_charges_description;
+
+                $.each(data, function(categoryName, category) {
+                    $.each(category, function(itemName, item) {
+                        var discount = item.single_discount_rate + (item.cumulative_discount_rate * item.cumulative_discount),
+                            monthlyCharges = parseFloat(((item.rate * item.quantity) - discount) || 0).toFixed(2);
+
+                        if(monthlyCharges > 0) {
+                            dataArray.push({
+                                service: itemName.toUpperCase().replace("_"," "),
+                                rate: item.rate || 0,
+                                quantity: item.quantity || 0,
+                                discount: discount > 0 ? '-' + self.i18n.active().currencyUsed + parseFloat(discount).toFixed(2) : '',
+                                monthlyCharges: monthlyCharges
+                            });
+
+                            totalAmount += parseFloat(monthlyCharges);
+                        }
+                    });
+                });
+
+                var sortByPrice = function(a, b) {
+                    return parseFloat(a.monthlyCharges) >= parseFloat(b.monthlyCharges) ? -1 : 1;
+                }
+
+                dataArray.sort(sortByPrice);
+
+                renderData.servicePlanArray = dataArray;
+                renderData.totalAmount = parseFloat(totalAmount).toFixed(2);
+
+                return renderData;
+            };
+
+        options.title = 'Charges summary';
+        options.maxWidth = 'auto';
+        options.width = 'auto';
         options.onClose = function() {
             if(ok) {
                 if(typeof callback_ok == 'function') {
@@ -108,9 +150,9 @@
             }
         };
 
-        var content = data.activation_charges_description + "<br />activation charges: " + data.activation_charges + "<br />monthly charges: " + data.charges + "<br />charges description: " + data.charges_description;
+        renderData = formatData(data).servicePlanArray[0];
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">You will pay a $' + activation_charges + ' one-time fee for ' + activation_charges_description + '. Here is the detail of the monthly charges attached to your account:</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody><tr><td>' + renderData.service + '</td><td>$' + renderData.rate + '</td><td>X</td><td>' + renderData.quantity + '</td><td>' + renderData.discount + '</td><td>$' + renderData.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
 
         popup = winkstart.dialog(html, options);
 

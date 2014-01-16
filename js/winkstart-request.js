@@ -116,8 +116,7 @@
                     if(typeof error == 'function') {
                         if (status  == "402" && typeof request.accept_charges === "undefined") {
                             winkstart.charges(data.data, function() {
-                            	request.data.accept_charges = true;
-
+                                request.data.accept_charges = true;
                                 amplify.request(request);
                             });
                         } else {
