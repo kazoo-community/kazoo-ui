@@ -4,16 +4,16 @@ html {
 }
 
 body {
-	font-family: Helvetica, Arial, sans-serif;
-	font-size: 12px;
-	color: #EBEBEB;
     height: 100%;
+    color: #EBEBEB;
+    font-size: 12px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 body > .topbar {
     position: absolute;
-    height: 72px;
     min-width: 1029px;
+    height: 72px;
     box-shadow: 0px 2px 2px #222;
 }
 
@@ -26,12 +26,12 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 #ws-topbar .brand.logo {
-    width: 150px;
-	height: 52px;
     padding: 10px 21px;
-	/*background-image: url(../../../../config/images/logo.png);*/
-	background-repeat: no-repeat;
-	background-position: center center;
+    width: 150px;
+    height: 52px;
+    background-position: center center;
+    /*background-image: url(../../../../config/images/logo.png);*/
+    background-repeat: no-repeat;
 }
 
 #ws-topbar .nav > li a {
@@ -67,28 +67,28 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .container-fluid.page {
-    padding-left: 0px;
     padding-right: 0px;
+    padding-left: 0px;
     height: 100%;
 }
 
 #ws-content {
-    padding-top: 72px;
-    height: auto;
     position: absolute;
     top: 0;
     right: 0;
-    left: 0;
     bottom: 0;
+    left: 0;
+    padding-top: 72px;
+    height: auto;
 }
 
 .main_content {
     margin: 0 auto 0 auto;
-    width: 800px;
     padding-top: 30px;
+    padding-right: 8px;
     padding-bottom: 30px;
     padding-left: 8px;
-    padding-right: 8px;
+    width: 800px;
 }
 
 .inline_content.main_content .row {
@@ -96,11 +96,11 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .container-fluid > .sidebar.list_panel {
-    width: 192px;
-    left: 0;
     position: absolute;
-    height: auto;
     top: 0;
+    left: 0;
+    width: 192px;
+    height: auto;
 }
 
 .container-fluid > .content {
@@ -108,24 +108,24 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .background {
+    background-color: #6E7377;
     background-image: url(../images/bg.jpg);
     background-repeat: repeat-x;
-    background-color: #6E7377;
 }
 
 .footer_wrapper {
     position: fixed;
+    right: 0;
     bottom: 2px;
     text-align: right;
-    right: 0;
 }
 
 .footer_wrapper .powered_by a {
     margin-right: 5px;
+    color: #BFBFBF;
+    text-decoration: none;
     text-shadow: 1px 1px 3px #333;
     font-size: 11px;
-    text-decoration: none;
-    color: #BFBFBF;
 }
 
 .footer_wrapper .powered_by a:hover {
@@ -133,34 +133,34 @@ body > .topbar .topbar-inner > .container-fluid {
 }
 
 .footer_wrapper .tag_version {
-    font-size: 10px;
     color: #bfbfbf;
+    font-size: 10px;
 }
 
 #loading {
-    font-size: large;
-    color: #EBEBEB;
-    padding: 2em;
-
-    background-color: #999999;
-    border: 1px;
-    border-radius: 1em;
-    box-shadow: 3px 3px 3px #333333;
 
     position: absolute;
     top:43%;
     left:43%;
     z-index:30000;
-    opacity: 0.8;
     display:none;
+    padding: 2em;
+    border: 1px;
+    border-radius: 1em;
+
+    background-color: #999999;
+    box-shadow: 3px 3px 3px #333333;
+    color: #EBEBEB;
+    font-size: large;
+    opacity: 0.8;
 }
 
 #loading .close-button {
-    cursor: pointer;
-    font-size: 11px;
     position: absolute;
-    right: 7px;
     top: 2px;
+    right: 7px;
+    font-size: 11px;
+    cursor: pointer;
 }
 
 #loading .graphic {
@@ -169,8 +169,8 @@ body > .topbar .topbar-inner > .container-fluid {
 
 #loading .text {
     float: left;
-    line-height: 32px;
     margin-left: 10px;
+    line-height: 32px;
 }
 
 #span_ajax_loader {
@@ -180,15 +180,15 @@ body > .topbar .topbar-inner > .container-fluid {
 
 /**** Tooltip ****/
 .tooltip {
-    background-image: url("../images/help_icon2.png");
-    background-position: 0 0;
     display: block;
     float: left;
-    height: 14px;
     margin-top: 3px;
     margin-right: 6px;
-    text-indent: -9999px;
     width: 14px;
+    height: 14px;
+    background-image: url("../images/help_icon2.png");
+    background-position: 0 0;
+    text-indent: -9999px;
 }
 
 .tooltip-wrapper {
@@ -203,51 +203,51 @@ body > .topbar .topbar-inner > .container-fluid {
 
 /* Help Boxes */
 .help_box {
-    border: 1px solid #363636;
-    font-style: italic;
     margin-bottom: 10px;
     padding: 10px;
     padding-bottom: 10px;
-    text-align: center;
-    box-shadow: 1px 1px 1px #333333;
+    border: 1px solid #363636;
+    border-radius: 10px 10px 10px 10px;
     background: #05addc;
     background: -webkit-gradient(linear, left top, left bottom, from(#05addc), to(#036884)) !important;
     background: -moz-linear-gradient(top,  #05addc,  #036884) !important;
+    box-shadow: 1px 1px 1px #333333;
+    text-align: center;
+    font-style: italic;
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#036884') !important;
-    border-radius: 10px 10px 10px 10px;
 }
 
 /* fancy_button */
 .fancy_button {
-    color: #dfdfdf !important;
+    margin-left: 5px;
+    padding: 5px 10px;
+    height: 18px;
     border: solid 1px #333333;
     border-radius: 5px;
-    padding: 5px 10px;
+    box-shadow: 1px 1px 2px #555555;
+    color: #dfdfdf !important;
     text-decoration: none;
+    line-height: 18px;
     user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
-    box-shadow: 1px 1px 2px #555555;
-    margin-left: 5px;
-    height: 18px;
-    line-height: 18px;
 }
 
 .fancy_button:hover, .fancy_button:focus {
-    cursor: default;
-    color: #dfdfdf !important;
     background: #333333 !important;
     background: -webkit-gradient(linear, left top, left bottom, from(#333333), to(#000000)) !important;
     background: -moz-linear-gradient(top,  #333333,  #000000) !important;
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#000000') !important;
     box-shadow: 0px 0px 0px #555555;
+    color: #dfdfdf !important;
     text-decoration: none;
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#000000') !important;
+    cursor: default;
 }
 
 .fancy_button:active {
-    color: #dfdfdf !important;
     position:relative;
     top:1px;
+    color: #dfdfdf !important;
 }
 
 button.fancy_button {
@@ -258,12 +258,12 @@ button.fancy_button {
 /* block display  */
 .fancy_button.block {
     display: block;
-    font-weight: bold;
-    height: 18px;
-    line-height: 18px;
     margin: 0 auto;
-    text-align: center;
     width: 81px;
+    height: 18px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 18px;
 }
 
 /* BLUE */
@@ -313,28 +313,28 @@ button.fancy_button {
 
 /* GENERIC ALERT CSS */
 .alert_buttons_wrapper {
-    text-align: center;
     padding: 15px;
+    text-align: center;
 }
 
 .alert_text_wrapper {
-    max-width: 600px;
-    padding:15px;
-    margin: 15px 15px 0;
-    max-height: 200px;
     overflow-y: auto;
+    margin: 15px 15px 0;
+    padding:15px;
+    max-width: 600px;
+    max-height: 200px;
     text-align: center;
 }
 
 .alert_img {
-    height: 50px;
     padding-top: 15px;
+    height: 50px;
 }
 
 .alert_buttons_wrapper .alert_button {
     display: block;
-    width: 81px;
     margin: auto;
+    width: 81px;
 }
 /* ERROR */
 .alert_text_wrapper.error_alert {
@@ -377,19 +377,19 @@ button.fancy_button {
 
 /* Not supported browser template */
 #not_supported_browsers_div {
-    background-color: #6C6C6C;
-    border: 1px solid #363636;
     display: inline-block;
     margin-top: 50px;
-    text-align: center;
     width: 600px;
+    border: 1px solid #363636;
+    background-color: #6C6C6C;
+    text-align: center;
 }
 
 #not_supported_browsers_div a {
-    color: #05addc;
     height: 32px;
-    line-height: 32px;
+    color: #05addc;
     text-decoration: underline;
+    line-height: 32px;
 }
 
 #not_supported_browsers_div a:hover {
@@ -398,8 +398,8 @@ button.fancy_button {
 
 #not_supported_browsers_div .list_browsers {
     display: block;
-    padding-bottom: 30px;
     padding-top: 10px;
+    padding-bottom: 30px;
 }
 
 #not_supported_browsers_div ul {
@@ -433,16 +433,16 @@ button.fancy_button {
 
 /* Small table */
 .small-table {
+    margin: 20px auto auto;
+    max-height: 342px;
     border: 2px solid #666666;
     border-radius: 15px 15px 0px 0px;
     color: #666666;
-    margin: 20px auto auto;
-    max-height: 342px;
 }
 
 .small-table .rows {
-    max-height: 310px;
     overflow: auto;
+    max-height: 310px;
 }
 
 .small-table .column.first:not(:last-child) {
@@ -451,8 +451,8 @@ button.fancy_button {
 
 .small-table .column {
     float: left;
-    text-align: center;
     height: 32px;
+    text-align: center;
     line-height: 32px;
 }
 
@@ -461,14 +461,14 @@ button.fancy_button {
 }
 
 .small-table .row {
-    height: 32px;
     margin-left: 0px;
+    height: 32px;
 }
 
 .small-table .row.title {
-    background-color: #dddddd !important;
     border-bottom: 2px solid #666666 !important;
     border-radius: 13px 13px 0px 0px;
+    background-color: #dddddd !important;
     font-weight: bold;
 }
 
@@ -482,4 +482,20 @@ button.fancy_button {
 
 .small-table .row:nth-child(even) {
     background-color: #dddddd;
+}
+
+.ui-dialog .charges-summary thead tr th:nth-child(2),
+.ui-dialog .charges-summary thead tr th:nth-child(5),
+.ui-dialog .charges-summary thead tr th:last-child,
+.ui-dialog .charges-summary tbody tr td:nth-child(2),
+.ui-dialog .charges-summary tbody tr td:nth-child(5),
+.ui-dialog .charges-summary tbody tr td:last-child { text-align: right; }
+
+.ui-dialog .charges-summary tbody tr td:nth-child(3) { text-align: center; }
+
+.ui-dialog .charges-summary { margin-bottom: 0; }
+
+.ui-dialog .charges-info {
+    border: 0;
+    background: 0;
 }
