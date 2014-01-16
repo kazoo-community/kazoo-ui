@@ -767,21 +767,17 @@ winkstart.module('numbers', 'numbers_manager', {
             $('#add_numbers_button', popup_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-                    function() {
-                        $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
-                            numbers_data.push($(this).dataset());
-                        });
+                $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
+                    numbers_data.push($(this).dataset());
+                });
 
-                        THIS.add_numbers(numbers_data, function() {
-                            if(typeof callback === 'function') {
-                                callback();
-                            }
-
-                            popup.dialog('close');
-                        });
+                THIS.add_numbers(numbers_data, function() {
+                    if(typeof callback === 'function') {
+                        callback();
                     }
-                );
+
+                    popup.dialog('close');
+                });
             });
 
             $(popup_html).delegate('.checkbox_number', 'click', function() {
