@@ -579,11 +579,11 @@ winkstart.module('voip', 'directory', {
 
             $.extend(callflow_nodes, {
                 'directory[id=*]': {
-                    name: 'Directory',
+                    name: _t('directory', 'directory'),
                     icon: 'book',
                     category: 'Advanced',
                     module: 'directory',
-                    tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
+                    tip: _t('directory', 'directory_tip'),
                     data: {
                         id: 'null'
                     },
@@ -615,6 +615,9 @@ winkstart.module('voip', 'directory', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.directory_callflow.tmpl({
+									_t: function(param){
+										return window.translate['directory'][param];
+									},
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -647,7 +650,7 @@ winkstart.module('voip', 'directory', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Directory',
+                                    title: _t('directory', 'directory_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

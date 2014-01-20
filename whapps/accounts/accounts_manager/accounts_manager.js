@@ -109,7 +109,8 @@ winkstart.module('accounts', 'accounts_manager', {
 
 	function(args) {
 		var THIS = this;
-
+		THIS.module = "accounts";
+		
 		winkstart.publish('nav.add_sublink', {
 			link: 'nav',
 			sublink: 'switch_account',
@@ -627,6 +628,9 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		render_accounts_manager: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['accounts'][param];
+			};
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
 				deregister = $('#deregister', account_html),
@@ -818,7 +822,7 @@ winkstart.module('accounts', 'accounts_manager', {
 									);
 								},
 								function() {
-									winkstart.alert('There were errors on the form, please correct!');
+									winkstart.alert(_t('config', 'there_were_errors'));
 								}
 							);
 						};
@@ -940,7 +944,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						.listpanel({
 							label: 'Accounts',
 							identifier: 'accounts_manager-listview',
-							new_entity_label: 'Add Account',
+							new_entity_label: _t(THIS.module, 'add_account'),//'Add Account',
 							data: map_crossbar_data(data.data),
 							publisher: winkstart.publish,
 							notifyMethod: 'accounts_manager.edit',

@@ -501,11 +501,11 @@ winkstart.module('voip', 'menu', {
 
             $.extend(callflow_nodes, {
                 'menu[id=*]': {
-                    name: 'Menu',
+                    name: _t('menu', 'menu'),
                     icon: 'menu1',
                     category: 'Basic',
                     module: 'menu',
-                    tip: 'Ask a caller to push a menu option or dial an extension number',
+                    tip: _t('menu', 'menu_tip'),
                     data: {
                         id: 'null'
                     },
@@ -586,6 +586,9 @@ winkstart.module('voip', 'menu', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.menu_callflow.tmpl({
+                                    _t: function(param){
+										return window.translate['menu'][param];
+                                    },
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -618,7 +621,7 @@ winkstart.module('voip', 'menu', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Menu',
+                                    title: _t('menu', 'menu_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

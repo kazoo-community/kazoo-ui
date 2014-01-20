@@ -1,7 +1,7 @@
 winkstart.module('pbxs', 'pbxs_manager', {
         css: [
             'css/pbxs_manager.css',
-            'css/numbers_popup.css',
+            _t('pbxs_manager', 'numbers_popup_css'),
             'css/endpoints.css'
         ],
 
@@ -439,7 +439,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 );
             }
             else {
-                winkstart.alert('You need to specify a name for this PBX.');
+                winkstart.alert(_t('pbxs_manager', 'you_need_to_specify_a_name'));
             }
         },
 
@@ -493,6 +493,10 @@ winkstart.module('pbxs', 'pbxs_manager', {
             if(!endpoint_data.server_name) {
                 endpoint_data.server_name = null;
             }
+			
+			endpoint_data._t = function(param){
+				return window.translate['pbxs_manager'][param];
+			};
 
             var THIS = this,
                 endpoint_html = THIS.templates.endpoint.tmpl(endpoint_data);
@@ -985,7 +989,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     .listpanel({
                         label: 'PBXs',
                         identifier: 'pbxs_manager-listview',
-                        new_entity_label: 'Add Server',
+                        new_entity_label: _t('pbxs_manager', 'add_server_label'),
                         data: map_crossbar_data(data),
                         publisher: winkstart.publish,
                         notifyMethod: 'pbxs_manager.edit',

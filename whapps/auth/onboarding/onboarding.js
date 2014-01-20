@@ -1,6 +1,6 @@
 winkstart.module('auth', 'onboarding', {
         css: [
-            'css/onboarding.css'
+            _t('onboarding', 'css_onboarding')
         ],
 
         templates: {
@@ -100,10 +100,10 @@ winkstart.module('auth', 'onboarding', {
                 }
                 if(key == 'phone_numbers') {
                     if(errors.phone_numbers[number].data.provider_fault) {
-                        msg += 'Incorrect address';
+                        msg += _t('onboarding', 'incorrect_address');
                     }
                     if(errors.phone_numbers[number].data.carrier_fault) {
-                        msg += 'Number already used! Please select another one.'
+                        msg += _t('onboarding', 'number_already_used')
                     }
 
                 }
@@ -281,7 +281,7 @@ winkstart.module('auth', 'onboarding', {
                                     display_fields();
                                 }
                                 else {
-                                    winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
+                                    winkstart.alert('error',_t('onboarding', 'no_dids_were_found'));
                                 }
                             }
                         );
@@ -298,12 +298,12 @@ winkstart.module('auth', 'onboarding', {
                             display_fields();
                         }
                         else {
-                            winkstart.alert('This number is the only number available for this Area Code at the moment');
+                            winkstart.alert(_t('onboarding', 'this_number_is_the_only_number_available'));
                         }
                     }
                 }
                 else {
-                    winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
+                    winkstart.alert(_t('onboarding', 'you_need_to_input_a_valid'));
                 }
             });
 
@@ -475,7 +475,11 @@ winkstart.module('auth', 'onboarding', {
         load_step: function(step, parent, data) {
             var THIS = this;
 
-            $('#fast_onboarding_form', parent).append(THIS.templates['step'+step].tmpl({}));
+            $('#fast_onboarding_form', parent).append(THIS.templates['step'+step].tmpl({
+				_t: function(param){
+					return window.translate['onboarding'][param];
+				}
+			}));
 
             switch(step) {
                 case 1: THIS.load_step1(data, parent);
@@ -491,7 +495,11 @@ winkstart.module('auth', 'onboarding', {
 
         render_onboarding: function(args) {
             var THIS = this,
-                onboard_html = THIS.templates.new_onboarding.tmpl({}),
+                onboard_html = THIS.templates.new_onboarding.tmpl({
+					_t: function(param){
+						return window.translate['onboarding'][param];
+					}
+				}),
                 $form = $('#fast_onboarding_form', onboard_html),
                 max_step = $form.dataset('max-step'),
                 current_step = 1;
@@ -513,7 +521,7 @@ winkstart.module('auth', 'onboarding', {
                             THIS.move_to_step(++current_step, onboard_html);
                         },
                         function() {
-                            winkstart.alert('You can\'t go to the next step because you inputted invalid values in the form.');
+                            winkstart.alert(_t('onboarding', 'you_cant_go_to_the_next'));
                         }
                     );
                 };
@@ -524,7 +532,7 @@ winkstart.module('auth', 'onboarding', {
                             next_step_fct();
                         }
                         else {
-                            winkstart.alert('You need to give an area code and click on the Generate number button before going to next step.');
+                            winkstart.alert(_t('onboarding', 'you_need_to_give_an_area_code'));
                             $('#area_code', onboard_html).focus();
                         }
                         break;
@@ -595,7 +603,7 @@ winkstart.module('auth', 'onboarding', {
                                     success();
                                 }
                                 else {
-                                    winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
+                                    winkstart.alert('error', _t('onboarding', 'error_while_creating_your_account'));
                                 }
                             },
                             function (_data, status) {
@@ -609,7 +617,7 @@ winkstart.module('auth', 'onboarding', {
                         );
                     },
                     function() {
-                        winkstart.alert('You can\'t finish the setup because you inputted invalid values in the form.');
+                        winkstart.alert(_t('onboarding', 'you_cant_finish'));
                     }
                 );
             });

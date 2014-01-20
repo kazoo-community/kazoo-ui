@@ -1,15 +1,15 @@
 <div>
     <div class="dialog_popup">
-        <h1>Pause Agent</h1>
+        <h1>${_t('pause_agent')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="timeout">Pause Duration (s): </label>
+                    <label for="timeout">${_t('pause_duration')}: </label>
                     <input type="text" id="timeout" value="${data_agent.timeout}"/>
                 </div>
                 <div class="popup_field">
-                    <label for="presence_id">Presence ID: </label>
-                    <input type="text" id="presence_id" placeholder="Optional" value="${data_agent.presence_id}"/>
+                    <label for="presence_id">${_t('presence_id')}: </label>
+                    <input type="text" id="presence_id" placeholder="${_t('optional')}" value="${data_agent.presence_id}"/>
                 </div>
             </div>
         </form>

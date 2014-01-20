@@ -474,11 +474,11 @@ winkstart.module('voip', 'media', {
 
             $.extend(callflow_nodes, {
                 'play[id=*]': {
-                    name: 'Play Media',
+                    name: _t('media', 'play_media'),
                     icon: 'play',
                     category: 'Basic',
                     module: 'play',
-                    tip: 'Play an audio file such as a greeting',
+                    tip: _t('media', 'play_media_tip'),
                     data: {
                         id: 'null'
                     },
@@ -511,7 +511,10 @@ winkstart.module('voip', 'media', {
 
                                 popup_html = THIS.templates.media_callflow.tmpl({
                                     items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    selected: node.getMetadata('id') || '',
+									_t: function(param){
+										return window.translate['media'][param]
+									}
                                 });
 
                                 if($('#media_selector option:selected', popup_html).val() == undefined) {
@@ -542,7 +545,7 @@ winkstart.module('voip', 'media', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Media',
+                                    title: _t('media', 'media'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

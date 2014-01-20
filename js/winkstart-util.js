@@ -54,9 +54,9 @@
             options = {},
             ok = false;
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">' + _t('config', 'OK') + '</button><button id="cancel_button" class="btn danger confirm_button">' + _t('config', 'CANCEL') + '</button></div></div>');
 
-        options.title = 'Please confirm';
+        options.title = _t('config', 'please_confirm_title');
         options.maxWidth = '400px';
         options.width = '400px';
         options.onClose = function() {
@@ -182,7 +182,7 @@
         if(type_temp == 'error') {
             html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' +
                 content +
-                '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+                '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
 
             if(content && content.data) {
                 html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' +
@@ -190,17 +190,17 @@
                     '<p>' +
                     '<p><button class="btn small danger json">Show Errors</button>' +
                     '</p><p style="display:none" class="json_error"></p>' +
-                    '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+                    '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
             }
         }
         else if(type_temp == 'info'){
-            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+            html = $('<div class="center"><div class="alert_img info_alert"></div><div class="alert_text_wrapper info_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
         }
         else {
             callback = content;
             content = type;
-            type_temp = 'warning';
-            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">Close</button></div></div>');
+            type_temp = _t('config', 'WARNING');
+            html = $('<div class="center"><div class="alert_img warning_alert"></div><div class="alert_text_wrapper warning_alert"><span>' + content + '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
         }
 
         options.title = type_temp.charAt(0).toUpperCase() + type_temp.slice(1);

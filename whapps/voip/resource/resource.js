@@ -623,11 +623,11 @@ winkstart.module('voip', 'resource', {
 
             $.extend(callflow_nodes, {
                 'offnet[]': {
-                    name: 'Global Carrier',
+                    name: _t('resource', 'global_carrier'),
                     icon: 'offnet',
                     category: 'Advanced',
                     module: 'offnet',
-                    tip: 'Route calls to the phone network through pre-configured service providers',
+                    tip: _t('resource', 'global_carrier_tip'),
                     data: {},
                     rules: [
                         {
@@ -646,11 +646,11 @@ winkstart.module('voip', 'resource', {
                     }
                 },
                 'resources[]': {
-                    name: 'Account Carrier',
+                    name: _t('resource', 'account_carrier'),
                     icon: 'resource',
                     category: 'Advanced',
                     module: 'resources',
-                    tip: 'Route calls to the phone network through a configured SIP provider, Google Voice or physical digital/analog line',
+                    tip: _t('resource', 'account_carrier_tip'),
                     data: {},
                     rules: [
                         {
@@ -666,6 +666,9 @@ winkstart.module('voip', 'resource', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.account_carrier_callflow.tmpl({
+							_t: function(param){
+								return window.translate['resource'][param];
+							},
                             data_resource: {
                                 'hunt_account_id': node.getMetadata('hunt_account_id') || '',
                             }
@@ -682,7 +685,7 @@ winkstart.module('voip', 'resource', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Account Carrier',
+                            title: _t('resource', 'account_carrier_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {

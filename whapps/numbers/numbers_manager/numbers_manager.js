@@ -1,7 +1,7 @@
 winkstart.module('numbers', 'numbers_manager', {
         css: [
             'css/numbers_manager.css',
-            'css/numbers_popup.css'
+            _t('numbers_manager', 'numbers_popup_css')
         ],
 
         templates: {
@@ -301,8 +301,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 //var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
                 var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
                     error_function = function() {
-                        winkstart.confirm('There was an error when trying to acquire ' + numbers_data[0].phone_number +
-                            ', would you like to retry?',
+                        winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
+                            _t('numbers_manager', 'would_you_like_to_retry'),
                             function() {
                                 THIS.add_freeform_numbers(numbers_data, callback);
                             },
@@ -347,8 +347,8 @@ winkstart.module('numbers', 'numbers_manager', {
             if(numbers_data.length > 0) {
                 var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
                     error_function = function() {
-                        winkstart.confirm('There was an error when trying to acquire ' + numbers_data[0].phone_number +
-                            ', would you like to retry?',
+                        winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
+                            _t('numbers_manager', 'would_you_like_to_retry'),
                             function() {
                                 THIS.add_numbers(numbers_data, callback);
                             },
@@ -450,13 +450,13 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_caller_id') + _data_update.message);
                                         }
                                     );
                                 }
@@ -479,19 +479,19 @@ winkstart.module('numbers', 'numbers_manager', {
                                     $cnam_cell.removeClass('active').addClass('inactive');
                                 },
                                 function(_data_update) {
-                                    winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                    winkstart.alert(_t('numbers_manager', 'failed_to_update_the_caller_id') + _data_update.message);
                                 }
                             );
                         }
                         else {
-                            winkstart.confirm('If you turn on this feature, the Caller\'s Name will be included in your Caller ID information for everyone who dial this phone number. <br/><br/>Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('numbers_manager', 'if_you_turn_on_this_feature'),
                                 function() {
                                     _data.data.cnam = $.extend(true,_data.data.cnam || {},{ inbound_lookup: true });
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             $cnam_cell.removeClass('inactive').addClass('active');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_caller_id')+_data_update.message);
                                         }
                                     );
                                 }
@@ -513,13 +513,13 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the e911 for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_e911') + _data_update.message);
                                         }
                                     );
                                 }
@@ -542,7 +542,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     };
 
                 if(nb_numbers > 0) {
-                    winkstart.confirm('Are you sure you want to delete the '+nb_numbers+' number(s) selected?', function() {
+                    winkstart.confirm(_t('numbers_manager', 'are_you_sure_you_want') + nb_numbers + _t('numbers_manager', 'numbers_selected'), function() {
                             $selected_checkboxes.each(function() {
                                 data_phone_number = $(this).parents('tr').attr('id'),
                                 phone_number = data_phone_number.match(/^(.*)$/);
@@ -565,7 +565,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     );
                 }
                 else {
-                    winkstart.alert('You didn\'t select any number to delete');
+                    winkstart.alert(_t('numbers_manager', 'you_didnt_select_any_number'));
                 }
             });
 
@@ -575,7 +575,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 THIS.render_port_dialog(function(port_data, popup) {
                     var ports_done = 0;
 
-                    winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                    winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
                         function() {
                             $.each(port_data.phone_numbers, function(i, val) {
                                 var number_data = {
@@ -628,7 +628,7 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Edit CID'
+                title: _t('numbers_manager', 'edit_cid')
             });
         },
 
@@ -706,12 +706,12 @@ winkstart.module('numbers', 'numbers_manager', {
                     });
                 }
                 else {
-                    winkstart.alert('You didn\'t enter any valid phone number.');
+                    winkstart.alert(_t('numbers_manager', 'you_didnt_enter_any_valid_phone_number'));
                 }
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Add your phone numbers to the platform',
+                title: _t('numbers_manager', 'add_your_phone_numbers_to_the_platform'),
                 position: ['center', 20]
             });
 
@@ -734,9 +734,14 @@ winkstart.module('numbers', 'numbers_manager', {
 		},
 
         render_add_number_dialog: function(callback) {
+			var data = {
+				_t: function(param){
+					return window.translate['numbers_manager'][param];
+				}
+			};
             var THIS = this,
                 numbers_data = [],
-                popup_html = THIS.templates.add_number_dialog.tmpl(),
+                popup_html = THIS.templates.add_number_dialog.tmpl(data),
                 popup;
 
             $('.toggle_div', popup_html).hide();
@@ -753,6 +758,12 @@ winkstart.module('numbers', 'numbers_manager', {
                 npa_data.prefix = npa + nxx;
 
                 THIS.search_numbers(npa_data, function(results_data) {
+
+					results_data._t = function(param){
+						return window.translate['numbers_manager'][param];
+					};
+                    var results_html = THIS.templates.add_number_search_results.tmpl(results_data);
+
                 	var formattedData = THIS.formatBuyNumberData(results_data),
                     	results_html = THIS.templates.add_number_search_results.tmpl({ data: formattedData });
 
@@ -767,18 +778,22 @@ winkstart.module('numbers', 'numbers_manager', {
             $('#add_numbers_button', popup_html).click(function(ev) {
                 ev.preventDefault();
 
-                $('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
-                    numbers_data.push($(this).dataset());
-                });
+                winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                    function() {
+            
+						$('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
+							numbers_data.push($(this).dataset());
+						});
 
-                THIS.add_numbers(numbers_data, function() {
-                    if(typeof callback === 'function') {
-                        callback();
-                    }
+						THIS.add_numbers(numbers_data, function() {
+							if(typeof callback === 'function') {
+								callback();
+							}
 
-                    popup.dialog('close');
-                });
-            });
+							popup.dialog('close');
+						});
+					});
+			});
 
             $(popup_html).delegate('.checkbox_number', 'click', function() {
                 var selected_numbers =  $('.checkbox_number:checked', popup_html).size(),
@@ -805,6 +820,9 @@ winkstart.module('numbers', 'numbers_manager', {
             var THIS = this,
                 port_form_data = {},
                 popup_html = THIS.templates.port_dialog.tmpl({
+					_t: function(param){
+						return window.translate['numbers_manager'][param];
+					},
                     company_name: winkstart.config.company_name || '2600hz',
                     support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
                     support_file_upload: (File && FileReader)
@@ -940,12 +958,12 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
 
                 if(!port_form_data.extra.agreed) {
-                    string_alert += 'You must agree to the terms before continuing!<br/>';
+                    string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
                 }
 
                 $.each(port_form_data.extra.cb, function(k, v) {
                     if(v === false) {
-                        string_alert += 'You must confirm the first conditions before continuing!<br/>';
+                        string_alert += _t('numbers_manager', 'you_must_confirm_the_first_conditions');
                         return false;
                     }
                 });
@@ -956,7 +974,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
 
                 var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
-                res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += 'You need to enter a main number.<br/>';
+                res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
 
                 var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
 
@@ -977,7 +995,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     }
                     else {
                         if(val !== '') {
-                            string_alert += val + ' : this Phone Number is not valid.<br/>';
+                            string_alert += val + _t('numbers_manager', 'this_phone_number_is_not_valid');
                         }
                     }
                 });
@@ -988,20 +1006,20 @@ winkstart.module('numbers', 'numbers_manager', {
                     });
 
                     if(is_toll_free_main) {
-                        string_alert += 'these numbers are not toll-free numbers.<br/>As the main number is a toll-free number, you need to file another port request for these numbers.<br/>To complete this port request, please remove those numbers (Step 1).<br/><br/>';
+                        string_alert += _t('numbers_manager', 'these_numbers_are_not_toll_free_numbers');
                     }
                     else {
-                        string_alert += 'these numbers are toll-free numbers.<br/>As the main number is a regular phone number, you need to file another port request for these numbers.<br/>To complete this port request, please remove those numbers from (Step 1).<br/><br/>';
+                        string_alert += _t('numbers_manager', 'these_numbers_are_toll_free_numbers');
                     }
                 }
 
                 port_form_data.phone_numbers = phone_numbers;
 
-                files ? port_form_data.files = files : string_alert += 'You need to upload a bill (Step 2) in order to submit a port request.<br/>';
-                loa ? port_form_data.loa = loa : string_alert += 'You need to upload a Letter of Authorization / Resporg form (Step 3) in order to submit a port request.<br/>';
+                files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
+                loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
 
                 if(!port_form_data.port.email.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
-                    string_alert += 'The e-mail address you entered for notification doesn\'t have a valid format';
+                    string_alert += _t('numbers_manager', 'the_email_address_you_entered');
                 }
 
                 if(string_alert === '') {
@@ -1017,7 +1035,7 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Port a number'
+                title: _t('numbers_manager', 'port_a_number_title')
             });
         },
 
@@ -1078,24 +1096,24 @@ winkstart.module('numbers', 'numbers_manager', {
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'Phone Number'
+                    'sTitle': _t('numbers_manager', 'phone_number')
                 },
                 {
-                    'sTitle': 'Caller-ID',
+                    'sTitle': _t('numbers_manager', 'caller_id'),
                     'fnRender': function(obj) {
-                        var link = '<a class="cid inactive">Outbound</a>' + ' / ' + '<a class="cid_inbound inactive">Inbound</a>'
+                        var link = '<a class="cid inactive">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="cid_inbound inactive">' + _t('numbers_manager', 'inbound') + '</a>'
                         if(typeof obj.aData[obj.iDataColumn] === 'object') {
                             var cid_outbound = 'cid ' + (obj.aData[obj.iDataColumn].outbound ? 'active' : 'inactive');
                             var cid_inbound = 'cid_inbound ' + (obj.aData[obj.iDataColumn].inbound ? 'active' : 'inactive');
 
-                            link = '<a class="'+cid_outbound+'">Outbound</a>' + ' / ' + '<a class="'+cid_inbound+'">Inbound</a>'
+                            link = '<a class="'+cid_outbound+'">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="'+cid_inbound+'">' + _t('numbers_manager', 'inbound') + '</a>'
                         }
                         return link;
                     },
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'E911',
+                    'sTitle': _t('numbers_manager', 'E911'),
                     'fnRender': function(obj) {
                         var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
                         return '<a class="'+ e911  +'">E911</a>';
@@ -1103,7 +1121,7 @@ winkstart.module('numbers', 'numbers_manager', {
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'State',
+                    'sTitle': _t('numbers_manager', 'state'),
                     'fnRender': function(obj) {
                         var state = obj.aData[obj.iDataColumn].replace('_',' ');
                         return state.charAt(0).toUpperCase() + state.substr(1);
@@ -1120,7 +1138,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
-            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="buy_number">Buy Number</button><button class="btn primary" id="port_numbers">Port a Number</button><button class="btn danger" id="delete_number">Delete Selected Numbers</button>');
+            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button><button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button><button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>');
 
             /* Check if the flag is in the current account OR in the master account if masquerading */
             var account_id = winkstart.apps['numbers'].account_id;
@@ -1135,7 +1153,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 },
                 function(_data, status) {
                     if(_data.data && _data.data.wnm_allow_additions) {
-                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">Add Number</button>');
+                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
                     }
                 }
             );

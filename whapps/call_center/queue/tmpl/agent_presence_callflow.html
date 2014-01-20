@@ -1,11 +1,11 @@
 <div>
     <div class="dialog_popup">
-        <h1>${data_agent.action} Agent</h1>
+        <h1>${data_agent.action} ${_t('agent')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="presence_id">Presence ID: </label>
-                    <input type="text" id="presence_id" placeholder="Optional" value="${data_agent.presence_id}"/>
+                    <label for="presence_id">${_t('presence_id')}: </label>
+                    <input type="text" id="presence_id" placeholder="${_t('optional')}" value="${data_agent.presence_id}"/>
                 </div>
             </div>
         </form>

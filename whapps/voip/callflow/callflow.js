@@ -3,7 +3,7 @@ winkstart.module('voip', 'callflow', {
             'css/style.css',
             /*'css/popups.css',*/
             'css/two_columns.css',
-            'css/callflow.css',
+            _t('callflow', 'css_callflow'),
             'css/ring_groups.css'
         ],
 
@@ -269,7 +269,9 @@ winkstart.module('voip', 'callflow', {
 
             $('#ws-content').empty()
                             .append(callflow_html);
-
+			THIS.config.elements._t = function(param){
+				return window.translate['callflow'][param];
+			}
             THIS.renderList(function() {
                 THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
             });
@@ -326,8 +328,13 @@ winkstart.module('voip', 'callflow', {
         },
 
         renderButtons: function() {
+			data = {
+				_t: function(param){
+					return window.translate['callflow'][param];
+				}
+			};
             var THIS = this,
-                buttons_html = THIS.templates.buttons.tmpl();
+                buttons_html = THIS.templates.buttons.tmpl(data);
 
             $('.buttons').empty();
 
@@ -336,13 +343,13 @@ winkstart.module('voip', 'callflow', {
                     THIS.save();
                 }
                 else {
-                    winkstart.alert('Invalid number! <br/><br/>Please select a valid number by click in the grey boxes of the Callflow box.');
+                    winkstart.alert(_t('callflow', 'invalid_number') + '<br/><br/>' + _t('callflow', 'please_select_valid_number'));
                 }
             });
 
             $('.delete', buttons_html).click(function() {
                 if(THIS.flow.id) {
-                    winkstart.confirm('Are you sure you want to delete this callflow?', function() {
+                    winkstart.confirm(_t('callflow', 'are_you_sure'), function() {
                         winkstart.deleteJSON('callflow.delete', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url,
@@ -360,7 +367,7 @@ winkstart.module('voip', 'callflow', {
                     });
                 }
                 else {
-                    winkstart.alert('This callflow has not been created or doesn\'t exist anymore.');
+                    winkstart.alert(_t('callflow', 'this_callflow_has_not_been_created'));
                 }
             });
 
@@ -724,9 +731,9 @@ winkstart.module('voip', 'callflow', {
                     $('.edit_icon', node_html).click(function() {
                         THIS.flow = $.extend(true, { contact_list: { exclude: false }} , THIS.flow);
 
-                        var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name, exclude: THIS.flow.contact_list.exclude}), {
+                        var popup = winkstart.dialog(THIS.templates.edit_name.tmpl({name: THIS.flow.name, exclude: THIS.flow.contact_list.exclude, _t: function(param){return window.translate['callflow'][param];}}), {
                             width: '310px',
-                            title: 'Edit Callflow Name'
+                            title: _t('callflow', 'popup_title')
                         });
 
                         $('#add', popup).click(function() {
@@ -771,17 +778,17 @@ winkstart.module('voip', 'callflow', {
                             }
                             phone_numbers.sort();
 
-                            var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers}),
+                            var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers, _t: function(param){return window.translate['callflow'][param];}}),
                                 popup;
 
                             if(phone_numbers.length === 0) {
                                 $('#list_numbers', popup_html).attr('disabled', 'disabled');
-                                $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup_html));
+                                $('<option value="select_none">' + _t('callflow', 'no_phone_numbers') + '</option>').appendTo($('#list_numbers', popup_html));
                             }
 
                             var render = function() {
                                 popup = winkstart.dialog(popup_html, {
-                                        title: 'Add number'
+                                        title: _t('callflow', 'add_number')
                                 });
                             };
 
@@ -801,7 +808,7 @@ winkstart.module('voip', 'callflow', {
 
                                     if(phone_numbers.length === 0) {
                                         $('#list_numbers', popup).attr('disabled', 'disabled');
-                                        $('<option value="select_none">No Phone Numbers</option>').appendTo($('#list_numbers', popup));
+                                        $('<option value="select_none">' + _t('callflow', 'no_phone_numbers') + '</option>').appendTo($('#list_numbers', popup));
                                     }
                                     else {
                                         $('#list_numbers', popup).removeAttr('disabled');
@@ -841,7 +848,7 @@ winkstart.module('voip', 'callflow', {
                                             THIS.renderFlow();
                                         }
                                         else {
-                                            winkstart.alert('You didn\'t select a valid phone number.');
+                                            winkstart.alert(_t('callflow', 'you_didnt_select'));
                                         }
                                     },
                                     check_and_add_number = function() {
@@ -849,7 +856,7 @@ winkstart.module('voip', 'callflow', {
                                             function(data_numbers, status) {
                                                 map_numbers = $.extend(true, map_numbers, data_numbers);
                                                 if(number in map_numbers) {
-                                                    winkstart.alert('This number is already attached to a callflow');
+                                                    winkstart.alert(_t('callflow', 'this_number_is_already_attached'));
                                                 }
                                                 else {
                                                     add_number();
@@ -1458,6 +1465,9 @@ winkstart.module('voip', 'callflow', {
                                             });
 
                                             popup_html = THIS.templates.page_group_dialog.tmpl({
+												_t: function(param){
+													return window.translate['callflow'][param];
+												},
                                                 form: {
                                                     name: node.getMetadata('name') || ''
                                                 }
@@ -1585,7 +1595,7 @@ winkstart.module('voip', 'callflow', {
                                             });
 
                                             popup = winkstart.dialog(popup_html, {
-                                                title: 'Page Group',
+                                                title: _t('callflow', 'page_group_title'),
                                                 beforeClose: function() {
                                                     if(typeof callback == 'function') {
                                                         callback();
@@ -1757,17 +1767,20 @@ winkstart.module('voip', 'callflow', {
                                             });
 
                                             popup_html = THIS.templates.ring_group_dialog.tmpl({
+												_t: function(param){
+													return window.translate['callflow'][param];
+												},
                                                 form: {
                                                     name: node.getMetadata('name') || '',
                                                     strategy: {
                                                         items: [
                                                             {
                                                                 id: 'simultaneous',
-                                                                name: 'At the same time'
+                                                                name: _t('callflow', 'at_the_same_time')
                                                             },
                                                             {
                                                                 id: 'single',
-                                                                name: 'In order'
+                                                                name: _t('callflow', 'in_order')
                                                             }
                                                         ],
                                                         selected: node.getMetadata('strategy') || 'simultaneous'
@@ -1922,7 +1935,7 @@ winkstart.module('voip', 'callflow', {
                                             });
 
                                             popup = winkstart.dialog(popup_html, {
-                                                title: 'Ring Group',
+                                                title: _t('callflow', 'ring_group'),
                                                 beforeClose: function() {
                                                     if(typeof callback == 'function') {
                                                         callback();
@@ -2029,11 +2042,11 @@ winkstart.module('voip', 'callflow', {
                 },
 
                 'callflow[id=*]': {
-                    name: 'Callflow',
+                    name: _t('callflow', 'callflow'),
                     icon: 'callflow',
                     category: 'Advanced',
                     module: 'callflow',
-                    tip: 'Transfer the call to another call flow',
+                    tip: _t('callflow', 'callflow_tip'),
                     data: {
                         id: 'null'
                     },
@@ -2071,6 +2084,9 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup_html = THIS.templates.edit_dialog.tmpl({
+									_t: function(param){
+										return window.translate['callflow'][param];
+									},
                                     objects: {
                                         type: 'callflow',
                                         items: _data,
@@ -2087,7 +2103,7 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Callflow',
+                                    title: _t('callflow', 'callflow_title'),
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
                                             callback();
@@ -2099,11 +2115,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'page_group[]': {
-                    name: 'Page Group',
+                    name: _t('callflow', 'page_group'),
                     icon: 'ring_group',
                     category: 'Advanced',
                     module: 'page_group',
-                    tip: 'Ring several VoIP or cell phones',
+                    tip:  _t('callflow', 'page_group_tip'),
                     data: {
                         name: ''
                     },
@@ -2122,11 +2138,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'ring_group[]': {
-                    name: 'Ring Group',
+                    name: _t('callflow', 'ring_group'),
                     icon: 'ring_group',
                     category: 'Basic',
                     module: 'ring_group',
-                    tip: 'Ring several VoIP or cell phones in order or at the same time',
+                    tip: _t('callflow', 'ring_group_tip'),
                     data: {
                         name: ''
                     },
@@ -2145,11 +2161,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'call_forward[action=activate]': {
-                    name: 'Enable call forwarding',
+                    name: _t('callflow', 'enable_call_forwarding'),
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
-                    tip: 'Enable call forwarding (using the last forwaded number)',
+                    tip: _t('callflow', 'enable_call_forwarding_tip'),
                     data: {
                         action: 'activate'
                     },
@@ -2170,11 +2186,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'call_forward[action=deactivate]': {
-                    name: 'Disable call forwarding',
+                    name: _t('callflow', 'disable_call_forwarding'),
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
-                    tip: 'Disable call forwarding',
+                    tip: _t('callflow', 'disable_call_forwarding_tip'),
                     data: {
                         action: 'deactivate'
                     },
@@ -2195,11 +2211,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'call_forward[action=update]': {
-                    name: 'Update call forwarding',
+                    name: _t('callflow', 'update_call_forwarding'),
                     icon: 'rightarrow',
                     category: 'Call Forwarding',
                     module: 'call_forward',
-                    tip: 'Update the call forwarding number',
+                    tip: _t('callflow', 'update_call_forwarding_tip'),
                     data: {
                         action: 'update'
                     },
@@ -2220,11 +2236,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'dynamic_cid[]': {
-                    name: 'Dynamic cid',
+                    name: _t('callflow', 'dynamic_cid'),
                     icon: 'rightarrow',
                     category: 'Caller ID',
                     module: 'dynamic_cid',
-                    tip: 'Set your CallerId by entering it on the phone',
+                    tip: _t('callflow', 'dynamic_cid_tip'),
                     isUsable: 'true',
                     caption: function(node, caption_map) {
                         return '';
@@ -2236,11 +2252,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'prepend_cid[action=prepend]': {
-                    name: 'Prepend',
+                    name: _t('callflow', 'prepend'),
                     icon: 'plus_circle',
                     category: 'Caller ID',
                     module: 'prepend_cid',
-                    tip: 'Prepend Caller ID with a text.',
+                    tip: _t('callflow', 'prepend_tip'),
                     data: {
                         action: 'prepend',
                         caller_id_name_prefix: '',
@@ -2260,6 +2276,9 @@ winkstart.module('voip', 'callflow', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.prepend_cid_callflow.tmpl({
+							_t: function(param){
+								return window.translate['callflow'][param];
+							},
                             data_cid: {
                                 'caller_id_name_prefix': node.getMetadata('caller_id_name_prefix') || '',
                                 'caller_id_number_prefix': node.getMetadata('caller_id_number_prefix') || ''
@@ -2279,7 +2298,7 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Prepend Caller-ID',
+                            title: _t('callflow', 'prepend_caller_id_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -2294,11 +2313,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'prepend_cid[action=reset]': {
-                    name: 'Reset Prepend',
+                    name: _t('callflow', 'reset_prepend'),
                     icon: 'loop2',
                     category: 'Caller ID',
                     module: 'prepend_cid',
-                    tip: 'Reset all the prepended texts before the Caller ID.',
+                    tip: _t('callflow', 'reset_prepend_tip'),
                     data: {
                         action: 'reset'
                     },
@@ -2319,11 +2338,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'manual_presence[]': {
-                    name: 'Manual Presence',
+                    name: _t('callflow', 'manual_presence'),
                     icon: 'lightbulb_on',
                     category: 'Advanced',
                     module: 'manual_presence',
-                    tip: 'Manual Presence Help',
+                    tip: _t('callflow', 'manual_presence_tip'),
                     data: {
                     },
                     rules: [
@@ -2340,6 +2359,9 @@ winkstart.module('voip', 'callflow', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.presence_callflow.tmpl({
+							_t: function(param){
+								return window.translate['callflow'][param];
+							},
                             data_presence: {
                                 'presence_id': node.getMetadata('presence_id') || '',
                                 'status': node.getMetadata('status') || 'busy'
@@ -2357,7 +2379,7 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Manual Presence',
+                            title: _t('callflow', 'manual_presence_title'),
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                      callback();
@@ -2367,11 +2389,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'group_pickup[]': {
-                    name: 'Group Pickup',
+                    name: _t('callflow', 'group_pickup'),
                     icon: 'sip',
                     category: 'Advanced',
                     module: 'group_pickup',
-                    tip: 'Setup the group pickup feature for a user, device or a group.',
+                    tip: _t('callflow', 'group_pickup_tip'),
                     data: {
                     },
                     rules: [
@@ -2406,6 +2428,9 @@ winkstart.module('voip', 'callflow', {
 								var popup, popup_html;
 
                                 popup_html = THIS.templates.group_pickup.tmpl({
+									_t: function(param){
+										return window.translate['callflow'][param];
+									},
                                     data: {
                                         items: results,
                                         selected: node.getMetadata('device_id') || node.getMetadata('group_id') || node.getMetadata('user_id') || ''
@@ -2430,7 +2455,7 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Select Endpoint',
+                                    title: _t('callflow', 'select_endpoint_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -2443,11 +2468,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'receive_fax[]': {
-                    name: 'Receive Fax',
+                    name: _t('callflow', 'receive_fax'),
                     icon: 'sip',
                     category: 'Advanced',
                     module: 'receive_fax',
-                    tip: 'Directs a fax to a specific user',
+                    tip: _t('callflow', 'receive_fax_tip'),
                     data: {
                         owner_id: null
                     },
@@ -2474,6 +2499,9 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup_html = THIS.templates.fax_callflow.tmpl({
+									_t: function(param){
+										return window.translate['callflow'][param];
+									},
                                     objects: {
                                         items: data.data,
                                         selected: node.getMetadata('owner_id') || ''
@@ -2504,7 +2532,7 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Select User',
+                                    title: _t('callflow', 'select_user_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -2517,11 +2545,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'record_call[action=start]': {
-                    name: 'Start Call Recording',
+                    name: _t('callflow', 'start_call_recording'),
                     icon: 'conference',
                     category: 'Call Recording',
                     module: 'record_call',
-                    tip: 'Start Call Recording',
+                    tip: _t('callflow', 'start_call_recording_tip'),
                     data: {
                         action: 'start'
                     },
@@ -2539,6 +2567,9 @@ winkstart.module('voip', 'callflow', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.call_record_callflow.tmpl({
+							_t: function(param){
+								return window.translate['callflow'][param];
+							},
                             data_call_record: {
                                 'format': node.getMetadata('format') || 'mp3',
                                 'url': node.getMetadata('url') || '',
@@ -2555,7 +2586,7 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Start Call Recording',
+                            title: _t('callflow', 'start_call_recording'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -2566,11 +2597,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'record_call[action=stop]': {
-                    name: 'Stop Call Recording',
+                    name: _t('callflow', 'stop_call_recording'),
                     icon: 'conference',
                     category: 'Call Recording',
                     module: 'record_call',
-                    tip: 'Stop Call Recording',
+                    tip: _t('callflow', 'stop_call_recording_tip'),
                     data: {
                         action: 'stop'
                     },
@@ -2588,11 +2619,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'pivot[]': {
-                    name: 'Pivot',
+                    name: _t('callflow', 'pivot'),
                     icon: 'conference',
                     category: 'Advanced',
                     module: 'pivot',
-                    tip: '',
+                    tip: _t('callflow', 'pivot_tip'),
                     data: {
                         method: 'get',
                         req_timeout: '5',
@@ -2613,6 +2644,9 @@ winkstart.module('voip', 'callflow', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.pivot_callflow.tmpl({
+							_t: function(param){
+								return window.translate['callflow'][param];
+							},
                             data_pivot: {
                                 'method': node.getMetadata('method') || 'get',
                                 'voice_url': node.getMetadata('voice_url') || '',
@@ -2630,7 +2664,7 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Pivot',
+                            title: _t('callflow', 'pivot_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -2641,11 +2675,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'disa[]': {
-                    name: 'DISA',
+                    name: _t('callflow', 'disa'),
                     icon: 'conference',
                     category: 'Advanced',
                     module: 'disa',
-                    tip: 'DISA allows external callers to make outbound calls as though they originated from the system',
+                    tip: _t('callflow', 'disa_tip'),
                     data: {
                         pin: '',
                         retries: '3'
@@ -2664,6 +2698,9 @@ winkstart.module('voip', 'callflow', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.disa_callflow.tmpl({
+							_t: function(param){
+								return window.translate['callflow'][param];
+							},
                             data_disa: {
                                 'pin': node.getMetadata('pin') || '',
                                 'retries': node.getMetadata('retries') || '3'
@@ -2688,7 +2725,7 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'DISA',
+                            title: _t('callflow', 'disa_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -2699,11 +2736,11 @@ winkstart.module('voip', 'callflow', {
                     }
                 },
                 'response[]': {
-                    name: 'Response',
+                    name: _t('callflow', 'response'),
                     icon: 'rightarrow',
                     category: 'Advanced',
                     module: 'response',
-                    tip: 'Return a custom SIP error code',
+                    tip: _t('callflow', 'response_tip'),
                     data: {
                         code: '',
                         message: '',
@@ -2728,6 +2765,9 @@ winkstart.module('voip', 'callflow', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.response_callflow.tmpl({
+									_t: function(param){
+										return window.translate['callflow'][param];
+									},
                                     response_data: {
                                         items: data.data,
                                         media_enabled: node.getMetadata('media') ? true : false,
@@ -2783,7 +2823,7 @@ winkstart.module('voip', 'callflow', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Response',
+                                    title: _t('callflow', 'response_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

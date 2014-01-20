@@ -532,11 +532,11 @@ winkstart.module('voip', 'conference', {
 
             $.extend(callflow_nodes, {
                 'conference[id=*]': {
-                    name: 'Conference',
+                    name: _t('conference', 'conference'),
                     icon: 'conference',
                     category: 'Basic',
                     module: 'conference',
-                    tip: 'Connect a caller to a Meet-Me conference bridge',
+                    tip: _t('conference', 'conference_tip'),
                     data: {
                         id: 'null'
                     },
@@ -568,6 +568,9 @@ winkstart.module('voip', 'conference', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.conference_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['conference'][param];
+                                    },
                                     items: data.data,
                                     selected: node.getMetadata('id') || '!'
                                 });
@@ -600,7 +603,7 @@ winkstart.module('voip', 'conference', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Conference',
+                                    title: _t('conference', 'conference'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -614,11 +617,11 @@ winkstart.module('voip', 'conference', {
                 },
 
                 'conference[]': {
-                    name: 'Conference Service',
+                    name: _t('conference', 'conference_service'),
                     icon: 'conference',
                     category: 'Advanced',
                     module: 'conference',
-                    tip: 'Transfer the caller to the conference call service, prompting for both a conference number and a pin',
+                    tip: _t('conference', 'conference_service_tip'),
                     data: {},
                     rules: [
                         {

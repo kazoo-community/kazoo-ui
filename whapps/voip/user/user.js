@@ -953,11 +953,11 @@ winkstart.module('voip', 'user', {
 
             $.extend(callflow_nodes, {
                  'user[id=*]': {
-                    name: 'User',
+                    name: _t('user', 'user'),
                     icon: 'user',
                     category: 'Basic',
                     module: 'user',
-                    tip: 'Direct a caller to a specific user',
+                    tip: _t('user', 'user_tip'),
                     data: {
                         id: 'null'
                     },
@@ -991,6 +991,9 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup_html = THIS.templates.user_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['user'][param];
+                                    },
                                     can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
@@ -1034,7 +1037,7 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Select User',
+                                    title: _t('user', 'select_user'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -1047,11 +1050,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=login]': {
-                    name: 'Hot Desk login',
+                    name: _t('user', 'hot_desk_login'),
                     icon: 'hotdesk_login',
-                    category: 'Hotdesking',
+                    category: _t('user', 'hotdesking_category'),
                     module: 'hotdesk',
-                    tip: 'Enable Hot desking',
+                    tip: _t('user', 'hot_desk_login_tip'),
                     data: {
                         action: 'login'
                     },
@@ -1072,11 +1075,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=logout]': {
-                    name: 'Hot Desk logout',
+                    name: _t('user', 'hot_desk_logout'),
                     icon: 'hotdesk_logout',
-                    category: 'Hotdesking',
+                    category: _t('user', 'hotdesking_category'),
                     module: 'hotdesk',
-                    tip: 'Disable Hot desking',
+                    tip: _t('user', 'hot_desk_logout_tip'),
                     data: {
                         action: 'logout'
                     },
@@ -1097,11 +1100,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=toggle]': {
-                    name: 'Hot Desk toggle',
+                    name: _t('user', 'hot_desk_toggle'),
                     icon: 'hotdesk_toggle',
-                    category: 'Hotdesking',
+                    category: _t('user', 'hotdesking_category'),
                     module: 'hotdesk',
-                    tip: 'Toggle Hot desking',
+                    tip: _t('user', 'hot_desk_toggle_tip'),
                     data: {
                         action: 'toggle'
                     },

@@ -501,18 +501,23 @@ amplify.module.loadApp = function(whapp, callback) {
 			callback.call( amplify.module(whapp, whapp) );
 		});
     }
+	//$LAB.script('whapps/' + whapp + '/' + whapp + '/' + 'lang' + '/' + winkstart.config.language + '.js')
 };
 
 amplify.module.loadModule = function(whapp, module, callback) {
     // Cache buster
+	$LAB.script('whapps/' + whapp + '/' + module + '/' + 'lang' + '/' + winkstart.config.language + '.js');
+	//console.log("locale " + module + " loaded");
     if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
 		.wait(function() {
+			//console.log(module + " loaded");
 			callback.call( amplify.module(whapp, module) );
 		});
     } else {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js')
 		.wait(function() {
+			//console.log(module + " loaded with cache");
 			callback.call( amplify.module(whapp, module) );
 		});
     }

@@ -992,11 +992,11 @@ winkstart.module('voip', 'device', {
 
             $.extend(callflow_nodes, {
                 'device[id=*]': {
-                    name: 'Device',
+                    name: _t('device', 'device'),
                     icon: 'phone',
                     category: 'Advanced',
                     module: 'device',
-                    tip: 'Ring a VoIP or cell phone or other device',
+                    tip: _t('device', 'device_tip'),
                     data: {
                         id: 'null'
                     },
@@ -1027,6 +1027,9 @@ winkstart.module('voip', 'device', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.device_callflow.tmpl({
+									_t: function(param){
+										return window.translate['device'][param];
+									},
                                     can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
@@ -1070,7 +1073,7 @@ winkstart.module('voip', 'device', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Device',
+                                    title: _t('device', 'device_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

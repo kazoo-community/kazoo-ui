@@ -51,7 +51,7 @@ winkstart.module('voip', 'account', {
 
     function(args) {
         var THIS = this;
-
+		THIS.module = 'account';
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('whappnav.subnav.add', {
@@ -134,11 +134,11 @@ winkstart.module('voip', 'account', {
                                 _data.data.unshift(
                                     {
                                         id: '',
-                                        name: 'Default Music'
+                                        name: _t(THIS.module, 'default_music')
                                     },
                                     {
                                         id: 'silence_stream://300000',
-                                        name: 'Silence'
+                                        name: _t(THIS.module, 'silence')
                                     }
                                 );
 
@@ -259,6 +259,9 @@ winkstart.module('voip', 'account', {
         },
 
         render_account: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['account'][param];
+			}
             var THIS = this,
                 account_html = THIS.templates.edit.tmpl(data),
                 $tech_email = $('#contact_technical_email', account_html),

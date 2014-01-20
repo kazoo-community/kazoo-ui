@@ -545,11 +545,11 @@ winkstart.module('voip', 'vmbox', {
 
             $.extend(callflow_nodes, {
                 'voicemail[id=*]': {
-                    name: 'Voicemail',
+                    name: _t('vmbox', 'voicemail'),
                     icon: 'voicemail',
                     category: 'Basic',
                     module: 'voicemail',
-                    tip: 'Direct a caller to leave a voicemail message',
+                    tip: _t('vmbox', 'voicemail_tip'),
                     data: {
                         id: 'null'
                     },
@@ -581,6 +581,9 @@ winkstart.module('voip', 'vmbox', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.vmbox_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['vmbox'][param];
+                                    },
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -613,7 +616,7 @@ winkstart.module('voip', 'vmbox', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Voicemail',
+                                    title: _t('vmbox', 'voicemail_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -627,11 +630,11 @@ winkstart.module('voip', 'vmbox', {
                 },
 
                 'voicemail[action=check]': {
-                    name: 'Check Voicemail',
+                    name: _t('vmbox', 'check_voicemail'),
                     icon: 'voicemail',
                     category: 'Advanced',
                     module: 'voicemail',
-                    tip: 'Prompt the caller for a mailbox number and password so they can check voicemails',
+                    tip: _t('vmbox', 'check_voicemail_tip'),
                     data: {
                         action: 'check'
                     },

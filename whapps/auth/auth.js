@@ -1,7 +1,10 @@
+if (!window.translate["auth"]) {
+	//$LAB.script('whapps/auth/auth/lang/' + winkstart.config.language + '.js');
+}
 winkstart.module('auth', 'auth',
     {
         css: [
-            'css/auth.css'
+            _t('auth', 'css_auth')
         ],
 
         templates: {
@@ -98,7 +101,7 @@ winkstart.module('auth', 'auth',
     function() {
         var cookie_data,
             THIS = this;
-
+		THIS.module = 'auth';
         winkstart.registerResources(this.__whapp, this.config.resources);
 
 		var jsonCookie = $.parseJSON($.cookie('c_winkstart_auth'));
@@ -332,12 +335,16 @@ winkstart.module('auth', 'auth',
         },
 
         login: function(args) {
+
             var THIS = this,
                 username = (typeof args == 'object' && 'username' in args) ? args.username : '',
                 account_name = THIS.get_account_name_from_url(),
                 realm = THIS.get_realm_from_url(),
                 cookie_login = $.parseJSON($.cookie('c_winkstart.login')) || {},
                 data_tmpl = {
+					_t: function(param){
+						return window.translate['auth'][param];
+					},
                     username: username || cookie_login.login || '',
                     request_account_name: (realm || account_name) ? false : true,
                     account_name: account_name || cookie_login.account_name || '',
@@ -345,7 +352,11 @@ winkstart.module('auth', 'auth',
                     register_btn: winkstart.config.hide_registration || false
                 },
                 login_html = THIS.templates.new_login.tmpl(data_tmpl),
-                code_html = THIS.templates.code.tmpl(),
+                code_html = THIS.templates.code.tmpl({
+					_t: function(param){
+						return window.translate['auth'][param];
+					}
+				}),
                 contentDiv = $('.welcome-page-top .right_div', '#content_welcome_page')
                                 .empty()
                                 .append(login_html);
@@ -482,8 +493,8 @@ winkstart.module('auth', 'auth',
 
             $('a.recover_password', contentDiv).click(function(e) {
                 e.preventDefault();
-
-                winkstart.publish('auth.recover_password');
+				
+                winkstart.publish('auth.recover_password', {data: window.translate});
             });
         },
 
@@ -743,8 +754,11 @@ winkstart.module('auth', 'auth',
         recover_password: function(args) {
             var THIS = this;
 
-            var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({}), {
-                title: 'Recover Password'
+            var dialogRecover = winkstart.dialog(THIS.templates.recover_password.tmpl({
+				_t: function(param){
+					return window.translate['auth'][param];
+				},}), {
+                title: window.translate['auth']['title_recover']
             });
 
             winkstart.validate.set(THIS.config.validation_recover, dialogRecover);

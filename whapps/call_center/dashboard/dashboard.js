@@ -690,7 +690,12 @@ winkstart.module('call_center', 'dashboard', {
             THIS.clean_timers();
 
             THIS.fetch_all_data(true, function(data) {
-                dashboard_html = THIS.templates.dashboard.tmpl();
+				
+                dashboard_html = THIS.templates.dashboard.tmpl({
+					_t: function(param){
+						return window.translate['dashboard'][param];
+					}
+				});
 
                 THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
                 THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));

@@ -1,10 +1,10 @@
 <div>
     <div class="dialog_popup">
-        <h1>Connect a caller to a user...</h1>
+        <h1>${_t('connect_caller_to_user')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="user_selector">Which user?</label>
+                    <label for="user_selector">${_t('which_user')}</label>
                     <div class="select_wrapper">
                         <select id="user_selector">
                             {{each(i, item) objects.items}}
@@ -16,15 +16,15 @@
                             {{/each}}
                         </select>
                         <div class="action_links_div">
-                            <div id="edit_link"><a class="inline_action" data-action="edit" href="#">Edit user options</a></div>
-                            <div><a class="inline_action" data-action="create" href="#">Add a user</a></div>
+                            <div id="edit_link"><a class="inline_action" data-action="edit" href="#">${_t('edit_user_options')}</a></div>
+                            <div><a class="inline_action" data-action="create" href="#">${_t('add_user')}</a></div>
                         </div>
                     </div>
                     <div class="clear"/>
                 </div>
             </div>
             <div class="parameter_div">
-                Ring this user's devices for <input type="text" class="size2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> seconds.
+                ${_t('ring_this_users_devices_for')} <input type="text" class="size2" name="parameter_input" id="parameter_input" value="${parameter.value}"/> ${_t('seconds')}.
             </div>
             <div class="parameter_div">
                 {{if can_call_self === true}}
@@ -32,8 +32,8 @@
                 {{else}}
                 <input type="checkbox" id="user_can_call_self">
                 {{/if}}
-                Allow this user to call himself.
-                <div class="parameter_description">When you check this box, calls from the user's own extension to themselves will ring the extension. If this box isn't checked, calls from the user's own extension to themselves will go to their voicemail.</div>
+                ${_t('allow_this_user_to_call_himself')}
+                <div class="parameter_description">${_t('when_you_check_this_box')}</div>
             </div>
         </form>
         <div class="buttons-center">
