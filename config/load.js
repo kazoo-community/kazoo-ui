@@ -1,4 +1,5 @@
 window.translate = [];
+// Set your language value here
 var language = "en";
 if (language == "auto"){
 	language = navigator.language;

@@ -1,12 +1,6 @@
 //window.translate = [];
 ( function(winkstart, amplify, language, $) {
 	
-	//var language = language;
-	
-	/*if(language == "auto"){
-		var language = navigator.language;
-	}*/
-	
 	//document.write("<script src='config/lang/en.js'></script>");
 	//$LAB.script('config/lang/' + language + '.js').wait();
 	//setInterval();

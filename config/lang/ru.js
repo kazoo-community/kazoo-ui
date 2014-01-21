@@ -1,23 +1,23 @@
 window.translate['config'] = {
-	voip_label: "Hosted PBX",
-	voip_desc: "Manage vmboxes, callflows ...",
-	cluster_label: "Cluster Manager",
-	cluster_desc: "Manage Servers and Infrastructure",
-	userportal_label: "User Portal",
-	userportal_desc: "Let the user manage is own vmbox ...",
-	accounts_label: "Accounts",
-	accounts_desc: "Manage your sub-accounts",
-	developer_label: "Developer",
-	developer_desc: "Api Developer Tool",
-	pbxs_label: "PBX Connector",
-	pbxs_desc: "Manage your pbxs",
-	numbers_label: "Number Manager",
-	numbers_desc: "Manage your numbers",
-	there_were_errors: "There were errors on the form, please correct!", //all errors on the form
+	voip_label: "Виртуальная АТС",
+	voip_desc: "Управление вызовами, голосовая почта и прочие функции телефонии",
+	cluster_label: "Управление кластером",
+	cluster_desc: "Управление серверами и инфраструктурой",
+	userportal_label: "Мой портал",
+	userportal_desc: "Управление личной голосовой почтой, перенаправлениями",
+	accounts_label: "Клиенты",
+	accounts_desc: "Управление клиентами",
+	developer_label: "Разработка",
+	developer_desc: "Средства разработчика для API",
+	pbxs_label: "Подключение АТС",
+	pbxs_desc: "Подключение существующих АТС",
+	numbers_label: "Управление номерами",
+	numbers_desc: "Покупка, подключение номеров",
+	there_were_errors: "При заполнении формы были допущены ошибки", //all errors on the form
 	OK: "OK",		//button OK confirm dialog
-	CANCEL: "Cancel",	//button Cancel confirm dialog
+	CANCEL: "Отмена",	//button Cancel confirm dialog
 	CLOSE: "Закрыть",		//button Close alert dialog
-	please_confirm_title: "Please confirm",	//confirm title dialog
-	WARNING: "внимание",
+	please_confirm_title: "Пожалуйста, подтвердите",	//confirm title dialog
+	WARNING: "ПРЕДУПРЕЖДЕНИЕ",
 	
 };
