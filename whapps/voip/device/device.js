@@ -560,9 +560,9 @@ winkstart.module('voip', 'device', {
                                 }
                             }
 
-                            if('field_data' in data) {
-                                delete data.field_data;
-                            }
+                            // if('field_data' in data) {
+                            //     delete data.field_data;
+                            // }
 
                             THIS.save_device(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                         },
