@@ -419,7 +419,11 @@ winkstart.module('auth', 'onboarding', {
             $('.role_radio', onboard_html).click(function() {
                 var role = $('input:radio[name=account.role]:checked').val(),
                     $container = $(this).parents('.role_div').first(),
-                    tmpl_data = {};
+                    tmpl_data = {
+						_t: function(param){
+							return window.translate['onboarding'][param];
+						}
+					};
 
                 $('.role_content').slideUp().empty();
 
@@ -549,7 +553,7 @@ winkstart.module('auth', 'onboarding', {
 
             $('#save_account', onboard_html).click(function() {
                 if($('#password', onboard_html).val() != $('#verify_password', onboard_html).val()) {
-                    winkstart.alert('Passwords are not matching, please retype your password.' );
+                    winkstart.alert(_t('onboarding', 'passwords_are_not_matching'));
                     $('#password', onboard_html).val('');
                     $('#verify_password', onboard_html).val('');
 
@@ -558,7 +562,7 @@ winkstart.module('auth', 'onboarding', {
                     return true;
                 }
                 if($('#email', onboard_html).val() != $('#verify_email', onboard_html).val()) {
-                    winkstart.alert('Email addresses are not matching, please retype your email address.' );
+                    winkstart.alert(_t('onboarding', 'email_addresses_are_not_matching'));
                     $('#email', onboard_html).val('');
                     $('#verify_email', onboard_html).val('');
 

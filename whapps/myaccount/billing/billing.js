@@ -130,6 +130,9 @@ winkstart.module('myaccount', 'billing', {
         },
 
         render_billing: function(data, target) {
+			data._t = function(){
+				return window.translate['billing'][param];
+			};
             var THIS = this,
                 billing_html = THIS.templates.billing.tmpl(data);
 

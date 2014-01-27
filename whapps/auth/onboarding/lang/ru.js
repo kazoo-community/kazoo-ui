@@ -48,5 +48,11 @@ window.translate['onboarding'] = {
 	access_our_apis: "Access our APIs to start building the telecom app you always wanted.",
 	voip_minutes: "VoIP Minutes",
 	just_looking_for_minutes: "Just looking for minutes? We've got DIDs and trunks to make your life easier.",
+	setup_the_first_five_extensions: "Setup the first five extensions instantly and get calling immediately!",
+	this_is_not_set_in_stone: "* This is not set in stone. You can add, edit, and delete users once you've setup your account.",
+	first_last_name2: "First & Last Name",
+	extension: "Extension #",
+	passwords_are_not_matching: "Passwords are not matching, please retype your password.",
+	email_addresses_are_not_matching: "Email addresses are not matching, please retype your email address.",
 	
 };

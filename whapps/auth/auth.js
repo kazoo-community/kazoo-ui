@@ -172,7 +172,7 @@ winkstart.module('auth', 'auth',
             if(URL_DATA['activation_key']) {
                 winkstart.postJSON('auth.activate', {crossbar: true, api_url : winkstart.apps['auth'].api_url, activation_key: URL_DATA['activation_key'], data: {}}, function(data) {
 
-                   winkstart.alert('info','You are now registered! Please log in.', function() {
+                   winkstart.alert('info', _t('auth', 'you_are_now_registered'), function() {
                        winkstart.publish('auth.welcome', {username: data.data.user.username});
                    });
 
@@ -186,7 +186,7 @@ winkstart.module('auth', 'auth',
                 });
             }
             else if(URL_DATA['recover_password']) {
-                winkstart.alert('info','You are in the Recover Password tool.');
+                winkstart.alert('info', _t('auth', 'you_are_in_the_recover_password'));
             }
 
             if(cookie_data = $.cookie('c_winkstart_auth')) {
@@ -198,9 +198,13 @@ winkstart.module('auth', 'auth',
 
         register: function() {
             var THIS = this;
-
-            var dialogRegister = winkstart.dialog(THIS.templates.register.tmpl({}), {
-                title: 'Register a New Account',
+			var t_data = {
+				_t: function(param){
+					return window.translate['auth'][param];
+				}
+			};
+            var dialogRegister = winkstart.dialog(THIS.templates.register.tmpl(t_data), {
+                title: _t('auth', 'register_new_account_title'),
                 resizable : false,
                 modal: true
             });
@@ -248,17 +252,17 @@ winkstart.module('auth', 'auth',
                                 };
                                 winkstart.putJSON('auth.register', rest_data, function (json, xhr) {
                                     $.cookie('c_winkstart.login', null);
-                                    winkstart.alert('info','Registered successfully. Please check your e-mail to activate your account!');
+                                    winkstart.alert('info', _t('auth', 'registered_successfully'));
                                     dialogRegister.dialog('close');
                                 });
                             }
                         }
                         else {
-                            winkstart.alert('Please confirm your password');
+                            winkstart.alert(_t('auth', 'please_confirm_your_password'));
                         }
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('auth', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -423,16 +427,16 @@ winkstart.module('auth', 'auth',
                     },
                     function(data, status) {
                         if(status === 400) {
-                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                            winkstart.alert(_t('auth', 'invalid_check_username_and_account'));
                         }
                         else if($.inArray(status, [401, 403]) > -1) {
-                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
+                            winkstart.alert(_t('auth', 'invalid_check_password_and_account'));
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
+                            winkstart.alert(_t('auth', 'we_are_having_trouble_contacting'));
                         }
                         else {
-                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
+                            winkstart.alert(_t('auth', 'an_error_was_encountered') + status + ')');
                         }
                     }
                 );
@@ -476,13 +480,13 @@ winkstart.module('auth', 'auth',
                         function(_data, status) {
                             switch(_data['error']) {
                                 case '404':
-                                    winkstart.alert('error', 'Invalid invite code !');
+                                    winkstart.alert('error', _t('auth', 'invalid_invite_code'));
                                     break;
                                 case '410':
-                                    winkstart.alert('error', 'Invite code already used !');
+                                    winkstart.alert('error', _t('auth', 'invite_code_already_used'));
                                     break;
                                 default:
-                                    winkstart.alert('error', '<p>An error occurred</p>' + winkstart.print_r(_data));
+                                    winkstart.alert('error', _t('auth', 'an_error_occurred') + winkstart.print_r(_data));
                                     break;
                             }
                         }
@@ -506,11 +510,14 @@ winkstart.module('auth', 'auth',
                 login_html = THIS.templates.login.tmpl({
                     username: username,
                     request_account_name: (realm || account_name) ? false : true,
-                    account_name: account_name
+                    account_name: account_name,
+					_t: function(param){
+						return window.translate['auth'][param];
+					}
                 });
 
             var dialogDiv = winkstart.dialog(login_html, {
-                title : 'Login',
+                title : _t('auth', 'login_title'),
                 resizable : false,
                 width: '340',
                 modal: true
@@ -565,16 +572,16 @@ winkstart.module('auth', 'auth',
                     },
                     function(data, status) {
                         if(status === 400) {
-                            winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+                            winkstart.alert(_t('auth', 'invalid_check_username_and_account'));
                         }
                         else if($.inArray(status, [401, 403]) > -1) {
-                            winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
+                            winkstart.alert(_t('auth', 'invalid_check_password_and_account'));
                         }
                         else if(status === 'error') {
-                            winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
+                            winkstart.alert(_t('auth', 'we_are_having_trouble_contacting'));
                         }
                         else {
-                            winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
+                            winkstart.alert(_t('auth', 'an_error_was_encountered') + status + ')');
                         }
                     }
                 );
@@ -649,7 +656,7 @@ winkstart.module('auth', 'auth',
                             }
                         },
                         function(data, status) {
-                            winkstart.alert('error', 'An error occurred while loading your account.',
+                            winkstart.alert('error', _t('auth', 'an_error_occurred_while_loading'),
                                 function() {
                                     $.cookie('c_winkstart_auth', null);
                                     window.location.reload();
@@ -659,7 +666,7 @@ winkstart.module('auth', 'auth',
                     );
                 },
                 function(_data) {
-                    winkstart.alert('error', 'An error occurred while loading your account.',
+                    winkstart.alert('error', _t('auth', 'an_error_occurred_while_loading'),
                         function() {
                             $.cookie('c_winkstart_auth', null);
                             window.location.reload();
@@ -709,9 +716,13 @@ winkstart.module('auth', 'auth',
 
         new_password: function(user_data) {
             var THIS = this;
-
-            var dialog_new_password = winkstart.dialog(THIS.templates.new_password.tmpl(), {
-                title: 'Please set a new password',
+			var t_data = {
+				_t: function(param){
+					return window.translate['auth'][param];
+				}
+			};
+            var dialog_new_password = winkstart.dialog(THIS.templates.new_password.tmpl(t_data), {
+                title: _t('auth', 'please_set_a_new_password'),
                 width: '500px'
             });
 
@@ -733,7 +744,7 @@ winkstart.module('auth', 'auth',
                                 data: user_data
                             },
                             function(_data, status) {
-                                winkstart.alert('info', 'Password updated !');
+                                winkstart.alert('info', _t('auth', 'password_updated'));
                                 dialog_new_password.dialog('close');
                             },
                             function(_data, status) {
@@ -744,7 +755,7 @@ winkstart.module('auth', 'auth',
                     else {
                         $('#new_password1', dialog_new_password).val('');
                         $('#new_password2', dialog_new_password).val('');
-                        winkstart.alert('Password typed don\'t match. Please retype your new password');
+                        winkstart.alert(_t('auth', 'password_typed_dont_match'));
                     }
                 });
             });
@@ -833,7 +844,7 @@ winkstart.module('auth', 'auth',
                 winkstart.publish('auth.login');
             }
             else {
-                winkstart.confirm('Are you sure that you want to log out?', function() {
+                winkstart.confirm(_t('auth', 'are_you_sure_that_you_want_to_log_out'), function() {
                     // Remove any individual keys
                     $.each(winkstart.apps, function(k, v) {
                         // TODO: ADD APP UNLOADING CODE HERE. Remove CSS and scripts. This should inherently delete apps.

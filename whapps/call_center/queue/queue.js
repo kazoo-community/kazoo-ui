@@ -280,11 +280,11 @@ winkstart.module('call_center', 'queue', {
                     _data_media.data.unshift(
                         {
                             id: '',
-                            name: 'Default Music'
+                            name: _t('queue', 'default_music')
                         },
                         {
                             id: 'silence_stream://300000',
-                            name: 'Silence'
+                            name: _t('queue', 'silence')
                         }
                     );
 
@@ -362,6 +362,9 @@ winkstart.module('call_center', 'queue', {
         },
 
 		render_account_fields: function(parent, data, callback) {
+			data._t = function(param){
+				return window.translate['queue'][param];
+			};
 			var THIS = this,
 				fields_html = THIS.templates.account_fields.tmpl(data);
 
@@ -381,6 +384,9 @@ winkstart.module('call_center', 'queue', {
 		},
 
         render_edit_agents: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['queue'][param];
+			};
             var THIS = this,
                 agents_html = THIS.templates.edit_agents.tmpl(data);
 
@@ -467,7 +473,7 @@ winkstart.module('call_center', 'queue', {
                         THIS.save_queue(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('queue', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -475,7 +481,7 @@ winkstart.module('call_center', 'queue', {
             $('.queue-delete', queue_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('This will remove this queue and all the agents and reports attached to this queue as well. Are you sure you want to delete it?', function() {
+                winkstart.confirm(_t('queue', 'this_will_remove_this_queue'), function() {
                     THIS.delete_queue(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -510,7 +516,7 @@ winkstart.module('call_center', 'queue', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('queue', 'no_name')
                                 });
                             });
                         }
@@ -527,7 +533,7 @@ winkstart.module('call_center', 'queue', {
                         .listpanel({
                             label: 'Queues',
                             identifier: 'queue-listview',
-                            new_entity_label: 'Add ACD',
+                            new_entity_label: _t('queue', 'add_acd'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'queue.edit',
@@ -649,9 +655,13 @@ winkstart.module('call_center', 'queue', {
             $('#add_agents', parent).click(function(ev) {
                 ev.preventDefault();
 
-                var add_agents_html = THIS.templates.add_agents.tmpl(),
+                var add_agents_html = THIS.templates.add_agents.tmpl({
+					_t: function(param){
+						return window.translate['queue'][param];
+					}
+				}),
                     popup_agents = winkstart.dialog(add_agents_html, {
-                        title: 'Select Agents'
+                        title: _t('queue', 'select_agents')
                     });
 
                 var count_agents = 0;
@@ -781,7 +791,7 @@ winkstart.module('call_center', 'queue', {
                     });
                 }
                 else {
-                    winkstart.alert('You didn\'t select any agent.');
+                    winkstart.alert(_t('queue', 'you_didnt_select_any_agent'));
                 }
             });
 
@@ -818,16 +828,16 @@ winkstart.module('call_center', 'queue', {
             var THIS = this,
                 columns = [
                 {
-                    'sTitle': 'Call-ID'
+                    'sTitle': _t('queue', 'call_id_title')
                 },
                 {
-                    'sTitle': 'Duration'
+                    'sTitle': _t('queue', 'duration_title')
                 },
                 {
-                    'sTitle': 'Agent'
+                    'sTitle': _t('queue', 'agent_title')
                 },
                 {
-                    'sTitle': 'Recorded at',
+                    'sTitle': _t('queue', 'recorded_at_title'),
                     'fnRender': function(obj) {
                         var timestamp = obj.aData[obj.iDataColumn];
                         return winkstart.friendly_timestamp(timestamp);
@@ -874,7 +884,7 @@ winkstart.module('call_center', 'queue', {
                     }
                 },
                 {
-                    'sTitle': 'Actions',
+                    'sTitle': _t('queue', 'actions_title'),
                     'sWidth': '15%',
                     'bSortable': false,
                     'fnRender': function(obj) {
@@ -894,7 +904,7 @@ winkstart.module('call_center', 'queue', {
                 }
             });
 
-            $('#agents .buttons_div', parent).html('<button class="btn primary" id="add_agents">Add Agents</button>&nbsp;<button class="btn danger" id="remove_agents">Remove Selected Agents</button>');
+            $('#agents .buttons_div', parent).html('<button class="btn primary" id="add_agents">' + _t('queue', 'add_agents') + '</button>&nbsp;<button class="btn danger" id="remove_agents">' + _t('queue', 'remove_selected_agents') + '</button>');
 
             $('#agents-grid_filter input[type=text]', parent).first().focus();
 
@@ -907,7 +917,7 @@ winkstart.module('call_center', 'queue', {
         popup_edit_queue: function(data, callbacks, data_defaults) {
             var THIS = this,
                 popup = winkstart.dialog($('<div class="inline_popup"><div class="inline_content main_content"/></div>'), {
-                    title: 'Edit Queue',
+                    title: _t('queue', 'edit_queue_title'),
                     position: ['center', 100]
                 });
 
@@ -936,7 +946,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_member[id=*]': {
                     name: _t('queue', 'queue'),
                     icon: 'queue',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_member',
                     tip: _t('queue', 'queue_tip'),
                     data: {
@@ -1021,7 +1031,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_queue[id=*,action=login]': {
                     name: _t('queue', 'queue_login'),
                     icon: 'queue',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_queue',
                     tip: _t('queue', 'queue_login_tip'),
                     data: {
@@ -1107,7 +1117,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_queue[id=*,action=logout]': {
                     name: _t('queue', 'queue_logout'),
                     icon: 'queue',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_queue',
                     tip: _t('queue', 'queue_logout_tip'),
                     data: {
@@ -1178,7 +1188,7 @@ winkstart.module('call_center', 'queue', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Queue',
+                                    title: _t('queue', 'queue_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -1193,7 +1203,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=pause]': {
                     name: _t('queue', 'agent_pause'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'agent_pause_tip'),
                     data: {
@@ -1234,12 +1244,12 @@ winkstart.module('call_center', 'queue', {
                                 node.setMetadata('timeout', timeout);
                                 node.setMetadata('presence_id', presence_id);
 
-                                node.caption = timeout + ' seconds';
+                                node.caption = timeout + _t('queue', 'seconds');
 
                                 popup.dialog('close');
                             }
                             else {
-                                winkstart.alert('Please enter a valid number of seconds. It needs to be greater than 0.');
+                                winkstart.alert(_t('queue', 'please_enter_a_valid_number_of_seconds'));
                             }
                         });
 
@@ -1261,7 +1271,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=resume]': {
                     name: _t('queue', 'agent_resume'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'agent_resume_tip'),
                     data: {
@@ -1317,7 +1327,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=logout]': {
                     name: _t('queue', 'logout_agent'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'logout_agent_tip'),
                     data: {
@@ -1373,7 +1383,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=login]': {
                     name: _t('queue', 'login_agent'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('queue', 'call_center_category'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'login_agent_tip'),
                     data: {

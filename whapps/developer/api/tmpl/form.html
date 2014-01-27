@@ -3,11 +3,11 @@
 		<h1 class="api-urls">
 			${title.toUpperCase()}
 			<small>
-				${click_to_get_info}
+				${_t('click_to_get_info')}
 			</small>
 		</h1>
 		<div class="buttons-right">
-			<button class="btn black toggle-all">${show_all}</button>
+			<button class="btn black toggle-all">${_t('show_all')}</button>
 		</div>
 	</div>
 
@@ -17,7 +17,7 @@
 				<div class="whapp-header">
 					<button class="btn ${rests[verb].btn} toggle" data-toggle="${k}_${verb}">
 						{{if verb == "get_all"}}
-							GET
+							${_t('get')}
 						{{else}}
 							${verb.toUpperCase()}
 						{{/if}}
@@ -25,19 +25,19 @@
 					<small>${ressources['developer.' + k + '.' + verb].url.substr(9)}</small>
 					<small>
 						{{if verb == "get_all"}}
-							Get All
+							${_t('get_all')}
 						{{/if}}
 						{{if verb == "post"}}
-							Update
+							${_t('update')}
 						{{/if}}
 						{{if verb == "put"}}
-							Add
+							${_t('add')}
 						{{/if}}
 						{{if verb == "delete"}}
-							Delete
+							${_t('delete')}
 						{{/if}}
 						{{if verb == "get"}}
-							Get
+							${_t('get')}
 						{{/if}}
 						${api.title}
 					</small>
@@ -55,7 +55,7 @@
 									{{each(index, class_type)  api.rest[verb]}}
 										<div class="${class_type}"></div>
 										{{if class_type == "schema"}}
-											<a class="details" data-id="${k}_${verb}">Show Advanced</a>	
+											<a class="details" data-id="${k}_${verb}">${_t('show_advanced')}</a>	
 										{{/if}}
 									{{/each}}
 								{{/if}}
@@ -65,7 +65,7 @@
 								{{each(index, class_type) rests[verb].class}}
 									<div class="${class_type}"></div>
 									{{if class_type == "schema"}}
-										<a class="details" data-id="${k}_${verb}">Show Advanced</a>	
+										<a class="details" data-id="${k}_${verb}">${_t('show_advanced')}</a>	
 									{{/if}}
 								{{/each}}
 							{{/if}}
@@ -80,7 +80,7 @@
 					</form>
 
 					<div class="buttons-right">
-						<button class="btn success try" data-id="${k}" data-verb="${verb}">${try_it}</button>
+						<button class="btn success try" data-id="${k}" data-verb="${verb}">${_t('try_it')}</button>
 					</div>
 					
 				</div>

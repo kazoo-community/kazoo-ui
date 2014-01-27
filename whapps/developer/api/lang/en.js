@@ -26,5 +26,18 @@ window.translate['api'] = {
 	hotdesk: "Hotdesk",
 	servers_deployment: "Deployment",
 	servers_log: "Logs",
-	try_it: "Try It"
-}
+	try_it: "Try It",
+	get: "GET",
+	get_all: "Get All",
+	update: "Update",
+	add: "Add",
+	delete: "Delete",
+	show_advanced: "Show Advanced",
+	api_url: "API URL",
+	account_id: "ACCOUNT ID",
+	auth_token: "AUTH TOKEN",
+	copy_paste_curl_command: "Copy/Paste CURL Command",
+	hide_advanced: "Hide Advanced",
+	something_went_wrong: "Something went wrong with the schema!",
+	apis_developer_label: "APIs Developer",
+};

@@ -84,7 +84,11 @@ winkstart.module('core', 'layout', {
             var THIS = this,
                 timeout,
                 domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
-                layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent),
+                layout_html = THIS.templates.layout.tmpl({
+					_t: function(param){
+						return window.translate['layout'][param];
+					}
+				}).appendTo(THIS.parent),
                 api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url;
 
             if(winkstart.config.hide_powered) {
@@ -152,11 +156,13 @@ winkstart.module('core', 'layout', {
             }
             else {*/
                 layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
-
                 var data_welcome = {
                     company_name: winkstart.config.company_name,
                     company_website: winkstart.config.company_website,
-                    learn_more: winkstart.config.nav.learn_more || "http://www.2600hz.com/"
+                    learn_more: winkstart.config.nav.learn_more || "http://www.2600hz.com/",
+					_t: function(param){
+						return window.translate['layout'][param];
+					}
                 };
 
                 THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.welcome-page-top .left_div', layout_welcome_html));
