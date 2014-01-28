@@ -625,7 +625,7 @@ winkstart.module('voip', 'resource', {
                 'offnet[]': {
                     name: _t('resource', 'global_carrier'),
                     icon: 'offnet',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'offnet',
                     tip: _t('resource', 'global_carrier_tip'),
                     data: {},
@@ -648,7 +648,7 @@ winkstart.module('voip', 'resource', {
                 'resources[]': {
                     name: _t('resource', 'account_carrier'),
                     icon: 'resource',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'resources',
                     tip: _t('resource', 'account_carrier_tip'),
                     data: {},

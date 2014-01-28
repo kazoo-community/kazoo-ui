@@ -537,7 +537,7 @@ winkstart.module('voip', 'queue', {
                 'queue[id=*]': {
                     name: 'Queue',
                     icon: 'queue',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'queue',
                     tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
                     data: {
@@ -618,7 +618,7 @@ winkstart.module('voip', 'queue', {
                 'agent[action=resume]': {
                     name: 'Agent Resume',
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -644,7 +644,7 @@ winkstart.module('voip', 'queue', {
                 'agent[action=break]': {
                     name: 'Agent Break',
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -670,7 +670,7 @@ winkstart.module('voip', 'queue', {
                 'agent[action=logout]': {
                     name: 'Logout Agent',
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -696,7 +696,7 @@ winkstart.module('voip', 'queue', {
                 'agent[action=login]': {
                     name: 'Login Agent',
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -722,7 +722,7 @@ winkstart.module('voip', 'queue', {
                 'agent[action=toggle]': {
                     name: 'Toggle Agent',
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {

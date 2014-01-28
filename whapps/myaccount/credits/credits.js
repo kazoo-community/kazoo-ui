@@ -178,7 +178,10 @@ winkstart.module('myaccount', 'credits', {
                     extra: {
                         inbound_trunks_price: winkstart.config.inbound_trunks_price || '$6.99',
                         twoway_trunks_price: winkstart.config.twoway_trunks_price || '$29.99'
-                    }
+                    },
+					_t: function(param){
+						return window.translate['credits'][param];
+					}
                 },
                 credits_html = THIS.templates.credits.tmpl(data_tmpl),
                 popup;
@@ -202,7 +205,7 @@ winkstart.module('myaccount', 'credits', {
 
             $('.purchase_credits', credits_html).click(function(ev) {
                 ev.preventDefault();
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                winkstart.confirm(_t('credits', 'your_on_file_credit_card_will_immediately'),
                     function() {
                         var credits_to_add = parseFloat($('#add_credits', credits_html).val().replace(',','.'));
 
@@ -218,7 +221,7 @@ winkstart.module('myaccount', 'credits', {
             $('.submit_channels', credits_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                winkstart.confirm(_t('credits', 'your_on_file_credit_card_will_immediately'),
                     function() {
                         var limits_data = {
                             twoway_trunks: $('#outbound_calls', credits_html).size() > 0 ? parseInt($('#outbound_calls', credits_html).val() || 0) : -1,
@@ -230,13 +233,13 @@ winkstart.module('myaccount', 'credits', {
                         THIS.update_limits(limits_data, function(_data) {
                             popup.dialog('close');
 
-                            winkstart.alert('info', 'Your changes have been saved!');
+                            winkstart.alert('info', _t('credits', 'your_changes_have_been_saved'));
                         });
                     }
                 );
             });
 
-            popup = winkstart.dialog(credits_html, { title: 'Manage your credits and limits.' });
+            popup = winkstart.dialog(credits_html, { title: _t('credits', 'manage_your_credits_and_limits') });
         },
 
         define_stats: function() {
@@ -271,6 +274,9 @@ winkstart.module('myaccount', 'credits', {
                         });
                     },
                     container: function(stat) {
+						stat._t = function(param){
+							return window.translate['credits'][param];
+						};
                         return THIS.templates.stat_credits.tmpl(stat);
                     },
                     update_container: function(html) {

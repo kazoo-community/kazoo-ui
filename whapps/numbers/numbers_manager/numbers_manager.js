@@ -381,7 +381,11 @@ winkstart.module('numbers', 'numbers_manager', {
 
         render_fields: function(parent, callback, callback_after_buying) {
             var THIS = this,
-            fields_html = THIS.templates.fields.tmpl();
+            fields_html = THIS.templates.fields.tmpl({
+				_t: function(param){
+					return window.translate['numbers_manager'][param];
+				}
+			});
 
             $(fields_html, parent).click(function() {
                 THIS.render_add_number_dialog(function() {
@@ -611,8 +615,15 @@ winkstart.module('numbers', 'numbers_manager', {
         },
 
         render_cnam_dialog: function(cnam_data, callback) {
+			cnam_data._t = function(param){
+				return window.translate['numbers_manager'][param];
+			};
             var THIS = this,
-                popup_html = THIS.templates.cnam_dialog.tmpl(cnam_data || {}),
+                popup_html = THIS.templates.cnam_dialog.tmpl(cnam_data || {
+					_t: function(param){
+						return window.translate['numbers_manager'][param];
+					}
+				}),
                 popup;
 
             $('.submit_btn', popup_html).click(function(ev) {
@@ -633,6 +644,9 @@ winkstart.module('numbers', 'numbers_manager', {
         },
 
         render_e911_dialog: function(e911_data, callback) {
+			e911_data._t = function(param){
+				return window.translate['numbers_manager'][param];
+			};
             var THIS = this,
                 popup_html = THIS.templates.e911_dialog.tmpl(e911_data || {}),
                 popup;
@@ -669,14 +683,18 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: e911_data.phone_number ? 'Edit Location for ' + e911_data.phone_number : 'Edit 911 Location',
+                title: e911_data.phone_number ? _t('numbers_manager', 'edit_location_for') + e911_data.phone_number : _t('numbers_manager', 'edit_911_location'),
                 width: '465px'
             });
         },
 
         render_freeform_number_dialog: function(callback) {
             var THIS = this,
-                popup_html = THIS.templates.freeform_number_dialog.tmpl(),
+                popup_html = THIS.templates.freeform_number_dialog.tmpl({
+					_t: function(param){
+						return window.translate['numbers_manager'][param];
+					}
+				}),
                 popup;
 
             $('.add', popup_html).click(function(ev) {
@@ -765,7 +783,12 @@ winkstart.module('numbers', 'numbers_manager', {
                     var results_html = THIS.templates.add_number_search_results.tmpl(results_data);
 
                 	var formattedData = THIS.formatBuyNumberData(results_data),
-                    	results_html = THIS.templates.add_number_search_results.tmpl({ data: formattedData });
+                    	results_html = THIS.templates.add_number_search_results.tmpl({
+							data: formattedData,
+							_t: function(param){
+								return window.translate['numbers_manager'][param];
+							}
+						});
 
                     $('#foundDIDList', popup_html)
                         .empty()
@@ -810,7 +833,7 @@ winkstart.module('numbers', 'numbers_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Add number',
+                title: _t('numbers_manager', 'add_number_title'),
                 width: '600px',
                 position: ['center', 20]
             });

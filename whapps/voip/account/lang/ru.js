@@ -33,5 +33,10 @@ window.translate['account'] = {
 	create: "Create",
 	pass_realm_in_invite: "Pass Realm in INVITE",
 	pass_realm_in_invite_data_content: "Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm.",
-	save: "Save"
+	save: "Save",
+	name_placeholder: "Name",
+	email_address_placeholder: "E-mail address",
+	account_details_label: "Account Details",
+	there_were_errors_on_the_form: "There were errors on the form, please correct!",
+	are_you_sure_you_want_to_delete: "Are you sure you want to delete this account?<br>WARNING: This can not be undone"
 };

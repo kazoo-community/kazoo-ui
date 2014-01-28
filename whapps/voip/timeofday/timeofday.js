@@ -586,7 +586,7 @@ winkstart.module('voip', 'timeofday', {
                 'temporal_route[]': {
                     name: _t('timeofday', 'time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {},
                     rules: [
@@ -699,7 +699,7 @@ winkstart.module('voip', 'timeofday', {
                 'temporal_route[action=disable]': {
                     name: _t('timeofday', 'disable_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'disable',
@@ -799,7 +799,7 @@ winkstart.module('voip', 'timeofday', {
                 'temporal_route[action=enable]': {
                     name: _t('timeofday', 'enable_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'enable',
@@ -899,7 +899,7 @@ winkstart.module('voip', 'timeofday', {
                 'temporal_route[action=reset]': {
                     name: _t('timeofday', 'reset_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'reset',

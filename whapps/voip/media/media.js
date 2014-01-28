@@ -476,7 +476,7 @@ winkstart.module('voip', 'media', {
                 'play[id=*]': {
                     name: _t('media', 'play_media'),
                     icon: 'play',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'play',
                     tip: _t('media', 'play_media_tip'),
                     data: {

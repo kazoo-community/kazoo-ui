@@ -994,7 +994,7 @@ winkstart.module('voip', 'device', {
                 'device[id=*]': {
                     name: _t('device', 'device'),
                     icon: 'phone',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'device',
                     tip: _t('device', 'device_tip'),
                     data: {

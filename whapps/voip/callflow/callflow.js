@@ -146,7 +146,7 @@ winkstart.module('voip', 'callflow', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Callflows',
+            label: _t('callflow', 'callflows_label'),
             icon: 'callflow',
             weight: '50'
         });
@@ -763,7 +763,10 @@ winkstart.module('voip', 'callflow', {
                     for(var x, size = THIS.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
                         x = i * 2;
                         THIS.templates.num_row.tmpl({
-                            numbers: THIS.flow.numbers.slice(x, (x + 2 < size) ? x + 2 : size)
+                            numbers: THIS.flow.numbers.slice(x, (x + 2 < size) ? x + 2 : size),
+							_t: function(param){
+								return window.translate['callflow'][param];
+							}
                         }).appendTo($('.content', node_html));
                     }
 
@@ -778,7 +781,12 @@ winkstart.module('voip', 'callflow', {
                             }
                             phone_numbers.sort();
 
-                            var popup_html = THIS.templates.add_number.tmpl({phone_numbers: phone_numbers, _t: function(param){return window.translate['callflow'][param];}}),
+                            var popup_html = THIS.templates.add_number.tmpl({
+								phone_numbers: phone_numbers,
+								_t: function(param){
+									return window.translate['callflow'][param];
+								}
+							}),
                                 popup;
 
                             if(phone_numbers.length === 0) {
@@ -1046,7 +1054,10 @@ winkstart.module('voip', 'callflow', {
 
             tools = THIS.templates.tools.tmpl({
                 categories: THIS.categories,
-                nodes: THIS.actions
+                nodes: THIS.actions,
+				_t: function(param){
+					return window.translate['callflow'][param];
+				}
             });
 
             $('.content', tools).hide();
@@ -1256,7 +1267,7 @@ winkstart.module('voip', 'callflow', {
                 }
             }
             else {
-                winkstart.alert('You need to select a number for this callflow before saving it.');
+                winkstart.alert(_t('callflow', 'you_need_to_select_a_number'));
             }
         },
 
@@ -1301,9 +1312,9 @@ winkstart.module('voip', 'callflow', {
                     }
 
                     var options = {};
-                    options.label = 'Callflow Module';
+                    options.label = _t('callflow', 'callflow_module_label');
                     options.identifier = 'callflow-module-listview';
-                    options.new_entity_label = 'Add Callflow';
+                    options.new_entity_label = _t('callflow', 'add_callflow_label');
                     options.data = map_crossbar_data(data.data);
                     options.publisher = winkstart.publish;
                     options.notifyMethod = 'callflow.list-panel-click';
@@ -1620,7 +1631,7 @@ winkstart.module('voip', 'callflow', {
                                                         confirm_text;
 
                                                     if(data.endpoint_type === 'device') {
-                                                        confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
+                                                        confirm_text = _t('callflow', 'the_owner_of_this_device_is_already');
                                                         $('.connect.right li', popup_html).each(function() {
                                                             if($(this).dataset('id') === data.owner_id) {
                                                                 list_li.push($(this));
@@ -1628,7 +1639,7 @@ winkstart.module('voip', 'callflow', {
                                                         });
                                                     }
                                                     else if(data.endpoint_type === 'user') {
-                                                        confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
+                                                        confirm_text = _t('callflow', 'this_user_has_already_some_devices');
                                                         $('.connect.right li', popup_html).each(function() {
                                                             if($(this).dataset('owner_id') === data.id) {
                                                                 list_li.push($(this));
@@ -1710,7 +1721,7 @@ winkstart.module('voip', 'callflow', {
                                 // We need to translate the endpoints to prevent nasty O(N^2) time complexities,
                                 // we also need to clone to prevent managing of objects
                                 $.each($.extend(true, {}, endpoints), function(i, obj) {
-                                    obj.name = 'Undefined Device';
+                                    obj.name = _t('callflow', 'undefined_device');
                                     selected_endpoints[obj.id] = obj;
                                 });
                             }
@@ -1808,7 +1819,7 @@ winkstart.module('voip', 'callflow', {
                                             });
 
                                             $('#name', popup_html).bind('keyup blur change', function() {
-                                                $('.column.right .title', popup_html).html('Ring Group - ' + $(this).val());
+                                                $('.column.right .title', popup_html).html(_t('callflow', 'ring_group_val') + $(this).val());
                                             });
 
                                             $('ul.settings1 > li > a', popup_html).click(function(item) {
@@ -1960,7 +1971,7 @@ winkstart.module('voip', 'callflow', {
                                                         confirm_text;
 
                                                     if(data.endpoint_type === 'device') {
-                                                        confirm_text = 'The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?';
+                                                        confirm_text = _t('callflow', 'the_owner_of_this_device_is_already');
                                                         $('.connect.right li', popup_html).each(function() {
                                                             if($(this).dataset('id') === data.owner_id) {
                                                                 list_li.push($(this));
@@ -1968,7 +1979,7 @@ winkstart.module('voip', 'callflow', {
                                                         });
                                                     }
                                                     else if(data.endpoint_type === 'user') {
-                                                        confirm_text = 'This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?';
+                                                        confirm_text = _t('callflow', 'this_user_has_already_some_devices');
                                                         $('.connect.right li', popup_html).each(function() {
                                                             if($(this).dataset('owner_id') === data.id) {
                                                                 list_li.push($(this));
@@ -2044,7 +2055,7 @@ winkstart.module('voip', 'callflow', {
                 'callflow[id=*]': {
                     name: _t('callflow', 'callflow'),
                     icon: 'callflow',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'callflow',
                     tip: _t('callflow', 'callflow_tip'),
                     data: {
@@ -2077,7 +2088,7 @@ winkstart.module('voip', 'callflow', {
 
                                 $.each(data.data, function() {
                                     if(!this.featurecode && this.id != THIS.flow.id) {
-                                        this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : '(no numbers)');
+                                        this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
 
                                         _data.push(this);
                                     }
@@ -2117,7 +2128,7 @@ winkstart.module('voip', 'callflow', {
                 'page_group[]': {
                     name: _t('callflow', 'page_group'),
                     icon: 'ring_group',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'page_group',
                     tip:  _t('callflow', 'page_group_tip'),
                     data: {
@@ -2140,7 +2151,7 @@ winkstart.module('voip', 'callflow', {
                 'ring_group[]': {
                     name: _t('callflow', 'ring_group'),
                     icon: 'ring_group',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'ring_group',
                     tip: _t('callflow', 'ring_group_tip'),
                     data: {
@@ -2163,7 +2174,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=activate]': {
                     name: _t('callflow', 'enable_call_forwarding'),
                     icon: 'rightarrow',
-                    category: 'Call Forwarding',
+                    category: _t('config', 'call_forwarding_cat'),
                     module: 'call_forward',
                     tip: _t('callflow', 'enable_call_forwarding_tip'),
                     data: {
@@ -2188,7 +2199,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=deactivate]': {
                     name: _t('callflow', 'disable_call_forwarding'),
                     icon: 'rightarrow',
-                    category: 'Call Forwarding',
+                    category: _t('config', 'call_forwarding_cat'),
                     module: 'call_forward',
                     tip: _t('callflow', 'disable_call_forwarding_tip'),
                     data: {
@@ -2213,7 +2224,7 @@ winkstart.module('voip', 'callflow', {
                 'call_forward[action=update]': {
                     name: _t('callflow', 'update_call_forwarding'),
                     icon: 'rightarrow',
-                    category: 'Call Forwarding',
+                    category: _t('config', 'call_forwarding_cat'),
                     module: 'call_forward',
                     tip: _t('callflow', 'update_call_forwarding_tip'),
                     data: {
@@ -2238,7 +2249,7 @@ winkstart.module('voip', 'callflow', {
                 'dynamic_cid[]': {
                     name: _t('callflow', 'dynamic_cid'),
                     icon: 'rightarrow',
-                    category: 'Caller ID',
+                    category: _t('config', 'caller_id_cat'),
                     module: 'dynamic_cid',
                     tip: _t('callflow', 'dynamic_cid_tip'),
                     isUsable: 'true',
@@ -2254,7 +2265,7 @@ winkstart.module('voip', 'callflow', {
                 'prepend_cid[action=prepend]': {
                     name: _t('callflow', 'prepend'),
                     icon: 'plus_circle',
-                    category: 'Caller ID',
+                    category: _t('config', 'caller_id_cat'),
                     module: 'prepend_cid',
                     tip: _t('callflow', 'prepend_tip'),
                     data: {
@@ -2315,7 +2326,7 @@ winkstart.module('voip', 'callflow', {
                 'prepend_cid[action=reset]': {
                     name: _t('callflow', 'reset_prepend'),
                     icon: 'loop2',
-                    category: 'Caller ID',
+                    category: _t('config', 'caller_id_cat'),
                     module: 'prepend_cid',
                     tip: _t('callflow', 'reset_prepend_tip'),
                     data: {
@@ -2340,7 +2351,7 @@ winkstart.module('voip', 'callflow', {
                 'manual_presence[]': {
                     name: _t('callflow', 'manual_presence'),
                     icon: 'lightbulb_on',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'manual_presence',
                     tip: _t('callflow', 'manual_presence_tip'),
                     data: {
@@ -2391,7 +2402,7 @@ winkstart.module('voip', 'callflow', {
                 'group_pickup[]': {
                     name: _t('callflow', 'group_pickup'),
                     icon: 'sip',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'group_pickup',
                     tip: _t('callflow', 'group_pickup_tip'),
                     data: {
@@ -2470,7 +2481,7 @@ winkstart.module('voip', 'callflow', {
                 'receive_fax[]': {
                     name: _t('callflow', 'receive_fax'),
                     icon: 'sip',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'receive_fax',
                     tip: _t('callflow', 'receive_fax_tip'),
                     data: {
@@ -2547,7 +2558,7 @@ winkstart.module('voip', 'callflow', {
                 'record_call[action=start]': {
                     name: _t('callflow', 'start_call_recording'),
                     icon: 'conference',
-                    category: 'Call Recording',
+                    category: _t('config', 'call_recording_cat'),
                     module: 'record_call',
                     tip: _t('callflow', 'start_call_recording_tip'),
                     data: {
@@ -2599,7 +2610,7 @@ winkstart.module('voip', 'callflow', {
                 'record_call[action=stop]': {
                     name: _t('callflow', 'stop_call_recording'),
                     icon: 'conference',
-                    category: 'Call Recording',
+                    category: _t('config', 'call_recording_cat'),
                     module: 'record_call',
                     tip: _t('callflow', 'stop_call_recording_tip'),
                     data: {
@@ -2621,7 +2632,7 @@ winkstart.module('voip', 'callflow', {
                 'pivot[]': {
                     name: _t('callflow', 'pivot'),
                     icon: 'conference',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'pivot',
                     tip: _t('callflow', 'pivot_tip'),
                     data: {
@@ -2677,7 +2688,7 @@ winkstart.module('voip', 'callflow', {
                 'disa[]': {
                     name: _t('callflow', 'disa'),
                     icon: 'conference',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'disa',
                     tip: _t('callflow', 'disa_tip'),
                     data: {
@@ -2715,7 +2726,7 @@ winkstart.module('voip', 'callflow', {
                                 popup.dialog('close');
                             };
                             if($('#disa_pin_input', popup_html).val() == '') {
-                                winkstart.confirm('Not setting a PIN is a security risk, are you sure you don\'t want to set a PIN?', function() {
+                                winkstart.confirm(_t('callflow', 'not_setting_a_pin'), function() {
                                     save_disa();
                                 });
                             }
@@ -2738,7 +2749,7 @@ winkstart.module('voip', 'callflow', {
                 'response[]': {
                     name: _t('callflow', 'response'),
                     icon: 'rightarrow',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'response',
                     tip: _t('callflow', 'response_tip'),
                     data: {
@@ -2754,7 +2765,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        return 'SIP Code: ' + node.getMetadata('code');
+                        return _t('callflow', 'sip_code_caption') + node.getMetadata('code');
                     },
                     edit: function(node, callback) {
                         winkstart.request(true, 'callflow.list_media', {
@@ -2814,11 +2825,11 @@ winkstart.module('voip', 'callflow', {
                                             node.deleteMetadata('media');
                                         }
 
-                                        node.caption = 'SIP Code: ' + $('#response_code_input', popup_html).val();
+                                        node.caption = _t('callflow', 'sip_code_caption') + $('#response_code_input', popup_html).val();
 
                                         popup.dialog('close');
                                     } else {
-                                        winkstart.alert('error','Please enter a valide SIP code.');
+                                        winkstart.alert('error', _t('callflow', 'please_enter_a_valide_sip_code'));
                                     }
                                 });
 
@@ -2840,7 +2851,7 @@ winkstart.module('voip', 'callflow', {
             /* Migration callflows, fixes our goofs. To be removed eventually */
             $.extend(callflow_nodes, {
                 'resource[]': {
-                    name: 'Resource',
+                    name: _t('callflow', 'resource_name'),
                     icon: 'resource',
                     module: 'resources',
                     data: {},
@@ -2852,14 +2863,14 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert(_t('callflow', 'this_callflow_is_outdated'));
                         return '';
                     },
                     edit: function(node, callback) {
                     }
                 },
                 'hotdesk[id=*,action=call]': {
-                    name: 'Hot Desking',
+                    name: _t('callflow', 'hot_desking_name'),
                     icon: 'v_phone',
                     module: 'hotdesk',
                     data: {
@@ -2877,7 +2888,7 @@ winkstart.module('voip', 'callflow', {
                         //Migration here:
                         node.setMetadata('action', 'bridge');
 
-                        winkstart.alert('This callflow is outdated, please resave this callflow before continuing.');
+                        winkstart.alert(_t('callflow', 'this_callflow_is_outdated'));
                         return '';
                     },
                     edit: function(node, callback) {

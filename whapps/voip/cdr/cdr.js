@@ -46,7 +46,7 @@ function(args) {
 	winkstart.publish('whappnav.subnav.add', {
         whapp: 'voip',
 		module: this.__module,
-		label: 'Call History',
+		label: _t('cdr', 'call_history_label'),
 		icon: 'cdr',
         weight: '50',
         category: 'advanced'
@@ -176,13 +176,13 @@ function(args) {
                     cost = this.cost ? '$' + parseFloat((this.cost)/10000).toFixed(2) : '-';
 
                     tab_data.push([
-                        this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
-                        this.callee_id_number === this.callee_id_name ? this.callee_id_number || ((this.to) ? this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) : '(empty)') || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
-                        user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : 'No Owner',
+                        this.caller_id_number === this.caller_id_name ? this.caller_id_number || _t('cdr', 'empty') : this.caller_id_number + ' (' + this.caller_id_name+')',
+                        this.callee_id_number === this.callee_id_name ? this.callee_id_number || ((this.to) ? this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) : _t('cdr', 'empty')) || _t('cdr', 'empty') : this.callee_id_number + ' (' + this.callee_id_name+')',
+                        user_name ? '<a href="javascript:void(0);" id="'+ this.owner_id +'" class="table_owner_link">'+user_name+'</a>' : _t('cdr', 'no_owner'),
                         duration || '-',
                         this.hangup_cause || '-',
                         /*'<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +*/
-                        '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">Details</a>',
+                        '<a href="javascript:void(0);" data-cdr_id="'+cdr_id+'"  class="table_detail_link">' + _t('cdr', 'details') + '</a>',
                         cost,
                         humanFullDate,
                         cdr_id,
@@ -190,7 +190,7 @@ function(args) {
                     ]);
                 });
 
-                call_duration = 'Total duration : ' + parse_duration(call_duration, 'verbose');
+                call_duration = _t('cdr', 'total_duration') + parse_duration(call_duration, 'verbose');
                 $('.call_duration', '#cdr-grid_wrapper').text(call_duration);
 
                 winkstart.table.cdr.fnAddData(tab_data);
@@ -202,42 +202,42 @@ function(args) {
         var cdr_html = parent,
 		    columns = [
             {
-                'sTitle': 'From (Caller ID)',
+                'sTitle': _t('cdr', 'from_caller_id_stitle'),
                 'sWidth': '250px'
             },
             {
-                'sTitle': 'To (Dialed number)',
+                'sTitle': _t('cdr', 'to_dialed_number_stitle'),
                 'sWidth': '250px'
             },
             {
-                'sTitle': 'Owner',
+                'sTitle': _t('cdr', 'owner_stitle'),
                 'sWidth': '160px'
             },
             {
-                'sTitle': 'Duration',
+                'sTitle': _t('cdr', 'duration_stitle'),
                 'sWidth': '110px'
             },
             {
-                'sTitle': 'Hangup Cause',
+                'sTitle': _t('cdr', 'hangup_cause_stitle'),
                 'sWidth': '160px'
             },
             {
-                'sTitle': 'Actions',
+                'sTitle': _t('cdr', 'actions_stitle'),
                 'sWidth': '80px',
                 'bSortable': false
             },
             {
-                'sTitle': 'Cost'
+                'sTitle': _t('cdr', 'cost_stitle')
             },
             {
-                'sTitle': 'Date'
+                'sTitle': _t('cdr', 'date_stitle')
             },
             {
-                'sTitle': 'cdr_id',
+                'sTitle': _t('cdr', 'cdr_id_stitle'),
                 'bVisible': false
             },
             {
-                'sTitle': 'billing_seconds',
+                'sTitle': _t('cdr', 'billing_seconds_stitle'),
                 'bVisible': false
             }
 		];
@@ -295,7 +295,7 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<select id="dropdown_filter"><option value="all">All Calls</option><option value="queue">Queue Calls</option><option value="non-queue">Non-Queue Calls</option></select><button class="btn primary button-search" id="searchLink">Filter</button><label class="call_duration"/>');
+		$('div.date', cdr_html).html(_t('cdr', 'start_date') + '<input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;' + _t('cdr', 'end_date') + '<input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<select id="dropdown_filter"><option value="all">' + _t('cdr', 'all_calls') + '</option><option value="queue">' + _t('cdr', 'queue_calls') + '</option><option value="non-queue">' + +t('cdr', 'non_queue_calls') + '</option></select><button class="btn primary button-search" id="searchLink">' + _t('cdr', 'filter') + '</button><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });
@@ -332,12 +332,15 @@ function(args) {
                     });
 
                     var tmpl_data = {
-                        cdr_fields: cdr_data
+                        cdr_fields: cdr_data,
+						_f: function(param){
+							return window.translate['cdr'][param];
+						}
                     }
 
                     cdr_detail_html = THIS.templates.cdr_details.tmpl(tmpl_data);
                     winkstart.dialog(cdr_detail_html, {
-                            title: 'Detail of cdr: '+cdr_id,
+                            title: _t('cdr', 'detail_of_cdr_title') + cdr_id,
                             width: '840px',
                             height: 'auto',
                             open: function() {
@@ -367,11 +370,11 @@ function(args) {
                     THIS.list_by_date(start_date_sec, end_date_sec, $('#dropdown_filter', cdr_html).val());
                 }
                 else {
-                    winkstart.alert('The range is bigger than 7 days, please correct it.');
+                    winkstart.alert(_t('cdr', 'the_range_is_bigger'));
                 }
             }
             else {
-                winkstart.alert('Dates in the filter are not in the proper format (mm/dd/yyyy)');
+                winkstart.alert(_t('cdr', 'dates_in_the_filter'));
             }
 		});
 

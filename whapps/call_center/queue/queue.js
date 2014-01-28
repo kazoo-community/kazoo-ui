@@ -946,7 +946,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_member[id=*]': {
                     name: _t('queue', 'queue'),
                     icon: 'queue',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_member',
                     tip: _t('queue', 'queue_tip'),
                     data: {
@@ -1031,7 +1031,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_queue[id=*,action=login]': {
                     name: _t('queue', 'queue_login'),
                     icon: 'queue',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_queue',
                     tip: _t('queue', 'queue_login_tip'),
                     data: {
@@ -1117,7 +1117,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_queue[id=*,action=logout]': {
                     name: _t('queue', 'queue_logout'),
                     icon: 'queue',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_queue',
                     tip: _t('queue', 'queue_logout_tip'),
                     data: {
@@ -1203,7 +1203,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=pause]': {
                     name: _t('queue', 'agent_pause'),
                     icon: 'rightarrow',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'agent_pause_tip'),
                     data: {
@@ -1271,7 +1271,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=resume]': {
                     name: _t('queue', 'agent_resume'),
                     icon: 'rightarrow',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'agent_resume_tip'),
                     data: {
@@ -1327,7 +1327,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=logout]': {
                     name: _t('queue', 'logout_agent'),
                     icon: 'rightarrow',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'logout_agent_tip'),
                     data: {
@@ -1383,7 +1383,7 @@ winkstart.module('call_center', 'queue', {
                 'acdc_agent[action=login]': {
                     name: _t('queue', 'login_agent'),
                     icon: 'rightarrow',
-                    category: _t('queue', 'call_center_category'),
+                    category: _t('config', 'call_center_cat'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'login_agent_tip'),
                     data: {

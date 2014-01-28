@@ -547,7 +547,7 @@ winkstart.module('voip', 'vmbox', {
                 'voicemail[id=*]': {
                     name: _t('vmbox', 'voicemail'),
                     icon: 'voicemail',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'voicemail',
                     tip: _t('vmbox', 'voicemail_tip'),
                     data: {
@@ -632,7 +632,7 @@ winkstart.module('voip', 'vmbox', {
                 'voicemail[action=check]': {
                     name: _t('vmbox', 'check_voicemail'),
                     icon: 'voicemail',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'voicemail',
                     tip: _t('vmbox', 'check_voicemail_tip'),
                     data: {

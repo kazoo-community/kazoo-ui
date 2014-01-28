@@ -2,6 +2,7 @@
 ( function(winkstart, amplify, language, $) {
 	
 	_t = function(module, param){
+		
 		return window.translate[module][param];
 	};
 	

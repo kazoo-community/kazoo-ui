@@ -1,4 +1,3 @@
-var translate = {
-	login: "Login / Email",
-	test: "tttt"
+window.translate['myaccount'] = {
+	
 };

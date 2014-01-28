@@ -955,7 +955,7 @@ winkstart.module('voip', 'user', {
                  'user[id=*]': {
                     name: _t('user', 'user'),
                     icon: 'user',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'user',
                     tip: _t('user', 'user_tip'),
                     data: {
@@ -1052,7 +1052,7 @@ winkstart.module('voip', 'user', {
                 'hotdesk[action=login]': {
                     name: _t('user', 'hot_desk_login'),
                     icon: 'hotdesk_login',
-                    category: _t('user', 'hotdesking_category'),
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
                     tip: _t('user', 'hot_desk_login_tip'),
                     data: {
@@ -1077,7 +1077,7 @@ winkstart.module('voip', 'user', {
                 'hotdesk[action=logout]': {
                     name: _t('user', 'hot_desk_logout'),
                     icon: 'hotdesk_logout',
-                    category: _t('user', 'hotdesking_category'),
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
                     tip: _t('user', 'hot_desk_logout_tip'),
                     data: {
@@ -1102,7 +1102,7 @@ winkstart.module('voip', 'user', {
                 'hotdesk[action=toggle]': {
                     name: _t('user', 'hot_desk_toggle'),
                     icon: 'hotdesk_toggle',
-                    category: _t('user', 'hotdesking_category'),
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
                     tip: _t('user', 'hot_desk_toggle_tip'),
                     data: {

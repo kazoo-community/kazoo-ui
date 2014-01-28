@@ -245,16 +245,10 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         },
                         function(_data, status) {
                             if(status == 400 && _data.message.match(/credit\ card/)) {
-                                alert('Whoops! It appears you have no credit card on file. ' +
-                                      'You must have a credit card on file before signing up.\n\n' +
-                                      'To enter a credit card:\n' +
-                                      '1) Click on your account name in the upper righthand corner of Winkstart.\n' +
-                                      '2) Click on the Billing Account tab.\n' +
-                                      '3) Fill out your credit card information, then press save.');
+                                alert(_t('pbxs_manager', 'whoops_it_appears_you_have_no_credit'));
                             }
                             else {
-                                alert('An error occurred during the signup process,' +
-                                      ' please try again later! (Error: ' + status + ')');
+                                alert(_t('pbxs_manager', 'an_error_occurred_during') + status + ')');
                             }
                         }
                     );
@@ -466,7 +460,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
         popup_endpoint_settings: function(data, endpoint_data, callbacks) {
             var THIS = this,
                 popup = winkstart.dialog($('<div class="inline_popup"><div class="inline_content main_content"/></div>'), {
-                    title: 'Edit Settings of '+ endpoint_data.server_name,
+                    title: _t('pbxs_manager', 'edit_settings_of_title') + endpoint_data.server_name,
                     position: ['center', 100]
                 });
 
@@ -582,6 +576,9 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         render_pbxs_manager: function(data, endpoint_data, target, callbacks) {
+			endpoint_data._t = function(param){
+				return window.translate['pbxs_manager'][param];
+			};
             var THIS = this,
                 pbxs_manager_html = THIS.templates.endpoint_numbers.tmpl(endpoint_data),
                 server_id = endpoint_data.extra.id;
@@ -627,13 +624,13 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the Failover for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_failover')+_data_update.message);
                                         }
                                     );
                                 }
@@ -655,13 +652,13 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the Caller-ID for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_caller_id')+_data_update.message);
                                         }
                                     );
                                 }
@@ -683,13 +680,13 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm('Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
+                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
                                             !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
-                                            winkstart.alert('Failed to update the e911 for this phone number<br/>Error: '+_data_update.message);
+                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
                                         }
                                     );
                                 }
@@ -706,7 +703,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     nb_numbers = $selected_checkboxes.size();
 
                 if(nb_numbers > 0) {
-                    winkstart.confirm('Are you sure you want to remove the '+nb_numbers+' number(s) selected from this PBX?', function() {
+                    winkstart.confirm(_t('pbxs_manager', 'are_you_sure_you_want_to_remove') + nb_numbers + _t('pbxs_manager', 'numbers_selected_from_this_pbx'), function() {
                             var array_DIDs = [];
 
                             $selected_checkboxes.each(function() {
@@ -741,7 +738,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     );
                 }
                 else {
-                    winkstart.alert('You didn\'t select any number to delete');
+                    winkstart.alert(_t('pbxs_manager', 'you_didnt_select'));
                 }
             });
 
@@ -753,6 +750,9 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         render_cnam_dialog: function(cnam_data, callback) {
+			cnam_data._t = function(param){
+				return window.translate['pbxs_manager'][param];
+			};
             var THIS = this,
                 popup_html = THIS.templates.cnam_dialog.tmpl(cnam_data || {}),
                 popup;
@@ -770,7 +770,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Edit CID'
+                title: _t('pbxs_manager', 'edit_cid_title')
             });
         },
 
@@ -785,7 +785,12 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 }
             });
 
-            var popup_html = THIS.templates.move_number_dialog.tmpl({ servers: servers });
+            var popup_html = THIS.templates.move_number_dialog.tmpl({
+				servers: servers,
+				_t: function(param){
+					return window.translate['pbxs_manager'][param];
+				}
+			});
 
             $('.move', popup_html).click(function(ev) {
                 ev.preventDefault();
@@ -809,13 +814,17 @@ winkstart.module('pbxs', 'pbxs_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: 'Move selected numbers to another PBX'
+                title: _t('pbxs_manager', 'move_selected_numbers_title')
             });
         },
 
         render_assign_number_dialog: function(index, callback) {
             var THIS = this,
-                popup_html = THIS.templates.assign_number_dialog.tmpl(),
+                popup_html = THIS.templates.assign_number_dialog.tmpl({
+					_t: function(param){
+						return window.translate['pbxs_manager'][param];
+					}
+				}),
                 popup;
 
             THIS.setup_assign_number_table(popup_html);
@@ -845,7 +854,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
             THIS.list_available_numbers(function() {
                 popup = winkstart.dialog(popup_html, {
-                    title: 'Assign your available phone numbers to this PBX'
+                    title: _t('pbxs_manager', 'assign_your_available_phone_title')
                 });
             });
         },
@@ -855,12 +864,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 tmpl_data = {
                     radio: (failover_data || {}).e164 ? 'number' : ((failover_data || {}).sip ? 'sip' : ''),
                     failover: (failover_data || {}).e164 || (failover_data || {}).sip || '',
-                    phone_number: failover_data.phone_number || ''
+                    phone_number: failover_data.phone_number || '',
+					_t: function(param){
+						return window.translate['pbxs_manager'][param];
+					}
                 },
                 popup_html = THIS.templates.failover_dialog.tmpl(tmpl_data),
                 popup,
                 result,
-                popup_title = failover_data.phone_number ? 'Setup Failover for ' + failover_data.phone_number : 'Setup Failover';
+                popup_title = failover_data.phone_number ? _t('pbxs_manager', 'setup_failover_for') + failover_data.phone_number : _t('pbxs_manager', 'setup_failover');
 
             $('.radio_block input[type="radio"]', popup_html).click(function() {
                 $('.radio_block input[type="text"]', popup_html).hide();
@@ -897,7 +909,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     popup.dialog('close');
                 }
                 else {
-                    winkstart.alert('Invalid Failover Number, please type it again.');
+                    winkstart.alert(_t('pbxs_manager', 'invalid_failover_number'));
                 }
             });
 
@@ -917,6 +929,9 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         render_e911_dialog: function(e911_data, callback) {
+			e911_data._t = function(param){
+				return window.translate['pbxs_manager'][param];
+			};
             var THIS = this,
                 popup_html = THIS.templates.e911_dialog.tmpl(e911_data || {}),
                 popup;
@@ -953,7 +968,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             });
 
             popup = winkstart.dialog(popup_html, {
-                title: e911_data.phone_number ? 'Edit Location for ' + e911_data.phone_number : 'Edit 911 Location',
+                title: e911_data.phone_number ? _t('pbxs_manager', 'edit_location_for') + e911_data.phone_number : _t('pbxs_manager', 'edit_911_location'),
                 width: '465px'
             });
         },
@@ -971,7 +986,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         $.each(data, function(key, val) {
                             new_list.push({
                                 id: i,
-                                title: val.server_name || '(no name)'
+                                title: val.server_name || _t('pbxs_manager', 'no_name')
                             });
                             i++;
                         });
@@ -987,7 +1002,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 $('#pbxs_manager-listpanel', parent)
                     .empty()
                     .listpanel({
-                        label: 'PBXs',
+                        label: _t('pbxs_manager', 'pbxs_label'),
                         identifier: 'pbxs_manager-listview',
                         new_entity_label: _t('pbxs_manager', 'add_server_label'),
                         data: map_crossbar_data(data),
@@ -1109,7 +1124,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         'bSortable': false
                     },
                     {
-                        'sTitle': 'Phone Number'
+                        'sTitle': _t('pbxs_manager', 'phone_number_stitle')
                     }
                 ];
 
@@ -1146,18 +1161,18 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'Phone Number'
+                    'sTitle': _t('pbxs_manager', 'phone_number_stitle')
                 },
                 {
-                    'sTitle': 'Failover',
+                    'sTitle': _t('pbxs_manager', 'failover_stitle'),
                     'fnRender': function(obj) {
                         var failover = 'failover ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ failover  +'">Failover</a>';
+                        return '<a class="'+ failover  +'">' + _t('pbxs_manager', 'failover') + '</a>';
                     },
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'Caller-ID',
+                    'sTitle': _t('pbxs_manager', 'caller_id_stitle'),
                     'fnRender': function(obj) {
                         var cid = 'cid ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
                         return '<a class="'+ cid  +'">CID</a>';
@@ -1173,7 +1188,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     'bSortable': false
                 },
                 {
-                    'sTitle': 'State',
+                    'sTitle': _t('pbxs_manager', 'state_stitle'),
                     'fnRender': function(obj) {
                         var state = obj.aData[obj.iDataColumn].replace('_',' ');
                         return state.charAt(0).toUpperCase() + state.substr(1);

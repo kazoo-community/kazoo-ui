@@ -57,7 +57,7 @@ winkstart.module('voip', 'account', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Account Details',
+            label: _t('account', 'account_details_label'),
             icon: 'account',
             weight: '0'
         });
@@ -134,11 +134,11 @@ winkstart.module('voip', 'account', {
                                 _data.data.unshift(
                                     {
                                         id: '',
-                                        name: _t(THIS.module, 'default_music')
+                                        name: _t('account', 'default_music')
                                     },
                                     {
                                         id: 'silence_stream://300000',
-                                        name: _t(THIS.module, 'silence')
+                                        name: _t('account', 'silence')
                                     }
                                 );
 
@@ -297,7 +297,7 @@ winkstart.module('voip', 'account', {
                         THIS.save_account(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('account', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -305,7 +305,7 @@ winkstart.module('voip', 'account', {
             $('.account-delete', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
+                winkstart.confirm(_t('account', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });

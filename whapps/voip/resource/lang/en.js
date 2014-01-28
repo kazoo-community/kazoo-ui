@@ -5,6 +5,5 @@ window.translate['resource'] = {
 	account_carrier_tip: "Route calls to the phone network through a configured SIP provider, Google Voice or physical digital/analog line",
 	use_carriers_from_specific_account: "Use carriers from a specific account",
 	account_id: "Account ID",
-	account_carrier_title: "Account Carrier",
-	
+	account_carrier_title: "Account Carrier"
 };

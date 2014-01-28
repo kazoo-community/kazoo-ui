@@ -20,4 +20,14 @@ window.translate['config'] = {
 	please_confirm_title: "Пожалуйста, подтвердите",	//confirm title dialog
 	WARNING: "ПРЕДУПРЕЖДЕНИЕ",
 	
+	/*-------------category actions--------*/
+	basic_cat: "Basic",
+	advanced_cat: "Advanced",
+	call_forwarding_cat: "Call Forwarding",
+	caller_id_cat: "Caller ID",
+	call_recording_cat: "Call Recording",
+	call_center_cat: "Call-Center",
+	hotdesking_cat: "Hotdesking",
+	time_of_day_cat: "Time Of Day",
+	/*-------------------------------------*/
 };

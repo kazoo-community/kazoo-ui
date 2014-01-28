@@ -503,7 +503,7 @@ winkstart.module('voip', 'menu', {
                 'menu[id=*]': {
                     name: _t('menu', 'menu'),
                     icon: 'menu1',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'menu',
                     tip: _t('menu', 'menu_tip'),
                     data: {

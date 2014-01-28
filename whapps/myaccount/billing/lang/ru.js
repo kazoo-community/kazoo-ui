@@ -14,4 +14,14 @@ window.translate['billing'] = {
 	phone: "Phone",
 	edit: "Edit",
 	save: "Save",
+	credit_card_updated: "Credit card updated!",
+	the_following_errors_occurred: "The following errors occurred:",
+	there_was_an_unspecified_server_error: "There was an unspecified server error, please try again later.",
+	billing_title: "Billing",
+	date_stitle: "Date",
+	status_stitle: "Status",
+	amount_stitle: "Amount ($)",
+	subscription_stitle: "Subscription",
+	discount_stitle: "Discount ($)",
+	billing_label: "Billing"
 };

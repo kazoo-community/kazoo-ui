@@ -581,7 +581,7 @@ winkstart.module('voip', 'directory', {
                 'directory[id=*]': {
                     name: _t('directory', 'directory'),
                     icon: 'book',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'directory',
                     tip: _t('directory', 'directory_tip'),
                     data: {
