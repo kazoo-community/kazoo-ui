@@ -46,7 +46,7 @@ winkstart.module('voip', 'featurecode', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: this.__module,
-            label: 'Feature Codes',
+            label: _t('featurecode', 'feature_codes_label'),
             icon: 'sip',
             weight: '95'
         });
@@ -90,8 +90,14 @@ winkstart.module('voip', 'featurecode', {
                         }
                     });
 
-                    var data = {'categories': THIS.categories, 'label':'data' },
-                        featurecode_html = THIS.templates.featurecode.tmpl(data);
+                    var data = {
+						'categories': THIS.categories,
+						'label':'data',
+						_t: function(param){
+							return window.translate['featurecode'][param];
+						}
+					},
+					featurecode_html = THIS.templates.featurecode.tmpl(data);
 
                     winkstart.accordion(featurecode_html);
 
@@ -159,7 +165,7 @@ winkstart.module('voip', 'featurecode', {
                 count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
             if(count == 0) {
-                winkstart.alert('info','Nothing to save');
+                winkstart.alert('info', _t('featurecode', 'nothing_to_save'));
                 return;
             }
 
@@ -243,8 +249,14 @@ winkstart.module('voip', 'featurecode', {
                             }
                         }
                     });
-                    var data = {'categories': THIS.categories, 'label':'data' },
-                        featurecode_html = THIS.templates.featurecode.tmpl(data);
+                    var data = {
+						'categories': THIS.categories,
+						'label':'data',
+						_t: function(param){
+							return window.translate['featurecode'][param];
+						}
+					},
+					featurecode_html = THIS.templates.featurecode.tmpl(data);
 
                     $('#ws-content')
                         .empty()
@@ -331,9 +343,9 @@ winkstart.module('voip', 'featurecode', {
 
             $.extend(featurecodes, {
                'call_forward[action=activate]': {
-                    name: 'Enable Call-Forward',
+                    name: _t('featurecode', 'enable_call_forward'),
                     icon: 'phone',
-                    category: 'Call-Forward',
+                    category: _t('featurecode', 'call_forward_cat'),
                     module: 'call_forward',
                     number_type: 'number',
                     data: {
@@ -347,9 +359,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'call_forward[action=deactivate]': {
-                    name: 'Disable Call-Forward',
+                    name: _t('featurecode', 'disable_call_forward'),
                     icon: 'phone',
-                    category: 'Call-Forward',
+                    category: _t('featurecode', 'call_forward_cat'),
                     module: 'call_forward',
                     number_type: 'number',
                     data: {
@@ -363,9 +375,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'call_forward[action=toggle]': {
-                    name: 'Toggle Call-Forward',
+                    name: _t('featurecode', 'toggle_call_forward'),
                     icon: 'phone',
-                    category: 'Call-Forward',
+                    category: _t('featurecode', 'call_forward_cat'),
                     module: 'call_forward',
                     number_type: 'pattern',
                     data: {
@@ -379,9 +391,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'call_forward[action=update]': {
-                    name: 'Update Call-Forward',
+                    name: _t('featurecode', 'update_call_forward'),
                     icon: 'phone',
-                    category: 'Call-Forward',
+                    category: _t('featurecode', 'call_forward_cat'),
                     module: 'call_forward',
                     number_type: 'number',
                     data: {
@@ -396,9 +408,9 @@ winkstart.module('voip', 'featurecode', {
                 },
 
                 'hotdesk[action=login]': {
-                    name: 'Enable Hot Desking',
+                    name: _t('featurecode', 'enable_hot_desking'),
                     icon: 'phone',
-                    category: 'Hot-Desking',
+                    category: _t('featurecode', 'hot_desking_cat'),
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {
@@ -412,9 +424,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'hotdesk[action=logout]': {
-                    name: 'Disable Hot Desking',
+                    name: _t('featurecode', 'disable_hot_desking'),
                     icon: 'phone',
-                    category: 'Hot-Desking',
+                    category: _t('featurecode', 'hot_desking_cat'),
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {
@@ -428,9 +440,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'hotdesk[action=toggle]': {
-                    name: 'Toggle Hot Desking',
+                    name: _t('featurecode', 'toggle_hot_desking'),
                     icon: 'phone',
-                    category: 'Hot-Desking',
+                    category: _t('featurecode', 'hot_desking_cat'),
                     module: 'hotdesk',
                     number_type: 'number',
                     data: {
@@ -444,9 +456,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'voicemail[action=check]': {
-                    name: 'Check Voicemail',
+                    name: _t('featurecode', 'check_voicemail'),
                     icon: 'phone',
-                    category: 'Miscellaneous',
+                    category: _t('featurecode', 'miscellaneous_cat'),
                     module: 'voicemail',
                     number_type: 'number',
                     data: {
@@ -460,8 +472,8 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'voicemail[action="direct"]': {
-                    name: 'Direct to Voicemail',
-                    category: 'Miscellaneous',
+                    name: _t('featurecode', 'direct_to_voicemail'),
+                    category: _t('featurecode', 'miscellaneous_cat'),
                     module: 'voicemail',
                     number_type: 'pattern',
                     data: {
@@ -475,9 +487,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'intercom': {
-                    name: 'Intercom',
+                    name: _t('featurecode', 'intercom'),
                     icon: 'phone',
-                    category: 'Miscellaneous',
+                    category: _t('featurecode', 'miscellaneous_cat'),
                     module: 'intercom',
                     number_type: 'pattern',
                     data: {
@@ -490,9 +502,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'privacy[mode=full]': {
-                    name: 'Privacy',
+                    name: _t('featurecode', 'privacy'),
                     icon: 'phone',
-                    category: 'Miscellaneous',
+                    category: _t('featurecode', 'miscellaneous_cat'),
                     module: 'privacy',
                     number_type: 'pattern',
                     data: {
@@ -506,9 +518,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'park_and_retrieve': {
-                    name: 'Park and Retrieve',
+                    name: _t('featurecode', 'park_and_retrieve'),
                     icon: 'phone',
-                    category: 'Parking',
+                    category: _t('featurecode', 'parking_cat'),
                     module: 'park',
                     number_type: 'pattern',
                     data: {
@@ -522,9 +534,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'valet': {
-                    name: 'Valet',
+                    name: _t('featurecode', 'valet'),
                     icon: 'phone',
-                    category: 'Parking',
+                    category: _t('featurecode', 'parking_cat'),
                     module: 'park',
                     number_type: 'number',
                     data: {
@@ -538,9 +550,9 @@ winkstart.module('voip', 'featurecode', {
                     }
                 },
                 'retrieve': {
-                    name: 'Retrieve',
+                    name: _t('featurecode', 'retrieve'),
                     icon: 'phone',
-                    category: 'Parking',
+                    category: _t('featurecode', 'parking_cat'),
                     module: 'park',
                     number_type: 'pattern',
                     data: {

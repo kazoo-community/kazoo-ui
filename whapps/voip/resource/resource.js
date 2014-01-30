@@ -96,7 +96,7 @@ winkstart.module('voip', 'resource', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Carriers',
+            label: _t('resource', 'carriers_label'),
             icon: 'resource',
             weight: '15',
             category: 'advanced'
@@ -211,8 +211,8 @@ winkstart.module('voip', 'resource', {
                         rules: {
                             '^\\+{0,1}1{0,1}(\\d{10})$': 'US - 10 digits',
                             '^(\\d{7})$': 'US - 7 digits',
-                            '.*': 'No match',
-                            'custom': 'Custom'
+                            '.*': _t('resource', 'no_match'),
+                            'custom': _t('resource', 'custom')
                         }
                     },
                     functions: {
@@ -275,6 +275,9 @@ winkstart.module('voip', 'resource', {
         },
 
         render_resource: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['resource'][param];
+			};
             var THIS = this,
                 resource_html = THIS.templates.edit.tmpl(data),
                 check_rule_and_hide = function() {
@@ -312,7 +315,7 @@ winkstart.module('voip', 'resource', {
                         THIS.save_resource(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('resource', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -320,7 +323,7 @@ winkstart.module('voip', 'resource', {
             $('.resource-delete', resource_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this resource?', function() {
+                winkstart.confirm(_t('resource', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_resource(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -358,7 +361,7 @@ winkstart.module('voip', 'resource', {
                     from: 0,
                     to: 100,
                     step: 1,
-                    scale: ['Highest', 'High', 'Normal', 'Low', 'Lowest'],
+                    scale: [_t('resource', 'highest'), _t('resource', 'high'), _t('resource', 'normal'), _t('resource', 'low'), _t('resource', 'lowest')],
                     limits: false
                 });
             };
@@ -421,9 +424,9 @@ winkstart.module('voip', 'resource', {
                     }
 
                     var options = {};
-                    options.label = 'Carriers Module';
+                    options.label = _t('resource', 'carriers_module_label');
                     options.identifier = 'resource-listview';
-                    options.new_entity_label = 'Add Carrier';
+                    options.new_entity_label = _t('resource', 'add_carrier_label');
 
                     resources = [].concat(map_crossbar_data(local_data, 'local'), map_crossbar_data(global_data, 'global'));
                     resources.sort(function(a, b) {
@@ -529,7 +532,7 @@ winkstart.module('voip', 'resource', {
                         THIS.render_landing_resource(parent, module_name);
                     },
                     function(json, status) {
-                        winkstart.alert('Error: ' + status);
+                        winkstart.alert(_t('resource', 'error') + status);
                     }
                 );
             });
@@ -547,7 +550,7 @@ winkstart.module('voip', 'resource', {
                                 THIS.update_nomatch_route(parent, module_name);
                             }
                             else {
-                                winkstart.confirm('Are you sure you want to use a different carrier?', function() {
+                                winkstart.confirm(_t('resource', 'are_you_sure_you_want_to_use'), function() {
                                     module_name = 'resources';
                                     THIS.update_nomatch_route(parent, module_name);
                                 });
@@ -563,7 +566,13 @@ winkstart.module('voip', 'resource', {
                     });
                 },
                 display_page = function() {
-                    resource_html = THIS.templates.landing_resource.tmpl({ company_name: winkstart.config.company_name || false, resource_type: resource_type });
+                    resource_html = THIS.templates.landing_resource.tmpl({
+						company_name: winkstart.config.company_name || false,
+						resource_type: resource_type,
+						_t: function(param){
+							return window.translate['resource'][param];
+						}
+					});
                     init_events();
                     if(resource_type === 'resources') {
                         var list_resource_html = THIS.templates.resource.tmpl();
