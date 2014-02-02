@@ -28,6 +28,6 @@ window.translate['config'] = {
 	call_recording_cat: "Call Recording",
 	call_center_cat: "Call-Center",
 	hotdesking_cat: "Hotdesking",
-	time_of_day_cat: "Time Of Day",
+	time_of_day_cat: "Time Of Day"
 	/*-------------------------------------*/
 };

@@ -21,13 +21,13 @@ window.translate['config'] = {
 	WARNING: "ПРЕДУПРЕЖДЕНИЕ",
 	
 	/*-------------category actions--------*/
-	basic_cat: "Basic",
-	advanced_cat: "Advanced",
-	call_forwarding_cat: "Call Forwarding",
+	basic_cat: "Базовые",
+	advanced_cat: "Расширенные",
+	call_forwarding_cat: "Переадресация звонков",
 	caller_id_cat: "Caller ID",
-	call_recording_cat: "Call Recording",
-	call_center_cat: "Call-Center",
-	hotdesking_cat: "Hotdesking",
-	time_of_day_cat: "Time Of Day",
+	call_recording_cat: "Запись разговоров",
+	call_center_cat: "Call-центр",
+	hotdesking_cat: "Присвоение телефонов",
+	time_of_day_cat: "Время дня"
 	/*-------------------------------------*/
 };

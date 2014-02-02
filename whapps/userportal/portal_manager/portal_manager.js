@@ -580,6 +580,7 @@ winkstart.module('userportal', 'portal_manager', {
             $('#searchLink', user_cdr_html).click(function() {
                 var start_date = $('#startDate', user_cdr_html).val(),
                     end_date = $('#endDate', user_cdr_html).val(),
+                    /* I18N - to be fixed for national date formats */
                     regex = /^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$/;
 
                 winkstart.table.user_cdr.fnClearTable();

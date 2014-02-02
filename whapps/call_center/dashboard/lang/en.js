@@ -17,6 +17,6 @@ window.translate['dashboard'] = {
 	eavesdrop_request_failed: "Eavesdrop Request failed. Error #",
 	devices_title: "Devices",
 	hide_queues_html: "Hide Queues",
-	show_queues_html: "Show Queues",
+	show_queues_html: "Show Queues"
 	
 };

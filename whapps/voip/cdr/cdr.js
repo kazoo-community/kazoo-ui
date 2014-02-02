@@ -357,6 +357,7 @@ function(args) {
 		$('#searchLink', cdr_html).click(function() {
             var start_date = $('#startDate', cdr_html).val(),
                 end_date = $('#endDate', cdr_html).val(),
+               /* I18N - need re-writing for national date formats */
                 regex = /^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$/;
 
             winkstart.table.cdr.fnClearTable();

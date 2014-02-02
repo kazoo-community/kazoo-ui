@@ -512,7 +512,7 @@ winkstart.module('voip', 'groups', {
                     $('#groups-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: _t('groups', 'directories_label'),
+                            label: _t('groups', 'groups_label'),
                             identifier: 'groups-listview',
                             new_entity_label: _t('groups', 'add_group_label'),
                             data: map_crossbar_data(data.data),

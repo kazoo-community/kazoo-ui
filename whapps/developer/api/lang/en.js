@@ -39,5 +39,5 @@ window.translate['api'] = {
 	copy_paste_curl_command: "Copy/Paste CURL Command",
 	hide_advanced: "Hide Advanced",
 	something_went_wrong: "Something went wrong with the schema!",
-	apis_developer_label: "APIs Developer",
+	apis_developer_label: "APIs Developer"
 };

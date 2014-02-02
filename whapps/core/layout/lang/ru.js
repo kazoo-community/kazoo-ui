@@ -1,7 +1,7 @@
 window.translate['layout'] = {
-	welcome_to_the: "Welcome to the",
-	platform: "platform.",
-	learn_more: "LEARN MORE",
-	powered_by: "Powered by 2600hz",
-	please_wait: "Please wait...",
+	welcome_to_the: "Добро пожаловать в платформу",
+	platform: "",
+	learn_more: "УЗНАТЬ БОЛЬШЕ",
+	powered_by: "Работает на платформе 2600hz",
+	please_wait: "Ожидайте..."
 };

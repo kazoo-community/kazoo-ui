@@ -37,6 +37,6 @@ window.translate['portal_manager'] = {
 	dates_in_the_filter: "Dates in the filter are not in the proper format (mm/dd/yyyy)",
 	message_index: "Message Index",
 	voicemail_box_id: "Voicemail Box ID",
-	are_you_sure_that_you_want_to_delete: "Are you sure that you want to delete the selected voicemail message(s)?",
+	are_you_sure_that_you_want_to_delete: "Are you sure that you want to delete the selected voicemail message(s)?"
 	
 };

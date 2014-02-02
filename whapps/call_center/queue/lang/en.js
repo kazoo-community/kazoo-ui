@@ -92,5 +92,5 @@ window.translate['queue'] = {
 	edit_queue_title: "Edit Queue",
 	call_center_category: "Call-Center",
 	seconds: " seconds",
-	please_enter_a_valid_number_of_seconds: "Please enter a valid number of seconds. It needs to be greater than 0.",
+	please_enter_a_valid_number_of_seconds: "Please enter a valid number of seconds. It needs to be greater than 0."
 };
