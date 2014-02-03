@@ -22,5 +22,21 @@ window.translate['voip_queue'] = {
 	save: "Save",
 	connect_caller_to_queue: "Connect caller to queue...",
 	queue: "Queue",
-	edit_queue_options: "Edit queue options"
+	edit_queue_options: "Edit queue options",
+	there_is_currently_no_user: "There is currently no user in this queue",
+	queue_label: "Queue",
+	first_name: "First Name",
+	last_name: "Last Name",
+	there_were_errors_on_the_form: "There were errors on the form, please correct!",
+	are_you_sure_you_want_to_delete: "Are you sure you want to delete this queue?",
+	no_name: "(no name)",
+	queues_label: "Queues",
+	add_queue_label: "Add Queue",
+	ask_the_caller_to_input: "Ask the caller to input the first letters of the name of the person that he wants to reach.",
+	queue_title: "Queue",
+	agent_resume: "Agent Resume",
+	agent_break: "Agent Break",
+	logout_agent: "Logout Agent",
+	login_agent: "Login Agent",
+	toggle_agent: "Toggle Agent"
 };
