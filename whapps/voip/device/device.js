@@ -149,7 +149,7 @@ winkstart.module('voip', 'device', {
             label: _t('device', 'devices_label'),
             icon: 'device',
             weight: '20',
-            category: 'advanced'
+            category: _t('device', 'advanced')
         });
     },
 

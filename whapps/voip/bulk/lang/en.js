@@ -3,6 +3,8 @@ window.translate['bulk'] = {
 	select_users_or_and_devices: "1) Select users or/and devices in the table.",
 	choose_what_fields: "2) Choose what fields you would like to update for the selected devices/users.",
 	press_ok: "3) Press OK",
+	basic: "Basic",
+	advanced: "Advanced",
 	miscellaneous: "Miscellaneous",
 	music_on_hold: "Music on Hold",
 	timezone: "Timezone",

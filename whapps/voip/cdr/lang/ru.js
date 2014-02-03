@@ -1,6 +1,8 @@
 window.translate['cdr'] = {
 	key: "Код",
 	value: "Значение",
+	basic: "Базовые",
+	advanced: "Расширенные",
 	call_history_label: "История звонков",
 	empty: "(пусто)",
 	no_owner: "Нет владельца",

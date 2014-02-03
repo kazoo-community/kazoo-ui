@@ -68,7 +68,7 @@ winkstart.module('voip', 'directory', {
             label: _t('directory', 'directory_label'),
             icon: 'book',
             weight: '55',
-            category: 'advanced'
+            category: _t('directory', 'advanced')
         });
     },
 

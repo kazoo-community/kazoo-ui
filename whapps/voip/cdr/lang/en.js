@@ -1,6 +1,8 @@
 window.translate['cdr'] = {
 	key: "Key",
 	value: "Value",
+	basic: "Basic",
+	advanced: "Advanced",
 	call_history_label: "Call History",
 	empty: "(empty)",
 	no_owner: "No Owner",

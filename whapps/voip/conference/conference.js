@@ -66,7 +66,7 @@ winkstart.module('voip', 'conference', {
             label: _t('conference', 'conferences_label'),
             icon: 'conference',
             weight: '05',
-            category: 'advanced'
+            category: _t('conference', 'advanced')
         });
     },
     {

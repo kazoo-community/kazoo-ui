@@ -66,7 +66,7 @@ winkstart.module('voip', 'groups', {
             label: _t('groups', 'groups_label'),
             icon: 'user',
             weight: '60',
-            category: 'advanced'
+            category: _t('groups', 'advanced')
         });
     },
 

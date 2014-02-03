@@ -75,7 +75,7 @@ winkstart.module('voip', 'menu', {
             label: _t('menu', 'menus_label'),
             icon: 'menu1',
             weight: '40',
-            category: 'advanced'
+            category: _t('menu', 'advanced')
         });
     },
 

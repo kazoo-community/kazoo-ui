@@ -49,7 +49,7 @@ function(args) {
 		label: _t('cdr', 'call_history_label'),
 		icon: 'cdr',
         weight: '50',
-        category: 'advanced'
+        category: _t('cdr', 'advanced')
 	});
 },
 {

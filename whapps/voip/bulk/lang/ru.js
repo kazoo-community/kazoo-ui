@@ -3,6 +3,8 @@ window.translate['bulk'] = {
 	select_users_or_and_devices: "1) Выберите пользователей и/или устройства в таблице.",
 	choose_what_fields: "2) Выберите, какое поле вы собираетесь изменить у выбранных пользователей и/или устройств.",
 	press_ok: "3) Нажмите OK",
+	basic: "Базовые",
+	advanced: "Расширенные",
 	miscellaneous: "Разное",
 	music_on_hold: "Музыка на удержании",
 	timezone: "Часовой пояс",

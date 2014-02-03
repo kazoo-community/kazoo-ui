@@ -62,7 +62,7 @@ winkstart.module('voip', 'timeofday', {
             label: _t('timeofday', 'time_of_day_label'),
             icon: 'timeofday',
             weight: '25',
-            category: 'advanced'
+            category: _t('timeofday', 'advanced')
         });
     },
 
