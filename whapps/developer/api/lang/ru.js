@@ -26,7 +26,7 @@ window.translate['api'] = {
 	hotdesk: "Хот-дескинг",
 	servers_deployment: "Внедрение",
 	servers_log: "Журналы",
-	try_it: "Попробуйте"
+	try_it: "Попробуйте",
 	get: "GET",
 	get_all: "GET всё",
 	update: "Обновить",
@@ -40,5 +40,4 @@ window.translate['api'] = {
 	hide_advanced: "Скрыть расширенные",
 	something_went_wrong: "Что-то пошло не так со схемой!",
 	apis_developer_label: "Разработчик API"
-
-}
+};
