@@ -1,4 +1,4 @@
 window.translate['nav'] = {
 	css_style_css: "css/style.css",
-	sign_out: "Выйти"
+	sign_out: "Р’С‹Р№С‚Рё"
 };
