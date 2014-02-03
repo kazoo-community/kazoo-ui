@@ -1,6 +1,13 @@
-( function(winkstart, amplify, $) {
-
+//window.translate = [];
+( function(winkstart, amplify, language, $) {
+	
+	_t = function(module, param){
+		
+		return window.translate[module][param];
+	};
+	
     winkstart.config =  {
+		language: language,
         /* Was winkstart.debug */
         debug: false,
 
@@ -18,54 +25,54 @@
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     pbxs: {
                         label: 'PBX Connector',
                         icon: 'device',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://api.2600hz.com:8000/v1'
+                default_api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             'reseller': {
                 apps: {
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     accounts: {
                         label: 'Accounts',
                         icon: 'account',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://api.2600hz.com:8000/v1'
+                default_api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             'small_office': {
                 apps: {
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
@@ -76,48 +83,48 @@
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://api.2600hz.com:8000/v1'
+                default_api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             'api_developer': {
                 apps: {
                     developer: {
                         label: 'Developer Tool',
                         icon: 'connectivity',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://api.2600hz.com:8000/v1'
+                default_api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             'voip_minutes': {
                 apps: {
                     pbxs: {
                         label: 'PBX Connector',
                         icon: 'device',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     },
                     numbers: {
                         label: 'Number Manager',
                         icon: 'menu1',
-                        api_url: 'http://api.2600hz.com:8000/v1'
+                        api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://api.2600hz.com:8000/v1'
+                default_api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             }
         },
 
@@ -150,17 +157,17 @@
             cluster: {
                label: 'Cluster Manager',
                icon: 'cluster_manager',
-               api_url: 'http://api.2600hz.com:8000/v1'
+               api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             voip: {
                 label: 'Trial PBX',
                 icon: 'phone',
-                api_url: 'http://api.2600hz.com:8000/v1'
+                api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             },
             accounts: {
                 label: 'Accounts',
                 icon: 'account',
-                api_url: 'http://api.2600hz.com:8000/v1'
+                api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1'
             }
         },
 
@@ -170,57 +177,57 @@
             learn_more: 'http://www.2600hz.com/'
         },
 
-        default_api_url: 'http://api.2600hz.com:8000/v1',
+        default_api_url: 'http://api.2600hz.com:8000/v1', //'http://api.2600hz.com:8000/v1',
 
         available_apps: {
             'voip': {
                 id: 'voip',
-                label: 'Hosted PBX',
+                label: _t('config', 'voip_label'),
                 icon: 'device',
-                desc: 'Manage vmboxes, callflows ...'
+                desc: _t('config', 'voip_desc')
             },
             'cluster': {
                 id: 'cluster',
-                label: 'Cluster Manager',
+                label: _t('config', 'cluster_label'),
                 icon: 'cluster_manager',
-                desc: 'Manage Servers and Infrastructure'
+                desc: _t('config', 'cluster_desc')
             },
             'userportal': {
                 id: 'userportal',
-                label: 'User Portal',
+                label: _t('config', 'userportal_label'),
                 icon: 'user',
-                desc: 'Let the user manage is own vmbox ...'
+                desc: _t('config', 'userportal_desc')
             },
             'accounts': {
                 id: 'accounts',
-                label: 'Accounts',
+                label: _t('config', 'accounts_label'),
                 icon: 'account',
-                desc: 'Manage your sub-accounts'
+                desc: _t('config', 'accounts_desc')
             },
             'developer': {
                 id: 'developer',
-                label: 'Developer',
+                label: _t('config', 'developer_label'),
                 icon: 'connectivity',
-                desc: 'Api Developer Tool'
+                desc: _t('config', 'developer_desc')
             },
             'pbxs': {
                 id: 'pbxs',
-                label: 'PBX Connector',
+                label:  _t('config', 'pbxs_label'),
                 icon: 'device',
-                desc: 'Manage your pbxs'
+                desc: _t('config', 'pbxs_desc')
             },
             'numbers': {
                 id: 'numbers',
-                label: 'Number Manager',
+                label:  _t('config', 'numbers_label'),
                 icon: 'menu1',
-                desc: 'Manage your numbers'
+                desc: _t('config', 'numbers_desc')
             }
         }
     };
 
     winkstart.apps = {
         'auth' : {
-            api_url: 'http://api.2600hz.com:8000/v1',
+            api_url: 'http://api.2600hz.com:8000/v1' //'http://api.2600hz.com:8000/v1',
             /* These are some settings that are set automatically. You are free to override them here.
             account_id: null,
             auth_token: null,
@@ -233,4 +240,4 @@
 
     amplify.cache = false;
 
-})(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
+})(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, window.language, jQuery);

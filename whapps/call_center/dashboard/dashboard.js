@@ -138,7 +138,13 @@ winkstart.module('call_center', 'dashboard', {
 
         render_global_data: function(param_data, id, _parent) {
             var THIS = this,
-                data = $.extend({}, param_data, { show_queues: THIS.show_queues, hide_logout: THIS.hide_logout }),
+                data = $.extend({}, param_data, {
+					show_queues: THIS.show_queues,
+					hide_logout: THIS.hide_logout,
+					_t: function(param){
+						return window.translate['dashboard'][param];
+					}
+				}),
                 agents_html = THIS.templates.agents_dashboard.tmpl(data),
                 queues_html = THIS.templates.queues_dashboard.tmpl(data),
                 calls_html = THIS.templates.calls_dashboard.tmpl(data),
@@ -381,7 +387,7 @@ winkstart.module('call_center', 'dashboard', {
                 });
 
             $('.add_flow', parent).empty()
-                                  .html('Call Waiting Log...');
+                                  .html(_t('dashboard', 'call_waiting_log'));
         },
 
         get_time_seconds: function(seconds) {
@@ -690,7 +696,15 @@ winkstart.module('call_center', 'dashboard', {
             THIS.clean_timers();
 
             THIS.fetch_all_data(true, function(data) {
-                dashboard_html = THIS.templates.dashboard.tmpl();
+				data._t = function(param){
+					return window.translate['dashboard'][param];
+				};
+				
+                dashboard_html = THIS.templates.dashboard.tmpl({
+					_t: function(param){
+						return window.translate['dashboard'][param];
+					}
+				});
 
                 THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
                 THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));
@@ -776,8 +790,11 @@ winkstart.module('call_center', 'dashboard', {
                 function(_data, status) {
                     var popup_html = THIS.templates.list_devices.tmpl({
                         objects: {
-                            items: _data.data,
-                        }
+                            items: _data.data
+                        },
+						_t: function(param){
+							return window.translate['dashboard'][param];
+						}
                     });
 
                     $('#ring', popup_html).click(function() {
@@ -801,7 +818,7 @@ winkstart.module('call_center', 'dashboard', {
                                 popup.dialog('close');
                             },
                             function(_data, status) {
-                                winkstart.alert('Eavesdrop Request failed. Error #'+status);
+                                winkstart.alert(_t('dashboard', 'eavesdrop_request_failed')+status);
                             }
                         );
                     });
@@ -811,7 +828,7 @@ winkstart.module('call_center', 'dashboard', {
                     });
 
                     popup = winkstart.dialog(popup_html, {
-                        title: 'Devices'
+                        title: _t('dashboard', 'devices_title')
                     });
                 }
             );
@@ -834,11 +851,11 @@ winkstart.module('call_center', 'dashboard', {
 
                 if($topbar.is(':hidden')) {
                     new_height = $listpanel.outerHeight() - $topbar.outerHeight() + 'px';
-                    $('.toggle-button', parent).html('Hide Queues');
+                    $('.toggle-button', parent).html(_t('dashboard', 'hide_queues_html'));
                 }
                 else {
                     new_height = $listpanel.outerHeight() + $topbar.outerHeight() + 'px';
-                    $('.toggle-button', parent).html('Show Queues');
+                    $('.toggle-button', parent).html(_t('dashboard', 'show_queues_html'));
                 }
 
                 $listpanel.css({'min-height': new_height, 'height': new_height });

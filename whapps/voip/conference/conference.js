@@ -63,10 +63,10 @@ winkstart.module('voip', 'conference', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: this.__module,
-            label: 'Conferences',
+            label: _t('conference', 'conferences_label'),
             icon: 'conference',
             weight: '05',
-            category: 'advanced'
+            category: _t('conference', 'advanced')
         });
     },
     {
@@ -263,6 +263,9 @@ winkstart.module('voip', 'conference', {
         },
 
         render_conference: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['conference'][param];
+			};
             var THIS = this,
                 conference_html = THIS.templates.edit.tmpl(data);
 
@@ -330,7 +333,7 @@ winkstart.module('voip', 'conference', {
                         THIS.save_conference(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('conference', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -338,7 +341,7 @@ winkstart.module('voip', 'conference', {
             $('.conference-delete', conference_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this conference?', function() {
+                winkstart.confirm(_t('conference', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -461,7 +464,7 @@ winkstart.module('voip', 'conference', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(name)'
+                                    title: val.name || _t('conference', 'name')
                                 });
                             });
                         }
@@ -476,9 +479,9 @@ winkstart.module('voip', 'conference', {
                 $('#conference-listpanel', parent)
                     .empty()
                     .listpanel({
-                        label: 'Conferences',
+                        label: _t('conference', 'conferences_label'),
                         identifier: 'conference-listview',
-                        new_entity_label: 'Add Conference',
+                        new_entity_label: _t('conference', 'add_conference_label'),
                         data: map_crossbar_data(data.data),
                         publisher: winkstart.publish,
                         notifyMethod: 'conference.edit',
@@ -521,7 +524,7 @@ winkstart.module('voip', 'conference', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit conference' : 'Create conference'
+                        title: (data.id) ? _t('conference', 'edit_conference') : _t('conference', 'create_conference')
                     });
                 }
             }, data_defaults);
@@ -532,11 +535,11 @@ winkstart.module('voip', 'conference', {
 
             $.extend(callflow_nodes, {
                 'conference[id=*]': {
-                    name: 'Conference',
+                    name: _t('conference', 'conference'),
                     icon: 'conference',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'conference',
-                    tip: 'Connect a caller to a Meet-Me conference bridge',
+                    tip: _t('conference', 'conference_tip'),
                     data: {
                         id: 'null'
                     },
@@ -568,6 +571,9 @@ winkstart.module('voip', 'conference', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.conference_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['conference'][param];
+                                    },
                                     items: data.data,
                                     selected: node.getMetadata('id') || '!'
                                 });
@@ -600,7 +606,7 @@ winkstart.module('voip', 'conference', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Conference',
+                                    title: _t('conference', 'conference'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -614,11 +620,11 @@ winkstart.module('voip', 'conference', {
                 },
 
                 'conference[]': {
-                    name: 'Conference Service',
+                    name: _t('conference', 'conference_service'),
                     icon: 'conference',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'conference',
-                    tip: 'Transfer the caller to the conference call service, prompting for both a conference number and a pin',
+                    tip: _t('conference', 'conference_service_tip'),
                     data: {},
                     rules: [
                         {

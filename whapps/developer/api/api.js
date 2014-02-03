@@ -34,7 +34,12 @@ winkstart.module('developer', 'api', {
     },
 
     function(args) {
+		_t = function(module, param){
+			return window.translate[module][param];
+		};
         var THIS = this;
+		
+		THIS.module = 'api';
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
@@ -148,7 +153,10 @@ winkstart.module('developer', 'api', {
                         api_url: winkstart.config.fake_api_url || winkstart.apps['developer'].api_url,
                         auth_token: winkstart.apps['developer'].auth_token,
                         account_id: winkstart.apps['developer'].account_id
-                    }
+                    },
+					_t: function(param){
+						return window.translate['api'][param];
+					}
                 }),
                 input_id_html = THIS.templates.input_id.tmpl();
 
@@ -171,7 +179,10 @@ winkstart.module('developer', 'api', {
                             title: THIS.apis[data.data.id].title,
                             apis: THIS.apis[data.data.id].api,
                             ressources: THIS.apis[data.data.id].ressources,
-                            rests: THIS.rest
+                            rests: THIS.rest,
+							_t: function(param){
+								return window.translate['api'][param];
+							}
                         });
 
                         not_required_schema_html = THIS.templates.schema.tmpl({
@@ -205,7 +216,7 @@ winkstart.module('developer', 'api', {
                                                     cursor: 'pointer'
                                                 })
                                                 .click(function() {
-                                                    prompt('Copy/Paste CURL Command', curl);
+                                                    prompt(_t('api', 'copy_paste_curl_command'), curl);
                                                 });
 
                                     $('#' + id_verb + ' .result_content', form_html)
@@ -240,12 +251,12 @@ winkstart.module('developer', 'api', {
                                 if(!state) {
                                     $(this)
                                         .data('state', true)
-                                        .text('Hide Advanced');
+                                        .text(_t('api', 'hide_advanced'));
                                     div.slideDown();
                                 } else {
                                      $(this)
                                         .data('state', false)
-                                        .text('Show Advanced');
+                                        .text(_t('api', 'show_advanced'));
                                     div.slideUp();
                                 }
                         });
@@ -263,7 +274,7 @@ winkstart.module('developer', 'api', {
                                 height: 'auto',
                                 width: 400,
                                 modal: true,
-                                title: 'API Information'
+                                title: _t('api', 'api_information')
                             });
                         });
 
@@ -371,7 +382,7 @@ winkstart.module('developer', 'api', {
                     callback(required, not_required, new_schema, schema);
                 }
             } catch(err) {
-                winkstart.alert('error', 'Something went wrong with the schema!')
+                winkstart.alert('error', _t('api', 'something_went_wrong'))
             }
         },
 
@@ -406,9 +417,9 @@ winkstart.module('developer', 'api', {
                     $('#api-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'APIs Developer',
+                            label: _t('api', 'apis_developer_label'),
                             identifier: 'api-listview',
-                            new_entity_label: 'APIs Developer',
+                            new_entity_label: _t('api', 'apis_developer'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'api.render',
@@ -470,55 +481,55 @@ winkstart.module('developer', 'api', {
                 },
                 normal_apis = {
                     menus: {
-                        title: 'Menus',
+                        title: _t('api', 'menus'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     vmboxes: {
-                        title: 'Voicemail Box',
+                        title: _t('api', 'vmboxes'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     callflows: {
-                        title: 'Callflows',
+                        title: _t('api', 'callflows'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     conferences: {
-                        title: 'Conferences',
+                        title: _t('api', 'conferences'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     media: {
-                        title: 'Media',
+                        title: _t('api', 'media'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     directories: {
-                        title: 'Directories',
+                        title: _t('api', 'directories'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     queues: {
-                        title: 'Queues',
+                        title: _t('api', 'queues'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     local_resources: {
-                        title: 'Local Resources',
+						title: _t('api', 'local_resources'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     global_resources: {
-                        title: 'Global Resources',
+                        title: _t('api', 'global_resources'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     temporal_rules: {
-                        title: 'Temporal Rules',
+                        title: _t('api', 'temporal_rules'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     phone_numbers: {
-                        title: 'Phone Numbers',
+                        title: _t('api', 'phone_numbers'),
                         verbs: ['get_all', 'post', 'delete']
                     },
                     limits: {
-                        title: 'Limits',
+                        title: _t('api', 'limits'),
                         verbs: ['get_all']
                     },
                     user_auth: {
-                        title: 'User Auth',
+                        title: _t('api', 'user_auth'),
                         verbs: ['put']
                     }
                 };
@@ -547,16 +558,16 @@ winkstart.module('developer', 'api', {
 
             THIS.apis = {
                 'devices': {
-                    title: 'Devices',
+                    title: _t(THIS.module, 'devices'),
                     api: {
                         'devices': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
-                            title: 'Devices',
+                            title: _t('api', 'devices'),
                             url: '/devices'
                         },
                         'devices_status': {
                             verbs: ['get_all'],
-                            title: 'Devices Status',
+                            title: _t('api', 'devices_status'),
                             url: '/devices/status'
                         }
                     },
@@ -594,21 +605,21 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'accounts': {
-                    title: 'Accounts',
+                    title: _t('api', 'accounts'),
                     api: {
                         'accounts': {
                             verbs: ['get', 'post'],
-                            title: 'Accounts',
+                            title: _t('api', 'accounts'),
                             url: '/accounts'
                         },
                         'accounts_children': {
                             verbs: ['get_all'],
-                            title: 'Accounts Children',
+                            title: _t('api', 'accounts_children'),
                             url: '/accounts/{account_id}/children'
                         },
                         'accounts_descendants': {
                             verbs: ['get_all'],
-                            title: 'Accounts Descendants',
+                            title: _t('api', 'accounts_descendants'),
                             url: '/accounts/{account_id}/descendants'
                         }
                     },
@@ -636,16 +647,16 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'users': {
-                    title: 'Users',
+                    title: _t(THIS.module, 'users'),
                     api: {
                         'users': {
                             verbs: ['get_all', 'get', 'put', 'post', 'delete'],
-                            title: 'Users',
+                            title: _t('api', 'users'),
                             url: '/users'
                         },
                         'hotdesk': {
                             verbs: ['get_all'],
-                            title: 'Hotdesk',
+                            title: _t('api', 'hotdesk'),
                             url: '/users/hotdesk'
                         }
                     },
@@ -683,16 +694,16 @@ winkstart.module('developer', 'api', {
                     }
                 },
                 'servers': {
-                    title: 'Servers',
+                    title: _t('api', 'servers'),
                     api: {
                         'servers': {
                             verbs: ['get_all'],
-                            title: 'Servers',
+                            title: _t('api', 'servers'),
                             url: '/servers'
                         },
                         'servers_deployment': {
                             verbs: ['get', 'put'],
-                            title: 'Deployment',
+                            title: _t('api', 'servers_deployment'),
                             url: '/servers/{id}/deployment',
                             rest: {
                                 put: ['id']
@@ -700,7 +711,7 @@ winkstart.module('developer', 'api', {
                         },
                         'servers_log': {
                             verbs: ['get'],
-                            title: 'Logs',
+                            title: _t('api', 'servers_log'),
                             url: '/servers/{id}/log'
                         }
                     },

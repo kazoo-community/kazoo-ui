@@ -63,10 +63,10 @@ winkstart.module('voip', 'groups', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Groups',
+            label: _t('groups', 'groups_label'),
             icon: 'user',
             weight: '60',
-            category: 'advanced'
+            category: _t('groups', 'advanced')
         });
     },
 
@@ -231,6 +231,9 @@ winkstart.module('voip', 'groups', {
         },
 
         render_groups: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['groups'][param];
+			};
             var THIS = this,
                 groups_html = THIS.templates.edit.tmpl(data);
 
@@ -269,7 +272,7 @@ winkstart.module('voip', 'groups', {
                         THIS.save_groups(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('groups', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -277,7 +280,7 @@ winkstart.module('voip', 'groups', {
             $('.group-delete', groups_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this groups?', function() {
+                winkstart.confirm(_t('groups', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_groups(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -391,7 +394,11 @@ winkstart.module('voip', 'groups', {
                 $('#option_endpoint_'+endpoint_id, groups_html).show();
                 //if grid empty, add no data line
                 if($('.rows .row', groups_html).size() === 0) {
-                    $('.rows', groups_html).append(THIS.templates.endpoint_row.tmpl());
+                    $('.rows', groups_html).append(THIS.templates.endpoint_row.tmpl({
+						_t: function(param){
+							return window.translate['groups'][param];
+						}
+					}));
                 }
 
 				/* TODO For some reason splice doesn't work and I don't have time to make it better for now */
@@ -490,7 +497,7 @@ winkstart.module('voip', 'groups', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('groups', 'no_name')
                                 });
                             });
                         }
@@ -505,9 +512,9 @@ winkstart.module('voip', 'groups', {
                     $('#groups-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Directories',
+                            label: _t('groups', 'groups_label'),
                             identifier: 'groups-listview',
-                            new_entity_label: 'Add Group',
+                            new_entity_label: _t('groups', 'add_group_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'groups.edit',
@@ -542,7 +549,11 @@ winkstart.module('voip', 'groups', {
             }
             else {
                 $('.rows', parent).empty()
-                                  .append(THIS.templates.endpoint_row.tmpl({}));
+                                  .append(THIS.templates.endpoint_row.tmpl({
+									_t: function(param){
+										return window.translate['groups'][param];
+									}
+								  }));
             }
         },
 
@@ -568,7 +579,7 @@ winkstart.module('voip', 'groups', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Groups' : 'Create Groups'
+                        title: (data.id) ? _t('groups', 'edit_groups') : _t('groups', 'create_groups')
                     });
                 }
             }, data_defaults);

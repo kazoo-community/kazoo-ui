@@ -1,10 +1,10 @@
 <div>
     <div class="dialog_popup">
-        <h1>Setting group pick-up...</h1>
+        <h1>${_t('setting_group_pickup')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="endpoint_selector">Which endpoint?</label>
+                    <label for="endpoint_selector">${_t('which_endpoint')}</label>
                     <div class="select_wrapper">
                         <select id="endpoint_selector">
                             {{each(i, item) data.items}}

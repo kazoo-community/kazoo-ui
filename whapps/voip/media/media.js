@@ -62,10 +62,10 @@ winkstart.module('voip', 'media', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Media',
+            label: _t('media', 'media_label'),
             icon: 'media',
             weight: '45',
-            category: 'advanced'
+            category: _t('media', 'advanced')
         });
     },
 
@@ -210,6 +210,9 @@ winkstart.module('voip', 'media', {
         },
 
         render_media: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['media'][param];
+			};
             var THIS = this,
                 media_html = THIS.templates.edit.tmpl(data),
                 file;
@@ -293,7 +296,7 @@ winkstart.module('voip', 'media', {
                                 if(!form_data.tts) {
                                     if($('#upload_div', media_html).is(':visible') && $('#file').val() != '') {
                                         if(file === 'updating') {
-                                            winkstart.alert('The file you want to apply is still being processed by the page. Please wait a couple of seconds and try again.');
+                                            winkstart.alert(_t('media', 'the_file_you_want_to_apply'));
                                         }
                                         else {
                                             THIS.upload_file(file, _data.data.id, function() {
@@ -318,7 +321,7 @@ winkstart.module('voip', 'media', {
                         );
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('media', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -326,7 +329,7 @@ winkstart.module('voip', 'media', {
             $('.media-delete', media_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this media?', function() {
+                winkstart.confirm(_t('media', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_media(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -402,7 +405,7 @@ winkstart.module('voip', 'media', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('media', 'no_name')
                                 });
                             });
                         }
@@ -417,9 +420,9 @@ winkstart.module('voip', 'media', {
                     $('#media-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Media',
+                            label: _t('media', 'media_label'),
                             identifier: 'media-listview',
-                            new_entity_label: 'Add Media',
+                            new_entity_label: _t('media', 'add_media_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'media.edit',
@@ -463,7 +466,7 @@ winkstart.module('voip', 'media', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit media' : 'Create media'
+                        title: (data.id) ? _t('media', 'edit_media') : _t('media', 'create_media')
                     });
                 }
             }, data_defaults);
@@ -474,11 +477,11 @@ winkstart.module('voip', 'media', {
 
             $.extend(callflow_nodes, {
                 'play[id=*]': {
-                    name: 'Play Media',
+                    name: _t('media', 'play_media'),
                     icon: 'play',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'play',
-                    tip: 'Play an audio file such as a greeting',
+                    tip: _t('media', 'play_media_tip'),
                     data: {
                         id: 'null'
                     },
@@ -511,7 +514,10 @@ winkstart.module('voip', 'media', {
 
                                 popup_html = THIS.templates.media_callflow.tmpl({
                                     items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    selected: node.getMetadata('id') || '',
+									_t: function(param){
+										return window.translate['media'][param]
+									}
                                 });
 
                                 if($('#media_selector option:selected', popup_html).val() == undefined) {
@@ -542,7 +548,7 @@ winkstart.module('voip', 'media', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Media',
+                                    title: _t('media', 'media'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

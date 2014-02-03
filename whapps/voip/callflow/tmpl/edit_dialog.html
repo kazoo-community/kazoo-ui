@@ -1,10 +1,10 @@
 <div>
     <div class="dialog_popup">
-        <h1>Connect a caller to another callflow...</h1>
+        <h1>${_t('connect_caller_to_another_callflow')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="object-selector">Which callflow?</label>
+                    <label for="object-selector">${_t('which_callflow')}</label>
                     <div class="select_wrapper">
                         <select id="object-selector">
                             {{each(i,obj) objects.items}}

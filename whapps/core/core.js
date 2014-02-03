@@ -44,7 +44,6 @@ winkstart.module('core', 'core',
 					});
 				});
 			};
-
         winkstart.registerResources('auth', THIS.config.resources);
 
         winkstart.request('core.get_whitelabel', {

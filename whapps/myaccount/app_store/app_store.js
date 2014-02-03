@@ -101,7 +101,7 @@ winkstart.module('myaccount', 'app_store', {
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
                     sublink: 'app_store',
-                    label: 'App Store',
+                    label: _t('app-store', 'app_store_label'),
                     weight: '20',
                     publish: 'app_store.popup'
                 });
@@ -126,7 +126,10 @@ winkstart.module('myaccount', 'app_store', {
 
                         var data = $.extend({}, data, {
                             available_apps: {},
-                            apps: user_info.data.apps || {}
+                            apps: user_info.data.apps || {},
+							_t: function(param){
+								return window.translate['app-store'][param];
+							}
                         });
 
                         _data.data.available_apps = _data.data.available_apps || ((winkstart.config.onboard_roles || {})['default'] || {}).available_apps || [];
@@ -177,7 +180,7 @@ winkstart.module('myaccount', 'app_store', {
                             e.preventDefault();
 
                             winkstart.confirm(
-                                'Warning! This is going to refresh the page.',
+                                _t('app-store', 'warning_this_is_going'),
                                 function(){
 
                                     winkstart.request('app_store.user_get', {
@@ -235,7 +238,7 @@ winkstart.module('myaccount', 'app_store', {
                     winkstart.dialog(popup_html, {
                         height: 'auto',
                         modal: true,
-                        title: 'App Store',
+                        title: _t('app-store', 'app_store_title'),
                         autoOpen: true
                     });
                 }

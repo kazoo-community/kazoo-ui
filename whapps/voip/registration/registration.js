@@ -27,7 +27,7 @@ winkstart.module('voip', 'registration',
 		winkstart.publish('whappnav.subnav.add', {
 			whapp: 'voip',
 			module: this.__module,
-			label: 'Registrations',
+			label: _t('registration', 'registrations_label'),
 			icon: 'registration',
 			weight: '35'
 		});
@@ -37,7 +37,11 @@ winkstart.module('voip', 'registration',
 		activate: function(data) {
 			var THIS = this;
 
-			var registration_html = THIS.templates.registration.tmpl({}).appendTo( $('#ws-content').empty() );
+			var registration_html = THIS.templates.registration.tmpl({
+				_t: function(param){
+					return window.translate['registration'][param];
+				}
+			}).appendTo( $('#ws-content').empty() );
 
             THIS.setup_table(registration_html);
 
@@ -78,32 +82,32 @@ winkstart.module('voip', 'registration',
                         var humanTime = parse_date(this.event_timestamp);
                         this.contact = this.contact.replace(/"/g,"");
                         this.contact = this.contact.replace(/'/g,"\\'");
-                        var stringToDisplay = 'Details of Registration<br/>';
-                        stringToDisplay += '<br/>App-Name: ' + this.app_name;
-                        stringToDisplay += '<br/>App-Version: ' + this.app_version;
-                        stringToDisplay += '<br/>Call-ID: ' + this.call_id;
-                        stringToDisplay += '<br/>Contact: ' + this.contact;
-                        stringToDisplay += '<br/>Event-Category: ' + this.event_category;
-                        stringToDisplay += '<br/>Event-Name: ' + this.event_name;
-                        stringToDisplay += '<br/>Expires: ' + this.expires;
-                        stringToDisplay += '<br/>FreeSWITCH-Hostname: ' + this.freeswitch_hostname;
-                        stringToDisplay += '<br/>From-Host: ' + this.from_host;
-                        stringToDisplay += '<br/>From-User: ' + this.from_user;
-                        stringToDisplay += '<br/>Network-IP: ' + this.network_ip;
-                        stringToDisplay += '<br/>Contact-IP: ' + this.contact_ip;
-                        stringToDisplay += '<br/>Contact-Port: ' + this.contact_port;
-                        stringToDisplay += '<br/>Network-Port: ' + this.network_port;
-                        stringToDisplay += '<br/>Presence-Hosts: ' + this.presence_hosts;
-                        stringToDisplay += '<br/>Profile-Name: ' + this.profile_name;
-                        stringToDisplay += '<br/>RPid: ' + this.rpid;
-                        stringToDisplay += '<br/>Realm: ' + this.realm;
-                        stringToDisplay += '<br/>Server-ID: ' + this.server_id;
-                        stringToDisplay += '<br/>Status: ' + this.status;
-                        stringToDisplay += '<br/>To-Host: ' + this.to_host;
-                        stringToDisplay += '<br/>To-User: ' + this.to_user;
-                        stringToDisplay += '<br/>User-Agent: ' + this.user_agent;
-                        stringToDisplay += '<br/>Username: ' + this.username;
-                        stringToDisplay += '<br/>Date: ' + humanTime;
+                        var stringToDisplay = _t('registration', 'details_of_registration') + '<br/>';
+                        stringToDisplay += '<br/>' + _t('registration', 'app_name') + this.app_name;
+                        stringToDisplay += '<br/>' + _t('registration', 'app_version') + this.app_version;
+                        stringToDisplay += '<br/>' + _t('registration', 'call_id') + this.call_id;
+                        stringToDisplay += '<br/>' + _t('registration', 'contact') + this.contact;
+                        stringToDisplay += '<br/>' + _t('registration', 'event_category') + this.event_category;
+                        stringToDisplay += '<br/>' + _t('registration', 'event_name') + this.event_name;
+                        stringToDisplay += '<br/>' + _t('registration', 'expires') + this.expires;
+                        stringToDisplay += '<br/>' + _t('registration', 'freeswitch_hostname') + this.freeswitch_hostname;
+                        stringToDisplay += '<br/>' + _t('registration', 'from_host') + this.from_host;
+                        stringToDisplay += '<br/>' + _t('registration', 'from_user') + this.from_user;
+                        stringToDisplay += '<br/>' + _t('registration', 'network_ip') + this.network_ip;
+                        stringToDisplay += '<br/>' + _t('registration', 'contact_ip') + this.contact_ip;
+                        stringToDisplay += '<br/>' + _t('registration', 'contact_port') + this.contact_port;
+                        stringToDisplay += '<br/>' + _t('registration', 'network_port') + this.network_port;
+                        stringToDisplay += '<br/>' + _t('registration', 'presence_hosts') + this.presence_hosts;
+                        stringToDisplay += '<br/>' + _t('registration', 'profile_name') + this.profile_name;
+                        stringToDisplay += '<br/>' + _t('registration', 'rpid') + this.rpid;
+                        stringToDisplay += '<br/>' + _t('registration', 'realm') + this.realm;
+                        stringToDisplay += '<br/>' + _t('registration', 'server_id') + this.server_id;
+                        stringToDisplay += '<br/>' + _t('registration', 'status') + this.status;
+                        stringToDisplay += '<br/>' + _t('registration', 'to_host') + this.to_host;
+                        stringToDisplay += '<br/>' + _t('registration', 'to_user') + this.to_user;
+                        stringToDisplay += '<br/>' + _t('registration', 'user_agent') + this.user_agent;
+                        stringToDisplay += '<br/>' + _t('registration', 'username') + this.username;
+                        stringToDisplay += '<br/>' + _t('registration', 'date') + humanTime;
 
                         tab_data.push([this.username, this.contact_ip, this.contact_port, humanTime, stringToDisplay]);
                     });
@@ -122,23 +126,23 @@ winkstart.module('voip', 'registration',
 			var THIS = this,
 			    columns = [
                 {
-                    'sTitle': 'Username'
+                    'sTitle': _t('registration', 'username_stitle')
                 },
                 {
-                    'sTitle': 'IP'
+                    'sTitle': _t('registration', 'ip_stitle')
                 },
                 {
-                    'sTitle': 'Port'
+                    'sTitle': _t('registration', 'port_stitle')
                 },
                 {
-                    'sTitle': 'Date'
+                    'sTitle': _t('registration', 'date_stitle')
                 },
                 {
-                    'sTitle': 'Details',
+                    'sTitle': _t('registration', 'details_stitle'),
                     'fnRender': function(obj) {
                         winkstart.log(obj);
                         var reg_details = obj.aData[obj.iDataColumn];
-                        return '<a href="#" onClick="winkstart.alert(\'info\',\''+reg_details+'\');">Details</a>';
+                        return '<a href="#" onClick="winkstart.alert(\'info\',\''+reg_details+'\');">' + _t('registration', 'details') + '</a>';
                     }
                 }
 			];

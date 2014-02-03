@@ -146,10 +146,10 @@ winkstart.module('voip', 'device', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Devices',
+            label: _t('device', 'devices_label'),
             icon: 'device',
             weight: '20',
-            category: 'advanced'
+            category: _t('device', 'advanced')
         });
     },
 
@@ -228,7 +228,7 @@ winkstart.module('voip', 'device', {
 
                     save_error: _callbacks.save_error || function(_data, status, type) {
                         if(status == 200 && type == 'mac_address') {
-                            winkstart.alert('warning', 'This MAC Address is already in use, please verify that it is correct.');
+                            winkstart.alert('warning', _t('device', 'this_mac_address_is_already_in_use'));
                         }
                     },
 
@@ -284,7 +284,7 @@ winkstart.module('voip', 'device', {
                         call_restriction: {},
                         sip: {
                             methods: {
-                                'password': 'Password',
+                                'password': _t('device', 'password'),
                                 'ip': 'IP'
                             },
                             invite_formats: {
@@ -295,15 +295,15 @@ winkstart.module('voip', 'device', {
                         },
                         media: {
                             peer_to_peer_options: {
-                                'auto': 'Automatic',
-                                'true': 'Always',
-                                'false': 'Never'
+                                'auto': _t('device', 'automatic'),
+                                'true': _t('device', 'always'),
+                                'false': _t('device', 'never')
                             },
                             fax: {
                                 options: {
-                                    'auto': 'Auto-detect',
-                                    'true': 'Always Force',
-                                    'false': 'Disabled'
+                                    'auto': _t('device', 'auto_detect'),
+                                    'true': _t('device', 'always_force'),
+                                    'false': _t('device', 'disabled')
                                 }
                             },
                             audio: {
@@ -399,11 +399,11 @@ winkstart.module('voip', 'device', {
                             _data.data.unshift(
                                 {
                                     id: '',
-                                    name: 'Default Music'
+                                    name: _t('device', 'default_music')
                                 },
                                 {
                                     id: 'silence_stream://300000',
-                                    name: 'Silence'
+                                    name: _t('device', 'silence')
                                 }
                             );
 
@@ -482,6 +482,9 @@ winkstart.module('voip', 'device', {
         },
 
         render_device: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['device'][param];
+			};
             var THIS = this,
                 device_html,
                 render;
@@ -567,7 +570,7 @@ winkstart.module('voip', 'device', {
                             THIS.save_device(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                         },
                         function() {
-                            winkstart.alert('There were errors on the form, please correct!');
+                            winkstart.alert(_t('device', 'there_were_errors_on_the_form'));
                         }
                     );
                 });
@@ -575,7 +578,7 @@ winkstart.module('voip', 'device', {
                 $('.device-delete', device_html).click(function(ev) {
                     ev.preventDefault();
 
-                    winkstart.confirm('Are you sure you want to delete this device?', function() {
+                    winkstart.confirm(_t('device', 'are_you_sure_you_want_to_delete'), function() {
                         THIS.delete_device(data, callbacks.delete_success, callbacks.delete_error);
                     });
                 });
@@ -635,7 +638,11 @@ winkstart.module('voip', 'device', {
                 });
             }
             else {
-                device_html = THIS.templates.general_edit.tmpl();
+                device_html = THIS.templates.general_edit.tmpl({
+					_t: function(param){
+						return window.translate['device'][param];
+					}
+				});
 
                 $('.media_pane', device_html).hide();
                 $('.media_tabs .buttons', device_html).click(function() {
@@ -859,7 +866,7 @@ winkstart.module('voip', 'device', {
                             $.each(data, function(key, val){
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('device', 'no_name')
                                 });
                             });
                         }
@@ -874,9 +881,9 @@ winkstart.module('voip', 'device', {
                     $('#device-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Devices',
+                            label: _t('device', 'devices_label'),
                             identifier: 'device-listview',
-                            new_entity_label: 'Add Device',
+                            new_entity_label: _t('device', 'add_device_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'device.edit',
@@ -946,7 +953,7 @@ winkstart.module('voip', 'device', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Device' : 'Create Device'
+                        title: (data.id) ? _t('device', 'edit_device') : _t('device', 'create_device')
                     });
                 }
             }, data_defaults);
@@ -992,11 +999,11 @@ winkstart.module('voip', 'device', {
 
             $.extend(callflow_nodes, {
                 'device[id=*]': {
-                    name: 'Device',
+                    name: _t('device', 'device'),
                     icon: 'phone',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'device',
-                    tip: 'Ring a VoIP or cell phone or other device',
+                    tip: _t('device', 'device_tip'),
                     data: {
                         id: 'null'
                     },
@@ -1027,6 +1034,9 @@ winkstart.module('voip', 'device', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.device_callflow.tmpl({
+									_t: function(param){
+										return window.translate['device'][param];
+									},
                                     can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
@@ -1070,7 +1080,7 @@ winkstart.module('voip', 'device', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Device',
+                                    title: _t('device', 'device_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
