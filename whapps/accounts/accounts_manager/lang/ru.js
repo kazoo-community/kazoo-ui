@@ -2,6 +2,7 @@ window.translate['accounts'] = {
 	add_account: "Добавить клиента",
 	create_account: "Создать клиента",
 	edit_account: "Редактировать клиента",
+	switch_account: "Переключиться",
 	basic: "Базовые",
 	notifications_templates: "Шаблоны уведомлений",
 	options: "Опции",

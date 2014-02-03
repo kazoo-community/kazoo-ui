@@ -115,7 +115,7 @@ winkstart.module('accounts', 'accounts_manager', {
 			link: 'nav',
 			sublink: 'switch_account',
 			masqueradable: true,
-			label: 'Switch Account',
+			label: _t('accounts','switch_account'),
 			weight: '05',
 			publish: 'accounts_manager.switch_account'
 		});
