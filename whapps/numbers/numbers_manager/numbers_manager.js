@@ -736,8 +736,10 @@ winkstart.module('numbers', 'numbers_manager', {
         render_add_number_dialog: function(callback) {
             var THIS = this,
                 numbers_data = [],
-                popup_html = THIS.templates.add_number_dialog.tmpl(),
+                popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.apps.cluster.api_url.match(/(v2)$/) ? true : false}),
                 popup;
+
+            console.log(winkstart.apps.cluster.api_url);
 
             $('.toggle_div', popup_html).hide();
 
@@ -753,8 +755,8 @@ winkstart.module('numbers', 'numbers_manager', {
                 npa_data.prefix = npa + nxx;
 
                 THIS.search_numbers(npa_data, function(results_data) {
-                	var formattedData = THIS.formatBuyNumberData(results_data),
-                    	results_html = THIS.templates.add_number_search_results.tmpl({ data: formattedData });
+                    var formattedData = THIS.formatBuyNumberData(results_data),
+                        results_html = THIS.templates.add_number_search_results.tmpl({ data: formattedData });
 
                     $('#foundDIDList', popup_html)
                         .empty()
