@@ -10,7 +10,7 @@ window.translate['bulk'] = {
 	deny: "Отменить",
 	inherit: "Унаследовать",
 	save: "Сохранить",
-	bulk_edit_label: "Массое обновление",
+	bulk_edit_label: "Массовое обновление",
 	name_stitle: "Имя",
 	endpoint_type_stitle: "Тип оконечного устройства",
 	bulk_id_stitle: "bulk_id",

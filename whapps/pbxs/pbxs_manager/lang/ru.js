@@ -1,7 +1,7 @@
 window.translate['pbxs_manager'] = {
 	set_your_pbx: "Выберите свою АТС",
 	edit_settings_for: "Редактировать настройки для",
-	we_support_all_top_ippbx: "Мы поддерживаем АТС всех ведущиз производителей. Выберите одного ниже.",
+	we_support_all_top_ippbx: "Мы поддерживаем АТС всех ведущих производителей. Выберите одного ниже.",
 	currently_selected: "В настоящий момент выбрано",
 	please_specify_the_name_of_this_pbx: "Выберите имя для этой АТС",
 	set_up_your_pbx: "Настройте свою АТС",
