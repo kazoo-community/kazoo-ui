@@ -17,7 +17,7 @@ window.translate['groups'] = {
 	there_were_errors_on_the_form: "При заполнении формы были допущены ошибки. Пожалуйста, исправьте!",
 	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить эту группу?",
 	no_name: "(без имени)",
-	groups_label: "Справочники",
+	groups_label: "Группы",
 	add_group_label: "Добавить группу",
 	edit_groups: "Редактировать группы",
 	create_groups: "Создать группы"
