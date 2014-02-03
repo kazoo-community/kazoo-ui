@@ -736,7 +736,7 @@ winkstart.module('numbers', 'numbers_manager', {
         render_add_number_dialog: function(callback) {
             var THIS = this,
                 numbers_data = [],
-                popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.apps.cluster.api_url.match(/(v2)$/) ? true : false}),
+                popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.config.default_api_url.match(/(v2)$/) ? true : false}),
                 popup;
 
             console.log(winkstart.apps.cluster.api_url);
