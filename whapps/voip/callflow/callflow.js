@@ -1041,8 +1041,8 @@ winkstart.module('voip', 'callflow', {
 
             /* Don't add categories here, this is just a hack to order the list on the right */
             THIS.categories = {
-                'Basic': [],
-                'Advanced': []
+                _t('callflow', 'basic'): [],
+                _t('callflow', 'advanced'): []
             };
 
             $.each(THIS.actions, function(i, data) {

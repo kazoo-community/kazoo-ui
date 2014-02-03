@@ -3,6 +3,8 @@ window.translate['callflow'] = {
 	delete_callflow: "Удалить сценарий",
 	save_changes: "Сохранить изменения",
 	invalid_number: "Неверный номер!",
+	basic: "Базовые",
+	advanced: "Расширенные",
 	please_select_valid_number: "Выберите корректный номер, нажав внутри области Сценария.",
 	this_callflow_has_not_been_created: "Этот сценарий не был создан или более не существует.",
 	are_you_sure: "Вы уверенеы что хотите удалить этот сценарий?",
