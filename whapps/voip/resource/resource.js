@@ -99,7 +99,7 @@ winkstart.module('voip', 'resource', {
             label: _t('resource', 'carriers_label'),
             icon: 'resource',
             weight: '15',
-            category: _t('resource', 'advanced')
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 

@@ -69,7 +69,7 @@ winkstart.module('voip', 'queue', {
             label: 'Queue',
             icon: 'queue',
             weight: '65',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -312,6 +312,9 @@ winkstart.module('voip', 'queue', {
         },
 
         render_queue: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['voip_queue'][param];
+			};
             var THIS = this,
                 queue_html = THIS.templates.edit.tmpl(data);
 
@@ -571,6 +574,9 @@ winkstart.module('voip', 'queue', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.queue_callflow.tmpl({
+									_t: function(param){
+										return window.translate['voip_queue'][param];
+									},
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });

@@ -80,7 +80,7 @@ winkstart.module('voip', 'vmbox', {
             label: _t('vmbox', 'voicemail_boxes_label'),
             icon: 'vmbox',
             weight: '30',
-            category: _t('vmbox', 'advanced')
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 

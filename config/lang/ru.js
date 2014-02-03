@@ -28,6 +28,7 @@ window.translate['config'] = {
 	call_recording_cat: "Запись разговоров",
 	call_center_cat: "Call-центр",
 	hotdesking_cat: "Присвоение телефонов",
-	time_of_day_cat: "Время дня"
+	time_of_day_cat: "Время дня",
 	/*-------------------------------------*/
+	advanced_menu_cat: "advanced"
 };

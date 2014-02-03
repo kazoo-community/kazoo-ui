@@ -38,7 +38,7 @@ function(args) {
 		label: _t('bulk', 'bulk_edit_label'),
 		icon: 'device',
         weight: '80',
-        category: _t('bulk', 'advanced')
+        category: _t('config', 'advanced_menu_cat')
 	});
 },
 {

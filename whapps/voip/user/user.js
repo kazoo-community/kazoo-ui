@@ -108,7 +108,7 @@ winkstart.module('voip', 'user', {
             label: _t('user', 'users_label'),
             icon: 'user',
             weight: '10',
-            category: _t('user', 'advanced')
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 

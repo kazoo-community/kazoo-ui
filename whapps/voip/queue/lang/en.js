@@ -1,3 +1,26 @@
 window.translate['voip_queue'] = {
-	
+	create_queue: "Create Queue",
+	edit_queue: "Edit Queue",
+	basic: "Basic",
+	advanced: "Advanced",
+	options: "Options",
+	name: "Name",
+	name_placeholder: "Name",
+	name_data_content: "Friendly name for this Queue",
+	user: "User",
+	actions: "Actions",
+	add_user: "Add User",
+	select: "Select",
+	add_this_user: "Add this user to the queue",
+	queue_timeout: "Queue timeout (s)",
+	queue_timeout_placeholder: "Queue timeout (s)",
+	queue_timeout_data_content: "How long caller stays in queue, in seconds",
+	member_timeout: "Member timeout (s)",
+	member_timeout_placeholder: "Member timeout (s)",
+	member_timeout_data_content: "How long to ring an agent's phone before moving to the next agent",
+	delete: "Delete",
+	save: "Save",
+	connect_caller_to_queue: "Connect caller to queue...",
+	queue: "Queue",
+	edit_queue_options: "Edit queue options"
 };
