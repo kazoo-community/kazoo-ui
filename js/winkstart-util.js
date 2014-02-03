@@ -87,6 +87,7 @@
     };
 
     winkstart.charges = function(data, callback_ok, callback_cancel) {
+        console.log(data);
         var html,
             popup,
             ok = false,
@@ -126,7 +127,7 @@
                                     service: itemName.toUpperCase().replace("_"," "),
                                     rate: item.rate || 0,
                                     quantity: item.quantity || 0,
-                                    discount: discount > 0 ? '-' + self.i18n.active().currencyUsed + parseFloat(discount).toFixed(2) : '',
+                                    discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : '',
                                     monthlyCharges: monthlyCharges
                                 });
 
