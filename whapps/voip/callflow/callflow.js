@@ -1039,6 +1039,11 @@ winkstart.module('voip', 'callflow', {
                 target,
                 tools;
 
+            /* Don't add categories here, this is just a hack to order the list on the right */
+            THIS.categories = {
+                 "'" + _t('callflow','basic') + "'": [],
+                 "'" + _t('callflow','advanced') + "'": []
+            };
 
             $.each(THIS.actions, function(i, data) {
                 if('category' in data) {
@@ -1054,12 +1059,6 @@ winkstart.module('voip', 'callflow', {
 					return window.translate['callflow'][param];
 				}
             });
-
-            /* Don't add categories here, this is just a hack to order the list on the right */
-            THIS.categories = {
-                _t('basic'): [],
-                _t('advanced'): []
-            };
 
             $('.content', tools).hide();
 
