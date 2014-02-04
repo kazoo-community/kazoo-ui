@@ -739,8 +739,6 @@ winkstart.module('numbers', 'numbers_manager', {
                 popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.config.default_api_url.match(/(v2)$/) ? true : false}),
                 popup;
 
-            console.log(winkstart.apps.cluster.api_url);
-
             $('.toggle_div', popup_html).hide();
 
             $('#search_numbers_button', popup_html).click(function(ev) {
