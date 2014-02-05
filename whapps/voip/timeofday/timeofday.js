@@ -444,7 +444,14 @@ winkstart.module('voip', 'timeofday', {
 
             form_data.wdays = wdays;
 
-            form_data.start_date = new Date(form_data.start_date).getTime()/1000 + 62167219200;
+            var startDate = new Date(form_data.start_date),
+            	year = startDate.getFullYear(),
+            	month = startDate.getMonth(),
+            	day = startDate.getDate(),
+            	utcDate = new Date(Date.UTC(year, month, day)),
+            	gregorianUTC = utcDate.getTime() / 1000 + 62167219200;
+
+            form_data.start_date = gregorianUTC;
 
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
@@ -474,10 +481,16 @@ winkstart.module('voip', 'timeofday', {
         },
 
         format_data: function(data) {
-            var tmp_date = data.data.start_date == undefined ? new Date() : new Date((data.data.start_date - 62167219200)* 1000);
-            var month = tmp_date.getMonth()+1 < 10 ? '0'+(tmp_date.getMonth()+1) : tmp_date.getMonth()+1;
-            var day = tmp_date.getDate() < 10 ? '0'+tmp_date.getDate() : tmp_date.getDate();
-            tmp_date = month + '/' + day + '/'  + tmp_date.getFullYear();
+        	var tmp_date = new Date();
+
+        	if(data.data.start_date) {
+				tmp_date = new Date((data.data.start_date - 62167219200)* 1000); // Local Time
+        	}
+
+            var month = tmp_date.getUTCMonth()+1 < 10 ? '0'+(tmp_date.getUTCMonth()+1) : tmp_date.getUTCMonth()+1,
+            	day = tmp_date.getUTCDate() < 10 ? '0'+tmp_date.getUTCDate() : tmp_date.getUTCDate();
+
+            tmp_date = month + '/' + day + '/'  + tmp_date.getUTCFullYear();
 
             data.data.start_date = tmp_date;
 
