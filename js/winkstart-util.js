@@ -121,17 +121,15 @@
                             var discount = item.single_discount_rate + (item.cumulative_discount_rate * item.cumulative_discount),
                                 monthlyCharges = parseFloat(((item.rate * item.quantity) - discount) || 0).toFixed(2);
 
-                            if(monthlyCharges > 0) {
-                                renderData.push({
-                                    service: itemName.toUpperCase().replace("_"," "),
-                                    rate: item.rate || 0,
-                                    quantity: item.quantity || 0,
-                                    discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : '',
-                                    monthlyCharges: monthlyCharges
-                                });
+                            renderData.push({
+                                service: itemName.toUpperCase().replace("_"," "),
+                                rate: item.rate || 0,
+                                quantity: item.quantity || 0,
+                                discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : '',
+                                monthlyCharges: monthlyCharges < 0 ? '- $' + Math.abs(monthlyCharges).toFixed(2) : '$' + monthlyCharges
+                            });
 
-                                totalAmount += parseFloat(monthlyCharges);
-                            }
+                            totalAmount += parseFloat(monthlyCharges);
                         });
                     }
                 });
@@ -145,8 +143,6 @@
                 return renderData;
             };
 
-        dataTemplate = formatData(data)[0];
-
         content = 'Here is the detail of the monthly charges attached to your account for this service:';
 
         if ( activation_charges !== null && activation_charges_description !== null ) {
@@ -157,7 +153,13 @@
             }
         }
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">' + content + '</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody><tr><td>' + dataTemplate.service + '</td><td>$' + dataTemplate.rate + '</td><td>X</td><td>' + dataTemplate.quantity + '</td><td>' + dataTemplate.discount + '</td><td>$' + dataTemplate.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">' + content + '</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+
+        dataTemplate = formatData(data);
+
+        for ( var key in dataTemplate ) {
+            html.find('tbody').append('<tr><td>' + dataTemplate[key].service + '</td><td>$' + dataTemplate[key].rate + '</td><td>X</td><td>' + dataTemplate[key].quantity + '</td><td>' + dataTemplate[key].discount + '</td><td>' + dataTemplate[key].monthlyCharges + '</td></tr>');
+        }
 
         popup = winkstart.dialog(html, options);
 
