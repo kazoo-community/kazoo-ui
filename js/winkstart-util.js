@@ -418,13 +418,13 @@
             if(state) {
                 btn.addClass('activated');
                 if(change_name != false) {
-                    btn.html('Hide');
+                    btn.html(_t('config','hide'));
                 }
                 div.slideDown();
             } else {
                 btn.removeClass('activated');
                 if(change_name != false) {
-                    btn.html('Show');
+                    btn.html(_t('config','show'));
                 }
                 div.slideUp();
             }
@@ -442,10 +442,10 @@
 
             if(btn.hasClass('activate')) {
                 btn.removeClass('activate');
-                btn.html('Show All');
+                btn.html(_t('config','show_all'));
             } else {
                 btn.addClass('activate');
-                btn.html('Hide All');
+                btn.html(_t('config','hide_all'));
             }
         });
 

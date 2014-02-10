@@ -17,6 +17,10 @@ window.translate['config'] = {
 	OK: "OK",		//button OK confirm dialog
 	CANCEL: "Отмена",	//button Cancel confirm dialog
 	CLOSE: "Закрыть",		//button Close alert dialog
+ 	hide: "Скрыть",
+ 	show: "Показать",
+ 	hide_all: "Скрыть все",
+ 	show_all: "Показать все",
 	please_confirm_title: "Пожалуйста, подтвердите",	//confirm title dialog
 	WARNING: "ПРЕДУПРЕЖДЕНИЕ",
 	
