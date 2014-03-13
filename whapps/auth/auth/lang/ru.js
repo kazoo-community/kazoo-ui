@@ -1,4 +1,4 @@
-window.translate['auth'] = {
+window.translate['auth'] = $.extend(true, {}, window.translate['auth'], {
 	css_auth: "css/auth_ru.css",
 	login: "Логин / Почта",
 	password: "Пароль",
@@ -54,5 +54,7 @@ window.translate['auth'] = {
 	you_are_in_the_recover_password: "Вы вошли в режим восстановления пароля.",
 	registered_successfully: "Клиент успешно зарегистрирован. Пожалуйста, проверьте ваш e-mail, на него было отправлено письмо с инструкцией по активации!",
 	please_confirm_your_password: "Пожалуйста, подтвердите ваш пароль",
-	there_were_errors_on_the_form: "При заполнении формы были допущены ошибки. Пожалуйста, исправьте!"
-};
+	there_were_errors_on_the_form: "При заполнении формы были допущены ошибки. Пожалуйста, исправьте!",
+	username_regex: /^[a-zA-Z0-9\_\-]{3,16}$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+});

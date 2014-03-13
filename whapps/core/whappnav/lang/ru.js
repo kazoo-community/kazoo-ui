@@ -1,3 +1,3 @@
-window.translate['whappnav'] = {
-	
-};
+window.translate['whappnav'] = $.extend(true, {}, window.translate['whappnav'], {
+
+});

@@ -1,4 +1,4 @@
-window.translate['registration'] = {
+window.translate['registration'] = $.extend(true, {}, window.translate['registration'], {
 	refresh: "Обновить",
 	registrations_label: "Регистрации",
 	details_of_registration: "Детали регистрации",
@@ -33,4 +33,4 @@ window.translate['registration'] = {
 	date_stitle: "Дата",
 	details_stitle: "Детали",
 	details: "Детали"
-};
+});

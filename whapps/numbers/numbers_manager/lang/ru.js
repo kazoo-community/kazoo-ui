@@ -1,4 +1,4 @@
-window.translate['numbers_manager'] = {
+window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbers_manager'], {
 	buy_number: "Купить номер",
 	port_a_number: "Перенести номер",
 	delete_selected_numbers: "Удалить выбранные номера",
@@ -113,4 +113,4 @@ window.translate['numbers_manager'] = {
 	edit_location_for: "Редактировать местоположение для ",
 	edit_911_location: "Редактировать местоположение для экстренных служб",
 	add_number_title: "Добавить номер"
-};
+});

@@ -1,4 +1,4 @@
-window.translate['menu'] = {
+window.translate['menu'] = $.extend(true, {}, window.translate['menu'], {
 	menu: "Меню",
 	menu_tip: "Попросить звонящего выбрать опцию меню или набрать внутренний номер",
 	connect_caller_to_menu: "Подключить звонящего к меню...",
@@ -53,4 +53,4 @@ window.translate['menu'] = {
 	add_menu_label: "Добавить меню",
 	default_action: "Действие по умолчанию",
 	menu_option_title: "Настройка меню"
-};
+});

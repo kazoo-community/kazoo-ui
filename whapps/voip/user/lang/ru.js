@@ -1,4 +1,4 @@
-window.translate['user'] = {
+window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	user: "Пользователь",
 	user_tip: "Перевести звонящего на указанного пользователя",
 	hot_desk_login: "Вход с присвоением телефона",
@@ -132,5 +132,9 @@ window.translate['user'] = {
 	there_were_errors_on_the_form: "При заполнении формы были допущены ошибки. Пожалуйста, исправьте!",
 	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить этого пользователя?",
 	do_you_really_want_to_delete: "Вы уверены что хотите удалить это устройство?",
-	add_user_label: "Добавить пользователя"
-};
+	add_user_label: "Добавить пользователя",
+	first_last_name_regex: /^[0-9a-zA-Z\s\-\']+$/,
+	username_regex: /^[0-9a-zA-Z+@._-]{3,256}$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
+});

@@ -1,4 +1,4 @@
-window.translate['directory'] = {
+window.translate['directory'] = $.extend(true, {}, window.translate['directory'], {
 	directory: "Справочник",
 	directory_tip: "Попросите звонящего ввести первые буквы имени человека, до которого вы пытаетесь дозвониться.",
 	connect_caller_to_directory: "Подключить звонящего к справочнику...",
@@ -39,4 +39,4 @@ window.translate['directory'] = {
 	no_name: "(без имени)",
 	directories_label: "Справочники",
 	add_directory_label: "Добавить справочник"
-};
+});

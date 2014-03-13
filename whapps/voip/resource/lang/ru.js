@@ -1,4 +1,4 @@
-window.translate['resource'] = {
+window.translate['resource'] = $.extend(true, {}, window.translate['resource'], {
 	global_carrier: "Системный провайдер",
 	global_carrier_tip: "Маршрутизировать вызовы в телефонную сеть через системного оператора",
 	account_carrier: "Собственный провайдер",
@@ -80,4 +80,4 @@ window.translate['resource'] = {
 	add_carrier_label: "Добавить провайдера",
 	error: "Ошибка: ",
 	are_you_sure_you_want_to_use: "Вы уверены что хотите использовать другого провайдера?"
-};
+});

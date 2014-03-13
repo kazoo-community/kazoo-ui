@@ -1,4 +1,4 @@
-window.translate['onboarding'] = {
+window.translate['onboarding'] = $.extend(true, {}, window.translate['onboarding'], {
 	css_onboarding: "css/onboarding.css",
 	get_started: "НАЧАТЬ",
 	step: "Шаг",
@@ -53,6 +53,9 @@ window.translate['onboarding'] = {
 	first_last_name2: "Имя и фамилия",
 	extension: "Внутренний номер #",
 	passwords_are_not_matching: "Пароли не совпадают, пожалуйста, введите заново.",
-	email_addresses_are_not_matching: "Адреса e-mail не совпадают, пожалуйста, введите заново."
-	
-};
+	email_addresses_are_not_matching: "Адреса e-mail не совпадают, пожалуйста, введите заново.",
+	cardholder_name_regex: /^[a-zA-Z\s\-\']+$/,
+	region_locality_regex: /^[a-zA-Z0-9\_\-\.\s]+$/,
+	country_regex: /^[a-zA-Z\_\-\s]+$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
+});

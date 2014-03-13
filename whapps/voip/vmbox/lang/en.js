@@ -51,5 +51,6 @@ window.translate['vmbox'] = {
 	no_name: "(no name)",
 	add_voicemail_box_label: "Add Voicemail Box",
 	edit_voicemail_box_title: "Edit voicemail box",
-	create_voicemail_box_title: "Create voicemail box"
+	create_voicemail_box_title: "Create voicemail box",
+	name_regex: /^[a-zA-Z0-9\s_']+$/
 };

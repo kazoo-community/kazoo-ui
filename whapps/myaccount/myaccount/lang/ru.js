@@ -1,3 +1,3 @@
-window.translate['myaccount'] = {
-	
-};
+window.translate['myaccount'] = $.extend(true, {}, window.translate['myaccount'], {
+
+});

@@ -19,7 +19,7 @@ winkstart.module('voip', 'timeofday', {
         },
 
         validation: [
-            { name: '#name', regex: /^[a-zA-Z0-9\s_']+$/ }
+            { name: '#name', regex: _t('timeofday', 'name_regex') }
         ],
 
         resources: {

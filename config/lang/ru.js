@@ -1,4 +1,4 @@
-window.translate['config'] = {
+window.translate['config'] = $.extend(true, {}, window.translate['config']{ 
 	voip_label: "Виртуальная АТС",
 	voip_desc: "Управление вызовами, голосовая почта и прочие функции телефонии",
 	cluster_label: "Управление кластером",
@@ -34,5 +34,23 @@ window.translate['config'] = {
 	hotdesking_cat: "Присвоение телефонов",
 	time_of_day_cat: "Время дня",
 	/*-------------------------------------*/
-	advanced_menu_cat: "advanced"
-};
+	advanced_menu_cat: "Расширенные",
+	
+	/*-------------jquery.dataTable--------*/
+	sProcessing: "Обработка...",
+	sLengthMenu: "Показать пункты _MENU_",
+	sZeroRecords: "Записи не найдены",
+	sEmptyTable: "Нет данных для отображения в таблице",
+	sLoadingRecords: "Загрузка...",
+	sInfo: "Отображаются позиции с _START_ по _END_ из _TOTAL_",
+	sInfoEmpty: "Отображается 0 из 0 позиций",
+	sInfoFiltered: "(отфильтровано из _MAX_ позиций)",
+	sInfoPostFix: "",
+	sSearch: "Поиск:",
+	sUrl: "",
+	sFirst: "В начало",
+	sPrevious: "Назад",
+	sNext: "Вперёд",
+	sLast: "В конец"
+	/*-------------------------------------*/
+});

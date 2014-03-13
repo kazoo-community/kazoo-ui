@@ -91,5 +91,6 @@ window.translate['accounts'] = {
 	in_addition_to_the_above: "In addition to the above if a customer makes an international call, or goes over the above limits, allow the call to proceed and bill per-minute",
 	customers_available_balance: "Customer's available balance for per-minute calls:",
 	delete_white_labeling: "Delete white labeling",
-	advanced: "Advanced"
+	advanced: "Advanced",
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/	
 };

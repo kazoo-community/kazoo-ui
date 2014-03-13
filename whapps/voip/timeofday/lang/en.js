@@ -44,5 +44,6 @@ window.translate['timeofday'] = {
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this time of day rule?",
 	no_name: "(no name)",
 	add_time_of_day_label: "Add Time of Day",
-	all_other_times: "All other times"
+	all_other_times: "All other times",
+	name_regex: /^[a-zA-Z0-9\s_']+$/
 };

@@ -1,4 +1,4 @@
-window.translate['media'] = {
+window.translate['media'] = $.extend(true, {}, window.translate['media'], {
 	play_media: "Воспроизвести",
 	play_media_tip: "Воспроизвести аудио-файл с приветствием",
 	connect_caller_to_media: "Подключить звонящего к медиа-файлы...",
@@ -31,4 +31,4 @@ window.translate['media'] = {
 	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить медиа-файл?",
 	no_name: "(без имени)",
 	add_media_label: "Добавить медиа-файл"
-};
+});

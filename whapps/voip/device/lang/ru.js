@@ -1,4 +1,4 @@
-window.translate['device'] = {
+window.translate['device'] = $.extend(true, {}, window.translate['device'], {
 	device: "Устройство",
 	device_tip: "Вызвать телефон VoIP, сотовый телефон или иное устройство",
 	connect_caller_to_device: "Подключить звонящего к устройству...",
@@ -127,5 +127,8 @@ window.translate['device'] = {
 	no_name: "(без имени)",
 	add_device_label: "Добавить устройство",
 	edit_device: "Редактировать устройство",
-	create_device: "Создать устройство"
-};
+	create_device: "Создать устройство",
+	sip_uri_name_regex: /^[a-zA-Z0-9\s_']+$/,
+	name_regex: /^[a-zA-Z0-9\s_'\-]+$/,
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
+});

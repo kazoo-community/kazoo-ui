@@ -965,22 +965,22 @@
 			 *   by javascript
 			 */
 			this.oLanguage = {
-				"sProcessing": "Processing...",
-				"sLengthMenu": "Show _MENU_ entries",
-				"sZeroRecords": "No matching records found",
-				"sEmptyTable": "No data available in table",
-				"sLoadingRecords": "Loading...",
-				"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
-				"sInfoEmpty": "Showing 0 to 0 of 0 entries",
-				"sInfoFiltered": "(filtered from _MAX_ total entries)",
-				"sInfoPostFix": "",
-				"sSearch": "Search:",
-				"sUrl": "",
+				"sProcessing": _t("config", "sProcessing"),
+				"sLengthMenu": _t("config", "sLengthMenu"),
+				"sZeroRecords": _t("config", "sZeroRecords"),
+				"sEmptyTable": _t("config", "sEmptyTable"),
+				"sLoadingRecords": _t("config", "sLoadingRecords"),
+				"sInfo": _t("config", "sInfo"),
+				"sInfoEmpty": _t("config", "sInfoEmpty"),
+				"sInfoFiltered": _t("config", "sInfoFiltered"),
+				"sInfoPostFix": _t("config", "sInfoPostFix"),
+				"sSearch": _t("config", "sSearch"),
+				"sUrl": _t("config", "sUrl"),
 				"oPaginate": {
-					"sFirst":    "First",
-					"sPrevious": "Previous",
-					"sNext":     "Next",
-					"sLast":     "Last"
+					"sFirst":    _t("config", "sFirst"),
+					"sPrevious": _t("config", "sPrevious"),
+					"sNext":     _t("config", "sNext"),
+					"sLast":     _t("config", "sLast"),
 				},
 				"fnInfoCallback": null
 			};

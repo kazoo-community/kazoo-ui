@@ -33,8 +33,8 @@ winkstart.module('auth', 'auth',
         },
 
         validation: [
-            { name: '#username', regex: /^[a-zA-Z0-9\_\-]{3,16}$/ },
-            { name: '#email', regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ }
+            { name: '#username', regex: _t('auth', 'username_regex') },
+            { name: '#email', regex: _t('auth', 'email_regex') }
         ],
 
         validation_recover: [

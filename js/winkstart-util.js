@@ -89,70 +89,75 @@
     winkstart.charges = function(data, callback_ok, callback_cancel) {
         var html,
             popup,
-            options = {},
             ok = false,
-            activation_charges = data.activation_charges,
-            activation_charges_description = data.activation_charges_description.replace("_", " "),
-            renderData,
+            activation_charges = (typeof data.activation_charges) ? null : data.activation_charges,
+            activation_charges_description = (typeof data.activation_charges_description === "undefined") ? null : data.activation_charges_description.replace("_", " "),
+            dataTemplate,
+            content,
+            options = {
+                title: 'Charges summary',
+                maxWidth: 'auto',
+                width: 'auto',
+                onClose: function() {
+                    if (ok) {
+                        if (typeof callback_ok == 'function') {
+                            callback_ok();
+                        }
+                    } else {
+                        if (typeof callback_cancel == 'function') {
+                            callback_cancel();
+                        }
+                    }
+                }
+            },
             formatData = function(data) {
-                var dataArray = [],
-                    totalAmount = 0,
+                var totalAmount = 0,
                     charges_description = data.activation_charges_description,
-                    renderData = {};
-
-                delete data.activation_charges;
-                delete data.activation_charges_description;
+                    renderData = [];
 
                 $.each(data, function(categoryName, category) {
-                    $.each(category, function(itemName, item) {
-                        var discount = item.single_discount_rate + (item.cumulative_discount_rate * item.cumulative_discount),
-                            monthlyCharges = parseFloat(((item.rate * item.quantity) - discount) || 0).toFixed(2);
+                    if (categoryName != 'activation_charges' && categoryName != 'activation_charges_description') {
+                        $.each(category, function(itemName, item) {
+                            var discount = item.single_discount_rate + (item.cumulative_discount_rate * item.cumulative_discount),
+                                monthlyCharges = parseFloat(((item.rate * item.quantity) - discount) || 0).toFixed(2);
 
-                        if(monthlyCharges > 0) {
-                            dataArray.push({
-                                service: itemName.toUpperCase().replace("_"," "),
-                                rate: item.rate || 0,
-                                quantity: item.quantity || 0,
-                                discount: discount > 0 ? '-' + self.i18n.active().currencyUsed + parseFloat(discount).toFixed(2) : '',
-                                monthlyCharges: monthlyCharges
-                            });
+                            if(monthlyCharges > 0) {
+                                renderData.push({
+                                    service: itemName.toUpperCase().replace("_"," "),
+                                    rate: item.rate || 0,
+                                    quantity: item.quantity || 0,
+                                    discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : '',
+                                    monthlyCharges: monthlyCharges
+                                });
 
-                            totalAmount += parseFloat(monthlyCharges);
-                        }
-                    });
+                                totalAmount += parseFloat(monthlyCharges);
+                            }
+                        });
+                    }
                 });
 
                 var sortByPrice = function(a, b) {
                     return parseFloat(a.monthlyCharges) >= parseFloat(b.monthlyCharges) ? -1 : 1;
-                }
+                };
 
-                dataArray.sort(sortByPrice);
-
-                renderData.servicePlanArray = dataArray;
-                renderData.totalAmount = parseFloat(totalAmount).toFixed(2);
+                renderData.sort(sortByPrice);
 
                 return renderData;
             };
 
-        options.title = 'Charges summary';
-        options.maxWidth = 'auto';
-        options.width = 'auto';
-        options.onClose = function() {
-            if(ok) {
-                if(typeof callback_ok == 'function') {
-                    callback_ok();
-                }
-            }
-            else {
-                if(typeof callback_cancel == 'function') {
-                    callback_cancel();
-                }
-            }
-        };
+        dataTemplate = formatData(data)[0];
 
-        renderData = formatData(data).servicePlanArray[0];
+        content = 'Here is the detail of the monthly charges attached to your account for this service:';
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">You will pay a $' + activation_charges + ' one-time fee for ' + activation_charges_description + '. Here is the detail of the monthly charges attached to your account:</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody><tr><td>' + renderData.service + '</td><td>$' + renderData.rate + '</td><td>X</td><td>' + renderData.quantity + '</td><td>' + renderData.discount + '</td><td>$' + renderData.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+        if ( activation_charges !== null && activation_charges_description !== null ) {
+            if ( activation_charges === 0 ) {
+                content = 'There is no ' + activation_charges_description + '. ';
+            } else {
+                content = 'You will pay a $' + activation_charges + ' one-time ' + activation_charges_description + '. ';
+            }
+        }
+
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">' + content + '</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody><tr><td>' + dataTemplate.service + '</td><td>$' + dataTemplate.rate + '</td><td>X</td><td>' + dataTemplate.quantity + '</td><td>' + dataTemplate.discount + '</td><td>$' + dataTemplate.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
 
         popup = winkstart.dialog(html, options);
 

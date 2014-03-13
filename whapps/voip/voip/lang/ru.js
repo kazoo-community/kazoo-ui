@@ -1,4 +1,4 @@
-window.translate['voip'] = {
+window.translate['voip'] = $.extend(true, {}, window.translate['voip'], {
 	welcome_to_your_voip: "Добро пожаловать в панель управления услугами VoIP!",
 	account_info: "Информация об учётной записи",
 	numbers: "Номера",
@@ -15,4 +15,4 @@ window.translate['voip'] = {
 	conferences: "Конференции",
 	active_feature_codes: "Активные коды ДВО",
 	callflows: "Сценарии"
-};
+});

@@ -1,4 +1,4 @@
-window.translate['report'] = {
+window.translate['report'] = $.extend(true, {}, window.translate['report'], {
 	generate_a_report_for: "Сформировать отчёт по:",
 	children_sub_accounts_only: "Дочерним клиентам",
 	this_account_and_his_direct: "Этому клиенту и дочерним клиентам первого уровня",
@@ -19,4 +19,4 @@ window.translate['report'] = {
 	inbound_trunks_stitle: "# входящих линий",
 	outbound_trunks_stitle: "# исходящих линий",
 	available_credits_stitle: "Доступно средств"
-};
+});

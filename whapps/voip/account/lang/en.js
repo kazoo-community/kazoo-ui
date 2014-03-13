@@ -38,5 +38,7 @@ window.translate['account'] = {
 	email_address_placeholder: "E-mail address",
 	account_details_label: "Account Details",
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
-	are_you_sure_you_want_to_delete: "Are you sure you want to delete this account?<br>WARNING: This can not be undone"	
+	are_you_sure_you_want_to_delete: "Are you sure you want to delete this account?<br>WARNING: This can not be undone",
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/,
+	contact_regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/
 };

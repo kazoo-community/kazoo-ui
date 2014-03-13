@@ -18,16 +18,16 @@ winkstart.module('voip', 'user', {
         },
 
         validation : [
-                { name: '#first_name',                regex: /^[0-9a-zA-Z\s\-\']+$/ },
-                { name: '#last_name',                 regex: /^[0-9a-zA-Z\s\-\']+$/ },
-                { name: '#username',                  regex: /^[0-9a-zA-Z+@._-]{3,256}$/ },
-                { name: '#email',                     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#first_name',                regex: _t('user', 'first_last_name_regex') },
+                { name: '#last_name',                 regex: _t('user', 'first_last_name_regex') },
+                { name: '#username',                  regex: _t('user', 'username_regex') },
+                { name: '#email',                     regex: _t('user', 'email_regex') },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_internal',   regex: _t('user', 'caller_id_name_regex') },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_external',   regex: _t('user', 'caller_id_name_regex') },
                 { name: '#advanced_caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#advanced_caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#advanced_caller_id_name_emergency',  regex: _t('user', 'caller_id_name_regex') },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }

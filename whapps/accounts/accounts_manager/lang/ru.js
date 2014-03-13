@@ -1,4 +1,4 @@
-window.translate['accounts'] = {
+window.translate['accounts'] = $.extend(true, {}, window.translate['accounts'], {
 	add_account: "Добавить клиента",
 	create_account: "Создать клиента",
 	edit_account: "Редактировать клиента",
@@ -91,5 +91,6 @@ window.translate['accounts'] = {
 	in_addition_to_the_above: "В добавление к вышесказанному если клиент совершает международный вызов или выходит за установленные ограничения, позволить выполнить вызов и тарифицировать поминутно",
 	customers_available_balance: "Доступный клиенту баланс для вызовов с поминутной тарификацией:",
 	delete_white_labeling: "Удалить ребрендинг",
-	advanced: "Расширенные"
-};
+	advanced: "Расширенные",
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
+});

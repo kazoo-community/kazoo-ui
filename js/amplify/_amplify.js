@@ -4,7 +4,7 @@
  * Version: @VERSION
  * Released: @DATE
  * Source: http://amplifyjs.com/store
- * 
+ *
  * Copyright 2010 appendTo LLC. (http://appendto.com/team)
  * Dual licensed under the MIT or GPL licenses.
  * http://appendto.com/open-source-licenses
@@ -21,14 +21,14 @@ amplify.store = function( key, value, options ) {
 
 $.extend( amplify.store, {
 	types: {},
-	
+
 	type: null,
-	
+
 	addType: function( type, store ) {
 		if ( !this.type ) {
 			this.type = type;
 		}
-		
+
 		this.types[ type ] = store;
 		amplify.store[ type ] = function( key, value, options ) {
 			return amplify.store( key, value,
@@ -40,7 +40,7 @@ $.extend( amplify.store, {
 function createSimpleStorage( storageType, storage ) {
 	amplify.store.addType( storageType, function( key, value ) {
 		var ret = value;
-		
+
 		if ( !key ) {
 			ret = {};
 			for ( key in storage ) {
@@ -49,12 +49,12 @@ function createSimpleStorage( storageType, storage ) {
 			}
 			return ret;
 		}
-		
+
 		// protect against overwriting built-in properties
 		if ( key in storage && typeof storage[ key ] !== "string" ) {
 			key = "__amplify__" + key;
 		}
-		
+
 		if ( value === undefined ) {
 			return storage[ key ] && JSON.parse( storage[ key ] );
 		} else {
@@ -64,7 +64,7 @@ function createSimpleStorage( storageType, storage ) {
 				storage[ key ] = JSON.stringify( value );
 			}
 		}
-		
+
 		return ret;
 	});
 }
@@ -82,15 +82,15 @@ $.each( [ "localStorage", "sessionStorage" ], function( i, storageType ) {
 	var div = $( "<div>" ).hide().appendTo( "html" ),
 		attrKey = "amplify",
 		attrs;
-	
+
 	if ( div[ 0 ].addBehavior ) {
 		div[ 0 ].addBehavior( "#default#userdata" );
 		div[ 0 ].load( attrKey );
 		attrs = div.attr( attrKey ) ? JSON.parse( div.attr( attrKey ) ) : {};
-		
+
 		amplify.store.addType( "userData", function( key, value ) {
 			var ret = value;
-			
+
 			if ( !key ) {
 				ret = {};
 				for ( key in attrs ) {
@@ -98,7 +98,7 @@ $.each( [ "localStorage", "sessionStorage" ], function( i, storageType ) {
 				}
 				return ret;
 			}
-			
+
 			if ( value === undefined ) {
 				return key in attrs ? JSON.parse( div.attr( key ) ) : undefined;
 			} else {
@@ -110,7 +110,7 @@ $.each( [ "localStorage", "sessionStorage" ], function( i, storageType ) {
 					attrs[ key ] = true;
 				}
 			}
-			
+
 			div.attr( attrKey, JSON.stringify( attrs ) );
 			div[ 0 ].save( "amplify" );
 			return ret;
@@ -137,7 +137,7 @@ if ( $.cookie && $.support.cookie ) {
  * Version: @VERSION
  * Released: @DATE
  * Source: http://amplifyjs.com/route
- * 
+ *
  * Copyright 2010 appendTo LLC. (http://appendto.com/team)
  * Dual licensed under the MIT or GPL licenses.
  * http://appendto.com/open-source-licenses
@@ -165,7 +165,7 @@ function sanitize( what ) {
 function parseValues( route ) {
 	var path = amplify.route.path(),
 		matches = route._regex.exec( path );
-	
+
 	for ( var i = 0; i < route.params.length; i++ ) {
 		var value = matches[ i + 1 ];
 		route.values[ route.params[ i ] ] = sanitize( value );
@@ -184,28 +184,28 @@ var interval = null,
 function onhashchange( event ) {
 	lastHash = amplify.route.path();
 	var route = amplify.route.active();
-	
+
 	for ( var i = 0; i < watches.length; i++ ) {
 		var watch = watches[ i ],
 			wildcard = false;
-		
+
 		if ( watch.routeName !== route.name ) {
 			if ( watch.routeName.indexOf( "*" ) >= 0 ) {
 				var regex = new RegExp(
 					sanitize( watch.routeName ).replace( "*", "(.*?)" ) );
-				
+
 				if ( !regex.test( lastHash ) ) {
 					continue;
 				}
-				
+
 				wildcard = true;
 			} else {
 				continue;
 			}
 		}
-		
+
 		var execute = watch.params ? false : true;
-		
+
 		for ( label in watch.params ) {
 			var paramName = watch.params[ label ];
 			if ( !lastRoute || route.values[ label ] !== lastRoute.values[ label ] ) {
@@ -213,12 +213,12 @@ function onhashchange( event ) {
 				break;
 			}
 		}
-		
+
 		if ( execute || wildcard ) {
 			watch.callback( route );
 		}
 	}
-	
+
 	lastRoute = amplify.route.active();
 };
 
@@ -226,10 +226,10 @@ function initHashChange() {
 	if ( interval ) {
 		return;
 	}
-	
+
 	if ( pushSupported || hashSupported ) {
 		var event = pushSupported ? "popstate" : "hashchange";
-		
+
 		if ( window.addEventListener ) {
 			window.addEventListener( event, onhashchange, false );
 		} else {
@@ -240,14 +240,14 @@ function initHashChange() {
 	} else {
 		interval = setInterval(function() {
 			var path = amplify.route.path();
-			
+
 			if ( lastHash !== path ) {
 				lastHash = path;
 				onhashchange();
 			}
 		}, 50 );
 	}
-	
+
 	if ( docMode && docMode <= 7 && !hashSupported ) {
 		initIframe();
 	}
@@ -264,7 +264,7 @@ function initIframe(){
 		doc.close();
 		doc.location.hash = hash;
 	};
-	
+
 	document.body.parentNode.insertBefore( iframe, document.body.nextSibling );
 }
 
@@ -275,28 +275,28 @@ amplify.route = function( name, path, options ) {
 		segments = sanitize( path ).split( "/" ),
 		rRoute,
 		params = [];
-	
+
 	if ( routes[ name ] ) {
 		return routes[ name ];
 	}
-	
+
 	options.constraints = options.constraints || {};
 	options.defaults = options.defaults || {};
-	
+
 	for ( var i = 0; i < segments.length; i++ ) {
 		var segment = segments[ i ].replace( rSpecial, "\\$&" );
-		
+
 		while ( match = rParam.exec( segment ) ) {
 			segment = segment.replace( match[ 0 ], "(.+)?" );
 			params.push( match[ 1 ] );
 		}
-		
+
 		segments[ i ] = segment;
 	};
-	
+
 	// if we dont have a hash to compare to, we're using the full url.
 	// we'll need to test the url to see if it ends with our pattern.
-	
+
 	var route = {
 		name: name,
 		path: path,
@@ -306,12 +306,12 @@ amplify.route = function( name, path, options ) {
 		_constraints: options.constraints,
 		_defaults: options.defaults
 	};
-	
+
 	routes[ name ] = route;
-	
+
 	// dont start watching the hash until we have a route
 	initHashChange();
-	
+
 	return route;
 };
 
@@ -323,50 +323,50 @@ amplify.route.active = function() {
 	for (label in routes ) {
 		var route = routes[ label ];
 		route._regex.lastIndex = 0;
-		
+
 		if ( route._regex.test( hash ) ) {
 			activeRoute = route;
 			parseValues( route );
 			break;
 		}
 	}
-	
+
 	return activeRoute;
 };
 
 amplify.route.go = function() {
 	var where = arguments[ 0 ],
 		title = arguments[ 1 ];
-	
+
 	if ( arguments.length >= 2 && typeof arguments[ 1 ] === "object" ) {
 		var routeName = arguments[ 0 ],
 			params = arguments[ 1 ];
-		
+
 		title = arguments.length > 2 ? arguments[ 2 ] : undefined;
-		
+
 		where = amplify.route.path( routeName, params );
 	}
-	
+
 	if ( typeof where === "number" ) {
 		window.history.go( where );
 		iframe && iframe.go( amplify.route.path() );
 		return;
 	}
-	
+
 	if ( title ) {
 		document.title = title;
 	}
-	
+
 	if ( pushSupported ) {
 		if ( !where || !where.length ) {
 			return;
 		}
-		
+
 		history.pushState( null, title, where );
 		onhashchange();
 		return;
 	}
-	
+
 	window.location.hash = ( where && where.length ? googleHash + where : "" );
 	if ( iframe ) {
 		iframe.go( amplify.route.path() );
@@ -375,22 +375,22 @@ amplify.route.go = function() {
 
 amplify.route.path = function() {
 	if ( !arguments.length ) {
-		return pushSupported ? 
+		return pushSupported ?
 			window.location.href :
 			window.location.hash.substring( googleHash ? 2 : 1 );
 	}
-	
+
 	var routeName = arguments[ 0 ],
 		params = arguments[ 1 ];
-	
+
 	route = routes[ routeName ];
 	var path = route.path;
-	
+
 	while ( match = rParam.exec( route.path ) ) {
 		var param = match[ 0 ], paramName = match[ 1 ];
 		path = path.replace( param, params[ paramName ] );
 	}
-	
+
 	return path;
 };
 
@@ -402,18 +402,18 @@ amplify.route.watch = function() {
 	if ( arguments.length < 2 || !$.isFunction( arguments[ 1 ] ) ) {
 		return;
 	}
-	
+
 	var options = arguments.length > 2 ? arguments[ 2 ] : null,
 		watch = {
 			routeName: arguments[ 0 ],
 			callback: arguments[ 1 ],
 			params: options && options.params ? options.params : null
 		};
-	
+
 	if ( watch.params && typeof watch.params === "string" ) {
 		watch.params = [ watch.params ];
 	}
-	
+
 	watches.push( watch );
 };
 
@@ -425,7 +425,7 @@ amplify.route.watch = function() {
  * Version: @VERSION
  * Released: @DATE
  * Source: http://amplifyjs.com/module
- * 
+ *
  * Copyright 2010 appendTo LLC. (http://appendto.com/team)
  * Dual licensed under the MIT or GPL licenses.
  * http://appendto.com/open-source-licenses
@@ -450,17 +450,17 @@ amplify.module = function(whapp, module, config, construct, methods) {
 			};
 		}
 	}
-	
+
 	return {
 		init: function(args, callback) {
 			if ( modules[w][m] ) {
 				var module = modules[w][m];
-				
+
 				if ( $.isFunction(args) && !callback ) {
 					callback = args;
 					args = {};
 				}
-				
+
 				// Clone the config
 				var base = { __module: module.module, __whapp: w, config: {} };
 				$.extend(base.config, module.config);
@@ -506,7 +506,12 @@ amplify.module.loadApp = function(whapp, callback) {
 
 amplify.module.loadModule = function(whapp, module, callback) {
     // Cache buster
-	$LAB.script('whapps/' + whapp + '/' + module + '/' + 'lang' + '/' + winkstart.config.language + '.js');
+	$LAB.script('whapps/' + whapp + '/' + module + '/' + 'lang' + '/en.js');
+
+	if(winkstart.config.language !== 'en') {
+		$LAB.script('whapps/' + whapp + '/' + module + '/' + 'lang' + '/' + winkstart.config.language + '.js');
+	}
+
 	//console.log("locale " + module + " loaded");
     if (amplify.cache === false) {
 	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
@@ -523,7 +528,7 @@ amplify.module.loadModule = function(whapp, module, callback) {
     }
 };
 
-// This is the method that may be overloaded to change the way in which the module is 
+// This is the method that may be overloaded to change the way in which the module is
 // loaded and instanciated
 amplify.module.constructor = function(args, callback) { callback(); };
 

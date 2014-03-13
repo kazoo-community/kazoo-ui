@@ -34,5 +34,23 @@ window.translate['config'] = {
 	hotdesking_cat: "Hotdesking",
 	time_of_day_cat: "Time Of Day",
 	/*-------------------------------------*/
-	advanced_menu_cat: "advanced"
+	advanced_menu_cat: "advanced",
+	
+	/*-------------jquery.dataTable--------*/
+	sProcessing: "Processing...",
+	sLengthMenu: "Show _MENU_ entries",
+	sZeroRecords: "No matching records found",
+	sEmptyTable: "No data available in table",
+	sLoadingRecords: "Loading...",
+	sInfo: "Showing _START_ to _END_ of _TOTAL_ entries",
+	sInfoEmpty: "Showing 0 to 0 of 0 entries",
+	sInfoFiltered: "(filtered from _MAX_ total entries)",
+	sInfoPostFix: "",
+	sSearch: "Search:",
+	sUrl: "",
+	sFirst: "First",
+	sPrevious: "Previous",
+	sNext: "Next",
+	sLast: "Last"
+	/*-------------------------------------*/
 };

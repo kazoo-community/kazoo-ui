@@ -13,8 +13,8 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         validation: [
-            { name: '#vm-to-email-txt', regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/ },
-            { name: '#ring-number-txt', regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/ }
+            { name: '#vm-to-email-txt', regex: _t('portal_manager', 'vm_to_email_txt_regex') },
+            { name: '#ring-number-txt', regex: _t('portal_manager', 'ring_number_txt_regex') }
         ],
 
         resources: {

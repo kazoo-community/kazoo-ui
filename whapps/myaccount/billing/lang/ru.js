@@ -1,4 +1,4 @@
-window.translate['billing'] = {
+window.translate['billing'] = $.extend(true, {}, window.translate['billing'], {
 	billing_information_and_history: "Биллинговая информация и история",
 	credit_card_information	: "Информация о платёжной карте",
 	one_time_transactions: "Однократные транзакции",
@@ -24,4 +24,4 @@ window.translate['billing'] = {
 	subscription_stitle: "Подписка",
 	discount_stitle: "Скидка ($)",
 	billing_label: "Биллинг"
-};
+});

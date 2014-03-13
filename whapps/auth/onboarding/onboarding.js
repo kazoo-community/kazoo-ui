@@ -30,22 +30,22 @@ winkstart.module('auth', 'onboarding', {
             ],
             //braintree
             step2: [
-                { name: '#cardholder_name',  regex: /^[a-zA-Z\s\-\']+$/ },
+                { name: '#cardholder_name',  regex: _t('onboarding', 'cardholder_name_regex') },
                 { name: '#card_number',      regex: /^[0-9\s\-]{10,22}$/ },
                 { name: '#cvv',              regex: /^[0-9]{2,6}$/ },
                 { name: '#street_address',   regex: /^.+$/ },
                 { name: '#extended_address', regex: /^.*/ },
-                { name: '#region',           regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
-                { name: '#locality',         regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
-                { name: '#country',          regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#region',           regex: _t('onboarding', 'region_locality_regex') },
+                { name: '#locality',         regex: _t('onboarding', 'region_locality_regex') },
+                { name: '#country',          regex: _t('onboarding', 'country_regex') },
                 { name: '#postal_code',      regex: /^[0-9\-]{4,10}$/ }
             ],
             //account
             step3: [
                 { name: '#password',         regex: /^.{3,16}$/ },
                 { name: '#verify_password',  regex: /^.{3,16}$/ },
-                { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
-                { name: '#verify_email',     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#email',            regex: _t('onboarding', 'email_regex') },
+                { name: '#verify_email',     regex: _t('onboarding', 'email_regex') },
                 { name: '#company_name',     regex: /^.*$/ },
                 { name: '#name',             regex: /^.*$/ }
             ],

@@ -1,4 +1,4 @@
-window.translate['groups'] = {
+window.translate['groups'] = $.extend(true, {}, window.translate['groups'], {
 	create_group: "Создать группу",
 	edit_group: "Редактировать группу",
 	basic: "Базовые",
@@ -21,4 +21,4 @@ window.translate['groups'] = {
 	add_group_label: "Добавить группу",
 	edit_groups: "Редактировать группы",
 	create_groups: "Создать группы"
-};
+});

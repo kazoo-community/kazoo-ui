@@ -1,4 +1,4 @@
-window.translate['account'] = {
+window.translate['account'] = $.extend(true, {}, window.translate['account'], {
 	account_details: "Информация об учётной записи",
 	basic: "Базовые",
 	advanced: "Расширенные",
@@ -38,5 +38,7 @@ window.translate['account'] = {
 	email_address_placeholder: "Адрес e-mail",
 	account_details_label: "Информация об учётной записи",
 	there_were_errors_on_the_form: "При заполнении формы были допущены ошибки, пожалуйста исправьте!",
-	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить эту учётную запись?<br>ВНИМАНИЕ: Отмена этого действия невозможна!"
-};
+	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить эту учётную запись?<br>ВНИМАНИЕ: Отмена этого действия невозможна!",
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/,
+	contact_regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/
+});

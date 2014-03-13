@@ -13,15 +13,15 @@ winkstart.module('voip', 'account', {
         },
 
         validation: [
-                { name: '#caller_id_name_external',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_external',      regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_external',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_internal',      regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_emergency',     regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_emergency',     regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_emergency',   regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#contact_billing_email',        regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/ },
+                { name: '#contact_billing_email',        regex: _t('account', 'contact_regex') },
                 { name: '#contact_billing_number',       regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#contact_technical_email',      regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/ },
+                { name: '#contact_technical_email',      regex: _t('account', 'contact_regex') },
                 { name: '#contact_technical_number',     regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
         ],
 

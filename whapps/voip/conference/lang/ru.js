@@ -1,4 +1,4 @@
-window.translate['conference'] = {
+window.translate['conference'] = $.extend(true, {}, window.translate['conference'], {
 	conference: "Конференция",
 	conference_tip: "Подключает звонящего к существующей конференции",
 	conference_service: "Сервер конференций",
@@ -36,5 +36,6 @@ window.translate['conference'] = {
 	are_you_sure_you_want_to_delete: "Вы уверены что хотите удалить эту конференцию?",
 	name: "(имя)",
 	conferences_label: "Конференции",
-	add_conference_label: "Добавить конференцию"
-};
+	add_conference_label: "Добавить конференцию",
+	member_pins_string_regex: /^[a-z0-9A-Z,\s]*$/
+});

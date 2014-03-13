@@ -1,4 +1,4 @@
-window.translate['pbxs_manager'] = {
+window.translate['pbxs_manager'] = $.extend(true, {}, window.translate['pbxs_manager'], {
 	set_your_pbx: "Выберите свою АТС",
 	edit_settings_for: "Редактировать настройки для",
 	we_support_all_top_ippbx: "Мы поддерживаем АТС всех ведущих производителей. Выберите одного ниже.",
@@ -80,4 +80,4 @@ window.translate['pbxs_manager'] = {
 	state_stitle: "Штат",
 	failover_stitle: "Отказоустойчивость",
 	failover: "Отказоустойчивость"
-};
+});

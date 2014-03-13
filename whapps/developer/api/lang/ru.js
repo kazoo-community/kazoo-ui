@@ -1,4 +1,4 @@
-window.translate['api'] = {
+window.translate['api'] = $.extend(true, {}, window.translate['api'], {
 	menus: "Меню",
 	vmboxes: "Ящик голосовой почты",
 	callflows: "Сценарии",
@@ -40,4 +40,4 @@ window.translate['api'] = {
 	hide_advanced: "Скрыть расширенные",
 	something_went_wrong: "Что-то пошло не так со схемой!",
 	apis_developer_label: "Разработчик API"
-};
+});

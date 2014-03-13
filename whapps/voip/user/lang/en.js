@@ -133,5 +133,9 @@ window.translate['user'] = {
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this user?",
 	do_you_really_want_to_delete: "Do you really want to delete this device?",
-	add_user_label: "Add User"
+	add_user_label: "Add User",
+	first_last_name_regex: /^[0-9a-zA-Z\s\-\']+$/,
+	username_regex: /^[0-9a-zA-Z+@._-]{3,256}$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
 };

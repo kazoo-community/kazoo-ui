@@ -1,4 +1,4 @@
-window.translate['personal-info'] = {
+window.translate['personal-info'] = $.extend(true, {}, window.translate['personal-info'], {
 	change_your_email: "Изменить адрес e-mail",
 	change_your_email_data_content: "",
 	save: "Сохранить",
@@ -20,4 +20,4 @@ window.translate['personal-info'] = {
 	my_account_title: "Моя учётная запись",
 	is_now_your_primary_app: " теперь является вашим главным приложением",
 	you_dont_have_a_primary_app: "У вас больше нет главного приложения"
-};
+});

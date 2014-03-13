@@ -36,5 +36,6 @@ window.translate['conference'] = {
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this conference?",
 	name: "(name)",
 	conferences_label: "Conferences",
-	add_conference_label: "Add Conference"	
+	add_conference_label: "Add Conference",
+	member_pins_string_regex: /^[a-z0-9A-Z,\s]*$/
 };

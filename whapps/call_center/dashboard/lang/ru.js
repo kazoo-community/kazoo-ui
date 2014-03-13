@@ -1,4 +1,4 @@
-window.translate['dashboard'] = {
+window.translate['dashboard'] = $.extend(true, {}, window.translate['dashboard'], {
 	hide_logged_out_agents: "Скрыть операторов, не зарегистрированных в системе",
 	hide_queues: "Скрыть очереди",
 	break_time: "Время паузы",
@@ -18,4 +18,4 @@ window.translate['dashboard'] = {
 	devices_title: "Устройства",
 	hide_queues_html: "Скрыть очереди",
 	show_queues_html: "Показать очереди"
-};
+});

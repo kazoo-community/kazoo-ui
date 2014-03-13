@@ -1,4 +1,4 @@
-window.translate['cdr'] = {
+window.translate['cdr'] = $.extend(true, {}, window.translate['cdr'], {
 	key: "Код",
 	value: "Значение",
 	basic: "Базовые",
@@ -27,4 +27,4 @@ window.translate['cdr'] = {
 	detail_of_cdr_title: "Детально о cdr: ",
 	the_range_is_bigger: "Период длиннее 7 дней, пожалуйста, исправьте.",
 	dates_in_the_filter: "Даты в фильтрах в неправильном формате (мм/дд/гггг)"
-};
+});

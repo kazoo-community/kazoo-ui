@@ -1,4 +1,4 @@
-window.translate['featurecode'] = {
+window.translate['featurecode'] = $.extend(true, {}, window.translate['featurecode'], {
 	feature_codes: "Коды ДВО",
 	show_all: "Показать все",
 	show: "Показать",
@@ -24,4 +24,4 @@ window.translate['featurecode'] = {
 	parking_cat: "Парковка",
 	valet: "Автоматически",
 	retrieve: "Извлечение"
-};
+});

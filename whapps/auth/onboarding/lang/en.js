@@ -53,6 +53,9 @@ window.translate['onboarding'] = {
 	first_last_name2: "First & Last Name",
 	extension: "Extension #",
 	passwords_are_not_matching: "Passwords are not matching, please retype your password.",
-	email_addresses_are_not_matching: "Email addresses are not matching, please retype your email address."
-	
+	email_addresses_are_not_matching: "Email addresses are not matching, please retype your email address.",
+	cardholder_name_regex: /^[a-zA-Z\s\-\']+$/,
+	region_locality_regex: /^[a-zA-Z0-9\_\-\.\s]+$/,
+	country_regex: /^[a-zA-Z\_\-\s]+$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/	
 };

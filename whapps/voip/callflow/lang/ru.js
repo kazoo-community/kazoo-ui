@@ -1,4 +1,4 @@
-window.translate['callflow'] = {
+window.translate['callflow'] = $.extend(true, {}, window.translate['callflow'], {
 	css_callflow: "css/callflow.css",
 	delete_callflow: "Удалить сценарий",
 	save_changes: "Сохранить изменения",
@@ -130,4 +130,4 @@ window.translate['callflow'] = {
 	resource_name: "Ресурс",
 	this_callflow_is_outdated: "Этот сценарий устарел. Пожалуйста, пересохраните этот сценарий перед продолжением.",
 	hot_desking_name: "Присвоение телефона"	
-};
+});

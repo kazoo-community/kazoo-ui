@@ -1,4 +1,4 @@
-window.translate['portal_manager'] = {
+window.translate['portal_manager'] = $.extend(true, {}, window.translate['portal_manager'], {
 	my_voicemails: "Голосовая почта",
 	my_call_history: "История звонков",
 	my_settings: "Настройки",
@@ -37,6 +37,7 @@ window.translate['portal_manager'] = {
 	dates_in_the_filter: "Даты в фильтре в неправильном формате (мм/дд/гггг)",
 	message_index: "Список сообщений",
 	voicemail_box_id: "ID ящика голосовой почты",
-	are_you_sure_that_you_want_to_delete: "Вы уверены что хотите удалить выбранные голосовые сообщения?"
-	
-};
+	are_you_sure_that_you_want_to_delete: "Вы уверены что хотите удалить выбранные голосовые сообщения?",
+	vm_to_email_txt_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/,
+	ring_number_txt_regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/
+});

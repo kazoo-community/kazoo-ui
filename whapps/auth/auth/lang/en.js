@@ -54,6 +54,7 @@ window.translate['auth'] = {
 	you_are_in_the_recover_password: "You are in the Recover Password tool.",
 	registered_successfully: "Registered successfully. Please check your e-mail to activate your account!",
 	please_confirm_your_password: "Please confirm your password",
-	there_were_errors_on_the_form: "There were errors on the form, please correct!"
-	
+	there_were_errors_on_the_form: "There were errors on the form, please correct!",
+	username_regex: /^[a-zA-Z0-9\_\-]{3,16}$/,
+	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
 };

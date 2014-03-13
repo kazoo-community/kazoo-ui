@@ -1,4 +1,4 @@
-window.translate['queue'] = {
+window.translate['queue'] = $.extend(true, {}, window.translate['queue'], {
 	queue: "Очередь",
 	queue_tip: "Отправить звонящего в очередь.",
 	queue_login: "Вход в очередь",
@@ -93,5 +93,5 @@ window.translate['queue'] = {
 	call_center_category: "Call-Center",
 	seconds: " секунд",
 	please_enter_a_valid_number_of_seconds: "Пожалуйста, введите корректное количество секунд. Оно должно быть больше ноля."
-	
-};
+
+});

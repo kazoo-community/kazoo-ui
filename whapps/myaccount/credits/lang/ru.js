@@ -1,4 +1,4 @@
-window.translate['credits'] = {
+window.translate['credits'] = $.extend(true, {}, window.translate['credits'], {
 	per_minute_calling: "Звонки с поминутной тарификацией",
 	flat_rate_calling: "Безлимитные звонки",
 	pay_per_minute_allows_you: "Поминутная тарификация позволяет вам оплачивать только фактически совершённые разговоры. Пополните свой счёт чтобы начать звонить и следите за балансом.",
@@ -19,4 +19,4 @@ window.translate['credits'] = {
 	your_on_file_credit_card_will_immediately: "Оплата за все изменения будет немедленно снята с вашей платёжной карты. Если вы изменили услуги с регулярными платежами, изменения будут применены во время следующего платежа.<br/><br/>Вы уверены что хотите продолжить?",
 	your_changes_have_been_saved: "Ваши изменения сохранены!",
 	manage_your_credits_and_limits: "Управлять платежами и ограничениями."
-};
+});
