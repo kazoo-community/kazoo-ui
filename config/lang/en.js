@@ -51,6 +51,18 @@ window.translate['config'] = {
 	sFirst: "First",
 	sPrevious: "Previous",
 	sNext: "Next",
-	sLast: "Last"
+	sLast: "Last",
 	/*-------------------------------------*/
+	
+	charges_summary_title: "Charges summary",
+	content_charges: "Here is the detail of the monthly charges attached to your account for this service:",
+	there_is_no: "There is no ",
+	you_will_pay: "You will pay a $",
+	one_time: " one-time ",
+	service: "Service",
+	rate: "Rate",
+	quantity: "Quantity",
+	discount: "Discount",
+	monthly_charges: "Monthly Charges",
+	press_OK_or_Cancel: "Press OK to continue or Cancel to abort the process."
 };

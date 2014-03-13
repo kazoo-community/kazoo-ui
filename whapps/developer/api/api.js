@@ -34,9 +34,6 @@ winkstart.module('developer', 'api', {
     },
 
     function(args) {
-		_t = function(module, param){
-			return window.translate[module][param];
-		};
         var THIS = this;
 		
 		THIS.module = 'api';

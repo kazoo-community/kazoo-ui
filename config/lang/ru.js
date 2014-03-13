@@ -1,4 +1,4 @@
-window.translate['config'] = $.extend(true, {}, window.translate['config']{ 
+window.translate['config'] = $.extend(true, {}, window.translate['config'], { 
 	voip_label: "Виртуальная АТС",
 	voip_desc: "Управление вызовами, голосовая почта и прочие функции телефонии",
 	cluster_label: "Управление кластером",
@@ -51,6 +51,18 @@ window.translate['config'] = $.extend(true, {}, window.translate['config']{
 	sFirst: "В начало",
 	sPrevious: "Назад",
 	sNext: "Вперёд",
-	sLast: "В конец"
+	sLast: "В конец",
 	/*-------------------------------------*/
+	
+	charges_summary_title: "Информация по платежам",
+	content_charges: "Ниже представлена информация о ежемесячных платежах за услуги:",
+	there_is_no: "Не найдено ",
+	you_will_pay: "Вы оплатите ",
+	one_time: " единовременно ",
+	service: "Услуга",
+	rate: "Цена",
+	quantity: "Количество",
+	discount: "Скидка",
+	monthly_charges: "Ежемесячный платёж",
+	press_OK_or_Cancel: "Нажмите OK для продолжения или Отмена для прерывания процесса."
 });

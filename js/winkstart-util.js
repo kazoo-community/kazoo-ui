@@ -95,7 +95,7 @@
             dataTemplate,
             content,
             options = {
-                title: 'Charges summary',
+                title: _t('config', 'charges_summary_title'),
                 maxWidth: 'auto',
                 width: 'auto',
                 onClose: function() {
@@ -147,17 +147,17 @@
 
         dataTemplate = formatData(data)[0];
 
-        content = 'Here is the detail of the monthly charges attached to your account for this service:';
+        content = _t('config', 'content_charges');
 
         if ( activation_charges !== null && activation_charges_description !== null ) {
             if ( activation_charges === 0 ) {
-                content = 'There is no ' + activation_charges_description + '. ';
+                content = _t('config', 'there_is_no') + activation_charges_description + '. ';
             } else {
-                content = 'You will pay a $' + activation_charges + ' one-time ' + activation_charges_description + '. ';
+                content = _t('config', 'you_will_pay') + activation_charges + _t('config', 'one_time') + activation_charges_description + '. ';
             }
         }
 
-        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">' + content + '</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>Service</th><th>Rate</th><th></th><th>Quantity</th><th>Discount</th><th>Monthly Charges</th></tr></thead><tbody><tr><td>' + dataTemplate.service + '</td><td>$' + dataTemplate.rate + '</td><td>X</td><td>' + dataTemplate.quantity + '</td><td>' + dataTemplate.discount + '</td><td>$' + dataTemplate.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">Press OK to continue or Cancel to abort the process.</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">OK</button><button id="cancel_button" class="btn danger confirm_button">Cancel</button></div></div>');
+        html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info">' + content + '</div><div class="alert_text_wrapper info_alert"><table class="charges-summary"><thead><tr><th>' + _t('config', 'service') + '</th><th>' + _t('config', 'rate') + '</th><th></th><th>' + _t('config', 'quantity') + '</th><th>' + _t('config', 'discount') + '</th><th>' + _t('config', 'monthly_charges') + '</th></tr></thead><tbody><tr><td>' + dataTemplate.service + '</td><td>$' + dataTemplate.rate + '</td><td>X</td><td>' + dataTemplate.quantity + '</td><td>' + dataTemplate.discount + '</td><td>$' + dataTemplate.monthlyCharges + '</td></tr></tbody></table></div><div class="alert_text_wrapper info_alert charges-info">' + _t('config', 'press_OK_or_Cancel') + '</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">' + _t('config', 'OK') + '</button><button id="cancel_button" class="btn danger confirm_button">' + _t('config', 'CANCEL') + '</button></div></div>');
 
         popup = winkstart.dialog(html, options);
 
