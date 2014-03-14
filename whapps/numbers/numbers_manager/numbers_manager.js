@@ -755,18 +755,15 @@ winkstart.module('numbers', 'numbers_manager', {
 			var data = {
 				_t: function(param){
 					return window.translate['numbers_manager'][param];
-				}
+				},
+				version: winkstart.config.default_api_url.match(/(v2)$/) ? true : false
 			};
+
             var THIS = this,
                 numbers_data = [],
-<<<<<<< HEAD
-                popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.config.default_api_url.match(/(v2)$/) ? true : false}),
-=======
-                popup_html = THIS.templates.add_number_dialog.tmpl({ version: winkstart.apps.cluster.api_url.match(/(v2)$/) ? true : false}),
->>>>>>> fc1c9ac0a091718b27303d890cba76dae428f7a6
+                popup_html = THIS.templates.add_number_dialog.tmpl(data),
                 popup;
 
-            console.log(winkstart.apps.cluster.api_url);
 
             $('.toggle_div', popup_html).hide();
 
