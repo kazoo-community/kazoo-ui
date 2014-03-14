@@ -34,7 +34,7 @@ window.translate['config'] = $.extend(true, {}, window.translate['config'], {
 	hotdesking_cat: "Присвоение телефонов",
 	time_of_day_cat: "Время дня",
 	/*-------------------------------------*/
-	advanced_menu_cat: "advanced",
+	advanced_menu_cat: "Расширенные",
 	
 	/*-------------jquery.dataTable--------*/
 	sProcessing: "Обработка...",
