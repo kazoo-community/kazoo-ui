@@ -1,31 +1,31 @@
 <div>
     <div class="dialog_popup">
-        <h1>Manual Presence</h1>
+        <h1>${_t('manual_presence')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="presence_id_input">ID: </label>
+                    <label for="presence_id_input">${_t('ID')} </label>
                     <input type="text" id="presence_id_input" class="medium" value="${data_presence.presence_id}"/>
                 </div>
                 <div class="popup_field">
-                    <label for="presence_status">Status: </label>
+                    <label for="presence_status">${_t('status')}: </label>
                     <select id="presence_status" style="width: 100px; height: 28px;">
                         {{if data_presence.status == 'idle'}}
-                            <option value="idle" selected="selected">Idle</option>
+                            <option value="idle" selected="selected">${_t('idle')}</option>
                         {{else}}
-                            <option value="idle">Idle</option>
+                            <option value="idle">${_t('idle')}</option>
                         {{/if}}
 
                         {{if data_presence.status == 'ringing'}}
-                            <option value="ringing" selected="selected">Ringing</option>
+                            <option value="ringing" selected="selected">${_t('ringing')}</option>
                         {{else}}
-                            <option value="ringing">Ringing</option>
+                            <option value="ringing">${_t('ringing')}</option>
                         {{/if}}
 
                         {{if data_presence.status == 'busy'}}
-                            <option value="busy" selected="selected">Busy</option>
+                            <option value="busy" selected="selected">${_t('busy')}</option>
                         {{else}}
-                            <option value="busy">Busy</option>
+                            <option value="busy">${_t('busy')}</option>
                         {{/if}}
                     </select>
                 </div>

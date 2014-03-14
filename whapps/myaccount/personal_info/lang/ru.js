@@ -1,0 +1,23 @@
+window.translate['personal-info'] = $.extend(true, {}, window.translate['personal-info'], {
+	change_your_email: "Изменить адрес e-mail",
+	change_your_email_data_content: "",
+	save: "Сохранить",
+	change_your_password: "Изменить пароль",
+	change_your_password_data_content: "",
+	confirm_your_password: "Подтверждение пароля",
+	confirm_your_password_data_content: "",
+	advanced_view: "Расширенные настройки",
+	advanced_view_data_content: "Нажмите, если хотите по умолчанию видеть расширенные настройки.",
+	primary_app: "Главное приложение",
+	primary_app_data_content: "Выберите приложения для отображения сразу после входа.",
+	none: "Нет",
+	close: "Закрыть",
+	email_placeholder: "e-mail",
+	my_account_label: "Моя учётная запись",
+	email_address_updated: "Адрес e-mail обновлён!",
+	password_updated: "Пароль успешно изменён!",
+	passwords_do_not_match: "Пароли не совпадают, пожалуйста, введите заново.",
+	my_account_title: "Моя учётная запись",
+	is_now_your_primary_app: " теперь является вашим главным приложением",
+	you_dont_have_a_primary_app: "У вас больше нет главного приложения"
+});

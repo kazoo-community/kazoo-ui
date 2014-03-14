@@ -120,7 +120,7 @@ winkstart.module('myaccount', 'report', {
                     link: 'nav',
                     sublink: 'report',
                     masqueradable: true,
-                    label: 'Report',
+                    label: _t('report', 'report_label'),
                     weight: '17',
                     publish: 'report.render'
                 });
@@ -130,10 +130,14 @@ winkstart.module('myaccount', 'report', {
         render_report: function(target) {
             var THIS = this,
                 popup_html = $('<div id="report_popup" class="inline_popup"><div class="inline_content main_content"/></div>'),
-                container = $('.inline_content', popup_html).append(THIS.templates.report.tmpl());
+                container = $('.inline_content', popup_html).append(THIS.templates.report.tmpl({
+					_t: function(param){
+						return window.translate['report'][param];
+					}
+				}));
                 report_dialog = winkstart.dialog(popup_html, {
                     modal: true,
-                    title: 'Report'
+                    title: _t('report', 'report_title')
                 });
 
             THIS.setup_report(container);
@@ -262,25 +266,25 @@ winkstart.module('myaccount', 'report', {
             var THIS = this,
                 columns = [
                 {
-                    'sTitle': 'Account'
+                    'sTitle': _t('report', 'account_stitle')
                 },
                 {
-                    'sTitle': '# SIP Devices'
+                    'sTitle': _t('report', 'sip_devices_stitle')
                 },
                 {
-                    'sTitle': '# Softphones'
+                    'sTitle': _t('report', 'softphones_stitle')
                 },
                 {
-                    'sTitle': '# DIDs'
+                    'sTitle': _t('report', 'dids_stitle')
                 },
                 {
-                    'sTitle': '# Inbound Trunks'
+                    'sTitle': _t('report', 'inbound_trunks_stitle')
                 },
                 {
-                    'sTitle': '# Outbound Trunks'
+                    'sTitle': _t('report', 'outbound_trunks_stitle')
                 },
                 {
-                    'sTitle': 'Available Credits',
+                    'sTitle': _t('report', 'available_credits_stitle'),
                     'sType': 'currency'
                 }
             ];

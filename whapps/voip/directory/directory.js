@@ -65,10 +65,10 @@ winkstart.module('voip', 'directory', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Directory',
+            label: _t('directory', 'directory_label'),
             icon: 'book',
             weight: '55',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -244,8 +244,8 @@ winkstart.module('voip', 'directory', {
                     }, data_defaults || {}),
                     field_data: {
                         sort_by: {
-                            'first_name': 'First Name',
-                            'last_name': 'Last Name'
+                            'first_name': _t('directory', 'first_name'),
+                            'last_name': _t('directory', 'last_name')
                         }
                     }
                 };
@@ -346,6 +346,9 @@ winkstart.module('voip', 'directory', {
         },
 
         render_directory: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['directory'][param];
+			};
             var THIS = this,
                 directory_html = THIS.templates.edit.tmpl(data);
 
@@ -386,7 +389,7 @@ winkstart.module('voip', 'directory', {
                         THIS.save_directory(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('directory', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -394,7 +397,7 @@ winkstart.module('voip', 'directory', {
             $('.directory-delete', directory_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this directory?', function() {
+                winkstart.confirm(_t('directory', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -411,7 +414,10 @@ winkstart.module('voip', 'directory', {
                             callflow_id: $callflow.val(),
                             field_data: {
                                 callflows: data.field_data.callflows
-                            }
+                            },
+							_t: function(param){
+								return window.translate['directory'][param];
+							}
                         };
 
                     if($('#row_no_data', directory_html).size() > 0) {
@@ -434,7 +440,11 @@ winkstart.module('voip', 'directory', {
                 $('#option_user_'+user_id, directory_html).show();
                 //if grid empty, add no data line
                 if($('.rows .row', directory_html).size() == 0) {
-                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl());
+                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl({
+						_t: function(param){
+							return window.translate['directory'][param];
+						}
+					}));
                 }
             });
 
@@ -474,7 +484,7 @@ winkstart.module('voip', 'directory', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('directory', 'no_name')
                                 });
                             });
                         }
@@ -489,9 +499,9 @@ winkstart.module('voip', 'directory', {
                     $('#directory-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Directories',
+                            label: _t('directory', 'directories_label'),
                             identifier: 'directory-listview',
-                            new_entity_label: 'Add Directory',
+                            new_entity_label: _t('directory', 'add_directory_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'directory.edit',
@@ -527,7 +537,10 @@ winkstart.module('voip', 'directory', {
                                 callflow_id: data.field_data.old_list[v.id],
                                 field_data: {
                                     callflows: data.field_data.callflows
-                                }
+                                },
+								_t: function(param){
+									return window.translate['directory'][param];
+								}
                             };
 
                             $('.rows', parent).append(THIS.templates.user_row.tmpl(user_item));
@@ -537,12 +550,20 @@ winkstart.module('voip', 'directory', {
                 }
                 else {
                     $('.rows', parent).empty()
-                                      .append(THIS.templates.user_row.tmpl());
+                                      .append(THIS.templates.user_row.tmpl({
+										_t: function(param){
+											return window.translate['directory'][param];
+										}
+									  }));
                 }
             }
             else {
                 $('.rows', parent).empty()
-                                  .append(THIS.templates.user_row.tmpl());
+                                  .append(THIS.templates.user_row.tmpl({
+									_t: function(param){
+										return window.translate['directory'][param];
+									}
+								  }));
             }
         },
 
@@ -568,7 +589,7 @@ winkstart.module('voip', 'directory', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Directory' : 'Create Directory'
+                        title: (data.id) ? _t('directory', 'edit_directory') : _t('directory', 'create_directory')
                     });
                 }
             }, data_defaults);
@@ -579,11 +600,11 @@ winkstart.module('voip', 'directory', {
 
             $.extend(callflow_nodes, {
                 'directory[id=*]': {
-                    name: 'Directory',
+                    name: _t('directory', 'directory'),
                     icon: 'book',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'directory',
-                    tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
+                    tip: _t('directory', 'directory_tip'),
                     data: {
                         id: 'null'
                     },
@@ -615,6 +636,9 @@ winkstart.module('voip', 'directory', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.directory_callflow.tmpl({
+									_t: function(param){
+										return window.translate['directory'][param];
+									},
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -647,7 +671,7 @@ winkstart.module('voip', 'directory', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Directory',
+                                    title: _t('directory', 'directory_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

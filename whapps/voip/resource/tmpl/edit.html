@@ -2,24 +2,24 @@
     <div class="row">
         <div class="whapp-header">
             {{if data.id}}
-                <h1>Edit ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Carrier</h1>
+                <h1>${_t('edit')} ${data.type.charAt(0).toUpperCase() + data.type.slice(1)} ${_t('carrier')}</h1>
             {{else}}
-                <h1>Add Carrier</h1>
+                <h1>${_t('add_carrier')}</h1>
             {{/if}}
 
             <div class="buttons-right pasted view-buttons">
-                <button class="btn black basic activate">Basic</button>
-                <button class="btn black advanced">Advanced</button>
+                <button class="btn black basic activate">${_t('basic')}</button>
+                <button class="btn black advanced">${_t('advanced')}</button>
             </div>
         </div>
     </div>
 
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
-            <li class="active"><a href="#basic">Basic</a></li>
-            <li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
-            <li><a href="#audio_settings"><span class="icon audio"></span>Gateway Codecs</a></li>
-            <li><a href="#caller_id_options"><span class="icon device"></span>Caller-ID Options</a></li>
+            <li class="active"><a href="#basic">${_t('basic')}</a></li>
+            <li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
+            <li><a href="#audio_settings"><span class="icon audio"></span>${_t('gateway_codecs')}</a></li>
+            <li><a href="#caller_id_options"><span class="icon device"></span>${_t('caller_id_options')}</a></li>
         </ul>
 
         <form id="resource-form">
@@ -31,48 +31,48 @@
 
                     {{if data.type}}{{else}}
                         <div class="clearfix">
-                            <label for="type">Carrier Type:</label>
+                            <label for="type">${_t('carrier_type')}</label>
                             <div class="input">
-                                <select name="type" id="type" class="medium" rel="popover" data-content="Global Carriers are system-wide trunks.">
-                                    <option value="local">Local</option>
-                                    <option value="global">Global</option>
+                                <select name="type" id="type" class="medium" rel="popover" data-content="${_t('carrier_type_data_content')}">
+                                    <option value="local">${_t('local')}</option>
+                                    <option value="global">${_t('global')}</option>
                                 </select>
                             </div>
                         </div>
                     {{/if}}
 
                     <div class="clearfix">
-                        <label for="name">Name:</label>
+                        <label for="name">${_t('name')}</label>
                         <div class="input">
-                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name of this carrier"/>
+                            <input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="gateways_server">Server:</label>
+                        <label for="gateways_server">${_t('server')}</label>
                         <div class="input">
-                            <input class="span4" id="gateways_server" name="gateways[0].server" type="text" placeholder="Domain name or IP address" value="${data.gateways[0].server}" data-prev_value="${data.gateways[0].server}" rel="popover" data-content="The destination server domain or IP"/>
+                            <input class="span4" id="gateways_server" name="gateways[0].server" type="text" placeholder="${_t('server_placeholder')}" value="${data.gateways[0].server}" data-prev_value="${data.gateways[0].server}" rel="popover" data-content="${_t('server_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="gateways_username">Username:</label>
+                        <label for="gateways_username">${_t('username')}</label>
                         <div class="input">
-                            <input class="span4" id="gateways_username" name="gateways[0].username" type="text" placeholder="Username" value="${data.gateways[0].username}" rel="popover" data-content="The authentication username used if challenged by the server"/>
+                            <input class="span4" id="gateways_username" name="gateways[0].username" type="text" placeholder="${_t('username_placeholder')}" value="${data.gateways[0].username}" rel="popover" data-content="${_t('username_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="gateways_password">Password:</label>
+                        <label for="gateways_password">${_t('password')}</label>
                         <div class="input">
-                            <input class="span4" id="gateways_password" name="gateways[0].password" type="password" placeholder="Password" value="${data.gateways[0].password}" rel="popover" data-content="The authentication password used if challenged by the server"/>
+                            <input class="span4" id="gateways_password" name="gateways[0].password" type="password" placeholder="${_t('password_placeholder')}" value="${data.gateways[0].password}" rel="popover" data-content="${_t('password_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix priority_wrapper">
-                        <label for="weight_cost">Priority:</label>
+                        <label for="weight_cost">${_t('priority')}</label>
                         <div class="input">
-                            <input class="span4" id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" rel="popover" data-content="The priority determines which carrier is tried first when multiple carriers are set up for the same rule (more than 1 10-digit US carrier, etc)"/>
+                            <input class="span4" id="weight_cost" name="weight_cost" type="slider" value="${data.weight_cost}" rel="popover" data-content="${_t('priority_data_content')}"/>
                         </div>
                     </div>
 
@@ -82,11 +82,11 @@
                                 <li>
                                     <label>
                                         {{if data.enabled}}
-                                            <input id="enabled" name="enabled" type="checkbox" checked="checked" rel="popover" data-content="When set to false this carrier will be ignored by the call routing engine"/>
+                                            <input id="enabled" name="enabled" type="checkbox" checked="checked" rel="popover" data-content="${_t('enabled_data_content')}"/>
                                         {{else}}
-                                            <input id="enabled" name="enabled" type="checkbox" rel="popover" data-content="When set to false this carrier will be ignored by the call routing engine"/>
+                                            <input id="enabled" name="enabled" type="checkbox" rel="popover" data-content="${_t('enabled_data_content')}"/>
                                         {{/if}}
-                                        <span>Enabled</span>
+                                        <span>${_t('enabled')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -96,9 +96,9 @@
 
                 <div id="options">
                     <div class="clearfix">
-                        <label for="gateways_realm">Realm:</label>
+                        <label for="gateways_realm">${_t('realm')}</label>
                         <div class="input">
-                            <input class="span4" name="gateways[0].realm" id="gateways_realm" type="text" placeholder="Realm" value="${data.gateways[0].realm}" rel="popover" data-content="The authentication realm used if challenged by the server"/>
+                            <input class="span4" name="gateways[0].realm" id="gateways_realm" type="text" placeholder="${_t('realm_placeholder')}" value="${data.gateways[0].realm}" rel="popover" data-content="${_t('realm_data_content')}"/>
                         </div>
                     </div>
 
@@ -108,11 +108,11 @@
                                 <li>
                                     <label>
                                         {{if data.gateways[0].format_from_uri == true}}
-                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" checked="checked" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" checked="checked" rel="popover" data-content="${_t('pass_realm_in_invite_data_content')}"/>
                                         {{else}}
-                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm."/>
+                                            <input type="checkbox" id="gateways_format_from_uri" name="gateways[0].format_from_uri" rel="popover" data-content="${_t('pass_realm_in_invite_data_content')}"/>
                                         {{/if}}
-                                        <span>Pass Realm in INVITE</span>
+                                        <span>${_t('pass_realm_in_invite')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -120,9 +120,9 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="rules">Rules:</label>
+                        <label for="rules">${_t('rules')}</label>
                         <div class="input">
-                            <select name="rules_dropdown" id="rules_dropdown" class="medium" rel="popover" data-content="A regular expression used by the routine engine to determine when to use this carrier.">
+                            <select name="rules_dropdown" id="rules_dropdown" class="medium" rel="popover" data-content="${_t('rules_data_content')}">
                             {{each(key, val) field_data.rules}}
                                 {{if data.rules[0] == key}}
                                     <option id="${key}" value="${key}" selected="selected">${val}</option>
@@ -136,21 +136,21 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="gateways_prefix">Prefix</label>
+                        <label for="gateways_prefix">${_t('prefix')}</label>
                         <div class="input">
-                            <input type="text" name="gateways[0].prefix" id="gateways_prefix" value="${data.gateways[0].prefix}" rel="popover" data-content="Additional characters to prepend to the front of the dialed number"/>
+                            <input type="text" name="gateways[0].prefix" id="gateways_prefix" value="${data.gateways[0].prefix}" rel="popover" data-content="${_t('prefix_data_content')}"/>
                         </div>
                     </div>
                     <div class="clearfix">
-                        <label for="gateways_suffix">Suffix</label>
+                        <label for="gateways_suffix">${_t('suffix')}</label>
                         <div class="input">
-                            <input type="text" name="gateways[0].suffix" id="gateways_suffix" value="${data.gateways[0].suffix}" rel="popover" data-content="Additional characters to append to the front of the dialed number"/>
+                            <input type="text" name="gateways[0].suffix" id="gateways_suffix" value="${data.gateways[0].suffix}" rel="popover" data-content="${_t('suffix_data_content')}"/>
                         </div>
                     </div>
                     <div class="clearfix">
-                        <label for="gateways_progress_timeout">Progress Timeout</label>
+                        <label for="gateways_progress_timeout">${_t('progress_timeout')}</label>
                         <div class="input">
-                            <input type="text" name="gateways[0].progress_timeout" id="gateways_progress_timeout" value="${data.gateways[0].progress_timeout}" rel="popover" data-content="In secs, the maximum time to wait for media from a carrier gateway"/>
+                            <input type="text" name="gateways[0].progress_timeout" id="gateways_progress_timeout" value="${data.gateways[0].progress_timeout}" rel="popover" data-content="${_t('progress_timeout_data_content')}"/>
                         </div>
                     </div>
 
@@ -164,7 +164,7 @@
                                         {{else}}
                                             <input type="checkbox" id="peer" name="peer" rel="popover" data-content=""/>
                                         {{/if}}
-                                        <span>Peer</span>
+                                        <span>${_t('peer')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -173,7 +173,7 @@
                 </div>
 
                 <div id="audio_settings">
-                        <h3>Audio Codecs</h3>
+                        <h3>${_t('audio_codecs')}</h3>
                         {{each(key, val) field_data.gateways.codecs}}
                             <div class="clearfix">
                                 <ul class="inputs-list">
@@ -194,9 +194,9 @@
 
                 <div id="caller_id_options">
                     <div class="clearfix">
-                        <label for="caller_id_options_type">Type</label>
+                        <label for="caller_id_options_type">${_t('type')}</label>
                         <div class="input">
-                            <select name="caller_id_options.type" id="caller_id_options_type" class="medium" rel="popover" data-content="An arbitrary caller-id type to search for when this route is used">
+                            <select name="caller_id_options.type" id="caller_id_options_type" class="medium" rel="popover" data-content="${_t('type_data_content')}">
                                 {{each(key, val) field_data.caller_id_options.type}}
                                     {{if data.caller_id_options.type == key}}
                                         <option value="${key}" selected="selected">${val}</option>
@@ -212,9 +212,9 @@
         </form>
         <div class="buttons-right">
             {{if data.id}}
-                <button class="resource-delete btn danger">Delete</button>
+                <button class="resource-delete btn danger">${_t('delete')}</button>
             {{/if}}
-            <button class="resource-save btn success">Save</button>
+            <button class="resource-save btn success">${_t('save')}</button>
         </div>
     </div>
 </div>

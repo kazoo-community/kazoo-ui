@@ -2,38 +2,38 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Conference</h1>
+                <h1>${_t('edit_conference')}</h1>
             {{else}}
-                <h1>Create Conference</h1>
+                <h1>${_t('create_conference')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
-		 	<li><a href="#conference_server"><span class="icon conference"></span>Conference Server</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
+		 	<li><a href="#conference_server"><span class="icon conference"></span>${_t('conference_server')}</a></li>
 		</ul>
 
 		<form id="conference-form" action="" method="post" >
 			<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="">Conference Name:</label>
+						<label for="">${_t('conference_name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this conference"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="${_t('conference_name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="owner_id">Assign To</label>
+						<label for="owner_id">${_t('assign_to')}</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the user who owns this conference">
+							<span rel="popover" data-content="${_t('assign_to_data_content')}">
 								<select name="owner_id" id="owner_id" class="medium" >
 									{{each field_data.users}}
 	                                    {{if data.owner_id == id}}
@@ -44,17 +44,17 @@
 	                                {{/each}}
 								</select>
 								<div class="edit_create">
-	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
-	                                <a class="inline_action" data-action="create" href="#">Create</a>
+	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">${_t('edit')}</a>
+	                                <a class="inline_action" data-action="create" href="#">${_t('create')}</a>
 								</div>
 							</span>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="member_pins_string">PINs</label>
+						<label for="member_pins_string">${_t('pins')}</label>
 						<div class="input">
-							<input class="span4" id="member_pins_string" name="member.pins_string" type="text" placeholder="PIN" value="${data.member.pins_string}" rel="popover" data-content="A comma separated list of pins, that can be entered to join the conference"/>
+							<input class="span4" id="member_pins_string" name="member.pins_string" type="text" placeholder="PIN" value="${data.member.pins_string}" rel="popover" data-content="${_t('pins_data_content')}"/>
 						</div>
 					</div>
 				</div>
@@ -65,13 +65,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to play names when entering the conference.">
+										<span rel="popover" data-content="${_t('play_name_upon_entry_data_content')}">
 											{{if data.play_name_on_join}}
 							                    <input type="checkbox" id="play_name_on_join" name="play_name_on_join" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="play_name_on_join" name="play_name_on_join"/>
 							                {{/if}}
-							                <span>Play name upon entry</span>
+							                <span>${_t('play_name_upon_entry')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -84,13 +84,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to join the conference muted">
+										<span rel="popover" data-content="${_t('join_the_conference_muted_data_content')}">
 											{{if data.member.join_muted}}
 							                    <input type="checkbox" id="member_join_muted" name="member.join_muted" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="member_join_muted" name="member.join_muted" />
 							                {{/if}}
-							                <span>Join the conference muted</span>
+							                <span>${_t('join_the_conference_muted')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -103,13 +103,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to join the conference deaf">
+										<span rel="popover" data-content="${_t('join_the_conference_deaf_data_content')}">
 											{{if data.member.join_deaf}}
 							                    <input type="checkbox" id="member_join_deaf" name="member.join_deaf" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="member_join_deaf" name="member.join_deaf" />
 							                {{/if}}
-							                <span>Join the conference deaf</span>
+							                <span>${_t('join_the_conference_deaf')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -120,9 +120,9 @@
 
 				<div id="conference_server">
 					<div class="clearfix">
-						<label for="member_numbers_string">Numbers</label>
+						<label for="member_numbers_string">${_t('numbers')}</label>
 						<div class="input">
-							<input class="span4" id="member_numbers_string" name="member.numbers_string" type="text" placeholder="Numbers" value="${data.member.numbers_string}" rel="popover" data-content="A comma separated list of numbers, that will be assigned to the conference. Unless you plan to use the 'Conference Service' callflow node - don't worry about this field" />
+							<input class="span4" id="member_numbers_string" name="member.numbers_string" type="text" placeholder="${_t('numbers_placeholder')}" value="${data.member.numbers_string}" rel="popover" data-content="${_t('numbers_data_content')}" />
 						</div>
 					</div>
 				</div>
@@ -131,9 +131,9 @@
 
 		<div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger conference-delete">Delete</button>
+	            <button class="btn danger conference-delete">${_t('delete')}</button>
 	        {{/if}}
-            <button class="btn success conference-save">Save</button>
+            <button class="btn success conference-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

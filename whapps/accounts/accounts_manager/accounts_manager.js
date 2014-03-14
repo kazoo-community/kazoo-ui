@@ -20,12 +20,12 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		validation: [
 				{ name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
-				{ name: '#vm_to_email_support_email',    regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ },
+				{ name: '#vm_to_email_support_email',    regex: _t('accounts', 'vm_to_email_support_email_regex') },
 				{ name: '#vm_to_email_send_from',        regex: /^.*$/ },
 				{ name: '#vm_to_email_service_url',      regex: /^.*$/ },
 				{ name: '#vm_to_email_service_provider', regex: /^.*$/ },
 				{ name: '#vm_to_email_service_name',     regex: /^.*$/ },
-				{ name: '#deregister_email',             regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/ }
+				{ name: '#deregister_email',             regex: _t('accounts', 'vm_to_email_support_email_regex') }
 		],
 
 		resources: {
@@ -109,12 +109,13 @@ winkstart.module('accounts', 'accounts_manager', {
 
 	function(args) {
 		var THIS = this;
-
+		THIS.module = "accounts";
+		
 		winkstart.publish('nav.add_sublink', {
 			link: 'nav',
 			sublink: 'switch_account',
 			masqueradable: true,
-			label: 'Switch Account',
+			label: _t('accounts','switch_account'),
 			weight: '05',
 			publish: 'accounts_manager.switch_account'
 		});
@@ -627,6 +628,9 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		render_accounts_manager: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['accounts'][param];
+			};
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
 				deregister = $('#deregister', account_html),
@@ -818,7 +822,7 @@ winkstart.module('accounts', 'accounts_manager', {
 									);
 								},
 								function() {
-									winkstart.alert('There were errors on the form, please correct!');
+									winkstart.alert(_t('config', 'there_were_errors'));
 								}
 							);
 						};
@@ -940,7 +944,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						.listpanel({
 							label: 'Accounts',
 							identifier: 'accounts_manager-listview',
-							new_entity_label: 'Add Account',
+							new_entity_label: _t(THIS.module, 'add_account'),//'Add Account',
 							data: map_crossbar_data(data.data),
 							publisher: winkstart.publish,
 							notifyMethod: 'accounts_manager.edit',

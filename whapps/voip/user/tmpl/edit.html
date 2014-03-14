@@ -2,103 +2,103 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit User</h1>
+                <h1>${_t('edit_user')}</h1>
             {{else}}
-                <h1>Create User</h1>
+                <h1>${_t('create_user')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#caller_id">Caller ID</a></li>
-		 	<li><a href="#options">Options</a></li>
-		 	<li><a href="#call_forward">Call Forward</a></li>
-		 	<li><a href="#password_management">Password Management</a></li>
-		 	<li><a href="#hot_desking">Hot Desking</a></li>
-            <li><a href="#restrictions">Restrictions</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#caller_id">${_t('caller_id')}</a></li>
+		 	<li><a href="#options">${_t('options')}</a></li>
+		 	<li><a href="#call_forward">${_t('call_forward')}</a></li>
+		 	<li><a href="#password_management">${_t('password_management')}</a></li>
+		 	<li><a href="#hot_desking">${_t('hot_desking')}</a></li>
+            <li><a href="#restrictions">${_t('restrictions')}</a></li>
 		</ul>
 		<form id="user-form" action="#" method="post">
 			<div class="pill-content">
 				<div class="active basic_view" id="basic">
-					<h3>Basic Settings</h3>
+					<h3>${_t('basic_settings')}</h3>
 					<div class="clearfix">
-						<label for="username">Username</label>
+						<label for="username">${_t('username')}</label>
 						<div class="input">
                             {{if data.username}}
                                 <label id="username_label">${data.username}</label>
                                 <input id="username" name="username" type="hidden"value="${data.username}" />
                             {{else}}
-                                <input class="span4" id="username" name="username" type="text" placeholder="Username" value="${data.username}" rel="popover" data-content="Username"/>
+                                <input class="span4" id="username" name="username" type="text" placeholder="${_t('username_placeholder')}" value="${data.username}" rel="popover" data-content="${_t('username_pdata_content')}"/>
                             {{/if}}
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="first_name">First Name</label>
+						<label for="first_name">${_t('first_name')}</label>
 						<div class="input">
-							<input class="span4" id="first_name" name="first_name" type="text" placeholder="First Name" value="${data.first_name}" rel="popover" data-content="First Name"/>
+							<input class="span4" id="first_name" name="first_name" type="text" placeholder="${_t('first_name_placeholder')}" value="${data.first_name}" rel="popover" data-content="${_t('first_name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="last_name">Last Name</label>
+						<label for="last_name">${_t('last_name')}</label>
 						<div class="input">
-							<input class="span4" id="last_name" name="last_name" type="text" placeholder="Last Name" value="${data.last_name}" rel="popover" data-content="Last Name"/>
+							<input class="span4" id="last_name" name="last_name" type="text" placeholder="${_t('last_name_placeholder')}" value="${data.last_name}" rel="popover" data-content="${_t('last_name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="email">Email</label>
+						<label for="email">${_t('email')}</label>
 						<div class="input">
-							<input class="span4" id="email" name="email" type="text" placeholder="user@company.com" value="${data.email}" rel="popover" data-content="Email Address like: user@company.com"/>
+							<input class="span4" id="email" name="email" type="text" placeholder="${_t('email_placeholder')}" value="${data.email}" rel="popover" data-content="${_t('email_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="priv_level">User privilege level</label>
+						<label for="priv_level">${_t('user_privilege_level')}</label>
 						<div class="input">
-							 <select id="priv_level" name="priv_level" class="medium" rel="popover" data-content="The user privilege level">
+							 <select id="priv_level" name="priv_level" class="medium" rel="popover" data-content="${_t('user_privilege_level_data_content')}">
                                 {{if data.priv_level == 'admin'}}
-                                    <option value="admin" selected>Administrator</option>
-                                    <option value="user">User</option>
+                                    <option value="admin" selected>${_t('administrator')}</option>
+                                    <option value="user">${_t('user')}</option>
                                 {{else}}
-                                    <option value="admin">Administrator</option>
-                                    <option value="user" selected>User</option>
+                                    <option value="admin">${_t('administrator')}</option>
+                                    <option value="user" selected>${_t('user')}</option>
                                 {{/if}}
                             </select>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="vm_to_email_enabled">Email Notifications</label>
+						<label for="vm_to_email_enabled">${_t('email_notifications')}</label>
 						<div class="input">
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-	              						<span rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time this user gets a voicemail.">
+	              						<span rel="popover" data-content="${_t('voicemail_data_content')}">
 											{{if data.vm_to_email_enabled}}
 			                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" checked="checked" />
 			                                {{else}}
 			                                <input id="vm_to_email_enabled" type="checkbox" name="vm_to_email_enabled" />
 			                                {{/if}}
-			                                <span>Voicemail</span>
+			                                <span>${_t('voicemail')}</span>
 		                                </span>
                             		</label>
                                 </li>
                                 <li>
                                 	<label>
-                                		<span rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time you get a Fax.">
+                                		<span rel="popover" data-content="${_t('fax_data_content')}">
 											{{if data.fax_to_email_enabled}}
 			                                <input id="fax_to_email_enabled" type="checkbox" name="fax_to_email_enabled" checked="checked" />
 			                                {{else}}
 			                                <input id="fax_to_email_enabled" type="checkbox" name="fax_to_email_enabled" />
 			                                {{/if}}
-			                                <span>Fax</span>
+			                                <span>${_t('fax')}</span>
 		                                </span>
                                 	</label>
                                 </li>
@@ -108,127 +108,127 @@
 
 					<hr />
 
-					<h3>In-House Calls</h3>
+					<h3>${_t('in_house_calls')}</h3>
 					<div class="clearfix">
-						<label for="caller_id_name_internal">Caller ID Name</label>
+						<label for="caller_id_name_internal">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this User for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="${_t('caller_id_name_placeholder')}" value="${data.caller_id.internal.name}"  rel="popover" data-content="${_t('caller_id_name_data_content')}" />
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="caller_id_number_internal">Caller ID Number</label>
+						<label for="caller_id_number_internal">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this User for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="${_t('caller_id_number_data_content')}"/>
 						</div>
 					</div>
 					<hr />
 
-					<h3>Outbound Calls</h3>
+					<h3>${_t('outbound_calls')}</h3>
 					<div class="clearfix">
-						<label for="caller_id_name_external">Caller ID Name</label>
+						<label for="caller_id_name_external">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this User for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="${_t('caller_id_name_placeholder')}" value="${data.caller_id.external.name}" rel="popover" data-content="${_t('caller_id_name_data_content2')}" />
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="caller_id_number_external">Caller ID Number</label>
+						<label for="caller_id_number_external">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this User for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="${_t('caller_id_number_data_content2')}"/>
 						</div>
 					</div>
 
-					<h3>Devices</h3>
+					<h3>${_t('devices')}</h3>
 					<div id="equipment">
 	                    <div class="help_box">
-	                        The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.
+	                        ${_t('the_following_devices_are_mapped')}
 	                    </div>
 	                    <div id="tab_devices">
 	                        <div class="row title">
-	                            <div class="column first">Device Name&nbsp;&nbsp;<span class="icon medium device"/></div>
-	                            <div class="column second">Type&nbsp;&nbsp;<span class="icon medium iphone" style="margin-bottom: 4px;"/></div>
-	                            <div class="column third">Status</div>
-	                            <div class="column fourth">Enabled</div>
-	                            <div class="column fifth">Actions&nbsp;&nbsp;<span class="icon medium settings" style="margin-bottom: 2px;"/></div>
+	                            <div class="column first">${_t('device_name')}&nbsp;&nbsp;<span class="icon medium device"/></div>
+	                            <div class="column second">${_t('type')}&nbsp;&nbsp;<span class="icon medium iphone" style="margin-bottom: 4px;"/></div>
+	                            <div class="column third">${_t('status')}</div>
+	                            <div class="column fourth">${_t('enabled')}</div>
+	                            <div class="column fifth">${_t('actions')}&nbsp;&nbsp;<span class="icon medium settings" style="margin-bottom: 2px;"/></div>
 	                        </div>
 	                        <div class="rows">
 	                        </div>
 	                    </div>
 
 	                    {{if field_data.new_user}}
-	                        <button class="btn add_device" data-new_user="${field_data.new_user}">Add a new device for this user</button>
+	                        <button class="btn add_device" data-new_user="${field_data.new_user}">${_t('add_a_new_device')}</button>
 	                    {{else}}
-	                        <button class="btn add_device" data-user_id="${data.id}">Add a new device for this user</button>
+	                        <button class="btn add_device" data-user_id="${data.id}">${_t('add_a_new_device')}</button>
 	                    {{/if}}
 	                </div>
 	            </div>
 
 	            <div id="caller_id">
-					<h3>In-House Calls</h3>
+					<h3>${_t('in_house_calls')}</h3>
 					<div class="clearfix">
-						<label for="advanced_caller_id_name_internal">Caller ID Name</label>
+						<label for="advanced_caller_id_name_internal">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="advanced_caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this User for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="advanced_caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="${_t('caller_id_name_placeholder')}" value="${data.caller_id.internal.name}"  rel="popover" data-content="${_t('caller_id_name_data_content')}" />
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="advanced_caller_id_number_internal">Caller ID Number</label>
+						<label for="advanced_caller_id_number_internal">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="advanced_caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this User for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
-						</div>
-					</div>
-					<hr />
-
-					<h3>Outbound Calls</h3>
-					<div class="clearfix">
-						<label for="advanced_caller_id_name_external">Caller ID Name</label>
-						<div class="input">
-							<input class="span4" id="advanced_caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this User for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
-						</div>
-					</div>
-
-					<div class="clearfix">
-						<label for="advanced_caller_id_number_external">Caller ID Number</label>
-						<div class="input">
-							<input class="span4" id="advanced_caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this User for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="advanced_caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="${_t('caller_id_number_data_content')}"/>
 						</div>
 					</div>
 					<hr />
 
-					<h3>Emergency</h3>
+					<h3>${_t('outbound_calls')}</h3>
 					<div class="clearfix">
-						<label for="advanced_caller_id_name_emergency">Caller ID Name</label>
+						<label for="advanced_caller_id_name_external">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="advanced_caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="Define the Caller ID Name of this User for Emergency Calls." />
+							<input class="span4" id="advanced_caller_id_name_external" name="caller_id.external.name" type="text" placeholder="${_t('caller_id_name_placeholder')}" value="${data.caller_id.external.name}" rel="popover" data-content="${_t('caller_id_name_data_content2')}" />
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="advanced_caller_id_number_emergency">Caller ID Number</label>
+						<label for="advanced_caller_id_number_external">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="advanced_caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="Define the Caller ID Number of this User for Emergency Calls."/>
+							<input class="span4" id="advanced_caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="${_t('caller_id_number_data_content2')}"/>
+						</div>
+					</div>
+					<hr />
+
+					<h3>${_t('emergency')}</h3>
+					<div class="clearfix">
+						<label for="advanced_caller_id_name_emergency">${_t('caller_id_name')}</label>
+						<div class="input">
+							<input class="span4" id="advanced_caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="${_t('caller_id_name_placeholder')}" value="${data.caller_id.emergency.name}" rel="popover" data-content="${_t('caller_id_name_data_content3')}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="advanced_caller_id_number_emergency">${_t('caller_id_number')}</label>
+						<div class="input">
+							<input class="span4" id="advanced_caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="${_t('caller_id_number_data_content3')}"/>
 						</div>
 					</div>
 	            </div>
 
 	            <div id="options">
-                    <h3>Standard Options</h3>
+                    <h3>${_t('standard_options')}</h3>
 
 	            	<div class="clearfix">
 						<div class="input">
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-	              						<span rel="popover" data-content="Verify User ?">
+	              						<span rel="popover" data-content="${_t('user_has_been_verified_data_content')}">
 											{{if data.verified}}
 			                                    <input type="checkbox" id="verified" name="verified" checked="checked"/>
 			                                {{else}}
 			                                    <input type="checkbox" id="verified" name="verified"
 			                                    />
 			                                {{/if}}
-			                                <span>User has been verified</span>
+			                                <span>${_t('user_has_been_verified')}</span>
 		                                </span>
 	                                </label>
                                 </li>
@@ -237,16 +237,16 @@
 					</div>
 
 					<div class="clearfix">
-						<label for="timezone">Time zone</label>
+						<label for="timezone">${_t('time_zone')}</label>
 						<div class="input">
-							<select name="timezone" id="timezone" rel="popover" data-content="Select the time zone of this user."></select>
+							<select name="timezone" id="timezone" rel="popover" data-content="${_t('time_zone_data_content')}"></select>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="music_on_hold_media_id">Music on Hold</label>
+						<label for="music_on_hold_media_id">${_t('music_on_hold')}</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the media file that you want to be played by default when it 's not set on a user or a device.">
+							<span rel="popover" data-content="${_t('music_on_hold_data_content')}">
 								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
 									{{each field_data.media}}
 	                                    {{if data.music_on_hold.media_id == id}}
@@ -257,8 +257,8 @@
 	                            	{{/each}}
 								</select>
 								<div class="edit_create">
-									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">${_t('edit')}</a>
+	                            	<a class="inline_action_media" data-action="create" href="#">${_t('create')}</a>
 								</div>
 							</span>
 						</div>
@@ -269,13 +269,13 @@
                            <ul class="inputs-list">
                                <li>
                                     <label>
-                                        <span rel="popover" data-content="By checking this box, this endpoint will not be added automatically to the contact list of the devices of this platform">
+                                        <span rel="popover" data-content="${_t('hide_from_contact_list_data_content')}">
                                             {{if data.contact_list.exclude === true}}
                                             <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" checked="checked" />
                                             {{else}}
                                             <input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" />
                                             {{/if}}
-                                            <span>Hide from Contact List</span>
+                                            <span>${_t('hide_from_contact_list')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -283,7 +283,7 @@
                        </div>
                     </div>
                     <hr/>
-                    <h3>Queue Options</h3>
+                    <h3>${_t('queue_options')}</h3>
 
 					<!--<div class="clearfix">
 						<div class="input">
@@ -317,13 +317,13 @@
                             <ul class="inputs-list">
                                 <li>
                                     <label>
-                                        <span rel="popover" data-content="By checking this box, this agent will be recorded even if the global setting for the queue is set to not record agents.">
+                                        <span rel="popover" data-content="${_t('record_this_agent_data_content')}">
                                             {{if data.record_call === true}}
                                             <input id="record_call" type="checkbox" name="record_call" checked="checked" />
                                             {{else}}
                                             <input id="record_call" type="checkbox" name="record_call"/>
                                             {{/if}}
-                                            <span>Record this agent(user)</span>
+                                            <span>${_t('record_this_agent')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -338,13 +338,13 @@
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-	              						<span rel="popover" data-content="If checked, call forwarding feature will be enabled for user.">
+	              						<span rel="popover" data-content="${_t('enable_call_forward_data_content')}">
 											{{if data.call_forward.enabled}}
 			                                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" checked="checked" rel="popover" data-content=""/>
 			                                {{else}}
 			                                    <input type="checkbox" id="call_forward_enabled" name="call_forward.enabled" rel="popover" data-content=""/>
 			                                {{/if}}
-			                                <span>Enable Call-Forward</span>
+			                                <span>${_t('enable_call_forward')}</span>
 		                            	</span>
 	                                </label>
                                 </li>
@@ -353,9 +353,9 @@
 					</div>
 
 					<div class="clearfix">
-						<label for="call_forward_number">Redirect calls to</label>
+						<label for="call_forward_number">${_t('redirect_calls_to')}</label>
 						<div class="input">
-							<input class="span4" id="call_forward_number" name="call_forward.number" type="text" placeholder="+1415555555" value="${data.call_forward.number}" rel="popover" data-content="Number to redirect calls to for the call-forwarding feature"/>
+							<input class="span4" id="call_forward_number" name="call_forward.number" type="text" placeholder="+1415555555" value="${data.call_forward.number}" rel="popover" data-content="${_t('redirect_calls_to_data_content')}"/>
 						</div>
 					</div>
 
@@ -364,13 +364,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="If this box is checked, it will prevent the user's phones from ringing. For example: If you want to ONLY ring a user's cellphone (and not their desk phone) - check this box.">
+										<span rel="popover" data-content="${_t('bypass_users_phones_data_content')}">
 											{{if data.call_forward.substitute}}
 							                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="call_forward_substitute" name="call_forward.substitute"/>
 							                {{/if}}
-							                <span>Bypass user's phones</span>
+							                <span>${_t('bypass_users_phones')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -383,13 +383,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Do you want this user to press a key to answer a call that has been call-forwarded">
+										<span rel="popover" data-content="${_t('require_key_press_data_content')}">
 											{{if data.call_forward.require_keypress}}
 							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" checked="checked"/>
 							                {{else}}
 							                    <input type="checkbox" id="call_forward_require_keypress" name="call_forward.require_keypress" />
 							                {{/if}}
-							                <span>Require Key Press</span>
+							                <span>${_t('require_key_press')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -402,13 +402,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="If checked, the caller-ID of the person being forwarded will display.  If not checked the caller-ID of the user will display.">
+										<span rel="popover" data-content="${_t('keep_caller_id_data_content')}">
 											{{if data.call_forward.keep_caller_id}}
 							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="call_forward_keep_caller_id" name="call_forward.keep_caller_id"/>
 							                {{/if}}
-							                <span>Keep Caller ID</span>
+							                <span>${_t('keep_caller_id')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -421,13 +421,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="If checked, it will only use the call forwarding if the user/device is rung directly and not when rung as a member of a group (ring group, ect).">
+										<span rel="popover" data-content="${_t('direct_calls_only_data_content')}">
 											{{if data.call_forward.direct_calls_only}}
 							                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="call_forward_direct_calls_only" name="call_forward.direct_calls_only" />
 							                {{/if}}
-							                <span>Direct Calls Only</span>
+							                <span>${_t('direct_calls_only')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -438,14 +438,14 @@
 
 	            <div id="password_management">
 	            	<div class="clearfix">
-	            		<label for="pwd_mngt_pwd1">New Password</label>
+	            		<label for="pwd_mngt_pwd1">${_t('new_password')}</label>
 	            		<div class="input">
 	            			<input class="span4" id="pwd_mngt_pwd1" name="pwd_mngt_pwd1" type="password" value="fakePassword"/>
 	            		</div>
 	            	</div>
 
 	            	<div class="clearfix">
-	            		<label for="pwd_reco_pwd2">Confirm Password</label>
+	            		<label for="pwd_reco_pwd2">${_t('confirm_password')}</label>
 	            		<div class="input">
 	            			<input class="span4" id="pwd_mngt_pwd2" name="pwd_mngt_pwd2" type="password" value="fakePassword"/>
 	            		</div>
@@ -458,13 +458,13 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						<span rel="popover" data-content="Check to enable Hot Desking">
+	            						<span rel="popover" data-content="${_t('enable_hot_desking_data_content')}">
 		            						{{if data.hotdesk.enabled}}
 		            		                    <input type="checkbox" id="hotdesk_enabled" name="hotdesk.enabled" checked="checked" />
 		            		                {{else}}
 		            		                    <input type="checkbox" id="hotdesk_enabled" name="hotdesk.enabled"/>
 		            		                {{/if}}
-		            		                <span>Enable Hot Desking</span>
+		            		                <span>${_t('enable_hot_desking')}</span>
 	            		                </span>
 	            		            </label>
 	            		        </li>
@@ -473,9 +473,9 @@
 	            	</div>
 
 	            	<div class="clearfix">
-	            		<label for="hotdesk_id">ID</label>
+	            		<label for="hotdesk_id">${_t('id')}</label>
 	            		<div class="input">
-	            			<input class="span4" id="hotdesk_id" name="hotdesk.id" type="text" placeholder="ID" value="${data.hotdesk.id}" rel="popover" data-content="In order to enable Hot Desking from another device, you'll need to provide an ID"/>
+	            			<input class="span4" id="hotdesk_id" name="hotdesk.id" type="text" placeholder="${_t('id_placeholder')}" value="${data.hotdesk.id}" rel="popover" data-content="${_t('id_data_content')}"/>
 	            		</div>
 	            	</div>
 
@@ -484,13 +484,13 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						<span  rel="popover" data-content="If checked the user will be required to enter their ID and a PIN">
+	            						<span  rel="popover" data-content="${_t('require_pin_data_content')}">
 		            						{{if data.hotdesk.require_pin}}
 		            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin" checked="checked"/>
 		            		                {{else}}
 		            		                    <input type="checkbox" id="hotdesk_require_pin" name="hotdesk.require_pin"/>
 		            		                {{/if}}
-		            		                <span>Require PIN</span>
+		            		                <span>${_t('require_pin')}</span>
 	            		                </span>
 	            		            </label>
 	            		        </li>
@@ -499,9 +499,9 @@
 	            	</div>
 
 	            	<div class="clearfix hotdesk_pin">
-	            		<label for="">PIN</label>
+	            		<label for="">${_t('pin')}</label>
 	            		<div class="input">
-	            			<input class="span4" id="hotdesk_pin" name="hotdesk.pin" type="text" placeholder="PIN" value="${data.hotdesk.pin}" rel="popover" data-content="PIN required to sign into a device."/>
+	            			<input class="span4" id="hotdesk_pin" name="hotdesk.pin" type="text" placeholder="${_t('pin_placeholder')}" value="${data.hotdesk.pin}" rel="popover" data-content="${_t('pin_data_content')}"/>
 	            		</div>
 	            	</div>
 
@@ -510,13 +510,13 @@
 	            			<ul class="inputs-list">
 	            				<li>
 	            					<label>
-	            						<span rel="popover" data-content="Tick if you want to stay logged in on your other devices">
+	            						<span rel="popover" data-content="${_t('check_if_you_want_data_content')}">
 		            						{{if data.hotdesk.keep_logged_in_elsewhere}}
 		            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere" checked="checked" />
 		            		                {{else}}
 		            		                    <input type="checkbox" id="hotdesk_keep_logged_in_elsewhere" name="hotdesk.keep_logged_in_elsewhere"/>
 		            		                {{/if}}
-		            		                <span>Check if you want to stay logged in</span>
+		            		                <span>${_t('check_if_you_want')}</span>
 	            		                </span>
 	            		            </label>
 	            		        </li>
@@ -527,13 +527,13 @@
                     {{if field_data.hotdesk_enabled}}
                         <hr/>
 
-                        <h3>Devices where this user is currently logged in</h3>
+                        <h3>${_t('devices_where_this_user')}</h3>
 
                         <!--<div class="help_box">In order to actually log out from the devices listed below, you need to tick the checkbox on the right of the device and then press the Save button!</div>-->
 
                         <div id="hotdesk_devices" class="small-table">
                             <div class="row title">
-                                <div class="column">Devices&nbsp;&nbsp;<span class="icon medium device"/></div>
+                                <div class="column">${_t('devices')}&nbsp;&nbsp;<span class="icon medium device"/></div>
                                 <!--<div class="column">Log out</div>-->
                             </div>
                             <div class="rows">
@@ -546,7 +546,7 @@
                                     {{/each}}
                                 {{else}}
                                     <div class="row" id="row_no_data">
-                                        <div class="column merged">This user is not logged in to any other endpoints.</div>
+                                        <div class="column merged">${_t('this_user_is_not_logged')}</div>
                                     </div>
                                 {{/if}}
                             </div>
@@ -560,13 +560,13 @@
                             <ul class="inputs-list">
                                 <li>
                                     <label>
-                                        <span rel="popover" data-content="If checked the user will only be able to call the Users in his groups.">
+                                        <span rel="popover" data-content="${_t('closed_groups_data_content')}">
                                             {{if data.call_restriction.closed_groups.action === 'deny'}}
                                                 <input type="checkbox" name="extra.closed_groups" checked="checked"/>
                                             {{else}}
                                                 <input type="checkbox" name="extra.closed_groups"/>
                                             {{/if}}
-                                            <span>Closed Groups</span>
+                                            <span>${_t('closed_groups')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -580,11 +580,11 @@
 						<div class="input">
 							 <select name="call_restriction.${k}.action" class="medium" rel="popover">
                                 {{if data.call_restriction[k].action === 'deny'}}
-                                    <option value="deny" selected>Deny</option>
-                                    <option value="inherit">Inherit</option>
+                                    <option value="deny" selected>${_t('deny')}</option>
+                                    <option value="inherit">${_t('inherit')}</option>
                                 {{else}}
-                                    <option value="deny">Deny</option>
-                                    <option value="inherit" selected>Inherit</option>
+                                    <option value="deny">${_t('deny')}</option>
+                                    <option value="inherit" selected>${_t('inherit')}</option>
                                 {{/if}}
                             </select>
 						</div>
@@ -595,9 +595,9 @@
 		</form>
 		<div class="buttons-right">
 			{{if data.id}}
-                <button class="btn danger user-delete">Delete</button>
+                <button class="btn danger user-delete">${_t('delete')}</button>
             {{/if}}
-              <button class="btn success user-save">Save</button>
+              <button class="btn success user-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

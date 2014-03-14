@@ -1,0 +1,22 @@
+window.translate['credits'] = {
+	per_minute_calling: "Per-Minute Calling",
+	flat_rate_calling: "Flat-Rate Calling",
+	pay_per_minute_allows_you: "Pay-per-minute allows you to pay only for what you use. Deposit money into your account to get started, then pay-as-you-go for usage.",
+	your_current_balance: "Your Current Balance:",
+	i_would_like_to_add: "I would like to add",
+	to_my_current_balance: "to my current balance",
+	purchase: "Purchase",
+	flat_rate_calling_allows_you: "Flat-Rate calling allows you to pay a monthly, predictable fee that never changes, regardless of your usage.",
+	flat_rate_outbound_calling: "Flat-Rate Outbound Calling",
+	allow_up_to: "Allow up to",
+	simultaneous_outbound_calls: "simultaneous outbound calls to the US-48 at",
+	month_per_line: "month per line",
+	flat_rate_inbound_calling: "Flat-Rate Inbound Calling",
+	simultaneous_inbound_calls_at: "simultaneous inbound calls at",
+	if_you_dont_want_flat_rate: "If you don't want flat-rate, your account will default to pay-per-minute",
+	save: "Save",
+	add_credit: "(add credit)",
+	your_on_file_credit_card_will_immediately: "Your on-file credit card will immediately be charged for any changes you make. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?",
+	your_changes_have_been_saved: "Your changes have been saved!",
+	manage_your_credits_and_limits: "Manage your credits and limits."	
+};

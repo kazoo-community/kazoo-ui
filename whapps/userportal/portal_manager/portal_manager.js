@@ -13,8 +13,8 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         validation: [
-            { name: '#vm-to-email-txt', regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/ },
-            { name: '#ring-number-txt', regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/ }
+            { name: '#vm-to-email-txt', regex: _t('portal_manager', 'vm_to_email_txt_regex') },
+            { name: '#ring-number-txt', regex: _t('portal_manager', 'ring_number_txt_regex') }
         ],
 
         resources: {
@@ -275,6 +275,9 @@ winkstart.module('userportal', 'portal_manager', {
                 parent = parent || $('#ws-content');
 
             THIS.get_settings(function(_data_settings) {
+				_data_settings._t = function(param){
+					return window.translate['portal_manager'][param];
+				};
                 var portal_manager_html = THIS.templates.portal_manager.tmpl(_data_settings);
 
                 THIS.refresh_list_devices(portal_manager_html);
@@ -306,11 +309,11 @@ winkstart.module('userportal', 'portal_manager', {
 
             var columns = [
                 {
-                    'sTitle': 'Name',
+                    'sTitle': _t('portal_manager', 'name'),
                     'sWidth': '300px'
                 },
                 {
-                    'sTitle': 'Internal Number',
+                    'sTitle': _t('portal_manager', 'internal_number'),
                     'fnRender': function(obj) {
                         var link = '-',
                             number_sent = obj.aData[obj.iDataColumn];
@@ -323,7 +326,7 @@ winkstart.module('userportal', 'portal_manager', {
                     'sWidth': '200px'
                 },
                 {
-                    'sTitle': 'External Number',
+                    'sTitle': _t('portal_manager', 'external_number'),
                     'fnRender': function(obj) {
                         var link = '-',
                             number_sent = obj.aData[obj.iDataColumn];
@@ -359,11 +362,11 @@ winkstart.module('userportal', 'portal_manager', {
                     );
                 }
                 else {
-                    winkstart.alert('You need to select a registered device from the dropdown in order to use the QuickCall Feature!');
+                    winkstart.alert(_t('portal_manager', 'you_need_to_select_a_registered_device'));
                 }
             });
 
-            $('div.contact_title', parent).html('<div class="device-selector">Quickcall Device: <select class="medium" id="device_quickcall"></select><input type="text" id="manual_number" placeholder="2000"></input><button id="quickcall_btn" style="display: none;" class="btn primary">Call</button></div>');
+            $('div.contact_title', parent).html('<div class="device-selector">' + _t('portal_manager', 'quickcall_device') + '<select class="medium" id="device_quickcall"></select><input type="text" id="manual_number" placeholder="2000"></input><button id="quickcall_btn" style="display: none;" class="btn primary">' + _t('portal_manager', 'call') + '</button></div>');
 
             $('#manual_number', parent).keyup(function() {
                 if($(this).val() !== '') {
@@ -390,7 +393,7 @@ winkstart.module('userportal', 'portal_manager', {
                     );
                 }
                 else {
-                    winkstart.alert('You need to select a registered device from the dropdown in order to use the QuickCall Feature!');
+                    winkstart.alert(_t('portal_manager', 'you_need_to_select_a_registered_device'));
                 }
             });
 
@@ -537,20 +540,20 @@ winkstart.module('userportal', 'portal_manager', {
                 range = THIS.user_cdr_range,
                 columns = [
                 {
-                    'sTitle': 'Date',
+                    'sTitle': _t('portal_manager', 'date'),
                     'sWidth': '250px'
                 },
 
                 {
-                    'sTitle': 'From (Caller ID)',
+                    'sTitle': _t('portal_manager', 'from_caller_id'),
                     'sWidth': '350px'
                 },
                 {
-                    'sTitle': 'To (Dialed number)',
+                    'sTitle': _t('portal_manager', 'to_dialed_number'),
                     'sWidth': '350px'
                 },
                 {
-                    'sTitle': 'Duration',
+                    'sTitle': _t('portal_manager', 'duration'),
                     'sWidth': '160px'
                 },
                 {
@@ -567,7 +570,7 @@ winkstart.module('userportal', 'portal_manager', {
 
             $.fn.dataTableExt.afnFiltering.pop();
 
-            $('div.date', user_cdr_html).html('Start Date: <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;End Date: <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<button class="button-search btn primary" id="searchLink" href="javascript:void(0);">Filter</button><label class="call_duration"/>');
+            $('div.date', user_cdr_html).html(_t('portal_manager', 'start_date') + ': <input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;' + _t('portal_manager', 'end_date') + ': <input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<button class="button-search btn primary" id="searchLink" href="javascript:void(0);">' + _t('portal_manager', 'filter') + '</button><label class="call_duration"/>');
 
             var $call_duration = $('#user_cdr-grid_wrapper .call_duration', user_cdr_html);
             $('#user_cdr-grid_wrapper #user_cdr-grid_filter input[type=text]', user_cdr_html).keyup(function() {
@@ -577,6 +580,7 @@ winkstart.module('userportal', 'portal_manager', {
             $('#searchLink', user_cdr_html).click(function() {
                 var start_date = $('#startDate', user_cdr_html).val(),
                     end_date = $('#endDate', user_cdr_html).val(),
+                    /* I18N - to be fixed for national date formats */
                     regex = /^(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d$/;
 
                 winkstart.table.user_cdr.fnClearTable();
@@ -590,11 +594,11 @@ winkstart.module('userportal', 'portal_manager', {
                         THIS.list_by_date(start_date_sec, end_date_sec);
                     }
                     else {
-                        winkstart.alert('The range is bigger than '+ range +' days, please correct it.');
+                        winkstart.alert(_t('portal_manager', 'the_range_is_bigger_than') + range + _t('portal_manager', 'days_please_correct_it'));
                     }
                 }
                 else {
-                    winkstart.alert('Dates in the filter are not in the proper format (mm/dd/yyyy)');
+                    winkstart.alert(_t('portal_manager', 'dates_in_the_filter'));
                 }
             });
 
@@ -836,27 +840,27 @@ winkstart.module('userportal', 'portal_manager', {
                       }
                     },
                     {
-                      'sTitle': 'Message Index',
+                      'sTitle': _t('portal_manager', 'message_index'),
                       'bSearchable': false,
                       'bVisible': false
                     },
                     {
-                      'sTitle': 'Voicemail Box ID',
+                      'sTitle': _t('portal_manager', 'voicemail_box_id'),
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    { 'sTitle': 'Date',
+                    { 'sTitle': _t('portal_manager', 'date'),
                       'sWidth': '220px'
                     },
                     {
-                      'sTitle': 'Caller ID',
+                      'sTitle': _t('portal_manager', 'caller_id'),
                       'sWidth': '150px'
                     },
-                    { 'sTitle': 'Status',
+                    { 'sTitle': _t('portal_manager', 'status'),
                       'sWidth': '130px'
                     },
                     {
-                      'sTitle': 'Listen',
+                      'sTitle': _t('portal_manager', 'listen'),
                       'bSortable': false,
                       'sWidth': '200px',
                       'fnRender': function(obj) {
@@ -881,7 +885,7 @@ winkstart.module('userportal', 'portal_manager', {
 
             $.fn.dataTableExt.afnFiltering.pop();
 
-            $('div.actions_voicemail', parent).html('<button id="new-voicemail-link" class="btn primary" data-action="new">Mark as New</button><button id="save-voicemail-link" class="btn success" data-action="saved">Mark as Saved</button><button id="delete-voicemail-link" class="btn danger" data-action="deleted">Delete</button>');
+            $('div.actions_voicemail', parent).html('<button id="new-voicemail-link" class="btn primary" data-action="new">' + _t('portal_manager', 'mark_as_new') + '</button><button id="save-voicemail-link" class="btn success" data-action="saved">' + _t('portal_manager', 'mark_as_saved') + '</button><button id="delete-voicemail-link" class="btn danger" data-action="deleted">' + _t('portal_manager', 'delete') + '</button>');
 
             $('#save-voicemail-link, #delete-voicemail-link, #new-voicemail-link', parent).click(function(e) {
                 e.preventDefault();
@@ -931,7 +935,7 @@ winkstart.module('userportal', 'portal_manager', {
                     };
 
                     if(action === 'delete') {
-                        winkstart.confirm('Are you sure that you want to delete the selected voicemail message(s)?', function() {
+                        winkstart.confirm(_t('portal_manager', 'are_you_sure_that_you_want_to_delete'), function() {
                             change_status();
                         });
                     }

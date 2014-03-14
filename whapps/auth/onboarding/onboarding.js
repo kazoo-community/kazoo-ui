@@ -1,6 +1,6 @@
 winkstart.module('auth', 'onboarding', {
         css: [
-            'css/onboarding.css'
+            _t('onboarding', 'css_onboarding')
         ],
 
         templates: {
@@ -30,22 +30,22 @@ winkstart.module('auth', 'onboarding', {
             ],
             //braintree
             step2: [
-                { name: '#cardholder_name',  regex: /^[a-zA-Z\s\-\']+$/ },
+                { name: '#cardholder_name',  regex: _t('onboarding', 'cardholder_name_regex') },
                 { name: '#card_number',      regex: /^[0-9\s\-]{10,22}$/ },
                 { name: '#cvv',              regex: /^[0-9]{2,6}$/ },
                 { name: '#street_address',   regex: /^.+$/ },
                 { name: '#extended_address', regex: /^.*/ },
-                { name: '#region',           regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
-                { name: '#locality',         regex: /^[a-zA-Z0-9\_\-\.\s]+$/ },
-                { name: '#country',          regex: /^[a-zA-Z\_\-\s]+$/ },
+                { name: '#region',           regex: _t('onboarding', 'region_locality_regex') },
+                { name: '#locality',         regex: _t('onboarding', 'region_locality_regex') },
+                { name: '#country',          regex: _t('onboarding', 'country_regex') },
                 { name: '#postal_code',      regex: /^[0-9\-]{4,10}$/ }
             ],
             //account
             step3: [
                 { name: '#password',         regex: /^.{3,16}$/ },
                 { name: '#verify_password',  regex: /^.{3,16}$/ },
-                { name: '#email',            regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
-                { name: '#verify_email',     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#email',            regex: _t('onboarding', 'email_regex') },
+                { name: '#verify_email',     regex: _t('onboarding', 'email_regex') },
                 { name: '#company_name',     regex: /^.*$/ },
                 { name: '#name',             regex: /^.*$/ }
             ],
@@ -100,10 +100,10 @@ winkstart.module('auth', 'onboarding', {
                 }
                 if(key == 'phone_numbers') {
                     if(errors.phone_numbers[number].data.provider_fault) {
-                        msg += 'Incorrect address';
+                        msg += _t('onboarding', 'incorrect_address');
                     }
                     if(errors.phone_numbers[number].data.carrier_fault) {
-                        msg += 'Number already used! Please select another one.'
+                        msg += _t('onboarding', 'number_already_used')
                     }
 
                 }
@@ -281,7 +281,7 @@ winkstart.module('auth', 'onboarding', {
                                     display_fields();
                                 }
                                 else {
-                                    winkstart.alert('error','No DIDs were found with this Area Code, please try again or change the Area Code');
+                                    winkstart.alert('error',_t('onboarding', 'no_dids_were_found'));
                                 }
                             }
                         );
@@ -298,12 +298,12 @@ winkstart.module('auth', 'onboarding', {
                             display_fields();
                         }
                         else {
-                            winkstart.alert('This number is the only number available for this Area Code at the moment');
+                            winkstart.alert(_t('onboarding', 'this_number_is_the_only_number_available'));
                         }
                     }
                 }
                 else {
-                    winkstart.alert('You need to input a valid area code (eg: 415, 508, ...)');
+                    winkstart.alert(_t('onboarding', 'you_need_to_input_a_valid'));
                 }
             });
 
@@ -419,7 +419,11 @@ winkstart.module('auth', 'onboarding', {
             $('.role_radio', onboard_html).click(function() {
                 var role = $('input:radio[name=account.role]:checked').val(),
                     $container = $(this).parents('.role_div').first(),
-                    tmpl_data = {};
+                    tmpl_data = {
+						_t: function(param){
+							return window.translate['onboarding'][param];
+						}
+					};
 
                 $('.role_content').slideUp().empty();
 
@@ -475,7 +479,11 @@ winkstart.module('auth', 'onboarding', {
         load_step: function(step, parent, data) {
             var THIS = this;
 
-            $('#fast_onboarding_form', parent).append(THIS.templates['step'+step].tmpl({}));
+            $('#fast_onboarding_form', parent).append(THIS.templates['step'+step].tmpl({
+				_t: function(param){
+					return window.translate['onboarding'][param];
+				}
+			}));
 
             switch(step) {
                 case 1: THIS.load_step1(data, parent);
@@ -491,7 +499,11 @@ winkstart.module('auth', 'onboarding', {
 
         render_onboarding: function(args) {
             var THIS = this,
-                onboard_html = THIS.templates.new_onboarding.tmpl({}),
+                onboard_html = THIS.templates.new_onboarding.tmpl({
+					_t: function(param){
+						return window.translate['onboarding'][param];
+					}
+				}),
                 $form = $('#fast_onboarding_form', onboard_html),
                 max_step = $form.dataset('max-step'),
                 current_step = 1;
@@ -513,7 +525,7 @@ winkstart.module('auth', 'onboarding', {
                             THIS.move_to_step(++current_step, onboard_html);
                         },
                         function() {
-                            winkstart.alert('You can\'t go to the next step because you inputted invalid values in the form.');
+                            winkstart.alert(_t('onboarding', 'you_cant_go_to_the_next'));
                         }
                     );
                 };
@@ -524,7 +536,7 @@ winkstart.module('auth', 'onboarding', {
                             next_step_fct();
                         }
                         else {
-                            winkstart.alert('You need to give an area code and click on the Generate number button before going to next step.');
+                            winkstart.alert(_t('onboarding', 'you_need_to_give_an_area_code'));
                             $('#area_code', onboard_html).focus();
                         }
                         break;
@@ -541,7 +553,7 @@ winkstart.module('auth', 'onboarding', {
 
             $('#save_account', onboard_html).click(function() {
                 if($('#password', onboard_html).val() != $('#verify_password', onboard_html).val()) {
-                    winkstart.alert('Passwords are not matching, please retype your password.' );
+                    winkstart.alert(_t('onboarding', 'passwords_are_not_matching'));
                     $('#password', onboard_html).val('');
                     $('#verify_password', onboard_html).val('');
 
@@ -550,7 +562,7 @@ winkstart.module('auth', 'onboarding', {
                     return true;
                 }
                 if($('#email', onboard_html).val() != $('#verify_email', onboard_html).val()) {
-                    winkstart.alert('Email addresses are not matching, please retype your email address.' );
+                    winkstart.alert(_t('onboarding', 'email_addresses_are_not_matching'));
                     $('#email', onboard_html).val('');
                     $('#verify_email', onboard_html).val('');
 
@@ -595,7 +607,7 @@ winkstart.module('auth', 'onboarding', {
                                     success();
                                 }
                                 else {
-                                    winkstart.alert('error', 'Error while creating your account, please verify information and try again.');
+                                    winkstart.alert('error', _t('onboarding', 'error_while_creating_your_account'));
                                 }
                             },
                             function (_data, status) {
@@ -609,7 +621,7 @@ winkstart.module('auth', 'onboarding', {
                         );
                     },
                     function() {
-                        winkstart.alert('You can\'t finish the setup because you inputted invalid values in the form.');
+                        winkstart.alert(_t('onboarding', 'you_cant_finish'));
                     }
                 );
             });

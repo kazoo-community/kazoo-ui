@@ -66,10 +66,10 @@ winkstart.module('voip', 'queue', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Queue',
+            label: _t('voip_queue', 'queue_label'),
             icon: 'queue',
             weight: '65',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -244,8 +244,8 @@ winkstart.module('voip', 'queue', {
                     }, data_defaults || {}),
                     field_data: {
                         sort_by: {
-                            'first_name': 'First Name',
-                            'last_name': 'Last Name'
+                            'first_name': _t('voip_queue', 'first_name'),
+                            'last_name': _t('voip_queue', 'last_name')
                         }
                     }
                 };
@@ -312,6 +312,9 @@ winkstart.module('voip', 'queue', {
         },
 
         render_queue: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['voip_queue'][param];
+			};
             var THIS = this,
                 queue_html = THIS.templates.edit.tmpl(data);
 
@@ -347,7 +350,7 @@ winkstart.module('voip', 'queue', {
                         THIS.save_queue(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('voip_queue', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -355,7 +358,7 @@ winkstart.module('voip', 'queue', {
             $('.queue-delete', queue_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this queue?', function() {
+                winkstart.confirm(_t('voip_queue', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_queue(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -367,7 +370,10 @@ winkstart.module('voip', 'queue', {
                     var user_id = $user.val(),
                         user_data = {
                             user_id: user_id,
-                            user_name: $('#option_user_'+user_id, queue_html).text()
+                            user_name: $('#option_user_'+user_id, queue_html).text(),
+							_t: function(param){
+								return window.translate['voip_queue'][param];
+							}
                         };
 
                     if($('#row_no_data', queue_html).size() > 0) {
@@ -400,7 +406,11 @@ winkstart.module('voip', 'queue', {
                 $('#option_user_'+user_id, queue_html).show();
                 //if grid empty, add no data line
                 if($('.rows .row', queue_html).size() == 0) {
-                    $('.rows', queue_html).append(THIS.templates.user_row.tmpl());
+                    $('.rows', queue_html).append(THIS.templates.user_row.tmpl({
+						_t: function(param){
+							return window.translate['voip_queue'][param];
+						}
+					}));
                 }
             });
 
@@ -434,7 +444,7 @@ winkstart.module('voip', 'queue', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('voip_queue', 'no_name')
                                 });
                             });
                         }
@@ -449,9 +459,9 @@ winkstart.module('voip', 'queue', {
                     $('#queue-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Queues',
+                            label: _t('voip_queue', 'queues_label'),
                             identifier: 'queue-listview',
-                            new_entity_label: 'Add Queue',
+                            new_entity_label: _t('voip_queue', 'add_queue_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'queue.edit',
@@ -483,7 +493,10 @@ winkstart.module('voip', 'queue', {
                         if(data.data.agents.indexOf(v.id) >= 0) {
                             user_item = {
                                 user_id: v.id,
-                                user_name: v.first_name + ' ' + v.last_name
+                                user_name: v.first_name + ' ' + v.last_name,
+								_t: function(param){
+									return window.translate['voip_queue'][param];
+								}
                             };
 
                             $('.rows', parent).append(THIS.templates.user_row.tmpl(user_item));
@@ -493,12 +506,20 @@ winkstart.module('voip', 'queue', {
                 }
                 else {
                     $('.rows', parent).empty()
-                                      .append(THIS.templates.user_row.tmpl());
+                                      .append(THIS.templates.user_row.tmpl({
+										_t: function(param){
+											return window.translate['voip_queue'][param];
+										}
+									  }));
                 }
             }
             else {
                 $('.rows', parent).empty()
-                                  .append(THIS.templates.user_row.tmpl());
+                                  .append(THIS.templates.user_row.tmpl({
+									_t: function(param){
+										return window.translate['voip_queue'][param];
+									}
+								  }));
             }
         },
 
@@ -524,7 +545,7 @@ winkstart.module('voip', 'queue', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Queue' : 'Create Queue'
+                        title: (data.id) ? _t('voip_queue', 'edit_queue') : _t('voip_queue', 'create_queue')
                     });
                 }
             }, data_defaults);
@@ -535,11 +556,11 @@ winkstart.module('voip', 'queue', {
 
             $.extend(callflow_nodes, {
                 'queue[id=*]': {
-                    name: 'Queue',
+                    name: _t('voip_queue', 'queue'),
                     icon: 'queue',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'queue',
-                    tip: 'Ask the caller to input the first letters of the name of the person that he wants to reach.',
+                    tip: _t('voip_queue', 'ask_the_caller_to_input'),
                     data: {
                         id: 'null'
                     },
@@ -571,6 +592,9 @@ winkstart.module('voip', 'queue', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.queue_callflow.tmpl({
+									_t: function(param){
+										return window.translate['voip_queue'][param];
+									},
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -603,7 +627,7 @@ winkstart.module('voip', 'queue', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Queue',
+                                    title: _t('voip_queue', 'queue_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -616,9 +640,9 @@ winkstart.module('voip', 'queue', {
                     }
                 },
                 'agent[action=resume]': {
-                    name: 'Agent Resume',
+                    name: _t('voip_queue', 'agent_resume'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -642,9 +666,9 @@ winkstart.module('voip', 'queue', {
                     }
                 },
                 'agent[action=break]': {
-                    name: 'Agent Break',
+                    name: _t('voip_queue', 'agent_break'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -668,9 +692,9 @@ winkstart.module('voip', 'queue', {
                     }
                 },
                 'agent[action=logout]': {
-                    name: 'Logout Agent',
+                    name: _t('voip_queue', 'logout_agent'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -694,9 +718,9 @@ winkstart.module('voip', 'queue', {
                     }
                 },
                 'agent[action=login]': {
-                    name: 'Login Agent',
+                    name: _t('voip_queue', 'login_agent'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {
@@ -720,9 +744,9 @@ winkstart.module('voip', 'queue', {
                     }
                 },
                 'agent[action=toggle]': {
-                    name: 'Toggle Agent',
+                    name: _t('voip_queue', 'toggle_agent'),
                     icon: 'rightarrow',
-                    category: 'Call-Center',
+                    category: _t('config', 'call_center_cat'),
                     module: 'agent',
                     tip: '',
                     data: {

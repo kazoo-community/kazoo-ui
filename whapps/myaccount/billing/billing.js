@@ -118,7 +118,7 @@ winkstart.module('myaccount', 'billing', {
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
                     sublink: 'billing',
-                    label: 'Billing',
+                    label: _t('billing', 'billing_label'),
                     weight: '15',
                     publish: (winkstart.config.nav.billing) ? 'billing.ext_link' : 'billing.popup'
                 });
@@ -130,6 +130,9 @@ winkstart.module('myaccount', 'billing', {
         },
 
         render_billing: function(data, target) {
+			data._t = function(){
+				return window.translate['billing'][param];
+			};
             var THIS = this,
                 billing_html = THIS.templates.billing.tmpl(data);
 
@@ -143,14 +146,14 @@ winkstart.module('myaccount', 'billing', {
                 THIS.update_billing({}, form_data, function(_data) {
                         THIS.render_billing(_data, target);
 
-                        winkstart.alert('info', 'Credit card updated!');
+                        winkstart.alert('info', _t('billing', 'credit_card_updated'));
                     },
                     function(_data, status) {
                         if(status == 400 && _data.message) {
-                            winkstart.alert('error', 'The following errors occurred:<br/><br/>' + _data.message.replace(/\./g, '<br/>'));
+                            winkstart.alert('error', _t('billing', 'the_following_errors_occurred') + '<br/><br/>' + _data.message.replace(/\./g, '<br/>'));
                         }
                         else {
-                            winkstart.alert('error', 'There was an unspecified server error, please try again later.');
+                            winkstart.alert('error', _t('billing', 'there_was_an_unspecified_server_error'));
                         }
                     }
                 );
@@ -247,7 +250,7 @@ winkstart.module('myaccount', 'billing', {
 
                             winkstart.dialog(popup_html, {
                                 modal: true,
-                                title: 'Billing',
+                                title: _t('billing', 'billing_title'),
                                 position: 'top',
                                 width: '1000px'
                             });
@@ -262,13 +265,13 @@ winkstart.module('myaccount', 'billing', {
             var THIS = this,
                 columns = [
                 {
-                    'sTitle': 'Date'
+                    'sTitle': _t('billing', 'date_stitle')
                 },
                 {
-                    'sTitle': 'Status'
+                    'sTitle': _t('billing', 'status_stitle')
                 },
                 {
-                    'sTitle': 'Amount ($)'
+                    'sTitle': _t('billing', 'amount_stitle')
                 }
             ];
 
@@ -289,15 +292,15 @@ winkstart.module('myaccount', 'billing', {
             var THIS = this,
                 columns = [
                     {
-                        'sTitle': 'Date',
+                        'sTitle': _t('billing', 'date_stitle'),
                         'sWidth': '10%'
                     },
                     {
-                        'sTitle': 'Subscription',
+                        'sTitle': _t('billing', 'subscription_stitle'),
                         'sWidth': '20%'
                     },
                     {
-                        'sTitle': 'Status',
+                        'sTitle': _t('billing', 'status_stitle'),
                         'sWidth': '10%'
                     }
                 ],
@@ -321,7 +324,7 @@ winkstart.module('myaccount', 'billing', {
                 columns.push({'sTitle': v, 'sWidth': column_width });
             });
 
-            columns.push({'sTitle': 'Discount ($)', 'sWidth': '10%'},{ 'sTitle': 'Amount ($)', 'sWidth': '10%' });
+            columns.push({'sTitle': _t('billing', 'discount_stitle'), 'sWidth': '10%'},{ 'sTitle': _t('billing', 'amount_stitle'), 'sWidth': '10%' });
 
             winkstart.table.create('subscriptions', $('#subscriptions-grid', parent), columns, {}, {
                 sDom: 'frtlip',

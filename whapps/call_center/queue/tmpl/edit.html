@@ -2,29 +2,29 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Queue</h1>
+                <h1>${_t('edit_queue')}</h1>
             {{else}}
-                <h1>Create Queue</h1>
+                <h1>${_t('create_queue')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Queue Configuration</a></li>
-		 	<li><a href="#notifications"><span class="icon lightbulb_on"></span>Notifications</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('queue_configuration')}</a></li>
+		 	<li><a href="#notifications"><span class="icon lightbulb_on"></span>${_t('notifications')}</a></li>
 		</ul>
 		 <form id="queue-form" action="" method="post" >
 			<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="name">Name</label>
+						<label for="name">${_t('name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this Queue"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
 						</div>
 					</div>
 				</div>
@@ -35,13 +35,13 @@
                             <ul class="inputs-list">
                                 <li>
                                     <label>
-                                        <span rel="popover" data-content="You can also change individual agent's recording settings under the Agent's section">
+                                        <span rel="popover" data-content="${_t('call_recording_data_content')}">
                                             {{if data.record_caller === true}}
                                                 <input type="checkbox" id="record_caller" name="record_caller" checked="checked" />
                                             {{else}}
                                                 <input type="checkbox" id="record_caller" name="record_caller" />
                                             {{/if}}
-                                            <span>Call Recording</span>
+                                            <span>${_t('call_recording')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -50,9 +50,9 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="moh">Music on Hold</label>
+                        <label for="moh">${_t('music_on_hold')}</label>
                         <div class="input">
-                            <span rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
+                            <span rel="popover" data-content="${_t('music_on_hold_data_content')}">
                                 <select name="moh" id="moh" class="medium">
                                     {{each field_data.media}}
                                         {{if data.moh == id}}
@@ -63,24 +63,24 @@
                                     {{/each}}
                                 </select>
                                 <div class="edit_create">
-                                    <a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-                                    <a class="inline_action_media" data-action="create" href="#">Create</a>
+                                    <a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">${_t('edit')}</a>
+                                    <a class="inline_action_media" data-action="create" href="#">${_t('create')}</a>
                                 </div>
                             </span>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label>Strategy</label>
+                        <label>${_t('strategy')}</label>
                         <div class="input">
-                            <span rel="popover" data-content="The queue strategy for connecting agents to caller">
+                            <span rel="popover" data-content="${_t('strategy_data_content')}">
                                 <select name="strategy">
                                     {{if data.strategy === 'most_idle'}}
-                                        <option value="round_robin">Round Robin</option>
-                                        <option value="most_idle" selected="selected">Most Idle</option>
+                                        <option value="round_robin">${_t('round_robin')}</option>
+                                        <option value="most_idle" selected="selected">${_t('most_idle')}</option>
                                     {{else}}
-                                        <option value="round_robin" selected="selected">Round Robin</option>
-                                        <option value="most_idle">Most Idle</option>
+                                        <option value="round_robin" selected="selected">${_t('round_robin')}</option>
+                                        <option value="most_idle">${_t('most_idle')}</option>
                                     {{/if}}
                                 </select>
                             </span>
@@ -88,30 +88,30 @@
                     </div>
 
                     <div class="clearfix">
-						<label for="call_recording_url">Call Recording URL</label>
+						<label for="call_recording_url">${_t('call_recording_url')}</label>
 						<div class="input">
-							<input class="span4" id="call_recording_url" name="call_recording_url" type="text" placeholder="http://xxx.yyy.com/call_recordings" value="${data.call_recording_url}" rel="popover" data-content="URL pointing to a server that will host the recording of the calls processed by this queue."/>
+							<input class="span4" id="call_recording_url" name="call_recording_url" type="text" placeholder="http://xxx.yyy.com/call_recordings" value="${data.call_recording_url}" rel="popover" data-content="${_t('call_recording_url_data_content')}"/>
 						</div>
 					</div>
 
                     <div class="clearfix">
-						<label for="agent_wrapup_time">Call Wrap-up Time (s)</label>
+						<label for="agent_wrapup_time">${_t('call_wrapup_time')}</label>
 						<div class="input">
-							<input class="span2" id="agent_wrapup_time" name="agent_wrapup_time" type="text" placeholder="30" value="${data.agent_wrapup_time}" rel="popover" data-content="Automatic break time between calls for the agents in this queue."/>
+							<input class="span2" id="agent_wrapup_time" name="agent_wrapup_time" type="text" placeholder="30" value="${data.agent_wrapup_time}" rel="popover" data-content="${_t('call_wrapup_time_data_content')}"/>
 						</div>
 					</div>
 
                     <div class="clearfix">
-						<label for="max_queue_size">Max Number of Calls:</label>
+						<label for="max_queue_size">${_t('max_number_of_calls')}:</label>
 						<div class="input">
-							<input class="span2" id="max_queue_size" name="max_queue_size" type="text" placeholder="10000" value="${data.max_queue_size}" rel="popover" data-content="How many callers are allowed to wait on hold in the queue (0 for no limit)."/>
+							<input class="span2" id="max_queue_size" name="max_queue_size" type="text" placeholder="10000" value="${data.max_queue_size}" rel="popover" data-content="${_t('max_number_of_calls_data_content')}"/>
 						</div>
 					</div>
 
                     <div class="clearfix">
-						<label for="connection_timeout">Max Hold Time (s)</label>
+						<label for="connection_timeout">${_t('max_hold_time')}</label>
 						<div class="input">
-							<input class="span2" id="connection_timeout" name="connection_timeout" type="text" placeholder="30" value="${data.connection_timeout}" rel="popover" data-content="In seconds, how long to try to connect the caller before progressing past the queue callflow action (0 for no limit)."/>
+							<input class="span2" id="connection_timeout" name="connection_timeout" type="text" placeholder="30" value="${data.connection_timeout}" rel="popover" data-content="${_t('max_hold_time_data_content')}"/>
 						</div>
 					</div>
 
@@ -126,7 +126,7 @@
                                             {{else}}
                                                 <input type="checkbox" id="enter_when_empty" name="enter_when_empty" />
                                             {{/if}}
-                                            <span>Allows a caller to enter this queue when no agents are available.</span>
+                                            <span>${_t('allows_a_caller_to_enter_this_queue')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -137,21 +137,21 @@
 
                 <div id="notifications">
                     <div class="clearfix">
-                        <label for="cdr_url">Notification on Hangup</label>
+                        <label for="cdr_url">${_t('notification_on_hangup')}</label>
                         <div class="input">
-                            <input class="span4" id="hangup_url" name="notifications.hangup" type="text" placeholder="http://xxx.yyy/script_hangup.php" value="${data.notifications.hangup}" rel="popover" data-content="URL for a callback when the call ends to tell the customer on their own servers that a call has ended."/>
+                            <input class="span4" id="hangup_url" name="notifications.hangup" type="text" placeholder="http://xxx.yyy/script_hangup.php" value="${data.notifications.hangup}" rel="popover" data-content="${_t('notification_on_hangup_data_content')}"/>
                         </div>
                     </div>
                     <div class="clearfix">
-                        <label for="cdr_url">Notification after Pickup</label>
+                        <label for="cdr_url">${_t('notification_after_pickup')}</label>
                         <div class="input">
-                            <input class="span4" id="pickup_url" name="notifications.pickup" type="text" placeholder="http://xxx.yyy/script_pickup.php" value="${data.notifications.pickup}" rel="popover" data-content="URL for a callback when the call is picked up to tell the customer on their own servers that a call has been picked up."/>
+                            <input class="span4" id="pickup_url" name="notifications.pickup" type="text" placeholder="http://xxx.yyy/script_pickup.php" value="${data.notifications.pickup}" rel="popover" data-content="${_t('notification_after_pickup_data_content')}"/>
                         </div>
                     </div>
                     <div class="clearfix">
-                        <label>Method</label>
+                        <label>${_t('method')}</label>
                         <div class="input">
-                            <span rel="popover" data-content="What HTTP method to use">
+                            <span rel="popover" data-content="${_t('method_data_content')}">
                                 <select name="notifications.method">
                                     {{if data.notifications.method === 'POST'}}
                                         <option value="GET">GET</option>
@@ -169,10 +169,10 @@
 		</form>
 		<div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger queue-delete">Delete</button>
-                <button class="btn success queue-save">Save</button>
+	            <button class="btn danger queue-delete">${_t('delete')}</button>
+                <button class="btn success queue-save">${_t('save')}</button>
 	        {{else}}
-                <button class="btn success queue-save">Add Agents</button>
+                <button class="btn success queue-save">${_t('add_agents')}</button>
             {{/if}}
 		</div>
 	</div>

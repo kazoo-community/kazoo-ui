@@ -1,12 +1,12 @@
 <div>
 	<div class="row">
 		<div class="whapp-header">
-            <h1>Agents & Records of ${data.name} &nbsp;</h1><button class="btn primary detail_queue">Edit settings</button>&nbsp;<button class="btn view_stats" data-id="${data.id}">Dashboard</button>
+            <h1>${_t('agents_records_of')} ${data.name} &nbsp;</h1><button class="btn primary detail_queue">${_t('edit_settings')}</button>&nbsp;<button class="btn view_stats" data-id="${data.id}">${_t('dashboard')}</button>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#agents"><span class="icon head1"/>Agents</a></li>
+		 	<li class="active"><a href="#agents"><span class="icon head1"/>${_t('agents')}</a></li>
 <!--		 	<li><a href="#reports"><span class="icon black_paper"></span>Reports</a></li>-->
 		</ul>
 		<form id="agents-form">

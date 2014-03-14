@@ -2,14 +2,14 @@
     <div>
         {{if data.length == 0}}
             <div class="errMsg">
-                    There are no numbers available in the specified NPA.
+                    ${_t('there_are_no_numbers_available')}
             </div>
         {{else}}
             <div id="addDIDForm">
                 <div class="user_tab">
                     <div class="row_table">
-                        <div class="first column">Select</div>
-                        <div class="second column">Number</div>
+                        <div class="first column">${_t('select')}</div>
+                        <div class="second column">${_t('number')}</div>
                     </div>
                     {{each(i, phone_number) data}}
                         <div class="row_table">

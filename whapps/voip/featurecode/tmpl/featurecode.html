@@ -4,9 +4,9 @@
         	<div id="featurecode-view"  class="main_content">
         		<div class="row">
 					<div class="whapp-header">
-						<h1>Feature Codes</h1>
+						<h1>${_t('feature_codes')}</h1>
 						<div class="buttons-right">
-							<button class="btn black basic toggle-all">Show All</button>
+							<button class="btn black basic toggle-all">${_t('show_all')}</button>
 						</div>
 					</div>
 				</div>
@@ -17,7 +17,7 @@
 								<div class="whapp-header">
 									<h3>${i}</h3>
 									<div class="buttons-right">
-										<button class="btn black basic toggle" data-toggle="${i}">Show</button>
+										<button class="btn black basic toggle" data-toggle="${i}">${_t('show')}</button>
 									</div>
 								</div>
 							</div>
@@ -29,7 +29,7 @@
 							            <div class="input">
 							            	<div class="input-append">
 							            		<span class="add-on">*</span>
-							                	<input class="featurecode_number mini" id="${name}" name="${name}" size="16" type="text" value=${number} rel="popover" data-content="The star is mandatory for any feature code, that's why it has been added by default.">
+							                	<input class="featurecode_number mini" id="${name}" name="${name}" size="16" type="text" value=${number} rel="popover" data-content="${_t('star_data_content')}">
 							                	<label class="add-on">
 							                		{{if enabled}}
 				                                        <input type="checkbox" class="featurecode_enabled" checked="checked">
@@ -46,7 +46,7 @@
 					</form>
 				</div>
 				<div class="buttons-right">
-		            <button class="btn success featurecode-save">Save</button>
+		            <button class="btn success featurecode-save">${_t('save')}</button>
 				</div>
         	</div>
         </div>

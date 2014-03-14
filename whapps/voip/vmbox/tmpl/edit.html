@@ -2,42 +2,42 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Voicemail Box</h1>
+                <h1>${_t('edit_voicemail_box')}</h1>
             {{else}}
-                <h1>Create Voicemail Box</h1>
+                <h1>${_t('create_voicemail_box')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
 		</ul>
 		 <form id="vmbox-form" action="" method="post">
 		 	<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="name">Name</label>
+						<label for="name">${_t('name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly Name for this voicemail box"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name_placeholder')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="mailbox">Voicemail Number</label>
+						<label for="mailbox">${_t('voicemail_number')}</label>
 						<div class="input">
-							<input class="span4" id="mailbox" name="mailbox" type="text" placeholder="Number" value="${data.mailbox}" rel="popover" data-content="Number of this voicemail box"/>
+							<input class="span4" id="mailbox" name="mailbox" type="text" placeholder="${_t('voicemail_number_placeholder')}" value="${data.mailbox}" rel="popover" data-content="${_t('voicemail_number_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="owner_id">Assign To</label>
+						<label for="owner_id">${_t('assign_to')}</label>
 						<div class="input">
-							<span rel="popover" data-content="Chose the owner of this voicemail box">
+							<span rel="popover" data-content="${_t('assign_to_data_content')}">
 								<select name="owner_id" id="owner_id" class="medium" >
 									{{each field_data.users}}
 	                                    {{if data.owner_id == id}}
@@ -48,24 +48,24 @@
 	                                {{/each}}
 								</select>
 								<div class="edit_create">
-	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">Edit</a>
-	                                <a class="inline_action" data-action="create" href="#">Create</a>
+	                            	<a id="edit_link"  class="inline_action" data-action="edit" href="#">${_t('edit')}</a>
+	                                <a class="inline_action" data-action="create" href="#">${_t('create')}</a>
 								</div>
 							</span>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="pin">PIN number</label>
+						<label for="pin">${_t('pin_number')}</label>
 						<div class="input">
-							<input class="span4" id="pin" name="pin" type="text" placeholder="PIN" value="${data.pin}" rel="popover" data-content="Enter the PIN Number of this voicemail box (must be at least 4 digits)"/>
+							<input class="span4" id="pin" name="pin" type="text" placeholder="PIN" value="${data.pin}" rel="popover" data-content="${_t('pin_number_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="media_unavailable">Unavailable Message</label>
+						<label for="media_unavailable">${_t('unavailable_message')}</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the Unavailable message that you want to use for this this device. If you select - Not set -, then no media file will be played.">
+							<span rel="popover" data-content="${_t('unavailable_message_data_content')}">
 								<select name="media.unavailable" id="media_unavailable" class="medium" >
 									{{each field_data.media}}
 	                                    {{if data.media.unavailable == id}}
@@ -76,8 +76,8 @@
 	                                {{/each}}
 								</select>
 								<div class="edit_create">
-	                            	<a id="edit_link_media"  class="inline_action_media" data-action="edit" href="#">Edit</a>
-	                                <a class="inline_action_media" data-action="create" href="#">Create</a>
+	                            	<a id="edit_link_media"  class="inline_action_media" data-action="edit" href="#">${_t('edit')}</a>
+	                                <a class="inline_action_media" data-action="create" href="#">${_t('create')}</a>
 								</div>
 							</span>
 						</div>
@@ -86,7 +86,7 @@
 
 				<div id="options">
 					<div class="clearfix">
-						<label for="timezone">Timezone</label>
+						<label for="timezone">${_t('timezone')}</label>
 						<div class="input">
 							<select name="timezone" id="timezone">
                             </select>
@@ -98,13 +98,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Is this voicemail box already considered initialized? If not, the first time the user logs in they will be forced to change their PIN and setup a greeting.">
+										<span rel="popover" data-content="${_t('already_setup_data_content')}">
 											{{if data.is_setup}}
 							                    <input type="checkbox" id="is_setup" name="is_setup" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="is_setup" name="is_setup"/>
 							                {{/if}}
-							                <span>Already Setup</span>
+							                <span>${_t('already_setup')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -117,13 +117,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check if voicemail requires a PIN.">
+										<span rel="popover" data-content="${_t('require_pin_data_content')}">
 											{{if data.require_pin}}
 							                    <input type="checkbox" id="require_pin" name="require_pin" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="require_pin" name="require_pin" />
 							                {{/if}}
-							                <span>Require PIN</span>
+							                <span>${_t('require_pin')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -136,13 +136,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to enable auto-login for this voicemail box? (If the user call his own voicemail, it goes straight to his messages)">
+										<span rel="popover" data-content="${_t('auto_login_enabled_data_content')}">
 											{{if data.check_if_owner}}
 							                    <input type="checkbox" id="check_if_owner" name="check_if_owner" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="check_if_owner" name="check_if_owner" />
 							                {{/if}}
-							                <span>Auto-login enabled</span>
+							                <span>${_t('auto_login_enabled')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -155,13 +155,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to skip greetings by default">
+										<span rel="popover" data-content="${_t('skip_greeting_data_content')}">
 											{{if data.skip_greeting}}
 							                    <input type="checkbox" id="skip_greeting" name="skip_greeting" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="skip_greeting" name="skip_greeting"/>
 							                {{/if}}
-							                <span>Skip Greeting</span>
+							                <span>${_t('skip_greeting')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -174,13 +174,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to skip instructions by default">
+										<span rel="popover" data-content="${_t('skip_instructions_data_content')}">
 											{{if data.skip_instructions}}
 							                    <input type="checkbox" id="skip_instructions" name="skip_instructions" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="skip_instructions" name="skip_instructions"/>
 							                {{/if}}
-							                <span>Skip Instructions</span>
+							                <span>${_t('skip_instructions')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -193,13 +193,13 @@
                             <ul class="inputs-list">
                                 <li>
                                     <label>
-                                        <span rel="popover" data-content="Delete the voicemail after the notification has been sent">
+                                        <span rel="popover" data-content="${_t('delete_after_notification_data_content')}">
                                             {{if data.delete_after_notify}}
                                                 <input type="checkbox" id="delete_after_notify" name="delete_after_notify" checked="checked" />
                                             {{else}}
                                                 <input type="checkbox" id="delete_after_notify" name="delete_after_notify"/>
                                             {{/if}}
-                                            <span>Delete After Notification</span>
+                                            <span>${_t('delete_after_notification')}</span>
                                         </span>
                                     </label>
                                 </li>
@@ -212,9 +212,9 @@
 
 		 <div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger vmbox-delete">Delete</button>
+	            <button class="btn danger vmbox-delete">${_t('delete')}</button>
 	        {{/if}}
-            <button class="btn success vmbox-save">Save</button>
+            <button class="btn success vmbox-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

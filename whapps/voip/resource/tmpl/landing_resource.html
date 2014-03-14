@@ -4,12 +4,12 @@
             {{if resource_type === 'offnet'}}
                 <div class="title">
                     {{if company_name}}
-                    <h1>Congratulations! You're now using ${company_name} as your global carrier!</h1>
+                    <h1>${_t('congratulations_youre_now_using')} ${company_name} ${_t('as_your_global_carrier')}</h1>
                     {{else}}
-                    <h1>Congratulations! You're now using your provider as your global carrier!</h1>
+                    <h1>${_t('congratulations_youre_now_using')} ${_t('your_provider')} ${_t('as_your_global_carrier')}</h1>
                     {{/if}}
                     <div class="help_text">
-                        If you want to manage your own carriers, click on "Use a different carrier" button.
+                        ${_t('if_you_want_to_manage')}
                     </div>
                 </div>
                 <div class="resource_buttons">
@@ -17,9 +17,9 @@
                         <div class="hosted_btn resource_btn pressed">
                             <div class="button_text">
                             {{if company_name}}
-                                Use ${company_name} as my phone company
+                                ${_t('use')} ${company_name} ${_t('as_my_phone_company')}
                             {{else}}
-                                Use my provider
+                                ${_t('use_my_provider')}
                             {{/if}}
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="wrapper_div">
                         <div class="different_carrier_btn resource_btn">
                             <div class="button_text">
-                            Use a different carrier
+                            ${_t('use_a_different_carrier')}
                             </div>
                         </div>
                     </div>
@@ -35,9 +35,9 @@
             {{else}}
                 {{if resource_type === 'resources'}}
                     <div class="title">
-                        <h1>Your account is currently using an external carrier</h1>
+                        <h1>${_t('your_account_is_currently')}</h1>
                         <div class="help_text">
-                            You can manage your own carriers by adding/editing or removing carriers from the list on the left side.
+                            ${_t('you_can_manage_your_own_carriers')}
                         </div>
                     </div>
                     <div class="resource_buttons">
@@ -45,9 +45,9 @@
                             <div class="hosted_btn resource_btn">
                                 <div class="button_text">
                                 {{if company_name}}
-                                    Use ${company_name} as my phone company
+                                    ${_t('use')} ${company_name} ${_t('as_my_phone_company')}
                                 {{else}}
-                                    Use my provider
+                                    ${_t('use_my_provider')}
                                 {{/if}}
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                         <div class="wrapper_div">
                             <div class="different_carrier_btn resource_btn pressed">
                                 <div class="button_text">
-                                Use a different carrier
+                                ${_t('use_a_different_carrier')}
                                 </div>
                             </div>
                         </div>
@@ -63,16 +63,16 @@
                 {{else}}
                     {{if resource_type === 'none'}}
                         <div class="title">
-                            <h1>Select the type of Resources you would like to use</h1>
+                            <h1>${_t('select_the_type')}</h1>
                         </div>
                         <div class="resource_buttons">
                             <div class="wrapper_div">
                                 <div class="hosted_btn resource_btn">
                                     <div class="button_text">
                                     {{if company_name}}
-                                        Use ${company_name} as my phone company
+                                        ${_t('use')} ${company_name} ${_t('as_my_phone_company')}
                                     {{else}}
-                                        Use my provider
+                                        ${_t('use_my_provider')}
                                     {{/if}}
                                     </div>
                                 </div>
@@ -80,16 +80,16 @@
                             <div class="wrapper_div">
                                 <div class="different_carrier_btn resource_btn">
                                     <div class="button_text">
-                                    Use a different carrier
+                                    ${_t('use_a_different_carrier')}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     {{else}}
                         <div class="title">
-                            <h2>This module is meant to help users to create their no_match route.</h2>
-                            <h2>As you're already using a customized one, this module is disabled!</h2>
-                            <h3>In order to re-enable this module, you would need to delete the no_match route under the Callflows submodule.</h3>
+                            <h2>${_t('this_module_is_meant')}</h2>
+                            <h2>${_t('as_youre_already_using')}</h2>
+                            <h3>${_t('in_order_to_re_enable_this_module')}</h3>
                         </div>
                         </div>
                     {{/if}}
