@@ -205,7 +205,10 @@ winkstart.module('voip', 'resource', {
                                 'G722_16': 'G722 (HD) @ 16kHz',
                                 'G722_32': 'G722.1 (HD) @ 32kHz',
                                 'CELT_48': 'Siren (HD) @ 48kHz',
-                                'CELT_64': 'Siren (HD) @ 64kHz'
+                                'CELT_64': 'Siren (HD) @ 64kHz',
+                                'GSM': 'GSM',
+                                'OPUS': 'OPUS',
+                                'Speex': 'Speex'
                             }
                         },
                         rules: {
