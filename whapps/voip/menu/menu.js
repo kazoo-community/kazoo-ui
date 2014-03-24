@@ -72,10 +72,10 @@ winkstart.module('voip', 'menu', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Menus',
+            label: _t('menu', 'menus_label'),
             icon: 'menu1',
             weight: '40',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -169,7 +169,7 @@ winkstart.module('voip', 'menu', {
                             function(_data, status) {
                                 _data.data.unshift({
                                     id: '',
-                                    name: '- Not set -'
+                                    name: _t('menu', 'not_set')
                                 });
 
                                 defaults.field_data.media = _data.data;
@@ -237,6 +237,9 @@ winkstart.module('voip', 'menu', {
         },
 
         render_menu: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['menu'][param];
+			};
             var THIS = this,
                 menu_html = THIS.templates.edit.tmpl(data);
 
@@ -303,7 +306,7 @@ winkstart.module('voip', 'menu', {
                         THIS.save_menu(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('menu', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -311,7 +314,7 @@ winkstart.module('voip', 'menu', {
             $('.menu-delete', menu_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this menu?', function() {
+                winkstart.confirm(_t('menu', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_menu(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -395,7 +398,7 @@ winkstart.module('voip', 'menu', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('menu', 'no_name')
                                 });
                             });
                         }
@@ -410,9 +413,9 @@ winkstart.module('voip', 'menu', {
                     $('#menu-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Menus',
+                            label: _t('menu', 'menus_label'),
                             identifier: 'menu-listview',
-                            new_entity_label: 'Add Menu',
+                            new_entity_label: _t('menu', 'add_menu_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'menu.edit',
@@ -456,7 +459,7 @@ winkstart.module('voip', 'menu', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Menu' : 'Create Menu'
+                        title: (data.id) ? _t('menu', 'edit_menu') : _t('menu', 'create_menu')
                     });
                 }
             }, data_defaults);
@@ -501,11 +504,11 @@ winkstart.module('voip', 'menu', {
 
             $.extend(callflow_nodes, {
                 'menu[id=*]': {
-                    name: 'Menu',
+                    name: _t('menu', 'menu'),
                     icon: 'menu1',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'menu',
-                    tip: 'Ask a caller to push a menu option or dial an extension number',
+                    tip: _t('menu', 'menu_tip'),
                     data: {
                         id: 'null'
                     },
@@ -519,7 +522,7 @@ winkstart.module('voip', 'menu', {
                     key_caption: function(child_node, caption_map) {
                         var key = child_node.key;
 
-                        return (key != '_') ? key : 'Default action';
+                        return (key != '_') ? key : _t('menu', 'default_action');
                     },
                     key_edit: function(child_node, callback) {
                         var popup, popup_html;
@@ -529,8 +532,11 @@ winkstart.module('voip', 'menu', {
                         */
 
                         popup_html = THIS.templates.menu_key_callflow.tmpl({
+							_t: function(param){
+								return window.translate['menu'][param];
+							},
                             items: {
-                                '_': 'Default action',
+                                '_': _t('menu', 'default_action'),
                                 '0': '0',
                                 '1': '1',
                                 '2': '2',
@@ -556,7 +562,7 @@ winkstart.module('voip', 'menu', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Menu Option',
+                            title: _t('menu', 'menu_option_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -586,6 +592,9 @@ winkstart.module('voip', 'menu', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.menu_callflow.tmpl({
+                                    _t: function(param){
+										return window.translate['menu'][param];
+                                    },
                                     items: data.data,
                                     selected: node.getMetadata('id') || ''
                                 });
@@ -618,7 +627,7 @@ winkstart.module('voip', 'menu', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Menu',
+                                    title: _t('menu', 'menu_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

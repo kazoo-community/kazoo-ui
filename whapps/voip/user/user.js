@@ -18,16 +18,16 @@ winkstart.module('voip', 'user', {
         },
 
         validation : [
-                { name: '#first_name',                regex: /^[0-9a-zA-Z\s\-\']+$/ },
-                { name: '#last_name',                 regex: /^[0-9a-zA-Z\s\-\']+$/ },
-                { name: '#username',                  regex: /^[0-9a-zA-Z+@._-]{3,256}$/ },
-                { name: '#email',                     regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ },
+                { name: '#first_name',                regex: _t('user', 'first_last_name_regex') },
+                { name: '#last_name',                 regex: _t('user', 'first_last_name_regex') },
+                { name: '#username',                  regex: _t('user', 'username_regex') },
+                { name: '#email',                     regex: _t('user', 'email_regex') },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_internal',   regex: _t('user', 'caller_id_name_regex') },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_external',   regex: _t('user', 'caller_id_name_regex') },
                 { name: '#advanced_caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#advanced_caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#advanced_caller_id_name_emergency',  regex: _t('user', 'caller_id_name_regex') },
                 { name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
                 { name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
                 { name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
@@ -105,10 +105,10 @@ winkstart.module('voip', 'user', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Users',
+            label: _t('user', 'users_label'),
             icon: 'user',
             weight: '10',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -255,13 +255,13 @@ winkstart.module('voip', 'user', {
                     }, data_defaults || {}),
                     field_data: {
                         device_types: {
-                            sip_device: 'SIP Device',
-                            cellphone: 'Cell Phone',
-                            fax: 'Fax',
-                            smartphone: 'Smartphone',
-                            landline: 'landline',
-                            softphone: 'Softphone',
-                            sip_uri: 'SIP URI'
+                            sip_device: _t('user', 'sip_device_type'),
+                            cellphone: _t('user', 'cell_phone_type'),
+                            fax: _t('user', 'fax_type'),
+                            smartphone: _t('user', 'smartphone_type'),
+                            landline: _t('user', 'landline_type'),
+                            softphone: _t('user', 'softphone_type'),
+                            sip_uri: _t('user', 'sip_uri_type')
                         },
                         call_restriction: {}
                     }
@@ -299,11 +299,11 @@ winkstart.module('voip', 'user', {
                                 _data.data.unshift(
                                     {
                                         id: '',
-                                        name: 'Default Music'
+                                        name: _t('user', 'default_music')
                                     },
                                     {
                                         id: 'silence_stream://300000',
-                                        name: 'Silence'
+                                        name: _t('user', 'silence')
                                     }
                                 );
                             }
@@ -449,6 +449,9 @@ winkstart.module('voip', 'user', {
         },
 
         render_user: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['user'][param];
+			};
             var THIS = this,
                 user_html = THIS.templates.edit.tmpl(data),
                 data_devices,
@@ -486,7 +489,7 @@ winkstart.module('voip', 'user', {
                 ev.preventDefault();
 
                 if($('#pwd_mngt_pwd1', user_html).val() != $('#pwd_mngt_pwd2', user_html).val()) {
-                    winkstart.alert('The passwords on the \'Password management\' tab do not match! Please re-enter the password.');
+                    winkstart.alert(_t('user', 'the_passwords_on_the'));
                     return true;
                 }
 
@@ -515,7 +518,7 @@ winkstart.module('voip', 'user', {
                                         form_data.apps = form_data.apps || {};
                                         if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {
                                             form_data.apps['voip'] = {
-                                                label: 'VoIP Services',
+                                                label: _t('user', 'voip_services_label'),
                                                 icon: 'device',
                                                 api_url: winkstart.apps['voip'].api_url
                                             }
@@ -525,7 +528,7 @@ winkstart.module('voip', 'user', {
                                         form_data.apps = form_data.apps || {};
                                         if(!('userportal' in form_data.apps)) {
                                             form_data.apps['userportal'] = {
-                                                label: 'User Portal',
+                                                label: _t('user', 'user_portal_label'),
                                                 icon: 'userportal',
                                                 api_url: winkstart.apps['voip'].api_url
                                             }
@@ -556,7 +559,7 @@ winkstart.module('voip', 'user', {
                         }
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('user', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -564,7 +567,7 @@ winkstart.module('voip', 'user', {
             $('.user-delete', user_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this user?', function() {
+                winkstart.confirm(_t('user', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_user(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -639,7 +642,7 @@ winkstart.module('voip', 'user', {
 
             $(user_html).delegate('.action_device.delete', 'click', function() {
                 var device_id = $(this).dataset('id');
-                winkstart.confirm('Do you really want to delete this device?', function() {
+                winkstart.confirm(_t('user', 'do_you_really_want_to_delete'), function() {
                     winkstart.request(true, 'device.delete', {
                             account_id: winkstart.apps['voip'].account_id,
                             api_url: winkstart.apps['voip'].api_url,
@@ -726,14 +729,22 @@ winkstart.module('voip', 'user', {
                             );
                         }
                         else {
-                            $('.rows', parent).append(THIS.templates.device_row.tmpl());
+                            $('.rows', parent).append(THIS.templates.device_row.tmpl({
+								_t: function(param){
+									return window.translate['user'][param];
+								}
+							}));
                         }
                     }
                 );
             }
             else {
                 $('.rows', parent).empty()
-                                  .append(THIS.templates.device_row.tmpl());
+                                  .append(THIS.templates.device_row.tmpl({
+									_t: function(param){
+										return window.translate['user'][param];
+									}
+								  }));
             }
         },
 
@@ -854,9 +865,9 @@ winkstart.module('voip', 'user', {
                     $('#user-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Users',
+                            label: _t('user', 'users_label'),
                             identifier: 'user-listview',
-                            new_entity_label: 'Add User',
+                            new_entity_label: _t('user', 'add_user_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'user.edit',
@@ -905,7 +916,7 @@ winkstart.module('voip', 'user', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit User' : 'Create User'
+                        title: (data.id) ? _t('user', 'edit_user') : _t('user', 'create_user')
                     });
                 }
             }, data_defaults);
@@ -953,11 +964,11 @@ winkstart.module('voip', 'user', {
 
             $.extend(callflow_nodes, {
                  'user[id=*]': {
-                    name: 'User',
+                    name: _t('user', 'user'),
                     icon: 'user',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'user',
-                    tip: 'Direct a caller to a specific user',
+                    tip: _t('user', 'user_tip'),
                     data: {
                         id: 'null'
                     },
@@ -991,6 +1002,9 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup_html = THIS.templates.user_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['user'][param];
+                                    },
                                     can_call_self: node.getMetadata('can_call_self') || false,
                                     parameter: {
                                         name: 'timeout (s)',
@@ -1034,7 +1048,7 @@ winkstart.module('voip', 'user', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Select User',
+                                    title: _t('user', 'select_user'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -1047,11 +1061,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=login]': {
-                    name: 'Hot Desk login',
+                    name: _t('user', 'hot_desk_login'),
                     icon: 'hotdesk_login',
-                    category: 'Hotdesking',
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
-                    tip: 'Enable Hot desking',
+                    tip: _t('user', 'hot_desk_login_tip'),
                     data: {
                         action: 'login'
                     },
@@ -1072,11 +1086,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=logout]': {
-                    name: 'Hot Desk logout',
+                    name: _t('user', 'hot_desk_logout'),
                     icon: 'hotdesk_logout',
-                    category: 'Hotdesking',
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
-                    tip: 'Disable Hot desking',
+                    tip: _t('user', 'hot_desk_logout_tip'),
                     data: {
                         action: 'logout'
                     },
@@ -1097,11 +1111,11 @@ winkstart.module('voip', 'user', {
                     }
                 },
                 'hotdesk[action=toggle]': {
-                    name: 'Hot Desk toggle',
+                    name: _t('user', 'hot_desk_toggle'),
                     icon: 'hotdesk_toggle',
-                    category: 'Hotdesking',
+                    category: _t('config', 'hotdesking_cat'),
                     module: 'hotdesk',
-                    tip: 'Toggle Hot desking',
+                    tip: _t('user', 'hot_desk_toggle_tip'),
                     data: {
                         action: 'toggle'
                     },

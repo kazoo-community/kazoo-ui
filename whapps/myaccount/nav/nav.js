@@ -1,6 +1,6 @@
 winkstart.module('myaccount', 'nav', {
         css: [
-            'css/style.css'
+            _t('nav', 'css_style_css')
         ],
 
         templates: {
@@ -56,7 +56,7 @@ winkstart.module('myaccount', 'nav', {
                 link: 'nav',
                 sublink: 'logout',
                 masqueradable: true,
-                label: 'Sign out',
+                label: _t('nav', 'sign_out'),
                 weight: '25',
                 publish: 'auth.activate'
             });

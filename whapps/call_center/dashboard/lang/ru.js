@@ -1,0 +1,21 @@
+window.translate['dashboard'] = $.extend(true, {}, window.translate['dashboard'], {
+	hide_logged_out_agents: "Скрыть операторов, не зарегистрированных в системе",
+	hide_queues: "Скрыть очереди",
+	break_time: "Время паузы",
+	wrapping_up: "Закругление",
+	call_time: "Время звонка",
+	busy_since: "Разговаривает с",
+	no_active_call: "Нет активного звонка...",
+	total_calls: "Всего звонков",
+	missed_calls: "Всего пропущено",
+	clicking_here_will_send_you: "Нажатие здесь отправит вас на страницу редактирования очереди, где вы сможете обновить настройки этой очереди, управлять операторами очереди и смотреть отчёты.",
+	select_the_device: "Выберите устройство для звонка",
+	which_device: "Какое устройство?",
+	ring: "Звонить",
+	cancel: "Отмена",
+	call_waiting_log: "Журнал ожидающих вызовов...",
+	eavesdrop_request_failed: "Попытка присоединения не удалась. Ошибка #",
+	devices_title: "Устройства",
+	hide_queues_html: "Скрыть очереди",
+	show_queues_html: "Показать очереди"
+});

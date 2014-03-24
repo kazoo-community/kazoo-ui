@@ -2,7 +2,7 @@
     <div id="ring_group_popup" class="dialog_popup page_group">
         <div class="form_content">
             <div class="popup_field">
-                <label>Name this page group</label>
+                <label>${_t('name_this_page_group')}</label>
                 <input id="name" type="text" value="${form.name}"/>
                 <div class="clear"/>
             </div>
@@ -10,9 +10,9 @@
         <div id="two_columns">
             <div class="wrapper">
                 <ul class="settings_tabs settings1">
-                    <li class="current"><a id="users_tab_link" href="javascript:void(0);">Users</a></li>
-                    <li><a id="devices_tab_link" href="javascript:void(0);">Devices</a></li>
-                    <li><a id="groups_tab_link" href="javascript:void(0);">Groups</a></li>
+                    <li class="current"><a id="users_tab_link" href="javascript:void(0);">${_t('users')}</a></li>
+                    <li><a id="devices_tab_link" href="javascript:void(0);">${_t('devices')}</a></li>
+                    <li><a id="groups_tab_link" href="javascript:void(0);">${_t('groups')}</a></li>
                     <div class="clear"/>
                 </ul>
                 <div class="clear"></div>
@@ -22,7 +22,7 @@
                         <div class="column left">
                             <div class="search_box title_column">
                                 <div class="searchsubmit1"/>
-                                <input class="search searchfield" type="text" placeholder="Device Name"/>
+                                <input class="search searchfield" type="text" placeholder="${_t('device_name')}"/>
                                 <div class="searchsubmit2"/>
                                 <div class="clear"/>
                             </div>
@@ -38,7 +38,7 @@
                         <div class="column left">
                             <div class="search_box title_column">
                                 <div class="searchsubmit1"/>
-                                <input class="search searchfield" type="text" placeholder="User Name"/>
+                                <input class="search searchfield" type="text" placeholder="${_t('user_name')}"/>
                                 <div class="searchsubmit2"/>
                                 <div class="clear"/>
                             </div>
@@ -54,7 +54,7 @@
                         <div class="column left">
                             <div class="search_box title_column">
                                 <div class="searchsubmit1"/>
-                                <input class="search searchfield" type="text" placeholder="Group Name"/>
+                                <input class="search searchfield" type="text" placeholder="${_t('group_name')}"/>
                                 <div class="searchsubmit2"/>
                                 <div class="clear"/>
                             </div>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="column right">
-                    <div class="title_column"><div class="title">Page Group - ${form.name}</div><div class="actions_item">Delete</div></div>
+                    <div class="title_column"><div class="title">${_t('page_group')} - ${form.name}</div><div class="actions_item">${_t('delete')}</div></div>
                     <div class="scrollable">
                         <ul class="connect right">
                         </ul>

@@ -13,15 +13,15 @@ winkstart.module('voip', 'account', {
         },
 
         validation: [
-                { name: '#caller_id_name_external',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_external',      regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_external',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_internal',      regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_internal',      regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_internal',    regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_emergency',     regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_emergency',     regex: _t('account', 'caller_id_name_regex') },
                 { name: '#caller_id_number_emergency',   regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#contact_billing_email',        regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/ },
+                { name: '#contact_billing_email',        regex: _t('account', 'contact_regex') },
                 { name: '#contact_billing_number',       regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#contact_technical_email',      regex: /^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/ },
+                { name: '#contact_technical_email',      regex: _t('account', 'contact_regex') },
                 { name: '#contact_technical_number',     regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
         ],
 
@@ -51,13 +51,13 @@ winkstart.module('voip', 'account', {
 
     function(args) {
         var THIS = this;
-
+		THIS.module = 'account';
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Account Details',
+            label: _t('account', 'account_details_label'),
             icon: 'account',
             weight: '0'
         });
@@ -134,11 +134,11 @@ winkstart.module('voip', 'account', {
                                 _data.data.unshift(
                                     {
                                         id: '',
-                                        name: 'Default Music'
+                                        name: _t('account', 'default_music')
                                     },
                                     {
                                         id: 'silence_stream://300000',
-                                        name: 'Silence'
+                                        name: _t('account', 'silence')
                                     }
                                 );
 
@@ -259,6 +259,9 @@ winkstart.module('voip', 'account', {
         },
 
         render_account: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['account'][param];
+			}
             var THIS = this,
                 account_html = THIS.templates.edit.tmpl(data),
                 $tech_email = $('#contact_technical_email', account_html),
@@ -294,7 +297,7 @@ winkstart.module('voip', 'account', {
                         THIS.save_account(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('account', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -302,7 +305,7 @@ winkstart.module('voip', 'account', {
             $('.account-delete', account_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this account?<br>WARNING: This can not be undone', function() {
+                winkstart.confirm(_t('account', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_account(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });

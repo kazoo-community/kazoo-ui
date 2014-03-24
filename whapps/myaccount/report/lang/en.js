@@ -1,0 +1,22 @@
+window.translate['report'] = {
+	generate_a_report_for: "Generate a report for:",
+	children_sub_accounts_only: "Children sub-accounts only",
+	this_account_and_his_direct: "This account and his direct sub-accounts",
+	this_account_and_all_his_sub_accounts: "This account and all his sub-accounts",
+	generate: "Generate",
+	total_number_of_softphones: "Total Number of Softphones:",
+	total_number_of_sip_devices: "Total Number of SIP Devices:",
+	total_number_of_dids: "Total Number of DIDs:",
+	total_number_of_inbound_trunks: "Total Number of Inbound Trunks:",
+	total_number_of_outbound_trunks: "Total Number of Outbound Trunks:",
+	total_number_of_credits: "Total Number of Credits:",
+	report_label: "Report",
+	report_title: "Report",
+	account_stitle: "Account",
+	sip_devices_stitle: "# SIP Devices",
+	softphones_stitle: "# Softphones",
+	dids_stitle: "# DIDs",
+	inbound_trunks_stitle: "# Inbound Trunks",
+	outbound_trunks_stitle: "# Outbound Trunks",
+	available_credits_stitle: "Available Credits"
+};

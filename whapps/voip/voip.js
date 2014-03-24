@@ -204,7 +204,10 @@ winkstart.module('voip', 'voip', {
                     feature_codes: 'N/A',
                     field_data: {
                         sub_accounts: {}
-                    }
+                    },
+					_t: function(param){
+						return window.translate['voip'][param];
+					}
                 },
                 welcome_html = $('#ws-content').empty()
                                                .append(THIS.templates.voip.tmpl(data_default)),

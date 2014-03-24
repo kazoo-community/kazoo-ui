@@ -2,49 +2,49 @@
     <div class="row">
         <div class="whapp-header">
             {{if data.id}}
-            <h1>Edit Account</h1>
+            <h1>${_t('edit_account')}</h1>
             {{else}}
-            <h1>Create Account</h1>
+            <h1>${_t('create_account')}</h1>
             {{/if}}
             <div class="buttons-right pasted view-buttons">
-                <button class="btn black basic activate">Basic</button>
-                <button class="btn black advanced">Advanced</button>
+                <button class="btn black basic activate">${_t('basic')}</button>
+                <button class="btn black advanced">${_t('advanced')}</button>
             </div>
         </div>
     </div>
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
-            <li class="active"><a href="#basic">Basic</a></li>
-            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>Notifications Templates</a></li>
-            <li><a href="#options"></span>Options</a></li>
+            <li class="active"><a href="#basic">${_t('basic')}</a></li>
+            <li><a href="#voicemail_to_email"><span class="icon vmbox"></span>${_t('notifications_templates')}</a></li>
+            <li><a href="#options"></span>${_t('options')}</a></li>
             {{if field_data.display_limits}}
-                <li><a href="#billing">Limits</a></li>
+                <li><a href="#billing">${_t('limits')}</a></li>
             {{/if}}
-            <li><a href="#applications">Available Apps</a></li>
-            <li><a href="#white_labeling">White labeling</a></li>
+            <li><a href="#applications">${_t('available_apps')}</a></li>
+            <li><a href="#white_labeling">${_t('white_labeling')}</a></li>
             {{if field_data.enable_call_restriction}}
-                <li><a href="#restrictions">Restrictions</a></li>
+                <li><a href="#restrictions">${_t('restrictions')}</a></li>
             {{/if}}
         </ul>
         <form action="#" id="accounts_manager-form">
             <div class="pill-content">
                 <div class="active basic_view" id="basic">
                     <div class="clearfix">
-                        <label for="name">Name</label>
+                        <label for="name">${_t('name')}</label>
                         <div class="input">
-                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this account"/>
+                            <input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
                         </div>
                     </div>
                     <div class="clearfix">
-                        <label for="realm">Realm</label>
+                        <label for="realm">${_t('realm')}</label>
                         <div class="input">
-                            <input class="span4" id="realm" name="realm" type="text" placeholder="Realm (unique)" value="${data.realm}"
-                             rel="popover" data-content="Realm of this account" />
+                            <input class="span4" id="realm" name="realm" type="text" placeholder="${_t('realm')} (unique)" value="${data.realm}"
+                             rel="popover" data-content="${_t('realm_data_content')}" />
                         </div>
                     </div>
                     {{if data.id}}
                     <div class="clearfix">
-                        <label>Account ID</label>
+                        <label>${_t('account_id')}</label>
                         <div class="input"><label class="text-inline">${data.id}</label></div>
                     </div>
                     {{/if}}
@@ -52,102 +52,102 @@
 
                 <div id="voicemail_to_email">
 
-                    <h2>  Voicemail to email </h2>
-                    <h3 class="notificationsTitle">Template fields</h3>
+                    <h2>  ${_t('voicemail_to_email')} </h2>
+                    <h3 class="notificationsTitle">${_t('template_fields')}</h3>
                     <div class="clearfix">
-                        <label for="vm_to_email_support_number">Support Number</label>
+                        <label for="vm_to_email_support_number">${_t('support_number')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="Input the support number that will be inserted in the voicemail-to-email template"/>       
+                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="${_t('support_number_data_content')}"/>       
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="vm_to_email_support_email">Support Email</label>
+                        <label for="vm_to_email_support_email">${_t('support_email')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="Support Email" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="Input the support email address that will be inserted in the voicemail-to-email template"/>
+                            <input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="${_t('support_email')}" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="${_t('support_email_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="vm_to_email_send_from">Send From</label>
+                        <label for="vm_to_email_send_from">${_t('send_from')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="Send From" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="This will be displayed as the Send form field in the Voicemail-To-Email template"/>
+                            <input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="${_t('send_from')}" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
                         </div>
                     </div>
 
-                    <h3 class="notificationsTitle">Template fields for sub-accounts</h3>
+                    <h3 class="notificationsTitle">${_t('template_fields_for_subaccounts')}</h3>
                     <div class="clearfix">
-                        <label for="vm_to_email_service_url">Service URL</label>
+                        <label for="vm_to_email_service_url">${_t('service_url')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="Input the Service URL"/>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <label for="vm_to_email_service_name">Service Name</label>
-                        <div class="input">
-                            <input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="Input the service name"/>
+                            <input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="${_t('service_url')}" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="${_t('service_url_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="vm_to_email_service_provider">Service Provider</label>
+                        <label for="vm_to_email_service_name">${_t('service_name')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="Input the service provider"/>
+                            <input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="${_t('service_name')}" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="${_t('service_name_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="vm_to_email_service_provider">${_t('service_provider')}</label>
+                        <div class="input">
+                            <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="${_t('service_provider')}" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="${_t('service_provider_data_content')}"/>
                         </div>
                     </div>
                     
-                        <h2>Fax to email</h2>
+                        <h2>${_t('fax_to_email')}</h2>
                         {{if field_data.sameTemplate}}
                             <input type="checkbox" name="extra.sameTemplate" checked="checked" id="sameTemplate"/>
-                                Use the same values for the Fax-To-Email template
+                                ${_t('use_the_same_values_for_the_Fax_template')}
                         {{else}}
                             <input type="checkbox" name="extra.sameTemplate" id="sameTemplate"/>
-                                Use the same values for the Fax-To-Email template 
+                                ${_t('use_the_same_values_for_the_Fax_template')}
                         {{/if}}
 
                     <div class="fax_to_email">
-                        <h3 class="notificationsTitle">Template fields</h3>
+                        <h3 class="notificationsTitle">${_t('template_fields')}</h3>
                         <div class="clearfix">
-                            <label for="fax_to_email_support_number">Support Number</label>
+                            <label for="fax_to_email_support_number">${_t('support_number')}</label>
                             <div class="input">
-                                <input class="span4 text-val" id="fax_to_email_support_number" name="notifications.fax_to_email.support_number" type="text" placeholder="Support Number" value="${data.notifications.fax_to_email.support_number}" />
+                                <input class="span4 text-val" id="fax_to_email_support_number" name="notifications.fax_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.fax_to_email.support_number}" />
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="fax_to_email_support_email">Support Email</label>
+                            <label for="fax_to_email_support_email">${_t('support_email')}</label>
                             <div class="input">
-                                <input class="span4 text-val" id="fax_to_email_support_email" name="notifications.fax_to_email.support_email" type="text" placeholder="Support Email"  value="${data.notifications.fax_to_email.support_email}"/>
+                                <input class="span4 text-val" id="fax_to_email_support_email" name="notifications.fax_to_email.support_email" type="text" placeholder="${_t('support_email')}"  value="${data.notifications.fax_to_email.support_email}"/>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="fax_to_email_send_from">Send From</label>
+                            <label for="fax_to_email_send_from">${_t('send_from')}</label>
                             <div class="input">
-                                <input  class="span4 text-val" id="fax_to_email_send_from" name="notifications.fax_to_email.send_from" type="text" placeholder="Send From"  value="${data.notifications.fax_to_email.send_from}"/>
+                                <input  class="span4 text-val" id="fax_to_email_send_from" name="notifications.fax_to_email.send_from" type="text" placeholder="${_t('send_from')}"  value="${data.notifications.fax_to_email.send_from}"/>
                             </div>
                         </div>
 
-                        <h3 class="notificationsTitle">Template fields for sub-accounts</h3>
+                        <h3 class="notificationsTitle">${_t('template_fields_for_subaccounts')}</h3>
                         <div class="clearfix">
-                            <label for="fax_to_email_service_url">Service URL</label>
+                            <label for="fax_to_email_service_url">${_t('service_url')}</label>
                             <div class="input">
-                                <input class="span4 text-val" id="fax_to_email_service_url" name="notifications.fax_to_email.service_url" type="text" placeholder="Service URL" value="${data.notifications.fax_to_email.service_url}"/>
-                            </div>
-                        </div>
-
-                        <div class="clearfix">
-                            <label for="fax_to_email_service_name">Service Name</label>
-                            <div class="input">
-                                <input class="span4 text-val" id="fax_to_email_service_name" name="notifications.fax_to_email.service_name" type="text" placeholder="Service Name" value="${data.notifications.fax_to_email.service_name}"/>
+                                <input class="span4 text-val" id="fax_to_email_service_url" name="notifications.fax_to_email.service_url" type="text" placeholder="${_t('service_url')}" value="${data.notifications.fax_to_email.service_url}"/>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="fax_to_email_service_provider">Service Provider</label>
+                            <label for="fax_to_email_service_name">${_t('service_name')}</label>
                             <div class="input">
-                                <input class="span4 text-val" id="fax_to_email_service_provider" name="notifications.fax_to_email.service_provider" type="text" placeholder="Service Provider" value="${data.notifications.fax_to_email.service_provider}"/>
+                                <input class="span4 text-val" id="fax_to_email_service_name" name="notifications.fax_to_email.service_name" type="text" placeholder="${_t('service_name')}" value="${data.notifications.fax_to_email.service_name}"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="fax_to_email_service_provider">${_t('service_provider')}</label>
+                            <div class="input">
+                                <input class="span4 text-val" id="fax_to_email_service_provider" name="notifications.fax_to_email.service_provider" type="text" placeholder="${_t('service_provider')}" value="${data.notifications.fax_to_email.service_provider}"/>
                             </div>
                         </div>
 
@@ -156,18 +156,18 @@
                 </div>
 
                 <div id="options">
-                	<h3>Monitoring</h3>
+                	<h3>${_t('monitoring')}</h3>
                     <div class="clearfix">
                         <div class="input">
                             <ul class="inputs-list">
                                 <li>
                                     <label>
                                         {{if field_data.deregister}}
-                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters."/>
+                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="${_t('notify_on_deregister_data_content')}"/>
                                         {{else}}
-                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters." />
+                                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="${_t('notify_on_deregister_data_content')}" />
                                         {{/if}}
-                                        <span>Notify on de-register</span>
+                                        <span>${_t('notify_on_deregister')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -175,12 +175,12 @@
                     </div>
 
                     <div class="clearfix deregister_email">
-                        <label for="deregister_email">Email to notify</label>
+                        <label for="deregister_email">${_t('email_to_notify')}</label>
                         <div class="input">
                             {{if field_data.deregister}}
-                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="Email to notify"/>
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="${_t('email_to_notify_data_content')}"/>
                             {{else}}
-                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="Email to notify"/>
+                            <input id="deregister_email" placeholder="name@email.com" type="text" name="notifications.deregister.send_to" rel="popover" data-content="${_t('email_to_notify_data_content')}"/>
                             {{/if}}
                         </div>
                     </div>
@@ -188,21 +188,21 @@
 
                 <div id="billing">
                     <div class="clearfix">
-                        <label>Billing Account</label>
+                        <label>${_t('billing_account')}</label>
                         <div class="input">
-                            <span rel="popover" data-content="Who is paying for calls made and phone numbers purchased on this account">
+                            <span rel="popover" data-content="${_t('billing_account_data_content')}">
                                 <select name="extra.billing_account">
                                     {{if field_data.billing_account === 'self'}}
-                                        <option value="parent">This Parent Account</option>
-                                        <option value="self" selected="selected">This Account itself</option>
+                                        <option value="parent">${_t('this_parent_account')}</option>
+                                        <option value="self" selected="selected">${_t('this_account_itself')}</option>
                                     {{else}}
                                         {{if field_data.billing_account === 'parent'}}
-                                            <option value="parent" selected="selected">This Parent Account</option>
-                                            <option value="self">This Account itself</option>
+                                            <option value="parent" selected="selected">${_t('this_parent_account')}</option>
+                                            <option value="self">${_t('this_account_itself')}</option>
                                         {{else}}
-                                            <option value="parent">This Parent Account</option>
-                                            <option value="self">This Account itself</option>
-                                            <option value="other" selected="selected">Other</option>
+                                            <option value="parent">${_t('this_parent_account')}</option>
+                                            <option value="self">${_t('this_account_itself')}</option>
+                                            <option value="other" selected="selected">${_t('other')}</option>
                                         {{/if}}
                                     {{/if}}
                                 </select>
@@ -212,14 +212,14 @@
 
                     {{if data.id}}
 
-                        <h3>Credit / Limits</h3>
+                        <h3>${_t('credit_limits')}</h3>
 
                         <div class="clearfix">
-                            Allow my customer to make up to <input id="inbound_trunks" name="extra.inbound_trunks" type="text" value="${limits.inbound_trunks}" class="span4 check-value number"/> <span class="highlighted">inbound</span> flat-rate calls at a time.
+                            ${_t('allow_my_customer')} <input id="inbound_trunks" name="extra.inbound_trunks" type="text" value="${limits.inbound_trunks}" class="span4 check-value number"/> <span class="highlighted">${_t('inbound')}</span> ${_t('flat_rate_calls')}
                         </div>
 
                         <div class="clearfix">
-                            Allow my customer to make up to <input id="twoway_trunks" name="extra.twoway_trunks" type="text" value="${limits.twoway_trunks}" class="span4 check-value number"/> <span class="highlighted">outbound</span> flat-rate calls at a time.
+                            ${_t('allow_my_customer')} <input id="twoway_trunks" name="extra.twoway_trunks" type="text" value="${limits.twoway_trunks}" class="span4 check-value number"/> <span class="highlighted">${_t('outbound')}</span> ${_t('flat_rate_calls')}
                         </div>
 
                         <div class="clearfix">
@@ -231,14 +231,14 @@
                                         {{else}}
                                         <input id="allow_prepay" type="checkbox" name="extra.allow_prepay" class="check-value"/>
                                         {{/if}}
-                                        <span>In addition to the above if a customer makes an international call, or goes over the above limits, allow the call to proceed and bill per-minute</span>
+                                        <span>${_t('in_addition_to_the_above')}</span>
                                     </label>
                                 </li>
                             </ul>
                         </div>
 
                         <div id="credit_block" class="clearfix">
-                            Customer's available balance for per-minute calls: <span class="highlighted">$</span><input id="amount_balance" name="extra.amount_balance" type="text" value="${credits.amount}" class="span4 check-value number"/>
+                            ${_t('customers_available_balance')} <span class="highlighted">$</span><input id="amount_balance" name="extra.amount_balance" type="text" value="${credits.amount}" class="span4 check-value number"/>
                         </div>
                     {{/if}}
                 </div>
@@ -246,7 +246,7 @@
                 <div id="applications">
 
                     <div class="clearfix">
-                        <label for="">Available Apps</label>
+                        <label for="">${_t('available_apps')}</label>
                         <div class="input">
                             <ul class="inputs-list">
                                 {{each(i, app) field_data.available_apps}}
@@ -273,29 +273,29 @@
 					{{if field_data.whitelabel.domain}}
 					<div class="clearfix">
 						<div class="input">
-							<button class="btn danger whitelabel-delete">Delete white labeling</button>
+							<button class="btn danger whitelabel-delete">${_t('delete_white_labeling')}</button>
 						</div>
 					</div>
 					{{/if}}
-                    <h3>General</h3>
+                    <h3>${_t('general')}</h3>
                     <div class="clearfix">
-                        <label for="white_label_company_name">Company Name</label>
+                        <label for="white_label_company_name">${_t('company_name')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_company_name" name="whitelabel.company_name" type="text" placeholder="Company Name" value="${field_data.whitelabel.company_name}" rel="popover" data-content="The company name that you want to display wherever a company name is used in the GUI."/>
+                            <input class="span4" id="white_label_company_name" name="whitelabel.company_name" type="text" placeholder="${_t('company_name')}" value="${field_data.whitelabel.company_name}" rel="popover" data-content="${_t('company_name_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_nav_help">Help link</label>
+                        <label for="white_label_nav_help">${_t('help_link')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_nav_help" name="whitelabel.nav.help" type="text" placeholder="http://mycompany.com/help" value="${field_data.whitelabel.nav.help}" rel="popover" data-content="The link you want to go to when a user click on the top right Help image."/>
+                            <input class="span4" id="white_label_nav_help" name="whitelabel.nav.help" type="text" placeholder="http://mycompany.com/help" value="${field_data.whitelabel.nav.help}" rel="popover" data-content="${_t('help_link_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_nav_help">Learn More link</label>
+                        <label for="white_label_nav_help">${_t('learn_more_link')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_nav_help" name="whitelabel.nav.learn_more" type="text" placeholder="http://mycompany.com/learn_more" value="${field_data.whitelabel.nav.learn_more}" rel="popover" data-content="The link you want to go to when a user click learn_more link on the front page before login."/>
+                            <input class="span4" id="white_label_nav_help" name="whitelabel.nav.learn_more" type="text" placeholder="http://mycompany.com/learn_more" value="${field_data.whitelabel.nav.learn_more}" rel="popover" data-content="${_t('learn_more_link_data_content')}"/>
                         </div>
                     </div>
 
@@ -305,11 +305,11 @@
                                 <li>
                                     <label>
                                         {{if field_data.whitelabel.hide_powered}}
-                                        <input id="hide_powered" type="checkbox" name="whitelabel.hide_powered" checked="checked" rel="popover" data-content="Check to hide powered by 2600hz"/>
+                                        <input id="hide_powered" type="checkbox" name="whitelabel.hide_powered" checked="checked" rel="popover" data-content="${_t('hide_powered_by_data_content')}"/>
                                         {{else}}
-                                        <input id="hide_powered" type="checkbox" name="whitelabel.hide_powered" rel="popover" data-content="Check to hide powered by 2600hz" />
+                                        <input id="hide_powered" type="checkbox" name="whitelabel.hide_powered" rel="popover" data-content="${_t('hide_powered_by_data_content')}" />
                                         {{/if}}
-                                        <span>Hide powered by</span>
+                                        <span>${_t('hide_powered_by')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -322,11 +322,11 @@
                                 <li>
                                     <label>
                                         {{if field_data.whitelabel.hide_registration}}
-                                        <input id="hide_registration" type="checkbox" name="whitelabel.hide_registration" checked="checked" rel="popover" data-content="Check to hide Signup button on login page."/>
+                                        <input id="hide_registration" type="checkbox" name="whitelabel.hide_registration" checked="checked" rel="popover" data-content="${_t('hide_signup_data_content')}"/>
                                         {{else}}
-                                        <input id="hide_registration" type="checkbox" name="whitelabel.hide_registration" rel="popover" data-content="Check to hide Signup button on login page." />
+                                        <input id="hide_registration" type="checkbox" name="whitelabel.hide_registration" rel="popover" data-content="${_t('hide_signup_data_content')}" />
                                         {{/if}}
-                                        <span>Hide Signup</span>
+                                        <span>${_t('hide_signup')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -339,11 +339,11 @@
                                 <li>
                                     <label>
                                         {{if field_data.whitelabel.hide_credits}}
-                                        <input id="hide_credits" type="checkbox" name="whitelabel.hide_credits" checked="checked" rel="popover" data-content="Check to hide the Credits from the top bar."/>
+                                        <input id="hide_credits" type="checkbox" name="whitelabel.hide_credits" checked="checked" rel="popover" data-content="${_t('hide_credits_data_content')}"/>
                                         {{else}}
-                                        <input id="hide_credits" type="checkbox" name="whitelabel.hide_credits" rel="popover" data-content="Check to hide the Credits from the top bar" />
+                                        <input id="hide_credits" type="checkbox" name="whitelabel.hide_credits" rel="popover" data-content="${_t('hide_credits_data_content')}" />
                                         {{/if}}
-                                        <span>Hide Credits</span>
+                                        <span>${_t('hide_credits')}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -351,21 +351,21 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_domain">Domain</label>
+                        <label for="white_label_domain">${_t('domain')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_domain" name="whitelabel.domain" type="text" placeholder="Domain" value="${field_data.whitelabel.domain}" rel="popover" data-content="The domain you want to use for this account."/>
+                            <input class="span4" id="white_label_domain" name="whitelabel.domain" type="text" placeholder="Domain" value="${field_data.whitelabel.domain}" rel="popover" data-content="${_t('domain_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_fake_api_url">Developer API URL</label>
+                        <label for="white_label_fake_api_url">${_t('developer_api_url')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_fake_api_url" name="whitelabel.fake_api_url" type="text" placeholder="https://api.myacompany.com:8443/v1" value="${field_data.whitelabel.fake_api_url}" rel="popover" data-content="Some API URLs are displayed in the Developer app, if you would like to display a customized URL, write it here."/>
+                            <input class="span4" id="white_label_fake_api_url" name="whitelabel.fake_api_url" type="text" placeholder="https://api.myacompany.com:8443/v1" value="${field_data.whitelabel.fake_api_url}" rel="popover" data-content="${_t('developer_api_url_data_content')}"/>
                         </div>
                     </div>
 
                      <div class="clearfix">
-                         <label for="fileInput">Logo (190x72px)</label>
+                         <label for="fileInput">${_t('logo')} (190x72px)</label>
                          <div id="upload_div" class="input">
                              <input class="input-file" id="file" name="extra.upload_media" type="file">
                          </div>
@@ -377,8 +377,8 @@
                     </div>
                     <div class="clearfix player_file">
                         <div class="input">
-                            <button class="btn primary" id="change_link">Change File</button>
-                            <button class="btn primary" id="download_link">Download File</button>
+                            <button class="btn primary" id="change_link">${_t('change_file')}</button>
+                            <button class="btn primary" id="download_link">${_t('download_file')}</button>
                         </div>
                     </div>
                     {{else}}
@@ -386,62 +386,62 @@
                     {{/if}}
 
                     <hr/>
-                    <h3>Porting</h3>
+                    <h3>${_t('porting')}</h3>
 
                     <div class="clearfix">
-                        <label for="white_label_port_loa">Letter of Authorization</label>
+                        <label for="white_label_port_loa">${_t('letter_of_authorization')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_port_loa" name="whitelabel.port.loa" type="text" placeholder="http://mycompany.com/loa" value="${field_data.whitelabel.port.loa}" rel="popover" data-content="The link to access the letter of authorization in order to port a number (from PBX Connector or Number Manager)."/>
+                            <input class="span4" id="white_label_port_loa" name="whitelabel.port.loa" type="text" placeholder="http://mycompany.com/loa" value="${field_data.whitelabel.port.loa}" rel="popover" data-content="${_t('letter_of_authorization_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_port_resporg">Resporg</label>
+                        <label for="white_label_port_resporg">${_t('resporg')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_port_resporg" name="whitelabel.port.resporg" type="text" placeholder="http://mycompany.com/resporg" value="${field_data.whitelabel.port.resporg}" rel="popover" data-content="The link to access the Resporg form in order to port a number (from PBX Connector or Number Manager)."/>
+                            <input class="span4" id="white_label_port_resporg" name="whitelabel.port.resporg" type="text" placeholder="http://mycompany.com/resporg" value="${field_data.whitelabel.port.resporg}" rel="popover" data-content="${_t('resporg_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_port_support_email">Support Email</label>
+                        <label for="white_label_port_support_email">${_t('support_email')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_port_support_email" name="whitelabel.port.support_email" type="text" placeholder="support@mycompany.com" value="${field_data.whitelabel.port.support_email}" rel="popover" data-content="Support Email to display in the Port Number popup."/>
+                            <input class="span4" id="white_label_port_support_email" name="whitelabel.port.support_email" type="text" placeholder="support@mycompany.com" value="${field_data.whitelabel.port.support_email}" rel="popover" data-content="${_t('support_email_data_content2')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_port_features">Features</label>
+                        <label for="white_label_port_features">${_t('features')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_port_features" name="whitelabel.port.features" type="text" placeholder="http://mycompany.com/features" value="${field_data.whitelabel.port.features}" rel="popover" data-content="Address explaining what is a feature in the Port Number popup."/>
+                            <input class="span4" id="white_label_port_features" name="whitelabel.port.features" type="text" placeholder="http://mycompany.com/features" value="${field_data.whitelabel.port.features}" rel="popover" data-content="${_t('features_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_port_terms">Terms</label>
+                        <label for="white_label_port_terms">${_t('terms')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_port_terms" name="whitelabel.port.terms" type="text" placeholder="http://mycompany.com/terms" value="${field_data.whitelabel.port.terms}" rel="popover" data-content="The link to access the Terms and Conditions related to porting."/>
+                            <input class="span4" id="white_label_port_terms" name="whitelabel.port.terms" type="text" placeholder="http://mycompany.com/terms" value="${field_data.whitelabel.port.terms}" rel="popover" data-content="${_t('terms_data_content')}"/>
                         </div>
                     </div>
 
                     <hr/>
-                    <h3>Trunks</h3>
+                    <h3>${_t('trunks')}</h3>
 
                     <div class="clearfix">
-                        <label for="white_label_inbound_trunks_price">Inbound Trunks Price</label>
+                        <label for="white_label_inbound_trunks_price">${_t('inbound_trunks_price')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_inbound_trunks_price" name="whitelabel.inbound_trunks_price" type="text" placeholder="$6.99" value="${field_data.whitelabel.inbound_trunks_price}" rel="popover" data-content="Price displayed for inbound trunks in the popup to manage your limits."/>
+                            <input class="span4" id="white_label_inbound_trunks_price" name="whitelabel.inbound_trunks_price" type="text" placeholder="$6.99" value="${field_data.whitelabel.inbound_trunks_price}" rel="popover" data-content="${_t('inbound_trunks_price_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="white_label_twoway_trunks_price">Twoway Trunks Price</label>
+                        <label for="white_label_twoway_trunks_price">${_t('twoway_trunks_price')}</label>
                         <div class="input">
-                            <input class="span4" id="white_label_twoway_trunks_price" name="whitelabel.twoway_trunks_price" type="text" placeholder="$29.99" value="${field_data.whitelabel.twoway_trunks_price}" rel="popover" data-content="Price displayed for twoway trunks in the popup to manage your limits."/>
+                            <input class="span4" id="white_label_twoway_trunks_price" name="whitelabel.twoway_trunks_price" type="text" placeholder="$29.99" value="${field_data.whitelabel.twoway_trunks_price}" rel="popover" data-content="${_t('twoway_trunks_price_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="refresh_text clearfix">
-                        In order to see these changes, refresh the page once you saved this account!
+                        ${_t('in_order_to_see_these_changes')}
                     </div>
                 </div>
                 {{if field_data.enable_call_restriction}}
@@ -452,11 +452,11 @@
                             <div class="input">
                                  <select name="call_restriction.${k}.action" class="medium" rel="popover">
                                     {{if data.call_restriction[k].action === 'deny'}}
-                                        <option value="deny" selected>Deny</option>
-                                        <option value="inherit">Inherit</option>
+                                        <option value="deny" selected>${_t('deny')}</option>
+                                        <option value="inherit">${_t('inherit')}</option>
                                     {{else}}
-                                        <option value="deny">Deny</option>
-                                        <option value="inherit" selected>Inherit</option>
+                                        <option value="deny">${_t('deny')}</option>
+                                        <option value="inherit" selected>${_t('inherit')}</option>
                                     {{/if}}
                                 </select>
                             </div>
@@ -468,10 +468,10 @@
         </form>
         <div class="buttons-right">
             {{if data.id}}
-                <button class="btn primary accounts_manager-switch">Use Account</button>
-                <button class="btn danger accounts_manager-delete">Delete</button>
+                <button class="btn primary accounts_manager-switch">${_t('use_account')}</button>
+                <button class="btn danger accounts_manager-delete">${_t('delete')}</button>
             {{/if}}
-            <button class="btn success accounts_manager-save">Save</button>
+            <button class="btn success accounts_manager-save">${_t('save')}</button>
         </div>
     </div>
 </div>

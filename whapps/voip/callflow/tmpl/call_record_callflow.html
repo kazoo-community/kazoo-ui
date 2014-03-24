@@ -1,10 +1,10 @@
 <div>
     <div class="dialog_popup">
-        <h1>Call Recording</h1>
+        <h1>${_t('call_recording')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
 				<div class="popup_field">
-                    <label for="format">Format: </label>
+                    <label for="format">${_t('format')}: </label>
                     <select id="format" style="width: 100px; height: 28px;">
                         {{if data_call_record.format === 'mp3'}}
                             <option value="mp3" selected="selected">mp3</option>
@@ -17,12 +17,12 @@
                 </div>
 
                 <div class="popup_field">
-                    <label for="url">URL: </label>
+                    <label for="url">${_t('url')}: </label>
                     <input type="text" id="url" class="medium" value="${data_call_record.url}" placeholder="http://your.server.com/place/to/store/recordings"/>
                 </div>
 
                 <div class="popup_field">
-                    <label for="time_limit">Time Limit (s): </label>
+                    <label for="time_limit">${_t('time_limit')}: </label>
                     <input type="text" id="time_limit" class="medium" value="${data_call_record.time_limit}"/>
                 </div>
             </div>

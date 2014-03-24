@@ -1,15 +1,15 @@
 <div>
     <div class="row">
         <div class="whapp-header">
-            <h1>Billing information and History</h1>
+            <h1>${_t('billing_information_and_history')}</h1>
         </div>
     </div>
 
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
-            <li class="active"><a href="#credit_card"><span class="icon credit_card"/>Credit Card Information</a></li>
-            <li><a href="#transactions"><span class="icon price_tag"/>One-time transactions</a></li>
-            <li><a href="#subscriptions"><span class="icon refresh"/>Recurring Payments</a></li>
+            <li class="active"><a href="#credit_card"><span class="icon credit_card"/>${_t('credit_card_information')}</a></li>
+            <li><a href="#transactions"><span class="icon price_tag"/>${_t('one_time_transactions')}</a></li>
+            <li><a href="#subscriptions"><span class="icon refresh"/>${_t('recurring_payments')}</a></li>
         </ul>
 
          <form id="billing-form" action="" method="post">
@@ -17,9 +17,9 @@
                 <div class="active basic_view" id="credit_card">
                     {{if data.credit_cards[0]}}
                         <div class="clearfix">
-                            <label for="cardnbr">Card Number</label>
+                            <label for="cardnbr">${_t('card_number')}</label>
                             <div class="input">
-                                <input class="span4 hide" id="cardnbr" name="credit_card.number" type="text" placeholder="Card Number" value="************${data.credit_cards[0].last_four}" />
+                                <input class="span4 hide" id="cardnbr" name="credit_card.number" type="text" placeholder="${_t('card_number')}" value="************${data.credit_cards[0].last_four}" />
                                 <span class="uneditable-input">************${data.credit_cards[0].last_four}</span>
                                 <div class="hide">
                                     <span class="card" id="visa"></span>
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="clearfix">
-                            <label for="expiration_date">Expiration Date</label>
+                            <label for="expiration_date">${_t('expiration_date')}</label>
                             <div class="input">
                                 <input class="span1 hide" id="expiration_date" name="credit_card.expiration_date.month" type="text" placeholder="MM" value="${data.credit_cards[0].expiration_month}"/>
                                 <span class="uneditable-input">${data.credit_cards[0].expiration_month}</span>
@@ -42,10 +42,10 @@
                         </div>
 
                         <div class="clearfix">
-                            <label for="firstname">Name On Card</label>
+                            <label for="firstname">${_t('name_on_card')}</label>
                             <div class="input">
-                                <input class="span3 hide" id="firstname" name="first_name" type="text" placeholder="First Name" value="${data.first_name}"/><span class="uneditable-input">${data.first_name}</span>
-                                <input class="span3 hide" id="lastname" name="last_name" type="text" placeholder="Last Name" value="${data.last_name}" />
+                                <input class="span3 hide" id="firstname" name="first_name" type="text" placeholder="${_t('first_name')}" value="${data.first_name}"/><span class="uneditable-input">${data.first_name}</span>
+                                <input class="span3 hide" id="lastname" name="last_name" type="text" placeholder="${_t('last_name')}" value="${data.last_name}" />
                                 <span class="uneditable-input">${data.last_name}</span>
                             </div>
                         </div>
@@ -53,33 +53,33 @@
                         <hr />
 
                         <div class="clearfix">
-                            <label for="postal_code">Postal Code</label>
+                            <label for="postal_code">${_t('postal_code')}</label>
                             <div class="input">
-                                <input class="span3 hide" id="postal_code" name="credit_card.billing_address.postal_code" type="text" placeholder="Postal Code" value="${data.credit_cards[0].billing_address.postal_code}"/>
+                                <input class="span3 hide" id="postal_code" name="credit_card.billing_address.postal_code" type="text" placeholder="${_t('postal_code')}" value="${data.credit_cards[0].billing_address.postal_code}"/>
                                 <span class="uneditable-input">${data.credit_cards[0].billing_address.postal_code}</span>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="company">Company</label>
+                            <label for="company">${_t('company')}</label>
                             <div class="input">
-                                <input class="span4 hide" id="company" name="company" type="text" placeholder="Company Name" value="${data.company}"/>
+                                <input class="span4 hide" id="company" name="company" type="text" placeholder="${_t('company_name')}" value="${data.company}"/>
                                 <span class="uneditable-input">${data.company}</span>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="phone">Phone</label>
+                            <label for="phone">${_t('phone')}</label>
                             <div class="input">
-                                <input class="span4 hide" id="phone" name="phone" type="text" placeholder="Phone" value="${data.phone}"/>
+                                <input class="span4 hide" id="phone" name="phone" type="text" placeholder="${_t('phone')}" value="${data.phone}"/>
                                 <span class="uneditable-input">${data.phone}</span>
                             </div>
                         </div>
                     {{else}}
                         <div class="clearfix">
-                            <label for="cardnbr">Card Number</label>
+                            <label for="cardnbr">${_t('card_number')}</label>
                             <div class="input">
-                                <input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="Card Number" value=""/>
+                                <input class="span4" id="cardnbr" name="credit_card.number" type="text" placeholder="${_t('card_number')}" value=""/>
                                 <span class="card" id="visa"></span>
                                 <span class="card" id="mastercard"></span>
                                 <span class="card" id="amex"></span>
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="clearfix">
-                            <label for="expiration_date">Expiration Date</label>
+                            <label for="expiration_date">${_t('expiration_date')}</label>
                             <div class="input">
                                 <input class="span1" id="expiration_date" name="credit_card.expiration_date.month" type="text" placeholder="MM" value=""/>
                                 <input class="span1" id="expiration_date" name="credit_card.expiration_date.year" type="text" placeholder="YYYY" value=""/>
@@ -97,33 +97,33 @@
                         </div>
 
                         <div class="clearfix">
-                            <label for="firstname">Name On Card</label>
+                            <label for="firstname">${_t('name_on_card')}</label>
                             <div class="input">
-                                <input class="span3" id="firstname" name="first_name" type="text" placeholder="First Name" value=""/>
-                                <input class="span3" id="lastname" name="last_name" type="text" placeholder="Last Name" value=""/>
+                                <input class="span3" id="firstname" name="first_name" type="text" placeholder="${_t('first_name')}" value=""/>
+                                <input class="span3" id="lastname" name="last_name" type="text" placeholder="${_t('last_name')}" value=""/>
                             </div>
                         </div>
 
                         <hr />
 
                         <div class="clearfix">
-                            <label for="postal_code">Postal Code</label>
+                            <label for="postal_code">${_t('postal_code')}</label>
                             <div class="input">
-                                <input class="span3" id="postal_code" name="credit_card.billing_address.postal_code" type="text" placeholder="Postal Code" value=""/>
+                                <input class="span3" id="postal_code" name="credit_card.billing_address.postal_code" type="text" placeholder="${_t('postal_code')}" value=""/>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="company">Company</label>
+                            <label for="company">${_t('company')}</label>
                             <div class="input">
-                                <input class="span4" id="company" name="company" type="text" placeholder="Company Name" value=""/>
+                                <input class="span4" id="company" name="company" type="text" placeholder="${_t('company_name')}" value=""/>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="phone">Phone</label>
+                            <label for="phone">${_t('phone')}</label>
                             <div class="input">
-                                <input class="span4" id="phone" name="phone" type="text" placeholder="Phone" value=""/>
+                                <input class="span4" id="phone" name="phone" type="text" placeholder="${_t('phone')}" value=""/>
                             </div>
                         </div>
                     {{/if}}
@@ -131,10 +131,10 @@
                     <div class="clearfix">
                         <div class="buttons-right">
                             {{if data.credit_cards[0]}}
-                                <button class="btn " id="edit-billing">Edit</button>
-                                <button class="btn success disabled" id="save-billing"  disabled="disabled">Save</button>
+                                <button class="btn " id="edit-billing">${_t('edit')}</button>
+                                <button class="btn success disabled" id="save-billing"  disabled="disabled">${_t('save')}</button>
                             {{else}}
-                                <button class="btn success" id="save-billing">Save</button>
+                                <button class="btn success" id="save-billing">${_t('save')}</button>
                             {{/if}}
                         </div>
                     </div>

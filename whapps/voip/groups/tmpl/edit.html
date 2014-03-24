@@ -2,27 +2,27 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Group</h1>
+                <h1>${_t('edit_group')}</h1>
             {{else}}
-                <h1>Create Group</h1>
+                <h1>${_t('create_group')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
 		</ul>
 		<form id="group-form" action="" method="post">
 			<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="name">Name</label>
+						<label for="name">${_t('name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this Group"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
 						</div>
 					</div>
 
@@ -30,8 +30,8 @@
                         <div id="table_wrapper">
                             <div id="tab_users">
                                 <div class="row title">
-                                    <div class="column first">Endpoints</div>
-                                    <div class="column second">Remove</div>
+                                    <div class="column first">${_t('endpoints')}</div>
+                                    <div class="column second">${_t('remove')}</div>
                                 </div>
                                 <div class="rows">
                                 </div>
@@ -39,10 +39,10 @@
 
                             <div class="add_endpoint_wrapper">
                                 <div class="add_endpoint">
-                                    <div class="add_endpoint_title"><span class="icon user"/>Add User</div>
+                                    <div class="add_endpoint_title"><span class="icon user"/>${_t('add_user')}</div>
                                     <div class="add_content_wrapper">
                                         <select name="extra.select_user_id" id="select_user_id">
-                                            <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+                                            <option id="empty_option_user" value="empty_option_user">-- ${_t('select')} --</option>
                                             {{each field_data.users}}
                                                 <option value="${id}" id="option_endpoint_${id}">${first_name} ${last_name}</option>
                                             {{/each}}
@@ -51,10 +51,10 @@
                                 </div>
 
                                 <div class="add_endpoint">
-                                    <div class="add_endpoint_title"><span class="icon device"/>Add Device</div>
+                                    <div class="add_endpoint_title"><span class="icon device"/>${_t('add_device')}</div>
                                     <div class="add_content_wrapper">
                                         <select name="extra.select_device_id" id="select_device_id">
-                                            <option id="empty_option_device" value="empty_option_device">-- Select --</option>
+                                            <option id="empty_option_device" value="empty_option_device">-- ${_t('select')} --</option>
                                             {{each field_data.devices}}
                                                 <option value="${id}" id="option_endpoint_${id}">${name}</option>
                                             {{/each}}
@@ -69,9 +69,9 @@
 		</form>
 		<div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger group-delete">Delete</button>
+	            <button class="btn danger group-delete">${_t('delete')}</button>
 	        {{/if}}
-            <button class="btn success group-save">Save</button>
+            <button class="btn success group-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

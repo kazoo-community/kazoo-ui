@@ -6,66 +6,66 @@
                 <form name="form">
                     <div class="pill-content">
                         <div class="clearfix">
-                            <label for="username">Username</label>
+                            <label for="username">${_t('username')}</label>
                             <div class="input">
-                                <input class="span4" id="username" name="username" type="text" placeholder="Username" />
+                                <input class="span4" id="username" name="username" type="text" placeholder="${_t('username')}" />
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="password">Password</label>
+                            <label for="password">${_t('password')}</label>
                             <div class="input">
                                 <input class="span4" id="password" name="password" type="password" />
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="password2">Confirm Password</label>
+                            <label for="password2">${_t('confirm_password')}</label>
                             <div class="input">
                                 <input class="span4" id="password2" name="password2" type="password" />
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="email">Email</label>
+                            <label for="email">${_t('email')}</label>
                             <div class="input">
-                                <input class="span4" id="email" name="email" type="text" placeholder="Email" />
+                                <input class="span4" id="email" name="email" type="text" placeholder="${_t('email')}" />
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="first_name">First Name</label>
+                            <label for="first_name">${_t('first_name')}</label>
                             <div class="input">
-                                <input class="span4" id="first_name" name="first_name" type="text" placeholder="First Name"/>
+                                <input class="span4" id="first_name" name="first_name" type="text" placeholder="${_t('first_name')}"/>
                             </div>
                         </div>
 
                         <div class="clearfix">
-                            <label for="last_name">Last Name</label>
+                            <label for="last_name">${_t('last_name')}</label>
                             <div class="input">
-                                <input class="span4" id="last_name" name="last_name" type="text" placeholder="Last Name" />
+                                <input class="span4" id="last_name" name="last_name" type="text" placeholder="${_t('last_name')}" />
                             </div>
                         </div>
                         
                         <div class="clearfix">
-                            <label for="name">Account Name</label>
+                            <label for="name">${_t('account_name')}</label>
                             <div class="input">
-                                <input class="span4" id="name" name="name" type="text" placeholder="Account Name" />
+                                <input class="span4" id="name" name="name" type="text" placeholder="${_t('account_name')}" />
                             </div>
                         </div>
 
                         {{if request_realm}}
                             <div class="clearfix">
-                                <label for="realm">Domain name</label>
+                                <label for="realm">${_t('domain_name')}</label>
                                 <div class="input">
-                                    <input class="span4" id="realm" name="realm" type="text" placeholder="Domain name" />
+                                    <input class="span4" id="realm" name="realm" type="text" placeholder="${_t('domain_name')}" />
                                 </div>
                             </div>
                         {{/if}}
                     </div>
                 </form>
                 <div class="buttons-right">
-                    <button class="btn primary register">Register</button>
+                    <button class="btn primary register">${_t('register')}</button>
                 </div>
             </div>
         </div>

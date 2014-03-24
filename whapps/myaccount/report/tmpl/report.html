@@ -1,27 +1,27 @@
 <div>
-    <h1>Generate a report for: </h1>
+    <h1>${_t('generate_a_report_for')} </h1>
     <div id="report_filters" class="row half">
         <label class="radio">
-            <input type="radio" name="filter_account" value="children" checked> Children sub-accounts only
+            <input type="radio" name="filter_account" value="children" checked> ${_t('children_sub_accounts_only')}
         </label>
         <label class="radio">
-            <input type="radio" name="filter_account" value="with_account"> This account and his direct sub-accounts
+            <input type="radio" name="filter_account" value="with_account"> ${_t('this_account_and_his_direct')}
         </label>
         <label class="radio">
-            <input type="radio" name="filter_account" value="descendants"> This account and all his sub-accounts
+            <input type="radio" name="filter_account" value="descendants"> ${_t('this_account_and_all_his_sub_accounts')}
         </label>
 
-        <button class="btn primary" id="trigger_report">Generate</button>
+        <button class="btn primary" id="trigger_report">${_t('generate')}</button>
     </div>
 
     <div class="row half">
         <ul id="subtotals" style="display: none;">
-            <li>Total Number of Softphones: <span id="amount_softphones"></span>
-            <li>Total Number of SIP Devices: <span id="amount_sip_devices"></span>
-            <li>Total Number of DIDs: <span id="amount_dids"></span>
-            <li>Total Number of Inbound Trunks: <span id="amount_inbound_trunks"></span>
-            <li>Total Number of Outbound Trunks: <span id="amount_outbound_trunks"></span>
-            <li>Total Number of Credits: <span id="amount_credits"></span>
+            <li>${_t('total_number_of_softphones')} <span id="amount_softphones"></span>
+            <li>${_t('total_number_of_sip_devices')} <span id="amount_sip_devices"></span>
+            <li>${_t('total_number_of_dids')} <span id="amount_dids"></span>
+            <li>${_t('total_number_of_inbound_trunks')} <span id="amount_inbound_trunks"></span>
+            <li>${_t('total_number_of_outbound_trunks')} <span id="amount_outbound_trunks"></span>
+            <li>${_t('total_number_of_credits')} <span id="amount_credits"></span>
         </ul>
     </div>
 

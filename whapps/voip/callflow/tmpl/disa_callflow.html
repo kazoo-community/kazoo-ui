@@ -1,14 +1,14 @@
 <div>
     <div class="dialog_popup">
-        <h1>DISA</h1>
+        <h1>${_t('disa')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="disa_pin_input">PIN: </label>
+                    <label for="disa_pin_input">${_t('pin')}: </label>
                     <input type="text" id="disa_pin_input" class="medium" value="${data_disa.pin}"/>
                 </div>
                 <div class="popup_field">
-                    Allow a maximum of <input class="size2" type="text" id="disa_retries_input" value="${data_disa.retries}"/> retries.
+                    ${_t('allow_a_maximum_of')} <input class="size2" type="text" id="disa_retries_input" value="${data_disa.retries}"/> ${_t('retries')}.
                 </div>
             </div>
         </form>
