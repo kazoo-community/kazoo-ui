@@ -489,13 +489,16 @@ winkstart.module('pbxs', 'pbxs_manager', {
         },
 
         render_endpoint: function(data, endpoint_data, target, callbacks) {
-
             if(!endpoint_data.server_name) {
                 endpoint_data.server_name = null;
             }
 
             var THIS = this,
-                endpoint_html = THIS.templates.endpoint.tmpl(endpoint_data);
+                dataTemplate = endpoint_data,
+                endpoint_html;
+
+            dataTemplate.options.inbound_format = dataTemplate.options.inbound_format == 'e.164' ? 'e164' : dataTemplate.options.inbound_format;
+            endpoint_html = THIS.templates.endpoint.tmpl(dataTemplate);
 
             $.each($('.pbxs .pbx', endpoint_html), function() {
                 if($(this).dataset('pbx_name') === endpoint_data.server_type) {
@@ -520,6 +523,10 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 form_data.server_type = $('.pbxs .selected', endpoint_html).dataset('pbx_name');
                 if(form_data.server_type === 'other') {
                     form_data.server_type = $('#other_name', endpoint_html).val();
+                }
+
+                if ( form_data.options.inbound_format == 'e164' && endpoint_data.options.inbound_format == 'e.164' ) {
+                    form_data.options.inbound_format = 'e.164';
                 }
 
                 THIS.get_account(function(global_data) {

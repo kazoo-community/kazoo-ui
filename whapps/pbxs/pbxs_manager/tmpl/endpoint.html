@@ -84,6 +84,37 @@
                         </div>
                     </div>
 
+                    <div class="clearfix">
+                        <label for="invite_format">Invite format</label>
+                        <div class="input">
+                            <select id="inbound_format" name="options.inbound_format" class="medium">
+                            {{if options.inbound_format === 'e164' || !options.inbound_format}}
+                                <option value="e164" selected="selected">E.164@Realm</option>
+                            {{else}}
+                                <option value="e164">E.164@Realm</option>
+                            {{/if}}
+
+                            {{if options.inbound_format === '1npan'}}
+                                <option value="1npan" selected="selected">1 NPA NXX XXXX@Realm</option>
+                            {{else}}
+                                <option value="1npan">1 NPA NXX XXXX@Realm</option>
+                            {{/if}}
+                            
+                            {{if options.inbound_format === 'npan'}}
+                                <option value="npan" selected="selected">NPA NXX XXXX@Realm</option>
+                            {{else}}
+                                <option value="npan">NPA NXX XXXX@Realm</option>
+                            {{/if}}
+                            
+                            {{if options.inbound_format === 'username'}}
+                                <option value="username" selected="selected">SIP_Username@Realm</option>
+                            {{else}}
+                                <option value="username">SIP_Username@Realm</option>
+                            {{/if}}
+                            </select>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="auth.auth_method" value="Password" />
                     <input type="hidden" name="extra.serverid" value="${extra.id}" />
 
