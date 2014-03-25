@@ -53,6 +53,9 @@
                         string_alert += winkstart.print_r(data);
                     }
                 }
+                else {
+                    string_alert += 'Unknown error: ' + status;
+                }
 
                 if(string_alert != '') {
                     if(typeof callback == 'function') {
