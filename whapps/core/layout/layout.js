@@ -121,7 +121,9 @@ winkstart.module('core', 'layout', {
             });
 
             winkstart.get_version(function(version) {
-                $('.footer_wrapper .tag_version').html('('+version.replace(/\s/g,'')+')');
+                $('.footer_wrapper .tag_version').html('('+version+')');
+
+                winkstart.config.version = version
             });
 
             $('#ws-topbar .brand.logo', layout_html).click(function() {
