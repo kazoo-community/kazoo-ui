@@ -9,6 +9,8 @@
             url: 'VERSION',
             cache: false,
             success: function(template) {
+            	template = template.replace(/[\n\s]/g,'');
+
                 callback(template);
             }
         });

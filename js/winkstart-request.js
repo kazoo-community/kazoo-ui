@@ -100,6 +100,13 @@
             }
         }
 
+		if(params.data) {
+			params.data.ui_metadata = $.extend(true, params.data.ui_metadata || {}, {
+				ui: 'kazoo-ui',
+				version: winkstart.config.version
+			});
+		}
+
         var request = {
                 resourceId: resource_name,
                 data: params,
