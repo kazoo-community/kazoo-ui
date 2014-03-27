@@ -1760,8 +1760,7 @@ winkstart.module('voip', 'callflow', {
                                     winkstart.request('user.list', {
                                             account_id: winkstart.apps['voip'].account_id,
                                             api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(_data, status) {
+                                        }, function(_data, status) {
                                             $.each(_data.data, function(i, obj) {
                                                 obj.name = obj.first_name + ' ' + obj.last_name;
                                                 obj.endpoint_type = 'user';
@@ -1776,261 +1775,322 @@ winkstart.module('voip', 'callflow', {
                                                 }
                                             });
 
-                                            popup_html = THIS.templates.ring_group_dialog.tmpl({
-												_t: function(param){
-													return window.translate['callflow'][param];
-												},
-                                                form: {
-                                                    name: node.getMetadata('name') || '',
-                                                    strategy: {
-                                                        items: [
-                                                            {
-                                                                id: 'simultaneous',
-                                                                name: _t('callflow', 'at_the_same_time')
+                                            winkstart.request('media.list', {
+                                                    account_id: winkstart.apps['voip'].account_id,
+                                                    api_url: winkstart.apps['voip'].api_url
+                                                },
+                                                function(_data, status) {
+                                                    var media_array = _data.data.sort(function(a,b) {
+                                                        return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
+                                                    });
+
+                                                    popup_html = THIS.templates.ring_group_dialog.tmpl({
+        												_t: function(param){
+        													return window.translate['callflow'][param];
+        												},
+                                                        form: {
+                                                            name: node.getMetadata('name') || '',
+                                                            strategy: {
+                                                                items: [
+                                                                    {
+                                                                        id: 'simultaneous',
+                                                                        name: _t('callflow', 'at_the_same_time')
+                                                                    },
+                                                                    {
+                                                                        id: 'single',
+                                                                        name: _t('callflow', 'in_order')
+                                                                    }
+                                                                ],
+                                                                selected: node.getMetadata('strategy') || 'simultaneous'
                                                             },
-                                                            {
-                                                                id: 'single',
-                                                                name: _t('callflow', 'in_order')
+                                                            timeout: node.getMetadata('timeout') || '30',
+                                                            ringback: {
+                                                                items: $.merge([
+                                                                    {
+                                                                        id: 'default',
+                                                                        name: _t('callflow', 'default'),
+                                                                        class: 'uneditable'
+                                                                    },
+                                                                    {
+                                                                        id: 'silence_stream://300000',
+                                                                        name: _t('callflow', 'silence'),
+                                                                        class: 'uneditable'
+                                                                    }
+                                                                ], media_array),
+                                                                selected: node.getMetadata('ringback') || 'default'
                                                             }
-                                                        ],
-                                                        selected: node.getMetadata('strategy') || 'simultaneous'
-                                                    },
-                                                    timeout: node.getMetadata('timeout') || '30'
-                                                }
-                                            });
-                                            $.each(unselected_groups, function() {
-                                                $('#groups_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                            });
+                                                        }
+                                                    });
+                                                    $.each(unselected_groups, function() {
+                                                        $('#groups_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                                    });
 
-                                            $.each(unselected_devices, function() {
-                                                $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                            });
+                                                    $.each(unselected_devices, function() {
+                                                        $('#devices_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                                    });
 
-                                            $.each(unselected_users, function() {
-                                                $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                            });
+                                                    $.each(unselected_users, function() {
+                                                        $('#users_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                                    });
 
-                                            $.each(selected_endpoints, function() {
-                                                //Check if user/device exists.
-                                                if(this.endpoint_type) {
-                                                    $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
-                                                }
-                                            });
+                                                    $.each(selected_endpoints, function() {
+                                                        //Check if user/device exists.
+                                                        if(this.endpoint_type) {
+                                                            $('.connect.right', popup_html).append(THIS.templates.ring_group_element.tmpl(this));
+                                                        }
+                                                    });
 
-                                            $('#name', popup_html).bind('keyup blur change', function() {
-                                                $('.column.right .title', popup_html).html(_t('callflow', 'ring_group_val') + $(this).val());
-                                            });
+                                                    $('#name', popup_html).bind('keyup blur change', function() {
+                                                        $('.column.right .title', popup_html).html(_t('callflow', 'ring_group_val') + $(this).val());
+                                                    });
 
-                                            $('ul.settings1 > li > a', popup_html).click(function(item) {
-                                                $('.pane_content', popup_html).hide();
+                                                    $('#ringback', popup_html).change(function(e) {
+                                                        if($(this).find('option:selected').hasClass('uneditable')) {
+                                                            $('.media_action[data-action="edit"]', popup_html).hide();
+                                                        } else {
+                                                            $('.media_action[data-action="edit"]', popup_html).show();
+                                                        }
+                                                    });
 
-                                                //Reset Search field
-                                                $('.searchfield', popup_html).val('');
-                                                $('.column.left li', popup_html).show();
+                                                    $('.media_action', popup_html).click(function(e) {
+                                                        var isCreation = $(this).data('action') === 'create',
+                                                            mediaData = isCreation ? {} : { id: $('#ringback', popup_html).val() };
 
-                                                $('ul.settings1 > li', popup_html).removeClass('current');
+                                                        winkstart.publish('media.popup_edit', mediaData, function(_mediaData) {
+                                                            if(_mediaData.data && _mediaData.data.id) {
+                                                                if(isCreation) {
+                                                                    $('#ringback', popup_html).append('<option value="'+_mediaData.data.id+'">'+_mediaData.data.name+'</option>');
+                                                                } else {
+                                                                    $('#ringback option[value="'+_mediaData.data.id+'"]', popup_html).text(_mediaData.data.name);
+                                                                }
+                                                                $('#ringback', popup_html).val(_mediaData.data.id);
+                                                            }
+                                                        });
+                                                    });
 
-                                                var tab_id = $(this).attr('id');
+                                                    $('ul.settings1 > li > a', popup_html).click(function(item) {
+                                                        $('.pane_content', popup_html).hide();
 
-                                                if(tab_id  === 'users_tab_link') {
-                                                    $('#users_pane', popup_html).show();
-                                                }
-                                                else if(tab_id === 'devices_tab_link') {
-                                                    $('#devices_pane', popup_html).show();
-                                                }
-                                                else if(tab_id === 'groups_tab_link') {
-                                                    $('#groups_pane', popup_html).show();
-                                                }
+                                                        //Reset Search field
+                                                        $('.searchfield', popup_html).val('');
+                                                        $('.column.left li', popup_html).show();
 
-                                                $(this).parent().addClass('current');
-                                            });
+                                                        $('ul.settings1 > li', popup_html).removeClass('current');
 
-                                            $('.searchsubmit2', popup_html).click(function() {
-                                                $('.searchfield', popup_html).val('');
-                                                $('.column li', popup_html).show();
-                                            });
+                                                        var tab_id = $(this).attr('id');
 
-                                            $('#devices_pane .searchfield', popup_html).keyup(function() {
-                                                $('#devices_pane .column.left li').each(function() {
-                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                        $(this).hide();
-                                                    }
-                                                    else {
-                                                        $(this).show();
-                                                    }
-                                                });
-                                            });
-
-                                            $('#users_pane .searchfield', popup_html).keyup(function() {
-                                                $('#users_pane .column.left li').each(function() {
-                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                        $(this).hide();
-                                                    }
-                                                    else {
-                                                        $(this).show();
-                                                    }
-                                                });
-                                            });
-
-                                            $('#groups_pane .searchfield', popup_html).keyup(function() {
-                                                $('#groups_pane .column.left li').each(function() {
-                                                    if($('.item_name', $(this)).html().toLowerCase().indexOf($('#groups_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                        $(this).hide();
-                                                    }
-                                                    else {
-                                                        $(this).show();
-                                                    }
-                                                });
-                                            });
-
-                                            if(jQuery.isEmptyObject(selected_endpoints)) {
-                                                $('.column.right .connect', popup_html).addClass('no_element');
-                                            }
-                                            else {
-                                                $('.column.right .connect', popup_html).removeClass('no_element');
-                                            }
-
-                                            $('.column.left .options', popup_html).hide();
-                                            $('.column.left .actions', popup_html).hide();
-
-                                            $('.options .option.delay', popup_html).bind('keyup', function() {
-                                                $(this).parents('li').dataset('delay', $(this).val());
-                                            });
-
-                                            $('.options .option.timeout', popup_html).bind('keyup', function() {
-                                                $(this).parents('li').dataset('timeout', $(this).val());
-                                            });
-
-                                            $('#save_ring_group', popup_html).click(function() {
-                                                var name = $('#name', popup_html).val(),
-                                                    global_timeout = 0,
-                                                    strategy = $('#strategy', popup_html).val();
-
-                                                endpoints = [];
-
-                                                if(strategy === 'simultaneous') {
-                                                    var computeTimeout = function(delay, local_timeout, global_timeout) {
-                                                        var duration = delay + local_timeout;
-
-                                                        if(duration > global_timeout) {
-                                                            global_timeout = duration;
+                                                        if(tab_id  === 'users_tab_link') {
+                                                            $('#users_pane', popup_html).show();
+                                                        }
+                                                        else if(tab_id === 'devices_tab_link') {
+                                                            $('#devices_pane', popup_html).show();
+                                                        }
+                                                        else if(tab_id === 'groups_tab_link') {
+                                                            $('#groups_pane', popup_html).show();
                                                         }
 
-                                                        return global_timeout;
-                                                    }
-                                                }
-                                                else {
-                                                    var computeTimeout = function(delay, local_timeout, global_timeout) {
-                                                        global_timeout += delay + local_timeout;
+                                                        $(this).parent().addClass('current');
+                                                    });
 
-                                                        return global_timeout;
-                                                    }
-                                                }
+                                                    $('.searchsubmit2', popup_html).click(function() {
+                                                        $('.searchfield', popup_html).val('');
+                                                        $('.column li', popup_html).show();
+                                                    });
 
-                                                $('.right .connect li', popup_html).each(function() {
-                                                    var item_data = $(this).dataset();
-                                                    delete item_data.owner_id;
-                                                    endpoints.push(item_data);
-                                                    global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
-                                                });
-
-                                                node.setMetadata('endpoints', endpoints);
-                                                node.setMetadata('name', name);
-                                                node.setMetadata('strategy', strategy);
-                                                node.setMetadata('timeout', global_timeout);
-
-                                                node.caption = name;
-
-                                                popup.dialog('close');
-                                            });
-
-                                            popup = winkstart.dialog(popup_html, {
-                                                title: _t('callflow', 'ring_group'),
-                                                beforeClose: function() {
-                                                    if(typeof callback == 'function') {
-                                                        callback();
-                                                    }
-                                                }
-                                            });
-
-                                            $('.scrollable', popup).jScrollPane({
-                                                horizontalDragMinWidth: 0,
-                                                horizontalDragMaxWidth: 0
-                                            });
-
-                                            $('.connect', popup).sortable({
-                                                connectWith: $('.connect.right', popup),
-                                                zIndex: 2000,
-                                                helper: 'clone',
-                                                appendTo: $('.wrapper', popup),
-                                                scroll: false,
-                                                receive: function(ev, ui) {
-                                                    var data = ui.item.dataset(),
-                                                        list_li = [],
-                                                        confirm_text;
-
-                                                    if(data.endpoint_type === 'device') {
-                                                        confirm_text = _t('callflow', 'the_owner_of_this_device_is_already');
-                                                        $('.connect.right li', popup_html).each(function() {
-                                                            if($(this).dataset('id') === data.owner_id) {
-                                                                list_li.push($(this));
+                                                    $('#devices_pane .searchfield', popup_html).keyup(function() {
+                                                        $('#devices_pane .column.left li').each(function() {
+                                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#devices_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                                $(this).hide();
+                                                            }
+                                                            else {
+                                                                $(this).show();
                                                             }
                                                         });
-                                                    }
-                                                    else if(data.endpoint_type === 'user') {
-                                                        confirm_text = _t('callflow', 'this_user_has_already_some_devices');
-                                                        $('.connect.right li', popup_html).each(function() {
-                                                            if($(this).dataset('owner_id') === data.id) {
-                                                                list_li.push($(this));
+                                                    });
+
+                                                    $('#users_pane .searchfield', popup_html).keyup(function() {
+                                                        $('#users_pane .column.left li').each(function() {
+                                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#users_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                                $(this).hide();
+                                                            }
+                                                            else {
+                                                                $(this).show();
                                                             }
                                                         });
+                                                    });
+
+                                                    $('#groups_pane .searchfield', popup_html).keyup(function() {
+                                                        $('#groups_pane .column.left li').each(function() {
+                                                            if($('.item_name', $(this)).html().toLowerCase().indexOf($('#groups_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                                $(this).hide();
+                                                            }
+                                                            else {
+                                                                $(this).show();
+                                                            }
+                                                        });
+                                                    });
+
+                                                    if(jQuery.isEmptyObject(selected_endpoints)) {
+                                                        $('.column.right .connect', popup_html).addClass('no_element');
+                                                    }
+                                                    else {
+                                                        $('.column.right .connect', popup_html).removeClass('no_element');
                                                     }
 
-                                                    if(list_li.length > 0) {
-                                                        winkstart.confirm(confirm_text,
-                                                            function() {
-                                                                $.each(list_li, function() {
-                                                                    remove_element(this);
+                                                    $('.column.left .options', popup_html).hide();
+                                                    $('.column.left .actions', popup_html).hide();
+
+                                                    $('.options .option.delay', popup_html).bind('keyup', function() {
+                                                        $(this).parents('li').dataset('delay', $(this).val());
+                                                    });
+
+                                                    $('.options .option.timeout', popup_html).bind('keyup', function() {
+                                                        $(this).parents('li').dataset('timeout', $(this).val());
+                                                    });
+
+                                                    $('#save_ring_group', popup_html).click(function() {
+                                                        var name = $('#name', popup_html).val(),
+                                                            global_timeout = 0,
+                                                            strategy = $('#strategy', popup_html).val(),
+                                                            ringback = $('#ringback', popup_html).val();
+
+                                                        endpoints = [];
+
+                                                        if(strategy === 'simultaneous') {
+                                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                                var duration = delay + local_timeout;
+
+                                                                if(duration > global_timeout) {
+                                                                    global_timeout = duration;
+                                                                }
+
+                                                                return global_timeout;
+                                                            }
+                                                        }
+                                                        else {
+                                                            var computeTimeout = function(delay, local_timeout, global_timeout) {
+                                                                global_timeout += delay + local_timeout;
+
+                                                                return global_timeout;
+                                                            }
+                                                        }
+
+                                                        $('.right .connect li', popup_html).each(function() {
+                                                            var item_data = $(this).dataset();
+                                                            delete item_data.owner_id;
+                                                            endpoints.push(item_data);
+                                                            global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
+                                                        });
+
+                                                        node.setMetadata('endpoints', endpoints);
+                                                        node.setMetadata('name', name);
+                                                        node.setMetadata('strategy', strategy);
+                                                        node.setMetadata('timeout', global_timeout);
+                                                        if(ringback === 'default') {
+                                                            node.deleteMetadata('ringback', ringback);
+                                                        } else {
+                                                            node.setMetadata('ringback', ringback);
+                                                        }
+
+                                                        node.caption = name;
+
+                                                        popup.dialog('close');
+                                                    });
+
+                                                    popup = winkstart.dialog(popup_html, {
+                                                        title: _t('callflow', 'ring_group'),
+                                                        beforeClose: function() {
+                                                            if(typeof callback == 'function') {
+                                                                callback();
+                                                            }
+                                                        }
+                                                    });
+
+                                                    $('.scrollable', popup).jScrollPane({
+                                                        horizontalDragMinWidth: 0,
+                                                        horizontalDragMaxWidth: 0
+                                                    });
+
+                                                    $('.connect', popup).sortable({
+                                                        connectWith: $('.connect.right', popup),
+                                                        zIndex: 2000,
+                                                        helper: 'clone',
+                                                        appendTo: $('.wrapper', popup),
+                                                        scroll: false,
+                                                        receive: function(ev, ui) {
+                                                            var data = ui.item.dataset(),
+                                                                list_li = [],
+                                                                confirm_text;
+
+                                                            if(data.endpoint_type === 'device') {
+                                                                confirm_text = _t('callflow', 'the_owner_of_this_device_is_already');
+                                                                $('.connect.right li', popup_html).each(function() {
+                                                                    if($(this).dataset('id') === data.owner_id) {
+                                                                        list_li.push($(this));
+                                                                    }
                                                                 });
-                                                            },
-                                                            function() {
-                                                                remove_element(ui.item);
                                                             }
-                                                        );
+                                                            else if(data.endpoint_type === 'user') {
+                                                                confirm_text = _t('callflow', 'this_user_has_already_some_devices');
+                                                                $('.connect.right li', popup_html).each(function() {
+                                                                    if($(this).dataset('owner_id') === data.id) {
+                                                                        list_li.push($(this));
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            if(list_li.length > 0) {
+                                                                winkstart.confirm(confirm_text,
+                                                                    function() {
+                                                                        $.each(list_li, function() {
+                                                                            remove_element(this);
+                                                                        });
+                                                                    },
+                                                                    function() {
+                                                                        remove_element(ui.item);
+                                                                    }
+                                                                );
+                                                            }
+
+                                                            if($(this).hasClass('right')) {
+                                                                $('.options', ui.item).show();
+                                                                $('.actions', ui.item).show();
+                                                                //$('.item_name', ui.item).addClass('right');
+                                                                $('.column.right .connect', popup).removeClass('no_element');
+                                                            }
+                                                        }
+                                                    });
+
+                                                    $(popup_html).delegate('.trash', 'click', function() {
+                                                        var $parent_li = $(this).parents('li').first();
+                                                        remove_element($parent_li);
+                                                    });
+
+                                                    $('.pane_content', popup_html).hide();
+                                                    $('#users_pane', popup_html).show();
+                                                    if($('#ringback option:selected').hasClass('uneditable')) {
+                                                        $('.media_action[data-action="edit"]', popup_html).hide();
+                                                    } else {
+                                                        $('.media_action[data-action="edit"]', popup_html).show();
                                                     }
 
-                                                    if($(this).hasClass('right')) {
-                                                        $('.options', ui.item).show();
-                                                        $('.actions', ui.item).show();
-                                                        //$('.item_name', ui.item).addClass('right');
-                                                        $('.column.right .connect', popup).removeClass('no_element');
-                                                    }
+                                                    var remove_element = function(li) {
+                                                        var $parent_li = li;
+                                                        var data = $parent_li.dataset();
+                                                        data.name = jQuery.trim($('.item_name', $parent_li).html());
+                                                        $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
+                                                        $parent_li.remove();
+
+                                                        if($('.connect.right li', popup_html).size() == 0) {
+                                                            $('.column.right .connect', popup).addClass('no_element');
+                                                        }
+
+                                                        if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
+                                                            $('#'+data.id, popup_html).hide();
+                                                        }
+                                                    };
                                                 }
-                                            });
-
-                                            $(popup_html).delegate('.trash', 'click', function() {
-                                                var $parent_li = $(this).parents('li').first();
-                                                remove_element($parent_li);
-                                            });
-
-                                            $('.pane_content', popup_html).hide();
-                                            $('#users_pane', popup_html).show();
-
-                                            var remove_element = function(li) {
-                                                var $parent_li = li;
-                                                var data = $parent_li.dataset();
-                                                data.name = jQuery.trim($('.item_name', $parent_li).html());
-                                                $('#'+data.endpoint_type+'s_pane .connect.left', popup_html).append(THIS.templates.ring_group_element.tmpl(data));
-                                                $parent_li.remove();
-
-                                                if($('.connect.right li', popup_html).size() == 0) {
-                                                    $('.column.right .connect', popup).addClass('no_element');
-                                                }
-
-                                                if(data.name.toLowerCase().indexOf($('#'+data.endpoint_type+'s_pane .searchfield', popup_html).val().toLowerCase()) == -1) {
-                                                    $('#'+data.id, popup_html).hide();
-                                                }
-                                            };
+                                            );
                                         }
                                     );
                                 }
