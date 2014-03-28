@@ -364,7 +364,11 @@ winkstart.module('numbers', 'numbers_manager', {
                             THIS.add_numbers(numbers_data.slice(1), callback);
                         },
                         function(_data, status) {
-                            error_function();
+                            if(_data.data && _data.data.credit) {
+                                winkstart.error_message.process_error()(_data, status);
+                            } else {
+                                error_function();
+                            }
                         }
                     );
                 }
@@ -456,12 +460,11 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
                                 function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                    THIS.update_number(phone_number[1], _data.data, 
+                                        function(_data_update) {
                                             !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
                                         },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_caller_id') + _data_update.message);
-                                        }
+                                        winkstart.error_message.process_error()
                                     );
                                 }
                             );
