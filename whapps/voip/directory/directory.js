@@ -263,6 +263,14 @@ winkstart.module('voip', 'directory', {
                                         list_callflows.push(this);
                                     }
                                 });
+
+								list_callflows.sort(function(a,b) {
+									var aName = a.name || (a.numbers[0] + ''),
+										bName = b.name || (b.numbers[0] + '');
+
+									return aName > bName;
+								});
+
                                 defaults.field_data.callflows = list_callflows;
 
                                 callback(null, _data);
@@ -275,6 +283,13 @@ winkstart.module('voip', 'directory', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
+                            	_data.data.sort(function(a,b) {
+                            		var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
+                            			bName = (b.first_name + ' ' + b.last_name).toLowerCase();
+
+									return aName > bName;
+                            	});
+
                                 defaults.field_data.users = _data.data;
 
                                 callback(null, _data);
@@ -400,7 +415,7 @@ winkstart.module('voip', 'directory', {
             });
 
             $('.add_user_div', directory_html).click(function() {
-                var $user = $('#user_id', directory_html);
+                var $user = $('#select_user_id', directory_html);
                 var $callflow = $('#callflow_id', directory_html);
 
                 if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
