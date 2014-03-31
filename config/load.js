@@ -13,7 +13,16 @@ function loadScript(url){
 }
 
 _t = function(module, param){				//Global function translate
-	return window.translate[module][param];
+	if(module && param) {
+		response = window.translate[module][param]
+	}
+	else {
+		console.log('i18n field missing: ' + module + '.' + param);
+
+		response = '';
+	}
+
+	return response;
 };
 
 var langUrls = [

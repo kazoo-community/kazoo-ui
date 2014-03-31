@@ -1,11 +1,6 @@
 //window.translate = [];
 ( function(winkstart, amplify, $) {
 
-	_t = function(module, param){
-
-		return window.translate[module][param];
-	};
-
     winkstart.config =  {
         /* Was winkstart.debug */
         debug: false,
