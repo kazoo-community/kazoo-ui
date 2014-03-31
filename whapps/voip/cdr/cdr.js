@@ -333,7 +333,7 @@ function(args) {
 
                     var tmpl_data = {
                         cdr_fields: cdr_data,
-						_f: function(param){
+						_t: function(param){
 							return window.translate['cdr'][param];
 						}
                     }
