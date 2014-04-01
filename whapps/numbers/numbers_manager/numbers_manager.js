@@ -345,7 +345,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 number_data;
 
             if(numbers_data.length > 0) {
-                var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
+                var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
                     error_function = function() {
                         winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
                             _t('numbers_manager', 'would_you_like_to_retry'),
@@ -445,7 +445,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -473,7 +473,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid_inbound', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -508,7 +508,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
