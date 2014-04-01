@@ -580,33 +580,36 @@ winkstart.module('numbers', 'numbers_manager', {
                 ev.preventDefault();
 
                 THIS.render_port_dialog(function(port_data, popup) {
-                    var ports_done = 0;
+                    var ports_done = 0,
+                    	text = _t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged');
 
-                    winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                        function() {
-                            $.each(port_data.phone_numbers, function(i, val) {
-                                var number_data = {
-                                    phone_number: val
-                                };
+					if('port_text' in winkstart.config) {
+						text = winkstart.config.port_text;
+                    }
 
-                                THIS.port_number(number_data, function(_number_data) {
-                                    number_data.options = _number_data.data;
+					winkstart.confirm(text,	function() {
+						$.each(port_data.phone_numbers, function(i, val) {
+                            var number_data = {
+                                phone_number: val
+                            };
 
-                                    if('id' in number_data.options) {
-                                        delete number_data.options.id;
+                            THIS.port_number(number_data, function(_number_data) {
+                                number_data.options = _number_data.data;
+
+                                if('id' in number_data.options) {
+                                    delete number_data.options.id;
+                                }
+
+                                THIS.submit_port(port_data, number_data, function(_data) {
+                                    if(++ports_done > port_data.phone_numbers.length - 1) {
+                                        THIS.list_numbers();
+
+                                        popup.dialog('close');
                                     }
-
-                                    THIS.submit_port(port_data, number_data, function(_data) {
-                                        if(++ports_done > port_data.phone_numbers.length - 1) {
-                                            THIS.list_numbers();
-
-                                            popup.dialog('close');
-                                        }
-                                    });
                                 });
                             });
-                        }
-                    );
+                        });
+                    });
                 });
             });
 
