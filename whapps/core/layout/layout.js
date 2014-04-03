@@ -28,6 +28,12 @@ winkstart.module('core', 'layout', {
                 contentType: 'application/json',
                 dataType: 'text',
                 verb: 'GET'
+            },
+            'layout.get_icon': {
+                url: '{api_url}/whitelabel/{domain}/icon',
+                contentType: 'application/json',
+                dataType: 'text',
+                verb: 'GET'
             }
         }
     },
@@ -147,6 +153,23 @@ winkstart.module('core', 'layout', {
                     else {
                         $('#ws-topbar .brand.logo', layout_html).css('background-image', 'url(config/images/logo.png)');
                     }
+                }
+            );
+            winkstart.request('layout.get_icon', {
+                    api_url: api_url,
+                    domain: domain
+                },
+                function(_data, status) {
+                    var favicon = document.createElement('link');
+                    favicon.rel = 'icon';
+                    favicon.href = api_url + '/whitelabel/' + domain + '/icon?_='+new Date().getTime();
+                    document.getElementsByTagName('head')[0].appendChild(favicon);
+                },
+                function(_data, status) {
+                    var favicon = document.createElement('link');
+                    favicon.rel = 'icon';
+                    favicon.href = winkstart.config.favicon || 'img/wsLogo.png';
+                    document.getElementsByTagName('head')[0].appendChild(favicon);
                 }
             );
         },
