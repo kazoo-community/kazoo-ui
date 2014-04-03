@@ -84,6 +84,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/x-base64',
 				verb: 'POST'
 			},
+			'whitelabel.update_icon': {
+				url: '{api_url}/accounts/{account_id}/whitelabel/icon',
+				contentType: 'application/x-base64',
+				verb: 'POST'
+			},
 			'accounts_manager.credits.get': {
 				url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
 				contentType: 'application/json',
@@ -369,6 +374,7 @@ winkstart.module('accounts', 'accounts_manager', {
 								function(_data_wl, status) {
 									defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
 									defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
+									defaults.field_data.whitelabel.icon_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/icon?auth_token='+winkstart.apps['accounts'].auth_token;
 
 									callback(null, _data_wl);
 								},
@@ -553,10 +559,16 @@ winkstart.module('accounts', 'accounts_manager', {
 				delete form_data.max_connect_failures;
 			}
 
-			form_data.whitelabel.description = form_data.extra.upload_media;
+			form_data.whitelabel.description = form_data.extra.upload_logo;
 
 			if(form_data.whitelabel.description === '') {
 				delete form_data.whitelabel.description;
+			}
+
+			form_data.whitelabel.icon_desc = form_data.extra.upload_icon;
+
+			if(form_data.whitelabel.icon_desc === '') {
+				delete form_data.whitelabel.icon_desc;
 			}
 
 			if(form_data.extra.sameTemplate) {
@@ -604,6 +616,21 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		upload_file: function(data, account_id, callback) {
 			winkstart.request('whitelabel.update_logo', {
+					account_id: account_id,
+					api_url: winkstart.apps['accounts'].api_url,
+					data: data
+				},
+				function(_data, status) {
+					if(typeof callback === 'function') {
+						callback();
+					}
+				},
+				winkstart.error_message.process_error()
+			);
+		},
+
+		upload_icon: function(data, account_id, callback) {
+			winkstart.request('whitelabel.update_icon', {
 					account_id: account_id,
 					api_url: winkstart.apps['accounts'].api_url,
 					data: data
@@ -690,10 +717,16 @@ winkstart.module('accounts', 'accounts_manager', {
 			winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html), true);
 
 			$('.logo_div', account_html).css('background-image', 'url('+data.field_data.whitelabel.logo_url+ '&_=' + new Date().getTime()+')');
+			$('.icon_div', account_html).css('background-image', 'url('+data.field_data.whitelabel.icon_url+ '&_=' + new Date().getTime()+')');
 
 			if(data.field_data.whitelabel.description) {
 				$('#upload_div', account_html).hide();
 				$('.player_file', account_html).show();
+			}
+
+			if(data.field_data.whitelabel.icon_desc) {
+				$('#upload_div_icon', account_html).hide();
+				$('.player_file_icon', account_html).show();
 			}
 
 			if(data.limits.allow_prepay === false) {
@@ -736,6 +769,36 @@ winkstart.module('accounts', 'accounts_manager', {
 						var data = evt.target.result;
 
 						file = data;
+					}
+
+					reader.readAsDataURL(files[0]);
+				}
+			});
+
+			$('#change_link_icon', account_html).click(function(ev) {
+				ev.preventDefault();
+				$('#upload_div_icon', account_html).show();
+				$('.player_file_icon', account_html).hide();
+			});
+
+			$('#download_link_icon', account_html).click(function(ev) {
+				ev.preventDefault();
+				window.location.href = winkstart.apps['accounts'].api_url + '/accounts/' +
+				data.data.id + '/whitelabel/icon?auth_token=' +
+				winkstart.apps['accounts'].auth_token;
+			});
+
+			$('#file_icon', account_html).bind('change', function(evt){
+				var files = evt.target.files;
+
+				if(files.length > 0) {
+					var reader = new FileReader();
+
+					icon_file = 'updating';
+					reader.onloadend = function(evt) {
+						var data = evt.target.result;
+
+						icon_file = data;
 					}
 
 					reader.readAsDataURL(files[0]);
@@ -789,7 +852,7 @@ winkstart.module('accounts', 'accounts_manager', {
 							THIS.save_accounts_manager(form_data, data,
 								function(_data_account, status) {
 									var account_id = _data_account.data.id,
-										upload_file = function() {
+										upload_logo = function() {
 											if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
 												THIS.upload_file(file, account_id, function() {
 													if(typeof callbacks.save_success == 'function') {
@@ -801,6 +864,23 @@ winkstart.module('accounts', 'accounts_manager', {
 												if(typeof callbacks.save_success == 'function') {
 													callbacks.save_success(_data_account, status);
 												}
+											}
+										};
+
+										upload_icon = function() {
+										if($('#upload_div_icon', account_html).is(':visible') && $('#file_icon', account_html).val() != '') {
+												THIS.upload_icon(icon_file, account_id, function() {
+													if(typeof callbacks.save_success == 'function') {
+														callbacks.save_success(_data_account, status);
+														upload_logo();
+													}
+												});
+											}
+											else {
+												if(typeof callbacks.save_success == 'function') {
+													callbacks.save_success(_data_account, status);
+												}
+												upload_logo();
 											}
 										};
 
@@ -822,7 +902,7 @@ winkstart.module('accounts', 'accounts_manager', {
 													data: whitelabel_data
 												},
 												function(_data, status) {
-													upload_file();
+													upload_icon();
 												},
 												winkstart.error_message.process_error()
 											);
@@ -835,7 +915,7 @@ winkstart.module('accounts', 'accounts_manager', {
 														data: whitelabel_data
 													},
 													function(_data, status) {
-														upload_file();
+														upload_icon();
 													},
 													winkstart.error_message.process_error()
 												);
