@@ -605,7 +605,7 @@ winkstart.module('voip', 'timeofday', {
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '9'
+                            maxSize: '12'
                         }
                     ],
                     isUsable: 'true',

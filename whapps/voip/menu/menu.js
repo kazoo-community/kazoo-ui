@@ -512,7 +512,7 @@ winkstart.module('voip', 'menu', {
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '9'
+                            maxSize: '12'
                         }
                     ],
                     isUsable: 'true',
