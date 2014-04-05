@@ -630,7 +630,7 @@ winkstart.module('voip', 'timeofday', {
                                 data.data.push({ id: '_', name: _t('timeofday', 'all_other_times') });
 
                                 popup_html = THIS.templates.timeofday_key_dialog.tmpl({
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: child_node.key,
 									_t: function(param){
 										return window.translate['timeofday'][param];

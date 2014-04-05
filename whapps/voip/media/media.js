@@ -533,7 +533,7 @@ winkstart.module('voip', 'media', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.media_callflow.tmpl({
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || '',
 									_t: function(param){
 										return window.translate['media'][param]

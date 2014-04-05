@@ -587,7 +587,7 @@ winkstart.module('voip', 'vmbox', {
                                     _t: function(param){
                                         return window.translate['vmbox'][param];
                                     },
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || ''
                                 });
 

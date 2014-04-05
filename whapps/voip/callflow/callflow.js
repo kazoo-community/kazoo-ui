@@ -1040,9 +1040,9 @@ winkstart.module('voip', 'callflow', {
                 tools;
 
             /* Don't add categories here, this is just a hack to order the list on the right */
-		THIS.categories = {};  
-		THIS.categories["'" + _t('callflow', 'basic') + "'"] = [];
-		THIS.categories["'" + _t('callflow', 'advanced') + "'"] = [];
+		THIS.categories = {};
+		//THIS.categories["'" + _t('callflow', 'basic') + "'"] = [];
+		//THIS.categories["'" + _t('callflow', 'advanced') + "'"] = [];
 
             $.each(THIS.actions, function(i, data) {
                 if('category' in data) {
@@ -1441,6 +1441,8 @@ winkstart.module('voip', 'callflow', {
                                 }
                             });
 
+                            unselected_devices = winkstart.sort(unselected_devices);
+
                             winkstart.request('groups.list', {
                                     account_id: winkstart.apps['voip'].account_id,
                                     api_url: winkstart.apps['voip'].api_url
@@ -1456,6 +1458,8 @@ winkstart.module('voip', 'callflow', {
                                             unselected_groups.push(obj);
                                         }
                                     });
+
+                                    unselected_groups = winkstart.sort(unselected_groups);
 
                                     winkstart.request('user.list', {
                                             account_id: winkstart.apps['voip'].account_id,
@@ -1473,6 +1477,7 @@ winkstart.module('voip', 'callflow', {
                                                     unselected_users.push(obj);
                                                 }
                                             });
+                                            unselected_users = winkstart.sort(unselected_users);
 
                                             popup_html = THIS.templates.page_group_dialog.tmpl({
 												_t: function(param){
@@ -1739,6 +1744,8 @@ winkstart.module('voip', 'callflow', {
                                 }
                             });
 
+                            unselected_devices = winkstart.sort(unselected_devices);
+
                             winkstart.request('groups.list', {
                                     account_id: winkstart.apps['voip'].account_id,
                                     api_url: winkstart.apps['voip'].api_url
@@ -1757,6 +1764,8 @@ winkstart.module('voip', 'callflow', {
                                         }
                                     });
 
+                            		unselected_groups = winkstart.sort(unselected_groups);
+
                                     winkstart.request('user.list', {
                                             account_id: winkstart.apps['voip'].account_id,
                                             api_url: winkstart.apps['voip'].api_url
@@ -1774,6 +1783,8 @@ winkstart.module('voip', 'callflow', {
                                                     unselected_users.push(obj);
                                                 }
                                             });
+
+                                            unselected_users = winkstart.sort(unselected_users);
 
                                             winkstart.request('media.list', {
                                                     account_id: winkstart.apps['voip'].account_id,
@@ -2159,7 +2170,7 @@ winkstart.module('voip', 'callflow', {
 									},
                                     objects: {
                                         type: 'callflow',
-                                        items: _data,
+                                        items: winkstart.sort(_data),
                                         selected: node.getMetadata('id') || ''
                                     }
                                 });

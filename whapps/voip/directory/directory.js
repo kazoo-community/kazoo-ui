@@ -654,7 +654,7 @@ winkstart.module('voip', 'directory', {
 									_t: function(param){
 										return window.translate['directory'][param];
 									},
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || ''
                                 });
 

@@ -576,7 +576,7 @@
 
     winkstart.jsonToString = function(obj) {
         return JSON.stringify(obj);
-    },
+    };
 
     /* If we want to limit the # of simultaneous request, we can use async.parallelLimit(list_functions, LIMIT_# (ex: 3), callback) */
     winkstart.parallel = function(list_functions, callback) {
@@ -586,6 +586,28 @@
                 callback(err, results);
             }
         );
+    };
+
+	/* Automatically sorts an array of objects. secondArg can either be a custom sort to be applied to the dataset, or a fieldName to sort alphabetically on */
+    winkstart.sort = function(dataSet, secondArg) {
+		var fieldName = 'name',
+    		sortFunction = function(a, b) {
+    			var aString = a[fieldName].toLowerCase(),
+    				bString = b[fieldName].toLowerCase();
+
+				return aString > bString;
+    		};
+
+    	if(typeof secondArg === 'function') {
+			sortFunction = secondArg;
+    	}
+    	else if(typeof secondArg === 'string') {
+			fieldName = secondArg;
+    	}
+
+    	result = dataSet.sort(sortFunction);
+
+		return result;
     };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

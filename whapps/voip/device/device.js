@@ -1067,7 +1067,7 @@ winkstart.module('voip', 'device', {
                                         value: node.getMetadata('timeout') || '20'
                                     },
                                     objects: {
-                                        items: data.data,
+                                        items: winkstart.sort(data.data),
                                         selected: node.getMetadata('id') || ''
                                     }
                                 });

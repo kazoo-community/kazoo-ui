@@ -595,7 +595,7 @@ winkstart.module('voip', 'menu', {
                                     _t: function(param){
 										return window.translate['menu'][param];
                                     },
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || ''
                                 });
 
