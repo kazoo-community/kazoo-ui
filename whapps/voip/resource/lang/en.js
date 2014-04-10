@@ -67,7 +67,7 @@ window.translate['resource'] = {
 	as_youre_already_using: "As you're already using a customized one, this module is disabled!",
 	in_order_to_re_enable_this_module: "In order to re-enable this module, you would need to delete the no_match route under the Callflows submodule.",
 	carriers_label: "Carriers",
-	no_match: "No match",
+	all_match: "All match",
 	custom: "Custom",
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this resource?",
