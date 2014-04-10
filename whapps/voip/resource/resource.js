@@ -211,7 +211,7 @@ winkstart.module('voip', 'resource', {
                         rules: {
                             '^\\+{0,1}1{0,1}(\\d{10})$': 'US - 10 digits',
                             '^(\\d{7})$': 'US - 7 digits',
-                            '.*': 'No match',
+                            '.*': 'Always match',
                             'custom': 'Custom'
                         }
                     },
