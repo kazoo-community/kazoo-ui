@@ -103,6 +103,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				url: '{api_url}/accounts/{account_id}/limits',
 				contentType: 'application/json',
 				verb: 'POST'
+			},
+			'accounts_manager.create_no_match': {
+				url: '{api_url}/accounts/{account_id}/callflows',
+				contentType: 'application/json',
+				verb: 'PUT'
 			}
 		}
 	},
@@ -110,7 +115,7 @@ winkstart.module('accounts', 'accounts_manager', {
 	function(args) {
 		var THIS = this;
 		THIS.module = "accounts";
-		
+
 		winkstart.publish('nav.add_sublink', {
 			link: 'nav',
 			sublink: 'switch_account',
@@ -156,10 +161,12 @@ winkstart.module('accounts', 'accounts_manager', {
 						data: normalized_data
 					},
 					function(_data, status) {
-						THIS.update_billing_account(_data, function() {
-							if(typeof success == 'function') {
-								success(_data, status, 'create');
-							}
+						THIS.create_no_match(_data.data.id, function() {
+							THIS.update_billing_account(_data, function() {
+								if(typeof success == 'function') {
+									success(_data, status, 'create');
+								}
+							});
 						});
 					},
 					function(_data, status) {
@@ -171,7 +178,27 @@ winkstart.module('accounts', 'accounts_manager', {
 			}
 		},
 
+		create_no_match: function(accountId, callback) {
+			var THIS = this,
+				no_match_callflow = {
+					numbers: ['no_match'],
+					flow: {
+						children: {},
+						data: {},
+						module: 'offnet'
+					}
+				};
 
+			winkstart.request('accounts_manager.create_no_match', {
+					account_id: accountId,
+					api_url: winkstart.apps['accounts'].api_url,
+					data: no_match_callflow
+				},
+				function(_data, status) {
+					callback && callback();
+				}
+			);
+		},
 
 		update_billing_account: function(data, callback) {
 			if(data.data.billing_id === 'self') {

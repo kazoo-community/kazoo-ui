@@ -193,7 +193,7 @@ winkstart.module('voip', 'media', {
             }
         },
 
-        upload_file: function(data, media_id, callback) {
+        upload_file: function(data, media_id, success, error) {
             winkstart.request('media.upload', {
                     account_id: winkstart.apps.voip.account_id,
                     api_url: winkstart.apps.voip.api_url,
@@ -201,11 +201,15 @@ winkstart.module('voip', 'media', {
                     data: data
                 },
                 function(_data, status) {
-                    if(typeof callback === 'function') {
-                        callback();
+                    if(typeof success === 'function') {
+                        success();
                     }
                 },
-                winkstart.error_message.process_error()
+                winkstart.error_message.process_error(function(_data, status) {
+                    if(typeof error === 'function') {
+                        error();
+                    }
+                })
             );
         },
 
@@ -302,6 +306,22 @@ winkstart.module('voip', 'media', {
                                             THIS.upload_file(file, _data.data.id, function() {
                                                 if(typeof callbacks.save_success == 'function') {
                                                     callbacks.save_success(_data, status);
+                                                }
+                                            }, function() {
+                                                if(data && data.data && data.data.id) {
+                                                    THIS.save_media({}, data, function() {
+                                                            if(typeof callbacks.save_success == 'function') {
+                                                                callbacks.save_success(_data, status);
+                                                            }
+                                                        },
+                                                        winkstart.error_message.process_error(callbacks.save_error)
+                                                    );
+                                                } else {
+                                                    THIS.delete_media(_data, callbacks.delete_success, callbacks.delete_error);
+                                                }
+
+                                                if(typeof callbacks.save_error == 'function') {
+                                                    callbacks.save_error(_data, status);
                                                 }
                                             });
                                         }
@@ -513,7 +533,7 @@ winkstart.module('voip', 'media', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.media_callflow.tmpl({
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || '',
 									_t: function(param){
 										return window.translate['media'][param]

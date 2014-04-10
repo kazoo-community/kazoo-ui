@@ -295,7 +295,7 @@ function(args) {
 
 		$.fn.dataTableExt.afnFiltering.pop();
 
-		$('div.date', cdr_html).html(_t('cdr', 'start_date') + '<input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;' + _t('cdr', 'end_date') + '<input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<select id="dropdown_filter"><option value="all">' + _t('cdr', 'all_calls') + '</option><option value="queue">' + _t('cdr', 'queue_calls') + '</option><option value="non-queue">' + +t('cdr', 'non_queue_calls') + '</option></select><button class="btn primary button-search" id="searchLink">' + _t('cdr', 'filter') + '</button><label class="call_duration"/>');
+		$('div.date', cdr_html).html(_t('cdr', 'start_date') + '<input id="startDate" readonly="readonly" type="text"/>&nbsp;&nbsp;' + _t('cdr', 'end_date') + '<input id="endDate" readonly="readonly" type="text"/>&nbsp;&nbsp;&nbsp;&nbsp;<select id="dropdown_filter"><option value="all">' + _t('cdr', 'all_calls') + '</option><option value="queue">' + _t('cdr', 'queue_calls') + '</option><option value="non-queue">' + _t('cdr', 'non_queue_calls') + '</option></select><button class="btn primary button-search" id="searchLink">' + _t('cdr', 'filter') + '</button><label class="call_duration"/>');
 
         $(cdr_html).delegate('.table_owner_link','click', function() {
             winkstart.publish('user.popup_edit', { id: $(this).attr('id') });
@@ -333,7 +333,7 @@ function(args) {
 
                     var tmpl_data = {
                         cdr_fields: cdr_data,
-						_f: function(param){
+						_t: function(param){
 							return window.translate['cdr'][param];
 						}
                     }

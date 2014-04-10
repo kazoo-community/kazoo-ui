@@ -574,7 +574,7 @@ winkstart.module('voip', 'conference', {
                                     _t: function(param){
                                         return window.translate['conference'][param];
                                     },
-                                    items: data.data,
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || '!'
                                 });
 

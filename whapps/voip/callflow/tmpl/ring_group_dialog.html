@@ -18,6 +18,20 @@
                     {{/each}}
                 </select>
             </div>
+            <div class="popup_field">
+                <label>${_t('music_on_hold')}</label>
+                <select id="ringback">
+                    {{each(i, obj) form.ringback.items}}
+                        {{if form.ringback.selected == obj.id}}
+                            <option class="${obj.class}" value="${obj.id}" SELECTED>${obj.name}</option>
+                        {{else}}
+                            <option class="${obj.class}"  value="${obj.id}">${obj.name}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+                <a href="#" class="media_action" data-action="edit">Edit</a>
+                <a href="#" class="media_action" data-action="create">Create</a>
+            </div>
         </div>
         <div id="two_columns">
             <div class="wrapper">

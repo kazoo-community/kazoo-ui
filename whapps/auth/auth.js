@@ -1,6 +1,3 @@
-if (!window.translate["auth"]) {
-	//$LAB.script('whapps/auth/auth/lang/' + winkstart.config.language + '.js');
-}
 winkstart.module('auth', 'auth',
     {
         css: [
@@ -497,7 +494,7 @@ winkstart.module('auth', 'auth',
 
             $('a.recover_password', contentDiv).click(function(e) {
                 e.preventDefault();
-				
+
                 winkstart.publish('auth.recover_password', {data: window.translate});
             });
         },

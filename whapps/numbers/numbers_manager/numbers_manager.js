@@ -345,7 +345,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 number_data;
 
             if(numbers_data.length > 0) {
-                var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
+                var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
                     error_function = function() {
                         winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
                             _t('numbers_manager', 'would_you_like_to_retry'),
@@ -364,7 +364,11 @@ winkstart.module('numbers', 'numbers_manager', {
                             THIS.add_numbers(numbers_data.slice(1), callback);
                         },
                         function(_data, status) {
-                            error_function();
+                            if(_data.data && _data.data.credit) {
+                                winkstart.error_message.process_error()(_data, status);
+                            } else {
+                                error_function();
+                            }
                         }
                     );
                 }
@@ -445,7 +449,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -456,12 +460,11 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
                                 function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                    THIS.update_number(phone_number[1], _data.data,
+                                        function(_data_update) {
                                             !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
                                         },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_caller_id') + _data_update.message);
-                                        }
+                                        winkstart.error_message.process_error()
                                     );
                                 }
                             );
@@ -473,7 +476,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid_inbound', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -508,7 +511,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+?1?([2-9]\d{9})$/);
+                    phone_number = data_phone_number.match(/^\+(.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -577,33 +580,36 @@ winkstart.module('numbers', 'numbers_manager', {
                 ev.preventDefault();
 
                 THIS.render_port_dialog(function(port_data, popup) {
-                    var ports_done = 0;
+                    var ports_done = 0,
+                    	text = _t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged');
 
-                    winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                        function() {
-                            $.each(port_data.phone_numbers, function(i, val) {
-                                var number_data = {
-                                    phone_number: val
-                                };
+					if('port_text' in winkstart.config) {
+						text = winkstart.config.port_text;
+                    }
 
-                                THIS.port_number(number_data, function(_number_data) {
-                                    number_data.options = _number_data.data;
+					winkstart.confirm(text,	function() {
+						$.each(port_data.phone_numbers, function(i, val) {
+                            var number_data = {
+                                phone_number: val
+                            };
 
-                                    if('id' in number_data.options) {
-                                        delete number_data.options.id;
+                            THIS.port_number(number_data, function(_number_data) {
+                                number_data.options = _number_data.data;
+
+                                if('id' in number_data.options) {
+                                    delete number_data.options.id;
+                                }
+
+                                THIS.submit_port(port_data, number_data, function(_data) {
+                                    if(++ports_done > port_data.phone_numbers.length - 1) {
+                                        THIS.list_numbers();
+
+                                        popup.dialog('close');
                                     }
-
-                                    THIS.submit_port(port_data, number_data, function(_data) {
-                                        if(++ports_done > port_data.phone_numbers.length - 1) {
-                                            THIS.list_numbers();
-
-                                            popup.dialog('close');
-                                        }
-                                    });
                                 });
                             });
-                        }
-                    );
+                        });
+                    });
                 });
             });
 
