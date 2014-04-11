@@ -57,7 +57,7 @@
                     <div class="clearfix">
                         <label for="vm_to_email_support_number">${_t('support_number')}</label>
                         <div class="input">
-                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="${_t('support_number_data_content')}"/>       
+                            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="${_t('support_number_data_content')}"/>
                         </div>
                     </div>
 
@@ -96,7 +96,7 @@
                             <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="${_t('service_provider')}" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="${_t('service_provider_data_content')}"/>
                         </div>
                     </div>
-                    
+
                         <h2>${_t('fax_to_email')}</h2>
                         {{if field_data.sameTemplate}}
                             <input type="checkbox" name="extra.sameTemplate" checked="checked" id="sameTemplate"/>
@@ -384,7 +384,7 @@
                     </div>
 
                     <div class="clearfix">
-                         <label for="fileInput">Icon (64x64px)</label>
+                         <label for="fileInput">${_t('icon')} (64x64px)</label>
                          <div id="upload_div_icon" class="input">
                              <input class="input-file" id="file_icon" name="extra.upload_icon" type="file">
                          </div>
