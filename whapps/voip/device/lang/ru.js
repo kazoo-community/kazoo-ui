@@ -86,7 +86,6 @@ window.translate['device'] = $.extend(true, {}, window.translate['device'], {
 	music_on_hold_data_content: "Выберите медиа-файл, который будет проигрываться, если иной не установлен для пользователя или устройства.",
 	peer_to_peer_audio: "Звук точка-точка",
 	peer_to_peer_audio_data_content: "Выберите тип передачи данных в режиме точка-точка, который вы хотите использовать с этим устройством",
-	enable_secure_rtp: "Включить Secure RTP",
 	t_38: "T.38",
 	t_38_data_content: "Вы хотите включить протокол T.38 для этого устройства?",
 	ignore_complete_elsewhere: "Игнорировать Принято-В-Другом-Месте",

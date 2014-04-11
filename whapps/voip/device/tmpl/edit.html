@@ -268,19 +268,17 @@
                     </div>
 
 					<div class="clearfix">
+						<label for="secure_rtp">${_t('secure_rtp')}</label>
 						<div class="input">
-							<ul class="inputs-list">
-								<li>
-									<label>
-										{{if data.media.secure_rtp }}
-							                <input type="checkbox" id="media_audio_codecs" name="media.secure_rtp" checked="checked" rel="popover" data-content=""/>
-							            {{else}}
-							                <input type="checkbox" id="media_audio_codecs" name="media.secure_rtp" rel="popover" data-content=""/>
-							            {{/if}}
-							            <span>${_t('enable_secure_rtp')}</span>
-							        </label>
-							    </li>
-							</ul>
+							<select name="extra.encryptionMethod" id="secure_rtp" class="medium" rel="popover" data-content="${_t('secure_rtp_help')}">
+								{{each(key, val) field_data.media.secure_rtp.options}}
+                                    {{if field_data.media.secure_rtp.value == key}}
+                                        <option value="${key}" selected="selected">${val}</option>
+                                    {{else}}
+                                        <option value="${key}">${val}</option>
+                                    {{/if}}
+                                {{/each}}
+							</select>
 						</div>
 					</div>
 
@@ -324,6 +322,8 @@
                         </div>
                     {{/each}}
                 </div>
+
+				<input type="hidden" value="${data.device_type}" name="device_type"/>
 
                 <div id="options">
                     <div class="clearfix">

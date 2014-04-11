@@ -167,10 +167,15 @@ winkstart.module('voip', 'device', {
     },
 
     {
-        fix_codecs: function(data, data2) {
+        fix_arrays: function(data, data2) {
             if(typeof data.media == 'object' && typeof data2.media == 'object') {
                 (data.media.audio || {}).codecs = (data2.media.audio || {}).codecs;
                 (data.media.video || {}).codecs = (data2.media.video || {}).codecs;
+            }
+
+            if('media' in data2 && 'encryption' in data2.media && 'methods' in data2.media.encryption) {
+            	data.media.encryption = data.media.encryption || {};
+				data.media.encryption.methods = data2.media.encryption.methods;
             }
 
             return data;
@@ -179,7 +184,7 @@ winkstart.module('voip', 'device', {
         save_device: function(form_data, data, success, error) {
             var THIS = this,
                 id = (typeof data.data == 'object' && data.data.id) ? data.data.id : undefined,
-                normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
+                normalized_data = THIS.fix_arrays(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
             if(id) {
                 winkstart.request(true, 'device.update', {
@@ -266,6 +271,7 @@ winkstart.module('voip', 'device', {
                         ringtones: {},
                         call_restriction: { closed_groups: 'inherit' },
                         media: {
+                        	secure_rtp: 'none',
                             peer_to_peer: 'auto',
                             audio: {
                                 codecs: ['PCMU', 'PCMA']
@@ -307,6 +313,14 @@ winkstart.module('voip', 'device', {
                             }
                         },
                         media: {
+                        	secure_rtp: {
+                        		value: 'none',
+								options: {
+                                	'none': _t('device', 'none'),
+                                	'srtp': _t('device', 'srtp'),
+                                	'zrtp': _t('device', 'zrtp')
+								}
+                        	},
                             peer_to_peer_options: {
                                 'auto': _t('device', 'automatic'),
                                 'true': _t('device', 'always'),
@@ -438,6 +452,10 @@ winkstart.module('voip', 'device', {
                             },
                             function(_data, status) {
                                 defaults.data.device_type = 'sip_device';
+
+                                if('media' in _data.data && 'encryption' in _data.data.media) {
+									defaults.field_data.media.secure_rtp.value = _data.data.media.encryption.enforce_security ? _data.data.media.encryption.methods[0] : 'none';
+                                }
 
                                 if('sip' in _data.data && 'realm' in _data.data.sip) {
                                     defaults.field_data.sip.realm = _data.data.sip.realm;
@@ -760,6 +778,10 @@ winkstart.module('voip', 'device', {
                 data.media.fax.option = data.media.fax_option;
             }
 
+            if('media' in data && 'secure_rtp' in data.media) {
+            	delete data.media.secure_rtp;
+            }
+
             if('media' in data && 'bypass_media' in data.media) {
                 delete data.media.bypass_media;
             }
@@ -868,6 +890,21 @@ winkstart.module('voip', 'device', {
 
             if('extra' in form_data && 'closed_groups' in form_data.extra) {
                 form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
+            }
+
+			if($.inArray(form_data.device_type, ['sip_device', 'mobile', 'softphone']) > -1) {
+            	if('extra' in form_data) {
+					form_data.media.encryption = form_data.media.encryption || {};
+
+					if($.inArray(form_data.extra.encryptionMethod, ['srtp', 'zrtp']) > -1) {
+						form_data.media.encryption.enforce_security = true;
+						form_data.media.encryption.methods = [form_data.extra.encryptionMethod];
+					}
+					else {
+						form_data.media.encryption.methods = [];
+						form_data.media.encryption.enforce_security = false;
+					}
+            	}
             }
 
             delete form_data.extra;
