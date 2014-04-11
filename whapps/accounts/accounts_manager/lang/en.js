@@ -53,6 +53,7 @@ window.translate['accounts'] = {
 	developer_api_url: "Developer API URL",
 	developer_api_url_data_content: "Some API URLs are displayed in the Developer app, if you would like to display a customized URL, write it here.",
 	logo: "Logo",
+	icon: "Icon",
 	change_file: "Change File",
 	download_file: "Download File",
 	porting: "Porting",
@@ -92,5 +93,5 @@ window.translate['accounts'] = {
 	customers_available_balance: "Customer's available balance for per-minute calls:",
 	delete_white_labeling: "Delete white labeling",
 	advanced: "Advanced",
-	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/	
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
 };
