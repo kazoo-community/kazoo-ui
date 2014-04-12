@@ -23,7 +23,7 @@ window.translate['numbers_manager'] = {
 	porting_numbers: "Porting Numbers",
 	current_service_info: "Current Service Info",
 	verification: "Verification",
-	terms_conditions: "Terms & Conditions",
+	terms_conditions: "Privacy Policy",
 	current_carrier: "Current carrier",
 	select: "Select",
 	other: "Other",
@@ -62,14 +62,14 @@ window.translate['numbers_manager'] = {
 	these_numbers_are_standard: "These numbers are standard phone numbers, not",
 	features: "features",
 	like_star_ring: "like star-ring",
-	terms_and_conditions: "Terms and Conditions.",
+	terms_and_conditions: "Privacy Policy",
 	read_here: "Read Here",
-	i_accept_the_terms_and_conditions: "I accept the Terms and Conditions. I have read it and understand it.",
+	i_accept_the_terms_and_conditions: "I accept the Privacy Policy. I have read it and understand it.",
 	notify_this_porting_to: "Notify this porting to:",
 	mail_address: "E-mail address",
 	submit: "Submit",
 	port_a_number_title: "Port a number",
-	you_must_agree_to_the_terms: "You must agree to the terms before continuing!<br/>",
+	you_must_agree_to_the_terms: "You must agree to the Privacy Policy before continuing!<br/>",
 	you_must_confirm_the_first_conditions: "You must confirm the first conditions before continuing!<br/>",
 	you_need_to_enter_main_number: "You need to enter a main number.<br/>",
 	this_phone_number_is_not_valid: " : this Phone Number is not valid.<br/>",
@@ -112,5 +112,5 @@ window.translate['numbers_manager'] = {
 	buy_numbers: "Buy Numbers",
 	edit_location_for: "Edit Location for ",
 	edit_911_location: "Edit 911 Location",
-	add_number_title: "Add number"	
+	add_number_title: "Add number"
 };
