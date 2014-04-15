@@ -21,8 +21,6 @@ window.translate['conference'] = {
 	create: "Create",
 	pins: "PINs",
 	pins_data_content: "A comma separated list of pins, that can be entered to join the conference",
-	play_name_upon_entry: "Play name upon entry",
-	play_name_upon_entry_data_content: "Check to play names when entering the conference.",
 	join_the_conference_muted: "Join the conference muted",
 	join_the_conference_muted_data_content: "Check to join the conference muted",
 	join_the_conference_deaf: "Join the conference deaf",

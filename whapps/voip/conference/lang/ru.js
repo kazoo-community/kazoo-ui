@@ -21,8 +21,6 @@ window.translate['conference'] = $.extend(true, {}, window.translate['conference
 	create: "Создать",
 	pins: "PIN-коды",
 	pins_data_content: "Список PIN-кодов (через запятую), которые могут быть введены для доступа к конференции",
-	play_name_upon_entry: "Воспроизвести имя при входе",
-	play_name_upon_entry_data_content: "Выберите для воспроизведения имён при входе в конференцию.",
 	join_the_conference_muted: "Войти в конференецию с выключенным микрофоном",
 	join_the_conference_muted_data_content: "Выберите для входа в конференцию с выключенным микрофоном",
 	join_the_conference_deaf: "Войти в конференцию с выключенными динамиками",

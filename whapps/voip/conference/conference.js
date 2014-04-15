@@ -186,7 +186,6 @@ winkstart.module('voip', 'conference', {
                 },
                 defaults = {
                     data: $.extend(true, {
-                        play_name_on_join: true,
                         member: {}
                     }, data_defaults || {}),
                     field_data: {
