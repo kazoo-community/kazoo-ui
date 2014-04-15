@@ -1,6 +1,6 @@
 window.translate['auth'] = {
 	css_auth: "css/auth.css",
-	login: "Login / Email",
+	login: "Login",
 	password: "Password",
 	account_name: "Account Name",
 	remember_me: "remember me",
