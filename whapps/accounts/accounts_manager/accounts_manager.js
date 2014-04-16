@@ -25,7 +25,8 @@ winkstart.module('accounts', 'accounts_manager', {
 				{ name: '#vm_to_email_service_url',      regex: /^.*$/ },
 				{ name: '#vm_to_email_service_provider', regex: /^.*$/ },
 				{ name: '#vm_to_email_service_name',     regex: /^.*$/ },
-				{ name: '#deregister_email',             regex: _t('accounts', 'vm_to_email_support_email_regex') }
+				{ name: '#deregister_email',             regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#realm',                        regex: /^[a-zA-Z0-9\.\-]+$/ }
 		],
 
 		resources: {
