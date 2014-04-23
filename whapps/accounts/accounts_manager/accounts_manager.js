@@ -849,68 +849,58 @@ winkstart.module('accounts', 'accounts_manager', {
 
 						data.data.apps = [];
 
-						var save_account = function() {
-							THIS.save_accounts_manager(form_data, data,
-								function(_data_account, status) {
-									var account_id = _data_account.data.id,
-										upload_logo = function() {
-											if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
-												THIS.upload_file(file, account_id, function() {
+						if ( form_data.name === form_data.notifications.voicemail_to_email.send_from ) {
+							winkstart.alert('You cannot specify the company name as "Send From"!');
+						} else {
+							var save_account = function() {
+								THIS.save_accounts_manager(form_data, data,
+									function(_data_account, status) {
+										var account_id = _data_account.data.id,
+											upload_logo = function() {
+												if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
+													THIS.upload_file(file, account_id, function() {
+														if(typeof callbacks.save_success == 'function') {
+															callbacks.save_success(_data_account, status);
+														}
+													});
+												}
+												else {
 													if(typeof callbacks.save_success == 'function') {
 														callbacks.save_success(_data_account, status);
 													}
-												});
-											}
-											else {
-												if(typeof callbacks.save_success == 'function') {
-													callbacks.save_success(_data_account, status);
 												}
-											}
-										};
+											};
 
-										upload_icon = function() {
-										if($('#upload_div_icon', account_html).is(':visible') && $('#file_icon', account_html).val() != '') {
-												THIS.upload_icon(icon_file, account_id, function() {
+											upload_icon = function() {
+											if($('#upload_div_icon', account_html).is(':visible') && $('#file_icon', account_html).val() != '') {
+													THIS.upload_icon(icon_file, account_id, function() {
+														if(typeof callbacks.save_success == 'function') {
+															callbacks.save_success(_data_account, status);
+															upload_logo();
+														}
+													});
+												}
+												else {
 													if(typeof callbacks.save_success == 'function') {
 														callbacks.save_success(_data_account, status);
-														upload_logo();
 													}
-												});
-											}
-											else {
-												if(typeof callbacks.save_success == 'function') {
-													callbacks.save_success(_data_account, status);
+													upload_logo();
 												}
-												upload_logo();
-											}
-										};
+											};
 
-									/*
-									* We check if the whitelabel exist for this account,
-									* If yes, then we check if it has been updated and if it was, we update the whitelabel document.
-									* If it doesn't exist, we check if data is not empty before creating a whitelabel document
-									*/
-									winkstart.request('whitelabel.get', {
-											account_id: account_id,
-											api_url: winkstart.apps['accounts'].api_url
-										},
-										function(_data, status) {
-											whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
+										/*
+										* We check if the whitelabel exist for this account,
+										* If yes, then we check if it has been updated and if it was, we update the whitelabel document.
+										* If it doesn't exist, we check if data is not empty before creating a whitelabel document
+										*/
+										winkstart.request('whitelabel.get', {
+												account_id: account_id,
+												api_url: winkstart.apps['accounts'].api_url
+											},
+											function(_data, status) {
+												whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
-											winkstart.request('whitelabel.update', {
-													account_id: account_id,
-													api_url: winkstart.apps['accounts'].api_url,
-													data: whitelabel_data
-												},
-												function(_data, status) {
-													upload_icon();
-												},
-												winkstart.error_message.process_error()
-											);
-										},
-										function(_data, status) {
-											if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
-												winkstart.request('whitelabel.create', {
+												winkstart.request('whitelabel.update', {
 														account_id: account_id,
 														api_url: winkstart.apps['accounts'].api_url,
 														data: whitelabel_data
@@ -920,53 +910,63 @@ winkstart.module('accounts', 'accounts_manager', {
 													},
 													winkstart.error_message.process_error()
 												);
-											}
-											else {
-												if(typeof callbacks.save_success == 'function') {
-													callbacks.save_success(_data_account, status);
+											},
+											function(_data, status) {
+												if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
+													winkstart.request('whitelabel.create', {
+															account_id: account_id,
+															api_url: winkstart.apps['accounts'].api_url,
+															data: whitelabel_data
+														},
+														function(_data, status) {
+															upload_icon();
+														},
+														winkstart.error_message.process_error()
+													);
+												}
+												else {
+													if(typeof callbacks.save_success == 'function') {
+														callbacks.save_success(_data_account, status);
+													}
 												}
 											}
+										);
+									},
+									function() {
+										winkstart.alert(_t('config', 'there_were_errors'));
+									}
+								);
+							};
+
+							if($('.check-value', account_html).hasClass('updated')) {
+									if($('#amount_balance', account_html).hasClass('updated')) {
+										var new_credits = parseFloat($('#amount_balance', account_html).val().replace(',','.')),
+											credits_to_add = parseFloat(new_credits - starting_values.amount_balance);
+
+										if(credits_to_add > 0 && 'id' in data.data) {
+											THIS.add_credits(credits_to_add, data.data.id, function() {});
 										}
-									);
-								},
-								function() {
-									winkstart.alert(_t('config', 'there_were_errors'));
-								}
-							);
-						};
-
-						if($('.check-value', account_html).hasClass('updated')) {
-							/* Karl wanted me to remove this from reseller
-							winkstart.confirm('Your on-file credit card will immediately be charged for the changes your made to the billing options of this account. If you have changed any recurring services, new charges will be pro-rated for your billing cycle.<br/><br/>Are you sure you want to continue?',
-					function() {*/
-								if($('#amount_balance', account_html).hasClass('updated')) {
-									var new_credits = parseFloat($('#amount_balance', account_html).val().replace(',','.')),
-										credits_to_add = parseFloat(new_credits - starting_values.amount_balance);
-
-									if(credits_to_add > 0 && 'id' in data.data) {
-										THIS.add_credits(credits_to_add, data.data.id, function() {});
 									}
-								}
 
-								if($('#inbound_trunks', account_html).hasClass('updated') || $('#twoway_trunks', account_html).hasClass('updated') || $('#allow_prepay', account_html).hasClass('updated')) {
-									var limits_data = {
-										twoway_trunks: parseInt($('#twoway_trunks', account_html).val()),
-										inbound_trunks:  parseInt($('#inbound_trunks', account_html).val()),
-										allow_prepay: $('#allow_prepay', account_html).is(':checked')
-									};
+									if($('#inbound_trunks', account_html).hasClass('updated') || $('#twoway_trunks', account_html).hasClass('updated') || $('#allow_prepay', account_html).hasClass('updated')) {
+										var limits_data = {
+											twoway_trunks: parseInt($('#twoway_trunks', account_html).val()),
+											inbound_trunks:  parseInt($('#inbound_trunks', account_html).val()),
+											allow_prepay: $('#allow_prepay', account_html).is(':checked')
+										};
 
-									limits_data = $.extend({}, data.limits, limits_data);
+										limits_data = $.extend({}, data.limits, limits_data);
 
-									if(limits_data.twoway_trunks >= -1 && limits_data.inbound_trunks >= -1 && 'id' in data.data) {
-										THIS.update_limits(limits_data, data.data.id, function(_data) {});
+										if(limits_data.twoway_trunks >= -1 && limits_data.inbound_trunks >= -1 && 'id' in data.data) {
+											THIS.update_limits(limits_data, data.data.id, function(_data) {});
+										}
 									}
-								}
 
+									save_account();
+							}
+							else {
 								save_account();
-						   // });
-						}
-						else {
-							save_account();
+							}
 						}
 					}
 				);
