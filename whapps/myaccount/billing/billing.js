@@ -130,7 +130,7 @@ winkstart.module('myaccount', 'billing', {
         },
 
         render_billing: function(data, target) {
-			data._t = function(){
+			data._t = function(param){
 				return window.translate['billing'][param];
 			};
             var THIS = this,
