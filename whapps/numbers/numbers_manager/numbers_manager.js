@@ -862,6 +862,10 @@ winkstart.module('numbers', 'numbers_manager', {
                 	portPrice = '$' + portPrice;
 
                 	callback && callback(portPrice);
+                },
+                function() {
+                	/* This is a hack, if the API fails, which shouldn't happen, to show the UI as it was before, with a hardcoded 5$ */
+                	callback && callback('$5');
                 }
             );
 		},
