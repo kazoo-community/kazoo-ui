@@ -463,16 +463,25 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data,
-                                        function(_data_update) {
-                                            !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        winkstart.error_message.process_error()
-                                    );
-                                }
-                            );
+							var updateNumber = function() {
+								THIS.update_number(phone_number[1], _data.data,
+                                    function(_data_update) {
+                                        !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    winkstart.error_message.process_error()
+                                );
+							};
+
+							if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
+								updateNumber();
+							}
+							else {
+                            	winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                                	function() {
+                                		updateNumber();
+                                	}
+                            	);
+							}
                         });
                     });
                 }
@@ -525,17 +534,26 @@ winkstart.module('numbers', 'numbers_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('numbers_manager', 'failed_to_update_the_e911') + _data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+							var updateNumber = function() {
+								THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('numbers_manager', 'failed_to_update_the_e911') + _data_update.message);
+                                    }
+                                );
+							};
+
+							if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
+								updateNumber();
+							}
+							else {
+								winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                                	function() {
+                                		updateNumber();
+                                	}
+                            	);
+							}
                         });
                     });
                 }
@@ -586,35 +604,40 @@ winkstart.module('numbers', 'numbers_manager', {
 
                 THIS.render_port_dialog(function(port_data, popup) {
                     var ports_done = 0,
-                    	text = _t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged');
+					    portNumbers = function() {
+							$.each(port_data.phone_numbers, function(i, val) {
+                            	var number_data = {
+                                	phone_number: val
+                            	};
 
-					if('port_text' in winkstart.config) {
-						text = winkstart.config.port_text;
-                    }
+                            	THIS.port_number(number_data, function(_number_data) {
+                                	number_data.options = _number_data.data;
 
-					winkstart.confirm(text,	function() {
-						$.each(port_data.phone_numbers, function(i, val) {
-                            var number_data = {
-                                phone_number: val
-                            };
+                                	if('id' in number_data.options) {
+                                    	delete number_data.options.id;
+                                	}
 
-                            THIS.port_number(number_data, function(_number_data) {
-                                number_data.options = _number_data.data;
+                                	THIS.submit_port(port_data, number_data, function(_data) {
+                                    	if(++ports_done > port_data.phone_numbers.length - 1) {
+                                        	THIS.list_numbers();
 
-                                if('id' in number_data.options) {
-                                    delete number_data.options.id;
-                                }
+                                        	popup.dialog('close');
+                                    	}
+                                	});
+                            	});
+                    		});
+                    	};
 
-                                THIS.submit_port(port_data, number_data, function(_data) {
-                                    if(++ports_done > port_data.phone_numbers.length - 1) {
-                                        THIS.list_numbers();
-
-                                        popup.dialog('close');
-                                    }
-                                });
-                            });
-                        });
-                    });
+					if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
+						portNumbers();
+					}
+					else {
+						winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                        	function() {
+                            	portNumbers();
+                        	}
+                    	);
+					}
                 });
             });
 
@@ -809,21 +832,30 @@ winkstart.module('numbers', 'numbers_manager', {
             $('#add_numbers_button', popup_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                    function() {
-
-						$('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
-							numbers_data.push($(this).dataset());
-						});
-
-						THIS.add_numbers(numbers_data, function() {
-							if(typeof callback === 'function') {
-								callback();
-							}
-
-							popup.dialog('close');
-						});
+				var addNumbers = function() {
+					$('#foundDIDList .checkbox_number:checked', popup_html).each(function() {
+						numbers_data.push($(this).dataset());
 					});
+
+					THIS.add_numbers(numbers_data, function() {
+						if(typeof callback === 'function') {
+							callback();
+						}
+
+						popup.dialog('close');
+					});
+				};
+
+				if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
+					addNumbers();
+				}
+				else {
+					winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                        function() {
+                            addNumbers();
+                        }
+                    );
+				}
 			});
 
             $(popup_html).delegate('.checkbox_number', 'click', function() {
