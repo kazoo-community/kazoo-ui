@@ -66,6 +66,11 @@ winkstart.module('numbers', 'numbers_manager', {
                 contentType: 'application/json',
                 verb: 'PUT'
             },
+			'numbers_manager.getServicePlan': {
+                url: '{api_url}/accounts/{account_id}/service_plans/current',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'numbers_manager.create_doc': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/docs/{file_name}',
                 contentType: 'application/x-base64',
@@ -842,226 +847,249 @@ winkstart.module('numbers', 'numbers_manager', {
             });
         },
 
+		get_port_price: function(callback) {
+			winkstart.request('numbers_manager.getServicePlan', {
+                    account_id: winkstart.apps['numbers'].account_id,
+                    api_url: winkstart.apps['numbers'].api_url
+                },
+                function(_data, status) {
+                	var portPrice = '0';
+
+                	if('items' in _data.data && 'number_services' in _data.data.items && 'port' in _data.data.items.number_services && 'activation_charges' in _data.data.items.number_services) {
+						portPrice = _data.data.items.number_services.port.activation_charges;
+                	}
+
+                	portPrice = '$' + portPrice;
+
+                	callback && callback(portPrice);
+                }
+            );
+		},
+
         render_port_dialog: function(callback) {
-            var THIS = this,
-                port_form_data = {},
-                popup_html = THIS.templates.port_dialog.tmpl({
-					_t: function(param){
-						return window.translate['numbers_manager'][param];
-					},
-                    company_name: winkstart.config.company_name || '2600hz',
-                    support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
-                    support_file_upload: (File && FileReader)
-                }),
-                popup,
-                files,
-                loa,
-                phone_numbers,
-                current_step = 1,
-                max_steps = 4,
-                $prev_step = $('.prev_step', popup_html),
-                $next_step = $('.next_step', popup_html),
-                $submit_btn = $('.submit_btn', popup_html);
+            var THIS = this;
 
-            /* White label links, have to do it in JS because template doesn't eval variables in href :( */
-            $('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://2600hz.com/porting/2600hz_loa.pdf');
-            $('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://2600hz.com/porting/2600hz_resporg.pdf');
-            $('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
-            $('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/html/privacy_policy.html');
+			THIS.get_port_price(function(portPrice) {
+            	var port_form_data = {},
+                	popup_html = THIS.templates.port_dialog.tmpl({
+						_t: function(param){
+							return window.translate['numbers_manager'][param];
+						},
+						porting_price: portPrice,
+                    	company_name: winkstart.config.company_name || '2600hz',
+                    	support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
+                    	support_file_upload: (File && FileReader)
+                	}),
+                	popup,
+                	files,
+                	loa,
+                	phone_numbers,
+                	current_step = 1,
+                	max_steps = 4,
+                	$prev_step = $('.prev_step', popup_html),
+                	$next_step = $('.next_step', popup_html),
+                	$submit_btn = $('.submit_btn', popup_html);
 
-            $('.step_div:not(.first)', popup_html).hide();
-            $prev_step.hide();
-            $submit_btn.hide();
+            	/* White label links, have to do it in JS because template doesn't eval variables in href :( */
+            	$('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://2600hz.com/porting/2600hz_loa.pdf');
+            	$('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://2600hz.com/porting/2600hz_resporg.pdf');
+            	$('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
+            	$('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
-            $('.other_carrier', popup_html).hide();
+            	$('.step_div:not(.first)', popup_html).hide();
+            	$prev_step.hide();
+            	$submit_btn.hide();
 
-            $('.carrier_dropdown', popup_html).change(function() {
-                if($(this).val() === 'Other') {
-                    $('.other_carrier', popup_html).show();
-                }
-                else {
-                    $('.other_carrier', popup_html).empty().hide();
-                }
-            });
+            	$('.other_carrier', popup_html).hide();
 
-            $('#postal_code', popup_html).blur(function() {
-                $.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country=US&callback=?', { postalcode: $(this).val() }, function(response) {
-                    if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                        $('#locality', popup_html).val(response.postalcodes[0].placeName);
-                        $('#region', popup_html).val(response.postalcodes[0].adminName1);
-                    }
-                });
-            });
+            	$('.carrier_dropdown', popup_html).change(function() {
+                	if($(this).val() === 'Other') {
+                    	$('.other_carrier', popup_html).show();
+                	}
+                	else {
+                    	$('.other_carrier', popup_html).empty().hide();
+                	}
+            	});
 
-            $('.prev_step', popup_html).click(function() {
-                $next_step.show();
-                $submit_btn.hide();
-                $('.step_div', popup_html).hide();
-                $('.step_div:nth-child(' + --current_step + ')', popup_html).show();
-                $('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
-                $('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+            	$('#postal_code', popup_html).blur(function() {
+                	$.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country=US&callback=?', { postalcode: $(this).val() }, function(response) {
+                    	if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
+                        	$('#locality', popup_html).val(response.postalcodes[0].placeName);
+                        	$('#region', popup_html).val(response.postalcodes[0].adminName1);
+                    	}
+                	});
+            	});
 
-                current_step === 1 ? $('.prev_step', popup_html).hide() : true;
-            });
+            	$('.prev_step', popup_html).click(function() {
+                	$next_step.show();
+                	$submit_btn.hide();
+                	$('.step_div', popup_html).hide();
+                	$('.step_div:nth-child(' + --current_step + ')', popup_html).show();
+                	$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+                	$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
 
-            $('.next_step', popup_html).click(function() {
-                $prev_step.show();
-                $('.step_div', popup_html).hide();
-                $('.step_div:nth-child(' + ++current_step + ')', popup_html).show();
-                $('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
-                $('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
-                if(current_step === max_steps) {
-                    $next_step.hide();
-                    $submit_btn.show();
-                }
-            });
+                	current_step === 1 ? $('.prev_step', popup_html).hide() : true;
+            	});
 
-            $('.loa', popup_html).change(function(ev) {
-                var slice = [].slice,
-                    raw_files = slice.call(ev.target.files, 0),
-                    file_reader = new FileReader(),
-                    file_name,
-                    read_file = function(file) {
-                        file_name = file.fileName || file.name || 'noname';
-                        file_reader.readAsDataURL(file);
-                    };
+            	$('.next_step', popup_html).click(function() {
+                	$prev_step.show();
+                	$('.step_div', popup_html).hide();
+                	$('.step_div:nth-child(' + ++current_step + ')', popup_html).show();
+                	$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+                	$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+                	if(current_step === max_steps) {
+                    	$next_step.hide();
+                    	$submit_btn.show();
+                	}
+            	});
 
-                loa = [];
+            	$('.loa', popup_html).change(function(ev) {
+                	var slice = [].slice,
+                    	raw_files = slice.call(ev.target.files, 0),
+                    	file_reader = new FileReader(),
+                    	file_name,
+                    	read_file = function(file) {
+                        	file_name = file.fileName || file.name || 'noname';
+                        	file_reader.readAsDataURL(file);
+                    	};
 
-                file_reader.onload = function(ev) {
-                    loa.push({
-                        file_name: file_name,
-                        file_data: ev.target.result
-                    });
+                	loa = [];
 
-                    if(raw_files.length > 1) {
-                        raw_files = raw_files.slice(1);
-                        read_file(raw_files[0]);
-                    }
-                };
+                	file_reader.onload = function(ev) {
+                    	loa.push({
+                        	file_name: file_name,
+                        	file_data: ev.target.result
+                    	});
 
-                read_file(raw_files[0]);
-            });
+                    	if(raw_files.length > 1) {
+                        	raw_files = raw_files.slice(1);
+                        	read_file(raw_files[0]);
+                    	}
+                	};
 
-            $('.files', popup_html).change(function(ev) {
-                var slice = [].slice,
-                    raw_files = slice.call(ev.target.files, 0),
-                    file_reader = new FileReader(),
-                    file_name,
-                    read_file = function(file) {
-                        file_name = file.fileName || file.name || 'noname';
-                        file_reader.readAsDataURL(file);
-                    };
+                	read_file(raw_files[0]);
+            	});
 
-                files = [];
+            	$('.files', popup_html).change(function(ev) {
+                	var slice = [].slice,
+                    	raw_files = slice.call(ev.target.files, 0),
+                    	file_reader = new FileReader(),
+                    	file_name,
+                    	read_file = function(file) {
+                        	file_name = file.fileName || file.name || 'noname';
+                        	file_reader.readAsDataURL(file);
+                    	};
 
-                file_reader.onload = function(ev) {
-                    files.push({
-                        file_name: file_name,
-                        file_data: ev.target.result
-                    });
+                	files = [];
 
-                    if(raw_files.length > 1) {
-                        raw_files = raw_files.slice(1);
-                        read_file(raw_files[0]);
-                    }
-                    else {
-                        $('.number_of_docs', popup_html).html(files.length);
-                    }
-                };
+                	file_reader.onload = function(ev) {
+                    	files.push({
+                        	file_name: file_name,
+                        	file_data: ev.target.result
+                    	});
 
-                read_file(raw_files[0]);
-            });
+                    	if(raw_files.length > 1) {
+                        	raw_files = raw_files.slice(1);
+                        	read_file(raw_files[0]);
+                    	}
+                    	else {
+                        	$('.number_of_docs', popup_html).html(files.length);
+                    	}
+                	};
 
-            $('.submit_btn', popup_html).click(function(ev) {
-                ev.preventDefault();
-                port_form_data = form2object('port');
+                	read_file(raw_files[0]);
+            	});
 
-                var string_alert = '';
+            	$('.submit_btn', popup_html).click(function(ev) {
+                	ev.preventDefault();
+                	port_form_data = form2object('port');
 
-                if($('.carrier_dropdown', popup_html).val() === 'Other') {
-                    port_form_data.port.service_provider = $('.other_carrier', popup_html).val();
-                }
+                	var string_alert = '';
 
-                if(!port_form_data.extra.agreed) {
-                    string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
-                }
+                	if($('.carrier_dropdown', popup_html).val() === 'Other') {
+                    	port_form_data.port.service_provider = $('.other_carrier', popup_html).val();
+                	}
 
-                $.each(port_form_data.extra.cb, function(k, v) {
-                    if(v === false) {
-                        string_alert += _t('numbers_manager', 'you_must_confirm_the_first_conditions');
-                        return false;
-                    }
-                });
+                	if(!port_form_data.extra.agreed) {
+                    	string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
+                	}
 
-                port_form_data.phone_numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
-                port_form_data.phone_numbers = port_form_data.phone_numbers.replace(/[\s-\(\)\.]/g, '').split(',');
+                	$.each(port_form_data.extra.cb, function(k, v) {
+                    	if(v === false) {
+                        	string_alert += _t('numbers_manager', 'you_must_confirm_the_first_conditions');
+                        	return false;
+                    	}
+                	});
 
-                port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
+                	port_form_data.phone_numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
+                	port_form_data.phone_numbers = port_form_data.phone_numbers.replace(/[\s-\(\)\.]/g, '').split(',');
 
-                var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
-                res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
+                	port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
 
-                var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
+                	var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
+                	res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
 
-                port_form_data.phone_numbers.push(port_form_data.port.main_number);
+                	var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
 
-                phone_numbers = [];
-                var error_toll_free = [];
-                $.each(port_form_data.phone_numbers, function(i, val) {
-                    var result = val.match(/^\+?1?([2-9]\d{9})$/);
+                	port_form_data.phone_numbers.push(port_form_data.port.main_number);
 
-                    if(result) {
-                        if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
-                            phone_numbers.push('+1' + result[1]);
-                        }
-                        else {
-                            error_toll_free.push(result[1]);
-                        }
-                    }
-                    else {
-                        if(val !== '') {
-                            string_alert += val + _t('numbers_manager', 'this_phone_number_is_not_valid');
-                        }
-                    }
-                });
+                	phone_numbers = [];
+                	var error_toll_free = [];
+                	$.each(port_form_data.phone_numbers, function(i, val) {
+                    	var result = val.match(/^\+?1?([2-9]\d{9})$/);
 
-                if(error_toll_free.length > 0) {
-                    $.each(error_toll_free, function(k, v) {
-                        string_alert += v + ', ';
-                    });
+                    	if(result) {
+                        	if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
+                            	phone_numbers.push('+1' + result[1]);
+                        	}
+                        	else {
+                            	error_toll_free.push(result[1]);
+                        	}
+                    	}
+                    	else {
+                        	if(val !== '') {
+                            	string_alert += val + _t('numbers_manager', 'this_phone_number_is_not_valid');
+                        	}
+                    	}
+                	});
 
-                    if(is_toll_free_main) {
-                        string_alert += _t('numbers_manager', 'these_numbers_are_not_toll_free_numbers');
-                    }
-                    else {
-                        string_alert += _t('numbers_manager', 'these_numbers_are_toll_free_numbers');
-                    }
-                }
+                	if(error_toll_free.length > 0) {
+                    	$.each(error_toll_free, function(k, v) {
+                        	string_alert += v + ', ';
+                    	});
 
-                port_form_data.phone_numbers = phone_numbers;
+                    	if(is_toll_free_main) {
+                        	string_alert += _t('numbers_manager', 'these_numbers_are_not_toll_free_numbers');
+                    	}
+                    	else {
+                        	string_alert += _t('numbers_manager', 'these_numbers_are_toll_free_numbers');
+                    	}
+                	}
 
-                files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
-                loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
+                	port_form_data.phone_numbers = phone_numbers;
 
-                if(!port_form_data.port.email.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
-                    string_alert += _t('numbers_manager', 'the_email_address_you_entered');
-                }
+                	files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
+                	loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
 
-                if(string_alert === '') {
-                    delete port_form_data.extra;
+                	if(!port_form_data.port.email.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
+                    	string_alert += _t('numbers_manager', 'the_email_address_you_entered');
+                	}
 
-                    if(typeof callback === 'function') {
-                        callback(port_form_data, popup);
-                    }
-                }
-                else {
-                    winkstart.alert(string_alert);
-                }
-            });
+                	if(string_alert === '') {
+                    	delete port_form_data.extra;
 
-            popup = winkstart.dialog(popup_html, {
-                title: _t('numbers_manager', 'port_a_number_title')
+                    	if(typeof callback === 'function') {
+                        	callback(port_form_data, popup);
+                    	}
+                	}
+                	else {
+                    	winkstart.alert(string_alert);
+                	}
+            	});
+
+            	popup = winkstart.dialog(popup_html, {
+                	title: _t('numbers_manager', 'port_a_number_title')
+            	});
             });
         },
 
