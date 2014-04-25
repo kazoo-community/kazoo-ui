@@ -67,6 +67,11 @@ winkstart.module('numbers', 'numbers_manager', {
                 verb: 'PUT'
             },
 			'numbers_manager.getServicePlan': {
+                url: '{api_url}/accounts/{account_id}/service_plans/{name}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+			'numbers_manager.getCurrentServicePlan': {
                 url: '{api_url}/accounts/{account_id}/service_plans/current',
                 contentType: 'application/json',
                 verb: 'GET'
@@ -880,25 +885,47 @@ winkstart.module('numbers', 'numbers_manager', {
         },
 
 		get_port_price: function(callback) {
-			winkstart.request('numbers_manager.getServicePlan', {
+			var THIS = this,
+				errorCallback = function() {
+                	/* This is a hack, if the API fails, which shouldn't happen, to show the UI as it was before, with a hardcoded 5$ */
+                	callback && callback('$5');
+				};
+
+			winkstart.request('numbers_manager.getCurrentServicePlan', {
                     account_id: winkstart.apps['numbers'].account_id,
                     api_url: winkstart.apps['numbers'].api_url
                 },
-                function(_data, status) {
-                	var portPrice = '0';
+                function(_dataPlan, status) {
+                	var keyPlan = '';
 
-                	if('items' in _data.data && 'number_services' in _data.data.items && 'port' in _data.data.items.number_services && 'activation_charges' in _data.data.items.number_services) {
-						portPrice = _data.data.items.number_services.port.activation_charges;
-                	}
+					if('plans' in _dataPlan.data) {
+						for(var plan in _dataPlan.data.plans) {
+							keyPlan = plan;
 
-                	portPrice = '$' + portPrice;
+							break;
+						}
+					}
 
-                	callback && callback(portPrice);
+                	winkstart.request('numbers_manager.getServicePlan', {
+                    		account_id: winkstart.apps['numbers'].account_id,
+                    		api_url: winkstart.apps['numbers'].api_url,
+                    		name: keyPlan
+                    	},
+                    	function(_data,status) {
+							var portPrice = '0';
+
+                			if('plan' in _data.data && 'number_services' in _data.data.plan && 'port' in _data.data.plan.number_services && 'activation_charge' in _data.data.plan.number_services.port) {
+								portPrice = _data.data.plan.number_services.port.activation_charge;
+                			}
+
+                			portPrice = '$' + portPrice;
+
+                			callback && callback(portPrice);
+                    	},
+                    	errorCallback
+                    );
                 },
-                function() {
-                	/* This is a hack, if the API fails, which shouldn't happen, to show the UI as it was before, with a hardcoded 5$ */
-                	callback && callback('$5');
-                }
+                errorCallback
             );
 		},
 
