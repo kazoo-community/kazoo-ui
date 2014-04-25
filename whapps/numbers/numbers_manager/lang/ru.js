@@ -55,7 +55,6 @@ window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbe
 	having_trouble_uploading: "Есть трудности с отправкой файлов PDF? Пожалуйста, свяжитесь с",
 	at: "по адресу",
 	please_confirm_the_following: "Пожалуйста, подтвердите правильность нижеследующей информации",
-	i_understand_the_cost: "Я понимаю что перенос стоит $5 за каждый номер",
 	i_will_not_cancel: "Я не прекращаю пользоваться услугами у старого оператора пока номер переносится",
 	i_understand_the_porting_process: "Я осознаю что перенос номера может занять от 3 до 30 дней",
 	i_understand_my_old_carrier: "Я осознаю что предыдущий оператор может потребовать оплату за досрочный разрыв контракта",

@@ -55,7 +55,8 @@ window.translate['numbers_manager'] = {
 	having_trouble_uploading: "Having trouble uploading a PDF? Please contact",
 	at: "at",
 	please_confirm_the_following: "Please confirm the following",
-	i_understand_the_cost: "I understand the cost of porting is $5/number",
+	i_understand_the_cost: "I understand the porting process's cost is: ",
+	by_number: "/number",
 	i_will_not_cancel: "I will not cancel my old service until the port is complete",
 	i_understand_the_porting_process: "I understand the porting process can take from 3 to 30 days",
 	i_understand_my_old_carrier: "I understand my old carrier may charge an early termination fee",
@@ -112,5 +113,5 @@ window.translate['numbers_manager'] = {
 	buy_numbers: "Buy Numbers",
 	edit_location_for: "Edit Location for ",
 	edit_911_location: "Edit 911 Location",
-	add_number_title: "Add number"	
+	add_number_title: "Add number"
 };
