@@ -1040,9 +1040,7 @@ winkstart.module('voip', 'callflow', {
                 tools;
 
             /* Don't add categories here, this is just a hack to order the list on the right */
-		THIS.categories = {};
-		//THIS.categories["'" + _t('callflow', 'basic') + "'"] = [];
-		//THIS.categories["'" + _t('callflow', 'advanced') + "'"] = [];
+			THIS.categories = {};
 
             $.each(THIS.actions, function(i, data) {
                 if('category' in data) {
