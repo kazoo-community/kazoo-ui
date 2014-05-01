@@ -58,7 +58,7 @@ window.translate['callflow'] = {
 	ring_strategy: "Ring Strategy",
 	at_the_same_time: "At the same time",
 	in_order: "In order",
-	music_on_hold: "Music-On-hold",
+	ringback: "Ringback",
 	default: "Default",
 	silence: "Silence",
 	users: "Users",
