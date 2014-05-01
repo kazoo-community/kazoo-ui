@@ -458,7 +458,7 @@ winkstart.module('userportal', 'portal_manager', {
                         number: replaced_number,
                         enabled: replaced_number !== '' ? true : false,
                         substitute: $('#ring-device-checkbox', portal_manager_html).attr('checked') ? false : true,
-                        keep_caller_id: $('#call_forward_keep_caller_id', portal_manager_html).attr('checked')
+                        keep_caller_id: $('#call_forward_keep_caller_id', portal_manager_html).attr('checked') ? true : false
                         //Substitute equals true to enable real call forwarding, false in order to ring devices as well.
                     }
                 };
