@@ -104,9 +104,17 @@ winkstart.module('voip', 'resource', {
     },
 
     {
+    	fix_codecs: function(data, formData) {
+			$.each(data.gateways, function(k, gateway) {
+				gateway.codecs = formData.gateways[0].codecs;
+			});
+
+			return data;
+    	},
+
         save_resource: function(form_data, data, success, error) {
             var THIS = this,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
             if(typeof data.data == 'object' && data.data.id) {
                  winkstart.request(true, normalized_data.type + '_resource.update', {
@@ -230,6 +238,11 @@ winkstart.module('voip', 'resource', {
                         },
                         function(_data, status) {
                             _data.data.type = data.type;
+
+							/* We don't want the defaults to override the settings if the array is empty */
+                            if(_data.data.gateways[0].codecs) {
+								defaults.data.gateways[0].codecs = _data.data.gateways[0].codecs;
+                            }
 
                             THIS.render_resource($.extend(true, defaults, _data), target, callbacks);
 
