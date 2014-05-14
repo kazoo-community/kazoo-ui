@@ -280,9 +280,9 @@ winkstart.module('voip', 'device', {
                                 codecs: []
                             },
                             fax: {
-                                option: 'auto'
+                                option: 'true'
                             },
-                            fax_option: 'auto'
+                            fax_option: true
                         },
                         sip: {
                             method: 'password',
@@ -522,6 +522,10 @@ winkstart.module('voip', 'device', {
             var THIS = this,
                 device_html,
                 render;
+
+            if('media' in data.data && 'fax_option' in data.data.media) {
+                data.data.media.fax_option = (data.data.media.fax_option === 'auto' || data.data.media.fax_option === true);
+            }
 
             if(typeof data.data == 'object' && data.data.device_type) {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
@@ -775,7 +779,7 @@ winkstart.module('voip', 'device', {
             }
 
             if('media' in data && 'fax' in data.media && 'fax_option' in data.media) {
-                data.media.fax.option = data.media.fax_option;
+                data.media.fax.option = data.media.fax_option.toString();
             }
 
             if('media' in data && 'secure_rtp' in data.media) {

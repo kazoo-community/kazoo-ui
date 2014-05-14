@@ -1,5 +1,5 @@
 <div>
-    <div class="dialog_popup">
+    <div class="dialog_popup fax_callflow_popup">
         <h1>${_t('sends_fax_to_user')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
@@ -20,6 +20,15 @@
                             <div><a class="inline_action" data-action="create" href="#">${_t('add_a_user')}</a></div>
                         </div>
                     </div>
+                    <div class="clear"/>
+                </div>
+                <div class="popup_field checkbox_field">
+                    <label for="t_38_checkbox">${_t('t_38_checkbox')}</label>
+                    {{if objects.t_38 === true}}
+                        <input id="t_38_checkbox" type="checkbox" checked>
+                    {{else}}
+                        <input id="t_38_checkbox" type="checkbox">
+                    {{/if}}
                     <div class="clear"/>
                 </div>
             </div>

@@ -89,6 +89,7 @@ window.translate['callflow'] = {
 	edit_user_options: "Edit user options",
 	add_a_user: "Add a user",
 	select_user_title: "Select User",
+	t_38_checkbox: 'Enable T.38?',
 	voice_url: "Voice URL",
 	method: "Method",
 	format: "Format",
@@ -132,5 +133,5 @@ window.translate['callflow'] = {
 	please_enter_a_valide_sip_code: "Please enter a valide SIP code.",
 	resource_name: "Resource",
 	this_callflow_is_outdated: "This callflow is outdated, please resave this callflow before continuing.",
-	hot_desking_name: "Hot Desking"	
+	hot_desking_name: "Hot Desking"
 };

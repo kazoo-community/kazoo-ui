@@ -2583,7 +2583,8 @@ winkstart.module('voip', 'callflow', {
 									},
                                     objects: {
                                         items: data.data,
-                                        selected: node.getMetadata('owner_id') || ''
+                                        selected: node.getMetadata('owner_id') || '',
+                                        t_38: node.getMetadata('media') && node.getMetadata('media').fax_option || false
                                     }
                                 });
 
@@ -2606,7 +2607,9 @@ winkstart.module('voip', 'callflow', {
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('owner_id', $('#user_selector', popup_html).val());
-
+                                    node.setMetadata('media', {
+                                        fax_option: $('#t_38_checkbox', popup_html).is(':checked')
+                                    });
                                     popup.dialog('close');
                                 });
 

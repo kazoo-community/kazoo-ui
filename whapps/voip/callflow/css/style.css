@@ -339,6 +339,15 @@
     margin-left: 5px;
 }
 
+.fax_callflow_popup .checkbox_field,
+.fax_callflow_popup .checkbox_field label {
+    padding: 0px;
+}
+
+.fax_callflow_popup .checkbox_field #t_38_checkbox {
+    float: left;
+}
+
 #callflow-content .ui-draggable-dragging {
     cursor: -moz-grabbing !important;
     cursor: -webkit-grabbing !important;

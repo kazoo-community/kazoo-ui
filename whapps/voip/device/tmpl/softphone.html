@@ -284,20 +284,24 @@
 				</div>
 
 				<div id="options">
-					<div class="clearfix">
-						<label for="media_fax_option">${_t('t_38')}</label>
-						<div class="input">
-							<select name="media.fax_option" id="media_fax_option" class="medium" rel="popover" data-content="${_t('t_38_data_content')}">
-								{{each(key, val) field_data.media.fax.options}}
-                                    {{if data.media.fax.option == key}}
-                                        <option value="${key}" selected="selected">${val}</option>
-                                    {{else}}
-                                        <option value="${key}">${val}</option>
-                                    {{/if}}
-                                {{/each}}
-							</select>
-						</div>
-					</div>
+                    <div class="clearfix">
+                        <div class="input">
+                           <ul class="inputs-list">
+                               <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('t_38_data_content')}">
+                                            {{if data.media.fax_option === true}}
+                                            <input id="media_fax_option" type="checkbox" name="media.fax_option" checked="checked" />
+                                            {{else}}
+                                            <input id="media_fax_option" type="checkbox" name="media.fax_option" />
+                                            {{/if}}
+                                            <span>${_t('t_38')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                       </div>
+                    </div>
 
                     <div class="clearfix">
                         <div class="input">
