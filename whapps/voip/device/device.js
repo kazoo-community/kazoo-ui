@@ -832,6 +832,7 @@ winkstart.module('voip', 'device', {
                         new_flags.push(v);
                     }
                 });
+                if(new_flags.indexOf('fax') < 0) { new_flags.splice(0,0,'fax'); }
                 data.outbound_flags = new_flags;
             }
 
