@@ -1,4 +1,33 @@
 ( function(winkstart, amplify, $) {
+	winkstart.check_routes = function(routes) {
+		var THIS = this;
+
+        if (window.location.hash.length > 1) {
+            var account,
+                handler,
+                matches,
+                path = window.location.hash.substring(1);
+
+            for (var routeIdx = 0; routeIdx < routes.length; routeIdx++) {
+                var route = routes[routeIdx];
+                matches = path.match(route.pattern);
+
+                if (matches && matches[1]) {
+                    account = {'id': matches[1], 'name': 'demo'};
+                    handler = route.handler;
+                    break;
+                }
+            }
+            if (!account) return; // Account not found in path. Do nothing.
+
+            // get the account
+            winkstart.publish('accounts_manager.trigger_masquerade', { account: account }, function() {
+                if (!handler) return; // No handler defined for route, do nothing.
+                handler.apply(THIS, matches.slice(1));
+            });
+        }
+	};
+
     winkstart.is_password_valid = function(password_string, strength) {
         var help = {
                 standard: 'The password must contain at least 6 characters and include a letter and a number.',

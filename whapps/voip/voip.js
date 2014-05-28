@@ -100,7 +100,66 @@ winkstart.module('voip', 'voip', {
                 $('[data-whapp="voip"] > a').addClass('activate');
                 THIS.setup_page();
             }
+
+            THIS.check_deep_links();
         },
+
+		check_deep_links: function() {
+			var THIS = this;
+                routes = [
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/callflows\/([0-9,a-f]+)\/?/i,
+                    	"handler" : function(accountId, callflowId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'callflow',
+                        		'callback': function(){
+                            		winkstart.publish('callflow.list-panel-click', { 'id': callflowId });
+                            	}
+                            });
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/callflows\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'callflow'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/users\/([0-9,a-f]+)\/?/i,
+                    	"handler" : function(accountId, userId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'user',
+                        		'callback': function(){
+                            		winkstart.publish('user.edit', { 'id': userId });
+                        		}
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/users\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'user'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/cdrs\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'cdr'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/?/i
+                	}
+            	];
+
+        	winkstart.check_routes(routes);
+		},
 
         activate: function() {
             var THIS = this;
@@ -136,7 +195,7 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
 
             THIS.whapp_auth(function() {
-                winkstart.publish(args.name + '.activate');
+                winkstart.publish(args.name + '.activate', args);
             });
         },
 

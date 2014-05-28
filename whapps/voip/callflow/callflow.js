@@ -263,20 +263,24 @@ winkstart.module('voip', 'callflow', {
             );
         },
 
-        activate: function () {
+        activate: function (args) {
             var THIS = this,
                 callflow_html = THIS.templates.callflow_main.tmpl();
 
             $('#ws-content').empty()
                             .append(callflow_html);
-			THIS.config.elements._t = function(param){
-				return window.translate['callflow'][param];
-			}
-            THIS.renderList(function() {
-                THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
-            });
 
             winkstart.publish('callflow.define_callflow_nodes', THIS.actions);
+
+			THIS.config.elements._t = function(param){
+				return window.translate['callflow'][param];
+			};
+
+            THIS.renderList(function() {
+                THIS.templates.callflow.tmpl(THIS.config.elements).appendTo($('#callflow-view'));
+
+                args.callback && args.callback();
+            });
         },
 
         list_numbers: function(success, error) {
