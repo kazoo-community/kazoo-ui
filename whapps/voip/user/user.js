@@ -833,7 +833,7 @@ winkstart.module('voip', 'user', {
             return data;
         },
 
-        render_list: function(parent) {
+        render_list: function(parent, callback) {
             var THIS = this;
 
             winkstart.request(true, 'user.list', {
@@ -874,19 +874,24 @@ winkstart.module('voip', 'user', {
                             notifyCreateMethod: 'user.edit',
                             notifyParent: parent
                         });
+
+                    callback && callback();
                 }
             );
         },
 
-        activate: function(parent) {
+        activate: function(args) {
             var THIS = this,
-                user_html = THIS.templates.user.tmpl();
+                user_html = THIS.templates.user.tmpl(),
+                parent = args.parent || $('#ws-content');
 
-            (parent || $('#ws-content'))
+            (parent)
                 .empty()
                 .append(user_html);
 
-            THIS.render_list(user_html);
+            THIS.render_list(user_html, function() {
+            	args.callback && args.callback();
+            });
         },
 
         popup_edit_user: function(data, callback, data_defaults) {
