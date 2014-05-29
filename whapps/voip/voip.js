@@ -195,7 +195,12 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
 
             THIS.whapp_auth(function() {
-                winkstart.publish(args.name + '.activate', args);
+            	if('callback' in args) {
+                	winkstart.publish(args.name + '.activate', args);
+            	}
+            	else {
+                	winkstart.publish(args.name + '.activate');
+                }
             });
         },
 
