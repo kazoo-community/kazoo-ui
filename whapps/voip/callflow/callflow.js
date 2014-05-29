@@ -265,6 +265,7 @@ winkstart.module('voip', 'callflow', {
 
         activate: function (args) {
             var THIS = this,
+            	args = args || {},
                 callflow_html = THIS.templates.callflow_main.tmpl();
 
             $('#ws-content').empty()

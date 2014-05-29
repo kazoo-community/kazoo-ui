@@ -882,6 +882,7 @@ winkstart.module('voip', 'user', {
 
         activate: function(args) {
             var THIS = this,
+            	args = args || {},
                 user_html = THIS.templates.user.tmpl(),
                 parent = args.parent || $('#ws-content');
 
