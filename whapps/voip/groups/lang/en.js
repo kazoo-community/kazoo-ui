@@ -17,9 +17,9 @@ window.translate['groups'] = {
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this groups?",
 	no_name: "(no name)",
-	groups_label: "Directories",
+	groups_label: "Groups",
 	add_group_label: "Add Group",
 	edit_groups: "Edit Groups",
 	create_groups: "Create Groups"
-	
+
 };
