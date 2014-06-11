@@ -197,11 +197,7 @@ winkstart.module('userportal', 'portal_manager', {
                         success(_data);
                     }
                 },
-                function(_data, status) {
-                    if(typeof error === 'function') {
-                        error(_data);
-                    }
-                }
+                winkstart.error_message.process_error()
             );
         },
 
