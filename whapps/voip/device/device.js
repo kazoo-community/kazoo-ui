@@ -838,8 +838,14 @@ winkstart.module('voip', 'device', {
                         new_flags.push(v);
                     }
                 });
-                if(new_flags.indexOf('fax') < 0) { new_flags.splice(0,0,'fax'); }
                 data.outbound_flags = new_flags;
+            }
+            if(data.device_type === 'fax') {
+                if(!('outbound_flags' in data)) {
+                    data.outbound_flags = ['fax'];
+                } else if(data.outbound_flags.indexOf('fax') < 0) {
+                    data.outbound_flags.splice(0,0,'fax');
+                }
             }
 
             if(data.ringtones && 'internal' in data.ringtones && data.ringtones.internal === '') {
