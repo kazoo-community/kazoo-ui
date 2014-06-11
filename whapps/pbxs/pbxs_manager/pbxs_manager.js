@@ -725,7 +725,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                                 phone_number = data_phone_number.match(/^\+(.*)$/);
 
                                 if(phone_number[1]) {
-                                    array_DIDs.push('+1' + phone_number[1]);
+                                    array_DIDs.push('+' + phone_number[1]);
                                 }
                             });
 
