@@ -770,6 +770,12 @@ winkstart.module('voip', 'device', {
                 delete data.data.status;
             }
 
+            if(data.data.hasOwnProperty('ignore_complete_elsewhere')) {
+				data.data.ignore_completed_elsewhere = data.data.ignore_complete_elsewhere;
+
+				delete data.data.ignore_complete_elsewhere;
+            }
+
             return data;
         },
 
