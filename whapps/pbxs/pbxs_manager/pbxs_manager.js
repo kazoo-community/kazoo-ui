@@ -1067,7 +1067,12 @@ winkstart.module('pbxs', 'pbxs_manager', {
                                     	failover = $.inArray('failover', _data_numbers.data.numbers[k].features) > -1 ? true : false;
                                     	dash_e911 = $.inArray('dash_e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
 
-                                        tab_data.push(['lol', k, failover, cnam, dash_e911, _data_numbers.data.numbers[k].state]);
+										if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
+                                        	tab_data.push(['lol', k, failover, cnam, _data_numbers.data.numbers[k].state]);
+                                        }
+                                        else {
+                                        	tab_data.push(['lol', k, failover, cnam, dash_e911, _data_numbers.data.numbers[k].state]);
+                                        }
                                 	}
                             	});
                             }
@@ -1166,49 +1171,56 @@ winkstart.module('pbxs', 'pbxs_manager', {
         setup_table: function(parent) {
             var THIS = this,
                 pbxs_manager_html = parent,
-                columns = [
-                {
-                    'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
-                    'fnRender': function(obj) {
-                        return '<input type="checkbox" class="select_number"/>';
-                    },
-                    'bSortable': false
+                columns = [];
+
+            columns.push({
+                'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
+                'fnRender': function(obj) {
+                    return '<input type="checkbox" class="select_number"/>';
                 },
-                {
-                    'sTitle': _t('pbxs_manager', 'phone_number_stitle')
+                'bSortable': false
+            });
+
+            columns.push({
+                'sTitle': _t('pbxs_manager', 'phone_number_stitle')
+            });
+
+            columns.push({
+                'sTitle': _t('pbxs_manager', 'failover_stitle'),
+                'fnRender': function(obj) {
+                    var failover = 'failover ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
+                    return '<a class="'+ failover  +'">' + _t('pbxs_manager', 'failover') + '</a>';
                 },
-                {
-                    'sTitle': _t('pbxs_manager', 'failover_stitle'),
-                    'fnRender': function(obj) {
-                        var failover = 'failover ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ failover  +'">' + _t('pbxs_manager', 'failover') + '</a>';
-                    },
-                    'bSortable': false
+                'bSortable': false
+            });
+
+            columns.push({
+                'sTitle': _t('pbxs_manager', 'caller_id_stitle'),
+                'fnRender': function(obj) {
+                    var cid = 'cid ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
+                    return '<a class="'+ cid  +'">CID</a>';
                 },
-                {
-                    'sTitle': _t('pbxs_manager', 'caller_id_stitle'),
-                    'fnRender': function(obj) {
-                        var cid = 'cid ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ cid  +'">CID</a>';
-                    },
-                    'bSortable': false
-                },
-                {
-                    'sTitle': 'E911',
-                    'fnRender': function(obj) {
-                        var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                        return '<a class="'+ e911  +'">E911</a>';
-                    },
-                    'bSortable': false
-                },
-                {
-                    'sTitle': _t('pbxs_manager', 'state_stitle'),
-                    'fnRender': function(obj) {
-                        var state = obj.aData[obj.iDataColumn].replace('_',' ');
-                        return state.charAt(0).toUpperCase() + state.substr(1);
-                    }
+                'bSortable': false
+            });
+
+			if(!winkstart.config.hasOwnProperty('hide_e911') || winkstart.config.hide_e911 === false) {
+            	columns.push({
+                	'sTitle': 'E911',
+                	'fnRender': function(obj) {
+                    	var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
+                    	return '<a class="'+ e911  +'">E911</a>';
+                	},
+                	'bSortable': false
+            	});
+            }
+
+            columns.push({
+                'sTitle': _t('pbxs_manager', 'state_stitle'),
+                'fnRender': function(obj) {
+                    var state = obj.aData[obj.iDataColumn].replace('_',' ');
+                    return state.charAt(0).toUpperCase() + state.substr(1);
                 }
-            ];
+            });
 
             winkstart.table.create('pbxs_manager', $('#pbxs_manager-grid', pbxs_manager_html), columns, {}, {
                 sDom: '<"action_number">frtlip',

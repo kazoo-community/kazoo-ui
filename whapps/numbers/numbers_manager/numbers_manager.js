@@ -1182,13 +1182,21 @@ winkstart.module('numbers', 'numbers_manager', {
                     winkstart.table.numbers_manager.fnClearTable();
 
                     var tab_data = [];
+
                     if('numbers' in _data.data) {
                     	$.each(_data.data.numbers, function(k, v) {
-                        	var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false;
-                        	var outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
+                        	var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false,
+                        	    outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
+
                         	v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
                         	v.caller_id = { inbound: inbound, outbound: outbound };
-                        	tab_data.push(['', k, v.caller_id, v.e911, v.state]);
+
+							if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
+                        		tab_data.push(['', k, v.caller_id,  v.state]);
+							}
+							else {
+                        		tab_data.push(['', k, v.caller_id, v.e911, v.state]);
+							}
                     	});
                     }
 
@@ -1204,47 +1212,54 @@ winkstart.module('numbers', 'numbers_manager', {
         setup_table: function(parent) {
             var THIS = this,
                 numbers_manager_html = parent,
-                columns = [
-                {
-                    'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
-                    'fnRender': function(obj) {
-                        return '<input type="checkbox" class="select_number"/>';
-                    },
-                    'bSortable': false
-                },
-                {
-                    'sTitle': _t('numbers_manager', 'phone_number')
-                },
-                {
-                    'sTitle': _t('numbers_manager', 'caller_id'),
-                    'fnRender': function(obj) {
-                        var link = '<a class="cid inactive">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="cid_inbound inactive">' + _t('numbers_manager', 'inbound') + '</a>'
-                        if(typeof obj.aData[obj.iDataColumn] === 'object') {
-                            var cid_outbound = 'cid ' + (obj.aData[obj.iDataColumn].outbound ? 'active' : 'inactive');
-                            var cid_inbound = 'cid_inbound ' + (obj.aData[obj.iDataColumn].inbound ? 'active' : 'inactive');
+                columns = [];
 
-                            link = '<a class="'+cid_outbound+'">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="'+cid_inbound+'">' + _t('numbers_manager', 'inbound') + '</a>'
-                        }
-                        return link;
-                    },
-                    'bSortable': false
+            columns.push({
+                'sTitle': '<input type="checkbox" id="select_all_numbers"/>',
+                'fnRender': function(obj) {
+                    return '<input type="checkbox" class="select_number"/>';
                 },
-                {
+                'bSortable': false
+            });
+
+            columns.push({
+                'sTitle': _t('numbers_manager', 'phone_number')
+            });
+
+            columns.push({
+                'sTitle': _t('numbers_manager', 'caller_id'),
+                'fnRender': function(obj) {
+                    var link = '<a class="cid inactive">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="cid_inbound inactive">' + _t('numbers_manager', 'inbound') + '</a>'
+                    if(typeof obj.aData[obj.iDataColumn] === 'object') {
+                        var cid_outbound = 'cid ' + (obj.aData[obj.iDataColumn].outbound ? 'active' : 'inactive');
+                        var cid_inbound = 'cid_inbound ' + (obj.aData[obj.iDataColumn].inbound ? 'active' : 'inactive');
+
+                        link = '<a class="'+cid_outbound+'">' + _t('numbers_manager', 'outbound') + '</a>' + ' / ' + '<a class="'+cid_inbound+'">' + _t('numbers_manager', 'inbound') + '</a>'
+                    }
+                    return link;
+                },
+                'bSortable': false
+            });
+
+            /* International customers don't always want to display e911 since it doesn't work for their numbers */
+            if(!winkstart.config.hasOwnProperty('hide_e911') || winkstart.config.hide_e911 === false) {
+                columns.push({
                     'sTitle': _t('numbers_manager', 'E911'),
                     'fnRender': function(obj) {
                         var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
                         return '<a class="'+ e911  +'">E911</a>';
                     },
                     'bSortable': false
-                },
-                {
-                    'sTitle': _t('numbers_manager', 'state'),
-                    'fnRender': function(obj) {
-                        var state = obj.aData[obj.iDataColumn].replace('_',' ');
-                        return state.charAt(0).toUpperCase() + state.substr(1);
-                    }
+                });
+            }
+
+            columns.push({
+                'sTitle': _t('numbers_manager', 'state'),
+                'fnRender': function(obj) {
+                    var state = obj.aData[obj.iDataColumn].replace('_',' ');
+                    return state.charAt(0).toUpperCase() + state.substr(1);
                 }
-            ];
+            });
 
             winkstart.table.create('numbers_manager', $('#numbers_manager-grid', numbers_manager_html), columns, {}, {
                 sDom: '<"action_number">frtlip',
