@@ -1270,7 +1270,14 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
-            $('div.action_number', numbers_manager_html).html('<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button><button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button><button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>');
+
+
+            var hasPort = !winkstart.config.hasOwnProperty('hide_port') || winkstart.config.hide_port === false,
+            	htmlString = '<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button>' +
+            				 (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
+            				 '<button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>';
+
+            $('div.action_number', numbers_manager_html).html(htmlString);
 
             /* Check if the flag is in the current account OR in the master account if masquerading */
             var account_id = winkstart.apps['numbers'].account_id;
