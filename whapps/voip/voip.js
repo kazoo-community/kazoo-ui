@@ -1,42 +1,42 @@
 function get_modules(){ 
-		var mod_list;
-		if ( winkstart.apps.voip.modules && $.isArray(winkstart.apps.voip.modules) ) {
-			mod_list = winkstart.apps.voip.modules;
-		} else if (winkstart.config.voip_modules) {
-			if ( $.isArray(winkstart.config.voip_modules) ) {
-				mod_list = winkstart.config.voip_modules;
-			} else if (typeof winkstart.config.voip_modules === 'object' ) {
-				return winkstart.config.voip_modules;
-			}
+	var mod_list;
+	if ( winkstart.apps.voip.modules && $.isArray(winkstart.apps.voip.modules) ) {
+		mod_list = winkstart.apps.voip.modules;
+	} else if (winkstart.config.voip_modules) {
+		if ( $.isArray(winkstart.config.voip_modules) ) {
+			mod_list = winkstart.config.voip_modules;
+		} else if (typeof winkstart.config.voip_modules === 'object' ) {
+			return winkstart.config.voip_modules;
 		}
-		if (!mod_list) {
-			return {
-			    'account': false,
-			    'bulk': false,
-			    'media': false,
-			    'device': false,
-			    'callflow': false,
-			    'conference': false,
-			    'groups': false,
-			    'user': false,
-			    //'phone': false,
-			    'vmbox': false,
-			    'menu': false,
-			    'registration': false,
-			    'resource': false,
-			    'timeofday': false,
-			    'featurecode': false,
-			    'cdr': false,
-			    //'queue': false,
-			    'directory': false
-			}
+	}
+	if (!mod_list) {
+		return {
+		    'account': false,
+		    'bulk': false,
+		    'media': false,
+		    'device': false,
+		    'callflow': false,
+		    'conference': false,
+		    'groups': false,
+		    'user': false,
+		    //'phone': false,
+		    'vmbox': false,
+		    'menu': false,
+		    'registration': false,
+		    'resource': false,
+		    'timeofday': false,
+		    'featurecode': false,
+		    'cdr': false,
+		    //'queue': false,
+		    'directory': false
 		}
-		var init_list = {};
-		$.each(mod_list, function(k, v) {
-			init_list[v] = false
-		});
-		return init_list;
-		};
+	}
+	var init_list = {};
+	$.each(mod_list, function(k, v) {
+		init_list[v] = false
+	});
+	return init_list;
+};
 winkstart.module('voip', 'voip', {
         css: {
             voip: 'css/voip.css'
