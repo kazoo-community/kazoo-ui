@@ -1,6 +1,6 @@
 function get_modules(){ 
 		var mod_list;
-		if ( winkstart.apps.voip.modules && $.isArray(winkstart.apps.voip.modules)) {
+		if ( winkstart.apps.voip.modules && $.isArray(winkstart.apps.voip.modules) ) {
 			mod_list = winkstart.apps.voip.modules;
 		} else if (winkstart.config.voip_modules) {
 			if ( $.isArray(winkstart.config.voip_modules) ) {
