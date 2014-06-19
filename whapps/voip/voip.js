@@ -1,3 +1,42 @@
+function get_modules(){ 
+		var mod_list;
+		if ( winkstart.apps.voip.modules && Object.prototype.toString.call(winkstart.apps.voip.modules) === "[object Array]" ) {
+			mod_list = winkstart.apps.voip.modules;
+		} else if (winkstart.config.voip_modules) {
+			if ( Object.prototype.toString.call(winkstart.config.voip_modules) === "[object Array]" ) {
+				mod_list = winkstart.config.voip_modules;
+			} else if (typeof winkstart.config.voip_modules === 'object' ) {
+				return winkstart.config.voip_modules;
+			}
+		}
+		if (!mod_list) {
+			return {
+			    'account': false,
+			    'bulk': false,
+			    'media': false,
+			    'device': false,
+			    'callflow': false,
+			    'conference': false,
+			    'groups': false,
+			    'user': false,
+			    //'phone': false,
+			    'vmbox': false,
+			    'menu': false,
+			    'registration': false,
+			    'resource': false,
+			    'timeofday': false,
+			    'featurecode': false,
+			    'cdr': false,
+			    //'queue': false,
+			    'directory': false
+			}
+		}
+		var init_list = {};
+		$.each(mod_list, function(k, v) {
+			init_list[v] = false
+		});
+		return init_list;
+		};
 winkstart.module('voip', 'voip', {
         css: {
             voip: 'css/voip.css'
@@ -57,26 +96,7 @@ winkstart.module('voip', 'voip', {
          * The format is as follows:
          * <module name>: <initialization status>
          */
-        modules: winkstart.config.voip_modules || {
-            'account': false,
-            'bulk': false,
-            'media': false,
-            'device': false,
-            'callflow': false,
-            'conference': false,
-            'groups': false,
-            'user': false,
-            //'phone': false,
-            'vmbox': false,
-            'menu': false,
-            'registration': false,
-            'resource': false,
-            'timeofday': false,
-            'featurecode': false,
-            'cdr': false,
-            //'queue': false,
-            'directory': false
-        },
+        modules: get_modules(),
 
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
