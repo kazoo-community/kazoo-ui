@@ -64,6 +64,7 @@ var langUrls = [
 	'whapps/voip/timeofday',
 	'whapps/voip/user',
 	'whapps/voip/vmbox',
+	'whapps/voip/faxbox',
 	'whapps/voip/voip'
 ];
 

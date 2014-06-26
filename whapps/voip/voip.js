@@ -68,6 +68,7 @@ winkstart.module('voip', 'voip', {
             'user': false,
             //'phone': false,
             'vmbox': false,
+            'faxbox': false,
             'menu': false,
             'registration': false,
             'resource': false,
@@ -263,6 +264,7 @@ winkstart.module('voip', 'voip', {
                     disabled_devices: 'N/A',
                     users: 'N/A',
                     vmboxes: 'N/A',
+                    faxboxes: 'N/A',
                     conferences: 'N/A',
                     callflows: 'N/A',
                     feature_codes: 'N/A',
@@ -452,6 +454,16 @@ winkstart.module('voip', 'voip', {
                             }
                         );
                     }
+                }
+            );
+
+            /* # of faxboxes */
+            winkstart.request('faxbox.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.faxboxes', welcome_html).html(_data.data.length);
                 }
             );
         },
