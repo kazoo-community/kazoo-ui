@@ -615,7 +615,17 @@ winkstart.module('voip', 'timeofday', {
                     key_caption: function(child_node, caption_map) {
                         var key = child_node.key;
 
-                        return (key != '_') ? caption_map[key].name : _t('timeofday', 'all_other_times');
+                        if(key === '_') {
+                            caption = _t('timeofday', 'all_other_times');
+                        }
+                        else if(caption_map.hasOwnProperty(key)) {
+                            caption = caption_map[key].name;
+                        }
+                        else {
+                            caption = ''
+                        }
+
+                        return caption;
                     },
                     key_edit: function(child_node, callback) {
                         var _this = this;
