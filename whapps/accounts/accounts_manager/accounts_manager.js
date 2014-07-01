@@ -21,7 +21,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		validation: [
 				{ name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
 				{ name: '#vm_to_email_support_email',    regex: _t('accounts', 'vm_to_email_support_email_regex') },
-				{ name: '#vm_to_email_send_from',        regex: /^.*$/ },
+				{ name: '#vm_to_email_send_from',        regex: _t('accounts', 'vm_to_email_support_email_regex') },
 				{ name: '#vm_to_email_service_url',      regex: /^.*$/ },
 				{ name: '#vm_to_email_service_provider', regex: /^.*$/ },
 				{ name: '#vm_to_email_service_name',     regex: /^.*$/ },
