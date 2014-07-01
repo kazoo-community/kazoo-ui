@@ -351,7 +351,8 @@ winkstart.module('voip', 'device', {
                                 codecs: {
                                     'H261': 'H261',
                                     'H263': 'H263',
-                                    'H264': 'H264'
+                                    'H264': 'H264',
+				    'VP8': 'VP8'
                                 }
                             }
                         },
