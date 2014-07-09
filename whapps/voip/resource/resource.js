@@ -207,16 +207,19 @@ winkstart.module('voip', 'resource', {
                         },
                         gateways: {
                             codecs: {
-                                'G729': 'G729 - 8kbps (Requires License)',
+                                'OPUS': 'OPUS',
+                                'CELT@32000h': 'Siren @ 32Khz',
+                                'G7221@32000h': 'G722.1 @ 32khz',
+                                'G7221@16000h': 'G722.1 @ 16khz',
+                                'G722': 'G722',
+                                'speex@32000h': 'Speex @ 32khz',
+                                'speex@16000h': 'Speex @ 16khz',
                                 'PCMU': 'G711u / PCMU - 64kbps (North America)',
                                 'PCMA': 'G711a / PCMA - 64kbps (Elsewhere)',
-                                'G722_16': 'G722 (HD) @ 16kHz',
-                                'G722_32': 'G722.1 (HD) @ 32kHz',
-                                'CELT_48': 'Siren (HD) @ 48kHz',
-                                'CELT_64': 'Siren (HD) @ 64kHz',
-                                'GSM': 'GSM',
-                                'OPUS': 'OPUS',
-                                'Speex': 'Speex'
+                                'G729':'G729 - 8kbps (Requires License)',
+                                'GSM':'GSM',
+                                'CELT@48000h': 'Siren (HD) @ 48kHz',
+                                'CELT@64000h': 'Siren (HD) @ 64kHz'
                             }
                         },
                         rules: {
@@ -247,7 +250,11 @@ winkstart.module('voip', 'resource', {
 								defaults.data.gateways[0].codecs = _data.data.gateways[0].codecs;
                             }
 
-                            THIS.render_resource($.extend(true, defaults, _data), target, callbacks);
+                            var dataTemplate = $.extend(true, defaults, _data);
+
+                            THIS.migrate_data(dataTemplate);
+
+                            THIS.render_resource(dataTemplate, target, callbacks);
 
                             if(typeof callbacks.after_render == 'function') {
                                 callbacks.after_render();
@@ -265,6 +272,29 @@ winkstart.module('voip', 'resource', {
                         callbacks.after_render();
                     }
                 }
+        },
+
+        migrate_data: function(data) {
+            var THIS = this;
+
+            if(data.hasOwnProperty('gateways') && data.gateways[0].hasOwnProperty('codecs')) {
+                var mapMigrateCodec = {
+                        'Speex': 'speex@16000h',
+                        'G722_16': 'G7221@16000h',
+                        'G722_32': 'G7221@32000h',
+                        'CELT_48': 'CELT@48000h',
+                        'CELT_64': 'CELT@64000h'
+                    },
+                    newCodecList = [];
+
+                _.each(data.gateways[0].codecs, function(codec) {
+                    mapMigrateCodec.hasOwnProperty(codec) ? newCodecList.push(mapMigrateCodec[codec]) : newCodecList.push(codec);
+                });
+
+                data.gateways[0].codecs = newCodecList;
+            }
+
+            return data;
         },
 
         delete_resource: function(data, success, error) {
