@@ -26,7 +26,8 @@ winkstart.module('auth', 'auth',
             'auth.register' : 'register',
             'auth.save_registration' : 'save_registration',
             'auth.landing': 'landing',
-            'core.loaded': 'core_loaded'
+            'core.loaded': 'core_loaded',
+            'auth.logout': '_logout'
         },
 
         validation: [
@@ -651,12 +652,13 @@ winkstart.module('auth', 'auth',
                             if(json.data.require_password_update) {
                                 winkstart.publish('auth.new_password', json.data);
                             }
+
+                            winkstart.autoLogout();
                         },
                         function(data, status) {
                             winkstart.alert('error', _t('auth', 'an_error_occurred_while_loading'),
                                 function() {
-                                    $.cookie('c_winkstart_auth', null);
-                                    window.location.reload();
+                                    THIS._logout();
                                 }
                             );
                         }
@@ -665,12 +667,19 @@ winkstart.module('auth', 'auth',
                 function(_data) {
                     winkstart.alert('error', _t('auth', 'an_error_occurred_while_loading'),
                         function() {
-                            $.cookie('c_winkstart_auth', null);
-                            window.location.reload();
+                            THIS._logout();
                         }
                     );
                 }
             );
+        },
+
+        _logout: function() {
+            var THIS = this;
+
+            $.cookie('c_winkstart_auth', null);
+
+            window.location.reload();
         },
 
         shared_auth: function(args) {

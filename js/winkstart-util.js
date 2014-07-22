@@ -658,4 +658,43 @@
 		return result;
     };
 
+    winkstart.autoLogout = function() {
+		var timerAlert,
+			timerLogout,
+		    wait=15,
+		    alertBeforeLogout=2,
+		    alertTriggered = false,
+		    alertDialog;
+
+		var logout = function()	{
+			winkstart.publish('auth.logout');
+		};
+
+		var resetTimer = function() {
+			clearTimeout(timerAlert);
+			clearTimeout(timerLogout);
+
+			if(alertTriggered) {
+				alertTriggered = false;
+
+				alertDialog.dialog('close').remove();
+			}
+
+			timerAlert=setTimeout(function() {
+				alertTriggered = true;
+
+				alertDialog = winkstart.alert(_t('config', 'alert_logout'));
+			}, 60000*(wait-alertBeforeLogout));
+
+			timerLogout=setTimeout(function() {
+				logout();
+			}, 60000*wait);
+		};
+
+		document.onkeypress = resetTimer;
+		document.onmousemove = resetTimer;
+
+		resetTimer();
+	};
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

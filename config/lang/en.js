@@ -54,6 +54,7 @@ window.translate['config'] = {
 	sLast: "Last",
 	/*-------------------------------------*/
 	
+	alert_logout: "Your current session is expiring and you're about to be logged off due to inactivity. Please move your cursor if you want to remain logged in.",
 	charges_summary_title: "Charges summary",
 	no_charges: 'There is no charges for this action.',
 	content_charges: "Here is the detail of the monthly charges per service attached to your account:",
