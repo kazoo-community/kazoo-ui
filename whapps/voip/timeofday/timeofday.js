@@ -480,6 +480,14 @@ winkstart.module('voip', 'timeofday', {
             delete form_data.time;
             delete form_data.weekday;
 
+            if(form_data.enabled === "true") {
+                form_data.enabled = true;
+            } else if(form_data.enabled === "false") {
+                form_data.enabled = false;
+            } else {
+                delete form_data.enabled;
+            }
+
             return form_data;
         },
 
