@@ -280,9 +280,9 @@ winkstart.module('voip', 'device', {
                                 codecs: []
                             },
                             fax: {
-                                option: 'true'
+                                option: 'false'
                             },
-                            fax_option: true
+                            fax_option: false
                         },
                         sip: {
                             method: 'password',
@@ -766,6 +766,15 @@ winkstart.module('voip', 'device', {
                         mdn: ''
                     };
                 }
+            }
+
+            if(data.data.device_type === 'fax') {
+                data.data.media.fax_option = true;
+                data.data.media.fax.option = 'true';
+            }
+            else {
+                data.data.media.fax_option = false;
+                data.data.media.fax.option = 'false';
             }
         },
 
