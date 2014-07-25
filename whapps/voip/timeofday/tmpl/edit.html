@@ -126,6 +126,25 @@
                             <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}"/>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <label for="day">${_t('enabled')}</label>
+                        <div class="input">
+                            <select name="enabled" id="enabled" class="medium" rel="popover" data-content="${_t('enabled_data_content')}">
+                                <option value="">${_t('enabled_based_on_time')}</option>
+                                {{if data.enabled == true}}
+                                    <option value="true" selected>${_t('enabled_forced_on')}</option>
+                                {{else}}
+                                    <option value="true">${_t('enabled_forced_on')}</option>
+                                {{/if}}
+                                {{if data.enabled == false}}
+                                    <option value="false" selected>${_t('enabled_forced_off')}</option>
+                                {{else}}
+                                    <option value="false">${_t('enabled_forced_off')}</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
