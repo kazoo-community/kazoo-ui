@@ -160,16 +160,14 @@ winkstart.module('core', 'layout', {
                     domain: domain
                 },
                 function(_data, status) {
-                    var favicon = document.createElement('link');
-                    favicon.rel = 'icon';
-                    favicon.href = api_url + '/whitelabel/' + domain + '/icon?_='+new Date().getTime();
-                    document.getElementsByTagName('head')[0].appendChild(favicon);
+                    var src = api_url + '/whitelabel/' + domain + '/icon?_='+new Date().getTime();
+
+                    winkstart.changeFavIcon(src);
                 },
                 function(_data, status) {
-                    var favicon = document.createElement('link');
-                    favicon.rel = 'icon';
-                    favicon.href = winkstart.config.favicon || 'img/wsLogo.png';
-                    document.getElementsByTagName('head')[0].appendChild(favicon);
+                    var src = winkstart.config.favicon || 'img/wsLogo.png';
+                    
+                    winkstart.changeFavIcon(src);
                 }
             );
         },

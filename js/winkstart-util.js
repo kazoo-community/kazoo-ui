@@ -45,6 +45,21 @@
         }
     };
 
+    winkstart.changeFavIcon = function(src) {
+        var link = document.createElement('link'),
+            oldLink = document.getElementById('dynamicFavicon');
+
+        link.id = 'dynamicFavicon';
+        link.rel = 'shortcut icon';
+        link.href = src;
+
+        if (oldLink) {
+            document.head.removeChild(oldLink);
+        }
+
+        document.head.appendChild(link);
+    };
+
     winkstart.get_password_regex = function(strength) {
         var validation = {
             standard: /(?=^.{6,}$)(?=.*\d)((?=.*[a-z])|(?=.*[A-Z])).*$/g,
