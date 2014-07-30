@@ -37,6 +37,7 @@ window.translate['faxbox'] = {
 	custom_smtp_address: "Custom SMTP address",
 	custom_smtp_address_placeholder: "mail@domain.com",
 	cloud_connector_claim_url: "Link to printer",
+	cloud_connector_installer_url: "Windows driver",
 
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this fax box?",
 
