@@ -159,31 +159,31 @@ winkstart.module('voip', 'timeofday', {
                         ],
 
                         cycle: [
-                            { id: 'weekly', value: 'Weekly' },
+                            { id: 'weekly',  value: 'Weekly' },
                             { id: 'monthly', value:'Monthly' },
-                            { id: 'yearly', value:'Yearly' }
+                            { id: 'yearly',  value:'Yearly' }
                         ],
 
                         ordinals: [
-                            { id: 'first', value: 'First' },
+                            { id: 'first',  value: 'First' },
                             { id: 'second', value: 'Second' },
-                            { id: 'third', value: 'Third' },
+                            { id: 'third',  value: 'Third' },
                             { id: 'fourth', value: 'Fourth' },
-                            { id: 'fifth', value: 'Fifth' },
-                            { id: 'last', value: 'Last' },
-                            { id: 'every', value: 'Day' }
+                            { id: 'fifth',  value: 'Fifth' },
+                            { id: 'last',   value: 'Last' },
+                            { id: 'every',  value: 'Day' }
                         ],
 
                         months: [
-                            { id: 1, value: 'January' },
-                            { id: 2, value: 'February' },
-                            { id: 3, value: 'March' },
-                            { id: 4, value: 'April' },
-                            { id: 5, value: 'May' },
-                            { id: 6, value: 'June' },
-                            { id: 7, value: 'July' },
-                            { id: 8, value: 'August' },
-                            { id: 9, value: 'September' },
+                            { id: 1,  value: 'January' },
+                            { id: 2,  value: 'February' },
+                            { id: 3,  value: 'March' },
+                            { id: 4,  value: 'April' },
+                            { id: 5,  value: 'May' },
+                            { id: 6,  value: 'June' },
+                            { id: 7,  value: 'July' },
+                            { id: 8,  value: 'August' },
+                            { id: 9,  value: 'September' },
                             { id: 10, value: 'October' },
                             { id: 11, value: 'November' },
                             { id: 12, value: 'December' }
