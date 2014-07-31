@@ -187,7 +187,14 @@ winkstart.module('voip', 'timeofday', {
                             { id: 10, value: 'October' },
                             { id: 11, value: 'November' },
                             { id: 12, value: 'December' }
-                        ]
+                        ],
+
+                        status: [
+                            { id: 'normal', value: 'Normal operation' },
+                            { id: 'on',     value: 'Forced active' },
+                            { id: 'off',    value: 'Forced inactive' }
+                        ],
+
                     }
                 };
 
@@ -294,6 +301,8 @@ winkstart.module('voip', 'timeofday', {
                     $('#weekly_every', timeofday_html).show();
                     $('#days_checkboxes', timeofday_html).show();
                 }
+
+                $('#status', timeofday_html).val(data.data.enabled == undefined ? 'normal' : data.data.enabled ? 'on' : 'off');
             }
 
             $('.fake_checkbox', timeofday_html).click(function() {
@@ -476,6 +485,16 @@ winkstart.module('voip', 'timeofday', {
                 form_data.cycle == 'yearly' ? delete form_data.interval : delete form_data.month;
                 form_data.ordinal != 'every' ? delete form_data.days : delete form_data.wdays;
             }
+
+            if (form_data.status == 'on') {
+                form_data.enabled = true;
+            }
+            else if (form_data.status == 'off') {
+                form_data.enabled = false;
+            } else {
+                delete form_data.enabled;
+            }
+            delete form_data.status;
 
             delete form_data.time;
             delete form_data.weekday;

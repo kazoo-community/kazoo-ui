@@ -50,5 +50,7 @@ window.translate['timeofday'] = {
 	no_name: "(no name)",
 	add_time_of_day_label: "Add Time of Day",
 	all_other_times: "All other times",
-	name_regex: /^[a-zA-Z0-9\s_']+$/
+	name_regex: /^[a-zA-Z0-9\s_']+$/,
+	status: "Status",
+	status_data_content: "Select whether this rule should act as if it were always on or off"
 };
