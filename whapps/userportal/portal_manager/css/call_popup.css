@@ -1,0 +1,30 @@
+#call_popup {
+  width: 150px;
+  height: 100px;
+  position: fixed;
+  right: 50px;
+  bottom: -114px;
+  padding: 5px;
+  overflow: hidden;
+  background-color: #222;
+  border: 2px solid #fa6108;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  -webkit-transition: 1s ease-in-out;
+  -moz-transition:    1s ease-in-out;
+  -ms-transition:     1s ease-in-out;
+  transition:         1s ease-in-out;
+}
+
+.showing {
+  -webkit-transform: translate(0px,-100px);
+  -moz-transform:    translate(0px,-100px);
+  -ms-transform:     translate(0px,-100px);
+  transform:         translate(0px,-100px);
+}
+
+#call_popup label {
+  text-align: left;
+  font-weight: bold;
+  color: #fa6108;
+}

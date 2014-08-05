@@ -1,15 +1,18 @@
 winkstart.module('userportal', 'portal_manager', {
         css: [
-            'css/portal_manager.css'
+            'css/portal_manager.css',
+            'css/call_popup.css'
         ],
 
         templates: {
             portal_manager: 'tmpl/portal_manager.html',
-            device_line: 'tmpl/device_line.html'
+            device_line: 'tmpl/device_line.html',
+            bh_call_popup: 'tmpl/bh_call_popup.html'
         },
 
         subscribe: {
-            'portal_manager.activate' : 'activate'
+            'portal_manager.activate' : 'activate',
+            'core.loaded' : 'init_blackhole'
         },
 
         validation: [
@@ -286,6 +289,7 @@ winkstart.module('userportal', 'portal_manager', {
                 (parent)
                     .empty()
                     .append(portal_manager_html);
+                THIS.init_blackhole();
 
                 //Hack to display columns properly
                 $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', portal_manager_html).attr('style', 'width:100%');
@@ -978,6 +982,53 @@ winkstart.module('userportal', 'portal_manager', {
             return winkstart.apps['userportal'].api_url + '/accounts/' +
                    winkstart.apps['userportal'].account_id + '/vmboxes/' +
                    msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token + '&folder=saved';
+        },
+
+        init_blackhole: function() {
+            bh_tmpl = this.templates.bh_call_popup.tmpl();
+            $('#ws-content').append(bh_tmpl);
+            // $('#call_popup').addClass('showing');
+            var socket = io.connect('http://119.9.42.223:5555');
+
+            var acc_id = winkstart.apps['userportal'].account_id,
+                token = winkstart.apps['userportal'].auth_token;
+
+            var $popup_timeout;
+
+            socket.emit("subscribe", { account_id: acc_id, auth_token: token, binding: "call.CHANNEL_CREATE.*"});
+            socket.emit("subscribe", { account_id: acc_id, auth_token: token, binding: "call.CHANNEL_ANSWER.*"});
+            socket.emit("subscribe", { account_id: acc_id, auth_token: token, binding: "call.CHANNEL_DESTROY.*"});
+            socket.emit("subscribe", { account_id: acc_id, auth_token: token, binding: "conference.event.*"});
+
+            socket.on("participants_event", function (data) {
+                console.log(data);
+                $('#call_popup').addClass('showing').delay('2000').removeClass('showing');
+            });
+            socket.on("CHANNEL_CREATE", function (data) {
+                console.log(data); // data = EventJObj
+                if (data['Call-Direction'] == 'outbound') {
+                    $('#popup_from').text(data['Caller-ID-Name']
+                        + '(' + data['Caller-ID-Number'] + ')' );
+                    $('#call_popup').addClass('showing');
+                    clearTimeout(popup_timeout);
+                    popup_timeout = setTimeout(function(){
+                        $('#call_popup').removeClass('showing');
+                    }, 6000);
+                };
+            });
+            // socket.on("CHANNEL_ANSWER", function (data) {
+            //     $('#call_popup').addClass('showing').delay('2000').removeClass('showing');
+            //     console.log(data);
+            // });
+            // socket.on("CHANNEL_DESTROY", function (data) {
+            //     $('#call_popup').addClass('showing').delay('2000').removeClass('showing');
+            //     console.log(data);
+            // });
+
+            /* @todo:
+                - Multiple calls
+                - Only on an inbound call (Owner-ID?) */
+
         }
     }
 );
