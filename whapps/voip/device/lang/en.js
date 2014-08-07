@@ -94,7 +94,7 @@ window.translate['device'] = {
 	t_38: "T.38",
 	t_38_data_content: "When this option is enabled the media servers will attempt to use T.38 between this device/resource and the server.",
 	ignore_completed_elsewhere: "Ignore Complete Elsewhere",
-	ignore_completed_elsewhere_data_content: "When checked supporting phones will not show a call missed if it was part of a ring group answered elsewhere.",
+	ignore_completed_elsewhere_data_content: "When checked supporting phones will show a call missed if it was part of a ring group answered elsewhere.",
 	edit_voip_phone: "Edit VoIP Phone",
 	add_a_voip_phone: "Add a VoIP Phone",
 	sip: "SIP",
