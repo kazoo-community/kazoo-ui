@@ -496,6 +496,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 endpoint_html;
 
             dataTemplate.options.inbound_format = dataTemplate.options.inbound_format == 'e.164' ? 'e164' : dataTemplate.options.inbound_format;
+            
             endpoint_html = THIS.templates.endpoint.tmpl(dataTemplate);
 
             $.each($('.pbxs .pbx', endpoint_html), function() {
@@ -525,6 +526,12 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                 if ( form_data.options.inbound_format == 'e164' && endpoint_data.options.inbound_format == 'e.164' ) {
                     form_data.options.inbound_format = 'e.164';
+                }
+
+                if(form_data.auth.auth_method.toLowerCase() === 'ip') {
+                    form_data.options.ip = form_data.auth.ip;
+                } else {
+                    delete form_data.options.ip;
                 }
 
                 THIS.get_account(function(global_data) {
@@ -562,6 +569,18 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     $('.selected_pbx_block', endpoint_html).slideDown();
                     $('input[name="auth.auth_user"]', endpoint_html).focus();
                 }
+            });
+
+            if('auth' in dataTemplate && 'auth_method' in dataTemplate.auth && dataTemplate.auth.auth_method.toLowerCase() === 'ip') {
+                endpoint_html.find('#auth_username_inputs').hide();
+            } else {
+                endpoint_html.find('#auth_ip_inputs').hide();
+            }
+            endpoint_html.find('input[name="auth.auth_method"]').change(function() {
+                var type = $(this).data('type');
+                endpoint_html.find('.auth-inputs').slideUp(function() {
+                    endpoint_html.find('#auth_'+type+'_inputs').slideDown();
+                });
             });
 
             (target)

@@ -68,3 +68,9 @@
 .inline_popup.assign_number .buttons-right  {
     margin-bottom: 15px;
 }
+
+#endpoint .input.auth-type label {
+    width: auto;
+    text-align: left;
+    margin-right: 10px;
+}
