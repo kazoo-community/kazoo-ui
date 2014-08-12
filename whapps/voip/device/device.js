@@ -901,6 +901,10 @@ winkstart.module('voip', 'device', {
                 delete data.call_restriction;
             }
 
+            if(data.hasOwnProperty('presence_id') && data.presence_id === '') {
+                delete data.presence_id;
+            }
+
             return data;
         },
 

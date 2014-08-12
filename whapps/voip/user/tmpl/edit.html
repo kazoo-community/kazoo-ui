@@ -165,6 +165,12 @@
 	            </div>
 
 	            <div id="caller_id">
+	            	<div class="clearfix">
+						<label for="name">${_t('presence_id')}</label>
+						<div class="input">
+							<input class="span4" id="presence_id" name="presence_id" type="text" placeholder="${_t('presence_id_placeholder')}" value="${data.presence_id}" rel="popover" data-content="${_t('presence_id_help')}"/>
+						</div>
+					</div>
 					<h3>${_t('in_house_calls')}</h3>
 					<div class="clearfix">
 						<label for="advanced_caller_id_name_internal">${_t('caller_id_name')}</label>
