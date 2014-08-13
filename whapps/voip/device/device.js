@@ -488,14 +488,16 @@ winkstart.module('voip', 'device', {
                     render_data = $.extend(true, defaults, results.get_device);
                 }
                 
-                // If the codecs property is defined, override the defaults with it. Indeed, when an empty array is set as the
-                // list of codecs, it gets overwritten by the extend function otherwise.
-                if(results.get_device.data.media.audio.hasOwnProperty('codecs')) {
-                    render_data.data.media.audio.codecs = results.get_device.data.media.audio.codecs;
-                }
+                if(results.get_device.data.media.hasOwnProperty('audio')) {
+                    // If the codecs property is defined, override the defaults with it. Indeed, when an empty array is set as the
+                    // list of codecs, it gets overwritten by the extend function otherwise.
+                    if(results.get_device.data.media.audio.hasOwnProperty('codecs')) {
+                        render_data.data.media.audio.codecs = results.get_device.data.media.audio.codecs;
+                    }
 
-                if(results.get_device.data.media.video.hasOwnProperty('codecs')) {
-                    render_data.data.media.video.codecs = results.get_device.data.media.video.codecs;
+                    if(results.get_device.data.media.video.hasOwnProperty('codecs')) {
+                        render_data.data.media.video.codecs = results.get_device.data.media.video.codecs;
+                    }
                 }
 
                 THIS.render_device(render_data, target, callbacks);
