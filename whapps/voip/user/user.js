@@ -834,6 +834,10 @@ winkstart.module('voip', 'user', {
                 delete data.call_forward.number;
             }
 
+            if(data.hasOwnProperty('presence_id') && data.presence_id === '') {
+                delete data.presence_id;
+            }
+
             return data;
         },
 

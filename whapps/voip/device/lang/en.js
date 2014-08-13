@@ -69,6 +69,12 @@ window.translate['device'] = {
 	sip_settings: "SIP Settings",
 	audio_settings: "Audio Settings",
 	video_settings: "Video Settings",
+
+	presence_id_title: "",
+	presence_id: "Presence ID",
+	presence_id_help: "",
+	presence_id_placeholder: "",
+
 	device_nickname: "Device Nickname",
 	assign_to: "Assign To",
 	in_house_calls: "In-House Calls",
