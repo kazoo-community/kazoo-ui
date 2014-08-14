@@ -1,3 +1,32 @@
+
+/* Admin Mode */
+#admin-mode .container {
+	margin-top: 10px;
+	height: auto;
+	overflow: hidden;
+}
+	
+#admin-mode .container .right {
+	float: right;
+	padding: 10px;
+	text-align: right;
+	width: 120px;
+}
+
+#admin-mode .container .left {
+	width: auto;
+	padding: 10px;
+	overflow: hidden;
+}
+
+#admin-mode .admin-mode-on {
+	background: #448E45;
+}
+
+#admin-mode .admin-mode-off {
+	background: #C96936;
+}
+
 #prompt-form #basic #tab_prompts  {
 	border: 2px solid #666666;
 	border-radius: 15px 15px 0px 0px;

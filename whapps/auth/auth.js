@@ -624,6 +624,9 @@ winkstart.module('auth', 'auth',
 
             THIS.get_account(
                 function(_data) {
+                    winkstart.apps.auth.superduper_admin = _data.data.superduper_admin || false;
+                    
+                    console.log(winkstart.apps.auth)
                     winkstart.getJSON('auth.get_user', rest_data,
                         function (json, xhr) {
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;

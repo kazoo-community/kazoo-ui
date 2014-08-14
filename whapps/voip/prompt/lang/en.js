@@ -21,5 +21,9 @@ window.translate['prompt'] = {
 	language: "Language",
 	full_name: "Full Name",
 	actions: "Actions",
-	save: "Save"
+	save: "Save",
+	turn_on: "Turn On",
+	turn_off: "Turn Off",
+	admin_mode_on_help: "Admin mode: ON! You're a superduper admin, which means you have access to this awesome admin mode. It lets you manage the prompts for all your subaccounts at the same time. If you want to create prompts, just for this account, click on the button to turn off the admin mode! :)",
+	admin_mode_off_help: "Admin mode: OFF! You are currently editing this account's prompts only. If you'd like to manage prompts for all your subaccounts, turn on the admin mode by click on the button on the right! :)"
 };

@@ -22,11 +22,6 @@ winkstart.module('voip', 'prompt', {
 		],
 
 		resources: {
-			'prompt.listValues': {
-				url: '{api_url}/media/prompts',
-				contentType: 'application/json',
-				verb: 'GET'
-			},
 			'prompt.list': {
 				url: '{api_url}/accounts/{account_id}/media/prompts',
 				contentType: 'application/json',
@@ -51,7 +46,32 @@ winkstart.module('voip', 'prompt', {
 				url: '{api_url}/accounts/{account_id}/media/{prompt_id}/raw',
 				contentType: 'application/x-base64',
 				verb: 'POST'
-			}
+			},
+			'prompt.listGlobal': {
+				url: '{api_url}/media/prompts',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
+			'prompt.getGlobal': {
+				url: '{api_url}/media/prompts/{prompt_id}',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
+			'prompt.createGlobal': {
+				url: '{api_url}/media',
+				contentType: 'application/json',
+				verb: 'PUT'
+			},
+			'prompt.uploadGlobal': {
+				url: '{api_url}/media/{prompt_id}/raw',
+				contentType: 'application/x-base64',
+				verb: 'POST'
+			},
+			'prompt.deleteGlobal': {
+				url: '{api_url}/media/{prompt_id}',
+				contentType: 'application/json',
+				verb: 'DELETE'
+			},
 		}
 	},
 
@@ -71,19 +91,7 @@ winkstart.module('voip', 'prompt', {
 	},
 
 	{
-		save_prompt: function(data, callback) {
-			var THIS = this;
-
-			winkstart.request(true, 'prompt.create', {
-					account_id: winkstart.apps['voip'].account_id,
-					api_url: winkstart.apps['voip'].api_url,
-					data: data
-				},
-				function(_data, status) {
-					callback && callback(_data);
-				}
-			);
-		},
+		adminMode: false,
 
 		render_create_prompt: function(){
 			var THIS = this,
@@ -247,7 +255,7 @@ winkstart.module('voip', 'prompt', {
 			});
 		},
 
-		refresh_view: function(promptId) {
+		refresh_view: function(promptId, callback) {
 			var THIS = this,
 				canEdit = false,
 				target = $('#prompt-view');
@@ -268,23 +276,19 @@ winkstart.module('voip', 'prompt', {
 				else {
 					target.empty();
 				}
+
+				callback && callback();
 			});
 		},
 
 		getDataEditPrompt: function(promptId, callback) {
 			var THIS = this;
 
-			winkstart.request('prompt.get', {
-					account_id: winkstart.apps['voip'].account_id,
-					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
-				},
-				function(_data, status) {
-					var prompts = THIS.formatListPrompts(_data.data);
+			THIS.get_prompt(promptId, function(_data) {
+				var prompts = THIS.formatListPrompts(_data.data);
 
-					callback && callback(prompts);
-				}
-			);
+				callback && callback(prompts);
+			});
 		},
 
 		formatListPrompts: function(data) {
@@ -306,40 +310,6 @@ winkstart.module('voip', 'prompt', {
 			});
 
 			return prompts;
-		},
-
-		delete_prompt: function(promptId, callback) {
-			var THIS = this;
-
-			winkstart.request(true, 'prompt.delete', {
-					account_id: winkstart.apps['voip'].account_id,
-					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
-				},
-				function(_data, status) {
-					callback && callback(_data);
-				}
-			);
-		},
-
-		upload_file: function(data, prompt_id, success, error) {
-			winkstart.request('prompt.upload', {
-					account_id: winkstart.apps.voip.account_id,
-					api_url: winkstart.apps.voip.api_url,
-					prompt_id: prompt_id,
-					data: data
-				},
-				function(_data, status) {
-					if(typeof success === 'function') {
-						success();
-					}
-				},
-				winkstart.error_message.process_error(function(_data, status) {
-					if(typeof error === 'function') {
-						error();
-					}
-				})
-			);
 		},
 
 		clean_form_data: function(form_data) {
@@ -375,13 +345,8 @@ winkstart.module('voip', 'prompt', {
 
 		render_list: function(callback){
 			var THIS = this,
-				parent = $('#prompt-content');
-
-			winkstart.request(true, 'prompt.list', {
-					account_id: winkstart.apps['voip'].account_id,
-					api_url: winkstart.apps['voip'].api_url
-				},
-				function(dataRequest, status) {
+				parent = $('#prompt-content'),
+				globalCallback = function(dataRequest, paramCallback) {
 					var data = dataRequest.hasOwnProperty('data') ? dataRequest.data : [],
 						map_crossbar_data = function(data) {
 							var new_list = [];
@@ -415,33 +380,72 @@ winkstart.module('voip', 'prompt', {
 							notifyParent: parent
 						});
 
-					callback && callback(data);
-				}
-			);
+					paramCallback && paramCallback(data);
+				};
+
+			if(THIS.adminMode) {
+				THIS.getGlobalPrompts(function(dataRequest) {
+					globalCallback && globalCallback(dataRequest, callback)
+				});
+				
+			}
+			else {
+				THIS.getAccountPrompts(function(dataRequest) {
+					globalCallback && globalCallback(dataRequest, callback)
+				});
+			}
 		},
 
 		activate: function(parent) {
 			var THIS = this,
-				prompt_html = THIS.templates.prompt.tmpl();
+				dataTemplate = {
+					isAdmin: winkstart.apps.auth.superduper_admin,
+					_t: function(param) {
+						return window.translate['prompt'][param]
+					}
+				},
+				prompt_html = THIS.templates.prompt.tmpl(dataTemplate);
+
+			if(THIS.adminMode) {
+				prompt_html.find('.admin-mode-off').hide();
+			}
+			else {
+				prompt_html.find('.admin-mode-on').hide();
+			}
+
+			prompt_html.find('#enable_admin_mode').click(function() {
+				THIS.adminMode = true;
+
+				THIS.refresh_view(undefined, function() {
+					prompt_html.find('.admin-mode-off').hide();
+					prompt_html.find('.admin-mode-on').show();
+				});
+			});
+
+			prompt_html.find('#disable_admin_mode').click(function() {
+				THIS.adminMode = false;
+
+				THIS.refresh_view(undefined, function() {
+					prompt_html.find('.admin-mode-off').show();
+					prompt_html.find('.admin-mode-on').hide();
+				});
+			});
 
 			(parent || $('#ws-content'))
 				.empty()
 				.append(prompt_html);
 
-			winkstart.request('prompt.listValues', {
-					api_url: winkstart.apps['voip'].api_url
-				},
-				function(data, status) {
-					THIS.arrayPrompts = [];
 
-					$.each(data.data[0], function(k,v) {
-						THIS.arrayPrompts.push(k);
-					});
+			// Initialize global list of prompts available
+			THIS.getGlobalPrompts(function(data) {
+				THIS.arrayPrompts = [];
 
-					THIS.render_list();
-				}
-			);
-			
+				$.each(data.data[0], function(k,v) {
+					THIS.arrayPrompts.push(k);
+				});
+
+				THIS.render_list();
+			});
 		},
 
 		get_list_prompts: function(callback) {
@@ -454,11 +458,7 @@ winkstart.module('voip', 'prompt', {
 			var THIS = this,
 				allPrompts = THIS.get_list_prompts();
 
-			winkstart.request('prompt.list', {
-					account_id: winkstart.apps['voip'].account_id,
-					api_url: winkstart.apps['voip'].api_url
-				},
-				function(data) {
+			THIS.list_prompts(function(data) {
 					var availablePrompts = [];
 
 					$.each(allPrompts, function(k, v) {
@@ -470,6 +470,119 @@ winkstart.module('voip', 'prompt', {
 					callback && callback(availablePrompts);
 				}
 			);
+		},
+
+		getGlobalPrompts: function(callback) {
+			var THIS = this;
+
+			winkstart.request('prompt.listGlobal', {
+					api_url: winkstart.apps['voip'].api_url
+				},
+				function(data, status) {
+					callback && callback(data);
+				}
+			);
+		},
+
+		getAccountPrompts: function(callback) {
+			var THIS = this;
+
+			winkstart.request('prompt.list', {
+					account_id: winkstart.apps['voip'].account_id,
+					api_url: winkstart.apps['voip'].api_url
+				},
+				function(data) {
+					callback && callback(data);
+				}
+			);
+		},
+
+		list_prompts: function(callback) {
+			var THIS = this;
+
+			if(!THIS.adminMode) {
+				THIS.getAccountPrompts(function(data) {
+					callback && callback(data);
+				});
+			}
+			else {
+				THIS.getGlobalPrompts(function(data) {
+					callback && callback(data);
+				});
+			}
+		},
+
+		get_prompt: function(promptId, callback) {
+			var THIS = this,
+				requestString = 'prompt.getGlobal',
+				paramsRequest = {
+					api_url: winkstart.apps['voip'].api_url,
+					prompt_id: promptId
+				};
+
+			if(!THIS.adminMode) {
+				requestString = 'prompt.get';
+				paramsRequest.account_id = winkstart.apps['voip'].account_id;
+			}
+
+			winkstart.request(requestString, paramsRequest,	function(_data, status) {
+				callback && callback(_data);
+			});
+		},
+
+		save_prompt: function(data, callback) {
+			var THIS = this,
+				requestString = 'prompt.createGlobal',
+				paramsRequest = {
+					api_url: winkstart.apps['voip'].api_url,
+					data: data
+				};
+
+			if(!THIS.adminMode) {
+				requestString = 'prompt.create';
+				paramsRequest.account_id = winkstart.apps['voip'].account_id;
+			}
+
+			winkstart.request(requestString, paramsRequest,	function(_data, status) {
+				callback && callback(_data);
+			});
+		},
+
+		upload_file: function(data, promptId, callback) {
+			var THIS = this,
+				requestString = 'prompt.uploadGlobal',
+				paramsRequest = {
+					api_url: winkstart.apps['voip'].api_url,
+					prompt_id: promptId,
+					data: data
+				};
+
+			if(!THIS.adminMode) {
+				requestString = 'prompt.upload';
+				paramsRequest.account_id = winkstart.apps['voip'].account_id;
+			}
+
+			winkstart.request(requestString, paramsRequest, function(_data, status) {
+				callback && callback();
+			});
+		},
+
+		delete_prompt: function(promptId, callback) {
+			var THIS = this,
+				requestString = 'prompt.deleteGlobal',
+				paramsRequest = {
+					api_url: winkstart.apps['voip'].api_url,
+					prompt_id: promptId
+				};
+
+			if(!THIS.adminMode) {
+				requestString = 'prompt.delete';
+				paramsRequest.account_id = winkstart.apps['voip'].account_id;
+			}
+
+			winkstart.request(requestString, paramsRequest, function(_data, status) {
+				callback && callback(_data);
+			});
 		}
 	}
 );
