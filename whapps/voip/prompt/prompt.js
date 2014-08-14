@@ -64,7 +64,7 @@ winkstart.module('voip', 'prompt', {
 			whapp: 'voip',
 			module: THIS.__module,
 			label: _t('prompt', 'prompt_label'),
-			icon: 'music1',
+			icon: 'earth',
 			weight: '45',
 			category: _t('config', 'advanced_menu_cat')
 		});
@@ -253,15 +253,16 @@ winkstart.module('voip', 'prompt', {
 				target = $('#prompt-view');
 
 			THIS.render_list(function(data) {
-				$.each(data[0], function(k, v) {
-					if(promptId === k) {
-						canEdit = true;
-						return false;
-					}
-				});
+				if(data.length > 0) {
+					$.each(data[0], function(k, v) {
+						if(promptId === k) {
+							canEdit = true;
+							return false;
+						}
+					});
+				}
 
 				if(canEdit) {
-
 					THIS.render_edit_prompt({ id: promptId });
 				}
 				else {
@@ -380,25 +381,26 @@ winkstart.module('voip', 'prompt', {
 					account_id: winkstart.apps['voip'].account_id,
 					api_url: winkstart.apps['voip'].api_url
 				},
-				function(data, status) {
-					var map_crossbar_data = function(data) {
-						var new_list = [];
+				function(dataRequest, status) {
+					var data = dataRequest.hasOwnProperty('data') ? dataRequest.data : [],
+						map_crossbar_data = function(data) {
+							var new_list = [];
 
-						if(data.length > 0) {
-							$.each(data[0], function(key, val) {
-								new_list.push({
-									id: key,
-									title: key + ' (' + val + ')'
+							if(data.length > 0) {
+								$.each(data[0], function(key, val) {
+									new_list.push({
+										id: key,
+										title: key + ' (' + val + ')'
+									});
 								});
-							});
-						}
 
-						new_list.sort(function(a, b) {
-							return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-						});
-						console.log(new_list);
-						return new_list;
-					};
+								new_list.sort(function(a, b) {
+									return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+								});
+							}
+
+							return new_list;
+						};
 
 					$('#prompt-listpanel', parent)
 						.empty()
@@ -406,14 +408,14 @@ winkstart.module('voip', 'prompt', {
 							label: _t('prompt', 'prompt_label'),
 							identifier: 'prompt-listview',
 							new_entity_label: _t('prompt', 'add_prompt_label'),
-							data: map_crossbar_data(data.data),
+							data: map_crossbar_data(data),
 							publisher: winkstart.publish,
 							notifyMethod: 'prompt.edit',
 							notifyCreateMethod: 'prompt.create',
 							notifyParent: parent
 						});
 
-					callback && callback(data.data);
+					callback && callback(data);
 				}
 			);
 		},
