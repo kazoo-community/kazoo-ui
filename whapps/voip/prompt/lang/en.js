@@ -14,5 +14,12 @@ window.translate['prompt'] = {
 	the_file_you_want_to_apply: "The file you want to save is still being processed by the page. Please wait a couple of seconds and try again.",
 	no_name: "(no name)",
 	add_prompt_label: "Add prompt",
+	save: "Save",
+	add_language: "Add this language",
+	add_new_language: "Add new language",
+	edit_prompt: "List of languages supported for ",
+	language: "Language",
+	full_name: "Full Name",
+	actions: "Actions",
 	save: "Save"
 };

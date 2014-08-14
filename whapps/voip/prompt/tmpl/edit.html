@@ -1,0 +1,42 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			<h1>${_t('edit_prompt')} ${data.prompt_id}</h1>
+		</div>
+	</div>
+	<div class="row">
+		 <form id="prompt-form" action="" enctype="multipart/form-data" method="post" data-promptid="${data.prompt_id}">
+			<div class="pill-content">
+				<div class="active basic_view clearfix" id="basic">
+					<div class="title">
+						<h2>${data.prompt_id}</h2>
+					</div>
+
+					<div id="tab_prompts">
+						<div class="row title">
+							<div class="column first">${_t('language')}&nbsp;&nbsp;<span class="icon medium earth"/></div>
+							<div class="column second">${_t('full_name')}</div>
+							<div class="column third">${_t('actions')}</div>
+						</div>
+						<div class="rows">
+							{{each(k, curr) data.prompts}}
+								<div class="row" data-id="${curr.id}">
+									<div class="column first">${curr.language}</div>
+									<div class="column second">${curr.id}</div>
+									<div class="column third">
+										<a href="javascript:void(0)" data-id="${curr.id}" class="delete-prompt icon medium x"></a>
+										<a href="${curr.link}" class="download-prompt icon medium download"></a>
+									</div>
+								</div>
+							{{/each}}
+						</div>
+					</div>
+
+					<div class="add-language-button">
+						<button id="add_language" class="btn primary">${_t('add_new_language')}</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
