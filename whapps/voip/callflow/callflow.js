@@ -398,6 +398,9 @@ winkstart.module('voip', 'callflow', {
                     },
                     function(json) {
                         THIS._resetFlow();
+
+                        THIS.dataCallflow = json.data;
+
                         THIS.flow.id = json.data.id;
                         THIS.flow.name = json.data.name;
                         THIS.flow.contact_list = { exclude: 'contact_list' in json.data ? json.data.contact_list.exclude || false : false };
@@ -1240,6 +1243,10 @@ winkstart.module('voip', 'callflow', {
                 if('contact_list' in THIS.flow) {
                     data_request.contact_list = { exclude: THIS.flow.contact_list.exclude || false };
                 }
+
+                // Change dictated by the new field added by monster-ui. THis way we can potentially update callflows in Kazoo UI without breaking monster.
+                data_request = $.extend(true, {}, THIS.dataCallflow, data_request);
+                delete data_request.metadata;
 
                 if(THIS.flow.id) {
                     winkstart.postJSON('callflow.update', {
@@ -2489,7 +2496,6 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        console.log(node, caption_map);
                         return node.getMetadata('language') || '';
                     },
                     edit: function(node, callback) {
@@ -2508,7 +2514,6 @@ winkstart.module('voip', 'callflow', {
                             var language = $('#language_id_input', popup_html).val();
                             node.setMetadata('language', language);
                             node.caption = language;
-                            console.log(node);
 
                             popup.dialog('close');
                         });
