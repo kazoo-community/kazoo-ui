@@ -1,0 +1,22 @@
+window.translate['report'] = {
+	generate_a_report_for: "Genereer een rapport voor:",
+	children_sub_accounts_only: "Alleen sub accounts of sub-accounts",
+	this_account_and_his_direct: "Huidig account en directe subaccounts",
+	this_account_and_all_his_sub_accounts: "Dit account en al zijn subaccounts",
+	generate: "Genereer",
+	total_Aantal_of_softphones: "Totaal Aantal Softphones:",
+	total_Aantal_of_sip_devices: "Total Aantal SIP Devices:",
+	total_Aantal_of_dids: "Total Aantal DIDs:",
+	total_Aantal_of_inbound_trunks: "Total Aantal Inbound Trunks:",
+	total_Aantal_of_outbound_trunks: "Total Aantal Outbound Trunks:",
+	total_Aantal_of_credits: "Beschikbare Balans:",
+	report_label: "Rapportage",
+	report_title: "Rapportage",
+	account_stitle: "Account",
+	sip_devices_stitle: "# SIP Devices",
+	softphones_stitle: "# Softphones",
+	dids_stitle: "# DIDs",
+	inbound_trunks_stitle: "# Inbound Trunks",
+	outbound_trunks_stitle: "# Outbound Trunks",
+	available_credits_stitle: "Huidige balans"
+};
