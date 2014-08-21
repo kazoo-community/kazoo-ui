@@ -1,0 +1,23 @@
+window.translate['personal-info'] = {
+	Verander_uw_email: "Wijzig uw emailadres",
+	Verander_uw_email_data_content: "",
+	save: "Opslaan",
+	Verander_uw_wachtwoord: "Verander uw wachtwoord",
+	Verander_uw_wachtwoord_data_content: "",
+	Bevestig_uw_wachtwoord: "Bevestig uw wachtwoord",
+	Bevestig_uw_wachtwoord_data_content: "",
+	advanced_view: "Geavanceerd View",
+	advanced_view_data_content: "Klik hier om de Geavanceerd View standaard te maken.",
+	primary_app: "Standaard App",
+	primary_app_data_content: "Kies de app die u wilt zien na inloggen.",
+	none: "Geen",
+	close: "Sluiten",
+	email_placeholder: "Email",
+	my_account_label: "Mijn Account",
+	email_address_updated: "Email address bijgewerkt!",
+	wachtwoord_updated: "wachtwoord bijgewerkt!",
+	wachtwoords_do_not_match: "wachtwoorden komen niet overeen, probeer opnieuw.",
+	my_account_title: "Mijn Account",
+	is_now_uw_primary_app: " is nu uw standaard app",
+	you_dont_have_a_primary_app: "U heeft geen standaard app meer"
+};
