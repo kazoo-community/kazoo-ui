@@ -7,7 +7,7 @@ window.translate['accounts'] = {
 	notifications_templates: "Notificatie Templates",
 	options: "Opties",
 	limits: "Grenzen",
-	available_apps: "Beschkbare Apps",
+	available_apps: "Beschikbare Apps",
 	white_labeling: "White labeling",
 	restrictions: "Beperkingen",
 	name: "Naam",
