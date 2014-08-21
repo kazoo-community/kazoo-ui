@@ -1072,6 +1072,9 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				function(_data, status) {
 					if(_data.data.length > 0) {
+						_data.data.sort(function(a, b) {
+							return a.name < b.name ? -1 : 1;
+						});
 						switch_html = winkstart.dialog(THIS.templates.switch_tmpl.tmpl({ 'accounts': _data.data }), {
 							title: 'Account Masquerading'
 						});
