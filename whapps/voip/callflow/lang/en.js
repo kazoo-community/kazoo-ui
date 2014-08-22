@@ -133,5 +133,7 @@ window.translate['callflow'] = {
 	please_enter_a_valide_sip_code: "Please enter a valide SIP code.",
 	resource_name: "Resource",
 	this_callflow_is_outdated: "This callflow is outdated, please resave this callflow before continuing.",
-	hot_desking_name: "Hot Desking"
+	hot_desking_name: "Hot Desking",
+	language: "Language",
+	language_tip: "This callflow action lets you change the language of the prompts used in this callflow!"
 };

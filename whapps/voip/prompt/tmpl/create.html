@@ -1,0 +1,31 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			<h1>${_t('select_prompt')}</h1>
+		</div>
+	</div>
+	<div class="row">
+		 <form id="prompt-form" action="" enctype="multipart/form-data" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix prompts">
+						<label for="prompt_id">${_t('prompt_id')}</label>
+						<div class="input">
+							<select class="medium" name="prompt_id" id="prompt_id">
+								{{each(k, curr) field_data.prompts}}
+									<option>${curr}</option>
+								{{/each}}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="buttons-right">
+<!-- 			{{if data.id}}
+				<button class="btn danger prompt-delete">${_t('delete')}</button>
+			{{/if}} -->
+			<button class="btn success prompt-save">${_t('save')}</button>
+		</div>
+	</div>
+</div>

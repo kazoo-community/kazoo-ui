@@ -1,0 +1,32 @@
+<div> 
+	<div id="prompt-content" class="container-fluid page">
+		<div id="prompt-listpanel"  class="sidebar list_panel"></div>
+		<div class="content">
+			{{if isAdmin}}
+				<div id="admin-mode">
+					<div class="container admin-mode-on">
+						<div class="right">
+							<button id="disable_admin_mode" class="btn primary">${_t('turn_off')}</button>
+						</div>
+						<div class="left">
+							${_t('admin_mode_on_help')}
+						</div>
+					</div>
+
+					<div class="container admin-mode-off">
+						<div class="right">
+							<button id="enable_admin_mode" class="btn primary">${_t('turn_on')}</button>
+						</div>
+						<div class="left">
+							${_t('admin_mode_off_help')}
+						</div>
+					</div>
+				</div>
+			{{/if}}
+			<div id="prompt-view"  class="main_content">
+
+				
+			</div>
+		</div>
+	</div>
+</div>

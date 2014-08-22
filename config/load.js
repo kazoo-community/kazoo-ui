@@ -57,6 +57,7 @@ var langUrls = [
 	'whapps/voip/featurecode',
 	'whapps/voip/groups',
 	'whapps/voip/media',
+	'whapps/voip/prompt',
 	'whapps/voip/menu',
 	'whapps/voip/queue',
 	'whapps/voip/registration',

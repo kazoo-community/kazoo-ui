@@ -32,7 +32,8 @@ winkstart.module('voip', 'callflow', {
             edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
             response_callflow: 'tmpl/response_callflow.html',
-            group_pickup: 'tmpl/group_pickup.html'
+            group_pickup: 'tmpl/group_pickup.html',
+            language_callflow: 'tmpl/language_callflow.html'
         },
 
         elements: {
@@ -397,6 +398,9 @@ winkstart.module('voip', 'callflow', {
                     },
                     function(json) {
                         THIS._resetFlow();
+
+                        THIS.dataCallflow = json.data;
+
                         THIS.flow.id = json.data.id;
                         THIS.flow.name = json.data.name;
                         THIS.flow.contact_list = { exclude: 'contact_list' in json.data ? json.data.contact_list.exclude || false : false };
@@ -1239,6 +1243,10 @@ winkstart.module('voip', 'callflow', {
                 if('contact_list' in THIS.flow) {
                     data_request.contact_list = { exclude: THIS.flow.contact_list.exclude || false };
                 }
+
+                // Change dictated by the new field added by monster-ui. THis way we can potentially update callflows in Kazoo UI without breaking monster.
+                data_request = $.extend(true, {}, THIS.dataCallflow, data_request);
+                delete data_request.metadata;
 
                 if(THIS.flow.id) {
                     winkstart.postJSON('callflow.update', {
@@ -2464,6 +2472,54 @@ winkstart.module('voip', 'callflow', {
 
                         popup = winkstart.dialog(popup_html, {
                             title: _t('callflow', 'manual_presence_title'),
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+                    }
+                },
+                'language[]': {
+                    name: _t('callflow', 'language'),
+                    icon: 'earth',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'language',
+                    tip: _t('callflow', 'language_tip'),
+                    data: {
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('language') || '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.language_callflow.tmpl({
+                            _t: function(param){
+                                return window.translate['callflow'][param];
+                            },
+                            data_language: {
+                                'language': node.getMetadata('language') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var language = $('#language_id_input', popup_html).val();
+                            node.setMetadata('language', language);
+                            node.caption = language;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'language_title'),
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                      callback();

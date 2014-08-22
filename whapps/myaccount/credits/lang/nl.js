@@ -1,0 +1,22 @@
+window.translate['credits'] = {
+	per_minute_calling: "Betaal per minuut",
+	flat_rate_calling: "Flat-Rate",
+	pay_per_minute_allows_you: "Betaal per minuut stelt u in staat om te betalen voor wat u,  gebruikt. Voeg geld aan uw account toe om te beginnen en betaal dan voor wat u,  gebruikt.",
+	your_current_balance: "Uw huidige balans:",
+	i_would_like_to_add: "Ik wil graag",
+	to_my_current_balance: "toevoegen aan mijn huidige balans",
+	purchase: "Voeg toe",
+	flat_rate_calling_allows_you: "Flat-Rate stelt u in staat een maandelijks vast bedrag te betalen voor gesprekken naar vast en mobiel in Nederland, internationale gesprekken worden wel gewoon berekend.",
+	flat_rate_outbound_calling: "Flat-Rate Outbound Gesprekken",
+	allow_up_to: "Sta zoveel gesprekken toe:",
+	simultaneous_outbound_calls: "naar vast en mobiel in Nederland",
+	month_per_line: "per maand per lijn",
+	flat_rate_inbound_calling: "Flat-Rate Inbound gesprekken",
+	simultaneous_inbound_calls_at: "gelijktijdige inbound gesprekken voor",
+	if_you_dont_want_flat_rate: "Inien u geen flat-rate wenst kiest u automatisch voor Betalen per minuut",
+	save: "Opslaan",
+	add_credit: "(voeg credit toe)",
+	your_on_file_credit_card_will_immediately: "Uw bij ons bekende Credit Card wordt,  gebruikt voor wat u kiest. Indien u een abonement heeft dan wordt dit pro-rate verwerkt.<br/><br/>Weet u zeker dat u door wilt gaan?",
+	your_changes_have_been_saved: "Uw veranderingen zijn opgeslagen!",
+	manage_your_credits_and_limits: "Beheer uw balans en limieten."	
+};
