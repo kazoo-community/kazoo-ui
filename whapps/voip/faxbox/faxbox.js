@@ -105,20 +105,22 @@ winkstart.module('voip', 'faxbox', {
 		},
 
 		render_faxbox: function(data, target, callbacks) {
-			data._t = function(param){
-				return window.translate['faxbox'][param];
-			};
 			var THIS = this,
-				faxbox_html = THIS.templates.edit.tmpl({data: THIS.normalized_data(data.data), _t: data._t});
+				faxbox_html = THIS.templates.edit.tmpl({
+					data: THIS.normalized_data(data),
+					_t: function(param){
+						return window.translate['faxbox'][param];
+					}
+				});
 
-			winkstart.timezone.populate_dropdown($('#fax_timezone', faxbox_html), data.data.timezone);
+			winkstart.timezone.populate_dropdown($('#fax_timezone', faxbox_html), data.timezone);
 
 			winkstart.tabs($('.view-buttons', faxbox_html), $('.tabs', faxbox_html));
 
 			$('.faxbox-save', faxbox_html).click(function(ev) {
 				ev.preventDefault();
 
-				var form_data = form2object('faxbox-form');
+				var form_data = form2object('faxbox-form', '.', true);
 
 				THIS.save_faxbox(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
 			});
@@ -126,7 +128,7 @@ winkstart.module('voip', 'faxbox', {
 			$('.faxbox-delete', faxbox_html).click(function(ev) {
 				ev.preventDefault();
 
-				winkstart.confirm(_t('vmbox', 'are_you_sure_you_want_to_delete'), function() {
+				winkstart.confirm(_t('faxbox', 'are_you_sure_you_want_to_delete'), function() {
 					THIS.delete_faxbox(data, callbacks.delete_success, callbacks.delete_error);
 				});
 			});
@@ -149,14 +151,14 @@ winkstart.module('voip', 'faxbox', {
 
 		save_faxbox: function(form_data, data, success, error) {
 			var THIS = this,
-				normalized_data = THIS.normalized_data($.extend(true, {}, data.data, form_data));
+				normalized_data = THIS.normalized_data($.extend(true, {}, data, form_data));
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if(typeof data == 'object' && data.id) {
 
 				winkstart.request(true, 'faxbox.update', {
 						account_id: winkstart.apps.voip.account_id,
 						api_url: winkstart.apps.voip.api_url,
-						faxbox_id: data.data.id,
+						faxbox_id: data.id,
 						data: normalized_data
 					},
 					function(_data, status) {
@@ -211,25 +213,21 @@ winkstart.module('voip', 'faxbox', {
 					after_render: _callbacks.after_render
 				},
 				defaults = {
-					data: {
-						name: "",
-						caller_name: "",
-						caller_id: "",
-						fax_header: "",
-						smtp_permission_list: "",
-						fax_identity: "",
-						fax_timezone: "",
-						retries: 0,
-						notifications: {
-							inbound: {
-								email: {
-									send_to: ""
-								}
-							},
-							outbound: {
-								email: {
-									send_to: ""
-								}
+					name: "",
+					caller_name: "",
+					caller_id: "",
+					fax_header: "",
+					fax_identity: "",
+					fax_timezone: "",
+					notifications: {
+						inbound: {
+							email: {
+								send_to: ""
+							}
+						},
+						outbound: {
+							email: {
+								send_to: ""
 							}
 						}
 					}
@@ -242,7 +240,8 @@ winkstart.module('voip', 'faxbox', {
 						faxbox_id: data.id
 					},
 					function(_data, status) {
-						THIS.render_faxbox(_data, target, callbacks)
+						_data.data.id = data.id;
+						THIS.render_faxbox(_data.data, target, callbacks)
 					}
 				);
 			} else {
@@ -253,11 +252,11 @@ winkstart.module('voip', 'faxbox', {
 		delete_faxbox: function(data, success, error) {
 			var THIS = this;
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if(typeof data == 'object' && data.id) {
 				winkstart.request(true, 'faxbox.delete', {
 						account_id: winkstart.apps.voip.account_id,
 						api_url: winkstart.apps.voip.api_url,
-						faxbox_id: data.data.id
+						faxbox_id: data.id
 					},
 					function(_data, status) {
 						if(typeof success == 'function') {
@@ -274,9 +273,16 @@ winkstart.module('voip', 'faxbox', {
 		},
 
 		normalized_data: function(form_data) {
-			form_data.smtp_permission_list = typeof form_data.smtp_permission_list == 'string' ? form_data.smtp_permission_list.split(' ') : form_data.smtp_permission_list.join(' ');
 			form_data.notifications.inbound.email.send_to = typeof form_data.notifications.inbound.email.send_to == 'string' ? form_data.notifications.inbound.email.send_to.split(' ') : form_data.notifications.inbound.email.send_to.join(' ');
 			form_data.notifications.outbound.email.send_to = typeof form_data.notifications.outbound.email.send_to == 'string' ? form_data.notifications.outbound.email.send_to.split(' ') : form_data.notifications.outbound.email.send_to.join(' ');
+
+			if ( form_data.hasOwnProperty('smtp_permission_list') ) {
+				if ( typeof form_data.smtp_permission_list === 'string' ) {
+					form_data.smtp_permission_list = form_data.smtp_permission_list.split(' ');
+				} else if ( form_data.smtp_permission_list instanceof Array ) {
+					form_data.smtp_permission_list = form_data.smtp_permission_list.join(' ');
+				}
+			}
 
 			return form_data;
 		}
