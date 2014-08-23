@@ -1089,7 +1089,7 @@ winkstart.module('numbers', 'numbers_manager', {
 
                 	port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
 
-                	var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
+                	var res = port_form_data.port.main_number.match(/^\+(.*)$/);
                 	res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
 
                 	var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
@@ -1099,7 +1099,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 	phone_numbers = [];
                 	var error_toll_free = [];
                 	$.each(port_form_data.phone_numbers, function(i, val) {
-                    	var result = val.match(/^\+?1?([2-9]\d{9})$/);
+                    	var result = val.match(/^\+(.*)$/);
 
                     	if(result) {
                         	if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
