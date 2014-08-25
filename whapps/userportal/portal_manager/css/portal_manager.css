@@ -212,3 +212,9 @@
     color: #bbb;
     font-style: italic;
 }
+
+.portal-view #call-forward-data {
+    border:1px solid #999;
+    border-radius: 5px;
+    padding-left: 15px;
+}
