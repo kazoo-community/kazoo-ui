@@ -108,7 +108,9 @@
 
                             <div class="upload_bill">
                                 ${_t('upload_your_current_phone_bill')}
-                                <input type="file" name="files" class="files"/>
+                                <div class="file-upload-container">
+                                    <input type="file" name="files" class="files"/>
+                                </div>
                             </div>
                         </div>
 
@@ -150,7 +152,12 @@
 
                     <div class="loa_block">
                         3. ${_t('upload_it_here')}
-                        <div class="upload_block">${_t('upload_signed_letter')}&nbsp;&nbsp;<input name="loa" class="loa" type="file"/></div>
+                        <div class="upload_block">
+                            ${_t('upload_signed_letter')}
+                            <div class="file-upload-container">
+                                <input name="loa" class="loa" type="file"/>
+                            </div>
+                        </div>
                         <div class="fancy_help">
                             <div class="wrapper_icon"><span class="note_icon"/></div>
                             <div class="help_text">${_t('having_trouble_uploading')} ${company_name} ${_t('at')} ${support_email}</div>

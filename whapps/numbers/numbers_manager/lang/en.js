@@ -113,5 +113,7 @@ window.translate['numbers_manager'] = {
 	buy_numbers: "Buy Numbers",
 	edit_location_for: "Edit Location for ",
 	edit_911_location: "Edit 911 Location",
-	add_number_title: "Add number"
+	add_number_title: "Add number",
+	error_mime_types: "The following files are not in pdf format: ",
+	error_size: "The following files are too big: "
 };

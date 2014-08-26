@@ -1006,62 +1006,39 @@ winkstart.module('numbers', 'numbers_manager', {
                 	}
             	});
 
-            	$('.loa', popup_html).change(function(ev) {
-                	var slice = [].slice,
-                    	raw_files = slice.call(ev.target.files, 0),
-                    	file_reader = new FileReader(),
-                    	file_name,
-                    	read_file = function(file) {
-                        	file_name = file.fileName || file.name || 'noname';
-                        	file_reader.readAsDataURL(file);
-                    	};
+                $('.files, .loa', popup_html).each(function(idx, el) {
+                    var loa = [],
+                        files = [],
+                        el = $(el),
+                        name = el.attr('name');
 
-                	loa = [];
-
-                	file_reader.onload = function(ev) {
-                    	loa.push({
-                        	file_name: file_name,
-                        	file_data: ev.target.result
-                    	});
-
-                    	if(raw_files.length > 1) {
-                        	raw_files = raw_files.slice(1);
-                        	read_file(raw_files[0]);
-                    	}
-                	};
-
-                	read_file(raw_files[0]);
-            	});
-
-            	$('.files', popup_html).change(function(ev) {
-                	var slice = [].slice,
-                    	raw_files = slice.call(ev.target.files, 0),
-                    	file_reader = new FileReader(),
-                    	file_name,
-                    	read_file = function(file) {
-                        	file_name = file.fileName || file.name || 'noname';
-                        	file_reader.readAsDataURL(file);
-                    	};
-
-                	files = [];
-
-                	file_reader.onload = function(ev) {
-                    	files.push({
-                        	file_name: file_name,
-                        	file_data: ev.target.result
-                    	});
-
-                    	if(raw_files.length > 1) {
-                        	raw_files = raw_files.slice(1);
-                        	read_file(raw_files[0]);
-                    	}
-                    	else {
-                        	$('.number_of_docs', popup_html).html(files.length);
-                    	}
-                	};
-
-                	read_file(raw_files[0]);
-            	});
+                    el.fileUpload({
+                        bigBtnClass: 'btn',
+                        btnClass: 'btn',
+                        mimeTypes: ['application/pdf'],
+                        success: function(results) {
+                            if ( name === 'loa' ) {
+                                loa.push({
+                                    file_name: results[0].name,
+                                    file_data: results[0].file
+                                });
+                            }
+                            else if ( name === 'files') {
+                                files.push({
+                                    file_name: results[0].name,
+                                    file_data: results[0].file
+                                });
+                            }
+                        },
+                        error: function(errors) {
+                            for ( var key in errors ) {
+                                if ( errors[key].length > 0 ) {
+                                    winkstart.alert(_t('numbers_manager', 'error_'.concat(key.replace(/([A-Z])/g, "_$1" ).toLowerCase())).concat(errors[key].join(' ')));
+                                }
+                            }
+                        }
+                    });
+                });
 
             	$('.submit_btn', popup_html).click(function(ev) {
                 	ev.preventDefault();
