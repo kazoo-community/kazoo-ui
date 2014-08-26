@@ -7,6 +7,7 @@ window.translate['callflow'] = {
 	advanced: "'Advanced'",
 	please_select_valid_number: "Please select a valid number by click in the grey boxes of the Callflow box.",
 	this_callflow_has_not_been_created: "This callflow has not been created or doesn\'t exist anymore.",
+	monster_callflow_error: "This callflow was created via the Monster UI. At this time, the Kazoo UI callflow editor is not compatible to edit Monster-UI Callflows.",
 	are_you_sure: "Are you sure you want to delete this callflow?",
 	callflow_name: "Callflow Name:",
 	hide_from_contact_list: "Hide from Contact List",
