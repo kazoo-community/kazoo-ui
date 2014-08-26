@@ -435,7 +435,6 @@ winkstart.module('voip', 'callflow', {
 
         buildFlow: function (json, parent, id, key) {
             var THIS = this,
-
             branch = THIS.branch(THIS.construct_action(json));
 
             branch.data.data = ('data' in json) ? json.data : {};
@@ -457,7 +456,7 @@ winkstart.module('voip', 'callflow', {
             return parent;
         },
 
-        construct_action: function(json) {
+        construct_action: function(json) {  
             var action = '';
 
             if('data' in json) {
