@@ -41,6 +41,13 @@ window.translate['faxbox'] = {
 
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this fax box?",
 
+	connect_call_to_faxbox: "Connect call to faxbox",
+	faxbox_tip: "",
+	which_faxbox: "Which Faxbox?",
+	edit_faxbox_options: "Edit faxbox options",
+	add_new_faxbox: "Add a new faxbox",
+
+	ok: "OK",
 	save: "Save",
 	delete: "Delete"
 };

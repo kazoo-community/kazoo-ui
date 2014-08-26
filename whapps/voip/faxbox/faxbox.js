@@ -4,11 +4,14 @@ winkstart.module('voip', 'faxbox', {
 		],
 
 		templates: {
+			faxbox_callflow: 'tmpl/faxbox_callflow.html',
 			faxbox: 'tmpl/faxbox.html',
 			edit: 'tmpl/edit.html'
 		},
 
 		subscribe: {
+			'callflow.define_callflow_nodes': 'define_callflow_nodes',
+			'faxbox.popup_edit': 'popup_edit_faxbox',
 			'faxbox.activate': 'activate',
 			'faxbox.edit': 'edit_faxbox'
 		},
@@ -54,7 +57,7 @@ winkstart.module('voip', 'faxbox', {
 			whapp: 'voip',
 			module: THIS.__module,
 			label: _t('faxbox', 'faxboxes_label'),
-			icon: 'vmbox',
+			icon: 'printer2',
 			weight: '35',
 			category: _t('config', 'advanced_menu_cat')
 		});
@@ -233,19 +236,28 @@ winkstart.module('voip', 'faxbox', {
 					}
 				};
 
-			if (data && data.id) {
-				winkstart.request(true,  'faxbox.get', {
+			if ( typeof data == 'object' && data.id ) {
+				winkstart.request(true, 'faxbox.get', {
 						account_id: winkstart.apps.voip.account_id,
 						api_url: winkstart.apps.voip.api_url,
 						faxbox_id: data.id
 					},
 					function(_data, status) {
 						_data.data.id = data.id;
-						THIS.render_faxbox(_data.data, target, callbacks)
+
+						THIS.render_faxbox($.extend(true, defaults, _data.data), target, callbacks);
+
+						if ( typeof callbacks.after_render == 'function' ) {
+							callbacks.after_render();
+						}
 					}
 				);
 			} else {
-				THIS.render_faxbox(defaults, target, callbacks)
+				THIS.render_faxbox(defaults, target, callbacks);
+
+				if ( typeof callbacks.after_render == 'function' ) {
+					callbacks.after_render();
+				}
 			}
 		},
 
@@ -285,6 +297,124 @@ winkstart.module('voip', 'faxbox', {
 			}
 
 			return form_data;
+		},
+
+		popup_edit_faxbox: function(data, callback, data_defaults) {
+			var popup, popup_html;
+
+			popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
+
+			winkstart.publish('faxbox.edit', data, popup_html, $('.inline_content', popup_html), {
+				save_success: function(_data) {
+					popup.dialog('close');
+
+					if ( typeof callback == 'function' ) {
+						callback(_data);
+					}
+				},
+				delete_success: function() {
+					popup.dialog('close');
+
+					if ( typeof callback == 'function' ) {
+						callback({ data: {} });
+					}
+				},
+				after_render: function() {
+					popup = winkstart.dialog(popup_html, {
+						title: _t('faxbox', (data.id ? 'edit' : 'create').concat('_faxbox'))
+					});
+				}
+			}, data_defaults);
+		},
+
+		define_callflow_nodes: function(callflow_nodes) {
+			var THIS = this;
+
+			$.extend(callflow_nodes, {
+				 'faxbox[]': {
+					name: _t('faxbox', 'faxboxes_label'),
+					icon: 'printer2',
+					category: _t('config', 'advanced_cat'),
+					module: 'faxbox',
+					tip: _t('faxbox', 'faxbox_tip'),
+					data: {
+					},
+					rules: [
+						{
+							type: 'quantity',
+							maxSize: '1'
+						}
+					],
+					isUsable: 'true',
+					caption: function(node, caption_map) {
+						var id = node.getMetadata('faxbox_id'),
+							returned_value = '';
+
+						if(id in caption_map) {
+							returned_value = caption_map[id].name;
+						}
+
+						return returned_value;
+					},
+					edit: function(node, callback) {
+						var _this = this;
+
+						winkstart.request(true, 'faxbox.list', {
+								account_id: winkstart.apps['voip'].account_id,
+								api_url: winkstart.apps['voip'].api_url
+							},
+							function(data, status) {
+								var popup, popup_html;
+
+								popup_html = THIS.templates.faxbox_callflow.tmpl({
+									_t: function(param){
+										return window.translate['faxbox'][param];
+									},
+									items: winkstart.sort(data.data),
+									selected: node.getMetadata('faxbox_id') || ''
+								});
+
+								if($('#faxbox_selector option:selected', popup_html).val() == undefined) {
+									$('#edit_link', popup_html).hide();
+								}
+
+								$('.inline_action', popup_html).click(function(ev) {
+									var _data = ($(this).dataset('action') == 'edit') ?
+													{ id: $('#faxbox_selector', popup_html).val() } : {};
+
+									ev.preventDefault();
+
+									winkstart.publish('faxbox.popup_edit', _data, function(_data) {
+										node.setMetadata('faxbox_id', _data.data.id || 'null');
+
+										node.caption = _data.data.name || '';
+
+										popup.dialog('close');
+									});
+								});
+
+								$('#add', popup_html).click(function() {
+									node.setMetadata('faxbox_id', $('#faxbox_selector', popup_html).val());
+
+									node.caption = $('#faxbox_selector option:selected', popup_html).text();
+
+									popup.dialog('close');
+								});
+
+								popup = winkstart.dialog(popup_html, {
+									title: _t('faxbox', 'voicemail_title'),
+									minHeight: '0',
+									beforeClose: function() {
+										if(typeof callback == 'function') {
+											callback();
+										}
+									}
+								});
+							}
+						);
+					}
+				}
+			});
 		}
 	}
 );
