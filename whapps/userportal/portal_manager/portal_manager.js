@@ -280,7 +280,7 @@ winkstart.module('userportal', 'portal_manager', {
                 }
 
                 if(!('call_forward' in _data_settings.data) || !_data_settings.data.call_forward.enabled) {
-                    $('.device-field', portal_manager_html).hide();
+                    $('#call-forward-data', portal_manager_html).hide();
                 }
 
                 (parent)
@@ -436,6 +436,11 @@ winkstart.module('userportal', 'portal_manager', {
                 $('#vm-to-email-checkbox', portal_manager_html).attr('checked') ? $('.email-field', portal_manager_html).slideDown() : $('.email-field', portal_manager_html).slideUp();
             });
 
+            // Show/hide call forward settings based on whether call forwarding is enabled.
+            $('#call-forward-enabled', portal_manager_html).change(function() {
+                $('#call-forward-enabled', portal_manager_html).attr('checked') ? $('#call-forward-data', portal_manager_html).slideDown() : $('#call-forward-data', portal_manager_html).slideUp();
+            });
+
             $('#contact_list_btn', portal_manager_html).click(function(e) {
                 e.preventDefault();
 
@@ -451,11 +456,13 @@ winkstart.module('userportal', 'portal_manager', {
                     replaced_number = replaced_number.replace(/\s|\(|\)|\-|\./g,'');
                 }
 
+                var enabled = $('#call-forward-enabled', portal_manager_html).attr('checked');
+
                 var data = {
                     vm_to_email_enabled: false,
                     call_forward: {
                         number: replaced_number,
-                        enabled: replaced_number !== '' ? true : false,
+                        enabled: (enabled && replaced_number !== '') ? true : false,
                         substitute: $('#ring-device-checkbox', portal_manager_html).attr('checked') ? false : true,
                         keep_caller_id: $('#call_forward_keep_caller_id', portal_manager_html).attr('checked') ? true : false
                         //Substitute equals true to enable real call forwarding, false in order to ring devices as well.
