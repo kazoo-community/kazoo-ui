@@ -21,20 +21,42 @@
                 <h1>${_t('my_settings')}</h1>
                 <div id="settings-view">
                     <form>
-                        <div class="clearfix">
-                            <label><span class="icon phone"/>${_t('forward_calls_to')}:</label>
+                    <div class="clearfix">
+                            <label>${_t('enable_call_forward')}:</label>
                             <div class="input">
-                                <input id="ring-number-txt" name="ring-number-txt" type="text" value="${data.call_forward.number}"/>
-                            </div>
-                        </div>
-                        <div class="clearfix device-field">
-                            <label>${_t('also_ring_my_voip_phone')}:</label>
-                            <div class="input">
-                                {{if data.call_forward.substitute}}
-                                    <input class="checkbox" id="ring-device-checkbox" name="ring-device-checkbox" type="checkbox"/>
+                                {{if data.call_forward.enabled}}
+                                    <input class="checkbox" id="call-forward-enabled" name="call_forward.enabled" type="checkbox" checked="checked"/>
                                 {{else}}
-                                    <input class="checkbox" id="ring-device-checkbox" name="ring-device-checkbox" type="checkbox" checked="checked"/>
+                                    <input class="checkbox" id="call-forward-enabled" name="call_forward.enabled" type="checkbox"/>
                                 {{/if}}
+                             </div>
+                         </div>
+                        <div id="call-forward-data">
+                            <div class="clearfix">
+                                <label><span class="icon phone"/>${_t('forward_calls_to')}:</label>
+                                <div class="input">
+                                    <input id="ring-number-txt" name="ring-number-txt" type="text" value="${data.call_forward.number}"/>
+                                </div>
+                            </div>
+                            <div class="clearfix device-field">
+                                <label>${_t('also_ring_my_voip_phone')}:</label>
+                                <div class="input">
+                                    {{if data.call_forward.substitute}}
+                                        <input class="checkbox" id="ring-device-checkbox" name="ring-device-checkbox" type="checkbox"/>
+                                    {{else}}
+                                        <input class="checkbox" id="ring-device-checkbox" name="ring-device-checkbox" type="checkbox" checked="checked"/>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <label>${_t('keep_caller_id')}:</label>
+                                <div class="input">
+                                    {{if data.call_forward.keep_caller_id}}
+                                        <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
+                                    {{else}}
+                                        <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox"/>
+                                    {{/if}}
+                                </div>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -51,16 +73,6 @@
                             <label>${_t('email_address')}:</label>
                             <div class="input">
                                 <input id="vm-to-email-txt" name="vm-to-email-txt" type="text" value="${data.email}"/>
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                            <label>${_t('keep_caller_id')}:</label>
-                            <div class="input">
-                                {{if data.call_forward.keep_caller_id}}
-                                    <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox" checked="checked"/>
-                                {{else}}
-                                    <input id="call_forward_keep_caller_id" class="checkbox" name="call_forward.keep_caller_id" type="checkbox"/>
-                                {{/if}}
                             </div>
                         </div>
                         <div class="buttons">

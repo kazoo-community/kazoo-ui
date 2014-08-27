@@ -39,5 +39,6 @@ window.translate['portal_manager'] = {
 	voicemail_box_id: "Voicemail Box ID",
 	are_you_sure_that_you_want_to_delete: "Are you sure that you want to delete the selected voicemail message(s)?",
 	vm_to_email_txt_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)?$/,
-	ring_number_txt_regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/
+	ring_number_txt_regex: /^[\+]?[0-9\s\-\.\(\)]{7,20}$|(sip[s]?:[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$|^$/,
+	enable_call_forward: "Enable Call Forward"
 };
