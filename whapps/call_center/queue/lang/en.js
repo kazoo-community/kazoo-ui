@@ -1,4 +1,5 @@
 window.translate['queue'] = {
+	manage_queues: "Manage Queues",
 	queue: "Queue",
 	queue_tip: "Direct a Caller to a Queue.",
 	queue_login: "Queue Login",
