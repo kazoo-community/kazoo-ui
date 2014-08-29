@@ -1,0 +1,23 @@
+window.translate['personal-info'] = {
+change_your_email: "修改您的邮箱地址",
+change_your_email_data_content: "",
+save: "保存",
+change_your_password: "修改您的密码",
+change_your_password_data_content: "",
+confirm_your_password: "确认您的密码",
+confirm_your_password_data_content: "",
+advanced_view: "高级视图",
+advanced_view_data_content: "选中将默认显示高级视图.",
+primary_app: "主应用",
+primary_app_data_content: "选择您在登录时看到的应用.",
+none: "无",
+close: "关闭",
+email_placeholder: "邮箱地址",
+my_account_label: "我的账户",
+email_address_updated: "邮箱地址已更新!",
+password_updated: "密码已更新!",
+passwords_do_not_match: "密码不匹配，请重新输入密码.",
+my_account_title: "我的账户",
+is_now_your_primary_app: " 现在是您的主应用了",
+you_dont_have_a_primary_app: "您没有主应用了"
+};
