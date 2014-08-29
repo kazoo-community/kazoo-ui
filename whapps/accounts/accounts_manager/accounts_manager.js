@@ -187,6 +187,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		create_no_match: function(accountId, callback) {
 			var THIS = this,
 				no_match_callflow = {
+					featurecode: {},
 					numbers: ['no_match'],
 					flow: {
 						children: {},
