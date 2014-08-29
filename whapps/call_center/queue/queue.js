@@ -85,7 +85,7 @@ winkstart.module('call_center', 'queue', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'call_center',
             module: THIS.__module,
-            label: 'Manage Queues',
+            label: _t('queue', 'manage_queues'),
             icon: 'wrench_left',
             weight: '10',
         });
