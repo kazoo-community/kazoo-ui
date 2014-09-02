@@ -51,11 +51,11 @@ window.translate['user'] = {
 	in_house_calls: "In-House Calls",
 	caller_id_name: "Caller ID Name",
 	caller_id_name_placeholder: "Name",
-	caller_id_name_data_content: "Define the Caller ID Name of this User for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.",
+	caller_id_name_data_content: "Define the Caller ID Name of this User for In-House Calls (max. 30 chars). If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.",
 	caller_id_number: "Caller ID Number",
 	caller_id_number_data_content: "Define the Caller ID Number of this User for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.",
 	outbound_calls: "Outbound Calls",
-	caller_id_name_data_content2: "Define the Caller ID Name of this User for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.",
+	caller_id_name_data_content2: "Define the Caller ID Name of this User for Outbound Calls (max. 30 chars). If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.",
 	caller_id_number_data_content2: "Define the Caller ID Number of this User for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.",
 	devices: "Devices",
 	the_following_devices_are_mapped: "The following devices are mapped to this user. If you're creating a user, you can add a Device and it will be automatically assigned to this new user once the user creation is completed.",
@@ -71,7 +71,7 @@ window.translate['user'] = {
 	add_a_new_device: "Add a new device for this user",
 	emergency: "Emergency",
 	caller_id_name_data_content3: "Define the Caller ID Name of this User for Emergency Calls.",
-	caller_id_number_data_content3: "Define the Caller ID Number of this User for Emergency Calls.",
+	caller_id_number_data_content3: "Define the Caller ID Number of this User for Emergency Calls (max. 30 chars).",
 	standard_options: "Standard Options",
 	user_has_been_verified: "User has been verified",
 	user_has_been_verified_data_content: "Verify User ?",
@@ -141,5 +141,5 @@ window.translate['user'] = {
 	first_last_name_regex: /^[0-9a-zA-Z\s\-\']+$/,
 	username_regex: /^[0-9a-zA-Z+@._-]{3,256}$/,
 	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/
 };

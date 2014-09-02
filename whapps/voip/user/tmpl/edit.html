@@ -157,9 +157,9 @@
 	                    </div>
 
 	                    {{if field_data.new_user}}
-	                        <button class="btn add_device" data-new_user="${field_data.new_user}">${_t('add_a_new_device')}</button>
+	                        <button type="button" class="btn add_device" data-new_user="${field_data.new_user}">${_t('add_a_new_device')}</button>
 	                    {{else}}
-	                        <button class="btn add_device" data-user_id="${data.id}">${_t('add_a_new_device')}</button>
+	                        <button type="button" class="btn add_device" data-user_id="${data.id}">${_t('add_a_new_device')}</button>
 	                    {{/if}}
 	                </div>
 	            </div>

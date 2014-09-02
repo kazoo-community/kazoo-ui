@@ -78,12 +78,12 @@ winkstart.module('voip', 'device', {
             mobile: [
                 { name: '#name',                      regex: /^[a-zA-Z0-9\s_'\-]+$/ },
                 { name: '#mdn',                       regex: /^[0-9]{10}$/ },
-                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_internal',   regex: /^[0-9A-Za-z ,]{0,30}$/ },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_external',   regex: /^[0-9A-Za-z ,]{0,30}$/ },
                 { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
                 { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
-                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,15}$/ },
+                { name: '#caller_id_name_emergency',  regex: /^[0-9A-Za-z ,]{0,30}$/ },
                 { name: '#sip_username',              regex: /^[^\s]+$/ },
                 { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
             ]
