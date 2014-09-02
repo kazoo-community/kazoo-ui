@@ -331,7 +331,7 @@ winkstart.module('voip', 'faxbox', {
 			var THIS = this;
 
 			$.extend(callflow_nodes, {
-				 'faxbox[]': {
+				 'faxbox[id=*]': {
 					name: _t('faxbox', 'faxboxes_label'),
 					icon: 'printer2',
 					category: _t('config', 'advanced_cat'),
@@ -347,7 +347,7 @@ winkstart.module('voip', 'faxbox', {
 					],
 					isUsable: 'true',
 					caption: function(node, caption_map) {
-						var id = node.getMetadata('faxbox_id'),
+						var id = node.getMetadata('id'),
 							returned_value = '';
 
 						if(id in caption_map) {
@@ -371,7 +371,7 @@ winkstart.module('voip', 'faxbox', {
 										return window.translate['faxbox'][param];
 									},
 									items: winkstart.sort(data.data),
-									selected: node.getMetadata('faxbox_id') || ''
+									selected: node.getMetadata('id') || ''
 								});
 
 								if($('#faxbox_selector option:selected', popup_html).val() == undefined) {
@@ -385,7 +385,7 @@ winkstart.module('voip', 'faxbox', {
 									ev.preventDefault();
 
 									winkstart.publish('faxbox.popup_edit', _data, function(_data) {
-										node.setMetadata('faxbox_id', _data.data.id || 'null');
+										node.setMetadata('id', _data.data.id || 'null');
 
 										node.caption = _data.data.name || '';
 
@@ -394,7 +394,7 @@ winkstart.module('voip', 'faxbox', {
 								});
 
 								$('#add', popup_html).click(function() {
-									node.setMetadata('faxbox_id', $('#faxbox_selector', popup_html).val());
+									node.setMetadata('id', $('#faxbox_selector', popup_html).val());
 
 									node.caption = $('#faxbox_selector option:selected', popup_html).text();
 
