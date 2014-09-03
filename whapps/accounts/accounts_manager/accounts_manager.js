@@ -249,7 +249,9 @@ winkstart.module('accounts', 'accounts_manager', {
 						THIS.render_list(parent);
 					},
 
-					delete_error: _callbacks.delete_error,
+					delete_error: _callbacks.delete_error || function(error) {
+						winkstart.alert('error', error.message);
+					},
 
 					after_render: _callbacks.after_render
 				},
@@ -943,7 +945,7 @@ winkstart.module('accounts', 'accounts_manager', {
 												});
 											});
 										}
-										winkstart.alert(errorMsg);
+										winkstart.alert('error', errorMsg);
 									}
 								);
 							};
