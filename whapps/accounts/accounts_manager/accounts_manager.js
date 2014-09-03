@@ -933,8 +933,17 @@ winkstart.module('accounts', 'accounts_manager', {
 											}
 										);
 									},
-									function() {
-										winkstart.alert(_t('config', 'there_were_errors'));
+									function(error) {
+										var errorMsg = "An error occurred...";
+										if(error.message) { errorMsg = error.message; }
+										if(error.data) {
+											$.each(error.data, function(field, errors) {
+												$.each(errors, function(errType, errMsg) {
+													errorMsg += '<br>' + field + ': ' + errMsg + '.';
+												});
+											});
+										}
+										winkstart.alert(errorMsg);
 									}
 								);
 							};
