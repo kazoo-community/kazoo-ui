@@ -3,6 +3,10 @@
     <head>
         <meta charset='utf-8'>
         <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+		<!-- Make it a webapp for IOS, no effect on normal browsing -->
+		<meta name="apple-mobile-web-app-capable"  content="yes" />       
+		<!-- Make it behave a bit more as a native app, not perfect yet -->
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
         <!-- Awesome URL Parsing -->
         <script type="text/javascript">
             var URL_PARTS = window.location.href.match(/^([^\?#]+)[\?#]*([^#]*).*$/).slice(1),
@@ -23,6 +27,8 @@
 
         <script type="text/javascript" src="js/external/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="js/external/jquery-ui-1.8.7.custom.min.js"></script>
+		 <!-- Enable touch events to be able to use Kazoo-GUI on IOS -->
+		<script type="text/javascript" src="js/external/jquery.ui.touch-punch.min.js"></script>
 
         <link type="text/css" href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 
@@ -91,7 +97,9 @@
         <script type="text/javascript" src="js/winkstart-timezone.js"></script>
         <script type="text/javascript" src="js/winkstart.js"></script>
     </head>
-    <body class="background">
+	<body class="background">
+	<!--Make the GUI steady on IOS, http://stackoverflow.com/questions/7260270/html-5-fixed-screen-ipad-->
+    <body ontouchmove="BlockMove(event);" >
     </body>
 </html>
 
