@@ -121,7 +121,7 @@ winkstart.module('call_center', 'dashboard', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'call_center',
             module: THIS.__module,
-            label: 'Dashboard',
+            label: _t('dashboard', 'dashboard'),
             icon: 'graph1_box',
             weight: '20'
         });

@@ -187,6 +187,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		create_no_match: function(accountId, callback) {
 			var THIS = this,
 				no_match_callflow = {
+					featurecode: {},
 					numbers: ['no_match'],
 					flow: {
 						children: {},
@@ -248,7 +249,9 @@ winkstart.module('accounts', 'accounts_manager', {
 						THIS.render_list(parent);
 					},
 
-					delete_error: _callbacks.delete_error,
+					delete_error: _callbacks.delete_error || function(error) {
+						winkstart.alert('error', error.message);
+					},
 
 					after_render: _callbacks.after_render
 				},
@@ -932,8 +935,17 @@ winkstart.module('accounts', 'accounts_manager', {
 											}
 										);
 									},
-									function() {
-										winkstart.alert(_t('config', 'there_were_errors'));
+									function(error) {
+										var errorMsg = "An error occurred...";
+										if(error.message) { errorMsg = error.message; }
+										if(error.data) {
+											$.each(error.data, function(field, errors) {
+												$.each(errors, function(errType, errMsg) {
+													errorMsg += '<br>' + field + ': ' + errMsg + '.';
+												});
+											});
+										}
+										winkstart.alert('error', errorMsg);
 									}
 								);
 							};
@@ -1072,6 +1084,9 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				function(_data, status) {
 					if(_data.data.length > 0) {
+						_data.data.sort(function(a, b) {
+							return a.name < b.name ? -1 : 1;
+						});
 						switch_html = winkstart.dialog(THIS.templates.switch_tmpl.tmpl({ 'accounts': _data.data }), {
 							title: 'Account Masquerading'
 						});

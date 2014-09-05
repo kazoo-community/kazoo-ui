@@ -830,7 +830,7 @@ winkstart.module('voip', 'user', {
                 delete data.hotdesk.endpoint_ids;
             }
 
-            if(data.hasOwnProperty('call_forward') && data.call_forward.enabled === false && data.call_forward.number === '') {
+            if(data.hasOwnProperty('call_forward') && data.call_forward.number === '') {
                 delete data.call_forward.number;
             }
 

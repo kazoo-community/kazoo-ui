@@ -1,0 +1,25 @@
+window.translate['groups'] = {
+	create_group: "创建群组",
+	edit_group: "编辑群组",
+	basic: "基本",
+	advanced: "高级",
+	name: "名字",
+	name_data_content: "群组备注名",
+	endpoints: "终端",
+	remove: "删除",
+	add_user: "添加用户",
+	select: "选择",
+	add_device: "添加设备",
+	delete: "删除",
+	save: "保存",
+	there_are_currently_no_endpoint: "群组中没有终端",
+	groups_label: "群组",
+	there_were_errors_on_the_form: "表单中有错误，请修正!",
+	are_you_sure_you_want_to_delete: "您确定删除此群组吗?",
+	no_name: "(无名氏)",
+	groups_label: "群组",
+	add_group_label: "添加群组",
+	edit_groups: "编辑群组",
+	create_groups: "创建群组"
+
+};

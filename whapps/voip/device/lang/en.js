@@ -79,14 +79,14 @@ window.translate['device'] = {
 	assign_to: "Assign To",
 	in_house_calls: "In-House Calls",
 	caller_id_name: "Caller ID Name",
-	caller_id_name_data_content: "Define the Caller ID Name of this Device for In-House Calls.",
+	caller_id_name_data_content: "Define the Caller ID Name of this Device for In-House Calls (max. 30 chars).",
 	caller_id_number: "Caller ID Number",
 	caller_id_number_data_content: "Define the Caller ID Number of this Device for In-House Calls.",
 	outbound_calls: "Outbound Calls",
-	caller_id_name_data_content2: "Define the Caller ID Name of this Device for Outbound Calls.",
+	caller_id_name_data_content2: "Define the Caller ID Name of this Device for Outbound Calls (max. 30 chars).",
 	caller_id_number_data_content2: "Define the Caller ID Number of this Device for Outbound Calls.",
 	emergency: "Emergency",
-	caller_id_name_data_content3: "Define the Caller ID Name of this Device for Emergency Calls.",
+	caller_id_name_data_content3: "Define the Caller ID Name of this Device for Emergency Calls (max. 30 chars).",
 	caller_id_number_data_content3: "Define the Caller ID Number of this Device for Emergency Calls.",
 	music_on_hold: "Music on Hold",
 	music_on_hold_data_content: "Select the media file that you want to be played by default when it's not set on a user or a device.",
@@ -140,5 +140,5 @@ window.translate['device'] = {
 	create_device: "Create Device",
 	sip_uri_name_regex: /^[a-zA-Z0-9\s_']+$/,
 	name_regex: /^[a-zA-Z0-9\s_'\-]+$/,
-	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/
 };

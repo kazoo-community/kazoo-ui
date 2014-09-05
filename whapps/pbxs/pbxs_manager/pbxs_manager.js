@@ -376,7 +376,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             /* Clean e911 */
         },
 
-        normalize_endpoint_data: function(data) {
+        clean_form_data: function(data) {
             delete data.serverid;
             delete data.extra;
 
@@ -388,7 +388,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 index = endpoint_data.extra.serverid,
                 new_data = $.extend(true, {}, data.data);
 
-            THIS.normalize_endpoint_data(endpoint_data);
+            THIS.clean_form_data(endpoint_data);
 
             if(endpoint_data.server_name) {
                 if((index || index === 0) && index != 'new') {
@@ -414,7 +414,8 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     }, endpoint_data));
                 }
 
-                winkstart.request('old_trunkstore.update', {
+                THIS.update_old_trunkstore(new_data, success, error);
+                /*winkstart.request('old_trunkstore.update', {
                         account_id: winkstart.apps['pbxs'].account_id,
                         api_url: winkstart.apps['pbxs'].api_url,
                         connectivity_id: winkstart.apps['pbxs'].connectivity_id,
@@ -430,14 +431,37 @@ winkstart.module('pbxs', 'pbxs_manager', {
                             error(_data, status);
                         }
                     }
-                );
+                );*/
             }
             else {
                 winkstart.alert(_t('pbxs_manager', 'you_need_to_specify_a_name'));
             }
         },
 
+        normalize_data: function(data) {
+            var THIS = this;
+
+            // We don't accept false for a disabled feature anymore, so we delete the key now. 
+            // We also delete empty key set at the servers level
+            $.each(data.servers, function(k, server) {
+                delete data.servers[k][''];
+                $.each(server.DIDs, function(k2, number) {
+                    $.each(number, function(k3, feature) {
+                        if(feature === false) {
+                            delete data.servers[k].DIDs[k2][k3];
+                        }
+                    });
+                });
+            });
+
+            return data;
+        },
+
         update_old_trunkstore: function(data, success, error) {
+            var THIS = this;
+
+            THIS.normalize_data(data);
+
             winkstart.request('old_trunkstore.update', {
                     account_id: winkstart.apps['pbxs'].account_id,
                     api_url: winkstart.apps['pbxs'].api_url,
@@ -528,10 +552,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     form_data.options.inbound_format = 'e.164';
                 }
 
+                //Manually getting the radio value since form2object doesn't properly handle radio buttons.
+                form_data.auth.auth_method = endpoint_html.find('#endpoint input[name="auth.auth_method"]:checked').val();
                 if(form_data.auth.auth_method.toLowerCase() === 'ip') {
                     form_data.options.ip = form_data.auth.ip;
+                    delete form_data.auth.auth_user;
+                    delete form_data.auth.auth_password;
                 } else {
                     delete form_data.options.ip;
+                    delete form_data.auth.ip;
                 }
 
                 THIS.get_account(function(global_data) {

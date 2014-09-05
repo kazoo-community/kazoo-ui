@@ -342,10 +342,17 @@ winkstart.module('voip', 'callflow', {
             var THIS = this,
                 buttons_html = THIS.templates.buttons.tmpl(data);
 
+            if(THIS.dataCallflow && THIS.dataCallflow.ui_metadata && THIS.dataCallflow.ui_metadata.ui === 'monster-ui') {
+                buttons_html.find('.save').addClass('disabled');
+            }
+
             $('.buttons').empty();
 
             $('.save', buttons_html).click(function() {
-                if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
+                if(THIS.dataCallflow && THIS.dataCallflow.ui_metadata && THIS.dataCallflow.ui_metadata.ui === 'monster-ui') {
+                    winkstart.alert(_t('callflow', 'monster_callflow_error'));
+                }
+                else if(THIS.flow.numbers && THIS.flow.numbers.length > 0) {
                     THIS.save();
                 }
                 else {
@@ -412,21 +419,22 @@ winkstart.module('voip', 'callflow', {
 
                         THIS.flow.numbers = json.data.numbers || [];
                         THIS.renderFlow();
+                        THIS.renderButtons();
                     }
                 );
             }
             else {
                 THIS._resetFlow();
+                THIS.dataCallflow = {};
                 THIS.renderFlow();
+                THIS.renderButtons();
             }
 
             THIS.renderTools();
-            THIS.renderButtons();
         },
 
         buildFlow: function (json, parent, id, key) {
             var THIS = this,
-
             branch = THIS.branch(THIS.construct_action(json));
 
             branch.data.data = ('data' in json) ? json.data : {};
@@ -448,7 +456,7 @@ winkstart.module('voip', 'callflow', {
             return parent;
         },
 
-        construct_action: function(json) {
+        construct_action: function(json) {  
             var action = '';
 
             if('data' in json) {

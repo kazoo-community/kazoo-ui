@@ -447,14 +447,19 @@ winkstart.module('voip', 'timeofday', {
 
             form_data.wdays = wdays;
 
-            var startDate = new Date(form_data.start_date),
-            	year = startDate.getFullYear(),
-            	month = startDate.getMonth(),
-            	day = startDate.getDate(),
-            	utcDate = new Date(Date.UTC(year, month, day)),
-            	gregorianUTC = utcDate.getTime() / 1000 + 62167219200;
+            if(form_data.start_date === '') {
+                delete form_data.start_date;
+            }
+            else {
+                var startDate = new Date(form_data.start_date),
+                    year = startDate.getFullYear(),
+                    month = startDate.getMonth(),
+                    day = startDate.getDate(),
+                    utcDate = new Date(Date.UTC(year, month, day)),
+                    gregorianUTC = utcDate.getTime() / 1000 + 62167219200;
 
-            form_data.start_date = gregorianUTC;
+                form_data.start_date = gregorianUTC;
+            }
 
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
