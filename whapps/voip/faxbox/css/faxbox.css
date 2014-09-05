@@ -3,3 +3,9 @@ form .input a {
 	font-size: 13px;
 	line-height: 30px;
 }
+
+#faxbox-form .tooltip {
+	display: inline-block;
+	float: none;
+	margin-left: 5px;
+}
