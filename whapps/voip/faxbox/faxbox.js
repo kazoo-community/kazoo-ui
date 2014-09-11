@@ -44,6 +44,16 @@ winkstart.module('voip', 'faxbox', {
 				url: '{api_url}/accounts/{account_id}/faxboxes/{faxbox_id}',
 				contentType: 'application/json',
 				verb: 'DELETE'
+			},
+			'user.get': {
+				url: '{api_url}/accounts/{account_id}/users/{user_id}',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
+			'user.list': {
+				url: '{api_url}/accounts/{account_id}/users',
+				contentType: 'application/json',
+				verb: 'GET'
 			}
 		}
 	},
@@ -110,29 +120,104 @@ winkstart.module('voip', 'faxbox', {
 		render_faxbox: function(data, target, callbacks) {
 			var THIS = this,
 				faxbox_html = THIS.templates.edit.tmpl({
-					data: THIS.normalized_data(data),
+					faxbox: THIS.normalized_data(data.faxbox),
+					users: data.user_list,
 					_t: function(param){
 						return window.translate['faxbox'][param];
 					}
 				});
 
-			winkstart.timezone.populate_dropdown($('#fax_timezone', faxbox_html), data.timezone);
+			winkstart.timezone.populate_dropdown($('#fax_timezone', faxbox_html), data.faxbox.fax_timezone);
+
+			$('*[rel=popover]:not([type="text"])', faxbox_html).popover({
+				trigger: 'hover'
+			});
+
+			$('*[rel=popover][type="text"]', faxbox_html).popover({
+				trigger: 'focus'
+			});
 
 			winkstart.tabs($('.view-buttons', faxbox_html), $('.tabs', faxbox_html));
+
+			if (!data.faxbox.hasOwnProperty('id')) {
+				$('#owner_id', faxbox_html).change(function(ev) {
+					if ($(this).val()) {
+						winkstart.request(true, 'user.get', {
+								account_id: winkstart.apps.voip.account_id,
+								user_id: $(this).val(),
+								api_url: winkstart.apps.voip.api_url
+							},
+							function(_data, status) {
+								data.faxbox = THIS.get_default_faxbox(_data.data);
+								$('#edit_link', faxbox_html).show()
+								THIS.render_faxbox(data, target, callbacks);
+							}
+						);
+					} else {
+						data.faxbox = THIS.get_default_faxbox();
+						$('#edit_link', faxbox_html).hide()
+						THIS.render_faxbox(data, target, callbacks);
+					}
+				});
+			}
+
+			if(!$('#owner_id', faxbox_html).val()) {
+				$('#edit_link', faxbox_html).hide();
+			}
+
+			$('.inline-action', faxbox_html).click(function(ev) {
+				var _data = $(this).dataset('action') == 'edit' ? { id: $('#owner_id', faxbox_html).val() } : {},
+					_id = _data.id;
+
+				winkstart.publish('user.popup_edit', _data, function(_data) {
+					/* Create */
+					if(!_id) {
+						$('#owner_id', faxbox_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>')
+						$('#owner_id', faxbox_html).val(_data.data.id);
+					}
+					else {
+						/* Update */
+						if('id' in _data.data) {
+							$('#owner_id #'+_data.data.id, faxbox_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+						}
+						/* Delete */
+						else {
+							$('#owner_id #'+_id, faxbox_html).remove();
+						}
+					}
+				});
+			});
+
+			$('#caller_id', faxbox_html).change(function(ev) {
+				var number = $(this).val(),
+					fax_identity = $('#fax_identity', faxbox_html);
+
+				if (/^(\+1|1)([0-9]{10})$|^([0-9]{10})$/.test(number)) {
+					if (/^(\+1)/.test(number)) {
+						fax_identity.val(number.replace(/^\+1([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
+					} else if (/^1([0-9]{10})$/.test(number)) {
+						fax_identity.val(number.replace(/^1([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
+					} else  {
+						fax_identity.val(number.replace(/^([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
+					}
+				} else {
+					fax_identity.val('');
+				}
+			});
 
 			$('.faxbox-save', faxbox_html).click(function(ev) {
 				ev.preventDefault();
 
-				var form_data = form2object('faxbox-form', '.', true);
+				var form_data = form2object('faxbox-form');
 
-				THIS.save_faxbox(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
+				THIS.save_faxbox(form_data, data.faxbox, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
 			});
 
 			$('.faxbox-delete', faxbox_html).click(function(ev) {
 				ev.preventDefault();
 
 				winkstart.confirm(_t('faxbox', 'are_you_sure_you_want_to_delete'), function() {
-					THIS.delete_faxbox(data, callbacks.delete_success, callbacks.delete_error);
+					THIS.delete_faxbox(data.faxbox, callbacks.delete_success, callbacks.delete_error);
 				});
 			});
 
@@ -157,7 +242,6 @@ winkstart.module('voip', 'faxbox', {
 				normalized_data = THIS.normalized_data($.extend(true, {}, data, form_data));
 
 			if(typeof data == 'object' && data.id) {
-
 				winkstart.request(true, 'faxbox.update', {
 						account_id: winkstart.apps.voip.account_id,
 						api_url: winkstart.apps.voip.api_url,
@@ -214,51 +298,70 @@ winkstart.module('voip', 'faxbox', {
 					},
 					delete_error: _callbacks.delete_error,
 					after_render: _callbacks.after_render
-				},
-				defaults = {
-					name: "",
-					caller_name: "",
-					caller_id: "",
-					fax_header: "",
-					fax_identity: "",
-					fax_timezone: "",
-					notifications: {
-						inbound: {
-							email: {
-								send_to: ""
-							}
-						},
-						outbound: {
-							email: {
-								send_to: ""
-							}
-						}
-					}
 				};
 
-			if ( typeof data == 'object' && data.id ) {
-				winkstart.request(true, 'faxbox.get', {
-						account_id: winkstart.apps.voip.account_id,
-						api_url: winkstart.apps.voip.api_url,
-						faxbox_id: data.id
-					},
-					function(_data, status) {
-						_data.data.id = data.id;
+			winkstart.parallel({
+					faxbox: function(callback) {
+						if (typeof data === 'object' && data.id) {
+							winkstart.request(true, 'faxbox.get', {
+									account_id: winkstart.apps.voip.account_id,
+									api_url: winkstart.apps.voip.api_url,
+									faxbox_id: data.id
+								},
+								function(_data, status) {
+									_data.data.id = data.id;
 
-						THIS.render_faxbox($.extend(true, defaults, _data.data), target, callbacks);
-
-						if ( typeof callbacks.after_render == 'function' ) {
-							callbacks.after_render();
+									callback(null, _data.data);
+								}
+							);
+						} else {
+							callback(null, {});
 						}
-					}
-				);
-			} else {
-				THIS.render_faxbox(defaults, target, callbacks);
+					},
+					user_list: function(callback) {
+						winkstart.request(true, 'user.list', {
+								account_id: winkstart.apps.voip.account_id,
+								api_url: winkstart.apps.voip.api_url
+							},
+							function(_data, status) {
+								_data.data.sort(function(a, b){
+									return a.first_name.concat(' ', a.last_name).toLowerCase() > b.first_name.concat(' ', b.last_name).toLowerCase() ? 1 : -1;
+								});
 
-				if ( typeof callbacks.after_render == 'function' ) {
-					callbacks.after_render();
+								_data.data.unshift({
+									id: '',
+									first_name: _t('faxbox', 'no'),
+									last_name: _t('faxbox', 'owner')
+								});
+
+								callback(null, _data.data);
+							}
+						);
+					},
+					current_user: function(callback) {
+						winkstart.request(true, 'user.get', {
+								account_id: winkstart.apps.voip.account_id,
+								user_id: winkstart.apps.voip.user_id,
+								api_url: winkstart.apps.voip.api_url
+							},
+							function(_data, status) {
+								callback(null, _data.data);
+							}
+						);
+					}
+				},
+				function(err, results) {
+					if (!data.hasOwnProperty('id')) {
+						results.faxbox = $.extend(true, THIS.get_default_faxbox(results.current_user), results.faxbox);
+					}
+
+					THIS.render_faxbox(results, target, callbacks);
+
+					if (typeof callbacks.after_render === 'function') {
+						callbacks.after_render();
+					}
 				}
-			}
+			);
 		},
 
 		delete_faxbox: function(data, success, error) {
@@ -285,18 +388,80 @@ winkstart.module('voip', 'faxbox', {
 		},
 
 		normalized_data: function(form_data) {
-			form_data.notifications.inbound.email.send_to = typeof form_data.notifications.inbound.email.send_to == 'string' ? form_data.notifications.inbound.email.send_to.split(' ') : form_data.notifications.inbound.email.send_to.join(' ');
-			form_data.notifications.outbound.email.send_to = typeof form_data.notifications.outbound.email.send_to == 'string' ? form_data.notifications.outbound.email.send_to.split(' ') : form_data.notifications.outbound.email.send_to.join(' ');
+			if (form_data.hasOwnProperty('notifications')) {
+				var inbound = form_data.notifications.inbound.email.send_to,
+					outbound = form_data.notifications.outbound.email.send_to;
 
-			if ( form_data.hasOwnProperty('smtp_permission_list') ) {
-				if ( typeof form_data.smtp_permission_list === 'string' ) {
-					form_data.smtp_permission_list = form_data.smtp_permission_list.split(' ');
-				} else if ( form_data.smtp_permission_list instanceof Array ) {
-					form_data.smtp_permission_list = form_data.smtp_permission_list.join(' ');
+				form_data.notifications.inbound.email.send_to = inbound instanceof Array ? inbound.join(' ') : inbound.split(' ');
+				form_data.notifications.outbound.email.send_to = outbound instanceof Array ? outbound.join(' ') : outbound.split(' ');
+			}
+
+			if (form_data.hasOwnProperty('smtp_permission_list')) {
+				if (form_data.smtp_permission_list === '') {
+					delete form_data.smtp_permission_list;
+				} else {
+					var list = form_data.smtp_permission_list;
+
+					form_data.smtp_permission_list  = list instanceof Array ? list.join(' ') : list.split(' ');
 				}
 			}
 
+			if (form_data.hasOwnProperty('custom_smtp_address') && form_data.custom_smtp_address === '') {
+				delete form_data.custom_smtp_address;
+			}
+
+			if (form_data.hasOwnProperty('owner_id') && form_data.owner_id === '') {
+				delete form_data.owner_id;
+			}
+
 			return form_data;
+		},
+
+		get_default_faxbox: function(user) {
+			var default_faxbox = {
+					name: '',
+					caller_name: '',
+					fax_header: '',
+					fax_timezone: '',
+					retries: 1,
+					notifications: {
+						inbound: {
+							email: {
+								send_to: ''
+							}
+						},
+						outbound: {
+							email: {
+								send_to: ''
+							}
+						}
+					}
+				};
+
+			if (typeof user === 'undefined') {
+				return default_faxbox;
+			} else {
+				return $.extend(true, {}, default_faxbox, {
+							name: user.first_name.concat(' ', user.last_name, _t('faxbox', 'default_settings_name_extension')),
+							caller_name: user.first_name.concat(' ', user.last_name),
+							fax_header: winkstart.config.company_name.concat(_t('faxbox', 'default_settings_header_extension')),
+							fax_timezone: user.timezone,
+							owner_id: user.id,
+							notifications: {
+								inbound: {
+									email: {
+										send_to: user.email || user.username
+									}
+								},
+								outbound: {
+									email: {
+										send_to: user.email || user.username
+									}
+								}
+							}
+						}
+					);
+			}
 		},
 
 		popup_edit_faxbox: function(data, callback, data_defaults) {

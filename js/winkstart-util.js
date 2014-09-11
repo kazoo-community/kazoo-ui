@@ -131,13 +131,8 @@
     };
 
     winkstart.charges = function(data, callback_ok, callback_cancel) {
-        var html,
-            popup,
+        var html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info" id="charges_description"></div><div class="alert_text_wrapper info_alert charges-info">' + _t('config', 'press_OK_or_Cancel') + '</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">' + _t('config', 'OK') + '</button><button id="cancel_button" class="btn danger confirm_button">' + _t('config', 'CANCEL') + '</button></div></div>'),
             ok = false,
-            activation_charges = (typeof data.activation_charges === "undefined") ? undefined : data.activation_charges,
-            activation_charges_description = (typeof data.activation_charges_description === "undefined") ? undefined : data.activation_charges_description.replace("_", " "),
-            dataTemplate,
-            content,
             options = {
                 title: _t('config', 'charges_summary_title'),
                 maxWidth: 'auto',
@@ -168,7 +163,7 @@
                                 service: itemName.toUpperCase().replace("_"," "),
                                 rate: item.rate || 0,
                                 quantity: item.quantity || 0,
-                                discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : '',
+                                discount: discount > 0 ? '- $' + parseFloat(discount).toFixed(2) : 0,
                                 monthlyCharges: monthlyCharges < 0 ? '- $' + Math.abs(monthlyCharges).toFixed(2) : '$' + monthlyCharges
                             });
 
@@ -184,28 +179,27 @@
                 renderData.sort(sortByPrice);
 
                 return renderData;
-            };
+            },
+            formattedData = formatData(data),
+            dataTemplate,
+            content,
+            popup;
 
-        var content,
-            formattedData = formatData(data);
+        if (typeof data.activation_charges_description !== 'undefined') {
+            var description = data.activation_charges_description.replace("_", " ");
 
-       if ( formattedData.length === 0 && ( activation_charges === undefined || activation_charges_description === undefined ) ) {
-            content = _t('config', 'no_charges');
-       } else if ( formattedData.length === 0 && activation_charges !== undefined && activation_charges_description !== undefined ) {
-            if ( activation_charges === 0 ) {
-                content = _t('config', 'there_is_no') + activation_charges_description + '.';
+            if (typeof data.activation_charges !== 'undefined' && data.activation_charges !== 0) {
+                content = _t('config', 'you_will_pay') + data.activation_charges + _t('config', 'one_time') + description + '. '
             } else {
-                content = _t('config', 'you_will_pay') + activation_charges + ' one-time fee for ' + activation_charges_description + '.';
+               content = _t('config', 'there_is_no') + description + '.<br />'
             }
-       } else if ( formattedData.length > 0 && activation_charges !== undefined && activation_charges_description !== undefined ) {
-            if ( activation_charges === 0 ) {
-                content = _t('config', 'there_is_no') + activation_charges_description + '.<br />' + _t('config', 'content_charges');
-            } else {
-                content = _t('config', 'you_will_pay') + activation_charges + _t('config', 'one_time') + activation_charges_description + '.<br />' + _t('config', 'content_charges');
-            }
-       }
+        }
 
-        var html = $('<div class="center"><div class="alert_img confirm_alert"></div><div class="alert_text_wrapper info_alert charges-info" id="charges_description">' + content + '</div><div class="alert_text_wrapper info_alert charges-info">' + _t('config', 'press_OK_or_Cancel') + '</div><div class="clear"/><div class="alert_buttons_wrapper"><button id="confirm_button" class="btn success confirm_button">' + _t('config', 'OK') + '</button><button id="cancel_button" class="btn danger confirm_button">' + _t('config', 'CANCEL') + '</button></div></div>');
+        if (formattedData.length > 0) {
+            content += _t('config', 'content_charges');
+        }
+
+        $('#charges_description', html).append(content);
 
         if ( formattedData.length > 0 ) {
             var tableHtml = $('<div class="alert_text_wrapper info_alert" id="charges_table"><table class="charges-summary"><thead><tr><th>' + _t('config', 'service') + '</th><th>' + _t('config', 'rate') + '</th><th></th><th>' + _t('config', 'quantity') + '</th><th>' + _t('config', 'discount') + '</th><th>' + _t('config', 'monthly_charges') + '</th></tr></thead><tbody></tbody></table></div>');
