@@ -850,7 +850,7 @@ winkstart.module('accounts', 'accounts_manager', {
 							delete form_data.whitelabel;
 						}
 
-						data.data.apps = [];
+						data.data.apps = data.data.apps || [];
 
 						if ( form_data.name === form_data.notifications.voicemail_to_email.send_from ) {
 							winkstart.alert('You cannot specify the company name as "Send From"!');
