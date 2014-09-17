@@ -1252,6 +1252,8 @@ winkstart.module('voip', 'callflow', {
                     data_request.contact_list = { exclude: THIS.flow.contact_list.exclude || false };
                 }
 
+                // We don't want to keep the old data from the flow, so we override it with what's on the current screen before the extend.
+                THIS.dataCallflow.flow = data_request.flow;
                 // Change dictated by the new field added by monster-ui. THis way we can potentially update callflows in Kazoo UI without breaking monster.
                 data_request = $.extend(true, {}, THIS.dataCallflow, data_request);
                 delete data_request.metadata;
