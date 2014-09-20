@@ -59,10 +59,18 @@
 					<div class="clearfix">
 						<label for="inbound_notification_email">${_t('inbound_notification_email')}</label>
 						<div class="input">
-						{{if faxbox.notifications}}
-							<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.inbound.email.send_to}" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+						{{if faxbox.owner_id}}
+							{{if faxbox.notifications}}
+								<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.inbound.email.send_to}" rel="popover" data-content="${_t('inbound_notification_email_data_content')}" disabled />
+							{{else}}
+								<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('inbound_notification_email_data_content')}" disabled />
+							{{/if}}
 						{{else}}
-							<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+							{{if faxbox.notifications}}
+								<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.inbound.email.send_to}" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+							{{else}}
+								<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+							{{/if}}
 						{{/if}}
 						</div>
 					</div>
@@ -70,10 +78,18 @@
 					<div class="clearfix">
 						<label for="outbound_notification_email">${_t('outbound_notification_email')}</label>
 						<div class="input">
-						{{if faxbox.notifications}}
-							<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.outbound.email.send_to}" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+						{{if faxbox.owner_id}}
+							{{if faxbox.notifications}}
+								<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.outbound.email.send_to}" rel="popover" data-content="${_t('outbound_notification_email_data_content')}" disabled />
+							{{else}}
+								<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('outbound_notification_email_data_content')}" disabled />
+							{{/if}}
 						{{else}}
-							<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+							{{if faxbox.notifications}}
+								<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.outbound.email.send_to}" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+							{{else}}
+								<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+							{{/if}}
 						{{/if}}
 						</div>
 					</div>
