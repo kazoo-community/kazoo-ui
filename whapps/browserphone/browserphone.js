@@ -329,6 +329,7 @@ winkstart.module('browserphone', 'browserphone', {
             );
         },
 
+
         /**
          * Generic error popup.
          */
@@ -567,7 +568,7 @@ winkstart.module('browserphone', 'browserphone', {
          */
         make_call: function(target, publish, events) {
             var session,
-                THIS   = this;
+                THIS = this;
 
             THIS.maybe_start_softphone(function() {
                 session = THIS.phoneWindow.ctxSip.sipCall(target);
