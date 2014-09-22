@@ -25,6 +25,11 @@ winkstart.module('browserphone', 'browserphone', {
         },
 
         resources: {
+            'account.get': {
+                url: '{api_url}/accounts/{account_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'account.get_registered_devices': {
                 url: '{api_url}/accounts/{account_id}/devices/status',
                 contentType: 'application/json',
@@ -209,6 +214,24 @@ winkstart.module('browserphone', 'browserphone', {
 ////////////////////////////////////////////////////////////////////////////////
 
         /* Resources callbacks */
+        get_account: function(success, error) {
+            winkstart.request('account.get', {
+                    api_url    : winkstart.apps['browserphone'].api_url,
+                    account_id : winkstart.apps['browserphone'].account_id,
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data, status);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data, status);
+                    }
+                }
+            );
+        },
+
         get_registered_devices: function(success, error) {
             winkstart.request('account.get_registered_devices', {
                     api_url    : winkstart.apps['browserphone'].api_url,
@@ -424,26 +447,55 @@ winkstart.module('browserphone', 'browserphone', {
             );
         },
 
+        /**
+         * Pops up a window that prompts the user to enter credentials.
+         *
+         * Called when the browserphone is registered elswhere already.
+         */
         popup_get_credentials: function(success) {
             var dialog,
                 credentials_data,
                 THIS       = this,
+                errors     = '',
                 popup_html = THIS.templates.credentials_popup.tmpl();
+
+            var fnShow = function() {
+                dialog = winkstart.dialog(popup_html, {
+                    title: 'Enter SIP Credentials'
+                });
+            };
+
+            // Prepopulate realm if possible.
+            THIS.get_account(function(account_data, status) {
+                    $('#Realm', popup_html).val(account_data.data.realm);
+                    fnShow();
+                },
+                fnShow
+            );
 
             $('.submit', popup_html).click(function(ev) {
                 ev.preventDefault();
                 credentials_data = form2object('credentials');
 
-                credentials_data.Realm    = winkstart.apps['auth'].realm;
-                credentials_data.WSServer = winkstart.config.ws_server;
+                // Validate !empty fields
+                errors = '';
+                $('.invalid').removeClass('invalid');
+                $.each(credentials_data, function(index, el) {
+                    if (el === '') {
+                        errors += index + ': Field is empty. <br/>';
+                        $('#'+index).addClass('invalid');
+                    }
+                });
 
-                dialog.dialog('close');
-                success(credentials_data);
+                if (errors === '') {
+                    credentials_data.WSServer = winkstart.config.ws_server;
 
-            });
-
-            dialog = winkstart.dialog(popup_html, {
-                title: 'Enter SIP Credentials'
+                    dialog.dialog('close');
+                    success(credentials_data);
+                }
+                else {
+                    THIS.browserphone_error(errors);
+                }
             });
         },
 
@@ -484,18 +536,23 @@ winkstart.module('browserphone', 'browserphone', {
          * Extracts credentials from the result of an API call to /devices/{id}.
          */
         creds_from_device_data: function(device, callback) {
-            var user = {
-                //  User Name
-                User     : device.data.sip.username,
-                //  Password
-                Pass     : device.data.sip.password,
-                //  Auth Realm
-                Realm    : winkstart.apps['auth'].realm,
-                // Websocket server (Kamailio)
-                WSServer : winkstart.config.ws_server
-            };
+            var user = {};
 
-            callback(user);
+            user.User     = device.data.sip.username,
+            user.Pass     = device.data.sip.password,
+            user.WSServer = winkstart.config.ws_server
+
+            // Try and get realm from account document.
+            THIS.get_account(
+                function(account_data, status) {
+                    user.Realm = account_data.data.realm;
+                    callback(user);
+                },
+                function(_data, status) {
+                    // @todo Could ask user to manually enter realm.
+                    THIS.browserphone_error('Could not retrieve account realm data');
+                }
+            );
         },
 
         /**
