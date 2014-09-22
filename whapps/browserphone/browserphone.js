@@ -350,22 +350,29 @@ winkstart.module('browserphone', 'browserphone', {
                 THIS.get_sip_credentials(function(user, _status) {
                     localStorage.setItem('SIPCreds', JSON.stringify(user));
                     THIS.phoneWindow = window.open('/js/external/phone', 'ctxPhone', features);
-                    $(THIS.phoneWindow).load(function() {
-                        THIS.phoneWindow.ctxSip.phone.on('invite',
-                            function(evt){
-                                THIS.incoming_call(evt);
-                            }
-                        );
 
-                        if (typeof callback === 'function') {
-                            callback();
-                        };
-                    });
+                    // Handle popup blockers. Phone will work, but won't be linked to window.
+                    if (THIS.phoneWindow === undefined) {
+                        THIS.browserphone_error('To ensure your browserphone works correctly, please enable popups for this site.');
+                    }
+                    else {
+                        $(THIS.phoneWindow).load(function() {
+                            THIS.phoneWindow.ctxSip.phone.on('invite',
+                                function(evt){
+                                    THIS.incoming_call(evt);
+                                }
+                            );
 
-                    $(window).unload(function() {
-                        THIS.phoneWindow.ctxSip.phone.unregister();
-                        THIS.phoneWindow.close();
-                    });
+                            if (typeof callback === 'function') {
+                                callback();
+                            };
+                        });
+
+                        $(window).unload(function() {
+                            THIS.phoneWindow.ctxSip.phone.unregister();
+                            THIS.phoneWindow.close();
+                        });
+                    }
                 });
             } else {
                 THIS.phoneWindow.focus();
