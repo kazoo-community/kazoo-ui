@@ -102,9 +102,7 @@ winkstart.module('browserphone', 'browserphone', {
          * The format is as follows:
          * <module name>: <initialization status>
          */
-        modules: {
-            // 'softphone': false
-        },
+        modules: {},
 
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
@@ -539,9 +537,9 @@ winkstart.module('browserphone', 'browserphone', {
          * Notifies subscribers that a call has been received, and allows them
          * to bind to events on that call.
          */
-        incoming_call: function (session) {
-            var THIS = this,
-                bindCallback;
+        incoming_call: function(session) {
+            var bindCallback,
+                THIS = this;
 
             THIS.phoneWindow.focus();
 
