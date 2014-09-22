@@ -424,7 +424,11 @@ winkstart.module('browserphone', 'browserphone', {
                                         function(data) {
                                             THIS.creds_from_device_data(data, fnSuccess);
                                         },
-                                        fnFailure('Could not retrieve browserphone device info')
+                                        function(data, status) {
+                                            delete user_data.data.browserphone_id;
+                                            THIS.update_user(user_data.data);
+                                            THIS.browserphone_error('Could not retrieve browserphone device info', data, status);
+                                        }
                                     );
                                 };
                             },
