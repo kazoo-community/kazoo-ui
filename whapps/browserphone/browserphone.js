@@ -612,6 +612,23 @@ winkstart.module('browserphone', 'browserphone', {
 
             // @todo Don't pass full session, just caller data.
             winkstart.publish('browserphone.incoming_call', session, bindCallback);
+        },
+
+        /**
+         * Allows subscribers to be notified when a call is made from the browserphone.
+         *
+         * Warning: If your whapp started the call (via the 'browserphone.make_call' event),
+         * be careful not to bind to events on the same call twice!
+         * @todo Hook into the ctx phone so that this event actually fires!
+         */
+        outgoing_call: function(session) {
+            var bindCallback,
+                THIS = this;
+            // bindCallback allows subscribers to bind to events on this call.
+            bindCallback = function(publish, events) {
+                THIS.bind_call_events(session, publish, events);
+            }
+            winkstart.publish('browserphone.outgoing_call', session, bindCallback);
         }
     }
 );
