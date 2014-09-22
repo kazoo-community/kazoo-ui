@@ -355,11 +355,6 @@ winkstart.module('browserphone', 'browserphone', {
                                 THIS.incoming_call(evt);
                             }
                         );
-                        THIS.phoneWindow.ctxSip.phone.on('accepted',
-                            function(evt){
-                                THIS.outgoing_call(evt);
-                            }
-                        );
 
                         if (typeof callback === 'function') {
                             callback();
