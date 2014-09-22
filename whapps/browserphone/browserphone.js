@@ -432,7 +432,7 @@ winkstart.module('browserphone', 'browserphone', {
                         );
                     } else {
                         // Create device.
-                        device_data = THIS.new_browserphone_data(user_data.first_name + ' ' + user_data.last_name + '\'s Browserphone');
+                        device_data = THIS.new_browserphone_data(user_data.data);
                         THIS.create_browserphone_device(device_data,
                             function(data) {
                                 user_data.data.browserphone_id = data.data.id;
@@ -499,10 +499,14 @@ winkstart.module('browserphone', 'browserphone', {
             });
         },
 
-        new_browserphone_data: function(device_name) {
+        /**
+         * Creates the initial data for a new browserphone.
+         */
+        new_browserphone_data: function(user) {
             // @todo Extract defaults into config, so they can be reused here
             // and in device.js
-            var device = {
+            var device_name = user.first_name + ' ' + user.last_name + '\'s Browserphone',
+                device = {
                 sip : {
                     username       : 'user_' + winkstart.random_string(6),
                     password       : winkstart.random_string(12),
@@ -526,6 +530,7 @@ winkstart.module('browserphone', 'browserphone', {
                 },
                 call_forward  : {},
                 music_on_hold : {},
+                owner_id      : user.id,
                 name          : device_name
             };
 
