@@ -424,6 +424,10 @@ winkstart.module('voip', 'vmbox', {
 				delete form_data.pin;
             }
 
+            form_data.not_configurable = !form_data.extra.allow_configuration;
+
+            delete form_data.extra;
+
             return form_data;
         },
 
