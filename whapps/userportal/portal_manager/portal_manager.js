@@ -811,7 +811,8 @@ winkstart.module('userportal', 'portal_manager', {
                                 this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
                                 this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
                                 duration || '-',
-                                this.duration_seconds
+                                this.duration_seconds,
+                                this.timestamp
                             ]);
                         }
                     });
@@ -847,8 +848,10 @@ winkstart.module('userportal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    { 'sTitle': _t('portal_manager', 'date'),
-                      'sWidth': '220px'
+                    { 
+                        'sTitle': _t('portal_manager', 'date'),
+                        'sWidth': '220px',
+                        'iDataSort': 7
                     },
                     {
                       'sTitle': _t('portal_manager', 'caller_id'),
@@ -872,6 +875,11 @@ winkstart.module('userportal', 'portal_manager', {
                                  '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
                                  '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
                       }
+                    },
+                    {
+                        'sTitle': 'timestamp',
+                        'bSearchable': false,
+                        'bVisible': false
                     }
                 ];
 
@@ -968,7 +976,7 @@ winkstart.module('userportal', 'portal_manager', {
 
                                     humanFullDate = THIS.friendly_date(msg.timestamp);
 
-                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri]);
+                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
                                 }
                             });
 
