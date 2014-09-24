@@ -120,15 +120,22 @@
                     }
                 },
                 error: function(data, status) {
-                    if(typeof error == 'function') {
-                        if (status  == "402" && typeof request.accept_charges === "undefined") {
+                    if(status === 401 && resource_name !== 'auth.user_auth') {
+                        winkstart.alert('It appears your session expired, the UI will automatically send you back to the login screen in 5 seconds.');
+                        $.cookie('c_winkstart_auth', null);
+
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 5000);
+                    }
+                    else if(status  == "402" && typeof request.accept_charges === "undefined") {
                             winkstart.charges(data.data, function() {
                                 request.data.accept_charges = true;
                                 amplify.request(request);
                             });
-                        } else {
-                            error(data, status);
-                        }
+                    } 
+                    else if(typeof error == 'function') {
+                        error(data, status);
                     }
 
                     if(locking === true) {
