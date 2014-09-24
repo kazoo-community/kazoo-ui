@@ -4,7 +4,7 @@ window.translate['config'] = {
 	cluster_label: "Cluster Manager",
 	cluster_desc: "Manage Servers and Infrastructure",
 	userportal_label: "User Portal",
-	userportal_desc: "Let the user manage is own vmbox ...",
+	userportal_desc: "Let the user manage his own vmbox ...",
 	accounts_label: "Accounts",
 	accounts_desc: "Manage your sub-accounts",
 	developer_label: "Developer",
@@ -56,7 +56,12 @@ window.translate['config'] = {
 	
 	alert_logout: "Your current session is expiring and you're about to be logged off due to inactivity. Please move your cursor if you want to remain logged in.",
 	charges_summary_title: "Charges summary",
+<<<<<<< HEAD
+	no_charges: 'There are no charges for this action.',
+	content_charges: "Here are the details of the monthly charges per service attached to your account:",
+=======
 	content_charges: "Here is the detail of the monthly charges per service attached to your account:",
+>>>>>>> 23dc86615da7e09ed7c917cc33b03c5d9857475b
 	there_is_no: "There is no fee for the action: ",
 	you_will_pay: "You will pay a $",
 	one_time: " one-time fee for ",

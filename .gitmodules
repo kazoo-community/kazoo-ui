@@ -1,6 +1,0 @@
-[submodule "whapps/cluster"]
-	path = whapps/cluster
-	url = git@github.com:2600hz/cluster.git
-[submodule "whapps/voip/phone"]
-	path = whapps/voip/phone
-	url = git@github.com:2600hz/phone.git
