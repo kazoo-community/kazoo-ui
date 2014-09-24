@@ -349,7 +349,7 @@ winkstart.module('browserphone', 'browserphone', {
             if (THIS.phoneWindow === undefined || !THIS.phoneWindow || THIS.phoneWindow.closed) {
                 THIS.get_sip_credentials(function(user, _status) {
                     localStorage.setItem('SIPCreds', JSON.stringify(user));
-                    THIS.phoneWindow = window.open('/js/external/phone', 'ctxPhone', features);
+                    THIS.phoneWindow = window.open('js/external/phone', 'ctxPhone', features);
 
                     // Handle popup blockers. Phone will work, but won't be linked to window.
                     if (THIS.phoneWindow === undefined) {
