@@ -505,12 +505,8 @@ winkstart.module('developer', 'api', {
                         title: _t('api', 'queues'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
-                    local_resources: {
-						title: _t('api', 'local_resources'),
-                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
-                    },
-                    global_resources: {
-                        title: _t('api', 'global_resources'),
+                    resources: {
+						title: _t('api', 'resources'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
                     temporal_rules: {

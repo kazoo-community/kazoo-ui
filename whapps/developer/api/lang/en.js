@@ -8,6 +8,7 @@ window.translate['api'] = {
 	queues: "Queues",
 	local_resources: "Local Resources",
 	global_resources: "Global Resources",
+	resources: "Resources",
 	temporal_rules: "Temporal Rules",
 	phone_numbers: "Phone Numbers",
 	limits: "Limits",
