@@ -7,7 +7,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			accounts_manager: 'tmpl/accounts_manager.html',
 			edit: 'tmpl/edit.html',
 			'switch_tmpl': 'tmpl/switch.html',
-			'credits': 'tmpl/credits.html'
+			'credits': 'tmpl/credits.html',
+			'addBlacklist': 'tmpl/addBlacklist.html'
 		},
 
 		subscribe: {
@@ -30,6 +31,11 @@ winkstart.module('accounts', 'accounts_manager', {
 		],
 
 		resources: {
+			'accounts_manager.list_blacklists': {
+				url: '{api_url}/accounts/{account_id}/blacklists',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
 			'accounts_manager.list_classifiers': {
 				url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
 				contentType: 'application/json',
@@ -142,6 +148,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			var THIS = this,
 				normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+
 			if(typeof data.data == 'object' && data.data.id) {
 				winkstart.request(true, 'accounts_manager.update', {
 						account_id: data.data.id,
@@ -331,6 +338,28 @@ winkstart.module('accounts', 'accounts_manager', {
 							callback(null, defaults);
 						}
 					},
+					blacklists: function(callback) {
+						if(typeof data === 'object' && data.id) {
+							winkstart.request('accounts_manager.list_blacklists', {
+									account_id: data.id,
+									api_url: winkstart.apps['accounts'].api_url
+								},
+								function(_data, status) {
+									defaults.field_data.blacklists = _data.data;
+
+									callback(null, _data);
+								},
+								function(data, status) {
+									callback(null, {});
+								}
+							);
+						}
+						else {
+							defaults.field_data.blacklists =[];
+							
+							callback(null, {});
+						}
+					},
 					get_credits: function(callback) {
 						if(typeof data === 'object' && data.id) {
 							winkstart.request('accounts_manager.credits.get', {
@@ -446,6 +475,8 @@ winkstart.module('accounts', 'accounts_manager', {
 						defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
 					}
 
+					THIS.formatBlacklist(render_data);
+
 					THIS.render_accounts_manager(render_data, target, callbacks);
 
 					if(typeof callbacks.after_render == 'function') {
@@ -453,6 +484,24 @@ winkstart.module('accounts', 'accounts_manager', {
 					}
 				}
 			);
+		},
+
+		formatBlacklist: function(data) {
+			var THIS = this;
+
+			data.field_data.available_blacklists = [];
+			data.field_data.selected_blacklists = [];
+
+			$.each(data.field_data.blacklists, function(k,v) {
+				if(data.hasOwnProperty('data') && data.data.hasOwnProperty('blacklists') && data.data.blacklists.indexOf(v.id) >= 0) {
+					data.field_data.selected_blacklists.push({ id: v.id, name: v.name });
+				}
+				else {
+					data.field_data.available_blacklists.push({ id: v.id, name: v.name });
+				}
+			});
+
+			delete data.field_data.blacklists;
 		},
 
 		delete_accounts_manager: function(data, success, error) {
@@ -614,6 +663,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			if(data.billing_id === 'self' && data.id) {
 				data.billing_id = data.id;
 			}
+
+			delete data[''];
 
 			return data;
 		},
@@ -809,6 +860,65 @@ winkstart.module('accounts', 'accounts_manager', {
 				}
 			});
 
+			// Blacklists events
+			var addBlacklist = function(e) {
+				var id = $('#blacklist_select',account_html).val(),
+					name = $('#blacklist_select option:selected',account_html).html();
+
+				if(id) {
+					var dataTemplate = {
+						blacklist: {
+							id: id,
+							name: name
+						},
+						_t: function(param){
+							return window.translate['accounts'][param];
+						}
+					};
+
+					$('.list-blacklists .saved-blacklists', account_html).prepend(THIS.templates.addBlacklist.tmpl(dataTemplate));
+
+					$('#blacklist_select option:selected',account_html).remove();
+					$('#blacklist_select', account_html).val('');
+				}
+			};
+			$('.blacklist-wrapper.placeholder:not(.active)', account_html).click(function() {
+				$(this).addClass('active');
+				$('#blacklist_value', account_html).focus();
+			});
+
+			$('#add_blacklist', account_html).click(function() {
+				addBlacklist();
+			});
+
+			$('.add-blacklist', account_html).bind('keypress', function(e) {
+				var code = e.keyCode || e.which;
+
+				if(code === 13) {;
+					addBlacklist(e);
+				}
+			});
+
+			$(account_html).delegate('.delete-blacklist', 'click', function(e) {
+				var parent = $(this).parents('.blacklist-wrapper');
+
+				var id = parent.data('id'),
+					name = $('.blacklist-name', parent).html();
+
+				$('#blacklist_select', account_html).append($("<option></option>")
+													.attr("value",id)
+													.text(name)); 
+
+				parent.remove();
+			});
+
+			$('#cancel_blacklist', account_html).click(function(e) {
+				e.stopPropagation();
+
+				$('.blacklist-wrapper.placeholder.active', account_html).removeClass('active');
+			});
+			// End blacklists events
+
 			deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
 
 			deregister.change(function() {
@@ -851,6 +961,11 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 
 						data.data.apps = data.data.apps || [];
+						data.data.blacklists = [];
+
+						$('.saved-blacklists .blacklist-wrapper', account_html).each(function(k,wrapper) {
+							data.data.blacklists.push($(wrapper).data('id'));
+						});
 
 						if ( form_data.name === form_data.notifications.voicemail_to_email.send_from ) {
 							winkstart.alert('You cannot specify the company name as "Send From"!');

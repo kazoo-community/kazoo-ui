@@ -90,7 +90,8 @@ winkstart.module('voip', 'voip', {
                     'cdr': false,
                     //'queue': false,
                     'directory': false,
-                    'prompt': false
+                    'prompt': false,
+                    'blacklist': false
                 }
             }
             var init_list = {};

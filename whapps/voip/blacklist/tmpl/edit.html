@@ -1,0 +1,54 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			{{if id}}
+				<h1>${_t('edit_blacklist')}</h1>
+			{{else}}
+				<h1>${_t('create_blacklist')}</h1>
+			{{/if}}
+		</div>
+	</div>
+	<div class="row">
+		<form id="blacklist-form" action="#" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="blacklistname">${_t('name')}</label>
+						<div class="input">
+							<input class="span4" id="blacklistname" name="name" type="text" value="${name}"/>
+						</div>
+					</div>
+
+					<div class="list-numbers">
+						<h4>${_t('list_numbers')}</h4>
+						<div class="add-number">
+							<div class="number-wrapper placeholder">
+								<div class="create-text">
+									<i class="icon-plus-sign"></i>
+									${_t('add_number')}
+								</div>
+								
+								<div class="create-inputs">
+									${_t('number')}
+									<input type="text" id="number_value" name="extra.numberValue" class="input-medium">
+									<button type="button" id="add_number" class="btn success">${_t('add_number')}</button>
+									<a href="javascript:void(0);" id="cancel_number">${_t('cancel')}</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="saved-numbers">
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="buttons-right">
+			{{if id}}
+				<button class="btn danger blacklist-delete">${_t('delete')}</button>
+			{{/if}}
+			<button class="btn success blacklist-save">${_t('save')}</button>
+		</div>
+	</div>
+</div>
