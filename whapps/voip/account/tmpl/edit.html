@@ -148,6 +148,41 @@
                             </ul>
 						</div>
 					</div>
+
+                    <div class="list-blacklists">
+                        <h4>${_t('blacklists')}</h4>
+                        <div class="add-blacklist">
+                            <div class="blacklist-wrapper placeholder">
+                                <div class="create-text">
+                                    <i class="icon-plus-sign"></i>
+                                    ${_t('add_blacklist')}
+                                </div>
+                                
+                                <div class="create-inputs">
+                                    ${_t('select_blacklist')}
+                                    <select name="extra.blacklist" id="blacklist_select" class="input-medium">
+                                        {{each field_data.available_blacklists}}
+                                            <option value="${id}">${name}</option>
+                                        {{/each}}
+                                    </select>
+                                    <button type="button" id="add_blacklist" class="btn success">${_t('add_blacklist_button')}</button>
+                                    <a href="javascript:void(0);" id="cancel_blacklist">${_t('cancel')}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="saved-blacklists">
+                            {{each field_data.selected_blacklists}}
+                                <div class="blacklist-wrapper" data-id="${id}">
+                                    <span class="blacklist-name">${name}</span>
+                                    
+                                    <div class="actions-blacklist pull-right">
+                                        <a class="delete-blacklist icon medium trash" href="javascript:void(0);"></a>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</form>

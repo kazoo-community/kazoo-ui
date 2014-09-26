@@ -1,9 +1,11 @@
 winkstart.module('voip', 'account', {
         css: [
+            'css/account.css'
         ],
 
         templates: {
             account: 'tmpl/account.html',
+            'addBlacklist': 'tmpl/addBlacklist.html',
             edit: 'tmpl/edit.html'
         },
 
@@ -26,6 +28,11 @@ winkstart.module('voip', 'account', {
         ],
 
         resources: {
+            'account.list_blacklists': {
+                url: '{api_url}/accounts/{account_id}/blacklists',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'account.get': {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
@@ -88,6 +95,25 @@ winkstart.module('voip', 'account', {
             }
         },
 
+        formatBlacklist: function(data) {
+            var THIS = this;
+
+            data.field_data.available_blacklists = [];
+            data.field_data.selected_blacklists = [];
+
+            $.each(data.field_data.blacklists, function(k,v) {
+                if(data.hasOwnProperty('data') && data.data.hasOwnProperty('blacklists') && data.data.blacklists.indexOf(v.id) >= 0) {
+                    data.field_data.selected_blacklists.push({ id: v.id, name: v.name });
+                }
+                else {
+                    data.field_data.available_blacklists.push({ id: v.id, name: v.name });
+                }
+            });
+
+            delete data.field_data.blacklists;
+        },
+
+
         edit_account: function(data, _parent, _target, _callback, data_defaults) {
             var THIS = this,
                 parent = _parent || $('#account-content'),
@@ -125,6 +151,21 @@ winkstart.module('voip', 'account', {
                 };
 
             winkstart.parallel({
+                    blacklists: function(callback) {
+                        winkstart.request('account.list_blacklists', {
+                                account_id: data.id,
+                                api_url: winkstart.apps['accounts'].api_url
+                            },
+                            function(_data, status) {
+                                defaults.field_data.blacklists = _data.data;
+
+                                callback(null, _data);
+                            },
+                            function(data, status) {
+                                callback(null, {});
+                            }
+                        );
+                    },
                     media_list: function(callback) {
                         winkstart.request(true, 'media.list', {
                                 account_id: winkstart.apps['voip'].account_id,
@@ -175,6 +216,8 @@ winkstart.module('voip', 'account', {
                     if(typeof data == 'object' && data.id) {
                         render_data = $.extend(true, defaults, results.get_account);
                     }
+
+                    THIS.formatBlacklist(defaults);
 
                     THIS.render_account(defaults, target, callbacks);
 
@@ -282,6 +325,66 @@ winkstart.module('voip', 'account', {
 
             winkstart.tabs($('.view-buttons', account_html), $('.tabs', account_html));
 
+
+            // Blacklists events
+            var addBlacklist = function(e) {
+                var id = $('#blacklist_select',account_html).val(),
+                    name = $('#blacklist_select option:selected',account_html).html();
+
+                if(id) {
+                    var dataTemplate = {
+                        blacklist: {
+                            id: id,
+                            name: name
+                        },
+                        _t: function(param){
+                            return window.translate['accounts'][param];
+                        }
+                    };
+
+                    $('.list-blacklists .saved-blacklists', account_html).prepend(THIS.templates.addBlacklist.tmpl(dataTemplate));
+
+                    $('#blacklist_select option:selected',account_html).remove();
+                    $('#blacklist_select', account_html).val('');
+                }
+            };
+            $('.blacklist-wrapper.placeholder:not(.active)', account_html).click(function() {
+                $(this).addClass('active');
+                $('#blacklist_value', account_html).focus();
+            });
+
+            $('#add_blacklist', account_html).click(function() {
+                addBlacklist();
+            });
+
+            $('.add-blacklist', account_html).bind('keypress', function(e) {
+                var code = e.keyCode || e.which;
+
+                if(code === 13) {;
+                    addBlacklist(e);
+                }
+            });
+
+            $(account_html).delegate('.delete-blacklist', 'click', function(e) {
+                var parent = $(this).parents('.blacklist-wrapper');
+
+                var id = parent.data('id'),
+                    name = $('.blacklist-name', parent).html();
+
+                $('#blacklist_select', account_html).append($("<option></option>")
+                                                    .attr("value",id)
+                                                    .text(name)); 
+
+                parent.remove();
+            });
+
+            $('#cancel_blacklist', account_html).click(function(e) {
+                e.stopPropagation();
+
+                $('.blacklist-wrapper.placeholder.active', account_html).removeClass('active');
+            });
+            // End blacklists events
+
             $('.account-save', account_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -293,6 +396,12 @@ winkstart.module('voip', 'account', {
                         if('field_data' in data) {
                             delete data.field_data;
                         }
+
+                        data.data.blacklists = [];
+
+                        $('.saved-blacklists .blacklist-wrapper', account_html).each(function(k,wrapper) {
+                            data.data.blacklists.push($(wrapper).data('id'));
+                        });
 
                         THIS.save_account(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },

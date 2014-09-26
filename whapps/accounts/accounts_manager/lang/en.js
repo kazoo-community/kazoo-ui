@@ -93,10 +93,5 @@ window.translate['accounts'] = {
 	customers_available_balance: "Customer's available balance for per-minute calls:",
 	delete_white_labeling: "Delete white labeling",
 	advanced: "Advanced",
-	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/,
-	blacklists: "List of active blacklists",
-	select_blacklist: "Select the blacklist to add:",
-	add_blacklist: "Add a blacklist to this account",
-	add_blacklist_button: "Add",
-	cancel: "Cancel"
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
 };
