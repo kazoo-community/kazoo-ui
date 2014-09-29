@@ -178,6 +178,7 @@ winkstart.module('voip', 'faxbox', {
 								data.faxbox = THIS.get_default_faxbox();
 								data.faxbox = $.extend(true, {}, currentFaxbox, {
 									id: _data.data.id,
+									cloud_connector_claim_url: faxbox_html.find('#cloud_connector_claim_url').attr('href'),
 									notifications: {
 										inbound: {
 											email: {
