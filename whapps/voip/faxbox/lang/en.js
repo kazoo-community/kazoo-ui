@@ -47,6 +47,7 @@ window.translate['faxbox'] = {
 	custom_smtp_address: "Custom SMTP address",
 	custom_smtp_address_placeholder: "mail@domain.com",
 	custom_smtp_address_data_content: "",
+	smtp_email_address: "SMTP email address",
 	cloud_connector_claim_url: "Link to printer",
 	cloud_connector_installer_url: "Windows driver",
 
