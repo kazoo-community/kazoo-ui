@@ -121,9 +121,19 @@
 							<input class="span4" id="custom_smtp_address" name="custom_smtp_address" type="text" placeholder="${_t('custom_smtp_address_placeholder')}" value="${faxbox.custom_smtp_address}" rel="popover" data-content="${_t('custom_smtp_address_data_content')}"/>
 						</div>
 					</div>
+
+				{{if faxbox.smtp_email_address}}
+					<div class="clearfix">
+						<label for="smtp_email_address">${_t('smtp_email_address')}</label>
+						<div class="input">
+							<span class="text">${faxbox.smtp_email_address}</span>
+							<input type="hidden" name="smtp_email_address" value="${faxbox.smtp_email_address}">
+						</div>
+					</div>
+				{{/if}}
 				</div>
 
-			{{if faxbox.cloud_connector_claim_url}}
+			{{if faxbox.cloud_state === "registered"}}
 				<div id="google">
 					<div class="clearfix">
 						<label for="cloud_connector_claim_url">${_t('cloud_connector_claim_url')}</label>
