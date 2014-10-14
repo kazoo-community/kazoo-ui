@@ -149,14 +149,59 @@ winkstart.module('voip', 'faxbox', {
 							},
 							function(_data, status) {
 								data.faxbox = THIS.get_default_faxbox(_data.data);
-								$('#edit_link', faxbox_html).show()
+								$('#edit_link', faxbox_html).show();
 								THIS.render_faxbox(data, target, callbacks);
 							}
 						);
 					} else {
 						data.faxbox = THIS.get_default_faxbox();
-						$('#edit_link', faxbox_html).hide()
+						$('#edit_link', faxbox_html).hide();
 						THIS.render_faxbox(data, target, callbacks);
+					}
+				});
+			}
+			else {
+				$('#owner_id', faxbox_html).change(function(ev) {
+					var currentFaxbox = form2object('faxbox-form');
+
+					if ($(this).val()) {
+						$('[id$="bound_notification_email"]', faxbox_html).each(function(idx, el) {
+							$(el).attr('disabled', true);
+						});
+
+						winkstart.request(true, 'user.get', {
+								account_id: winkstart.apps.voip.account_id,
+								user_id: $(this).val(),
+								api_url: winkstart.apps.voip.api_url
+							},
+							function(_data, status) {
+								data.faxbox = THIS.get_default_faxbox();
+								data.faxbox = $.extend(true, {}, currentFaxbox, {
+									id: _data.data.id,
+									cloud_connector_claim_url: faxbox_html.find('#cloud_connector_claim_url').attr('href'),
+									notifications: {
+										inbound: {
+											email: {
+												send_to: _data.data.email || _data.data.username
+											}
+										},
+										outbound: {
+											email: {
+												send_to: _data.data.email || _data.data.username
+											}
+										}
+									}
+								});
+
+								$('#edit_link', faxbox_html).hide();
+								THIS.render_faxbox(data, target, callbacks);
+							}
+						);
+					}
+					else {
+						$('[id$="bound_notification_email"]', faxbox_html).each(function(idx, el) {
+							$(el).attr('disabled', false);
+						});
 					}
 				});
 			}
