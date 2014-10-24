@@ -202,12 +202,16 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         get_settings: function(success, error) {
+            var THIS = this;
+
             winkstart.request('user_settings.get', {
                     api_url: winkstart.apps['userportal'].api_url,
                     account_id: winkstart.apps['userportal'].account_id,
                     user_id: winkstart.apps['userportal'].user_id
                 },
                 function(_data, status) {
+                    _data = THIS.format_settings(_data);
+
                     if(typeof success === 'function') {
                         success(_data);
                     }
@@ -246,6 +250,16 @@ winkstart.module('userportal', 'portal_manager', {
             });
         },
 
+        format_settings: function(_data) {
+            var THIS = this;
+
+            if(!_data.data.hasOwnProperty('call_forward')) {
+                _data.data.call_forward = {};
+            }
+
+            return _data;
+        },
+
         normalize_data: function(data) {
             if(data.call_forward.number === '') {
                 delete data.call_forward.number;
@@ -268,6 +282,7 @@ winkstart.module('userportal', 'portal_manager', {
 				_data_settings._t = function(param){
 					return window.translate['portal_manager'][param];
 				};
+
                 var portal_manager_html = THIS.templates.portal_manager.tmpl(_data_settings);
 
                 THIS.refresh_list_devices(portal_manager_html);
