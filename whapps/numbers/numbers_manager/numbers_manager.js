@@ -587,7 +587,10 @@ winkstart.module('numbers', 'numbers_manager', {
                                         function() {
                                             refresh_list();
                                         },
-                                        function() {
+                                        function(error) {
+                                            if (typeof _t('numbers_manager', error.message) !== 'undefined') {
+                                                winkstart.alert('error', _t('numbers_manager', error.message));
+                                            }
                                             refresh_list();
                                         }
                                     );
