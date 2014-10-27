@@ -115,5 +115,7 @@ window.translate['numbers_manager'] = {
 	edit_911_location: "Edit 911 Location",
 	add_number_title: "Add number",
 	error_mime_types: "The following files are not in pdf format: ",
-	error_size: "The following files are too big: "
+	error_size: "The following files are too big: ",
+	carrier_fault: "This number is currently used!",
+	state_transition: "Invalid state transition from available to released"
 };
