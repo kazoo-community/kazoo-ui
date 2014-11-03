@@ -1,7 +1,7 @@
 window.translate['user'] = {
 	user: "用户",
 	user_tip: "将呼叫转给某个用户",
-	hot_desk_login: "代接登陆",
+	hot_desk_login: "代接登录",
 	hot_desk_login_tip: "启用代接",
 	hot_desk_logout: "代接登出",
 	hot_desk_logout_tip: "关闭代接",

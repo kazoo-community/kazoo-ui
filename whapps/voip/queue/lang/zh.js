@@ -37,6 +37,6 @@ window.translate['voip_queue'] = {
 	agent_resume: "坐席恢复",
 	agent_break: "坐席休息",
 	logout_agent: "登出坐席",
-	login_agent: "登陆坐席",
+	login_agent: "登录坐席",
 	toggle_agent: "坐席状态切换"	
 };
