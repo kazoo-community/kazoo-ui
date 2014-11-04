@@ -303,6 +303,7 @@ winkstart.module('voip', 'device', {
                             invite_formats: {
                                 'username': 'Username',
                                 'npan': 'NPA NXX XXXX',
+                                '1npan': '1 NPA NXX XXXX',
                                 'e164': 'E. 164'
                             }
                         },
