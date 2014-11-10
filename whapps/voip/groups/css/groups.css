@@ -47,6 +47,7 @@
     width: 250px;
     overflow: hidden;
     text-align:center;
+    cursor: move;
 }
 
 #group-form #tab_users .column.second {
