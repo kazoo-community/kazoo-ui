@@ -384,21 +384,33 @@ winkstart.module('voip', 'faxbox', {
 						);
 					},
 					current_user: function(callback) {
-						winkstart.request(true, 'user.get', {
-								account_id: winkstart.apps.voip.account_id,
-								user_id: winkstart.apps.voip.user_id,
-								api_url: winkstart.apps.voip.api_url
-							},
-							function(_data, status) {
-								callback(null, _data.data);
-							}
-						);
+						if (winkstart.apps.auth.account_id === winkstart.apps.voip.account_id) {
+							winkstart.request(true, 'user.get', {
+									account_id: winkstart.apps.voip.account_id,
+									user_id: winkstart.apps.voip.user_id,
+									api_url: winkstart.apps.voip.api_url
+								},
+								function(_data, status) {
+									callback(null, _data.data);
+								}
+							);
+						}
+						else {
+							callback(null, {});
+						}
 					}
 				},
 				function(err, results) {
 					if (!data.hasOwnProperty('id')) {
-						results.faxbox = $.extend(true, THIS.get_default_faxbox(results.current_user), results.faxbox);
+						if (Object.keys(results.current_user).length === 0) {
+							results.faxbox = $.extend(true, THIS.get_default_faxbox(), results.faxbox);
+						}
+						else {
+							results.faxbox = $.extend(true, THIS.get_default_faxbox(results.current_user), results.faxbox);
+						}
 					}
+
+					delete results.current_user;
 
 					THIS.render_faxbox(results, target, callbacks);
 

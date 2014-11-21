@@ -61,10 +61,15 @@ winkstart.module('numbers', 'numbers_manager', {
                 contentType: 'application/json',
                 verb: 'DELETE'
             },
-            'numbers_manager.port': {
-                url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/port',
+            'numbers_manager.add_port': {
+                url: '{api_url}/accounts/{account_id}/port_requests',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'numbers_manager.change_state': {
+                url: '{api_url}/accounts/{account_id}/port_requests/{request_id}/{state}',
+                contentType: 'application/json',
+                verb: 'POST'
             },
 			'numbers_manager.getServicePlan': {
                 url: '{api_url}/accounts/{account_id}/service_plans/{name}',
@@ -76,9 +81,9 @@ winkstart.module('numbers', 'numbers_manager', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
-            'numbers_manager.create_doc': {
-                url: '{api_url}/accounts/{account_id}/phone_numbers/{phone_number}/docs/{file_name}',
-                contentType: 'application/x-base64',
+            'numbers_manager.add_attachment': {
+                url: '{api_url}/accounts/{account_id}/port_requests/{request_id}/attachments?filename={document_name}',
+                contentType: 'application/pdf',
                 verb: 'PUT'
             }
         }
@@ -130,24 +135,39 @@ winkstart.module('numbers', 'numbers_manager', {
             );
         },
 
-        port_number: function(data, success, error) {
+        add_port: function(data, success, error) {
             var THIS = this;
 
-            winkstart.request('numbers_manager.port', {
-                    account_id: winkstart.apps['numbers'].account_id,
-                    api_url: winkstart.apps['numbers'].api_url,
-                    phone_number: encodeURIComponent(data.phone_number),
-                    data: data.options || {}
+            winkstart.request('numbers_manager.add_port', {
+                    account_id: winkstart.apps.numbers.account_id,
+                    api_url: winkstart.apps.numbers.api_url,
+                    data: data
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
-                        success(_data, status);
+                        success(_data.data, status);
                     }
                 },
                 function(_data, status) {
                     if(typeof error == 'function') {
-                        error(_data, status);
+                        error(_data.data, status);
                     }
+                }
+            );
+        },
+
+        add_attachment: function(request_id, data, document_name, callback){
+            var THIS = this;
+
+            winkstart.request('numbers_manager.add_attachment', {
+                    api_url: winkstart.apps.numbers.api_url,
+                    account_id: winkstart.apps.numbers.account_id,
+                    request_id: request_id,
+                    document_name: document_name,
+                    data: data
+                },
+                function(_data, status) {
+                    callback();
                 }
             );
         },
@@ -238,69 +258,20 @@ winkstart.module('numbers', 'numbers_manager', {
             );
         },
 
-        create_number_doc: function(data, success, error) {
+        submit_port: function(request_id, callback) {
             var THIS = this;
 
-            winkstart.request('numbers_manager.create_doc', {
-                    account_id: winkstart.apps['numbers'].account_id,
-                    api_url: winkstart.apps['numbers'].api_url,
-                    phone_number: encodeURIComponent(data.phone_number),
-                    file_name: data.file_name,
-                    data: data.file_data
+            winkstart.request('numbers_manager.change_state', {
+                    api_url: winkstart.apps.numbers.api_url,
+                    account_id: winkstart.apps.numbers.account_id,
+                    request_id: request_id,
+                    state: 'submitted',
+                    data: {}
                 },
                 function(_data, status) {
-                    if(typeof success == 'function') {
-                        success(_data, status);
-                    }
-                },
-                function(_data, status) {
-                    if(typeof error == 'function') {
-                        error(_data, status);
-                    }
+                    callback();
                 }
             );
-        },
-
-        submit_port: function(port_data, number_data, callback) {
-            var THIS = this,
-                uploads_done = 0,
-                put_port_data = function() {
-                    number_data.options.port = port_data.port;
-
-                    //todo phone nbr/data/cb
-                    THIS.update_number(number_data.phone_number, number_data.options, function(data) {
-                        if(typeof callback == 'function') {
-                            callback(data);
-                        }
-                    });
-                },
-                put_port_doc = function(index) {
-                    /* Add files */
-                    THIS.create_number_doc({
-                            phone_number: number_data.phone_number,
-                            file_name: port_data.loa[0].file_name,
-                            file_data: port_data.loa[0].file_data
-                        },
-                        function(_data, status) {
-                            THIS.create_number_doc({
-                                    phone_number: number_data.phone_number,
-                                    file_name: port_data.files[index].file_name,
-                                    file_data: port_data.files[index].file_data
-                                },
-                                function(_data, status) {
-                                    put_port_data();
-                                }
-                            );
-                        }
-                    );
-                };
-
-            if(port_data.port.main_number === number_data.phone_number) {
-                put_port_doc(0);
-            }
-            else{
-                put_port_data();
-            }
         },
 
         add_freeform_numbers: function(numbers_data, callback) {
@@ -613,35 +584,32 @@ winkstart.module('numbers', 'numbers_manager', {
                 THIS.render_port_dialog(function(port_data, popup) {
                     var ports_done = 0,
 					    portNumbers = function() {
-							$.each(port_data.phone_numbers, function(i, val) {
-                            	var number_data = {
-                                	phone_number: val
-                            	};
+                            var attachments = { bill: port_data.files, loa: port_data.loa };
 
-                            	THIS.port_number(number_data, function(_number_data) {
-                                	number_data.options = _number_data.data;
+                            delete port_data.files;
+                            delete port_data.loa;
 
-                                	if('id' in number_data.options) {
-                                    	delete number_data.options.id;
-                                	}
+                            port_data.port_state = 'unconfirmed';
 
-                                	THIS.submit_port(port_data, number_data, function(_data) {
-                                    	if(++ports_done > port_data.phone_numbers.length - 1) {
-                                        	THIS.list_numbers();
+                            THIS.add_port(port_data, function(_data) {
+                                THIS.add_attachment(_data.id, attachments.bill.file_data, 'bill.pdf', function() {
+                                    THIS.add_attachment(_data.id, attachments.loa.file_data, 'loa.pdf', function() {
+                                        THIS.submit_port(_data.id, function() {
+                                            THIS.list_numbers();
 
-                                        	popup.dialog('close');
-                                    	}
-                                	});
-                            	});
-                    		});
+                                            popup.dialog('close');
+                                        })
+                                    })
+                                });
+                            });
+
                     	};
 
 					if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
 						portNumbers();
 					}
 					else {
-						winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                        	function() {
+						winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'), function() {
                             	portNumbers();
                         	}
                     	);
@@ -1010,9 +978,7 @@ winkstart.module('numbers', 'numbers_manager', {
             	});
 
                 $('.files, .loa', popup_html).each(function(idx, el) {
-                    var loa = [],
-                        files = [],
-                        el = $(el),
+                    var el = $(el),
                         name = el.attr('name');
 
                     el.fileUpload({
@@ -1021,16 +987,16 @@ winkstart.module('numbers', 'numbers_manager', {
                         mimeTypes: ['application/pdf'],
                         success: function(results) {
                             if ( name === 'loa' ) {
-                                loa.push({
+                                loa = {
                                     file_name: results[0].name,
                                     file_data: results[0].file
-                                });
+                                };
                             }
                             else if ( name === 'files') {
-                                files.push({
+                                files = {
                                     file_name: results[0].name,
                                     file_data: results[0].file
-                                });
+                                };
                             }
                         },
                         error: function(errors) {
@@ -1047,15 +1013,24 @@ winkstart.module('numbers', 'numbers_manager', {
                 	ev.preventDefault();
                 	port_form_data = form2object('port');
 
+                    delete port_form_data[''];
+
+                    port_form_data.bill.address += ' ' + port_form_data.bill.extended_address
+                    delete port_form_data.bill.extended_address;
+
                 	var string_alert = '';
 
                 	if($('.carrier_dropdown', popup_html).val() === 'Other') {
-                    	port_form_data.port.service_provider = $('.other_carrier', popup_html).val();
+                    	port_form_data.carrier = $('.other_carrier', popup_html).val();
                 	}
 
                 	if(!port_form_data.extra.agreed) {
                     	string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
                 	}
+
+                    if (port_form_data.name === '') {
+                        string_alert += _t('numbers_manager', 'you_need_to_name');
+                    }
 
                 	$.each(port_form_data.extra.cb, function(k, v) {
                     	if(v === false) {
@@ -1064,26 +1039,27 @@ winkstart.module('numbers', 'numbers_manager', {
                     	}
                 	});
 
-                	port_form_data.phone_numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
-                	port_form_data.phone_numbers = port_form_data.phone_numbers.replace(/[\s-\(\)\.]/g, '').split(',');
+                	port_form_data.numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
+                	port_form_data.numbers = port_form_data.numbers.replace(/[\s-\(\)\.]/g, '').split(',');
 
-                	port_form_data.port.main_number = port_form_data.port.main_number.replace(/[\s-\(\)\.]/g, '');
+                	port_form_data.main_number = port_form_data.main_number.replace(/[\s-\(\)\.]/g, '');
 
-                	var res = port_form_data.port.main_number.match(/^\+?1?([2-9]\d{9})$/);
-                	res ? port_form_data.port.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
+                	var res = port_form_data.main_number.match(/^\+?1?([2-9]\d{9})$/);
+                	res ? port_form_data.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
 
-                	var is_toll_free_main = THIS.check_toll_free(port_form_data.port.main_number);
+                	var is_toll_free_main = THIS.check_toll_free(port_form_data.main_number);
 
-                	port_form_data.phone_numbers.push(port_form_data.port.main_number);
+                	port_form_data.numbers.unshift(port_form_data.main_number);
+                    delete port_form_data.main_number;
 
-                	phone_numbers = [];
+                	phone_numbers = {};
                 	var error_toll_free = [];
-                	$.each(port_form_data.phone_numbers, function(i, val) {
+                	$.each(port_form_data.numbers, function(i, val) {
                     	var result = val.match(/^\+?1?([2-9]\d{9})$/);
 
                     	if(result) {
                         	if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
-                            	phone_numbers.push('+1' + result[1]);
+                                phone_numbers['+1' + result[1]] = {};
                         	}
                         	else {
                             	error_toll_free.push(result[1]);
@@ -1109,12 +1085,12 @@ winkstart.module('numbers', 'numbers_manager', {
                     	}
                 	}
 
-                	port_form_data.phone_numbers = phone_numbers;
+                	port_form_data.numbers = phone_numbers;
 
                 	files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
                 	loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
 
-                	if(!port_form_data.port.email.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
+                	if(!port_form_data.notifications.email.send_to.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
                     	string_alert += _t('numbers_manager', 'the_email_address_you_entered');
                 	}
 

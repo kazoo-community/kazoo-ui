@@ -243,6 +243,10 @@ winkstart.module('voip', 'groups', {
 
             winkstart.timezone.populate_dropdown($('#timezone', groups_html), data.data.timezone);
 
+            $('#tab_users > .rows', groups_html).sortable({
+                handle: '.column.first'
+            });
+
             $('*[rel=popover]:not([type="text"])', groups_html).popover({
                 trigger: 'hover'
             });
@@ -263,7 +267,10 @@ winkstart.module('voip', 'groups', {
                         form_data.endpoints = {};
 
                         $('.rows .row:not(#row_no_data)', groups_html).each(function(k, v) {
-                            form_data.endpoints[$(v).dataset('id')] = { type: $(v).dataset('type')};
+                            form_data.endpoints[$(v).dataset('id')] = { 
+                                type: $(v).dataset('type'),
+                                weight: k+1
+                            };
                         });
 
                         delete data.data.resources;
@@ -428,6 +435,7 @@ winkstart.module('voip', 'groups', {
 	                    endpoint_type: 'user',
 	                    endpoint_id: v.id,
 	                    endpoint_name: v.first_name + ' ' + v.last_name,
+                        endpoint_weight: data.data.endpoints[v.id].weight || 0
 	                };
 
 	                list_endpoint.push(endpoint_item);
@@ -440,6 +448,7 @@ winkstart.module('voip', 'groups', {
 	                    endpoint_type: 'device',
 	                    endpoint_id: v.id,
 	                    endpoint_name: v.name,
+                        endpoint_weight: data.data.endpoints[v.id].weight || 0
 	                };
 
 	                list_endpoint.push(endpoint_item);
@@ -447,7 +456,7 @@ winkstart.module('voip', 'groups', {
 	        });
 
 	        list_endpoint.sort(function(a,b){
-	            return a.endpoint_name.toLowerCase() > b.endpoint_name.toLowerCase();
+	            return a.endpoint_weight - b.endpoint_weight;
 	        });
 
 	        data.data.endpoints = list_endpoint;
@@ -542,6 +551,7 @@ winkstart.module('voip', 'groups', {
             $('.rows', parent).empty();
 
             if('endpoints' in data.data && data.data.endpoints.length > 0) {
+                console.log(data.data.endpoints)
                 $.each(data.data.endpoints, function(k, item){
                     $('.rows', parent).append(THIS.templates.endpoint_row.tmpl(item));
                     $('#option_endpoint_'+item.endpoint_id, parent).hide();

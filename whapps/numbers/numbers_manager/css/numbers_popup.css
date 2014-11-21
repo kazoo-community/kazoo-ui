@@ -355,6 +355,7 @@
 }
 
 #port_number .file-upload-container div button {
+    padding-top: 6px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     font-size: 12px;
@@ -466,6 +467,7 @@
 
 #port_number .step_div.fourth .block .checkbox_line input {
     margin: 0 5px 0 15px;
+}
 }
 
 #number_list {
