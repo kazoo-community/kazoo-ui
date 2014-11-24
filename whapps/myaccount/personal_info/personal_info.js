@@ -95,7 +95,8 @@ winkstart.module('myaccount', 'personal_info', {
                 ev.preventDefault();
 
                 if(pass == $('#infos_pwd2', info_html).val()) {
-                    if(winkstart.is_password_valid(pass)) {
+                	var validationType = isNaN(data.data.username) ? null : "vm";
+                    if(winkstart.is_password_valid(pass, validationType)) {
                         THIS.update_acct(data.data, {
                                 password: pass
                             },

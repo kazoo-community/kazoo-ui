@@ -1,0 +1,5 @@
+{
+    "require": {
+	    "gorkalaucirica/hipchat-v2-api-client": "~1.0"
+    }
+}

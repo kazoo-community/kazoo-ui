@@ -75,7 +75,8 @@ winkstart.module('voip', 'voip', {
             'featurecode': false,
             'cdr': false,
             //'queue': false,
-            'directory': false
+            'directory': false,
+            'phone': false
         },
 
         /* The following code is generic and should be abstracted.

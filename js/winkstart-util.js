@@ -1,6 +1,7 @@
 ( function(winkstart, amplify, $) {
     winkstart.is_password_valid = function(password_string, strength) {
         var help = {
+        		vm: 'The password must contain between 4 and 6 numbers.',
                 standard: 'The password must contain at least 6 characters and include a letter and a number.',
                 strong: 'The password must contain at least 8 characters including a non-capitalized letter, a capitalized letter, a number and a special character (!%$...)'
             },
@@ -18,6 +19,7 @@
 
     winkstart.get_password_regex = function(strength) {
         var validation = {
+        	vm: /(?=^.{4,6}$)(?=.*\d).*$/g,
             standard: /(?=^.{6,}$)(?=.*\d)((?=.*[a-z])|(?=.*[A-Z])).*$/g,
             strong: /(?=^.{8,}$)(?![.\n])(?=.*[\!\@\#\$\%\^\&\*\-\_\(\)\[\]\=\+\^])(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).*$/g
         };
