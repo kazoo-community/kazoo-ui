@@ -5,18 +5,18 @@
                 <div class="onboarding_div_left">
                     <div class="credit_card_help">
                         <div class="help_card wrapping_div"/>
-                        <div class="help_onboarding">* This helps us prevent fraud. We will not charge your card without notifying you once you've purchased our paid services.</div>
+                        <div class="help_onboarding">${_t('this_helps_us_prevent_fraud')}</div>
                     </div>
                     <div class="cvv_help"></div>
                 </div>
                 <div class="onboarding_div_right">
                     <div class="onboarding_field_merged valid_credit_cards"/>
                     <div class="onboarding_field">
-                        <label>*Name on Card</label>
+                        <label>${_t('name_on_card')}</label>
                         <input type="text" name="braintree.credit_card.cardholder_name" id="cardholder_name"/>
                     </div>
                     <div class="onboarding_field">
-                        <label>*Card Number</label>
+                        <label>${_t('card_number')}</label>
                         <input type="text" name="braintree.credit_card.number" id="card_number" />
                     </div>
                     <div class="onboarding_field">
@@ -24,7 +24,7 @@
                         <input type="text" name="braintree.credit_card.cvv" id="cvv" maxlength="4"/>
                     </div>
                     <div class="onboarding_field">
-                        <label>*Expiration Date</label>
+                        <label>${_t('expiration_date')}</label>
                         <select name="extra.expiration_month" id="expiration_month">
                             <option value="01">01 - January</option>
                             <option value="02">02 - February</option>
@@ -66,14 +66,14 @@
             <div class="hr"/>
             <div class="onboarding_block">
                 <div class="onboarding_div_left">
-                    <div class="billing_as_911">Billing Address</div>
+                    <div class="billing_as_911">${_t('billing_address')}</div>
                     <!--<input type="checkbox" name="field_data.use_e911" id="use_e911"/>-->
                 </div>
                 <div class="onboarding_div_right">
                     <div class="onboarding_field">
-                        <label>*Country</label>
+                        <label>${_t('country')}</label>
                         <select name="braintree.credit_card.billing_address.country" id="country">
-                            <option value="Other">Other country...</option>
+                            <option value="Other">${_t('other_country')}</option>
                             <option value="AD"> Andorra</option>
                             <option value="AR"> Argentina</option>
                             <option value="AU"> Australia</option>
@@ -136,27 +136,27 @@
                         </select>
                     </div>
                     <div id="billing_country_text">
-                        <label>*Country</label>
+                        <label>${_t('country')}</label>
                         <input type="text" name="extra.braintree_country_other" id="country_other" />
                     </div>
                     <div class="onboarding_field">
-                        <label>*Postal Code</label>
+                        <label>${_t('postal_code')}</label>
                         <input type="text" name="braintree.credit_card.billing_address.postal_code" id="postal_code"/>
                     </div>
                     <div class="onboarding_field">
-                        <label>*Address</label>
+                        <label>${_t('address')}</label>
                         <input type="text" name="braintree.credit_card.billing_address.street_address" id="street_address" value=""/>
                     </div>
                     <div class="onboarding_field">
-                        <label>Apartment/Unit</label>
+                        <label>${_t('apartment_unit')}</label>
                         <input type="text" name="braintree.credit_card.billing_address.extended_address" id="extended_address" value=""/>
                     </div>
                     <div class="onboarding_field">
-                        <label>*State</label>
+                        <label>${_t('state')}</label>
                         <input type="text" name="braintree.credit_card.billing_address.region" id="region" />
                     </div>
                     <div class="onboarding_field">
-                        <label>*City</label>
+                        <label>${_t('city')}</label>
                         <input type="text" name="braintree.credit_card.billing_address.locality" id="locality"/>
                     </div>
                 </div>

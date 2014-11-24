@@ -1,0 +1,3 @@
+window.translate['myaccount'] = {
+	
+};

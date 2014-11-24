@@ -17,9 +17,9 @@ winkstart.module('voip', 'vmbox', {
         },
 
         validation : [
-            { name: '#name',    regex: /^[a-zA-Z0-9\s_']+$/ },
+            { name: '#name',    regex: _t('vmbox', 'name_regex') },
             { name: '#mailbox', regex: /^[0-9]+$/ },
-            { name: '#pin',     regex: /^[0-9]{4,}$/ }
+            { name: '#pin',     regex: /^([0-9]{4,})?$/ }
         ],
 
         resources: {
@@ -77,10 +77,10 @@ winkstart.module('voip', 'vmbox', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Voicemail Boxes',
+            label: _t('vmbox', 'voicemail_boxes_label'),
             icon: 'vmbox',
             weight: '30',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -156,7 +156,7 @@ winkstart.module('voip', 'vmbox', {
                     data: $.extend(true, {
                         require_pin: true,
                         check_if_owner: true,
-                        pin: winkstart.random_string(4, '0123456789'),
+                        pin: '',
                         media: {}
                     }, data_defaults || {}),
 
@@ -175,7 +175,7 @@ winkstart.module('voip', 'vmbox', {
                             function(_data, status) {
                                 _data.data.unshift({
                                     id: '',
-                                    name: '- Not set -'
+                                    name: _t('vmbox', 'not_set')
                                 });
 
                                 defaults.field_data.media = _data.data;
@@ -192,8 +192,8 @@ winkstart.module('voip', 'vmbox', {
                             function(_data, status) {
                                 _data.data.unshift({
                                     id: '',
-                                    first_name: '- No',
-                                    last_name: 'owner -'
+                                    first_name: _t('vmbox', 'no'),
+                                    last_name: _t('vmbox', 'owner')
                                 });
 
                                 defaults.field_data.users = _data.data;
@@ -259,6 +259,9 @@ winkstart.module('voip', 'vmbox', {
         },
 
         render_vmbox: function(data, target, callbacks) {
+			data._t = function(param){
+				return window.translate['vmbox'][param];
+			};
             var THIS = this,
                 vmbox_html = THIS.templates.edit.tmpl(data);
 
@@ -390,7 +393,7 @@ winkstart.module('voip', 'vmbox', {
                         THIS.save_vmbox(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('vmbox', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -398,7 +401,7 @@ winkstart.module('voip', 'vmbox', {
             $('.vmbox-delete', vmbox_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this voicemail box?', function() {
+                winkstart.confirm(_t('vmbox', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_vmbox(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -415,6 +418,10 @@ winkstart.module('voip', 'vmbox', {
 
             if(!form_data.media.unavailable) {
                 delete form_data.media.unavailable;
+            }
+
+            if(form_data.pin === '') {
+				delete form_data.pin;
             }
 
             return form_data;
@@ -439,7 +446,7 @@ winkstart.module('voip', 'vmbox', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('vmbox', 'no_name')
                                 });
                             });
                         }
@@ -454,9 +461,9 @@ winkstart.module('voip', 'vmbox', {
                     $('#vmbox-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Voicemail Boxes',
+                            label: _t('vmbox', 'voicemail_boxes_label'),
                             identifier: 'vmbox-listview',
-                            new_entity_label: 'Add Voicemail Box',
+                            new_entity_label: _t('vmbox', 'add_voicemail_box_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'vmbox.edit',
@@ -500,7 +507,7 @@ winkstart.module('voip', 'vmbox', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit voicemail box' : 'Create voicemail box'
+                        title: (data.id) ? _t('vmbox', 'edit_voicemail_box_title') : _t('vmbox', 'create_voicemail_box_title')
                     });
                 }
             }, data_defaults);
@@ -545,11 +552,11 @@ winkstart.module('voip', 'vmbox', {
 
             $.extend(callflow_nodes, {
                 'voicemail[id=*]': {
-                    name: 'Voicemail',
+                    name: _t('vmbox', 'voicemail'),
                     icon: 'voicemail',
-                    category: 'Basic',
+                    category: _t('config', 'basic_cat'),
                     module: 'voicemail',
-                    tip: 'Direct a caller to leave a voicemail message',
+                    tip: _t('vmbox', 'voicemail_tip'),
                     data: {
                         id: 'null'
                     },
@@ -581,7 +588,10 @@ winkstart.module('voip', 'vmbox', {
                                 var popup, popup_html;
 
                                 popup_html = THIS.templates.vmbox_callflow.tmpl({
-                                    items: data.data,
+                                    _t: function(param){
+                                        return window.translate['vmbox'][param];
+                                    },
+                                    items: winkstart.sort(data.data),
                                     selected: node.getMetadata('id') || ''
                                 });
 
@@ -613,7 +623,7 @@ winkstart.module('voip', 'vmbox', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Voicemail',
+                                    title: _t('vmbox', 'voicemail_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -627,11 +637,11 @@ winkstart.module('voip', 'vmbox', {
                 },
 
                 'voicemail[action=check]': {
-                    name: 'Check Voicemail',
+                    name: _t('vmbox', 'check_voicemail'),
                     icon: 'voicemail',
-                    category: 'Advanced',
+                    category: _t('config', 'advanced_cat'),
                     module: 'voicemail',
-                    tip: 'Prompt the caller for a mailbox number and password so they can check voicemails',
+                    tip: _t('vmbox', 'check_voicemail_tip'),
                     data: {
                         action: 'check'
                     },

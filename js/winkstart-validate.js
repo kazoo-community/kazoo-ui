@@ -44,6 +44,9 @@
 
                     string_alert += arrayToString(data.data || {});
                 }
+                else if('credit' in data.data) {
+                    string_alert += data.data.credit;
+                }
                 else if($.inArray(status, ['400','401','403','404','405','413','500','503',400,401,403,404,405,413,500,503]) >= 0) {
                     if(data.message === 'no_payment_token') {
                         string_alert += 'No credit card found for your account.';
@@ -53,6 +56,9 @@
                         string_alert += winkstart.print_r(data);
                     }
                 }
+                else {
+                    string_alert += 'Unknown error: ' + status;
+                }
 
                 if(string_alert != '') {
                     if(typeof callback == 'function') {
@@ -60,6 +66,10 @@
                     }
                     else {
                         winkstart.alert('error', string_alert);
+                    }
+                } else {
+                    if(typeof callback == 'function') {
+                        callback(data, status);
                     }
                 }
             };

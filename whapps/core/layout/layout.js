@@ -28,6 +28,12 @@ winkstart.module('core', 'layout', {
                 contentType: 'application/json',
                 dataType: 'text',
                 verb: 'GET'
+            },
+            'layout.get_icon': {
+                url: '{api_url}/whitelabel/{domain}/icon',
+                contentType: 'application/json',
+                dataType: 'text',
+                verb: 'GET'
             }
         }
     },
@@ -84,7 +90,11 @@ winkstart.module('core', 'layout', {
             var THIS = this,
                 timeout,
                 domain = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1],
-                layout_html = THIS.templates.layout.tmpl().appendTo(THIS.parent),
+                layout_html = THIS.templates.layout.tmpl({
+					_t: function(param){
+						return window.translate['layout'][param];
+					}
+				}).appendTo(THIS.parent),
                 api_url = winkstart.config.whitelabel_api_url || winkstart.apps['auth'].api_url;
 
             if(winkstart.config.hide_powered) {
@@ -117,7 +127,9 @@ winkstart.module('core', 'layout', {
             });
 
             winkstart.get_version(function(version) {
-                $('.footer_wrapper .tag_version').html('('+version.replace(/\s/g,'')+')');
+                $('.footer_wrapper .tag_version').html('('+version+')');
+
+                winkstart.config.version = version
             });
 
             $('#ws-topbar .brand.logo', layout_html).click(function() {
@@ -143,6 +155,21 @@ winkstart.module('core', 'layout', {
                     }
                 }
             );
+            winkstart.request('layout.get_icon', {
+                    api_url: api_url,
+                    domain: domain
+                },
+                function(_data, status) {
+                    var src = api_url + '/whitelabel/' + domain + '/icon?_='+new Date().getTime();
+
+                    winkstart.changeFavIcon(src);
+                },
+                function(_data, status) {
+                    var src = winkstart.config.favicon || 'img/wsLogo.png';
+                    
+                    winkstart.changeFavIcon(src);
+                }
+            );
         },
 
         render_welcome: function(args) {
@@ -152,11 +179,13 @@ winkstart.module('core', 'layout', {
             }
             else {*/
                 layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
-
                 var data_welcome = {
                     company_name: winkstart.config.company_name,
                     company_website: winkstart.config.company_website,
-                    learn_more: winkstart.config.nav.learn_more || "http://www.2600hz.com/"
+                    learn_more: winkstart.config.nav.learn_more || "http://www.2600hz.com/",
+					_t: function(param){
+						return window.translate['layout'][param];
+					}
                 };
 
                 THIS.templates.left_welcome.tmpl(data_welcome).appendTo($('.welcome-page-top .left_div', layout_welcome_html));

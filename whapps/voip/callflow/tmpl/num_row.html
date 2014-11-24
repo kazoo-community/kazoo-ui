@@ -3,9 +3,9 @@
         {{if numbers[1] || numbers[1] === ''}}
             <div class="number_column first" data-number="${numbers[0]}">
                 {{if numbers[0] == 'no_match'}}
-                    Catch all
+                    ${_t('catch_all')}
                 {{else numbers[0] == ''}}
-                    (no number)
+                    ${_t('no_number')}
                 {{else}}
                     ${numbers[0]}
                 {{/if}}
@@ -14,9 +14,9 @@
 
             <div class="number_column second" data-number="${numbers[1]}">
                 {{if numbers[1] == "no_match"}}
-                    Catch all
+                    ${_t('catch_all')}
                 {{else numbers[1] == ''}}
-                    (no number)
+                    ${_t('no_number')}
                 {{else}}
                     ${numbers[1]}
                 {{/if}}
@@ -25,17 +25,17 @@
         {{else numbers[0] || numbers[0] === ''}}
             <div class="number_column first" data-number="${numbers[0]}">
                 {{if numbers[0] == 'no_match'}}
-                    Catch all
+                    ${_t('catch_all')}
                 {{else numbers[0] == ''}}
-                    (no number)
+                    ${_t('no_number')}
                 {{else}}
                     ${numbers[0]}
                 {{/if}}
                 <span class="delete"/>
             </div>
-            <div class="number_column empty second">Click to add number</div>
+            <div class="number_column empty second">${_t('click_to_add_number')}</div>
         {{else}}
-            <div class="number_column empty full">Click to add number</div>
+            <div class="number_column empty full">${_t('click_to_add_number')}</div>
         {{/if}}
         <div class="clear"/>
     </div>

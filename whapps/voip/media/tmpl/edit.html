@@ -2,47 +2,47 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Media</h1>
+                <h1>${_t('edit_media')}</h1>
             {{else}}
-                <h1>Create Media</h1>
+                <h1>${_t('create_media')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
 		</ul>
 		 <form id="media-form" action="" enctype="multipart/form-data" method="post">
 		 	<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="name">Name</label>
+						<label for="name">${_t('name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this media file"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-			            <label for="media_type">Media Type</label>
+			            <label for="media_type">${_t('media_type')}</label>
 			            <div class="input">
 			            	<select class="medium" name="media_source" id="media_type">
-			            		<option value="upload">File</option>
+			            		<option value="upload">${_t('file')}</option>
 			            		{{if data.media_source == "tts"}}
-				                    <option selected="selected" value="tts">TTS</option>
+				                    <option selected="selected" value="tts">${_t('tts')}</option>
 				                {{else}}
-				                	<option value="tts">TTS</option>
+				                	<option value="tts">${_t('tts')}</option>
 				                {{/if}}
 			            	</select>
 			            </div>
 			        </div>
 
 					<div class="clearfix file">
-			            <label for="fileInput">File input</label>
+			            <label for="fileInput">${_t('file_input')}</label>
 			            <div id="upload_div" class="input">
 				            <input class="input-file" id="file" name="upload_media" type="file">
 				        </div>
@@ -53,8 +53,8 @@
 				    </div>
 				        <div class="clearfix player_file file">
 				        	<div class="input">
-				        		<button class="btn" id="change_link">Change File</button>
-				            	<button class="btn" id="download_link">Download File</button>
+				        		<button class="btn" id="change_link">${_t('change_file')}</button>
+				            	<button class="btn" id="download_link">${_t('download_file')}</button>
 				        	</div>
 				        </div>
 				        {{else}}
@@ -62,18 +62,18 @@
 			            {{/if}}
 
 					<div class="clearfix tts">
-			            <label for="tts_text">Text</label>
+			            <label for="tts_text">${_t('text')}</label>
 			            <div class="input">
 			            	{{if data.tts}}
-			            		<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="Text To Speach" value="${data.tts.text}"/>
+			            		<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="${_t('text_placeholder')}" value="${data.tts.text}"/>
 			                {{else}}
-			                   	<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="Text To Speach" />
+			                   	<input class="span6" id="tts_text" name="tts.text" type="text" placeholder="${_t('text_placeholder')}" />
 			                {{/if}}
 			            </div>
 			        </div>
 
 			        <div class="clearfix tts">
-			            <label for="tts_voice">Select</label>
+			            <label for="tts_voice">${_t('select')}</label>
 			            <div class="input">
 			            	<select class="medium" name="tts.voice" id="tts_voice">
 			            		{{if data.tts}}
@@ -135,13 +135,13 @@
 							<ul class="inputs-list">
 								<li>
 									<label>
-										<span rel="popover" data-content="Check to enable streaming of media.">
+										<span rel="popover" data-content="${_t('streamable_data_content')}">
 											{{if data.streamable}}
 							                    <input type="checkbox" id="streamable" name="streamable" checked="checked" />
 							                {{else}}
 							                    <input type="checkbox" id="streamable" name="streamable" />
 							                {{/if}}
-							                <span>Streamable</span>
+							                <span>${_t('streamable')}</span>
 						                </span>
 						            </label>
 						        </li>
@@ -153,9 +153,9 @@
 		 </form>
 		 <div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger media-delete">Delete</button>
+	            <button class="btn danger media-delete">${_t('delete')}</button>
 	        {{/if}}
-            <button class="btn success media-save">Save</button>
+            <button class="btn success media-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

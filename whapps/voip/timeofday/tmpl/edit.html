@@ -2,34 +2,34 @@
     <div class="row">
         <div class="whapp-header">
             {{if data.id}}
-                <h1>Edit Time of Day</h1>
+                <h1>${_t('edit_time_of_day')}</h1>
             {{else}}
-                <h1>Create Time of Day</h1>
+                <h1>${_t('create_time_of_day')}</h1>
             {{/if}}
             <div class="buttons-right pasted view-buttons">
-                <button class="btn black basic activate">Basic</button>
-                <button class="btn black advanced">Advanced</button>
+                <button class="btn black basic activate">${_t('basic')}</button>
+                <button class="btn black advanced">${_t('advanced')}</button>
             </div>
         </div>
     </div>
     <div class="row">
         <ul class="tabs" data-tabs="tabs">
-            <li class="active"><a href="#basic">Basic</a></li>
+            <li class="active"><a href="#basic">${_t('basic')}</a></li>
         </ul>
         <form action="#" id="timeofday-form">
             <div class="pill-content">
                 <div class="active basic_view" id="basic">
                     <div class="clearfix">
-                        <label for="name">Name</label>
+                        <label for="name">${_t('name')}</label>
                         <div class="input">
-                            <input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Name of this Time of Day Rule"/>
+                            <input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix" id="repeats">
-                        <label for="cycle">Repeats</label>
+                        <label for="cycle">${_t('repeats')}</label>
                         <div class="input">
-                            <select name="cycle" id="cycle" class="medium" rel="popover" data-content="Select the recurrence of this time based route">
+                            <select name="cycle" id="cycle" class="medium" rel="popover" data-content="${_t('repeats_data_content')}">
                                 {{each field_data.cycle}}
                                     {{if data.cycle == id}}
                                     <option id="${id}" value="${id}" selected="selected">${value}</option>
@@ -42,10 +42,10 @@
                     </div>
 
                     <div class="clearfix" id="every">
-                        <label>Every:</label>
+                        <label>${_t('every')}</label>
                         <div class="input" >
                             <div id="yearly_every">
-                                <select name="month" id="month" class="medium" rel="popover" data-content="Depending on the cycle, define the recurrence of this rule">
+                                <select name="month" id="month" class="medium" rel="popover" data-content="${_t('every_data_content')}">
                                     {{each field_data.months}}
                                         {{if data.month == id}}}
                                         <option value="${id}" selected="selected">${value}</option>
@@ -57,16 +57,16 @@
                             </div>
 
                             <span id="monthly_every">
-                                <input class="span1" id="interval_month" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;month(s)
+                                <input class="span1" id="interval_month" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;${_t('months')}
                             </span>
                             <span id="weekly_every">
-                                <input class="span1" id="interval_week" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;week(s)
+                                <input class="span1" id="interval_week" name="interval" type="text" placeholder="1" value="${data.interval}" rel="popover" data-content=""/>&nbsp;${_t('weeks')}
                             </span>
                         </div>
                     </div>
 
                     <div class="clearfix" id="on">
-                        <label>On:</label>
+                        <label>${_t('on')}</label>
                         <div class="input">
                             <select name="ordinal" id="ordinal" class="medium" rel="popover" data-content="">
                                 {{each field_data.ordinals}}
@@ -90,7 +90,7 @@
                                 </select>
                             </span>
 
-                            <span id="days_checkboxes" rel="popover" data-content="Select which days to apply this rule">
+                            <span id="days_checkboxes" rel="popover" data-content="${_t('select_which_days')}">
                                 {{each(i, day) field_data.wdays}}
                                     {{if $.inArray(day.toLowerCase(), data.wdays) != -1}}
                                         <div class="fake_checkbox checked" data-value="${day.toLowerCase()}">${day.substr(0,1)}</div>
@@ -114,16 +114,35 @@
                     </div>
 
                     <div class="clearfix">
-                        <label for="day">Start Date</label>
+                        <label for="day">${_t('start_date')}</label>
                         <div class="input">
-                            <input class="span4" id="start_date" name="start_date" type="text" placeholder="03/12/2012" value="${data.start_date}" rel="popover" data-content="Select the starting date of this rule"/>
+                            <input class="span4" id="start_date" name="start_date" type="text" placeholder="03/12/2012" value="${data.start_date}" rel="popover" data-content="${_t('start_date_data_content')}"/>
                         </div>
                     </div>
 
                     <div class="clearfix time_wrapper_field">
-                        <label for="time">Time:</label>
+                        <label for="time">${_t('time')}</label>
                         <div class="input time_wrapper">
                             <input id="time" name="time" type="slider" value="${data.time_window_start};${data.time_window_stop}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="day">${_t('enabled')}</label>
+                        <div class="input">
+                            <select name="enabled" id="enabled" class="medium" rel="popover" data-content="${_t('enabled_data_content')}">
+                                <option value="">${_t('enabled_based_on_time')}</option>
+                                {{if data.enabled == true}}
+                                    <option value="true" selected>${_t('enabled_forced_on')}</option>
+                                {{else}}
+                                    <option value="true">${_t('enabled_forced_on')}</option>
+                                {{/if}}
+                                {{if data.enabled == false}}
+                                    <option value="false" selected>${_t('enabled_forced_off')}</option>
+                                {{else}}
+                                    <option value="false">${_t('enabled_forced_off')}</option>
+                                {{/if}}
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -131,9 +150,9 @@
         </form>
         <div class="buttons-right">
             {{if data.id}}
-                <button class="btn danger timeofday-delete">Delete</button>
+                <button class="btn danger timeofday-delete">${_t('delete')}</button>
             {{/if}}
-            <button class="btn success timeofday-save">Save</button>
+            <button class="btn success timeofday-save">${_t('save')}</button>
         </div>
     </div>
 </div>

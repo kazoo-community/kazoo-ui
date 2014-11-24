@@ -14,6 +14,7 @@ var slice = [].slice,
 
 var amplify = global.amplify = {
 	publish: function( topic ) {
+		//console.log(arguments);
 		var args = slice.call( arguments, 1 ),
 			subscription,
 			length,

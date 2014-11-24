@@ -3,23 +3,23 @@
         <div class="row">
             <div class="whapp-header">
                 {{if server_name}}
-                <h1>Edit settings for ${server_name}</h1>
+                <h1>${_t('edit_settings_for')} ${server_name}</h1>
                 {{else}}
-                <h1>Set your PBX</h1>
+                <h1>${_t('set_your_pbx')}</h1>
                 {{/if}}
             </div>
         </div>
         <div class="row">
             <form action="#" id="endpoint">
                 <div class="pill-content">
-                    <h3>We support all top IP-PBX Manufacturers. Select one below.</h3>
+                    <h3>${_t('we_support_all_top_ippbx')}</h3>
                     <div class="info_pbx">
                         {{if server_type}}
-                        <div class="selected_pbx_block">Currently selected: <span class="selected_pbx">${server_type}</span></div>
+                        <div class="selected_pbx_block">${_t('currently_selected')}: <span class="selected_pbx">${server_type}</span></div>
                         {{else}}
-                        <div class="selected_pbx_block" style="display:none;">Currently selected: <span class="selected_pbx"></span></div>
+                        <div class="selected_pbx_block" style="display:none;">${_t('currently_selected')}: <span class="selected_pbx"></span></div>
                         {{/if}}
-                        <div class="other_name_wrapper">Please specify the name of this PBX: <input name="extra.other_name" type="text" id="other_name"></input></div>
+                        <div class="other_name_wrapper">${_t('please_specify_the_name_of_this_pbx')}: <input name="extra.other_name" type="text" id="other_name"></input></div>
                     </div>
                     <div class="pbxs">
                         <div class="pbx bluebox" data-pbx_name="blue.box">&nbsp;</div>
@@ -47,52 +47,107 @@
 
                     <hr/>
 
-                    <h3>Set up your PBX<!--<a class="instructions" href="http://www.2600hz.com/instructions" target="_blank">See Instructions</a>--></h3>
+                    <h3>${_t('set_up_your_pbx')}<!--<a class="instructions" href="http://www.2600hz.com/instructions" target="_blank">See Instructions</a>--></h3>
+                    
                     <div class="clearfix">
-                        <label for="auth_auth_user">Create a Username</label>
-                        <div class="input">
-                            <input class="span4" placeholder="Username" type="text" name="auth.auth_user" value="${auth.auth_user}" id="auth_auth_user"/>
+                        <label>${_t('authenticate_by')}</label>
+                        <div class="input auth-type">
+                            {{if auth.auth_method === 'IP'}}
+                                <label><input type="radio" name="auth.auth_method" data-type="username" value="Password" /> ${_t('authenticate_by_username')}</label>
+                                <label><input type="radio" name="auth.auth_method" data-type="ip" value="IP" checked /> ${_t('authenticate_by_ip')}</label>
+                            {{else}}
+                                <label><input type="radio" name="auth.auth_method" data-type="username" value="Password" checked /> ${_t('authenticate_by_username')}</label>
+                                <label><input type="radio" name="auth.auth_method" data-type="ip" value="IP" /> ${_t('authenticate_by_ip')}</label>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div id="auth_username_inputs" class="auth-inputs clearfix">
+                        <div class="clearfix">
+                            <label for="auth_auth_user">${_t('create_a_username')}</label>
+                            <div class="input">
+                                <input class="span4" placeholder="${_t('username_placeholder')}" type="text" name="auth.auth_user" value="${auth.auth_user}" id="auth_auth_user"/>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <label for="auth_auth_password">${_t('create_a_password')}</label>
+                            <div class="input">
+                                <input class="span4" type="text" name="auth.auth_password" id="auth_auth_password" value="${auth.auth_password}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="auth_ip_inputs" class="auth-inputs clearfix">
+                        <div class="clearfix">
+                            <label for="auth_auth_ip">${_t('ip_address')}</label>
+                            <div class="input">
+                                <input class="span4" placeholder="${_t('ip_placeholder')}" type="text" name="auth.ip" value="${auth.ip}" id="auth_ip"/>
+                            </div>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="auth_auth_password">Create a Password</label>
-                        <div class="input">
-                            <input class="span4" type="text" name="auth.auth_password" id="auth_auth_password" value="${auth.auth_password}"/>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <label for="compatibility_mode">Compatibility mode</label>
+                        <label for="compatibility_mode">${_t('compatibility_mode')}</label>
                         <div class="input">
                             <select id="compatibility_mode" name="options.media_handling" class="small">
                                 {{if options.media_handling === 'process'}}
-                                    <option value="process" selected="selected">Enabled</option>
-                                    <option value="bypass">Disabled</option>
+                                    <option value="process" selected="selected">${_t('enabled')}</option>
+                                    <option value="bypass">${_t('disabled')}</option>
                                 {{else}}
-                                    <option value="process">Enabled</option>
-                                    <option value="bypass" selected="selected">Disabled</option>
+                                    <option value="process">${_t('enabled')}</option>
+                                    <option value="bypass" selected="selected">${_t('disabled')}</option>
                                 {{/if}}
                             </select>
                         </div>
                     </div>
 
                     <div class="clearfix">
-                        <label for="realm">Server/Realm</label>
+                        <label for="realm">${_t('server_realm')}</label>
                         <div class="input realm_wrapper">
                             ${extra.realm}
                         </div>
                     </div>
 
-                    <input type="hidden" name="auth.auth_method" value="Password" />
+                    <div class="clearfix">
+                        <label for="invite_format">Invite format</label>
+                        <div class="input">
+                            <select id="inbound_format" name="options.inbound_format" class="medium">
+                            {{if options.inbound_format === 'e164' || !options.inbound_format}}
+                                <option value="e164" selected="selected">E.164@Realm</option>
+                            {{else}}
+                                <option value="e164">E.164@Realm</option>
+                            {{/if}}
+
+                            {{if options.inbound_format === '1npan'}}
+                                <option value="1npan" selected="selected">1 NPA NXX XXXX@Realm</option>
+                            {{else}}
+                                <option value="1npan">1 NPA NXX XXXX@Realm</option>
+                            {{/if}}
+                            
+                            {{if options.inbound_format === 'npan'}}
+                                <option value="npan" selected="selected">NPA NXX XXXX@Realm</option>
+                            {{else}}
+                                <option value="npan">NPA NXX XXXX@Realm</option>
+                            {{/if}}
+                            
+                            {{if options.inbound_format === 'username'}}
+                                <option value="username" selected="selected">SIP_Username@Realm</option>
+                            {{else}}
+                                <option value="username">SIP_Username@Realm</option>
+                            {{/if}}
+                            </select>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="extra.serverid" value="${extra.id}" />
 
                     <hr/>
 
-                    <h3>Name your PBX</h3>
+                    <h3>${_t('name_your_pbx')}</h3>
 
                     <div class="clearfix">
-                        <label for="server_name">This PBX will be known as </label>
+                        <label for="server_name">${_t('this_pbx_will_be_known_as')} </label>
                         <div class="input">
                             <input type="text" class="span4" id="server_name" name="server_name" value="${server_name}"/>
                         </div>
@@ -101,9 +156,9 @@
             </form>
             <div class="buttons-right">
                 {{if server_name}}
-                    <button class="btn danger endpoint delete">Delete</button>
+                    <button class="btn danger endpoint delete">${_t('delete')}</button>
                 {{/if}}
-                <button class="btn success endpoint edit">Save</button>
+                <button class="btn success endpoint edit">${_t('save')}</button>
             </div>
         </div>
     </div>

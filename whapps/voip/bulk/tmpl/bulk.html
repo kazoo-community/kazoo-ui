@@ -10,17 +10,17 @@
                 <div class="pill-content">
                     <div class="active basic_view">
                         <div class="help_box">
-                            How to use this Bulk module:<br/>
-                            1) Select users or/and devices in the table.<br/>
-                            2) Choose what fields you would like to update for the selected devices/users.<br/>
-                            3) Press OK
+                            ${_t('how_to_use_this_bulk_module')}<br/>
+							${_t('select_users_or_and_devices')}<br/>
+							${_t('choose_what_fields')}<br/>
+							${_t('press_ok')}
                         </div>
 
-                        <h3>Miscellaneous</h3>
+                        <h3>${_t('miscellaneous')}</h3>
                         <!-- Using ID for each clearfix is mandatory, see form2object to understand this hack -->
                         <div class="clearfix" id="line1">
                             <label class="checkbox checkbox-label">
-                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> Music on Hold
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('music_on_hold')}
                             </label>
                             <div class="input">
                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
@@ -33,7 +33,7 @@
 
                         <div class="clearfix" id="line2">
                             <label class="checkbox checkbox-label">
-                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> Timezone
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('timezone')}
                             </label>
                             <div class="input">
                                 <select name="timezone" id="timezone" rel="popover"></select>
@@ -41,7 +41,7 @@
                         </div>
 
                         <hr/>
-                        <h3>Restrictions</h3>
+                        <h3>${_t('restrictions')}</h3>
                         {{each(k, v) field_data.call_restriction}}
                         <div class="clearfix" id="line_${k}">
                             <label class="checkbox checkbox-label">
@@ -50,11 +50,11 @@
                             <div class="input">
                                  <select name="call_restriction.${k}.action" class="medium" rel="popover">
                                     {{if data.call_restriction[k].action === 'deny'}}
-                                        <option value="deny" selected>Deny</option>
-                                        <option value="inherit">Inherit</option>
+                                        <option value="deny" selected>${_t('deny')}</option>
+                                        <option value="inherit">${_t('inherit')}</option>
                                     {{else}}
-                                        <option value="deny">Deny</option>
-                                        <option value="inherit" selected>Inherit</option>
+                                        <option value="deny">${_t('deny')}</option>
+                                        <option value="inherit" selected>${_t('inherit')}</option>
                                     {{/if}}
                                 </select>
                             </div>
@@ -64,7 +64,7 @@
                 </div>
             </form>
             <div class="buttons-right">
-                <button class="btn success bulk-save">Save</button>
+                <button class="btn success bulk-save">${_t('save')}</button>
             </div>
         </div>
     </div>

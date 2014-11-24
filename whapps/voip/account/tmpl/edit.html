@@ -1,92 +1,92 @@
 <div>
 	<div class="row">
 		<div class="whapp-header">
-			<h1>Account Details</h1>
+			<h1>${_t('account_details')}</h1>
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#caller_id"><span class="icon sip"></span>Caller ID</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li class="active"><a href="#caller_id"><span class="icon sip"></span>${_t('caller_id')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
 		</ul>
 		<form action="#" id="account-form">
 			<div class="pill-content">
 				<div class="active" id="caller_id">
-					<h3>In-House Calls</h3>
+					<h3>${_t('inhouse_calls')}</h3>
 					<div class="clearfix">
-						<label for="caller_id_name_internal">Caller ID Name</label>
+						<label for="caller_id_name_internal">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="Name" value="${data.caller_id.internal.name}"  rel="popover" data-content="Define the Caller ID Name of this Account for In-House Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="${_t('name_placeholder')}" value="${data.caller_id.internal.name}"  rel="popover" data-content="${_t('caller_id_name_data_content')}" />
 						</div>
 					</div>
 					<div class="clearfix">
-						<label for="caller_id_number_internal">Caller ID Number</label>
+						<label for="caller_id_number_internal">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.internal.number}" rel="popover" data-content="Define the Caller ID Number of this Account for In-House Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
-						</div>
-					</div>
-					<hr />
-
-					<h3>Outbound Calls</h3>
-					<div class="clearfix">
-						<label for="caller_id_name_external">Caller ID Name</label>
-						<div class="input">
-							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Outbound Calls. If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used." />
-						</div>
-					</div>
-					<div class="clearfix">
-						<label for="caller_id_number_external">Caller ID Number</label>
-						<div class="input">
-							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.external.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used."/>
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+15555555555" value="${data.caller_id.internal.number}" rel="popover" data-content="${_t('caller_id_number_data_content')}"/>
 						</div>
 					</div>
 					<hr />
 
-					<h3>Emergency</h3>
+					<h3>${_t('outbound_calls')}</h3>
 					<div class="clearfix">
-						<label for="caller_id_name_emergency">Caller ID Name</label>
+						<label for="caller_id_name_external">${_t('caller_id_name')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="Define the Caller ID Name of this Account for Emergency Calls." />
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="${_t('name_placeholder')}" value="${data.caller_id.external.name}" rel="popover" data-content="${_t('caller_id_name_data_content2')}" />
 						</div>
 					</div>
 					<div class="clearfix">
-						<label for="caller_id_number_emergency">Caller ID Number</label>
+						<label for="caller_id_number_external">${_t('caller_id_number')}</label>
 						<div class="input">
-							<input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="+1555-555-5555" value="${data.caller_id.emergency.number}" rel="popover" data-content="Define the Caller ID Number of this Account for Emergency Calls."/>
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+15555555555" value="${data.caller_id.external.number}" rel="popover" data-content="${_t('caller_id_number_data_content2')}"/>
+						</div>
+					</div>
+					<hr />
+
+					<h3>${_t('emergency')}</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_emergency">${_t('caller_id_name')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="${_t('name_placeholder')}" value="${data.caller_id.emergency.name}" rel="popover" data-content="${_t('caller_id_name_data_content3')}" />
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="caller_id_number_emergency">${_t('caller_id_number')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="+15555555555" value="${data.caller_id.emergency.number}" rel="popover" data-content="${_t('caller_id_number_data_content3')}"/>
 						</div>
 					</div>
 				</div>
 
 				<div id="options">
 
-					<h3>Billing Contact</h3>
+					<h3>${_t('billing_contact')}</h3>
 					<div class="clearfix">
-						<label for="contact_billing_email">E-mail</label>
+						<label for="contact_billing_email">${_t('email')}</label>
 						<div class="input">
-							<input class="span4" id="contact_billing_email" name="contact.billing.email" type="text" placeholder="E-mail address" value="${data.contact.billing.email}" rel="popover" data-content="Define the contact e-mail address of this Account for billing issues." />
+							<input class="span4" id="contact_billing_email" name="contact.billing.email" type="text" placeholder="${_t('email_address_placeholder')}" value="${data.contact.billing.email}" rel="popover" data-content="${_t('email_data_content')}" />
 						</div>
 					</div>
 					<div class="clearfix">
-						<label for="contact_billing_number">Number</label>
+						<label for="contact_billing_number">${_t('number')}</label>
 						<div class="input">
-							<input class="span4" id="contact_billing_number" name="contact.billing.number" type="text" placeholder="+1555-555-5555" value="${data.contact.billing.number}" rel="popover" data-content="Define the contact number of this Account for billing issues." />
+							<input class="span4" id="contact_billing_number" name="contact.billing.number" type="text" placeholder="+15555555555" value="${data.contact.billing.number}" rel="popover" data-content="${_t('number_data_content')}" />
 						</div>
 					</div>
 					<hr />
 
-					<h3>Technical Contact</h3>
+					<h3>${_t('technical_contact')}</h3>
 					<div class="clearfix">
                         <div class="input">
                         	<ul class="inputs-list">
               					<li>
 		                        	<label>
-		          						<span rel="popover" data-content="Check this if Technical and Billing contacts are identical.">
+		          						<span rel="popover" data-content="${_t('same_contact_information_data_content')}">
 											<input id="contact_copy_checkbox" class="checkbox" name="extra.contact_copy_checkbox" type="checkbox"/>
-			                                <span>Same contact information</span>
+			                                <span>${_t('same_contact_information')}</span>
 		                            	</span>
 		                            </label>
                         		</li>
@@ -94,24 +94,24 @@
                         </div>
                     </div>
 					<div class="clearfix contact-technical">
-						<label for="contact_technical_email">E-mail</label>
+						<label for="contact_technical_email">${_t('email')}</label>
 						<div class="input">
-							<input class="span4" id="contact_technical_email" name="contact.technical.email" type="text" placeholder="E-mail address" value="${data.contact.technical.email}" rel="popover" data-content="Define the contact e-mail address of this Account for technical issues." />
+							<input class="span4" id="contact_technical_email" name="contact.technical.email" type="text" placeholder="${_t('email_address_placeholder')}" value="${data.contact.technical.email}" rel="popover" data-content="${_t('email_data_content2')}" />
 						</div>
 					</div>
 					<div class="clearfix contact-technical">
-						<label for="contact_technical_number">Number</label>
+						<label for="contact_technical_number">${_t('number')}</label>
 						<div class="input">
-							<input class="span4" id="contact_technical_number" name="contact.technical.number" type="text" placeholder="+1555-555-5555" value="${data.contact.technical.number}" rel="popover" data-content="Define the contact number of this Account for technical issues." />
+							<input class="span4" id="contact_technical_number" name="contact.technical.number" type="text" placeholder="+15555555555" value="${data.contact.technical.number}" rel="popover" data-content="${_t('number_data_content2')}" />
 						</div>
 					</div>
 					<hr />
 
 					<br />
 					<div class="clearfix">
-						<label for="music_on_hold">Music on Hold</label>
+						<label for="music_on_hold">${_t('music_on_hold')}</label>
 						<div class="input">
-							<span rel="popover" data-content="Select the media file that you want to be played by default when it's not set on a user or a device.">
+							<span rel="popover" data-content="${_t('music_on_hold_data_content')}">
 								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
 									{{each field_data.media}}
 	                                    {{if data.music_on_hold.media_id == id}}
@@ -122,8 +122,8 @@
 	                            	{{/each}}
 								</select>
 								<div class="edit_create">
-									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">Edit</a>
-	                            	<a class="inline_action_media" data-action="create" href="#">Create</a>
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">${_t('edit')}</a>
+	                            	<a class="inline_action_media" data-action="create" href="#">${_t('create')}</a>
 								</div>
 							</span>
 						</div>
@@ -135,13 +135,13 @@
 							<ul class="inputs-list">
               					<li>
 	              					<label>
-	              						<span rel="popover" data-content="Some upstream carriers need to know which specific customer is placing outbound calls. Activating this field puts the account realm into the From: header for all INVITEs so that the upstream carrier can tell which customer is actually making a call. Useful for billing and LCR purposes. WARNING: This also is used in authentication. If you are also authenticating the calls, this will change the authentication realm.">
+	              						<span rel="popover" data-content="${_t('pass_realm_in_invite_data_content')}">
 											{{if data.format_from_uri == true}}
 			                                    <input type="checkbox" id="format_from_uri" name="format_from_uri" checked="checked" />
 			                                {{else}}
 			                                    <input type="checkbox" id="format_from_uri" name="format_from_uri"/>
 			                                {{/if}}
-			                                <span>Pass Realm in INVITE</span>
+			                                <span>${_t('pass_realm_in_invite')}</span>
 		                            	</span>
 	                                </label>
                                 </li>
@@ -152,7 +152,7 @@
 			</div>
 		</form>
 		<div class="buttons-right">
-            <button class="btn success account-save">Save</button>
+            <button class="btn success account-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

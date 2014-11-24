@@ -1,3 +1,4 @@
+//window.translate = [];
 ( function(winkstart, amplify, $) {
 
     winkstart.config =  {
@@ -178,45 +179,45 @@
         available_apps: {
             'voip': {
                 id: 'voip',
-                label: 'Hosted PBX',
+                label: _t('config', 'voip_label'),
                 icon: 'device',
-                desc: 'Manage vmboxes, callflows ...'
+                desc: _t('config', 'voip_desc')
             },
             'cluster': {
                 id: 'cluster',
-                label: 'Cluster Manager',
+                label: _t('config', 'cluster_label'),
                 icon: 'cluster_manager',
-                desc: 'Manage Servers and Infrastructure'
+                desc: _t('config', 'cluster_desc')
             },
             'userportal': {
                 id: 'userportal',
-                label: 'User Portal',
+                label: _t('config', 'userportal_label'),
                 icon: 'user',
-                desc: 'End user portal, for managing extension settings'
+                desc: _t('config', 'userportal_desc')
             },
             'accounts': {
                 id: 'accounts',
-                label: 'Sub-Accounts',
+                label: _t('config', 'accounts_label'),
                 icon: 'account',
-                desc: 'Manage your sub-accounts'
+                desc: _t('config', 'accounts_desc')
             },
             'developer': {
                 id: 'developer',
-                label: 'Developer',
+                label: _t('config', 'developer_label'),
                 icon: 'connectivity',
-                desc: 'Api Developer Tool'
+                desc: _t('config', 'developer_desc')
             },
             'pbxs': {
                 id: 'pbxs',
-                label: 'SIP Trunking',
+                label:  _t('config', 'pbxs_label'),
                 icon: 'device',
-                desc: 'Manage your pbxs'
+                desc: _t('config', 'pbxs_desc')
             },
             'numbers': {
                 id: 'numbers',
-                label: 'Phone Numbers',
+                label:  _t('config', 'numbers_label'),
                 icon: 'menu1',
-                desc: 'Manage your numbers'
+                desc: _t('config', 'numbers_desc')
             }
         }
     };
@@ -236,4 +237,4 @@
 
     amplify.cache = false;
 
-})(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
+})(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, window.language, jQuery);

@@ -1,0 +1,18 @@
+form .input a {
+	color: #05ADDC;
+	font-size: 13px;
+	line-height: 30px;
+}
+
+#faxbox-form .tooltip {
+	display: inline-block;
+	float: none;
+	margin-left: 5px;
+}
+
+#faxbox-form span.text {
+	color: #22ccff;
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 30px;
+}

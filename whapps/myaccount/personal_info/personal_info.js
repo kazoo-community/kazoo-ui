@@ -59,13 +59,16 @@ winkstart.module('myaccount', 'personal_info', {
             winkstart.publish('nav.add_sublink', {
                 link: 'nav',
                 sublink: 'perso',
-                label: 'My Account',
+                label: _t('personal-info', 'my_account_label'),
                 weight: '10',
                 publish: 'personal_info.popup'
             });
         },
 
         render_info: function(data, target) {
+			data._t = function(param){
+				return window.translate['personal-info'][param];
+			};
             var THIS = this,
                 info_html = THIS.templates.info.tmpl(data);
 
@@ -84,7 +87,7 @@ winkstart.module('myaccount', 'personal_info', {
                         email: $('#infos_email', info_html).val()
                     },
                     function() {
-                        winkstart.alert('info', 'Email address updated!');
+                        winkstart.alert('info', _t('personal-info', 'email_address_updated'));
                     }
                 );
             });
@@ -101,12 +104,12 @@ winkstart.module('myaccount', 'personal_info', {
                                 password: pass
                             },
                             function() {
-                                winkstart.alert('info', 'Password updated!');
+                                winkstart.alert('info', _t('personal-info', 'password_updated'));
                             }
                         );
                     }
                 } else {
-                    winkstart.alert('Passwords do not match, please retype the passwords.');
+                    winkstart.alert(_t('personal-info', 'passwords_do_not_match'));
                 }
             });
 
@@ -153,7 +156,7 @@ winkstart.module('myaccount', 'personal_info', {
 
                 var personal_info_dialog = winkstart.dialog(popup_html, {
                     modal: true,
-                    title: 'My Account',
+                    title: _t('personal-info', 'my_account_title'),
                     autoOpen: true
                 });
 
@@ -200,9 +203,9 @@ winkstart.module('myaccount', 'personal_info', {
                 THIS.update_acct(data.data, tmp,
                     function(data, status) {
                         if(app && app != "false"){
-                            winkstart.alert('info', app + ' is now your primary app');
+                            winkstart.alert('info', app + _t('personal-info', 'is_now_your_primary_app'));
                         } else {
-                            winkstart.alert('info', "You don't have a primary app anymore");
+                            winkstart.alert('info', _t('personal-info', "you_dont_have_a_primary_app"));
                         }
 
                         if(typeof callback == 'function') {

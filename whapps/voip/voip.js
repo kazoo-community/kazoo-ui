@@ -57,27 +57,49 @@ winkstart.module('voip', 'voip', {
          * The format is as follows:
          * <module name>: <initialization status>
          */
-        modules: winkstart.config.voip_modules || {
-            'account': false,
-            'bulk': false,
-            'media': false,
-            'device': false,
-            'callflow': false,
-            'conference': false,
-            'groups': false,
-            'user': false,
-            //'phone': false,
-            'vmbox': false,
-            'menu': false,
-            'registration': false,
-            'resource': false,
-            'timeofday': false,
-            'featurecode': false,
-            'cdr': false,
-            //'queue': false,
-            'directory': false,
-            'phone': false
-        },
+
+        modules: (function get_modules(){ 
+            var mod_list;
+            if ( winkstart.apps.voip.modules && $.isArray(winkstart.apps.voip.modules) ) {
+                mod_list = winkstart.apps.voip.modules;
+            } else if (winkstart.config.voip_modules) {
+                if ( $.isArray(winkstart.config.voip_modules) ) {
+                    mod_list = winkstart.config.voip_modules;
+                } else if (typeof winkstart.config.voip_modules === 'object' ) {
+                    return winkstart.config.voip_modules;
+                }
+            }
+            if (!mod_list) {
+                return {
+                    'account': false,
+                    'bulk': false,
+                    'media': false,
+                    'device': false,
+                    'callflow': false,
+                    'conference': false,
+                    'groups': false,
+                    'user': false,
+                    //'phone': false,
+                    'vmbox': false,
+                    'faxbox': false,
+                    'menu': false,
+                    'registration': false,
+                    'resource': false,
+                    'timeofday': false,
+                    'featurecode': false,
+                    'cdr': false,
+                    //'queue': false,
+                    'directory': false,
+                    'prompt': false,
+					'phone': false
+                }
+            }
+            var init_list = {};
+            $.each(mod_list, function(k, v) {
+                init_list[v] = false
+            });
+            return init_list;
+        })(),
 
         /* The following code is generic and should be abstracted.
          * For the time being, you can just copy and paste this
@@ -101,7 +123,66 @@ winkstart.module('voip', 'voip', {
                 $('[data-whapp="voip"] > a').addClass('activate');
                 THIS.setup_page();
             }
+
+            THIS.check_deep_links();
         },
+
+		check_deep_links: function() {
+			var THIS = this;
+                routes = [
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/callflows\/([0-9,a-f]+)\/?/i,
+                    	"handler" : function(accountId, callflowId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'callflow',
+                        		'callback': function(){
+                            		winkstart.publish('callflow.list-panel-click', { 'id': callflowId });
+                            	}
+                            });
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/callflows\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'callflow'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/users\/([0-9,a-f]+)\/?/i,
+                    	"handler" : function(accountId, userId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'user',
+                        		'callback': function(){
+                            		winkstart.publish('user.edit', { 'id': userId });
+                        		}
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/users\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'user'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/cdrs\/?/i,
+                    	"handler" : function(accountId){
+                        	winkstart.publish('voip.module_activate', {
+                        		'name': 'cdr'
+                        	});
+                    	}
+                	},
+                	{
+                    	"pattern" : /accounts\/([0-9,a-f]+)\/?/i
+                	}
+            	];
+
+        	winkstart.check_routes(routes);
+		},
 
         activate: function() {
             var THIS = this;
@@ -137,7 +218,12 @@ winkstart.module('voip', 'voip', {
             var THIS = this;
 
             THIS.whapp_auth(function() {
-                winkstart.publish(args.name + '.activate');
+            	if('callback' in args) {
+                	winkstart.publish(args.name + '.activate', args);
+            	}
+            	else {
+                	winkstart.publish(args.name + '.activate');
+                }
             });
         },
 
@@ -200,12 +286,16 @@ winkstart.module('voip', 'voip', {
                     disabled_devices: 'N/A',
                     users: 'N/A',
                     vmboxes: 'N/A',
+                    faxboxes: 'N/A',
                     conferences: 'N/A',
                     callflows: 'N/A',
                     feature_codes: 'N/A',
                     field_data: {
                         sub_accounts: {}
-                    }
+                    },
+					_t: function(param){
+						return window.translate['voip'][param];
+					}
                 },
                 welcome_html = $('#ws-content').empty()
                                                .append(THIS.templates.voip.tmpl(data_default)),
@@ -386,6 +476,16 @@ winkstart.module('voip', 'voip', {
                             }
                         );
                     }
+                }
+            );
+
+            /* # of faxboxes */
+            winkstart.request('faxbox.list', {
+                    account_id: account_id,
+                    api_url: winkstart.apps.voip.api_url
+                },
+                function(_data, status) {
+                    $('.faxboxes', welcome_html).html(_data.data.length);
                 }
             );
         },

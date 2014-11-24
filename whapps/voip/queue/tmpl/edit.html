@@ -2,42 +2,42 @@
 	<div class="row">
 		<div class="whapp-header">
 			{{if data.id}}
-                <h1>Edit Queue</h1>
+                <h1>${_t('edit_queue')}</h1>
             {{else}}
-                <h1>Create Queue</h1>
+                <h1>${_t('create_queue')}</h1>
             {{/if}}
 			<div class="buttons-right pasted view-buttons">
-				<button class="btn black basic activate">Basic</button>
-				<button class="btn black advanced">Advanced</button>
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
-		 	<li class="active"><a href="#basic">Basic</a></li>
-		 	<li><a href="#options"><span class="icon wrench_screw"></span>Options</a></li>
+		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
 		</ul>
 		 <form id="queue-form" action="" method="post" >
 			<div class="pill-content">
 				<div class="active basic_view" id="basic">
 					<div class="clearfix">
-						<label for="name">Name</label>
+						<label for="name">${_t('name')}</label>
 						<div class="input">
-							<input class="span4" id="name" name="name" type="text" placeholder="Name" value="${data.name}" rel="popover" data-content="Friendly name for this Queue"/>
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name_placeholder')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="row">
 						<div id="tab_users">
 	                        <div class="row title">
-	                            <div class="column first">User&nbsp;&nbsp;<span class="icon medium user"/></div>
-	                            <div class="column third">Actions</div>
+	                            <div class="column first">${_t('user')}&nbsp;&nbsp;<span class="icon medium user"/></div>
+	                            <div class="column third">${_t('actions')}</div>
 	                        </div>
 	                        <div class="rows">
 	                        </div>
 	                    </div>
 	                    <div class="add_user">
-	                        <div class="add_user_title">Add User</div>
+	                        <div class="add_user_title">${_t('add_user')}</div>
 	                        <div class="add_content_wrapper">
 	                            <div class="add_user_fields">
 	                                <ul class="controls">
@@ -45,7 +45,7 @@
 	                                        <li>
 	                                            <label>User</label>
 	                                            <select name="user_id" id="user_id">
-	                                                <option id="empty_option_user" value="empty_option_user">-- Select --</option>
+	                                                <option id="empty_option_user" value="empty_option_user">-- ${_t('select')} --</option>
 	                                                {{each field_data.users}}
 	                                                    <option value="${id}" id="option_user_${id}">${first_name} ${last_name}</option>
 	                                                {{/each}}
@@ -58,7 +58,7 @@
 	                            </div>
 	                            <div class="add_user_div">
 	                                <span class="add_user_icon"/>
-	                                <a class="add_user_link" href="javascript:void(0);" data-queue_id="${data.id}">Add this user to the queue</a>
+	                                <a class="add_user_link" href="javascript:void(0);" data-queue_id="${data.id}">${_t('add_this_user')}</a>
 	                                <div class="clear"/>
 	                            </div>
 	                        </div>
@@ -68,16 +68,16 @@
 
 				<div id="options">
 					<div class="clearfix">
-						<label for="connection_timeout">Queue timeout (s)</label>
+						<label for="connection_timeout">${_t('queue_timeout')}</label>
 						<div class="input">
-							<input class="span4" id="connection_timeout" name="connection_timeout" type="text" placeholder="Queue timeout (s)" value="${data.connection_timeout}" rel="popover" data-content="How long caller stays in queue, in seconds"/>
+							<input class="span4" id="connection_timeout" name="connection_timeout" type="text" placeholder="${_t('queue_timeout_placeholder')}" value="${data.connection_timeout}" rel="popover" data-content="${_t('queue_timeout_data_content')}"/>
 						</div>
 					</div>
 
 					<div class="clearfix">
-						<label for="member_timeout">Member timeout (s)</label>
+						<label for="member_timeout">${_t('member_timeout')}</label>
 						<div class="input">
-							<input class="span4" id="member_timeout" name="member_timeout" type="text" placeholder="Member timeout (s)" value="${data.member_timeout}" rel="popover" data-content="How long to ring an agent's phone before moving to the next agent"/>
+							<input class="span4" id="member_timeout" name="member_timeout" type="text" placeholder="${_t('member_timeout_placeholder')}" value="${data.member_timeout}" rel="popover" data-content="${_t('member_timeout_data_content')}"/>
 						</div>
 					</div>
 				</div>
@@ -85,9 +85,9 @@
 		</form>
 		<div class="buttons-right">
 	        {{if data.id}}
-	            <button class="btn danger queue-delete">Delete</button>
+	            <button class="btn danger queue-delete">${_t('delete')}</button>
 	        {{/if}}
-            <button class="btn success queue-save">Save</button>
+            <button class="btn success queue-save">${_t('save')}</button>
 		</div>
 	</div>
 </div>

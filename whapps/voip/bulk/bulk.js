@@ -35,10 +35,10 @@ function(args) {
 	winkstart.publish('whappnav.subnav.add', {
         whapp: 'voip',
 		module: this.__module,
-		label: 'Bulk Edit',
+		label: _t('bulk', 'bulk_edit_label'),
 		icon: 'device',
         weight: '80',
-        category: 'advanced'
+        category: _t('config', 'advanced_menu_cat')
 	});
 },
 {
@@ -55,14 +55,14 @@ function(args) {
                 'sWidth': '100px'
             },
             {
-                'sTitle': 'Name'
+                'sTitle': _t('bulk', 'name_stitle')
             },
             {
-                'sTitle': 'Endpoint Type',
+                'sTitle': _t('bulk', 'endpoint_type_stitle'),
                 'sWidth': '200px'
             },
             {
-                'sTitle': 'bulk_id',
+                'sTitle': _t('bulk', 'bulk_id_stitle'),
                 'bVisible': false
             },
 		];
@@ -125,11 +125,11 @@ function(args) {
                                 _data.data.unshift(
                                     {
                                         id: '',
-                                        name: 'Default Music'
+                                        name: _t('bulk', 'default_music')
                                     },
                                     {
                                         id: 'silence_stream://300000',
-                                        name: 'Silence'
+                                        name: _t('bulk', 'silence')
                                     }
                                 );
                                 defaults.field_data.media = _data.data;
@@ -182,6 +182,9 @@ function(args) {
                 }
             },
             function(err, results) {
+				defaults._t = function(param){
+					return window.translate['bulk'][param];
+				};
                 var bulk_html = THIS.templates.bulk.tmpl(defaults);
 
                 THIS.bind_events(bulk_html);
@@ -253,10 +256,10 @@ function(args) {
                     });
 
                     if(error === true) {
-                        winkstart.alert('An error occured during the bulk update...');
+                        winkstart.alert(_t('bulk', 'an_error_occured_during'));
                     }
                     else {
-                        winkstart.alert('info','The endpoints selected were updated successfuly!');
+                        winkstart.alert('info', _t('bulk', 'the_endpoints_selected'));
                     }
                 }
             );

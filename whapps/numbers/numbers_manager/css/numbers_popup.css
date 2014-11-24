@@ -343,6 +343,23 @@
     width: 48%;
 }
 
+#port_number .file-upload-container {
+    margin-top: 10px;
+}
+
+#port_number .file-upload-container input[type="text"] {
+    width: auto;
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#port_number .file-upload-container div button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-size: 12px;
+}
+
 /* Step 1 */
 #port_number .step_div.first {
     width: 95%;
@@ -418,10 +435,6 @@
     background: url('images/bill.jpg');
     box-shadow: 1px 3px 3px #444;
     margin: 0 0 24px;
-}
-
-#port_number .step_div.second .right_part .files {
-    margin-top: 10px;
 }
 
 /* Step 3 */

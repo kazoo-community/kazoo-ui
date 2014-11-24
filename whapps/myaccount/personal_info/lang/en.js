@@ -1,0 +1,23 @@
+window.translate['personal-info'] = {
+	change_your_email: "Change your email",
+	change_your_email_data_content: "",
+	save: "Save",
+	change_your_password: "Change your password",
+	change_your_password_data_content: "",
+	confirm_your_password: "Confirm your password",
+	confirm_your_password_data_content: "",
+	advanced_view: "Advanced View",
+	advanced_view_data_content: "Click if you want to see the advanced view by default.",
+	primary_app: "Primary App",
+	primary_app_data_content: "Select the app you want to display at login.",
+	none: "None",
+	close: "Close",
+	email_placeholder: "Email",
+	my_account_label: "My Account",
+	email_address_updated: "Email address updated!",
+	password_updated: "Password updated!",
+	passwords_do_not_match: "Passwords do not match, please retype the passwords.",
+	my_account_title: "My Account",
+	is_now_your_primary_app: " is now your primary app",
+	you_dont_have_a_primary_app: "You don't have a primary app anymore"
+};

@@ -1,3 +1,8 @@
+.topbar #ws-topbar ul .menu-dropdown li a, .topbar #ws-topbar  ul .dropdown-menu li a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 #ws-topbar .whapps > .divider {
     height: 72px;
     width: 2px;

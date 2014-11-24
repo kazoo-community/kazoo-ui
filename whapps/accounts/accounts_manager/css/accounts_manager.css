@@ -21,6 +21,16 @@
     border: 1px solid #444;
 }
 
+#accounts_manager-form .player_file_icon .icon_div {
+    margin-top: 10px;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #444;
+}
+
 #accounts_manager-form .refresh_text {
     margin-left: 150px;
 }

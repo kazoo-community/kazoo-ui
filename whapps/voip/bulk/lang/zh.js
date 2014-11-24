@@ -1,0 +1,23 @@
+window.translate['bulk'] = {
+	how_to_use_this_bulk_module:	'如何使用批量模块:',
+	select_users_or_and_devices: "1) 选择表格中的用户和设备.",
+	choose_what_fields: "2) 选择您想更新的字段.",
+	press_ok: "3) 点击确定",
+	basic: "基本",
+	advanced: "高级",
+	miscellaneous: "杂项",
+	music_on_hold: "保持音",
+	timezone: "时区",
+	restrictions: "限制",
+	deny: "拒绝",
+	inherit: "继承",
+	save: "保存",
+	bulk_edit_label: "批量编辑",
+	name_stitle: "名称",
+	endpoint_type_stitle: "终端类型",
+	bulk_id_stitle: "bulk_id",
+	default_music: "默认音乐",
+	silence: "静音",
+	an_error_occured_during: "批量更新过程中发生错误...",
+	the_endpoints_selected: "更新成功!"
+};

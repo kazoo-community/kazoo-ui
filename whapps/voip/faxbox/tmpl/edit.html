@@ -1,0 +1,179 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			{{if faxbox.id}}
+				<h1>${_t('edit_faxbox')}</h1>
+			{{else}}
+				<h1>${_t('create_faxbox')}</h1>
+			{{/if}}
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+			<li class="active"><a href="#basic">${_t('basic')}</a></li>
+			<li><a href="#caller_id_tab">Caller ID</a></li>
+			<li><a href="#smtp">SMTP</a></li>
+			{{if faxbox.cloud_connector_claim_url}}
+			<li><a href="#google">Google</a></li>
+			{{/if}}
+			<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
+		</ul>
+		 <form id="faxbox-form" action="" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">${_t('name')}</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name_placeholder')}" value="${faxbox.name}" rel="popover" data-content="${_t('name_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="owner_id">${_t('assign_to')}</label>
+						<div class="input">
+							<span rel="popover" data-content="${_t('belongs_to_data_content')}">
+								<select name="owner_id" id="owner_id" class="medium">
+								{{each users}}
+									{{if faxbox.owner_id == id}}
+										<option id="${id}" value="${id}" selected="selected">${first_name} ${last_name}</option>
+									{{else}}
+										<option id="${id}" value="${id}">${first_name} ${last_name}</option>
+									{{/if}}
+								{{/each}}
+								</select>
+								<div class="edit_create">
+									<a id="edit_link"  class="inline-action" data-action="edit" href="#">${_t('edit_user')}</a>
+									<a class="inline-action" data-action="create" href="#">${_t('create_user')}</a>
+								</div>
+							</span>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="inbound_notification_email">${_t('inbound_notification_email')}</label>
+						<div class="input">
+						{{if faxbox.notifications}}
+							<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.inbound.email.send_to}" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+						{{else}}
+							<input class="span4" id="inbound_notification_email" name="notifications.inbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('inbound_notification_email_data_content')}"/>
+						{{/if}}
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="outbound_notification_email">${_t('outbound_notification_email')}</label>
+						<div class="input">
+						{{if faxbox.notifications}}
+							<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="${faxbox.notifications.outbound.email.send_to}" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+						{{else}}
+							<input class="span4" id="outbound_notification_email" name="notifications.outbound.email.send_to" type="text" placeholder="${_t('inbound_notification_email_placeholder')}" value="" rel="popover" data-content="${_t('outbound_notification_email_data_content')}"/>
+						{{/if}}
+						</div>
+					</div>
+
+				</div>
+
+				<div id="caller_id_tab">
+					<div class="clearfix">
+						<label for="caller_id">${_t('caller_id')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id" name="caller_id" type="text" placeholder="${_t('caller_id_placeholder')}" value="${faxbox.caller_id}" rel="popover" data-content="${_t('caller_id_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="caller_name">${_t('caller_name')}</label>
+						<div class="input">
+							<input class="span4" id="caller_name" name="caller_name" type="text" placeholder="${_t('caller_name_placeholder')}" value="${faxbox.caller_name}" rel="popover" data-content="${_t('caller_name_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="fax_header">${_t('fax_header')}</label>
+						<div class="input">
+							<input class="span4" id="fax_header" name="fax_header" type="text" placeholder="${_t('fax_header_placeholder')}" value="${faxbox.fax_header}" rel="popover" data-content="${_t('fax_header_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="fax_identity">${_t('fax_identity')}</label>
+						<div class="input">
+							<input class="span4" id="fax_identity" name="fax_identity" type="text" placeholder="${_t('fax_identity_placeholder')}" value="${faxbox.fax_identity}" rel="popover" data-content="${_t('fax_identity_data_content')}"/>
+						</div>
+					</div>
+				</div>
+
+				<div id="smtp">
+					<div class="clearfix">
+						<label for="smtp_permission_list">${_t('smtp_permission_list')}</label>
+						<div class="input">
+							<input class="span4" id="smtp_permission_list" name="smtp_permission_list" type="text" placeholder="${_t('smtp_permission_list_placeholder')}" value="${faxbox.smtp_permission_list}" rel="popover" data-content="${_t('smtp_permission_list_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="custom_smtp_address">${_t('custom_smtp_address')}</label>
+						<div class="input">
+							<input class="span4" id="custom_smtp_address" name="custom_smtp_address" type="text" placeholder="${_t('custom_smtp_address_placeholder')}" value="${faxbox.custom_smtp_address}" rel="popover" data-content="${_t('custom_smtp_address_data_content')}"/>
+						</div>
+					</div>
+
+				{{if faxbox.smtp_email_address}}
+					<div class="clearfix">
+						<label for="smtp_email_address">${_t('smtp_email_address')}</label>
+						<div class="input">
+							<span class="text">${faxbox.smtp_email_address}</span>
+							<input type="hidden" name="smtp_email_address" value="${faxbox.smtp_email_address}">
+						</div>
+					</div>
+				{{/if}}
+				</div>
+
+			{{if faxbox.cloud_state === "registered"}}
+				<div id="google">
+					<div class="clearfix">
+						<label for="cloud_connector_claim_url">${_t('cloud_connector_claim_url')}</label>
+						<div class="input">
+							<a href="${faxbox.cloud_connector_claim_url}" target="_blank">${faxbox.cloud_connector_claim_url}</a>
+						</div>
+					</div>
+					<div class="clearfix">
+						<label for="cloud_connector_installer_url">${_t('cloud_connector_installer_url')}</label>
+						<div class="input">
+							<a href="https://tools.google.com/dlpage/cloudprintdriver" target="_blank">https://tools.google.com/dlpage/cloudprintdriver</a>
+						</div>
+					</div>
+				</div>
+			{{/if}}
+
+				<div id="options">
+					<div class="clearfix">
+						<label for="retries">${_t('retries')}</label>
+						<div class="input">
+							<input class="span4" id="retries" name="retries" type="text" placeholder="${_t('retries_placeholder')}" value="${faxbox.retries}" rel="popover" data-content="${_t('retries_data_content')}"/>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="fax_timezone">${_t('fax_timezone')}</label>
+						<div class="input">
+							<select name="fax_timezone" id="fax_timezone" rel="popover" data-content="${_t('fax_timezone_data_content')}">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		 </form>
+
+		 <div class="buttons-right">
+			{{if faxbox.id}}
+				<button class="btn danger faxbox-delete">${_t('delete')}</button>
+			{{/if}}
+			<button class="btn success faxbox-save">${_t('save')}</button>
+		</div>
+	</div>
+</div>

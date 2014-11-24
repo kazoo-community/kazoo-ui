@@ -55,7 +55,7 @@
 #pbxs_manager-content .list-panel-anchor .img_style {
     float: left;
     margin-left: 5px;
-    padding: 7px 2px;
+    padding: 6px 2px;
 }
 
 .inline_popup.assign_number  {
@@ -67,4 +67,10 @@
 
 .inline_popup.assign_number .buttons-right  {
     margin-bottom: 15px;
+}
+
+#endpoint .input.auth-type label {
+    width: auto;
+    text-align: left;
+    margin-right: 10px;
 }

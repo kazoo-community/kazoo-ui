@@ -1,10 +1,10 @@
 <div>
 	<hr/>
-    <h3>Call-Center</h3>
+    <h3>${_t('call_center')}</h3>
     <div class="clearfix">
-        <label for="max_connect_failures">Missed Calls Logout</label>
+        <label for="max_connect_failures">${_t('missed_calls_logout')}</label>
         <div class="input">
-            <input class="span1" id="max_connect_failures" name="max_connect_failures" type="text" value="${data.max_connect_failures}" rel="popover" data-content="Sets the number of consecutive missed calls before logging out an agent. NOTE: Changes to this setting only take effect after the agent logs out and back in."/>
+            <input class="span1" id="max_connect_failures" name="max_connect_failures" type="text" value="${data.max_connect_failures}" rel="popover" data-content="${_t('sets_the_number_of_consecutive')}"/>
         </div>
     </div>
 </div>

@@ -1,15 +1,15 @@
 <div>
     <div class="dialog_popup">
-        <h1>Pivot</h1>
+        <h1>${_t('pivot')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="pivot_voiceurl_input">Voice URL: </label>
+                    <label for="pivot_voiceurl_input">${_t('voice_url')}: </label>
                     <input type="text" id="pivot_voiceurl_input" class="medium" value="${data_pivot.voice_url}"/>
                 </div>
 
                 <div class="popup_field">
-                    <label for="pivot_method_input">Method: </label>
+                    <label for="pivot_method_input">${_t('method')}: </label>
                     <select id="pivot_method_input" style="width: 100px; height: 28px;">
                         {{if data_pivot.method === 'POST'}}
                             <option value="POST" selected="selected">POST</option>
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="popup_field">
-                    <label for="pivot_format_input">Format: </label>
+                    <label for="pivot_format_input">${_t('format')}: </label>
                     <select id="pivot_format_input" style="width: 100px; height: 28px;">
                         {{if data_pivot.req_format === 'twiml'}}
                             <option value="twiml" selected="selected">twiml</option>

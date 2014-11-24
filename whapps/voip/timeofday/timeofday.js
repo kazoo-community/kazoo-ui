@@ -19,7 +19,7 @@ winkstart.module('voip', 'timeofday', {
         },
 
         validation: [
-            { name: '#name', regex: /^[a-zA-Z0-9\s_']+$/ }
+            { name: '#name', regex: _t('timeofday', 'name_regex') }
         ],
 
         resources: {
@@ -59,10 +59,10 @@ winkstart.module('voip', 'timeofday', {
         winkstart.publish('whappnav.subnav.add', {
             whapp: 'voip',
             module: THIS.__module,
-            label: 'Time Of Day',
+            label: _t('timeofday', 'time_of_day_label'),
             icon: 'timeofday',
             weight: '25',
-            category: 'advanced'
+            category: _t('config', 'advanced_menu_cat')
         });
     },
 
@@ -144,13 +144,13 @@ winkstart.module('voip', 'timeofday', {
                     }, data_defaults || {}),
                     field_data: {
                         wdays: [
-                            'Sunday',
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday'
+                            _t('timeofday', 'sunday'),
+                            _t('timeofday', 'monday'),
+                            _t('timeofday', 'tuesday'),
+                            _t('timeofday', 'wednesday'),
+                            _t('timeofday', 'thursday'),
+                            _t('timeofday', 'friday'),
+                            _t('timeofday', 'saturday')
                         ],
 
                         day: [
@@ -244,6 +244,9 @@ winkstart.module('voip', 'timeofday', {
         },
 
         render_timeofday: function(data, target, callbacks){
+			data._t = function(param){
+				return window.translate['timeofday'][param];
+			};
             var THIS = this,
                 wday,
                 timeofday_html = THIS.templates.edit.tmpl(data),
@@ -368,7 +371,7 @@ winkstart.module('voip', 'timeofday', {
                         THIS.save_timeofday(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
                     },
                     function() {
-                        winkstart.alert('There were errors on the form, please correct!');
+                        winkstart.alert(_t('timeofday', 'there_were_errors_on_the_form'));
                     }
                 );
             });
@@ -376,7 +379,7 @@ winkstart.module('voip', 'timeofday', {
             $('.timeofday-delete', timeofday_html).click(function(ev) {
                 ev.preventDefault();
 
-                winkstart.confirm('Are you sure you want to delete this time of day rule?', function() {
+                winkstart.confirm(_t('timeofday', 'are_you_sure_you_want_to_delete'), function() {
                     THIS.delete_timeofday(data, callbacks.delete_success, callbacks.delete_error);
                 });
             });
@@ -444,14 +447,19 @@ winkstart.module('voip', 'timeofday', {
 
             form_data.wdays = wdays;
 
-            var startDate = new Date(form_data.start_date),
-            	year = startDate.getFullYear(),
-            	month = startDate.getMonth(),
-            	day = startDate.getDate(),
-            	utcDate = new Date(Date.UTC(year, month, day)),
-            	gregorianUTC = utcDate.getTime() / 1000 + 62167219200;
+            if(form_data.start_date === '') {
+                delete form_data.start_date;
+            }
+            else {
+                var startDate = new Date(form_data.start_date),
+                    year = startDate.getFullYear(),
+                    month = startDate.getMonth(),
+                    day = startDate.getDate(),
+                    utcDate = new Date(Date.UTC(year, month, day)),
+                    gregorianUTC = utcDate.getTime() / 1000 + 62167219200;
 
-            form_data.start_date = gregorianUTC;
+                form_data.start_date = gregorianUTC;
+            }
 
             form_data.time_window_start = times[0];
             form_data.time_window_stop = times[1];
@@ -476,6 +484,14 @@ winkstart.module('voip', 'timeofday', {
 
             delete form_data.time;
             delete form_data.weekday;
+
+            if(form_data.enabled === "true") {
+                form_data.enabled = true;
+            } else if(form_data.enabled === "false") {
+                form_data.enabled = false;
+            } else {
+                delete form_data.enabled;
+            }
 
             return form_data;
         },
@@ -525,7 +541,7 @@ winkstart.module('voip', 'timeofday', {
                             $.each(data, function(key, val) {
                                 new_list.push({
                                     id: val.id,
-                                    title: val.name || '(no name)'
+                                    title: val.name || _t('timeofday', 'no_name')
                                 });
                             });
                         }
@@ -540,9 +556,9 @@ winkstart.module('voip', 'timeofday', {
                     $('#timeofday-listpanel', parent)
                         .empty()
                         .listpanel({
-                            label: 'Time of Day',
+                            label: _t('timeofday', 'time_of_day_label'),
                             identifier: 'timeofday-listview',
-                            new_entity_label: 'Add Time of Day',
+                            new_entity_label: _t('timeofday', 'add_time_of_day_label'),
                             data: map_crossbar_data(data.data),
                             publisher: winkstart.publish,
                             notifyMethod: 'timeofday.edit',
@@ -586,7 +602,7 @@ winkstart.module('voip', 'timeofday', {
                 },
                 after_render: function() {
                     popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? 'Edit Time of Day' : 'Create Time of Day'
+                        title: (data.id) ? _t('timeofday', 'edit_time_of_day') : _t('timeofday', 'create_time_of_day')
                     });
                 }
             }, data_defaults);
@@ -597,9 +613,9 @@ winkstart.module('voip', 'timeofday', {
 
             $.extend(callflow_nodes, {
                 'temporal_route[]': {
-                    name: 'Time of Day',
+                    name: _t('timeofday', 'time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {},
                     rules: [
@@ -612,7 +628,17 @@ winkstart.module('voip', 'timeofday', {
                     key_caption: function(child_node, caption_map) {
                         var key = child_node.key;
 
-                        return (key != '_') ? caption_map[key].name : 'All other times';
+                        if(key === '_') {
+                            caption = _t('timeofday', 'all_other_times');
+                        }
+                        else if(caption_map.hasOwnProperty(key)) {
+                            caption = caption_map[key].name;
+                        }
+                        else {
+                            caption = ''
+                        }
+
+                        return caption;
                     },
                     key_edit: function(child_node, callback) {
                         var _this = this;
@@ -624,11 +650,14 @@ winkstart.module('voip', 'timeofday', {
                             function(data, status) {
                                 var popup, popup_html;
 
-                                data.data.push({ id: '_', name: 'All other times' });
+                                data.data.push({ id: '_', name: _t('timeofday', 'all_other_times') });
 
                                 popup_html = THIS.templates.timeofday_key_dialog.tmpl({
-                                    items: data.data,
-                                    selected: child_node.key
+                                    items: winkstart.sort(data.data),
+                                    selected: child_node.key,
+									_t: function(param){
+										return window.translate['timeofday'][param];
+									}
                                 });
 
                                 $('.inline_action', popup_html).click(function(ev) {
@@ -681,6 +710,9 @@ winkstart.module('voip', 'timeofday', {
                         var popup, popup_html;
 
                         popup_html = THIS.templates.timeofday_callflow.tmpl({
+							_t: function(param){
+								return window.translate['timeofday'][param];
+							},
                             items: {},
                             selected: {}
                         });
@@ -696,7 +728,7 @@ winkstart.module('voip', 'timeofday', {
                         });
 
                         popup = winkstart.dialog(popup_html, {
-                            title: 'Select a Timezone',
+                            title: _t('timeofday', 'select_a_timezone_title'),
                             minHeight: '0',
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
@@ -707,9 +739,9 @@ winkstart.module('voip', 'timeofday', {
                     }
                 },
                 'temporal_route[action=disable]': {
-                    name: 'Disable Time of Day',
+                    name: _t('timeofday', 'disable_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'disable',
@@ -750,12 +782,15 @@ winkstart.module('voip', 'timeofday', {
                                 }
 
                                  popup_html = THIS.templates.two_column.tmpl({
+									_t: function(param){
+										return window.translate['timeofday'][param];
+									},
                                     left: {
-                                        title: 'Unselected time of day rules',
+                                        title: _t('timeofday', 'unselected_time_of_day_rules'),
                                         items: unselected_rules
                                     },
                                     right: {
-                                        title: 'Selected time of day rules',
+                                        title: _t('timeofday', 'selected_time_of_day_rules'),
                                         items: selected_rules
                                     }
                                 });
@@ -773,7 +808,7 @@ winkstart.module('voip', 'timeofday', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Disable Time of Day rules',
+                                    title: _t('timeofday', 'disable_time_of_day_rules_title'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -804,9 +839,9 @@ winkstart.module('voip', 'timeofday', {
                     }
                 },
                 'temporal_route[action=enable]': {
-                    name: 'Enable Time of Day',
+                    name: _t('timeofday', 'enable_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'enable',
@@ -847,12 +882,15 @@ winkstart.module('voip', 'timeofday', {
                                 }
 
                                 popup_html = THIS.templates.two_column.tmpl({
+									_t: function(param){
+										return window.translate['timeofday'][param];
+									},
                                     left: {
-                                        title: 'Unselected time of day rules',
+                                        title: _t('timeofday', 'unselected_time_of_day_rules'),
                                         items: unselected_rules
                                     },
                                     right: {
-                                        title: 'Selected time of day rules',
+                                        title: _t('timeofday', 'selected_time_of_day_rules'),
                                         items: selected_rules
                                     }
                                 });
@@ -870,7 +908,7 @@ winkstart.module('voip', 'timeofday', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Enable Time of Day rules',
+                                    title: _t('timeofday', 'enable_time_of_day_rules'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
@@ -901,9 +939,9 @@ winkstart.module('voip', 'timeofday', {
                     }
                 },
                 'temporal_route[action=reset]': {
-                    name: 'Reset Time of Day',
+                    name: _t('timeofday', 'reset_time_of_day'),
                     icon: 'temporal_route',
-                    category: 'Time Of Day',
+                    category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {
                         action: 'reset',
@@ -943,12 +981,15 @@ winkstart.module('voip', 'timeofday', {
                                     unselected_rules = data.data;
                                 }
                                 popup_html = THIS.templates.two_column.tmpl({
+									_t: function(param){
+										return window.translate['timeofday'][param];
+									},
                                     left: {
-                                        title: 'Unselected time of day rules',
+                                        title: _t('timeofday', 'unselected_time_of_day_rules'),
                                         items: unselected_rules
                                     },
                                     right: {
-                                        title: 'Selected time of day rules',
+                                        title: _t('timeofday', 'selected_time_of_day_rules'),
                                         items: selected_rules
                                     }
                                 });
@@ -966,7 +1007,7 @@ winkstart.module('voip', 'timeofday', {
                                 });
 
                                 popup = winkstart.dialog(popup_html, {
-                                    title: 'Reset Time of Day rules',
+                                    title: _t('timeofday', 'reset_time_of_day_rules'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
