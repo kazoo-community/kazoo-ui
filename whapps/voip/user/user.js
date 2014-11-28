@@ -507,7 +507,8 @@ winkstart.module('voip', 'user', {
                             delete data.field_data;
                         }
 
-                        if(form_data.password === undefined || winkstart.is_password_valid(form_data.password)) {
+						var validationType = isNaN(data.data.username) ? null : "vm";
+                        if(form_data.password === undefined || winkstart.is_password_valid(form_data.password, validationType)) {
 
                             winkstart.request('user.account_get', {
                                     api_url: winkstart.apps['voip'].api_url,
