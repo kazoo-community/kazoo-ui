@@ -493,10 +493,6 @@ winkstart.module('developer', 'api', {
                         title: _t('api', 'conferences'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
                     },
-                    media: {
-                        title: _t('api', 'media'),
-                        verbs: ['get_all', 'get', 'put', 'post', 'delete']
-                    },
                     directories: {
                         title: _t('api', 'directories'),
                         verbs: ['get_all', 'get', 'put', 'post', 'delete']
@@ -726,6 +722,63 @@ winkstart.module('developer', 'api', {
                         },
                         'developer.servers_log.get': {
                             url: '{api_url}/accounts/{account_id}/servers/{id}/log',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        }
+                    }
+                },
+		'media': {
+                    title: _t(THIS.module, 'media'),
+                    api: {
+                        'media': {
+                            verbs: ['get_all', 'get', 'put', 'post', 'delete'],
+                            title: _t('api', 'media'),
+                            url: '/media'
+                        },
+                        'languages': {
+                            verbs: ['get_all'],
+                            title: _t('api', 'languages'),
+                            url: '/media/languages'
+                        },
+                        'languages_missing': {
+                            verbs: ['get_all'],
+                            title: _t('api', 'languages_missing'),
+                            url: '/media/languages/missing'
+                        }
+                    },
+                    ressources: {
+                        'developer.media.get_all': {
+                            url: '{api_url}/accounts/{account_id}/media',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.media.get': {
+                            url: '{api_url}/accounts/{account_id}/media/{id}',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.media.put': {
+                            url: '{api_url}/accounts/{account_id}/media',
+                            contentType: 'application/json',
+                            verb: 'PUT'
+                        },
+                        'developer.media.post': {
+                            url: '{api_url}/accounts/{account_id}/media/{id}',
+                            contentType: 'application/json',
+                            verb: 'POST'
+                        },
+                        'developer.media.delete': {
+                            url: '{api_url}/accounts/{account_id}/media/{id}',
+                            contentType: 'application/json',
+                            verb: 'DELETE'
+                        },
+                        'developer.languages.get_all': {
+                            url: '{api_url}/accounts/{account_id}/media/languages',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.languages_missing.get_all': {
+                            url: '{api_url}/accounts/{account_id}/media/languages/missing',
                             contentType: 'application/json',
                             verb: 'GET'
                         }

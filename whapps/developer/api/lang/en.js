@@ -4,6 +4,8 @@ window.translate['api'] = {
 	callflows: "Callflows",
 	conferences: "Conferences",
 	media: "Media",
+	languages: "Languages",
+	languages_missing: "Languages Missing",
 	directories: "Directories",
 	queues: "Queues",
 	local_resources: "Local Resources",
