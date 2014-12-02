@@ -610,6 +610,11 @@ winkstart.module('developer', 'api', {
                             verbs: ['get_all'],
                             title: _t('api', 'accounts_descendants'),
                             url: '/accounts/{account_id}/descendants'
+                        },
+                        'accounts_siblings': {
+                            verbs: ['get_all'],
+                            title: _t('api', 'accounts_siblings'),
+                            url: '/accounts/{account_id}/siblings'
                         }
                     },
                     ressources: {
@@ -630,6 +635,11 @@ winkstart.module('developer', 'api', {
                         },
                         'developer.accounts_descendants.get_all': {
                             url: '{api_url}/accounts/{account_id}/descendants',
+                            contentType: 'application/json',
+                            verb: 'GET'
+                        },
+                        'developer.accounts_siblings.get_all': {
+                            url: '{api_url}/accounts/{account_id}/siblings',
                             contentType: 'application/json',
                             verb: 'GET'
                         }
