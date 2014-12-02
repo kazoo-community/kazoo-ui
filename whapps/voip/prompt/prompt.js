@@ -303,7 +303,15 @@ winkstart.module('voip', 'prompt', {
 					prompt = {};
 
 				prompt.language = promptSplit.length > 1 ? promptSplit[0] : '-';
-				prompt.link = apiUrl + '/accounts/' + accountId + '/media/' + v + '/raw?auth_token=' + authToken;
+
+				if(THIS.adminMode) {
+				    prompt.link = apiUrl + '/accounts/media/' + v + '/raw?auth_token=' + authToken;
+				}
+				else {
+				    prompt.link = apiUrl + '/accounts/' + accountId + '/media/' + v + '/raw?auth_token=' + authToken;    
+				}
+
+				
 				prompt.id = v;
 
 				prompts.push(prompt);
