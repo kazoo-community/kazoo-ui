@@ -79,5 +79,7 @@ window.translate['resource'] = {
 	carriers_module_label: "Carriers Module",
 	add_carrier_label: "Add Carrier",
 	error: "Error: ",
-	are_you_sure_you_want_to_use: "Are you sure you want to use a different carrier?"
+	are_you_sure_you_want_to_use: "Are you sure you want to use a different carrier?",
+	flags: "Flags",
+	flags_help: "You can list multiple flags by separating each flag with a comma"
 };

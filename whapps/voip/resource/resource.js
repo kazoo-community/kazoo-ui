@@ -104,17 +104,19 @@ winkstart.module('voip', 'resource', {
     },
 
     {
-    	fix_codecs: function(data, formData) {
+    	fix_array: function(data, formData) {
 			$.each(data.gateways, function(k, gateway) {
 				gateway.codecs = formData.gateways[0].codecs;
 			});
+
+            data.flags = formData.flags;
 
 			return data;
     	},
 
         save_resource: function(form_data, data, success, error) {
             var THIS = this,
-                normalized_data = THIS.fix_codecs(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
+                normalized_data = THIS.fix_array(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
 
             if(typeof data.data == 'object' && data.data.id) {
                  winkstart.request(true, normalized_data.type + '_resource.update', {
@@ -526,6 +528,15 @@ winkstart.module('voip', 'resource', {
 
                 form_data.gateways[indexGateway].codecs = audioCodecs;
             });
+
+            if(form_data.extra.flags) {
+                // trims the string, then creates an array from it, and remove the empty elements
+                form_data.flags = (form_data.extra.flags.replace(/\s/g,'').split(',')).filter(function(n) {
+                    return n != '';
+                });
+            }
+
+            delete form_data.extra;
 
             return form_data;
         },
