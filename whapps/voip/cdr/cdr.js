@@ -224,7 +224,8 @@ function(args) {
             {
                 'sTitle': _t('cdr', 'actions_stitle'),
                 'sWidth': '80px',
-                'bSortable': false
+                'bSortable': false,
+		'bVisible': winkstart.apps['auth'].is_reseller || (winkstart.config.hasOwnProperty('reseller_id') ? (winkstart.config.reseller_id === winkstart.apps['auth'].account_id) : false),
             },
             {
                 'sTitle': _t('cdr', 'cost_stitle')
