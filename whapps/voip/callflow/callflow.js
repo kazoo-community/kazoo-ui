@@ -1316,7 +1316,7 @@ winkstart.module('voip', 'callflow', {
                                 if($.isArray(elem.numbers) && elem.featurecode == false) {
                                     new_list.push({
                                         id: elem.id,
-                                        title: (elem.name) ? elem.name : (elem.numbers ? elem.numbers.toString() : '')
+                                        title: (elem.numbers) ? elem.numbers.toString() + ' | ' + elem.name : ''
                                     });
                                 }
                             });
