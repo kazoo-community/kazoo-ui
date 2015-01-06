@@ -206,6 +206,25 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('not_configurable_data_content')}">
+                                            {{if data.not_configurable}}
+                                                <input type="checkbox" id="not_configurable" name="extra.allow_configuration" />
+                                            {{else}}
+                                                <input type="checkbox" id="not_configurable" name="extra.allow_configuration" checked/>
+                                            {{/if}}
+                                            <span>${_t('not_configurable')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		 </form>

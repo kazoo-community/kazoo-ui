@@ -5,6 +5,8 @@
         /* Was winkstart.debug */
         debug: false,
 
+        ws_server: 'wss://IP_OF_KAMAILIO:8080',
+
         advancedView: false,
 
         /* Registration Type */
@@ -218,6 +220,12 @@
                 label:  _t('config', 'numbers_label'),
                 icon: 'menu1',
                 desc: _t('config', 'numbers_desc')
+            },
+            'browserphone': {
+                id: 'browserphone',
+                label: _t('config', 'browserphone_label'),
+                icon: 'menu1',
+                desc: _t('config', 'browserphone_desc')
             }
         }
     };

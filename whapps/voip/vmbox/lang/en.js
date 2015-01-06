@@ -40,6 +40,8 @@ window.translate['vmbox'] = {
 	skip_instructions_data_content: "Check to skip instructions by default",
 	delete_after_notification: "Delete After Notification",
 	delete_after_notification_data_content: "Delete the voicemail after the notification has been sent",
+	not_configurable: "Configurable via menu?",
+	not_configurable_data_content: " If unchecked, it will disallow the user to configure voicemail via the menu",
 	delete: "Delete",
 	save: "Save",
 	voicemail_boxes_label: "Voicemail Boxes",

@@ -1,0 +1,61 @@
+/* Blacklist part */
+#account-form .list-blacklists {
+    display: block;
+    margin: auto;
+    width: 470px;
+}
+
+#account-form .list-blacklists .add-blacklist {
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+#account-form .list-blacklists .saved-blacklists {
+    max-height: 300px;
+    overflow: auto;
+}
+
+#account-form .blacklist-wrapper {
+    background: #444;
+    border-top: 1px solid #22ccff;
+    border-right: 1px solid #22ccff;
+    border-left: 1px solid #22ccff;
+    line-height: 30px;
+}
+
+#account-form .blacklist-wrapper.placeholder > div,
+#account-form .blacklist-wrapper:not(.placeholder) {
+    padding: 5px 10px;
+}
+
+#account-form .blacklist-wrapper.placeholder .create-text:hover {
+    background: #222;
+    cursor: pointer;
+}
+
+#account-form .saved-blacklists .blacklist-wrapper:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+#account-form .saved-blacklists .blacklist-wrapper:last-child {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+
+    border-bottom: 1px solid #22ccff;
+}
+
+#account-form .blacklist-wrapper.placeholder {
+    background: none;
+    border: 1px dashed #999;
+}
+
+#account-form .blacklist-wrapper.placeholder .create-inputs,
+#account-form .blacklist-wrapper.placeholder.active .create-text {
+    display: none;
+}
+
+#account-form .blacklist-wrapper.placeholder.active .create-inputs,
+#account-form .blacklist-wrapper.placeholder .create-text {
+    display: inherit;
+}

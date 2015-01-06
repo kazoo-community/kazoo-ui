@@ -670,42 +670,42 @@
     };
 
     winkstart.autoLogout = function() {
-		var timerAlert,
-			timerLogout,
-		    wait=15,
-		    alertBeforeLogout=2,
-		    alertTriggered = false,
-		    alertDialog;
+        if(!winkstart.config.hasOwnProperty('logout_timer') || winkstart.config.logout_timer > 0) {
+             var timerAlert,
+                timerLogout,
+                wait = winkstart.config.logout_timer || 15 ,
+                alertBeforeLogout = 2,
+                alertTriggered = false,
+                alertDialog,
+                logout = function() {
+                    winkstart.publish('auth.logout');
+                },
+                resetTimer = function() {
+                    clearTimeout(timerAlert);
+                    clearTimeout(timerLogout);
 
-		var logout = function()	{
-			winkstart.publish('auth.logout');
-		};
+                    if(alertTriggered) {
+                        alertTriggered = false;
 
-		var resetTimer = function() {
-			clearTimeout(timerAlert);
-			clearTimeout(timerLogout);
+                        alertDialog.dialog('close').remove();
+                    }
 
-			if(alertTriggered) {
-				alertTriggered = false;
+                    timerAlert=setTimeout(function() {
+                        alertTriggered = true;
 
-				alertDialog.dialog('close').remove();
-			}
+                        alertDialog = winkstart.alert(_t('config', 'alert_logout'));
+                    }, 60000*(wait-alertBeforeLogout));
 
-			timerAlert=setTimeout(function() {
-				alertTriggered = true;
+                    timerLogout=setTimeout(function() {
+                        logout();
+                    }, 60000*wait);
+                };
 
-				alertDialog = winkstart.alert(_t('config', 'alert_logout'));
-			}, 60000*(wait-alertBeforeLogout));
+            document.onkeypress = resetTimer;
+            document.onmousemove = resetTimer;
 
-			timerLogout=setTimeout(function() {
-				logout();
-			}, 60000*wait);
-		};
-
-		document.onkeypress = resetTimer;
-		document.onmousemove = resetTimer;
-
-		resetTimer();
+            resetTimer();
+        }
 	};
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);

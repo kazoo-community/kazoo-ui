@@ -177,7 +177,7 @@ winkstart.module('myaccount', 'credits', {
                     limits: data.limits,
                     extra: {
                         inbound_trunks_price: winkstart.config.inbound_trunks_price || '$6.99',
-                        twoway_trunks_price: winkstart.config.twoway_trunks_price || '$29.99'
+                        twoway_trunks_price: winkstart.config.twoway_trunks_price || '$24.99'
                     },
 					_t: function(param){
 						return window.translate['credits'][param];

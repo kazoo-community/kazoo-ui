@@ -13,6 +13,8 @@ window.translate['config'] = {
 	pbxs_desc: "Manage your pbxs",
 	numbers_label: "Number Manager",
 	numbers_desc: "Manage your numbers",
+	browserphone_label: "Browserphone",
+	browserphone_desc: "Your in-browser SIP phone",
 	there_were_errors: "There were errors on the form, please correct!", //all errors on the form
 	OK: "OK",		//button OK confirm dialog
 	CANCEL: "Cancel",	//button Cancel confirm dialog

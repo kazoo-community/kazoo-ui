@@ -202,12 +202,16 @@ winkstart.module('userportal', 'portal_manager', {
         },
 
         get_settings: function(success, error) {
+            var THIS = this;
+
             winkstart.request('user_settings.get', {
                     api_url: winkstart.apps['userportal'].api_url,
                     account_id: winkstart.apps['userportal'].account_id,
                     user_id: winkstart.apps['userportal'].user_id
                 },
                 function(_data, status) {
+                    _data = THIS.format_settings(_data);
+
                     if(typeof success === 'function') {
                         success(_data);
                     }
@@ -246,6 +250,16 @@ winkstart.module('userportal', 'portal_manager', {
             });
         },
 
+        format_settings: function(_data) {
+            var THIS = this;
+
+            if(!_data.data.hasOwnProperty('call_forward')) {
+                _data.data.call_forward = {};
+            }
+
+            return _data;
+        },
+
         normalize_data: function(data) {
             if(data.call_forward.number === '') {
                 delete data.call_forward.number;
@@ -268,6 +282,7 @@ winkstart.module('userportal', 'portal_manager', {
 				_data_settings._t = function(param){
 					return window.translate['portal_manager'][param];
 				};
+
                 var portal_manager_html = THIS.templates.portal_manager.tmpl(_data_settings);
 
                 THIS.refresh_list_devices(portal_manager_html);
@@ -811,7 +826,8 @@ winkstart.module('userportal', 'portal_manager', {
                                 this.caller_id_number === this.caller_id_name ? this.caller_id_number || '(empty)' : this.caller_id_number + ' (' + this.caller_id_name+')',
                                 this.callee_id_number === this.callee_id_name ? this.callee_id_number || this.to.substring(0, this.to.indexOf('@') != -1 ? this.to.indexOf('@') : this.to.length) || '(empty)' : this.callee_id_number + ' (' + this.callee_id_name+')',
                                 duration || '-',
-                                this.duration_seconds
+                                this.duration_seconds,
+                                this.timestamp
                             ]);
                         }
                     });
@@ -847,8 +863,10 @@ winkstart.module('userportal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    { 'sTitle': _t('portal_manager', 'date'),
-                      'sWidth': '220px'
+                    { 
+                        'sTitle': _t('portal_manager', 'date'),
+                        'sWidth': '220px',
+                        'iDataSort': 7
                     },
                     {
                       'sTitle': _t('portal_manager', 'caller_id'),
@@ -872,6 +890,11 @@ winkstart.module('userportal', 'portal_manager', {
                                  '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
                                  '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
                       }
+                    },
+                    {
+                        'sTitle': 'timestamp',
+                        'bSearchable': false,
+                        'bVisible': false
                     }
                 ];
 
@@ -968,7 +991,7 @@ winkstart.module('userportal', 'portal_manager', {
 
                                     humanFullDate = THIS.friendly_date(msg.timestamp);
 
-                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri]);
+                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
                                 }
                             });
 

@@ -37,12 +37,22 @@
             <form id="port">
                 <div class="step_div first">
                     <div class="split_div">
+                        <div class="left_part text_only">
+                            ${_t('friendly_name')}
+                        </div>
+
+                        <div class="right_part">
+                            <input type="text" name="name" placeholder="${_t('friendly_name_placeholder')}">
+                        </div>
+                    </div>
+
+                    <div class="split_div">
                         <div class="left_part">
                             <span class="icon resource"/> ${_t('current_carrier')}
                         </div>
 
                         <div class="right_part">
-                            <select class="carrier_dropdown" name="port.service_provider">
+                            <select class="carrier_dropdown" name="carrier">
                                 <option value="empty">-- ${_t('select')} --</option>
                                 <option value="AT&T">AT&T</option>
                                 <option value="T-Mobile">T-Mobile</option>
@@ -61,7 +71,7 @@
                         </div>
 
                         <div class="right_part">
-                            <input type="text" name="port.main_number" class="main_number" placeholder="415-111-2222"/>
+                            <input type="text" name="main_number" class="main_number" placeholder="415-111-2222"/>
                         </div>
 
                         <div class="clear"/>
@@ -74,7 +84,7 @@
                         </div>
 
                         <div class="right_part">
-                            <textarea class="numbers_text" name="phone_numbers" placeholder="${_t('one_number_per_line')}"></textarea>
+                            <textarea class="numbers_text" name="numbers" placeholder="${_t('one_number_per_line')}"></textarea>
                         </div>
                         <div class="clear"/>
                     </div>
@@ -93,13 +103,12 @@
 
                     <div class="split_div last">
                         <div class="left_part">
-                            <div class="field"><label>${_t('name_on_account')}</label><input type="text" name="port.billing_name"/></div>
-                            <div class="field"><label>${_t('account_id')}</label><input type="text" name="port.billing_account_id" /></div>
-                            <div class="field"><label>${_t('postal_code')}</label><input id="postal_code" type="text" name="port.billing_postal_code"/></div>
-                            <div class="field"><label>${_t('address')}</label><input type="text" name="port.billing_street_address"/></div>
-                            <div class="field"><label>${_t('ext_address')}</label><input type="text" name="port.billing_extended_address"/></div>
-                            <div class="field"><label>${_t('city')}</label><input id="locality" type="text" name="port.billing_locality"/></div>
-                            <div class="field"><label>${_t('state')}</label><input id="region" type="text" name="port.billing_region" /></div>
+                            <div class="field"><label>${_t('name_on_account')}</label><input type="text" name="bill.name"/></div>
+                            <div class="field"><label>${_t('postal_code')}</label><input id="postal_code" type="text" name="bill.postal_code"/></div>
+                            <div class="field"><label>${_t('address')}</label><input type="text" name="bill.address"/></div>
+                            <div class="field"><label>${_t('ext_address')}</label><input type="text" name="bill.extended_address"/></div>
+                            <div class="field"><label>${_t('city')}</label><input id="locality" type="text" name="bill.locality"/></div>
+                            <div class="field"><label>${_t('state')}</label><input id="region" type="text" name="bill.region" /></div>
                         </div>
 
                         <div class="right_part">
@@ -165,6 +174,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="step_div fourth">
                     <div class="block">
                         <div class="title"><span class="icon down_arrow_circle"/>&nbsp;${_t('please_confirm_the_following')}</div>
@@ -181,7 +191,7 @@
                     <div class="block">
                         <div class="checkbox_line">
                             <label>${_t('notify_this_porting_to')}</label>
-                            <input type="text" name="port.email" placeholder="${_t('mail_address')}" />
+                            <input type="text" name="notifications.email.send_to" placeholder="${_t('mail_address')}" />
                         </div>
                     </div>
                 </div>

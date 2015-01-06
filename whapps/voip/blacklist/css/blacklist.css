@@ -1,0 +1,60 @@
+#blacklist-content .list-numbers {
+	display: block;
+	margin: auto;
+	width: 470px;
+}
+
+#blacklist-content .list-numbers .add-number {
+	margin-bottom: 10px;
+	border-radius: 4px;
+}
+
+#blacklist-content .list-numbers .saved-numbers {
+	max-height: 300px;
+	overflow: auto;
+}
+
+#blacklist-content .number-wrapper {
+	background: #444;
+	border-top: 1px solid #22ccff;
+	border-right: 1px solid #22ccff;
+	border-left: 1px solid #22ccff;
+	line-height: 30px;
+}
+
+#blacklist-content .number-wrapper.placeholder > div,
+#blacklist-content .number-wrapper:not(.placeholder) {
+	padding: 5px 10px;
+}
+
+#blacklist-content .number-wrapper.placeholder .create-text:hover {
+	background: #222;
+	cursor: pointer;
+}
+
+#blacklist-content .saved-numbers .number-wrapper:first-child {
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+#blacklist-content .saved-numbers .number-wrapper:last-child {
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+
+	border-bottom: 1px solid #22ccff;
+}
+
+#blacklist-content .number-wrapper.placeholder {
+	background: none;
+	border: 1px dashed #999;
+}
+
+#blacklist-content .number-wrapper.placeholder .create-inputs,
+#blacklist-content .number-wrapper.placeholder.active .create-text {
+	display: none;
+}
+
+#blacklist-content .number-wrapper.placeholder.active .create-inputs,
+#blacklist-content .number-wrapper.placeholder .create-text {
+	display: inherit;
+}

@@ -142,6 +142,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			var THIS = this,
 				normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+
 			if(typeof data.data == 'object' && data.data.id) {
 				winkstart.request(true, 'accounts_manager.update', {
 						account_id: data.data.id,
@@ -614,6 +615,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			if(data.billing_id === 'self' && data.id) {
 				data.billing_id = data.id;
 			}
+
+			delete data[''];
 
 			return data;
 		},
