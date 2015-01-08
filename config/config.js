@@ -5,7 +5,7 @@
         /* Was winkstart.debug */
         debug: false,
 
-        ws_server: 'wss://IP_OF_KAMAILIO:8080',
+        ws_server: 'wss://sbc01.van1.voxter.net:8443',
 
         advancedView: false,
 
@@ -37,7 +37,7 @@
                         api_url: 'https://api.voxter.com:8443/v1'
                     }
                 },
-                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs', 'browserphone'],
                 default_api_url: 'https://api.voxter.com:8443/v1'
             },
             'reseller': {
