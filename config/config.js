@@ -12,6 +12,8 @@
         /* Registration Type */
         register_type: 'onboard',
 
+	logout_timer: '360',
+
 	/* Provisioner Info */
 	provisioner_url: "https://p.voxter.com",
 

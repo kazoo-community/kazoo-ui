@@ -17,7 +17,7 @@ fclose($fp);
          ,"children":{
              "_":{
   		"module":"kvs_set"
- 		,"data":{"key":"Step-A","value":"red"}
+ 		,"data":{"key1":"somethin somethin","another_key":"a somethin somethin more"}
  		,"children":{
         		"_":{
                  		"module":"pivot"

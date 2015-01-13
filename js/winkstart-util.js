@@ -673,7 +673,7 @@
         if(!winkstart.config.hasOwnProperty('logout_timer') || winkstart.config.logout_timer > 0) {
              var timerAlert,
                 timerLogout,
-                wait = winkstart.config.logout_timer || 15 ,
+                wait = winkstart.config.logout_timer || 60 ,
                 alertBeforeLogout = 2,
                 alertTriggered = false,
                 alertDialog,

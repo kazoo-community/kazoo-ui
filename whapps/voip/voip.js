@@ -79,7 +79,6 @@ winkstart.module('voip', 'voip', {
                     'conference': false,
                     'groups': false,
                     'user': false,
-                    //'phone': false,
                     'vmbox': false,
                     'faxbox': false,
                     'menu': false,
