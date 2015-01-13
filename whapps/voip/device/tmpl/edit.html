@@ -82,6 +82,27 @@
 							</ul>
 						</div>
 					</div>
+					
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="Uncheck to disable inbound calls to this device. The device can still place outbound calls.">
+											{{if data.follow_me == true}}
+												<input type="checkbox" id="follow_me" name="follow_me" checked="checked" />
+											{{else data.follow_me === undefined}}
+												<input type="checkbox" id="follow_me" name="follow_me" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="follow_me" name="follow_me" />
+											{{/if}}
+											<span>Follow-Me</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
 
 					<div class="clearfix">
 						<div class="input">
