@@ -385,6 +385,8 @@ winkstart.module('userportal', 'portal_manager', {
             $('#quickcall_btn', parent).click(function() {
                 var device_id = $('#device_quickcall', parent).val(),
                     number = $('#manual_number', parent).val();
+                    
+                number = number.replace(/[^0-9+]/g, "");
 
                 if(device_id && device_id.length === 32) {
                     winkstart.request('portal_manager.quickcall', {
