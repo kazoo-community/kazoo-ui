@@ -486,7 +486,9 @@
         <div class="buttons-right">
             {{if data.id}}
                 <button class="btn primary accounts_manager-switch">${_t('use_account')}</button>
-                <button class="btn danger accounts_manager-delete">${_t('delete')}</button>
+                {{if role === 'admin'}}
+                    <button class="btn danger accounts_manager-delete">${_t('delete')}</button>
+                {{/if}}
             {{/if}}
             <button class="btn success accounts_manager-save">${_t('save')}</button>
         </div>

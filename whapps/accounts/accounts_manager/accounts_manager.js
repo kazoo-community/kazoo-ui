@@ -283,6 +283,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						enable_call_restriction: false,
 						available_apps: []
 					},
+					role: winkstart.apps['auth'].role,
 					functions: {
 						inArray: function(value, array) {
 							if(array) {
@@ -692,6 +693,7 @@ winkstart.module('accounts', 'accounts_manager', {
 			data._t = function(param){
 				return window.translate['accounts'][param];
 			};
+
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
 				deregister = $('#deregister', account_html),
