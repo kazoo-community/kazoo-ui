@@ -353,11 +353,7 @@ winkstart.module('developer', 'api', {
                             o.input_name = n;
                             o.id = k;
                             new_schema[n] = o;
-                        } else {
-                            (name) ? k = name + '.' + k : k = k;
-                            template(o, target, k);
                         }
-
                     });
 
                     $.extend(true, target, new_schema);
