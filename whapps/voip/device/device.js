@@ -498,7 +498,9 @@ winkstart.module('voip', 'device', {
                     if(results.get_device.data.media.audio.hasOwnProperty('codecs')) {
                         render_data.data.media.audio.codecs = results.get_device.data.media.audio.codecs;
                     }
+                }
 
+                if(results.get_device.data.media.hasOwnProperty('video')) {
                     if(results.get_device.data.media.video.hasOwnProperty('codecs')) {
                         render_data.data.media.video.codecs = results.get_device.data.media.video.codecs;
                     }
