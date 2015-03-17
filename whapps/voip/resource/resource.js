@@ -198,6 +198,7 @@ winkstart.module('voip', 'resource', {
                         caller_id_options: {
                             type: 'external'
                         },
+                        flags: []
                     }, data_defaults || {}),
                     field_data: {
                         caller_id_options: {
