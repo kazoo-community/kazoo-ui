@@ -1,4 +1,5 @@
 window.translate['callflow'] = {
+	duplicate_callflow: "Duplicate callflow",
 	css_callflow: "css/callflow.css",
 	delete_callflow: "Delete callflow",
 	save_changes: "Save changes",
