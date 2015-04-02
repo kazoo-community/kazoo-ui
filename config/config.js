@@ -158,17 +158,17 @@
             cluster: {
                label: 'Cluster Manager',
                icon: 'cluster_manager',
-               api_url: 'http://10.2.42.73:8000/v1'
+               api_url: 'https://api.voxter.com:8443/v1'
             },
             voip: {
                 label: 'Trial PBX',
                 icon: 'phone',
-                api_url: 'http://10.2.42.73:8000/v1'
+                api_url: 'https://api.voxter.com:8443/v1'
             },
             accounts: {
                 label: 'Sub-Accounts',
                 icon: 'account',
-                api_url: 'http://10.2.42.73:8000/v1'
+                api_url: 'https://api.voxter.com:8443/v1'
             }
         },
 
@@ -178,7 +178,7 @@
             learn_more: 'http://www.voxter.com/'
         },
 
-        default_api_url: 'http://10.2.42.73:8000/v1',
+        default_api_url: 'https://api.voxter.com:8443/v1',
 
         available_apps: {
             'voip': {
@@ -240,7 +240,7 @@
 
     winkstart.apps = {
         'auth' : {
-            api_url: 'http://10.2.42.73:8000/v1',
+            api_url: 'https://api.voxter.com:8443/v1',
             /* These are some settings that are set automatically. You are free to override them here.
             account_id: null,
             auth_token: null,
