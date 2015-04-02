@@ -1,4 +1,5 @@
 window.translate['callflow'] = {
+	duplicate_callflow: "重复呼叫流程",
 	css_callflow: "css/callflow.css",
 	delete_callflow: "删除呼叫流程",
 	save_changes: "保存修改",
