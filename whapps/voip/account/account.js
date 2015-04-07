@@ -154,7 +154,7 @@ winkstart.module('voip', 'account', {
                     blacklists: function(callback) {
                         winkstart.request('account.list_blacklists', {
                                 account_id: data.id,
-                                api_url: winkstart.apps['accounts'].api_url
+                                api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
                                 defaults.field_data.blacklists = _data.data;

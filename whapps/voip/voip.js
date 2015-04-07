@@ -400,7 +400,7 @@ winkstart.module('voip', 'voip', {
                     api_url: winkstart.apps.voip.api_url
                 },
                 function(_data, status) {
-                    var cpt_descendants = _data.data.length - 1;
+                    var cpt_descendants = _data.data.length;
                     $('.descendants_accounts', welcome_html).html(cpt_descendants);
 
                     /* # of children accounts */

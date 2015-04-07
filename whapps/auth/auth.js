@@ -630,6 +630,7 @@ winkstart.module('auth', 'auth',
                         function (json, xhr) {
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
                             json.data.apps = json.data.apps || {};
+                            winkstart.apps['auth'].role = json.data.priv_level;
 
                             winkstart.publish('auth.account.loaded', json.data);
 
