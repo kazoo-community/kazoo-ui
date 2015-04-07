@@ -192,10 +192,10 @@ winkstart.module('voip', 'blacklist', {
 
 				$('.saved-numbers .number-wrapper', template).each(function(k, wrapper) {
 					delete data.numbers;
-					var number = $(wrapper).data('number');
-
+					var number = $(wrapper).attr('data-number');
 					mapNumbers[number] = {};
 				});
+
 
 				cleanData.numbers = mapNumbers;
 
