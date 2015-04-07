@@ -385,12 +385,12 @@ winkstart.module('voip', 'callflow', {
                 }
             });
 
-            $('.duplicate', buttons_html).click(function() {
+            $('.copy_icon', '#ws_cf_flow').click(function() {
                 delete(THIS.dataCallflow.id);
+                THIS.flow.name = '';    
                 THIS.flow.numbers = [];
                 THIS.flow.id = undefined;
                 THIS.renderFlow();
-                console.log(THIS);
             });
 
             $('.buttons').append(buttons_html);
@@ -515,11 +515,11 @@ winkstart.module('voip', 'callflow', {
             var THIS = this;
             if(pending_change) {
                 $('#pending_change', '#ws_callflow').show();
-                $('.duplicate', '#ws_callflow').hide();
+                $('.copy_icon', '#ws_cf_flow').hide();
                 $('.save', '#ws_callflow').addClass('pulse-box');
             } else {
                 $('#pending_change', '#ws_callflow').hide();
-                $('.duplicate', '#ws_callflow').show();
+                $('.copy_icon', '#ws_cf_flow').show();
                 $('.save', '#ws_callflow').removeClass('pulse-box');
             }
         },
