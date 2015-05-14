@@ -175,9 +175,7 @@ winkstart.module('voip', 'faxbox', {
 								api_url: winkstart.apps.voip.api_url
 							},
 							function(_data, status) {
-								data.faxbox = THIS.get_default_faxbox();
-								data.faxbox = $.extend(true, {}, currentFaxbox, {
-									id: _data.data.id,
+								data.faxbox = $.extend(true, {}, THIS.get_default_faxbox(), data.faxbox, currentFaxbox, {
 									cloud_connector_claim_url: faxbox_html.find('#cloud_connector_claim_url').attr('href'),
 									notifications: {
 										inbound: {
