@@ -121,6 +121,51 @@
                                 <li>
                                     <label>
                                         <span rel="popover" data-content="">
+                                            {{if data.position_announcements_enabled === true}}
+                                                <input type="checkbox" id="position_announcements_enabled" name="position_announcements_enabled" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="position_announcements_enabled" name="position_announcements_enabled" />
+                                            {{/if}}
+                                            <span>${_t('position_announcements_enabled')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
+                                            {{if data.holdtime_announcements_enabled === true}}
+                                                <input type="checkbox" id="holdtime_announcements_enabled" name="holdtime_announcements_enabled" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="holdtime_announcements_enabled" name="holdtime_announcements_enabled" />
+                                            {{/if}}
+                                            <span>${_t('holdtime_announcements_enabled')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="announcements_timer">${_t('announcements_timer')}</label>
+                        <div class="input">
+                            <input class="span2" id="announcements_timer" name="announcements_timer" type="text" placeholder="30" value="${data.announcements_timer}" rel="popover" data-content="${_t('announcements_timer_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
                                             {{if data.enter_when_empty === true}}
                                                 <input type="checkbox" id="enter_when_empty" name="enter_when_empty" checked="checked" />
                                             {{else}}

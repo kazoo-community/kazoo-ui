@@ -262,7 +262,10 @@ winkstart.module('call_center', 'queue', {
                         record_caller: true,
                         moh: {},
                         notifications: {},
-                        max_queue_size: '0'
+                        max_queue_size: '0',
+                        position_announcements_enabled: false,
+                        holdtime_announcements_enabled: false,
+                        announcements_timer: '30'
                     }, data_defaults || {}),
                     field_data: {
                         /*sort_by: {
