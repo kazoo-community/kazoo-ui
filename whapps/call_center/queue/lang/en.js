@@ -97,5 +97,6 @@ window.translate['queue'] = {
 	position_announcements_enabled: "Enable periodic position announcements to caller.",
 	holdtime_announcements_enabled: "Enable periodic average hold time announcements to caller.",
 	announcements_timer: "Announce Time (s)",
-	announcements_timer_data_content: "Time between position and hold time announcements."
+	announcements_timer_data_content: "Time between position and hold time announcements.",
+	route_var_ccv: "Route Variable"
 };

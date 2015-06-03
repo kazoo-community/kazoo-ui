@@ -38,5 +38,6 @@ window.translate['voip_queue'] = {
 	agent_break: "Agent Break",
 	logout_agent: "Logout Agent",
 	login_agent: "Login Agent",
-	toggle_agent: "Toggle Agent"	
+	toggle_agent: "Toggle Agent",
+	route_var_ccv: "Route Variable"
 };

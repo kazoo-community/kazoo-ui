@@ -30,5 +30,6 @@ window.translate['media'] = {
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this media?",
 	no_name: "(no name)",
-	add_media_label: "Add Media"
+	add_media_label: "Add Media",
+	route_var_ccv: "Route Variable"
 };

@@ -596,7 +596,8 @@ winkstart.module('voip', 'vmbox', {
                                         return window.translate['vmbox'][param];
                                     },
                                     items: winkstart.sort(data.data),
-                                    selected: node.getMetadata('id') || ''
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
                                 });
 
                                 if($('#vmbox_selector option:selected', popup_html).val() == undefined) {
@@ -611,6 +612,11 @@ winkstart.module('voip', 'vmbox', {
 
                                     winkstart.publish('vmbox.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        if($('#route_var', popup_html).val().length > 0) {
+                                            node.setMetadata('var', $('#route_var', popup_html).val());
+                                        } else {
+                                            node.deleteMetadata('var');
+                                        }
 
                                         node.caption = _data.data.name || '';
 
@@ -620,8 +626,11 @@ winkstart.module('voip', 'vmbox', {
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#vmbox_selector', popup_html).val());
-
-                                    node.caption = $('#vmbox_selector option:selected', popup_html).text();
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
 
                                     popup.dialog('close');
                                 });
