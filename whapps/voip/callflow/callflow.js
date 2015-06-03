@@ -31,10 +31,11 @@ winkstart.module('voip', 'callflow', {
             fax_callflow: 'tmpl/fax_callflow.html',
             edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
-	    set_cid_callflow: 'tmpl/set_cid_callflow.html',
+	        set_cid_callflow: 'tmpl/set_cid_callflow.html',
             response_callflow: 'tmpl/response_callflow.html',
             group_pickup: 'tmpl/group_pickup.html',
-            language_callflow: 'tmpl/language_callflow.html'
+            language_callflow: 'tmpl/language_callflow.html',
+            routing_variables_callflow: 'tmpl/routing_variables_callflow.html'
         },
 
         elements: {
@@ -2204,11 +2205,17 @@ winkstart.module('voip', 'callflow', {
                                         type: 'callflow',
                                         items: winkstart.sort(_data),
                                         selected: node.getMetadata('id') || ''
-                                    }
+                                    },
+                                    route_var: node.getMetadata('var') || ''
                                 });
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#object-selector', popup_html).val());
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
 
                                     node.caption = $('#object-selector option:selected', popup_html).text();
 
@@ -2248,6 +2255,57 @@ winkstart.module('voip', 'callflow', {
                     },
                     edit: function(node, callback) {
                         edit_page_group(node, callback);
+                    }
+                },
+                'load_route_vars[]': {
+                    name: _t('callflow', 'routing_variables'),
+                    icon: 'callflow',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'load_route_vars',
+                    tip:  _t('callflow', 'routing_variables_tip'),
+                    data: {
+                        name: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('name') || '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.routing_variables_callflow.tmpl({
+                            _t: function(param){
+                                return window.translate['callflow'][param];
+                            },
+                            data: {
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            console.log(node);
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'routing_variables'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
                     }
                 },
                 'ring_group[]': {

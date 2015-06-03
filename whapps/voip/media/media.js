@@ -537,7 +537,8 @@ winkstart.module('voip', 'media', {
                                     selected: node.getMetadata('id') || '',
 									_t: function(param){
 										return window.translate['media'][param]
-									}
+									},
+                                    route_var: node.getMetadata('var') || ''
                                 });
 
                                 if($('#media_selector option:selected', popup_html).val() == undefined) {
@@ -552,6 +553,11 @@ winkstart.module('voip', 'media', {
 
                                     winkstart.publish('media.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        if($('#route_var', popup_html).val().length > 0) {
+                                            node.setMetadata('var', $('#route_var', popup_html).val());
+                                        } else {
+                                            node.deleteMetadata('var');
+                                        }
 
                                         node.caption = _data.data.name || '';
 
@@ -561,7 +567,12 @@ winkstart.module('voip', 'media', {
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#media_selector', popup_html).val());
-
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+                                        
                                     node.caption = $('#media_selector option:selected', popup_html).text();
 
                                     popup.dialog('close');
