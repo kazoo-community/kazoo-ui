@@ -2264,7 +2264,6 @@ winkstart.module('voip', 'callflow', {
                     module: 'load_route_vars',
                     tip:  _t('callflow', 'routing_variables_tip'),
                     data: {
-                        name: ''
                     },
                     rules: [
                         {
@@ -2274,7 +2273,7 @@ winkstart.module('voip', 'callflow', {
                     ],
                     isUsable: 'true',
                     caption: function(node, caption_map) {
-                        return node.getMetadata('name') || '';
+                        return '';
                     },
                     edit: function(node, callback) {
                         var popup, popup_html;
@@ -2283,15 +2282,43 @@ winkstart.module('voip', 'callflow', {
                             _t: function(param){
                                 return window.translate['callflow'][param];
                             },
-                            data: {
+                            items: node.data.data,
+                            count: Object.keys(node.data.data).length,
+                            dataArrayIndex: function (k, v) {
+                                return Object.keys(this.data.items).indexOf(k);
                             }
                         });
 
-                        $('#add', popup_html).click(function() {
-                            console.log(node);
+                        $('#ok', popup_html).click(function() {
+                            var formVars = $("form").serializeArray();
+                            var dataVars = {};
+                            for(var i=0; i<formVars.length; i++) {
+                                if(i%2 != 0) continue; // Collate object pairs
+                                if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0) 
+                                    dataVars[formVars[i].value] = formVars[i+1].value;
+                            }
+                            node.data.data = dataVars;
 
                             popup.dialog('close');
                         });
+
+                        $('#add', popup_html).click(function() {
+                            var i = $("form .form_content").children().length;
+
+                            $("form .form_content").append('<div class="popup_field"><input type="text" name="key[]" value="">&nbsp;:&nbsp;<input type="text" name="value[]" value="">&nbsp;<button id="del' + i + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button></div>');
+
+                            $('#del' + i, popup_html).click(function(e) {
+                                e.preventDefault();
+                                $(this).parent().remove();
+                            });
+                        });
+
+                        for(var i=0; i<Object.keys(node.data.data).length; i++) {
+                            $('#del' + i, popup_html).click(function(e) {
+                                e.preventDefault();
+                                $(this).parent().remove();
+                            });
+                        }
 
                         popup = winkstart.dialog(popup_html, {
                             title: _t('callflow', 'routing_variables'),
