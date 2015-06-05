@@ -147,5 +147,7 @@ window.translate['callflow'] = {
 	route_var_ccv: "Route Variable",
 	routing_variables: "Callflow Variables",
 	routing_variables_caption: "Custom Channel Variables",
-	routing_variables_tip: "Define custom variables for dynamic callflows."
+	routing_variables_tip: "Define custom variables for dynamic callflows.",
+	routing_variables_type: "Add Custom Channel Variable",
+	routing_variables_type_selector: "Variable type"
 };
