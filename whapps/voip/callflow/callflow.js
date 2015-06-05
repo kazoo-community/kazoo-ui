@@ -2301,7 +2301,7 @@ winkstart.module('voip', 'callflow', {
                                 div.append(del_btn);
                                 form.append(div);
                             } else {
-                                winkstart.request(true, item.type + '.list', {
+                                winkstart.request(false, item.type + '.list', {
                                     account_id: winkstart.apps['voip'].account_id,
                                     api_url: winkstart.apps['voip'].api_url
                                 },
@@ -2384,10 +2384,47 @@ winkstart.module('voip', 'callflow', {
                                 var selected = $('#type_selector option:selected', type_popup_html).val();
                                 
                                 div.append('<input class="large" type="text" name="key[]" value="" placeholder="Variable name">&nbsp;:&nbsp;');
-                                switch(selected) {
-                                    default:
-                                    case 'custom':
-                                        div.append('<input class="large" type="text" name="' + selected + '" value="" placeholder="Variable value">');
+                                if (selected == 'custom') {
+                                    div.append('<input class="large" type="text" name="' + selected + '" value="" placeholder="Variable value">');
+
+                                    var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
+                                    del_btn.click(function(e) {
+                                        e.preventDefault();
+                                        $(this).parent().remove();
+                                    });
+                                    div.append(del_btn);
+                                    form.append(div);
+                                } else {
+                                    winkstart.request(true, selected + '.list', {
+                                        account_id: winkstart.apps['voip'].account_id,
+                                        api_url: winkstart.apps['voip'].api_url
+                                    },
+                                    function(data, status) {
+                                        if(selected == 'user') {
+                                            var tmp = [];
+                                            $.each(data.data, function() {
+                                                this.name = this.first_name + ' ' + this.last_name;
+                                                tmp.push(this);
+                                            });
+                                            data.data = tmp;
+                                        }
+
+                                        if(selected == 'callflow') {
+                                            var tmp = [];
+                                            $.each(data.data, function() {
+                                                if(!this.featurecode && this.id != THIS.flow.id) {
+                                                    this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
+                                                    tmp.push(this);
+                                                }
+                                            });
+                                            data.data = tmp;
+                                        }
+
+                                        var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
+                                        $.each(winkstart.sort(data.data), function() {
+                                            select.append('<option value="' + this.id + '">' + this.name + '</option>');
+                                        });
+                                        div.append(select);
 
                                         var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
                                         del_btn.click(function(e) {
@@ -2396,144 +2433,7 @@ winkstart.module('voip', 'callflow', {
                                         });
                                         div.append(del_btn);
                                         form.append(div);
-                                        break;
-                                    case 'user':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(data.data, 'first_name'), function() {
-                                                select.append('<option value="' + this.id + '">' + this.first_name + ' ' + this.last_name + '</option>');
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
-                                    case 'vmbox':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(data.data), function() {
-                                                select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
-                                    case 'media':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(data.data), function() {
-                                                select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
-                                    case 'menu':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(data.data), function() {
-                                                select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
-                                    case 'queue':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(data.data), function() {
-                                                select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
-                                    case 'callflow':
-                                        winkstart.request(true, selected + '.list', {
-                                            account_id: winkstart.apps['voip'].account_id,
-                                            api_url: winkstart.apps['voip'].api_url
-                                        },
-                                        function(data, status) {
-                                            var _data = [];
-                                            $.each(data.data, function() {
-                                                if(!this.featurecode && this.id != THIS.flow.id) {
-                                                    this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
-
-                                                    _data.push(this);
-                                                }
-                                            });
-
-                                            var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                            $.each(winkstart.sort(_data), function() {
-                                                if(this.numbers instanceof Array) {
-                                                    select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                                }
-                                            });
-                                            div.append(select);
-
-                                            var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                            del_btn.click(function(e) {
-                                                e.preventDefault();
-                                                $(this).parent().remove();
-                                            });
-                                            div.append(del_btn);
-                                            form.append(div);
-                                        });
-                                        break;
+                                    });
                                 }
 
                                 type_popup.dialog('close');
