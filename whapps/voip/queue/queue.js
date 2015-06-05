@@ -624,6 +624,10 @@ winkstart.module('voip', 'queue', {
                                     });
                                 });
 
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#queue_selector', popup).val());
                                     if($('#route_var', popup_html).val().length > 0) {

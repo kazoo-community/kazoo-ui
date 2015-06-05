@@ -2344,6 +2344,10 @@ winkstart.module('voip', 'callflow', {
                             }
                         });
 
+                        $('#toggle_advanced', popup_html).click(function () {
+                            $('#route_var_div', popup_html).toggle();
+                        });
+
                         $('#ok', popup_html).click(function() {
                             var formVars = $("form", popup_html).serializeArray();
                             var dataVars = {};
@@ -2370,6 +2374,7 @@ winkstart.module('voip', 'callflow', {
                                 types: {
                                     "user": "User",
                                     "vmbox": "Voicemail",
+                                    "device": "Device",
                                     "media": "Media",
                                     "menu": "Menu",
                                     "queue": "Queue",
@@ -2449,13 +2454,6 @@ winkstart.module('voip', 'callflow', {
                                 }
                             });
                         });
-
-                        for(var i=0; i<Object.keys(node.data.data).length; i++) {
-                            $('#del' + i, popup_html).click(function(e) {
-                                e.preventDefault();
-                                $(this).parent().remove();
-                            });
-                        }
 
                         popup = winkstart.dialog(popup_html, {
                             title: _t('callflow', 'routing_variables'),

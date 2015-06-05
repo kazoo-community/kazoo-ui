@@ -21,7 +21,19 @@
             </div>
 
             <div class="parameter_div">
-                ${_t('route_var_ccv')} <input type="text" id="route_var" value="${route_var}"/>
+                {{if route_var.length == 0}}
+                <input type="checkbox" id="toggle_advanced"> Advanced
+                <div id="route_var_div" style="display: none;">
+                    ${_t('route_var_ccv')}
+                    <input type="text" id="route_var" value="${route_var}"/>
+                </div>
+                {{else}}
+                <input type="checkbox" checked="checked" id="toggle_advanced"> Advanced
+                <div id="route_var_div">
+                    ${_t('route_var_ccv')}
+                    <input type="text" id="route_var" value="${route_var}"/>
+                </div>
+                {{/if}}
             </div>
         </form>
         <div class="buttons-center">
