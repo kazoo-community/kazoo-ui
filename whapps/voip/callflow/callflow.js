@@ -2210,6 +2210,10 @@ winkstart.module('voip', 'callflow', {
                                     route_var: node.getMetadata('var') || ''
                                 });
 
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#object-selector', popup_html).val());
                                     if($('#route_var', popup_html).val().length > 0) {
