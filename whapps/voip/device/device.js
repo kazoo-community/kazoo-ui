@@ -738,7 +738,7 @@ winkstart.module('voip', 'device', {
                     .append(device_html);
             };
 
-            if(typeof data.data == 'object' && data.data.device_type == 'sip_device') {
+            if(typeof data.data == 'object' && (data.data.device_type == 'sip_device' || data.data.device_type == 'fax')) {
                 if(winkstart.publish('phone.render_fields', $(device_html), data.data.provision || (data.data.provision = {}), render, data.list_models || {})) {
                     render();
                 }

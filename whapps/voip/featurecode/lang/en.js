@@ -20,6 +20,7 @@ window.translate['featurecode'] = {
 	direct_to_voicemail: "Direct to Voicemail",
 	intercom: "Intercom",
 	privacy: "Privacy",
+	group_pickup_feature: "Directed Pickup",
 	park_and_retrieve: "Park and Retrieve",
 	parking_cat: "Parking",
 	valet: "Valet",
