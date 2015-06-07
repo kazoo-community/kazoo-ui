@@ -517,6 +517,22 @@ winkstart.module('voip', 'featurecode', {
                         return '^\\*'+number+'([0-9]*)$';
                     }
                 },
+                'group_pickup_feature': {
+                    name: _t('featurecode', 'group_pickup_feature'),
+                    icon: 'phone',
+                    category: _t('featurecode', 'miscellaneous_cat'),
+                    module: 'group_pickup_feature',
+                    number_type: 'pattern',
+                    data: {
+                        type: 'extension'
+                    },
+                    enabled: false,
+                    default_number: '2',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*'+number+'([0-9]*)$';
+                    }
+                },
                 'park_and_retrieve': {
                     name: _t('featurecode', 'park_and_retrieve'),
                     icon: 'phone',
@@ -530,7 +546,7 @@ winkstart.module('voip', 'featurecode', {
                     default_number: '3',
                     number: this.default_number,
                     build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
+                        return '^\\*?2?\\*'+number+'([0-9]*)$';
                     }
                 },
                 'valet': {
