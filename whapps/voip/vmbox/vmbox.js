@@ -624,6 +624,10 @@ winkstart.module('voip', 'vmbox', {
                                     });
                                 });
 
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#vmbox_selector', popup_html).val());
                                     if($('#route_var', popup_html).val().length > 0) {

@@ -1058,6 +1058,10 @@ winkstart.module('voip', 'user', {
                                     });
                                 });
 
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#user_selector', popup_html).val());
                                     node.setMetadata('timeout', $('#parameter_input', popup_html).val());
