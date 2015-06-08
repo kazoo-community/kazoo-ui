@@ -93,5 +93,10 @@ window.translate['queue'] = {
 	edit_queue_title: "Edit Queue",
 	call_center_category: "Call-Center",
 	seconds: " seconds",
-	please_enter_a_valid_number_of_seconds: "Please enter a valid number of seconds. It needs to be greater than 0."
+	please_enter_a_valid_number_of_seconds: "Please enter a valid number of seconds. It needs to be greater than 0.",
+	position_announcements_enabled: "Enable periodic position announcements to caller.",
+	holdtime_announcements_enabled: "Enable periodic average hold time announcements to caller.",
+	announcements_timer: "Announce Time (s)",
+	announcements_timer_data_content: "Time between position and hold time announcements.",
+	route_var_ccv: "Route Variable"
 };
