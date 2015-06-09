@@ -5,13 +5,15 @@
         /* Was winkstart.debug */
         debug: false,
 
+        ws_server: 'wss://sbc01.van1.voxter.net:8443',
+
         advancedView: false,
 
         /* Registration Type */
         register_type: 'onboard',
 
-        /* Provisioner Info */
-        provisioner_url: "https://p.voxter.com",
+	/* Provisioner Info */
+	provisioner_url: "https://p.voxter.com",
 
         /* Do you want the signup button or not ? default to false if not set */
         hide_registration: false,
@@ -175,7 +177,6 @@
         },
 
         default_api_url: 'https://api.voxter.com:8443/v1',
-        default_api_v2_url: 'https://api.voxter.com:8443/v2',
 
         available_apps: {
             'voip': {
