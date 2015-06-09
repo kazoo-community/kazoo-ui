@@ -143,5 +143,6 @@ window.translate['device'] = {
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/,
 	route_var_ccv: "Route Variable",
 	reboot: "Reboot",
-	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?"
+	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?",
+	reboot_success_title: "Reboot Command Sent"
 };
