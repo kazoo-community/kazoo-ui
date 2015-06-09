@@ -14,7 +14,8 @@ winkstart.module('voip', 'device', {
             sip_device: 'tmpl/edit.html',
             fax: 'tmpl/fax.html',
             device_callflow: 'tmpl/device_callflow.html',
-            sip_uri: 'tmpl/sip_uri.html'
+            sip_uri: 'tmpl/sip_uri.html',
+            reboot_success: 'tmpl/reboot_success.html'
         },
 
         subscribe: {
@@ -264,7 +265,19 @@ winkstart.module('voip', 'device', {
                     delete_error: _callbacks.delete_error,
 
                     reboot_success: _callbacks.reboot_success || function(_data) {
+                        var popup, popup_html;
 
+                        popup_html = THIS.templates.reboot_success.tmpl({
+                            _t: function(param){
+                                return window.translate['device'][param];
+                            }
+                        });
+
+                        $('#ok', popup_html).click(function() {
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {});
                     },
 
                     reboot_error: _callbacks.reboot_error,

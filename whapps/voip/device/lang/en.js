@@ -142,5 +142,6 @@ window.translate['device'] = {
 	name_regex: /^[a-zA-Z0-9\s_'\-]+$/,
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/,
 	reboot: "Reboot",
-	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?"
+	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?",
+	reboot_success_title: "Reboot Command Sent"
 };
