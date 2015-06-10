@@ -14,7 +14,8 @@ winkstart.module('voip', 'device', {
             sip_device: 'tmpl/edit.html',
             fax: 'tmpl/fax.html',
             device_callflow: 'tmpl/device_callflow.html',
-            sip_uri: 'tmpl/sip_uri.html'
+            sip_uri: 'tmpl/sip_uri.html',
+            reboot_success: 'tmpl/reboot_success.html'
         },
 
         subscribe: {
@@ -145,6 +146,11 @@ winkstart.module('voip', 'device', {
                 url: '{api_url}/accounts/{account_id}',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'registration.reboot': {
+                url: '{api_url}/accounts/{account_id}/devices/{device_id}/sync',
+                contentType: 'application/json',
+                verb: 'POST'
             }
         }
     },
@@ -257,6 +263,24 @@ winkstart.module('voip', 'device', {
                     },
 
                     delete_error: _callbacks.delete_error,
+
+                    reboot_success: _callbacks.reboot_success || function(_data) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.reboot_success.tmpl({
+                            _t: function(param){
+                                return window.translate['device'][param];
+                            }
+                        });
+
+                        $('#ok', popup_html).click(function() {
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {});
+                    },
+
+                    reboot_error: _callbacks.reboot_error,
 
                     after_render: _callbacks.after_render
                 },
@@ -537,6 +561,30 @@ winkstart.module('voip', 'device', {
             }
         },
 
+        reboot_device: function(data, success, error) {
+            var THIS = this;
+
+            if(typeof data.data == 'object' && data.data.id) {
+                winkstart.request(true, 'registration.reboot', {
+                        account_id: winkstart.apps['voip'].account_id,
+                        api_url: winkstart.config.default_api_v2_url,
+                        device_id: data.data.id,
+                        data: ''
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
+                    }
+                );
+            }
+        },
+
         render_device: function(data, target, callbacks){
 			data._t = function(param){
 				return window.translate['device'][param];
@@ -640,6 +688,14 @@ winkstart.module('voip', 'device', {
 
                     winkstart.confirm(_t('device', 'are_you_sure_you_want_to_delete'), function() {
                         THIS.delete_device(data, callbacks.delete_success, callbacks.delete_error);
+                    });
+                });
+
+                $('.device-reboot', device_html).click(function(ev) {
+                    ev.preventDefault();
+
+                    winkstart.confirm(_t('device', 'are_you_sure_you_want_to_reboot'), function() {
+                        THIS.reboot_device(data, callbacks.reboot_success, callbacks.reboot_error);
                     });
                 });
 
@@ -1078,6 +1134,11 @@ winkstart.module('voip', 'device', {
                 delete_success: function() {
                     popup.dialog('close');
 
+                    if(typeof callback == 'function') {
+                        callback({ data: {} });
+                    }
+                },
+                reboot_success: function() {
                     if(typeof callback == 'function') {
                         callback({ data: {} });
                     }

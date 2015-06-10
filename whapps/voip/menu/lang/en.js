@@ -52,5 +52,6 @@ window.translate['menu'] = {
 	no_name: "(no name)",
 	add_menu_label: "Add Menu",
 	default_action: "Default action",
-	menu_option_title: "Menu Option"
+	menu_option_title: "Menu Option",
+	route_var_ccv: "Route Variable"
 };
