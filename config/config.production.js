@@ -177,6 +177,7 @@
         },
 
         default_api_url: 'https://api.voxter.com:8443/v1',
+        default_api_v2_url: 'https://devapi.voxter.com:8443/v2',
 
         available_apps: {
             'voip': {
