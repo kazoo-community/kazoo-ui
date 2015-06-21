@@ -144,5 +144,7 @@ window.translate['device'] = {
 	route_var_ccv: "Route Variable",
 	reboot: "Reboot",
 	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?",
-	reboot_success_title: "Reboot Command Sent"
+	reboot_success_title: "Reboot Command Sent",
+	exclude_from_queues: "Exclude from Queues",
+	exclude_from_queues_tip: "Do not ring this device when calling user/agent in queue."
 };
