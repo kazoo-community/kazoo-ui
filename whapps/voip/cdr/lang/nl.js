@@ -24,6 +24,7 @@ window.translate['cdr'] = {
 	queue_calls: "Wachtrij Gesprekken",
 	non_queue_calls: "Geen-Wachtrijen Gesprekken",
 	filter: "Filter",
+	export: "Export CSV",
 	detail_of_cdr_title: "Details of cdr: ",
 	the_range_is_bigger: "Het bereik is groter dan 7 dagen, corriger dit aub.",
 	dates_in_the_filter: "datums in het bereik zijn niet in het juiste voormaat (mm/dd/yyyy)"	

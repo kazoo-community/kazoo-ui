@@ -24,6 +24,7 @@ window.translate['cdr'] = {
 	queue_calls: "队列呼叫",
 	non_queue_calls: "非队列呼叫",
 	filter: "过滤器",
+	export: "Export CSV",
 	detail_of_cdr_title: "cdr详情: ",
 	the_range_is_bigger: "过滤范围大于7天, 请修改.",
 	dates_in_the_filter: "过滤器中日期格式不正确 (mm/dd/yyyy)"	
