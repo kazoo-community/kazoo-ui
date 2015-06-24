@@ -937,7 +937,13 @@ winkstart.module('voip', 'callflow', {
                         callflow: THIS.actions[node.actionName]
                     });
 
-                    $('.module', node_html).click(function() {
+                    $('.edit_callflow', node_html).click(function (e) {
+                        THIS.editCallflow({id: node.data.data.id});
+                    });
+
+                    $('.module', node_html).click(function (e) {
+                        if(e.target.className === 'edit_callflow') return;
+                        
                         THIS.actions[node.actionName].edit(node, function() {
                             THIS.renderFlow();
                         });
