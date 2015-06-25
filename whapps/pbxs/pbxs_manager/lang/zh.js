@@ -79,5 +79,7 @@ phone_number_stitle: "电话号码",
 caller_id_stitle: "主叫号码",
 state_stitle: "状态",
 failover_stitle: "备份恢复",
-failover: "备份恢复"
+failover: "备份恢复",
+outbound_flags: "外呼标志",
+outbound_flags_data_content: "输入运营商要求的外呼标志. 多个标志以逗号分隔(例如: flag1, flag2, flag3)"
 };
