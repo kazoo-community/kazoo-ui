@@ -79,5 +79,7 @@ window.translate['pbxs_manager'] = $.extend(true, {}, window.translate['pbxs_man
 	caller_id_stitle: "Caller-ID",
 	state_stitle: "Штат",
 	failover_stitle: "Отказоустойчивость",
-	failover: "Отказоустойчивость"
+	failover: "Отказоустойчивость",
+	outbound_flags: "Исходящие флаги",
+	outbound_flags_data_content: "Введите через запятую исходящие флаги, которые устройство ожидает от оператора."
 });
