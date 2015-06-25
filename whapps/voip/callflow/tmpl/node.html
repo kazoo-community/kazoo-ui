@@ -6,7 +6,17 @@
                 <span class="icon ${callflow.icon}"/>
                 <span class="module_name">${callflow.name}</span>
             </div>
-            <div class="details">${node.caption.substr(0,28)}</div>
+            <div class="details">
+                {{if 'var' in node.data.data}}
+                ${node.data.data.var.substr(0,28)}<br/>
+                {{/if}}
+                
+                {{if node.module != 'callflow'}}
+                ${node.caption.substr(0,28)}
+                {{else}}
+                <a class="edit_callflow" href="#">${node.caption.substr(0,28)}</a>
+                {{/if}}
+            </div>
         </div>
         <div class="clear"/>
     </div>
