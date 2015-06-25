@@ -129,6 +129,30 @@
     margin-left: 0px;
 }
 
+#callflow-view .wrapper_callflow_buttons .skinny {
+    width: 119px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 0px;
+}
+
+#callflow-view .wrapper_callflow_buttons .btn.primary.back {
+    width: 20px;
+    min-width: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 0px;
+}
+
+#callflow-view .wrapper_callflow_buttons .btn.primary.back .back_image {
+    background-image: url("../images/back_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 8px;
+}
+
 #callflow-view .callflow_helpbox_wrapper {
     position: absolute;
     right: 175px;

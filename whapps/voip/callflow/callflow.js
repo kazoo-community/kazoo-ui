@@ -158,6 +158,8 @@ winkstart.module('voip', 'callflow', {
     {
         actions: {},
 
+        backLinks: [],
+
         list_accounts: function(success, error) {
             winkstart.request('callflow.list_trunkstore_accounts', {
                     account_id: winkstart.apps['voip'].account_id,
@@ -337,19 +339,25 @@ winkstart.module('voip', 'callflow', {
         },
 
         renderButtons: function() {
-			data = {
+			var THIS = this
+
+            var data = {
 				_t: function(param){
 					return window.translate['callflow'][param];
-				}
+				},
+                back_button: (THIS.backLinks.length > 0)
 			};
-            var THIS = this,
-                buttons_html = THIS.templates.buttons.tmpl(data);
+            var buttons_html = THIS.templates.buttons.tmpl(data);
 
             if(THIS.dataCallflow && THIS.dataCallflow.ui_metadata && THIS.dataCallflow.ui_metadata.ui === 'monster-ui') {
                 buttons_html.find('.save').addClass('disabled');
             }
 
             $('.buttons').empty();
+
+            if(data.back_button) $('.back', buttons_html).click(function() {
+                THIS.editCallflow({id: THIS.backLinks.pop()});
+            });
 
             $('.save', buttons_html).click(function() {
                 if(THIS.dataCallflow && THIS.dataCallflow.ui_metadata && THIS.dataCallflow.ui_metadata.ui === 'monster-ui') {
@@ -417,6 +425,10 @@ winkstart.module('voip', 'callflow', {
                     function(json) {
                         THIS._resetFlow();
 
+                        if('trackBack' in data) 
+                            THIS.backLinks.push(data.trackBack);
+                        else
+                            THIS.backLinks = [];
                         THIS.dataCallflow = json.data;
 
                         THIS.flow.id = json.data.id;
@@ -436,6 +448,7 @@ winkstart.module('voip', 'callflow', {
             }
             else {
                 THIS._resetFlow();
+                THIS.backLinks = [];
                 THIS.dataCallflow = {};
                 THIS.renderFlow();
                 THIS.renderButtons();
@@ -938,12 +951,12 @@ winkstart.module('voip', 'callflow', {
                     });
 
                     $('.edit_callflow', node_html).click(function (e) {
-                        THIS.editCallflow({id: node.data.data.id});
+                        THIS.editCallflow({id: node.data.data.id, trackBack: THIS.flow.id});
                     });
 
                     $('.module', node_html).click(function (e) {
                         if(e.target.className === 'edit_callflow') return;
-                        
+
                         THIS.actions[node.actionName].edit(node, function() {
                             THIS.renderFlow();
                         });
