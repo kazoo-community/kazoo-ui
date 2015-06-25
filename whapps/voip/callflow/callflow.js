@@ -158,7 +158,7 @@ winkstart.module('voip', 'callflow', {
     {
         actions: {},
 
-        backLinks: [],
+        backStack: [],
 
         list_accounts: function(success, error) {
             winkstart.request('callflow.list_trunkstore_accounts', {
@@ -345,7 +345,7 @@ winkstart.module('voip', 'callflow', {
 				_t: function(param){
 					return window.translate['callflow'][param];
 				},
-                back_button: (THIS.backLinks.length > 0)
+                back_button: (THIS.backStack.length > 0)
 			};
             var buttons_html = THIS.templates.buttons.tmpl(data);
 
@@ -356,7 +356,7 @@ winkstart.module('voip', 'callflow', {
             $('.buttons').empty();
 
             if(data.back_button) $('.back', buttons_html).click(function() {
-                THIS.editCallflow({id: THIS.backLinks.pop()});
+                THIS.editCallflow({id: THIS.backStack.pop(), back: true});
             });
 
             $('.save', buttons_html).click(function() {
@@ -425,10 +425,8 @@ winkstart.module('voip', 'callflow', {
                     function(json) {
                         THIS._resetFlow();
 
-                        if('trackBack' in data) 
-                            THIS.backLinks.push(data.trackBack);
-                        else
-                            THIS.backLinks = [];
+                        if('forward' in data) THIS.backStack.push(data.forward);
+                        else if(! ('back' in data)) THIS.backStack = [];
                         THIS.dataCallflow = json.data;
 
                         THIS.flow.id = json.data.id;
@@ -448,7 +446,7 @@ winkstart.module('voip', 'callflow', {
             }
             else {
                 THIS._resetFlow();
-                THIS.backLinks = [];
+                THIS.backStack = [];
                 THIS.dataCallflow = {};
                 THIS.renderFlow();
                 THIS.renderButtons();
@@ -951,7 +949,7 @@ winkstart.module('voip', 'callflow', {
                     });
 
                     $('.edit_callflow', node_html).click(function (e) {
-                        THIS.editCallflow({id: node.data.data.id, trackBack: THIS.flow.id});
+                        THIS.editCallflow({id: node.data.data.id, forward: THIS.flow.id});
                     });
 
                     $('.module', node_html).click(function (e) {
