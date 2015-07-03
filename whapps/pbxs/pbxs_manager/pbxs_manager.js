@@ -453,17 +453,17 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     });
                 });
 
-                if(typeof data.servers[k].outbound_flags == "string") {
-                    data.servers[k].outbound_flags = data.servers[k].outbound_flags.split(/,\s*/);
+                if(typeof data.servers[k].options.flags == "string") {
+                    data.servers[k].options.flags = data.servers[k].options.flags.split(/,\s*/);
 
                     /* Get rid of empty string */
                     var new_flags = [];
-                    $.each(data.servers[k].outbound_flags, function(k, v) {
+                    $.each(data.servers[k].options.flags, function(k, v) {
                         if(v.replace(/\s/g, '') !== '') {
                             new_flags.push(v);
                         }
                     });
-                    data.servers[k].outbound_flags = new_flags;
+                    data.servers[k].options.flags = new_flags;
                 }
             });
 
@@ -533,7 +533,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 endpoint_html;
 
             dataTemplate.options.inbound_format = dataTemplate.options.inbound_format == 'e.164' ? 'e164' : dataTemplate.options.inbound_format;
-            dataTemplate.outbound_flags = ('outbound_flags' in dataTemplate) && typeof dataTemplate.outbound_flags === 'object' ? dataTemplate.outbound_flags.join(", ") : "";           
+            dataTemplate.options.flags = ('flags' in dataTemplate.options) && typeof dataTemplate.options.flags === 'object' ? dataTemplate.options.flags.join(", ") : "";           
 
             endpoint_html = THIS.templates.endpoint.tmpl(dataTemplate);
 
