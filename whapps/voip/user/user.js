@@ -365,6 +365,25 @@ winkstart.module('voip', 'user', {
                     else {
                         callback(null, defaults);
                     }
+                },
+                account_get: function(callback) {
+                    if(typeof data != 'object' || !data.id) {
+                        winkstart.request(true, 'user.account_get', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data) {
+                                defaults.data.timezone = _data.data.timezone;
+                                callback(null, _data);
+                            },
+                            function(_data, status) {
+                                callback(null, defaults);
+                            }
+                        );
+                    }
+                    else {
+                        callback(null, defaults);
+                    }
                 }
             },
             function(err, results) {
