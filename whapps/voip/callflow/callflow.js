@@ -2279,11 +2279,11 @@ winkstart.module('voip', 'callflow', {
                         edit_page_group(node, callback);
                     }
                 },
-                'load_route_vars[]': {
+                'kvs_set[]': {
                     name: _t('callflow', 'routing_variables'),
                     icon: 'callflow',
                     category: _t('config', 'advanced_cat'),
-                    module: 'load_route_vars',
+                    module: 'kvs_set',
                     tip:  _t('callflow', 'routing_variables_tip'),
                     data: {
                     },
@@ -2308,6 +2308,8 @@ winkstart.module('voip', 'callflow', {
 
                         var form = $("form .form_content", popup_html);
                         $.each(node.data.data, function(key, item) {
+                            if (key === 'kvs_mode') return;
+
                             var div = $('<div class="popup_field" style="white-space: nowrap;"></div>'); // Base div for new input
                             div.append('<input class="large" type="text" name="key[]" value="' + key + '" placeholder="Variable name">&nbsp;:&nbsp;');
 
@@ -2380,6 +2382,7 @@ winkstart.module('voip', 'callflow', {
                                         value: formVars[i+1].value
                                     };
                             }
+                            dataVars["kvs_mode"] = "json";
                             node.data.data = dataVars;
 
                             popup.dialog('close');
