@@ -2310,7 +2310,7 @@ winkstart.module('voip', 'callflow', {
                         $.each(node.data.data, function(key, item) {
                             if (key === 'kvs_mode') return;
 
-                            var div = $('<div class="popup_field" style="white-space: nowrap;"></div>'); // Base div for new input
+                            var div = $('<div class="popup_field" style="white-space: nowrap; padding-bottom: 0.25em;"></div>'); // Base div for new input
                             div.append('<input class="large" type="text" name="key[]" value="' + key + '" placeholder="Variable name">&nbsp;:&nbsp;');
 
                             if (item.type == 'custom') {
