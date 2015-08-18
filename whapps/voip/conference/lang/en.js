@@ -35,5 +35,9 @@ window.translate['conference'] = {
 	name: "(name)",
 	conferences_label: "Conferences",
 	add_conference_label: "Add Conference",
-	member_pins_string_regex: /^[a-z0-9A-Z,\s]*$/
+	member_pins_string_regex: /^[a-z0-9A-Z,\s]*$/,
+	play_entry_tone: "Play Entry Tone",
+	play_exit_tone: "Play Exit Tone",
+	play_entry_tone_help: "Play Entry Tone (help)",
+	play_exit_tone_help: "Play Exit Tone (help)"
 };
