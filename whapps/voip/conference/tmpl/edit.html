@@ -97,6 +97,44 @@
 						    </ul>
 						</div>
 					</div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('play_entry_tone_help')}">
+											{{if data.play_entry_tone}}
+												<input type="checkbox" id="play_entry_tone" name="play_entry_tone" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="play_entry_tone" name="play_entry_tone" />
+											{{/if}}
+											<span>${_t('play_entry_tone')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('play_exit_tone_help')}">
+											{{if data.play_exit_tone}}
+												<input type="checkbox" id="play_entry_tone" name="play_exit_tone" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="play_entry_tone" name="play_exit_tone" />
+											{{/if}}
+											<span>${_t('play_exit_tone')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 
 				<div id="conference_server">
