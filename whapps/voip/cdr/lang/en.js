@@ -24,6 +24,7 @@ window.translate['cdr'] = {
 	queue_calls: "Queue Calls",
 	non_queue_calls: "Non-Queue Calls",
 	filter: "Filter",
+	export: "Export CSV",
 	detail_of_cdr_title: "Detail of cdr: ",
 	the_range_is_bigger: "The range is bigger than 7 days, please correct it.",
 	dates_in_the_filter: "Dates in the filter are not in the proper format (mm/dd/yyyy)"	
