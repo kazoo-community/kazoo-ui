@@ -167,6 +167,10 @@ winkstart.module('voip', 'menu', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
+                                _data.data.sort(function(a, b) {
+                                    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+                                });
+
                                 _data.data.unshift({
                                     id: '',
                                     name: _t('menu', 'not_set')

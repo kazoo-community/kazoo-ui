@@ -184,7 +184,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 2,
+                polling_interval = 10,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
