@@ -2341,7 +2341,7 @@ winkstart.module('voip', 'callflow', {
                                     if(item.type == 'callflow') {
                                         var tmp = [];
                                         $.each(data.data, function() {
-                                            if(!this.featurecode && this.id != THIS.flow.id) {
+                                            if(!this.featurecode) {
                                                 this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
                                                 tmp.push(this);
                                             }
@@ -2441,7 +2441,7 @@ winkstart.module('voip', 'callflow', {
                                         if(selected == 'callflow') {
                                             var tmp = [];
                                             $.each(data.data, function() {
-                                                if(!this.featurecode && this.id != THIS.flow.id) {
+                                                if(!this.featurecode) {
                                                     this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
                                                     tmp.push(this);
                                                 }
@@ -3101,7 +3101,7 @@ winkstart.module('voip', 'callflow', {
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
