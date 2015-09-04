@@ -225,6 +225,25 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('transcribe_voicemail_data_content')}">
+                                            {{if data.transcribe_voicemail}}
+                                                <input type="checkbox" id="transcribe_voicemail" name="transcribe_voicemail" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="transcribe_voicemail" name="transcribe_voicemail" />
+                                            {{/if}}
+                                            <span>${_t('transcribe_voicemail')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		 </form>
