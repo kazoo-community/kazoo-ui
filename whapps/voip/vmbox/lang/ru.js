@@ -52,5 +52,14 @@ window.translate['vmbox'] = $.extend(true, {}, window.translate['vmbox'], {
 	add_voicemail_box_label: "Добавить ящик голосовой почты",
 	edit_voicemail_box_title: "Редактировать настройки ящика голосовой почты",
 	create_voicemail_box_title: "Создать ящик голосовой почты",
-	name_regex: /^[a-zA-Z0-9\s_']+$/
+	name_regex: /^[a-zA-Z0-9\s_']+$/,
+    extension_dialing: "Набор внутреннего номера",
+    allow_caller_to_dial_extensions: "Разрешить звонящему набирать внутренние номера",
+    allow_caller_to_dial_extensions_data_content: "Выберите, чтобы звонящий мог донабирать внутренние номера, находясь в этом меню",
+    whitelist_of_numbers: "Белый список номеров",
+    whitelist_of_numbers_placeholder: "Регулярное выражение",
+    whitelist_of_numbers_data_content: "Список номеров, которые пользователи могут вводить (например: ^[0-9]{0,11}$ - простое выражение, под которое попадают любые последовательности от 0 до 11 цифр)",
+    blacklist_of_numbers: "Чёрный список номеров",
+    blacklist_of_numbers_placeholder: "Регулярное выражение",
+    blacklist_of_numbers_data_content: "Список номеров, которые пользователи НЕ могут вводить (например: ^[0-9]{0,11}$ - простое выражение, под которое попадают любые последовательности от 0 до 11 цифр)"
 });
