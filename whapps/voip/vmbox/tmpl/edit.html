@@ -15,6 +15,7 @@
 	<div class="row">
 		<ul class="tabs" data-tabs="tabs">
 		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
+            <li><a href="#extension_dialing"><span class="icon sip"></span>${_t('extension_dialing')}</a></li>
 		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
 		</ul>
 		 <form id="vmbox-form" action="" method="post">
@@ -83,6 +84,40 @@
 						</div>
 					</div>
 				</div>
+
+                <div id="extension_dialing">
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('allow_caller_to_dial_extensions_data_content')}">
+                                            {{if data.hunt}}
+                                                <input type="checkbox" id="hunt" name="hunt" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="hunt" name="hunt" />
+                                            {{/if}}
+                                            <span>${_t('allow_caller_to_dial_extensions')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="hunt_allow">${_t('whitelist_of_numbers')}</label>
+                        <div class="input">
+                            <input class="span4" id="hunt_allow" name="hunt_allow" type="text" placeholder="${_t('whitelist_of_numbers_placeholder')}" value="${data.hunt_allow}" rel="popover" data-content="${_t('whitelist_of_numbers_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="hunt_deny">${_t('blacklist_of_numbers')}</label>
+                        <div class="input">
+                            <input class="span4" id="hunt_deny" name="hunt_deny" type="text" placeholder="${_t('blacklist_of_numbers_placeholder')}" value="${data.hunt_deny}" rel="popover" data-content="${_t('blacklist_of_numbers_data_content')}"/>
+                        </div>
+                    </div>
+                </div>
 
 				<div id="options">
 					<div class="clearfix">
@@ -219,6 +254,25 @@
                                                 <input type="checkbox" id="not_configurable" name="extra.allow_configuration" checked/>
                                             {{/if}}
                                             <span>${_t('not_configurable')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('transcribe_voicemail_data_content')}">
+                                            {{if data.transcribe_voicemail}}
+                                                <input type="checkbox" id="transcribe_voicemail" name="transcribe_voicemail" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="transcribe_voicemail" name="transcribe_voicemail" />
+                                            {{/if}}
+                                            <span>${_t('transcribe_voicemail')}</span>
                                         </span>
                                     </label>
                                 </li>

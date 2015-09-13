@@ -42,6 +42,8 @@ window.translate['vmbox'] = {
 	delete_after_notification_data_content: "Delete the voicemail after the notification has been sent",
 	not_configurable: "Configurable via menu?",
 	not_configurable_data_content: " If unchecked, it will disallow the user to configure voicemail via the menu",
+	transcribe_voicemail: "Transcribe Messages",
+	transcribe_voicemail_data_content: "If checked, email notifications will include a best-guess transcription of voicemail messages",
 	delete: "Delete",
 	save: "Save",
 	voicemail_boxes_label: "Voicemail Boxes",
@@ -55,5 +57,14 @@ window.translate['vmbox'] = {
 	edit_voicemail_box_title: "Edit voicemail box",
 	create_voicemail_box_title: "Create voicemail box",
 	name_regex: /^[a-zA-Z0-9\s_']+$/,
-	route_var_ccv: "Route Variable"
+	route_var_ccv: "Route Variable",
+    extension_dialing: "Extension Dialing",
+    allow_caller_to_dial_extensions: "Allow caller to dial extensions",
+    allow_caller_to_dial_extensions_data_content: "Check to allow the user to dial extensions from this menu",
+    whitelist_of_numbers: "Whitelist of numbers",
+    whitelist_of_numbers_placeholder: "Regex",
+    whitelist_of_numbers_data_content: "List of numbers that users are allowed to dial when hunting (ex: ^[0-9]{0,11}$ is a simple regex catching a group of 0 to 11 numbers)",
+    blacklist_of_numbers: "Blacklist of numbers",
+    blacklist_of_numbers_placeholder: "Regex",
+    blacklist_of_numbers_data_content: "List of numbers that users are not allowed to dial when hunting (ex: ^[0-9]{0,11}$ is a simple regex catching a group of 0 to 11 numbers)"
 };
