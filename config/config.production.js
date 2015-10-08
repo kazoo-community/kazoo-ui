@@ -172,7 +172,7 @@
 
         /* Custom links */
         nav: {
-            help: 'http://wiki.voxter.com',
+            help: 'http://support.voxter.com',
             learn_more: 'http://www.voxter.com/'
         },
 
