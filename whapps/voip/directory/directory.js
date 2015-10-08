@@ -265,6 +265,7 @@ winkstart.module('voip', 'directory', {
                                 });
 
 								list_callflows.sort(function(a,b) {
+                  console.log(a,b);
 									var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
 										bName = (b.name || (b.numbers[0] + '')).toLowerCase();
 
