@@ -397,6 +397,7 @@ winkstart.module('voip', 'callflow', {
 
             $('.copy_icon', '#ws_cf_flow').click(function() {
                 delete(THIS.dataCallflow.id);
+                delete(THIS.dataCallflow.numbers);
                 THIS.flow.name = '';    
                 THIS.flow.numbers = [];
                 THIS.flow.id = undefined;
