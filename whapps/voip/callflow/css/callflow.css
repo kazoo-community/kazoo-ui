@@ -116,9 +116,10 @@
 
 #callflow-view .wrapper_callflow_buttons {
     display: block;
-    width: 322px;
+    width: 485px;
     margin: auto;
     margin-bottom: 5px;
+    text-align: center;
 }
 
 #callflow-view .wrapper_callflow_buttons .btn {

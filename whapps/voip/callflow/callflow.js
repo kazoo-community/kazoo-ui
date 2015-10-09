@@ -384,6 +384,15 @@ winkstart.module('voip', 'callflow', {
                 }
             });
 
+            $('.copy_icon', '#ws_cf_flow').click(function() {
+                delete(THIS.dataCallflow.id);
+                delete(THIS.dataCallflow.numbers);
+                THIS.flow.name = '';    
+                THIS.flow.numbers = [];
+                THIS.flow.id = undefined;
+                THIS.renderFlow();
+            });
+
             $('.buttons').append(buttons_html);
         },
 
@@ -506,9 +515,11 @@ winkstart.module('voip', 'callflow', {
             var THIS = this;
             if(pending_change) {
                 $('#pending_change', '#ws_callflow').show();
+                $('.copy_icon', '#ws_cf_flow').hide();
                 $('.save', '#ws_callflow').addClass('pulse-box');
             } else {
                 $('#pending_change', '#ws_callflow').hide();
+                $('.copy_icon', '#ws_cf_flow').show();
                 $('.save', '#ws_callflow').removeClass('pulse-box');
             }
         },
