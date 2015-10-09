@@ -1238,8 +1238,12 @@ winkstart.module('call_center', 'queue', {
                     isUsable: 'true',
                     caption: function(node, caption_map) {
                         var id = node.getMetadata('timeout');
-
-                        return (id) + ' seconds';
+                        if(id % 1 === 0) {
+                            return (id) + ' seconds';
+                        }
+                        else {
+                            return id;
+                        }
                     },
                     edit: function(node, callback) {
                         var popup, popup_html;
@@ -1267,7 +1271,12 @@ winkstart.module('call_center', 'queue', {
                                 popup.dialog('close');
                             }
                             else {
-                                winkstart.alert(_t('queue', 'please_enter_a_valid_number_of_seconds'));
+                                node.setMetadata('timeout', 'infinity');
+                                node.setMetadata('presence_id', presence_id);
+
+                                node.caption = 'infinity';
+
+                                popup.dialog('close');
                             }
                         });
 
