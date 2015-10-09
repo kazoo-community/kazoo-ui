@@ -136,5 +136,9 @@ window.translate['callflow'] = {
 	this_callflow_is_outdated: "This callflow is outdated, please resave this callflow before continuing.",
 	hot_desking_name: "Hot Desking",
 	language: "Language",
-	language_tip: "This callflow action lets you change the language of the prompts used in this callflow!"
+	language_tip: "This callflow action lets you change the language of the prompts used in this callflow!",
+	route_var_ccv: "Route Variable",
+	routing_variables: "Callflow Variables",
+	routing_variables_caption: "Custom Channel Variables",
+	routing_variables_tip: "Define custom variables for dynamic callflows."
 };

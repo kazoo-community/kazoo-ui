@@ -596,7 +596,8 @@ winkstart.module('voip', 'queue', {
 										return window.translate['voip_queue'][param];
 									},
                                     items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
                                 });
 
                                 if($('#queue_selector option:selected', popup_html).val() == undefined) {
@@ -611,6 +612,11 @@ winkstart.module('voip', 'queue', {
 
                                     winkstart.publish('queue.popup_edit', _data, function(_data) {
                                         node.setMetadata('id', _data.data.id || 'null');
+                                        if($('#route_var', popup_html).val().length > 0) {
+                                            node.setMetadata('var', $('#route_var', popup_html).val());
+                                        } else {
+                                            node.deleteMetadata('var');
+                                        }
 
                                         node.caption = _data.data.name || '';
 
@@ -618,9 +624,18 @@ winkstart.module('voip', 'queue', {
                                     });
                                 });
 
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#queue_selector', popup).val());
-
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+                                        
                                     node.caption = $('#queue_selector option:selected', popup).text();
 
                                     popup.dialog('close');
