@@ -22,7 +22,7 @@
 
         <div class="branch">
             {{if node.actionName != 'root'}}
-                <div id="${node.id}" name="${node.actionName}" class="node icons_black"></div>
+                <div id="${node.id}" name="${node.actionName}" class="node {{if node.data.data.var}}icons_black_tall{{else}}icons_black{{/if}}"></div>
             {{else}}
                 <div id="${node.id}" name="root" class="node icons_black root"></div>
             {{/if}}

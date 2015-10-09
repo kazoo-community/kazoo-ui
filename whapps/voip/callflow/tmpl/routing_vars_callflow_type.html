@@ -1,0 +1,20 @@
+<div>
+    <div class="dialog_popup">
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <label for="type_selector">${_t('routing_variables_type_selector')}</label>
+                <div class="select_wrapper">
+                    <select id="type_selector">
+                        {{each(i, type) types}}
+                            <option value="${i}">${type}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <div class="buttons-center">
+            <button id="ok" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

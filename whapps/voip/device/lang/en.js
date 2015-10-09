@@ -140,5 +140,6 @@ window.translate['device'] = {
 	create_device: "Create Device",
 	sip_uri_name_regex: /^[a-zA-Z0-9\s_']+$/,
 	name_regex: /^[a-zA-Z0-9\s_'\-]+$/,
-	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/,
+	route_var_ccv: "Route Variable"
 };

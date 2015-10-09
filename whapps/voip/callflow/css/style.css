@@ -199,6 +199,13 @@
     background: url(../images/blackbox.png) no-repeat;
 }
 
+#ws_callflow .callflow .icons_black_tall.node {
+    width: 143px;
+    height: 100px;
+    background: url(../images/blackbox_tall.png) no-repeat;
+    margin-bottom: 1px;
+}
+
 #ws_callflow #ws_cf_flow .children .child:last-child:not(:first-child) {
     padding-right: 10px;
 }
