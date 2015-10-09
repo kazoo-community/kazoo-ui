@@ -1,4 +1,5 @@
 window.translate['callflow'] = $.extend(true, {}, window.translate['callflow'], {
+	duplicate_callflow: "дублировать сценарий",
 	css_callflow: "css/callflow.css",
 	delete_callflow: "Удалить сценарий",
 	save_changes: "Сохранить изменения",

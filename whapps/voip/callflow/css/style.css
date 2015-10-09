@@ -369,3 +369,12 @@
     margin: 3px 0px 0px 7px;
     width: 20px;
 }
+
+#ws_callflow .root .top_bar .copy_icon {
+    background: url('../images/copy_icon.png') no-repeat scroll center center transparent;
+    cursor: pointer;
+    display: inline-block;
+    height: 18px;
+    margin: 3px 0px 0px 4px;
+    width: 17px;
+}
