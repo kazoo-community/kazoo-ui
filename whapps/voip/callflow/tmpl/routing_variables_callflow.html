@@ -1,0 +1,21 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('routing_variables_caption')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                {{each(i, item) items}}
+                <div class="popup_field" style="white-space: nowrap;">
+                    <input class="large" type="text" name="key[]" value="${item.key}" placeholder="Variable name"/>&nbsp;:&nbsp;
+                    <input class="large" type="text" name="${item.type}" value="${item.value}" placeholder="Variable value"/>
+                    <button id="del${i}" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>
+                </div>
+                {{/each}}
+            </div>
+        </form>
+
+        <div class="buttons-center">
+            <button id="add" class="btn success">Add Variable</button>
+            <button id="ok" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

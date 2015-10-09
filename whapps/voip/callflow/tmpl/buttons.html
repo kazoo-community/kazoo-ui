@@ -1,6 +1,12 @@
 <div>
     <span class="wrapper_callflow_buttons">
+    	{{if back_button}}
+    	<div class="btn primary back"><i class="back_image">&nbsp;</i></div>
+        <div class="btn danger delete skinny">${_t('delete_callflow')}</div>
+        <div class="btn success save skinny">${_t('save_changes')}</div><br />
+        {{else}}
         <div class="btn danger delete">${_t('delete_callflow')}</div>
-        <div class="btn success save">${_t('save_changes')}</div>
+        <div class="btn success save">${_t('save_changes')}</div><br />
+        {{/if}}
     </span>
 </div>
