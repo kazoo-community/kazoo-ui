@@ -174,6 +174,7 @@
         },
 
         default_api_url: 'https://api.zswitch.net:8443/v1', //'https://api.zswitch.net:8443/v1',
+        default_api_v2_url: 'https://api.zswitch.net:8443/v2',
 
         available_apps: {
             'voip': {
