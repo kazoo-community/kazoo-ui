@@ -84,5 +84,7 @@ window.translate['pbxs_manager'] = {
 	caller_id_stitle: "Caller-ID",
 	state_stitle: "Provincie",
 	failover_stitle: "Failover",
-	failover: "Failover"
+	failover: "Failover",
+	outbound_flags: "Outbound Flags",
+	outbound_flags_data_content: "Outbound flags die Device verwacht of de Carrier. (ex: flag1, flag2, flag3)"
 };

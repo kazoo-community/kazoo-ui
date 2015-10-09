@@ -84,5 +84,7 @@ window.translate['pbxs_manager'] = {
 	caller_id_stitle: "Caller-ID",
 	state_stitle: "State",
 	failover_stitle: "Failover",
-	failover: "Failover"
+	failover: "Failover",
+	outbound_flags: "Outbound Flags",
+	outbound_flags_data_content: "Enter outbound flags this device requires to be present on the carrier(s). Type a comma between each flag in order to have multiple outbound flags (ex: flag1, flag2, flag3)"
 };
