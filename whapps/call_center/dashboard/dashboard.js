@@ -629,9 +629,11 @@ winkstart.module('call_center', 'dashboard', {
                     }
                     else if(queue_stats.status === 'handled') {
                         formatted_data.calls_in_progress[call_id] = queue_stats;
-                        formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
-                        formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
-                        formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                        if(formatted_data.agents[queue_stats.agent_id]) {
+                            formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
+                            formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
+                            formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                        }
                         formatted_data.queues[k].total_calls++;
 
                         formatted_data.queues[k].current_calls++;
