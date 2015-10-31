@@ -137,6 +137,25 @@
 							</ul>
 					   </div>
 					</div>
+
+					<div class="clearfix">
+						<div class="input">
+						   <ul class="inputs-list">
+							   <li>
+									<label>
+										<span rel="popover" data-content="${_t('exclude_from_queues_tip')}">
+											{{if data.exclude_from_queues === true}}
+											<input id="exclude_from_queues" type="checkbox" name="exclude_from_queues" checked="checked" />
+											{{else}}
+											<input id="exclude_from_queues" type="checkbox" name="exclude_from_queues" />
+											{{/if}}
+											<span>${_t('exclude_from_queues')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+					   </div>
+					</div>
 				</div>
 			</div>
 		</form>
