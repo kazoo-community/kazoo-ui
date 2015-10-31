@@ -5,7 +5,11 @@
         <div id="agents-view">
     {{/if}}
         {{each agents}}
+            {{if status === 'ready' || status === 'logged_out'}}
+            <div class="agent_wrapper ${status}" id="${id}" data-queues="${queues}" style="cursor: pointer;">
+            {{else}}
             <div class="agent_wrapper ${status}" id="${id}" data-queues="${queues}">
+            {{/if}}
                 <div class="agent_header">
                     <span class="icon medium head1"/>
                     ${first_name} ${last_name}
