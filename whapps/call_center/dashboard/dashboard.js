@@ -34,7 +34,7 @@ winkstart.module('call_center', 'dashboard', {
                 verb: 'GET',
             },
             'dashboard.agents.livestats': {
-                url: '{api_url}/accounts/{account_id}/agents/stats',
+                url: '{api_url}/accounts/{account_id}/agents/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
@@ -46,19 +46,19 @@ winkstart.module('call_center', 'dashboard', {
                 trigger_events: false
             },
             'dashboard.queues.livestats': {
-                url: '{api_url}/accounts/{account_id}/queues/stats',
+                url: '{api_url}/accounts/{account_id}/queues/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
             },
             'dashboard.queues.stats': {
-                url: '{api_url}/accounts/{account_id}/queues/stats',
+                url: '{api_url}/accounts/{account_id}/queues/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
             },
             'dashboard.agents.stats': {
-                url: '{api_url}/accounts/{account_id}/agents/stats',
+                url: '{api_url}/accounts/{account_id}/agents/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET',
                 trigger_events: false
@@ -76,12 +76,12 @@ winkstart.module('call_center', 'dashboard', {
                 trigger_events: false
             },
             'dashboard.queues.stats_loading': {
-                url: '{api_url}/accounts/{account_id}/queues/stats',
+                url: '{api_url}/accounts/{account_id}/queues/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             'dashboard.agents.stats_loading': {
-                url: '{api_url}/accounts/{account_id}/agents/stats',
+                url: '{api_url}/accounts/{account_id}/agents/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -101,12 +101,12 @@ winkstart.module('call_center', 'dashboard', {
                 verb: 'GET'
             },
             'dashboard.agents.livestats_loading': {
-                url: '{api_url}/accounts/{account_id}/agents/stats',
+                url: '{api_url}/accounts/{account_id}/agents/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET'
             },
             'dashboard.queues.livestats_loading': {
-                url: '{api_url}/accounts/{account_id}/queues/stats',
+                url: '{api_url}/accounts/{account_id}/queues/stats_summary',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -184,7 +184,7 @@ winkstart.module('call_center', 'dashboard', {
         poll_agents: function(global_data, _parent) {
             var THIS = this,
                 parent = _parent,
-                polling_interval = 10,
+                polling_interval = 2,
                 map_agents = {},
                 cpt = 0,
                 current_queue,
@@ -202,7 +202,28 @@ winkstart.module('call_center', 'dashboard', {
                                 },
                                 get_agents: function(callback) {
                                     THIS.get_agents_livestats(false, function(_data_agents) {
-                                        callback(null, _data_agents);
+                                        var agents_data = {};
+                                        $.each(_data_agents.data, function(id, agent_stats) {
+                                            agents_data[id] = {
+                                                answered_calls: 0,
+                                                missed_calls: 0,
+                                                total_calls: 0,
+                                                queues: {}
+                                            };
+                                            $.each(agent_stats, function(queue_id, queue_stats) {
+                                                agents_data[id].queues[queue_id] = {
+                                                    answered_calls: queue_stats.answered_calls || 0,
+                                                    missed_calls: queue_stats.missed_calls || 0
+                                                };
+                                                agents_data[id].queues[queue_id].total_calls =
+                                                    agents_data[id].queues[queue_id].answered_calls +
+                                                    agents_data[id].queues[queue_id].missed_calls;
+                                                agents_data[id].answered_calls += agents_data[id].queues[queue_id].answered_calls;
+                                                agents_data[id].missed_calls += agents_data[id].queues[queue_id].missed_calls;
+                                                agents_data[id].total_calls += agents_data[id].queues[queue_id].total_calls;
+                                            });
+                                        });
+                                        callback(null, {data: agents_data});
                                     });
                                 },
                                 get_status: function(callback) {
@@ -606,43 +627,33 @@ winkstart.module('call_center', 'dashboard', {
                 }
             });
 
-            if('stats' in data.queues_live_stats) {
-                $.each(data.queues_live_stats.stats, function(index, queue_stats) {
-                    var k = queue_stats.queue_id,
-                        call_id = queue_stats.call_id;
+            $.each(data.queues_live_stats.Summarized, function(id, queue_summary) {
+                formatted_data.queues[id].current_calls = 0;
+                formatted_data.queues[id].total_wait_time = queue_summary.total_wait_time || 0;
+                formatted_data.queues[id].abandoned_calls = queue_summary.abandoned_calls || 0;
+                formatted_data.queues[id].total_calls = queue_summary.total_calls || 0;
+            });
+            $.each(data.queues_live_stats.Waiting, function(index, queue_stats) {
+                var k = queue_stats.queue_id,
+                    call_id = queue_stats.call_id;
+                formatted_data.calls_waiting[call_id] = queue_stats;
+                formatted_data.calls_waiting[call_id].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
+                formatted_data.calls_waiting[call_id].friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                formatted_data.queues[k].current_calls++;
+            });
+            $.each(data.queues_live_stats.Handled, function(index, queue_stats) {
+                var k = queue_stats.queue_id,
+                    call_id = queue_stats.call_id;
+                formatted_data.calls_in_progress[call_id] = queue_stats;
+                if(formatted_data.agents[queue_stats.agent_id]) {
+                    formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
+                    formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
+                    formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                }
+                formatted_data.queues[k].total_calls++;
 
-                    formatted_data.queues[k].current_calls = formatted_data.queues[k].current_calls || 0;
-
-                    if('wait_time' in queue_stats && queue_stats.status !== 'abandoned') {
-                        formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
-                    }
-
-                    if(queue_stats.status === 'abandoned') {
-                        formatted_data.queues[k].abandoned_calls++;
-                        formatted_data.queues[k].total_calls++;
-                    }
-                    else if(queue_stats.status === 'waiting') {
-                        formatted_data.calls_waiting[call_id] = queue_stats;
-                        formatted_data.calls_waiting[call_id].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
-                        formatted_data.calls_waiting[call_id].friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                        formatted_data.queues[k].current_calls++;
-                    }
-                    else if(queue_stats.status === 'handled') {
-                        formatted_data.calls_in_progress[call_id] = queue_stats;
-                        if(formatted_data.agents[queue_stats.agent_id]) {
-                            formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
-                            formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
-                            formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                        }
-                        formatted_data.queues[k].total_calls++;
-
-                        formatted_data.queues[k].current_calls++;
-                    }
-                    else if(queue_stats.status === 'processed') {
-                        formatted_data.queues[k].total_calls++;
-                    }
-                });
-            }
+                formatted_data.queues[k].current_calls++;
+            });
 
             $.each(formatted_data.queues, function(k, v) {
                 if(v.total_calls > 0) {
@@ -722,7 +733,6 @@ winkstart.module('call_center', 'dashboard', {
 
                 THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
                 THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));
-                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
 
                 THIS.poll_agents(data, parent);
 
@@ -731,6 +741,7 @@ winkstart.module('call_center', 'dashboard', {
                     .append(dashboard_html);
 
                 THIS.render_callwaiting_list(dashboard_html);
+                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
 
                 THIS.bind_live_events(parent);
                 THIS.render_timers(data);
@@ -751,8 +762,29 @@ winkstart.module('call_center', 'dashboard', {
                         });
                     },
                     agents_livestats: function(callback) {
-                        THIS.get_agents_livestats(loading, function(_data_live_agents) {
-                            callback(null, _data_live_agents);
+                        THIS.get_agents_livestats(false, function(_data_agents) {
+                            var agents_data = {};
+                            $.each(_data_agents.data, function(id, agent_stats) {
+                                agents_data[id] = {
+                                    answered_calls: 0,
+                                    missed_calls: 0,
+                                    total_calls: 0,
+                                    queues: {}
+                                };
+                                $.each(agent_stats, function(queue_id, queue_stats) {
+                                    agents_data[id].queues[queue_id] = {
+                                        answered_calls: queue_stats.answered_calls || 0,
+                                        missed_calls: queue_stats.missed_calls || 0
+                                    };
+                                    agents_data[id].queues[queue_id].total_calls =
+                                        agents_data[id].queues[queue_id].answered_calls +
+                                        agents_data[id].queues[queue_id].missed_calls;
+                                    agents_data[id].answered_calls += agents_data[id].queues[queue_id].answered_calls;
+                                    agents_data[id].missed_calls += agents_data[id].queues[queue_id].missed_calls;
+                                    agents_data[id].total_calls += agents_data[id].queues[queue_id].total_calls;
+                                });
+                            });
+                            callback(null, {data: agents_data});
                         });
                     },
                     agents_status: function(callback) {
