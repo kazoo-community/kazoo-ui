@@ -31,7 +31,7 @@ winkstart.module('voip', 'callflow', {
             fax_callflow: 'tmpl/fax_callflow.html',
             edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
-	        set_cid_callflow: 'tmpl/set_cid_callflow.html',
+            set_cid_callflow: 'tmpl/set_cid_callflow.html',
             response_callflow: 'tmpl/response_callflow.html',
             group_pickup: 'tmpl/group_pickup.html',
             language_callflow: 'tmpl/language_callflow.html',
