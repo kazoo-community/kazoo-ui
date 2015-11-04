@@ -110,6 +110,11 @@ winkstart.module('call_center', 'dashboard', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'dashboard.agent.status': {
+                url: '{api_url}/accounts/{account_id}/agents/{agent_id}/status',
+                contentType: 'application/json',
+                verb: 'POST'
+            }
         }
     },
 
@@ -163,6 +168,13 @@ winkstart.module('call_center', 'dashboard', {
                                                                 .append(calls_html);
 
             THIS.render_timers(data);
+            
+            $('.agent_wrapper.ready').click(function(e) {
+                THIS.logout(this);
+            });
+            $('.agent_wrapper.logged_out').click(function(e) {
+                THIS.login(this);
+            });
 
             if(id) {
                 THIS.detail_stat(id, parent);
@@ -997,6 +1009,48 @@ winkstart.module('call_center', 'dashboard', {
 
             //TODO check render global data
             THIS.render_dashboard(parent);
+        },
+        
+        login: function(agent) {
+            var agentId = $(agent).attr('id');
+            winkstart.request(true, 'dashboard.agent.status', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    agent_id: agentId,
+                    data: {status: 'login'}
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status, 'update');
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status, 'update');
+                    }
+                }
+            );
+        },
+        
+        logout: function(agent) {
+            var agentId = $(agent).attr('id');
+            winkstart.request(true, 'dashboard.agent.status', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
+                    agent_id: agentId,
+                    data: {status: 'logout'}
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status, 'update');
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status, 'update');
+                    }
+                }
+            );
         }
     }
 );
