@@ -3042,7 +3042,7 @@ winkstart.module('voip', 'callflow', {
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',
