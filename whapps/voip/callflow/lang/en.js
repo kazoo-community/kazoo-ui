@@ -149,5 +149,8 @@ window.translate['callflow'] = {
 	routing_variables_caption: "Custom Channel Variables",
 	routing_variables_tip: "Define custom variables for dynamic callflows.",
 	routing_variables_type: "Add Custom Channel Variable",
-	routing_variables_type_selector: "Variable type"
+	routing_variables_type_selector: "Variable type",
+    alert_info: "Alert Info",
+    alert_info_tip: "Specify a unique ringtone for the destination of the call.",
+    alert_info_title: "Alert Info"
 };
