@@ -141,10 +141,10 @@ window.translate['device'] = {
 	sip_uri_name_regex: /^[a-zA-Z0-9\s_']+$/,
 	name_regex: /^[a-zA-Z0-9\s_'\-]+$/,
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/,
-	route_var_ccv: "Route Variable",
 	reboot: "Reboot",
 	are_you_sure_you_want_to_reboot: "Are you sure you want to reboot this device?",
 	reboot_success_title: "Reboot Command Sent",
+	route_var_ccv: "Route Variable",
 	exclude_from_queues: "Exclude from Queues",
 	exclude_from_queues_tip: "Do not ring this device when calling user/agent in queue."
 };

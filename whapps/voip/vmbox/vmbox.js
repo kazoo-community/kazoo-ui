@@ -176,7 +176,7 @@ winkstart.module('voip', 'vmbox', {
                                 _data.data.sort(function(a, b) {
                                     return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
                                 });
-                            
+
                                 _data.data.unshift({
                                     id: '',
                                     name: _t('vmbox', 'not_set')
