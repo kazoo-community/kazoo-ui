@@ -8,6 +8,7 @@ winkstart.module('voip', 'callflow', {
         ],
 
         templates: {
+            alert_info_callflow: 'tmpl/alert_info_callflow.html',
             callflow: 'tmpl/callflow.html',
             callflow_main: 'tmpl/callflow_main.html',
             branch: 'tmpl/branch.html',
@@ -3302,6 +3303,57 @@ winkstart.module('voip', 'callflow', {
                                 });
                             }
                         );
+                    }
+                },
+                'alert_info[]': {
+                    name: _t('callflow', 'alert_info'),
+                    icon: 'play',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'alert_info',
+                    tip: _t('callflow', 'alert_info_tip'),
+                    data: {
+                        alert_info: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('alert_info');
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.alert_info_callflow.tmpl({
+                            _t: function(param){
+                                return window.translate['callflow'][param];
+                            },
+                            data_alert_info: {
+                                'alert_info': node.getMetadata('alert_info') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var save_alert_info = function() {
+                                node.setMetadata('alert_info', $('#alert_info_input', popup_html).val());
+                                node.caption = $('#alert_info_input', popup_html).val();
+                                popup.dialog('close');
+                            };
+                            save_alert_info();
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'alert_info_title'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 }
             });
