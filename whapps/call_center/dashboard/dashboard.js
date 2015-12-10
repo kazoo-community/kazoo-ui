@@ -9,7 +9,8 @@ winkstart.module('call_center', 'dashboard', {
             calls_dashboard: 'tmpl/calls_dashboard.html',
             queues_dashboard: 'tmpl/queues_dashboard.html',
             list_devices: 'tmpl/list_devices.html',
-            call: 'tmpl/call_list_element.html'
+            call: 'tmpl/call_list_element.html',
+            agent_restart: 'tmpl/agent_restart.html',
         },
 
         subscribe: {
@@ -19,7 +20,7 @@ winkstart.module('call_center', 'dashboard', {
 
         resources: {
             'dashboard.restart_agent': {
-                url: 'https://awe01.van1.voxter.net:8443/v1/sup/acdc_agents_sup/restart_agent/{account_id}/{agent_id}',
+                url: 'http://awe01.van1.voxter.net:8000/v1/sup/acdc/agent_restart/{account_id}/{agent_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -1105,7 +1106,9 @@ winkstart.module('call_center', 'dashboard', {
         },
 
         restart_agent: function(agent) {
+            var THIS = this;
             var agentId = $(agent).attr('id');
+
             winkstart.request(true, 'dashboard.restart_agent', {
                     account_id: winkstart.apps['voip'].account_id,
                     agent_id: agentId,
@@ -1117,9 +1120,16 @@ winkstart.module('call_center', 'dashboard', {
                     }
                 },
                 function(_data, status) {
-                    if(typeof error == 'function') {
-                        error(_data, status, 'update');
-                    }
+                    var popup_html = THIS.templates.agent_restart.tmpl({
+                        status: status,
+                        data: _data
+                    });
+
+                    $('#close', popup_html).click(function() {
+                        popup.dialog('close');
+                    });
+
+                    popup = winkstart.dialog(popup_html, {});
                 }
             );
         }
