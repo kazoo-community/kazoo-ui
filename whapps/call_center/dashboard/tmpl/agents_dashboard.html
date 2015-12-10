@@ -8,16 +8,20 @@
             <div class="agent_wrapper ${status}" id="${id}" data-queues="${queues}">
                 <div class="agent_header">
                     {{if status === 'ready' || status === 'logged_out'}}
-                    <div class="agent_title ${status}" style="display: inline;" id="${id}" style="cursor: pointer;">
+                    <div class="agent_title ${status}" id="${id}" style="display: inline; cursor: pointer;">
                     {{else}}
                     <div class="agent_title ${status}" style="display: inline;" id="${id}">
                     {{/if}}
                         <span class="icon medium head1"/>
                         ${first_name} ${last_name}
                     </div>
-                    {{if allow_agent_restart}}<span class="agent_restart icon medium loop2" id="${id}" style="float: right;" title="Restart agent"/>{{/if}}
+                    {{if allow_agent_restart}}<span class="agent_restart icon medium loop2" id="${id}" style="float: right; cursor: pointer;" title="Restart agent"/>{{/if}}
                 </div>
-                <div class="agent_data">
+                {{if status === 'ready' || status === 'logged_out'}}
+                <div class="agent_data ${status}" id="${id}" style="display: inline; cursor: pointer;">
+                {{else}}
+                <div class="agent_data ${status}" style="display: inline;" id="${id}">
+                {{/if}}
                     <div class="row_data call_time">
                         {{if status === 'paused'}}
                             <div class="data_title">${_t('break_time')}</div>

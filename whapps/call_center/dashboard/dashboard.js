@@ -175,15 +175,22 @@ winkstart.module('call_center', 'dashboard', {
 
             THIS.render_timers(data);
             
-            $('.agent_title .ready').click(function(e) {
+            $('.agent_title.ready').click(function(e) {
                 THIS.logout(this);
             });
-            $('.agent_title .logged_out').click(function(e) {
+            $('.agent_title.logged_out').click(function(e) {
                 THIS.login(this);
             });
 
             $('.agent_restart').click(function(e) {
                 THIS.restart_agent(this);
+            });
+
+            $('.agent_data.ready').click(function(e) {
+                THIS.logout(this);
+            });
+            $('.agent_data.logged_out').click(function(e) {
+                THIS.login(this);
             });
 
             if(id) {
