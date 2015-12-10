@@ -18,20 +18,25 @@ winkstart.module('call_center', 'dashboard', {
         },
 
         resources: {
+            'dashboard.restart_agent': {
+                url: 'https://awe01.van1.voxter.net:8443/v1/sup/acdc_agents_sup/restart_agent/{account_id}/{agent_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'dashboard.queue_eavesdrop': {
                 url: '{api_url}/accounts/{account_id}/queues/{queue_id}/eavesdrop',
                 contentType: 'application/json',
-                verb: 'PUT',
+                verb: 'PUT'
             },
             'dashboard.call_eavesdrop': {
                 url: '{api_url}/accounts/{account_id}/queues/eavesdrop',
                 contentType: 'application/json',
-                verb: 'PUT',
+                verb: 'PUT'
             },
             'dashboard.list_devices': {
                 url: '{api_url}/accounts/{account_id}/devices',
                 contentType: 'application/json',
-                verb: 'GET',
+                verb: 'GET'
             },
             'dashboard.agents.livestats': {
                 url: '{api_url}/accounts/{account_id}/agents/stats_summary',
@@ -146,6 +151,7 @@ winkstart.module('call_center', 'dashboard', {
                 data = $.extend({}, param_data, {
 					show_queues: THIS.show_queues,
 					hide_logout: THIS.hide_logout,
+                    allow_agent_restart: winkstart.apps.auth.superduper_admin,
 					_t: function(param){
 						return window.translate['dashboard'][param];
 					}
@@ -169,11 +175,15 @@ winkstart.module('call_center', 'dashboard', {
 
             THIS.render_timers(data);
             
-            $('.agent_wrapper.ready').click(function(e) {
+            $('.agent_title .ready').click(function(e) {
                 THIS.logout(this);
             });
-            $('.agent_wrapper.logged_out').click(function(e) {
+            $('.agent_title .logged_out').click(function(e) {
                 THIS.login(this);
+            });
+
+            $('.agent_restart').click(function(e) {
+                THIS.restart_agent(this);
             });
 
             if(id) {
@@ -1073,6 +1083,26 @@ winkstart.module('call_center', 'dashboard', {
                     api_url: winkstart.apps['voip'].api_url,
                     agent_id: agentId,
                     data: {status: 'logout'}
+                },
+                function(_data, status) {
+                    if(typeof success == 'function') {
+                        success(_data, status, 'update');
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error == 'function') {
+                        error(_data, status, 'update');
+                    }
+                }
+            );
+        },
+
+        restart_agent: function(agent) {
+            var agentId = $(agent).attr('id');
+            winkstart.request(true, 'dashboard.restart_agent', {
+                    account_id: winkstart.apps['voip'].account_id,
+                    agent_id: agentId,
+                    data: {}
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
