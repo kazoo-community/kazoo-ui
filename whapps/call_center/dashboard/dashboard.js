@@ -478,7 +478,9 @@ winkstart.module('call_center', 'dashboard', {
                         $target.html(THIS.get_time_seconds(new_duration > 0 ? new_duration : 0));
                     }
                     else {
-                        $target.html(THIS.get_time_seconds(++THIS.map_timers[type][id].duration));
+                        if(THIS.map_timers[type]) {
+                            $target.html(THIS.get_time_seconds(++THIS.map_timers[type][id].duration));
+                        }
                     }
                 }
                 else {
