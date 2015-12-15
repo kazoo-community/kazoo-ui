@@ -176,7 +176,7 @@ winkstart.module('voip', 'vmbox', {
                                 _data.data.sort(function(a, b) {
                                     return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
                                 });
-                            
+
                                 _data.data.unshift({
                                     id: '',
                                     name: _t('vmbox', 'not_set')
@@ -426,6 +426,12 @@ winkstart.module('voip', 'vmbox', {
 
             if(form_data.pin === '') {
 				delete form_data.pin;
+            }
+            if(form_data.hunt_allow === '') {
+                delete form_data.hunt_allow;
+            }
+            if(form_data.hunt_deny === '') {
+                delete form_data.hunt_deny;
             }
 
             form_data.not_configurable = !form_data.extra.allow_configuration;
