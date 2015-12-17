@@ -670,42 +670,49 @@
     };
 
     winkstart.autoLogout = function() {
-        if(!winkstart.config.hasOwnProperty('logout_timer') || winkstart.config.logout_timer > 0) {
-             var timerAlert,
-                timerLogout,
-                wait = winkstart.config.logout_timer || 60 ,
-                alertBeforeLogout = 2,
-                alertTriggered = false,
-                alertDialog,
-                logout = function() {
-                    winkstart.publish('auth.logout');
-                },
-                resetTimer = function() {
-                    clearTimeout(timerAlert);
-                    clearTimeout(timerLogout);
+        winkstart.request('auth.get_user', {
+            account_id: winkstart.apps['auth'].account_id,
+            api_url: winkstart.apps['auth'].api_url,
+            user_id: winkstart.apps['auth'].user_id
+        },
+        function(data, status) {
+            if(!winkstart.config.hasOwnProperty('logout_timer') && !data.data.disable_login_timeout || winkstart.config.logout_timer > 0) {
+                 var timerAlert,
+                    timerLogout,
+                    wait = winkstart.config.logout_timer || 60 ,
+                    alertBeforeLogout = 2,
+                    alertTriggered = false,
+                    alertDialog,
+                    logout = function() {
+                        winkstart.publish('auth.logout');
+                    },
+                    resetTimer = function() {
+                        clearTimeout(timerAlert);
+                        clearTimeout(timerLogout);
 
-                    if(alertTriggered) {
-                        alertTriggered = false;
+                        if(alertTriggered) {
+                            alertTriggered = false;
 
-                        alertDialog.dialog('close').remove();
-                    }
+                            alertDialog.dialog('close').remove();
+                        }
 
-                    timerAlert=setTimeout(function() {
-                        alertTriggered = true;
+                        timerAlert=setTimeout(function() {
+                            alertTriggered = true;
 
-                        alertDialog = winkstart.alert(_t('config', 'alert_logout'));
-                    }, 60000*(wait-alertBeforeLogout));
+                            alertDialog = winkstart.alert(_t('config', 'alert_logout'));
+                        }, 60000*(wait-alertBeforeLogout));
 
-                    timerLogout=setTimeout(function() {
-                        logout();
-                    }, 60000*wait);
-                };
+                        timerLogout=setTimeout(function() {
+                            logout();
+                        }, 60000*wait);
+                    };
 
-            document.onkeypress = resetTimer;
-            document.onmousemove = resetTimer;
+                document.onkeypress = resetTimer;
+                document.onmousemove = resetTimer;
 
-            resetTimer();
-        }
+                resetTimer();
+            }
+        });
 	};
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
