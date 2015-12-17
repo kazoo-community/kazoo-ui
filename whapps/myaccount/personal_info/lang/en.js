@@ -6,6 +6,8 @@ window.translate['personal-info'] = {
 	change_your_password_data_content: "",
 	confirm_your_password: "Confirm your password",
 	confirm_your_password_data_content: "",
+    disable_login_timeout: "Disable Login Timeout",
+    disable_login_timeout_data_content: "Do not automatically sign me out after a set timeout",
 	advanced_view: "Advanced View",
 	advanced_view_data_content: "Click if you want to see the advanced view by default.",
 	primary_app: "Primary App",

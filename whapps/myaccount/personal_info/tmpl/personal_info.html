@@ -39,16 +39,28 @@
 						<ul class="inputs-list">
 							<li>
 								<label>
-									<span rel="popover" data-content="${_t('advanced_view_data_content')}">
-										{{if data.advanced}}
-						                    <input type="checkbox" id="advanced" name="advanced" checked="checked"/>
+									<span rel="popover" data-content="${_t('disable_login_timeout_data_content')}">
+										{{if data.disable_login_timeout}}
+						                    <input type="checkbox" id="disable_login_timeout" name="disable_login_timeout" checked="checked"/>
 						                {{else}}
-						                    <input type="checkbox" id="advanced" name="advanced"/>
+						                    <input type="checkbox" id="disable_login_timeout" name="disable_login_timeout"/>
 						                {{/if}}
-						                <span>${_t('advanced_view')}</span>
+						                <span>${_t('disable_login_timeout')}</span>
 					                </span>
 					            </label>
 					        </li>
+                            <li>
+                                <label>
+                                    <span rel="popover" data-content="${_t('advanced_view_data_content')}">
+                                        {{if data.advanced}}
+                                            <input type="checkbox" id="advanced" name="advanced" checked="checked"/>
+                                        {{else}}
+                                            <input type="checkbox" id="advanced" name="advanced"/>
+                                        {{/if}}
+                                        <span>${_t('advanced_view')}</span>
+                                    </span>
+                                </label>
+                            </li>
 					    </ul>
 					</div>
 				</div>
