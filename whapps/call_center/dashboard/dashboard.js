@@ -554,7 +554,7 @@ winkstart.module('call_center', 'dashboard', {
 
             formatted_data.current_timestamp = data.queues_live_stats.current_timestamp;
 
-            formatted_data.calls_waiting = {};
+            formatted_data.calls_waiting = [];
             formatted_data.calls_in_progress = {};
             formatted_data.agent_status = {
                 busy: {},
@@ -656,9 +656,9 @@ winkstart.module('call_center', 'dashboard', {
             $.each(data.queues_live_stats.Waiting, function(index, queue_stats) {
                 var k = queue_stats.queue_id,
                     call_id = queue_stats.call_id;
-                formatted_data.calls_waiting[call_id] = queue_stats;
-                formatted_data.calls_waiting[call_id].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
-                formatted_data.calls_waiting[call_id].friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                queue_stats.friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
+                queue_stats.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                formatted_data.calls_waiting.push(queue_stats);
                 formatted_data.queues[k].current_calls++;
             });
             $.each(data.queues_live_stats.Handled, function(index, queue_stats) {
@@ -681,6 +681,10 @@ winkstart.module('call_center', 'dashboard', {
 
                     v.average_hold_time = THIS.get_time_seconds(v.total_wait_time / completed_calls);
                 }
+            });
+
+            formatted_data.calls_waiting.sort(function(a, b) {
+                return a.entered_timestamp < b.entered_timestamp ? -1 : 1;
             });
 
             return formatted_data;
