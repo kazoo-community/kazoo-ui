@@ -113,6 +113,15 @@ winkstart.module('myaccount', 'personal_info', {
                 }
             });
 
+            $('#disable_login_timeout', info_html).click(function() {
+                var $this = $(this);
+
+                winkstart.config.disable_login_timeout = $this.is(':checked');
+                THIS.update_acct(data.data, {
+                    disable_login_timeout: $this.is(':checked')
+                });
+            });
+
             $('#advanced', info_html).click(function() {
                 var $this = $(this);
 
