@@ -2670,6 +2670,66 @@ winkstart.module('voip', 'callflow', {
                         }
                     }
                 },
+                'set_cid[]': {
+                    name: _t('callflow', 'set_cid'),
+                    icon: 'rightarrow',
+                    category: _t('config', 'caller_id_cat'),
+                    module: 'set_cid',
+                    tip: _t('callflow', 'set_cid_tip'),
+                    data: {
+                        caller_id_name: '',
+                        caller_id_number: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return (node.getMetadata('caller_id_name') || '') + ' ' + (node.getMetadata('caller_id_number') || '');
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.set_cid_callflow.tmpl({
+                                                        _t: function(param){
+                                                                return window.translate['callflow'][param];
+                                                        },
+                            data_cid: {
+                                'caller_id_name': node.getMetadata('caller_id_name') || '',
+                                'caller_id_number': node.getMetadata('caller_id_number') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var cid_name_val = $('#cid_name', popup_html).val(),
+                                cid_number_val = $('#cid_number', popup_html).val();
+
+                            node.setMetadata('caller_id_name', cid_name_val);
+                            node.setMetadata('caller_id_number', cid_number_val);
+
+                            node.caption = cid_name_val + ' ' + cid_number_val;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'set_caller_id_title'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                },
                 'prepend_cid[action=reset]': {
                     name: _t('callflow', 'reset_prepend'),
                     icon: 'loop2',
@@ -3042,7 +3102,7 @@ winkstart.module('voip', 'callflow', {
                     rules: [
                         {
                             type: 'quantity',
-                            maxSize: '0'
+                            maxSize: '1'
                         }
                     ],
                     isUsable: 'true',

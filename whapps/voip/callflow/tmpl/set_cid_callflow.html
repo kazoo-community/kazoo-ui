@@ -1,0 +1,20 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('set_caller_id')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="cid_name">${_t('callerid_name')}: </label>
+                    <input type="text" id="cid_name" value="${data_cid.caller_id_name}"/>
+                </div>
+                <div class="popup_field">
+                    <label for="cid_number">${_t('callerid_number')}: </label>
+                    <input type="text" id="cid_number" value="${data_cid.caller_id_number}"/>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>
