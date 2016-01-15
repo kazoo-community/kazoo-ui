@@ -626,6 +626,8 @@ winkstart.module('auth', 'auth',
                 function(_data) {
                     winkstart.apps.auth.superduper_admin = _data.data.superduper_admin || false;
 
+                    THIS.showAnnouncement(_data.data.announcement);
+
                     winkstart.getJSON('auth.get_user', rest_data,
                         function (json, xhr) {
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
@@ -675,6 +677,15 @@ winkstart.module('auth', 'auth',
                     );
                 }
             );
+        },
+
+        showAnnouncement: function(announcement) {
+            var THIS = this,
+                announcement = announcement || winkstart.config.announcement;
+
+            if(announcement) {
+                winkstart.alert(announcement);
+            }
         },
 
         _logout: function() {
