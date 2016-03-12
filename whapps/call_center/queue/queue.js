@@ -1176,7 +1176,8 @@ winkstart.module('call_center', 'queue', {
 									},
                                     title: _t('queue', 'disconnects_an_agent_from_a_queue'),
                                     items: data.data,
-                                    selected: node.getMetadata('id') || ''
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
                                 });
 
                                 if($('#queue_selector option:selected', popup_html).val() == undefined) {
