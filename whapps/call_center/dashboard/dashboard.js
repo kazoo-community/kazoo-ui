@@ -507,7 +507,7 @@ winkstart.module('call_center', 'dashboard', {
             if(data.calls_waiting) {
                 $.each(data.calls_waiting, function(k, v) {
                     v.duration = data.current_timestamp - v.entered_timestamp;
-                    THIS.start_timer('waiting', {data: v, id: k});
+                    THIS.start_timer('waiting', {data: v, id: v.call_id});
                 });
             }
 
