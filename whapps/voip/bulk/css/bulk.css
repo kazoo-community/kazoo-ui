@@ -6,3 +6,7 @@
 #bulk-view .checkbox-label {
     text-align: left;
 }
+
+#bulk-view label {
+    width: 100%;
+}
