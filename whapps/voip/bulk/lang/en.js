@@ -19,5 +19,7 @@ window.translate['bulk'] = {
 	default_music: "Default Music",
 	silence: "Silence",
 	an_error_occured_during: "An error occured during the bulk update...",
-	the_endpoints_selected: "The endpoints selected were updated successfuly!"
+	the_endpoints_selected: "The endpoints selected were updated successfuly!",
+    enable: "Enable",
+    disable: "Disable"
 };
