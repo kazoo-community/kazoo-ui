@@ -717,13 +717,41 @@ winkstart.module('call_center', 'queue', {
                 });
 
                 $(popup_agents).delegate('.queue_agent', 'click', function() {
-                    $('.unassigned_users', popup_agents).prepend(THIS.templates.available_user.tmpl($(this).dataset()));
+                    var agentsList = $('.unassigned_users .user_box', popup_agents);
+                    for(var i = 0; i < agentsList.length; i++) {
+                        var agentEl = $(agentsList[i]);
+                        if($(this).dataset().last_name.toLowerCase() <
+                                agentEl.attr('data-last_name').toLowerCase()) {
+                            THIS.templates.available_user.tmpl($(this).dataset()).insertBefore(agentEl);
+                            break;
+                        }
+                        if(i == agentsList.length-1) {
+                            $('.unassigned_users', popup_agents).append(THIS.templates.available_user.tmpl($(this).dataset()));
+                        }
+                    }
+                    if(agentsList.length == 0) {
+                        $('.unassigned_users', popup_agents).append(THIS.templates.available_user.tmpl($(this).dataset()));
+                    }
                     $(this).remove();
                     $('.count_agents', popup_agents).html(--count_agents);
                 });
 
                 $(popup_agents).delegate('.user_box', 'click', function() {
-                    $('.list_agents', popup_agents).prepend(THIS.templates.selected_agent.tmpl($(this).dataset()));
+                    var agentsList = $('.list_agents .queue_agent', popup_agents);
+                    for(var i = 0; i < agentsList.length; i++) {
+                        var agentEl = $(agentsList[i]);
+                        if($(this).dataset().last_name.toLowerCase() <
+                                agentEl.attr('data-last_name').toLowerCase()) {
+                            THIS.templates.selected_agent.tmpl($(this).dataset()).insertBefore(agentEl);
+                            break;
+                        }
+                        if(i == agentsList.length-1) {
+                            $('.list_agents', popup_agents).append(THIS.templates.selected_agent.tmpl($(this).dataset()));
+                        }
+                    }
+                    if(agentsList.length == 0) {
+                        $('.list_agents', popup_agents).append(THIS.templates.selected_agent.tmpl($(this).dataset()));
+                    }
                     $(this).remove();
                     $('.count_agents', popup_agents).html(++count_agents);
                 });
