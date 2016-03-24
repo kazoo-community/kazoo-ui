@@ -62,6 +62,7 @@ winkstart.module('voip', 'featurecode', {
             $('#ws-content').empty();
             THIS.categories = {};
             THIS.actions = {};
+            THIS.parking_timeout = undefined;
             THIS.parking_timeout_changed = false;
             winkstart.publish('featurecode.define_featurecodes', THIS.actions);
 
