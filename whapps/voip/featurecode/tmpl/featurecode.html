@@ -41,6 +41,17 @@
 							            </div>
 							        </div>
 						        {{/each}}
+                                {{if i == (_t('parking_cat'))}}
+                                    <div>
+                                        <label for="parking_timeout">${_t('parking_timeout')}</label>
+                                        <div class="input">
+                                            <div class="input-append">
+                                                <input class="mini" id="parking_timeout" name="parking_timeout" type="text" value="${parking_timeout}" placeholder="${_t('parking_timeout_system_default')}" rel="popover" data-content="${_t('parking_timeout_content')}">
+                                                <label class="after">${_t('parking_timeout_seconds')}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/if}}
 							</div>
 						{{/each}}
 					</form>

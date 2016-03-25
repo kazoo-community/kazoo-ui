@@ -5,3 +5,8 @@
 #featurecode-view .buttons-right {
 	margin-top: 10px;
 }
+
+label.after {
+    margin-left: 6px;
+    text-align: left;
+}

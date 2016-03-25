@@ -24,5 +24,9 @@ window.translate['featurecode'] = {
 	park_and_retrieve: "Park and Retrieve",
 	parking_cat: "Parking",
 	valet: "Valet",
-	retrieve: "Retrieve"
+	retrieve: "Retrieve",
+    parking_timeout: "Parking Timeout",
+    parking_timeout_content: "Number of seconds to wait before returning a call that was parked using these feature codes",
+    parking_timeout_seconds: "seconds",
+    parking_timeout_system_default: "default"
 };

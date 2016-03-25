@@ -62,6 +62,8 @@ winkstart.module('voip', 'featurecode', {
             $('#ws-content').empty();
             THIS.categories = {};
             THIS.actions = {};
+            THIS.parking_timeout = undefined;
+            THIS.parking_timeout_changed = false;
             winkstart.publish('featurecode.define_featurecodes', THIS.actions);
 
             $.each(THIS.actions, function(i, data) {
@@ -87,6 +89,10 @@ winkstart.module('voip', 'featurecode', {
                                 THIS.actions[this.featurecode.name].enabled = true;
                                 THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
                             }
+                            if(THIS.actions[this.featurecode.name].category == _t('featurecode', 'parking_cat')) {
+                                THIS.parking_timeout = this.ringback_timeout / 1000 || undefined;
+                                THIS.actions[this.featurecode.name].data.ringback_timeout = this.ringback_timeout / 1000 || undefined;
+                            }
                         }
                     });
 
@@ -95,7 +101,8 @@ winkstart.module('voip', 'featurecode', {
 						'label':'data',
 						_t: function(param){
 							return window.translate['featurecode'][param];
-						}
+						},
+                        parking_timeout: THIS.parking_timeout
 					},
 					featurecode_html = THIS.templates.featurecode.tmpl(data);
 
@@ -143,6 +150,10 @@ winkstart.module('voip', 'featurecode', {
                         var number_field = action_wrapper.find('.featurecode_number');
                         !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
 
+                    });
+
+                    $('#parking_timeout', featurecode_html).bind('blur keyup focus', function() {
+                        THIS.parking_timeout_changed = $(this).val() != (THIS.parking_timeout || "");
                     });
 
                     $('.featurecode-save', featurecode_html).click(function() {
@@ -231,40 +242,6 @@ winkstart.module('voip', 'featurecode', {
             });
         },
 
-        render_featurecodes: function() {
-            var THIS = this;
-
-            winkstart.getJSON('featurecode.list', {
-                    crossbar: true,
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(data, status) {
-                    $.each(data.data, function() {
-                        if('featurecode' in this && this.featurecode != false) {
-                            if(this.featurecode.name in THIS.actions) {
-                                THIS.actions[this.featurecode.name].id = this.id;
-                                THIS.actions[this.featurecode.name].enabled = true;
-                                THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
-                            }
-                        }
-                    });
-                    var data = {
-						'categories': THIS.categories,
-						'label':'data',
-						_t: function(param){
-							return window.translate['featurecode'][param];
-						}
-					},
-					featurecode_html = THIS.templates.featurecode.tmpl(data);
-
-                    $('#ws-content')
-                        .empty()
-                        .append(featurecode_html);
-                }
-            );
-        },
-
         clean_form_data: function() {
             var THIS = this;
 
@@ -274,8 +251,15 @@ winkstart.module('voip', 'featurecode', {
                 updated_callflows: []
             };
 
+            var parking_timeout = parseInt($('#parking_timeout').val());
+            THIS.parking_timeout = isNaN(parking_timeout) ? undefined : parking_timeout * 1000;
+
             $('.enabled', '#featurecode-view').each(function() {
                 var callflow = $(this).dataset();
+
+                if(THIS.actions[callflow.action].category == _t('featurecode', 'parking_cat')) {
+                    THIS.actions[callflow.action].data.ringback_timeout = THIS.parking_timeout;
+                }
 
                 callflow.flow = {
                     data: THIS.actions[callflow.action].data,
@@ -299,31 +283,48 @@ winkstart.module('voip', 'featurecode', {
                 form_data.deleted_callflows.push(callflow);
             });
 
-            $('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
-                if($(this).dataset('enabled') == 'true') {
-                    var callflow = $(this).dataset();
-
-                    callflow.flow = {
-                        data: THIS.actions[callflow.action].data,
-                        module: THIS.actions[callflow.action].module,
-                        children: {}
-                    };
-
-                    //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
-                    callflow.type += 's';
-
-                    /* if a star is in the pattern, then we need to escape it */
-                    if(callflow.type === 'patterns') {
-                        callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+            if(THIS.parking_timeout_changed) {
+                $('.action_wrapper').not('.enabled, .disabled').each(function() {
+                    if($(this).dataset('enabled') == 'true') {
+                        var callflow = $(this).dataset();
+                        THIS.build_update(THIS, callflow, form_data);
                     }
-
-                    callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
-
-                    form_data.updated_callflows.push(callflow);
-                }
-            });
+                });
+            }
+            else {
+                $('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
+                    if($(this).dataset('enabled') == 'true') {
+                        var callflow = $(this).dataset();
+                        THIS.build_update(THIS, callflow, form_data);
+                    }
+                });
+            }
 
             return form_data;
+        },
+
+        build_update: function(THIS, callflow, form_data) {
+            if(THIS.actions[callflow.action].category == _t('featurecode', 'parking_cat')) {
+                THIS.actions[callflow.action].data.ringback_timeout = THIS.parking_timeout;
+            }
+
+            callflow.flow = {
+                data: THIS.actions[callflow.action].data,
+                module: THIS.actions[callflow.action].module,
+                children: {}
+            };
+
+            //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
+            callflow.type += 's';
+
+            /* if a star is in the pattern, then we need to escape it */
+            if(callflow.type === 'patterns') {
+                callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+            }
+
+            callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
+
+            form_data.updated_callflows.push(callflow);
         },
 
         construct_action: function(json) {

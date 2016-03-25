@@ -220,6 +220,19 @@ function(args) {
             $(this).prop('checked') ? $('.input', $(this).parents('.clearfix').first()).show() : $('.input', $(this).parents('.clearfix').first()).show().hide();
         });
 
+        var enableEl = $('.bulk-edit-checkbox[name=enable]', parent);
+        var disableEl = $('.bulk-edit-checkbox[name=disable]', parent);
+        enableEl.change(function() {
+            if(disableEl.prop('checked')) {
+                disableEl.removeAttr('checked');
+            }
+        });
+        disableEl.change(function() {
+            if(enableEl.prop('checked')) {
+                enableEl.removeAttr('checked');
+            }
+        });
+
         $('.bulk-save', parent).click(function() {
             var selected_endpoints = [];
             $('.select_endpoint:checked', parent).each(function(k, v) {
@@ -228,9 +241,16 @@ function(args) {
 
             var form_data = {};
 
-            $('.clearfix', parent).each(function(k, v) {
+            $('.clearfix', parent).not('.enabledisable').each(function(k, v) {
                 if($('.bulk-edit-checkbox', $(v)).prop('checked')) {
                     form_data = $.extend(true, form_data, form2object($(v).attr('id')));
+                }
+            });
+
+            var enableDisable = undefined;
+            $('.clearfix.enabledisable').each(function(k, v) {
+                if($('.bulk-edit-checkbox', $(v)).prop('checked')) {
+                    form_data.enabled = $('.bulk-edit-checkbox', $(v)).prop('name') == 'enable';
                 }
             });
 
