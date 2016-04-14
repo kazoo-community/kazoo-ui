@@ -152,5 +152,12 @@ window.translate['callflow'] = {
 	routing_variables_type_selector: "Variable type",
     alert_info: "Alert Info",
     alert_info_tip: "Specify a unique ringtone for the destination of the call.",
-    alert_info_title: "Alert Info"
+    alert_info_title: "Alert Info",
+    collect_dtmf: "Collect DTMF",
+    max_digits: "Max. Digits",
+	timeout: "Timeout (ms)",
+	terminator: "DTMF Terminator",
+	interdigit_timeout: "Timeout Between DTMF",
+	collection_name: "Collection Name",
+	collect_dtmf_tip: "Collects DTMF input for processing later"
 };

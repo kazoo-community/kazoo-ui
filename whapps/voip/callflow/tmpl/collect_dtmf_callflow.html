@@ -1,0 +1,36 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('collect_dtmf')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="collect_dtmf_max_digits">${_t('max_digits')}: </label>
+                    <input type="text" id="collect_dtmf_max_digits" class="medium" value="${data_collect_dtmf.max_digits}"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="collect_dtmf_timeout">${_t('timeout')}: </label>
+                    <input type="text" id="collect_dtmf_timeout" class="medium" value="${data_collect_dtmf.timeout}"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="collect_dtmf_terminator">${_t('terminator')}: </label>
+                    <input type="text" id="collect_dtmf_terminator" class="medium" value="${data_collect_dtmf.terminator}"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="collect_dtmf_interdigit_timeout">${_t('interdigit_timeout')}: </label>
+                    <input type="text" id="collect_dtmf_interdigit_timeout" class="medium" value="${data_collect_dtmf.interdigit_timeout}"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="collect_dtmf_collection_name">${_t('collection_name')}: </label>
+                    <input type="text" id="collect_dtmf_collection_name" class="medium" value="${data_collect_dtmf.collection_name}"/>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>
