@@ -246,7 +246,7 @@ winkstart.module('myaccount', 'report', {
                                 dids,
                                 inbound_trunks,
                                 twoway_trunks,
-                                '$'+parseFloat(results.credits.amount).toFixed(2)*/
+                                '$'+parseFloat(results.credits.amount).toFixed(2)
                             ];
 
                             winkstart.table.report.fnAddData(data_account);
