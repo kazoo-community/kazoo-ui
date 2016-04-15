@@ -88,10 +88,10 @@ winkstart.module('voip', 'featurecode', {
                                 THIS.actions[this.featurecode.name].id = this.id;
                                 THIS.actions[this.featurecode.name].enabled = true;
                                 THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
-                            }
-                            if(THIS.actions[this.featurecode.name].category == _t('featurecode', 'parking_cat')) {
-                                THIS.parking_timeout = this.ringback_timeout / 1000 || undefined;
-                                THIS.actions[this.featurecode.name].data.ringback_timeout = this.ringback_timeout / 1000 || undefined;
+                                if(THIS.actions[this.featurecode.name].category == _t('featurecode', 'parking_cat')) {
+                                    THIS.parking_timeout = this.ringback_timeout / 1000 || undefined;
+                                    THIS.actions[this.featurecode.name].data.ringback_timeout = this.ringback_timeout / 1000 || undefined;
+                                }
                             }
                         }
                     });
