@@ -2966,6 +2966,10 @@ winkstart.module('voip', 'callflow', {
                                     this.name = this.first_name + ' ' + this.last_name;
                                 });
 
+                                data.data.sort(function(a, b) {
+                                    return a.name < b.name ? -1 : 1;
+                                });
+
                                 popup_html = THIS.templates.fax_callflow.tmpl({
 									_t: function(param){
 										return window.translate['callflow'][param];
