@@ -163,7 +163,9 @@ winkstart.module('myaccount', 'report', {
                 _total_data = {
                     dids: 0,
                     softphones: 0,
+                    softphones_disabled: 0,
                     sip_devices: 0,
+                    sip_devices_disabled: 0,
                     inbound_trunks: 0,
                     twoway_trunks: 0,
                     credits: 0
@@ -197,7 +199,9 @@ winkstart.module('myaccount', 'report', {
                         },
                         function(err, results) {
                             var softphones = 0,
+                                softphones_disabled = 0,
                                 sip_devices = 0,
+                                sip_devices_disabled = 0,
                                 dids = 0,
                                 inbound_trunks = results.limits.inbound_trunks || 0,
                                 twoway_trunks = results.limits.twoway_trunks || 0;
@@ -210,22 +214,39 @@ winkstart.module('myaccount', 'report', {
 
                             $.each(results.devices, function(k, v) {
                                 if(v.device_type === 'softphone') {
-                                    softphones++;
+                                    v.enabled ? softphones++ : softphones_disabled++;
                                 }
                                 else if($.inArray(v.device_type, ['sip_device', 'fax', 'smartphone', 'sip_uri']) > -1) {
-                                    sip_devices++;
+                                    v.enabled ? sip_devices++ : sip_devices_disabled++;
                                 }
                             });
 
                             _total_data.dids += dids;
                             _total_data.sip_devices += sip_devices;
+                            _total_data.sip_devices_disabled += sip_devices_disabled;
                             _total_data.softphones += softphones;
+                            _total_data.softphones_disabled += softphones_disabled;
                             _total_data.credits += results.credits.amount;
                             _total_data.inbound_trunks += inbound_trunks;
                             _total_data.twoway_trunks += twoway_trunks;
 
+                            var sip_devices_string = sip_devices;
+                            var softphones_string = softphones;
+                            if(sip_devices_disabled > 0) {
+                                sip_devices_string = (sip_devices+sip_devices_disabled).toString() + " (" + sip_devices_disabled + " disabled)";
+                            }
+                            if(softphones_disabled > 0) {
+                                softphones_string = (softphones+softphones_disabled).toString() + " (" + softphones_disabled + " disabled)";
+                            }
+
                             var data_account = [
-                                account.name, sip_devices, softphones, dids, inbound_trunks, twoway_trunks, '$'+parseFloat(results.credits.amount).toFixed(2)
+                                account.name,
+                                sip_devices_string,
+                                softphones_string,
+                                dids,
+                                inbound_trunks,
+                                twoway_trunks,
+                                '$'+parseFloat(results.credits.amount).toFixed(2)*/
                             ];
 
                             winkstart.table.report.fnAddData(data_account);
