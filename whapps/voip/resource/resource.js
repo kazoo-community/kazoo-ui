@@ -422,6 +422,8 @@ winkstart.module('voip', 'resource', {
         },
 
         normalize_data: function(data) {
+            data.gateways[0].progress_timeout=parseInt(data.gateways[0].progress_timeout);
+            data.weight_cost=parseInt(data.weight_cost);
             return data;
         },
 

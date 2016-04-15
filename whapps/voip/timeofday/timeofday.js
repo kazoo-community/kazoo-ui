@@ -472,6 +472,10 @@ winkstart.module('voip', 'timeofday', {
         },
 
         normalize_data: function(form_data) {
+            form_data.interval=parseInt(form_data.interval);
+            form_data.time_window_start=parseInt(form_data.time_window_start);
+            form_data.time_window_stop=parseInt(form_data.time_window_stop);
+
             if(form_data.cycle == 'weekly') {
                 delete form_data.ordinal;
                 delete form_data.days;
