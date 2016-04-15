@@ -268,7 +268,7 @@ winkstart.module('voip', 'directory', {
 									var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
 										bName = (b.name || (b.numbers[0] + '')).toLowerCase();
 
-									return aName > bName;
+									return aName < bName ? -1 : 1;
 								});
 
                                 defaults.field_data.callflows = list_callflows;
@@ -287,7 +287,7 @@ winkstart.module('voip', 'directory', {
                             		var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
                             			bName = (b.first_name + ' ' + b.last_name).toLowerCase();
 
-									return aName > bName;
+									return aName < bName ? -1 : 1;
                             	});
 
                                 defaults.field_data.users = _data.data;
@@ -439,7 +439,21 @@ winkstart.module('voip', 'directory', {
                         $('#row_no_data', directory_html).remove();
                     }
 
-                    $('.rows', directory_html).prepend(THIS.templates.user_row.tmpl(user_data));
+                    var existingUsers = $('.rows .row', directory_html);
+                    for(var i = 0; i < existingUsers.length; i++) {
+                        var userEl = $('.column.first', existingUsers[i]);
+                        if(user_data.user_name.toLowerCase() <
+                                userEl.text().toLowerCase()) {
+                            THIS.templates.user_row.tmpl(user_data).insertBefore(existingUsers[i]);
+                            break;
+                        }
+                        if(i == existingUsers.length-1) {
+                            $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+                        }
+                    }
+                    if(existingUsers.length == 0) {
+                        $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+                    }
                     $('#option_user_'+user_id, directory_html).hide();
 
                     $user.val('empty_option_user');
