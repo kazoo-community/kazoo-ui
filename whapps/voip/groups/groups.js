@@ -156,6 +156,10 @@ winkstart.module('voip', 'groups', {
                             function(_data_devices, status) {
                                 defaults.field_data.devices = _data_devices.data;
 
+                                _data_devices.data.sort(function(a, b) {
+                                    return a.name.toLowerCase() > b.name.toLowerCase();
+                                });
+
                                 callback(null, _data_devices);
                             }
                         );
@@ -167,6 +171,11 @@ winkstart.module('voip', 'groups', {
                             },
                             function(_data, status) {
                                 defaults.field_data.users = _data.data;
+
+                                _data.data.sort(function(a, b) {
+                                    return (a.first_name + ' ' + a.last_name).toLowerCase() >
+                                        (b.first_name + ' ' + b.last_name).toLowerCase();
+                                });
 
                                 callback(null, _data);
                             }

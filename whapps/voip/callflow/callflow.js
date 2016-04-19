@@ -37,7 +37,8 @@ winkstart.module('voip', 'callflow', {
             group_pickup: 'tmpl/group_pickup.html',
             language_callflow: 'tmpl/language_callflow.html',
             routing_variables_callflow: 'tmpl/routing_variables_callflow.html',
-            routing_vars_callflow_type: 'tmpl/routing_vars_callflow_type.html'
+            routing_vars_callflow_type: 'tmpl/routing_vars_callflow_type.html',
+            collect_dtmf_callflow: 'tmpl/collect_dtmf_callflow.html'
         },
 
         elements: {
@@ -2965,6 +2966,10 @@ winkstart.module('voip', 'callflow', {
                                     this.name = this.first_name + ' ' + this.last_name;
                                 });
 
+                                data.data.sort(function(a, b) {
+                                    return a.name < b.name ? -1 : 1;
+                                });
+
                                 popup_html = THIS.templates.fax_callflow.tmpl({
 									_t: function(param){
 										return window.translate['callflow'][param];
@@ -3355,7 +3360,67 @@ winkstart.module('voip', 'callflow', {
                             }
                         });
                     }
-                }
+                },
+                'collect_dtmf[]': {
+                    name: _t('callflow', 'collect_dtmf'),
+                    icon: 'menu1',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'collect_dtmf',
+                    tip: _t('callflow', 'collect_dtmf_tip'),
+                    data: {
+                        max_digits: 4,
+                        timeout: 5000,
+                        terminator: '#',
+                        interdigit_timeout: 2000,
+                        collection_name: 'default'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.collect_dtmf_callflow.tmpl({
+                            _t: function(param){
+                                return window.translate['callflow'][param];
+                            },
+                            data_collect_dtmf: {
+                                'max_digits': parseInt(node.getMetadata('max_digits') || 4),
+                                'timeout': parseInt(node.getMetadata('timeout') || 5000),
+                                'terminator': node.getMetadata('terminator') || '#',
+                                'interdigit_timeout': parseInt(node.getMetadata('interdigit_timeout') || 2000),
+                                'collection_name': node.getMetadata('collection_name') || 'default'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('max_digits', parseInt($('#collect_dtmf_max_digits', popup_html).val()));
+                            node.setMetadata('timeout', parseInt($('#collect_dtmf_timeout', popup_html).val()));
+                            node.setMetadata('terminator', $('#collect_dtmf_terminator', popup_html).val());
+                            node.setMetadata('interdigit_timeout', parseInt($('#collect_dtmf_interdigit_timeout', popup_html).val()));
+                            node.setMetadata('collection_name', $('#collect_dtmf_collection_name', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'collect_dtmf_title'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+                    }
+                },
             });
 
             /* Migration callflows, fixes our goofs. To be removed eventually */

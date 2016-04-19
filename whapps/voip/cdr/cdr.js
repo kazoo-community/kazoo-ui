@@ -557,7 +557,7 @@ winkstart.module('voip', 'cdr', {
                 winkstart.request(true, 'cdr.read', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.apps['voip'].api_url,
-                        cdr_id: cdr_id,
+                        cdr_id: encodeURIComponent(cdr_id),
                     },
                     function (_data, status) {
                         var cdr_data = THIS.parse_data_cdr(_data.data);
