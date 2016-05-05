@@ -306,10 +306,10 @@ winkstart.module('voip', 'prompt', {
 				prompt.language = promptSplit.length > 1 ? promptSplit[0] : '-';
 
 				if(THIS.adminMode) {
-					prompt.link = apiUrl + '/accounts/media/' + encodeURI(name) + '/raw?auth_token=' + authToken;
+					prompt.link = apiUrl + '/accounts/media/' + name + '/raw?auth_token=' + authToken;
 				}
 				else {
-					prompt.link = apiUrl + '/accounts/' + accountId + '/media/' + encodeURI(name) + '/raw?auth_token=' + authToken;
+					prompt.link = apiUrl + '/accounts/' + accountId + '/media/' + name + '/raw?auth_token=' + authToken;
 				}
 
 				prompt.id = name;
