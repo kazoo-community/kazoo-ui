@@ -213,10 +213,9 @@ winkstart.module('voip', 'prompt', {
 			dialogTemplate.find('#add_language').click(function(ev) {
 				ev.preventDefault();
 
-				var form_data = form2object('language-form'),
-					clean_data = THIS.clean_form_data(form_data);
-
-				clean_data.prompt_id = globalPromptId;
+				var form_data = form2object('language-form');
+				form_data.prompt_id = globalPromptId;
+				var clean_data = THIS.clean_form_data(form_data);
 
 				if(file === 'updating') {
 					winkstart.alert(_t('prompt', 'the_file_you_want_to_apply'));
