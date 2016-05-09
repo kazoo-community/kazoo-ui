@@ -110,6 +110,16 @@
                                     {{/if}}
                                 {{/each}}
                             </select>
+
+                            <select id="end_day" name="days[1]" class="medium">
+                                {{each(i, day) field_data.day}}
+                                    {{if data.days[data.days.length-1] == day}}
+                                    <option value="${day}" selected="selected">${day}</option>
+                                    {{else}}
+                                    <option value="${day}">${day}</option>
+                                    {{/if}}
+                                {{/each}}
+                            </select>
                         </div>
                     </div>
 

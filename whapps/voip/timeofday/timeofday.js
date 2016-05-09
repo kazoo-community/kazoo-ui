@@ -69,7 +69,7 @@ winkstart.module('voip', 'timeofday', {
     {
         save_timeofday: function(form_data, data, success, error) {
             var THIS = this,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.normalize_data($.extend(true, {}, THIS.remove_old_data(data.data), form_data));
 
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'timeofday.update', {
@@ -171,7 +171,8 @@ winkstart.module('voip', 'timeofday', {
                             { id: 'fourth', value: 'Fourth' },
                             { id: 'fifth', value: 'Fifth' },
                             { id: 'last', value: 'Last' },
-                            { id: 'every', value: 'Day' }
+                            { id: 'every', value: 'Day' },
+                            { id: 'range', value: 'Day Range'}
                         ],
 
                         months: [
@@ -269,6 +270,7 @@ winkstart.module('voip', 'timeofday', {
             $('#days_checkboxes', timeofday_html).hide();
             $('#weekdays', timeofday_html).hide();
             $('#specific_day', timeofday_html).hide();
+            $('#end_day', timeofday_html).hide();
 
             if(data.data.id == undefined) {
                 $('#weekly_every', timeofday_html).show();
@@ -279,6 +281,9 @@ winkstart.module('voip', 'timeofday', {
                     $('#ordinal', timeofday_html).show();
                     if(data.data.days != undefined && data.data.days[0] != undefined) {
                         $('#specific_day', timeofday_html).show();
+                        if(data.data.days.length > 1) {
+                            $('#end_day', timeofday_html).show();
+                        }
                     } else {
                         $('#weekdays', timeofday_html).show();
                     }
@@ -287,6 +292,9 @@ winkstart.module('voip', 'timeofday', {
                     $('#ordinal', timeofday_html).show();
                     if(data.data.days != undefined && data.data.days[0] != undefined) {
                         $('#specific_day', timeofday_html).show();
+                        if(data.data.days.length > 1) {
+                            $('#end_day', timeofday_html).show();
+                        }
                     } else {
                         $('#weekdays', timeofday_html).show();
                     }
@@ -304,9 +312,18 @@ winkstart.module('voip', 'timeofday', {
                 if($(this).val() == 'every') {
                     $('#weekdays', timeofday_html).hide();
                     $('#specific_day', timeofday_html).show();
+                    $('#end_day', timeofday_html).hide();
+                } else if($(this).val() == 'range') {
+                    $('#weekdays', timeofday_html).hide();
+                    var specificDaySelect = $('#specific_day', timeofday_html);
+                    var endDaySelect = $('#end_day', timeofday_html);
+                    specificDaySelect.show();
+                    endDaySelect.show();
+                    updateEndDaySelect();
                 } else {
                     $('#weekdays', timeofday_html).show();
                     $('#specific_day', timeofday_html).hide();
+                    $('#end_day', timeofday_html).hide();
                 }
             });
 
@@ -318,6 +335,7 @@ winkstart.module('voip', 'timeofday', {
                 $('#days_checkboxes', timeofday_html).hide();
                 $('#weekdays', timeofday_html).hide();
                 $('#specific_day', timeofday_html).hide();
+                $('#end_day', timeofday_html).hide();
 
                 switch($(this).val()) {
                     case 'yearly':
@@ -326,6 +344,12 @@ winkstart.module('voip', 'timeofday', {
                         if($('#ordinal', timeofday_html).val() == 'every') {
                             //$('#weekdays', timeofday_html).hide();
                             $('#specific_day', timeofday_html).show();
+                        } else if($('#ordinal', timeofday_html).val() == 'range') {
+                            var specificDaySelect = $('#specific_day', timeofday_html);
+                            var endDaySelect = $('#end_day', timeofday_html);
+                            specificDaySelect.show();
+                            endDaySelect.show();
+                            updateEndDaySelect();
                         } else {
                             $('#weekdays', timeofday_html).show();
                             //$('#specific_day', timeofday_html).hide();
@@ -338,6 +362,12 @@ winkstart.module('voip', 'timeofday', {
                         if($('#ordinal', timeofday_html).val() == 'every') {
                             //$('#weekdays', timeofday_html).hide();
                             $('#specific_day', timeofday_html).show();
+                        } else if($('#ordinal', timeofday_html).val() == 'range') {
+                            var specificDaySelect = $('#specific_day', timeofday_html);
+                            var endDaySelect = $('#end_day', timeofday_html);
+                            specificDaySelect.show();
+                            endDaySelect.show();
+                            updateEndDaySelect();
                         } else {
                             $('#weekdays', timeofday_html).show();
                             //$('#specific_day', timeofday_html).hide();
@@ -350,6 +380,28 @@ winkstart.module('voip', 'timeofday', {
                         break;
                 }
             });
+
+            $('#specific_day', timeofday_html).change(function() {
+                if($('#ordinal', timeofday_html).val() == 'range') {
+                    updateEndDaySelect();
+                }
+            });
+
+            var updateEndDaySelect = function() {
+                var specificDaySelect = $('#specific_day', timeofday_html),
+                    endDaySelect = $('#end_day', timeofday_html);
+                if(parseInt(endDaySelect.val()) < parseInt(specificDaySelect.val())) {
+                    endDaySelect.val(specificDaySelect.val());
+                }
+                $('option', endDaySelect).each(function() {
+                    if(parseInt($(this).val()) < parseInt(specificDaySelect.val())) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+                });
+            };
 
             $('.timeofday-save', timeofday_html).click(function(ev) {
                 ev.preventDefault();
@@ -425,6 +477,7 @@ winkstart.module('voip', 'timeofday', {
 
         clean_form_data: function(form_data) {
             var wdays = [],
+                days = [],
                 times = form_data.time.split(';');
 
             if(form_data.cycle != 'weekly' && form_data.weekday != undefined) {
@@ -446,6 +499,13 @@ winkstart.module('voip', 'timeofday', {
             }
 
             form_data.wdays = wdays;
+
+            if(form_data.ordinal == 'range') {
+                for(var i = parseInt(form_data.days[0]); i <= parseInt(form_data.days[1]); i++) {
+                    days.push(i.toString());
+                }
+                form_data.days = days;
+            }
 
             if(form_data.start_date === '') {
                 delete form_data.start_date;
@@ -471,6 +531,11 @@ winkstart.module('voip', 'timeofday', {
             return form_data;
         },
 
+        remove_old_data: function(form_data) {
+            delete form_data.days;
+            return form_data;
+        },
+
         normalize_data: function(form_data) {
             if(form_data.cycle == 'weekly') {
                 delete form_data.ordinal;
@@ -479,7 +544,15 @@ winkstart.module('voip', 'timeofday', {
             }
             else {
                 form_data.cycle == 'yearly' ? delete form_data.interval : delete form_data.month;
-                form_data.ordinal != 'every' ? delete form_data.days : delete form_data.wdays;
+                if(form_data.ordinal != 'every' && form_data.ordinal != 'range') {
+                    delete form_data.days;
+                }
+                else {
+                    delete form_data.wdays;
+                    if(form_data.ordinal != 'range' && form_data.days.length > 1) {
+                        form_data.days.splice(1);
+                    }
+                }
             }
 
             delete form_data.time;
