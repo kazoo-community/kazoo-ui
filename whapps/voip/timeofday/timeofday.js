@@ -69,7 +69,7 @@ winkstart.module('voip', 'timeofday', {
     {
         save_timeofday: function(form_data, data, success, error) {
             var THIS = this,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+                normalized_data = THIS.normalize_data($.extend(true, {}, THIS.remove_old_data(data.data), form_data));
 
             if(typeof data.data == 'object' && data.data.id) {
                 winkstart.request(true, 'timeofday.update', {
@@ -528,6 +528,11 @@ winkstart.module('voip', 'timeofday', {
 				form_data.month = parseInt(form_data.month);
 			}
 
+            return form_data;
+        },
+
+        remove_old_data: function(form_data) {
+            delete form_data.days;
             return form_data;
         },
 
