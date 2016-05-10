@@ -53,7 +53,7 @@
                     }
 
                     if(settings.contentType == 'application/json') {
-                        if(settings.type == 'PUT' || settings.type == 'POST') {
+                        if(settings.type == 'PUT' || settings.type == 'POST' || settings.type == 'PATCH') {
                             settings.data.verb = settings.type;
                             settings.data = JSON.stringify(settings.data);
                         }
