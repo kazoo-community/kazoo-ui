@@ -114,6 +114,21 @@ winkstart.module('accounts', 'accounts_manager', {
 				url: '{api_url}/accounts/{account_id}/callflows',
 				contentType: 'application/json',
 				verb: 'PUT'
+			},
+			'accounts_manager.promote_reseller': {
+				url: '{api_url}/accounts/{account_id}/reseller',
+				contentType: 'application/json',
+				verb: 'PUT'
+			},
+			'accounts_manager.demote_reseller': {
+				url: '{api_url}/accounts/{account_id}/reseller',
+				contentType: 'application/json',
+				verb: 'DELETE'
+			},
+			'accounts_manager.allow_number_additions': {
+				url: '{api_url}/accounts/{account_id}',
+				contentType: 'application/json',
+				verb: 'PATCH'
 			}
 		}
 	},
@@ -284,6 +299,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						available_apps: []
 					},
 					role: winkstart.apps['auth'].role,
+					isAdmin: winkstart.apps.auth.superduper_admin,
 					functions: {
 						inArray: function(value, array) {
 							if(array) {
@@ -689,6 +705,47 @@ winkstart.module('accounts', 'accounts_manager', {
 			);
 		},
 
+		toggle_reseller_status: function(accountId, isReseller, callback) {
+			var action = isReseller ? 'promote_reseller' : 'demote_reseller';
+			winkstart.request('accounts_manager.' + action, {
+					account_id: accountId,
+					api_url: winkstart.apps['accounts'].api_url,
+					data: {}
+				},
+				function(data, status) {
+					winkstart.request('accounts_manager.allow_number_additions', {
+							account_id: accountId,
+							api_url: winkstart.apps['accounts'].api_url,
+							data: {
+								wnm_allow_additions: isReseller
+							}
+						},
+						function(data, status) {
+							callback(data, status);
+						},
+						function(data, status) {
+							// Do the opposite action to undo promotion
+							action = isReseller ? 'demote_reseller' : 'promote_reseller';
+							winkstart.request('accounts_manager.' + action, {
+									account_id: accountId,
+									api_url: winkstart.apps['accounts'].api_url,
+									data: {}
+								},
+								function() {
+									// Present the error message from the allow_number_additions failure
+									winkstart.error_message.process_error()(data, status);
+								},
+								winkstart.error_message.process_error(function(data, status) {
+									console.log('Critical failure when reverting promote/demote', data);
+								})
+							)
+						}
+					);
+				},
+				winkstart.error_message.process_error()
+			);
+		},
+
 		render_accounts_manager: function(data, target, callbacks) {
 			data._t = function(param){
 				return window.translate['accounts'][param];
@@ -710,6 +767,23 @@ winkstart.module('accounts', 'accounts_manager', {
 				};
 
 			winkstart.validate.set(THIS.config.validation, account_html);
+
+			var toggleResellerStatusClick = function(el, isReseller) {
+				$(el).prop('disabled', true);
+				THIS.toggle_reseller_status(data.data.id, isReseller, function(_data, status) {
+					$(el).prop('disabled', false);
+					callbacks.save_success(_data, status);
+				});
+			};
+
+			$('.accounts_manager-promote', account_html).click(function(ev) {
+				ev.preventDefault();
+				toggleResellerStatusClick(this, true);
+			});
+			$('.accounts_manager-demote', account_html).click(function(ev) {
+				ev.preventDefault();
+				toggleResellerStatusClick(this, false);
+			});
 
 			if(data.field_data.sameTemplate === true) {
 				$('.fax_to_email').hide();
