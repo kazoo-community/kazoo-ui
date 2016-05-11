@@ -45,6 +45,11 @@ winkstart.module('voip', 'faxbox', {
 				contentType: 'application/json',
 				verb: 'DELETE'
 			},
+			'faxbox.default_smtp_domain': {
+				url: '{api_url}/accounts/{account_id}/faxboxes/default_fax_smtp_domain',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
 			'user.get': {
 				url: '{api_url}/accounts/{account_id}/users/{user_id}',
 				contentType: 'application/json',
@@ -121,6 +126,7 @@ winkstart.module('voip', 'faxbox', {
 			var THIS = this,
 				faxbox_html = THIS.templates.edit.tmpl({
 					faxbox: THIS.normalized_data(data.faxbox),
+					custom_smtp_email_address_placeholder: data.default_smtp_domain ? 'domain.' + data.default_smtp_domain : '',
 					users: data.user_list,
 					_t: function(param){
 						return window.translate['faxbox'][param];
@@ -361,6 +367,19 @@ winkstart.module('voip', 'faxbox', {
 							callback(null, {});
 						}
 					},
+					default_smtp_domain: function(callback) {
+						winkstart.request('faxbox.default_smtp_domain', {
+								account_id: winkstart.apps.voip.account_id,
+								api_url: winkstart.apps.voip.api_url,
+							},
+							function(_data, status) {
+								callback(null, _data.data.default_smtp_domain);
+							},
+							function(err, status) {
+								callback(null, err);
+							}
+						);
+					},
 					user_list: function(callback) {
 						winkstart.request(true, 'user.list', {
 								account_id: winkstart.apps.voip.account_id,
@@ -406,6 +425,10 @@ winkstart.module('voip', 'faxbox', {
 						else {
 							results.faxbox = $.extend(true, THIS.get_default_faxbox(results.current_user), results.faxbox);
 						}
+					}
+
+					if (results.default_smtp_domain.status == 'error') {
+						delete results.default_smtp_domain;
 					}
 
 					delete results.current_user;
