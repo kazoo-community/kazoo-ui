@@ -691,12 +691,7 @@ winkstart.module('voip', 'timeofday', {
                     category: _t('config', 'time_of_day_cat'),
                     module: 'temporal_route',
                     data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '12'
-                        }
-                    ],
+                    rules: [],
                     isUsable: 'true',
                     key_caption: function(child_node, caption_map) {
                         var key = child_node.key;
