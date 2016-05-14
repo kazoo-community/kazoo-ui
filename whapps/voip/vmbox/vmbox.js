@@ -19,7 +19,8 @@ winkstart.module('voip', 'vmbox', {
         validation : [
             { name: '#name',    regex: _t('vmbox', 'name_regex') },
             { name: '#mailbox', regex: /^[0-9]+$/ },
-            { name: '#pin',     regex: /^([0-9]{4,})?$/ }
+            { name: '#pin',     regex: /^([0-9]{4,})?$/ },
+            { name: '#notify_email_addresses', regex: /^(?:([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+(?:,\s*(?!$)|$))*$/ }
         ],
 
         resources: {
@@ -214,6 +215,9 @@ winkstart.module('voip', 'vmbox', {
                                     vmbox_id: data.id
                                 },
                                 function(_data, status) {
+                                    if(_data.notify_email_addresses) {
+                                        _data.notify_email_addresses = _data.notify_email_addresses.join(',');
+                                    }
                                     callback(null, _data);
                                 }
                             );
@@ -437,6 +441,14 @@ winkstart.module('voip', 'vmbox', {
             form_data.not_configurable = !form_data.extra.allow_configuration;
 
             delete form_data.extra;
+
+            var notifyEmailAddresses = form_data.notify_email_addresses.split(',');
+            form_data.notify_email_addresses = [];
+            if(notifyEmailAddresses != '') {
+                $.each(notifyEmailAddresses, function(key, value) {
+                    form_data.notify_email_addresses[key] = $.trim(value);
+                });
+            }
 
             return form_data;
         },
