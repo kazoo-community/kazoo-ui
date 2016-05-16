@@ -9,6 +9,8 @@ winkstart.module('call_center', 'queue', {
             queue_callflow: 'tmpl/queue_callflow.html',
             agent_pause_callflow: 'tmpl/agent_pause_callflow.html',
             agent_presence_callflow: 'tmpl/agent_presence_callflow.html',
+            agent_availability_callflow: 'tmpl/agent_availability_callflow.html',
+            agent_availability_key_callflow: 'tmpl/agent_availability_key_callflow.html',
             add_agents: 'tmpl/add_agents.html',
             edit_agents: 'tmpl/edit_agents.html',
             selected_agent: 'tmpl/selected_agent.html',
@@ -1491,6 +1493,119 @@ winkstart.module('call_center', 'queue', {
                         if(typeof callback == 'function') {
                             callback();
                         }
+                    }
+                },
+                'acdc_agent_availability[id=*]': {
+                    name: _t('queue', 'agent_availability'),
+                    icon: 'queue',
+                    category: _t('config', 'call_center_cat'),
+                    module: 'acdc_agent_availability',
+                    tip: _t('queue', 'agent_availability_tip'),
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '2'
+                        }
+                    ],
+                    isUsable: 'true',
+                    key_caption: function(child_node, caption_map) {
+                        if(child_node.key == '_') {
+                            child_node.key = 'available';
+                        }
+                        return child_node.key;
+                    },
+                    key_edit: function(child_node, callback) {
+                        var popup,
+                            popup_html = THIS.templates.agent_availability_key_callflow.tmpl({
+                                _t: function(param){
+                                    return window.translate['queue'][param];
+                                },
+                                items: {
+                                    'available': _t('queue', 'availability_available'),
+                                    'unavailable': _t('queue', 'availability_unavailable')
+                                },
+                                selected: child_node.key
+                            });
+
+                        $('#add', popup_html).click(function() {
+                            child_node.key = $('#availability_key_selector', popup).val();
+
+                            child_node.key_caption = $('#availability_key_selector option:selected', popup).text();
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('queue', 'agent_availability'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'queue.list',  {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.agent_availability_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['queue'][param];
+                                    },
+                                    title: _t('queue', 'agent_availability_title'),
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#queue_selector', popup).val());
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+                                        
+                                    node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: _t('queue', 'agent_availability'),
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
                     }
                 }
             });
