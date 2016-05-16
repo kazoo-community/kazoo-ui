@@ -17,6 +17,7 @@
 		 	<li class="active"><a href="#basic">${_t('basic')}</a></li>
             <li><a href="#extension_dialing"><span class="icon sip"></span>${_t('extension_dialing')}</a></li>
 		 	<li><a href="#options"><span class="icon wrench_screw"></span>${_t('options')}</a></li>
+			<li><a href="#notifications"><span class="icon lightbulb_on"></span>${_t('notifications')}</a></li>
 		</ul>
 		 <form id="vmbox-form" action="" method="post">
 		 	<div class="pill-content">
@@ -279,6 +280,15 @@
                             </ul>
                         </div>
                     </div>
+				</div>
+
+				<div id="notifications">
+					<div class="clearfix">
+						<label for="notify_email_addresses">${_t('notify_email_addresses')}</label>
+						<div class="input">
+							<input class="span4" id="notify_email_addresses" name="notify_email_addresses" type="text" value="${data.notify_email_addresses}" rel="popover" data-content="${_t('notify_email_addresses_data_content')}"/>
+						</div>
+					</div>
 				</div>
 			</div>
 		 </form>
