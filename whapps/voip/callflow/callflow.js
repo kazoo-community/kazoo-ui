@@ -3186,9 +3186,9 @@ winkstart.module('voip', 'callflow', {
                         });
 
                         $('#add', popup_html).click(function() {
-                            node.setMetadata('uri', $('webhook_uri_input', popup_html).val());
-                            node.setMetadata('http_verb', $('webhook_http_verb_input', popup_html).val());
-                            node.setMetadata('retries', $('webhook_retries_input', popup_html).val());
+                            node.setMetadata('uri', $('#webhook_uri_input', popup_html).val());
+                            node.setMetadata('http_verb', $('#webhook_http_verb_input', popup_html).val());
+                            node.setMetadata('retries', $('#webhook_retries_input', popup_html).val());
 
                             popup.dialog('close');
                         });
