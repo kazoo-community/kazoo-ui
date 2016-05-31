@@ -1,0 +1,38 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('webhook')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="webhook_uri_input">${_t('webhook_uri')}: </label>
+                    <input type="text" id="webhook_uri_input" class="medium" value="${data_webhook.uri}"/>
+                </div>
+
+                <div class="popup_field">
+                    <label for="webhook_http_verb_input">${_t('method')}: </label>
+                    <select id="webhook_http_verb_input" style="width: 100px; height: 28px;">
+                        {{if data_webhook.http_verb === 'POST'}}
+                            <option value="POST" selected="selected">POST</option>
+                            <option value="GET">GET</option>
+                        {{else}}
+                            <option value="POST">POST</option>
+                            <option value="GET" selected="selected">GET</option>
+                        {{/if}}
+                    </select>
+                </div>
+
+                <div class="popup_field">
+                    <label for="webhook_retries_input">${_t('webhook_retries')}: </label>
+                    <input type="text" id="webhook_retries_input" class="medium" value="${data_webhook.retries}" style="width: 100px;"/>
+                </div>
+
+                <div class="parameter_div">
+                    <div class="parameter_description">${_t('webhook_payload_description')}</div>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

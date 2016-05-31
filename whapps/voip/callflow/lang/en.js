@@ -159,5 +159,11 @@ window.translate['callflow'] = {
 	terminator: "DTMF Terminator",
 	interdigit_timeout: "Timeout Between DTMF",
 	collection_name: "Collection Name",
-	collect_dtmf_tip: "Collects DTMF input for processing later"
+	collect_dtmf_tip: "Collects DTMF input for processing later",
+	webhook_title: "Webhook",
+	webhook_tip: "Sends a HTTP request to a custom webhook.",
+	webhook: "Webhook",
+	webhook_uri: "Webhook URI",
+	webhook_retries: "Retries",
+	webhook_payload_description: "This module will send channel variables, including custom key-values, as the payload. Custom channel variables, control and controller queues elements are removed from the payload."
 };

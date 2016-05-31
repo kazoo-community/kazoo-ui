@@ -22,6 +22,7 @@ winkstart.module('voip', 'callflow', {
             call_record_callflow: 'tmpl/call_record_callflow.html',
             disa_callflow: 'tmpl/disa_callflow.html',
             pivot_callflow: 'tmpl/pivot_callflow.html',
+            webhook_callflow: 'tmpl/webhook_callflow.html',
             presence_callflow: 'tmpl/presence_callflow.html',
             page_group_dialog: 'tmpl/page_group_dialog.html',
             page_group_element: 'tmpl/page_group_element.html',
@@ -3144,6 +3145,60 @@ winkstart.module('voip', 'callflow', {
                             beforeClose: function() {
                                 if(typeof callback == 'function') {
                                      callback();
+                                }
+                            }
+                        });
+                    }
+                },
+                'webhook[]': {
+                    name: _t('callflow', 'webhook'),
+                    icon: 'conference',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'webhook',
+                    tip: _t('callflow', 'webhook_tip'),
+                    data: {
+                        http_verb: 'GET',
+                        retries: '3',
+                        uri: ''
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node) {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.webhook_callflow.tmpl({
+                            _t: function(param){
+                                return window.translate['callflow'][param];
+                            },
+                            data_webhook: {
+                                'uri': node.getMetadata('uri') || '',
+                                'http_verb': node.getMetadata('http_verb') || 'GET',
+                                'retries': node.getMetadata('retries') || '3'
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            node.setMetadata('uri', $('#webhook_uri_input', popup_html).val());
+                            node.setMetadata('http_verb', $('#webhook_http_verb_input', popup_html).val());
+                            node.setMetadata('retries', $('#webhook_retries_input', popup_html).val());
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'webhook_title'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
                                 }
                             }
                         });
