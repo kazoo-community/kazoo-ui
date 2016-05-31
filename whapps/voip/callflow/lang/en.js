@@ -159,5 +159,10 @@ window.translate['callflow'] = {
 	terminator: "DTMF Terminator",
 	interdigit_timeout: "Timeout Between DTMF",
 	collection_name: "Collection Name",
-	collect_dtmf_tip: "Collects DTMF input for processing later"
+	collect_dtmf_tip: "Collects DTMF input for processing later",
+	webhook: "Webhook",
+	webhook_uri: "Webhook URI",
+	http_verb: "Method",
+	webhook_retries: "Retries",
+	webhook_payload_description: ""
 };
