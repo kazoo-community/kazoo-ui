@@ -22,7 +22,7 @@ winkstart.module('voip', 'callflow', {
             call_record_callflow: 'tmpl/call_record_callflow.html',
             disa_callflow: 'tmpl/disa_callflow.html',
             pivot_callflow: 'tmpl/pivot_callflow.html',
-            webhook_calflow: 'tmpl/webhook_callflow.html',
+            webhook_callflow: 'tmpl/webhook_callflow.html',
             presence_callflow: 'tmpl/presence_callflow.html',
             page_group_dialog: 'tmpl/page_group_dialog.html',
             page_group_element: 'tmpl/page_group_element.html',
