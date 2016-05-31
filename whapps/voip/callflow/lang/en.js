@@ -165,5 +165,5 @@ window.translate['callflow'] = {
 	webhook: "Webhook",
 	webhook_uri: "Webhook URI",
 	webhook_retries: "Retries",
-	webhook_payload_description: ""
+	webhook_payload_description: "This module will send channel variables, including custom key-values, as the payload. Custom channel variables, control and controller queues elements are removed from the payload."
 };
