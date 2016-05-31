@@ -162,7 +162,6 @@ window.translate['callflow'] = {
 	collect_dtmf_tip: "Collects DTMF input for processing later",
 	webhook: "Webhook",
 	webhook_uri: "Webhook URI",
-	http_verb: "Method",
 	webhook_retries: "Retries",
 	webhook_payload_description: ""
 };
