@@ -132,7 +132,7 @@ window.translate['user'] = {
 	default_music: "Default Music",
 	silence: "Silence",
 	the_passwords_on_the: "The passwords on the \'Password management\' tab do not match! Please re-enter the password.",
-	voip_services_label: "VoIP Services",
+	voip_services_label: "Hosted PBX",
 	user_portal_label: "User Portal",
 	there_were_errors_on_the_form: "There were errors on the form, please correct!",
 	are_you_sure_you_want_to_delete: "Are you sure you want to delete this user?",
