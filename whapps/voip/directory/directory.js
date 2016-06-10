@@ -243,6 +243,11 @@ winkstart.module('voip', 'directory', {
                         confirm_match: false
                     }, data_defaults || {}),
                     field_data: {
+                        search_fields: {
+                            'both': _t('directory', 'both_names'),
+                            'first_name': _t('directory', 'first_name'),
+                            'last_name': _t('directory', 'last_name')
+                        },
                         sort_by: {
                             'first_name': _t('directory', 'first_name'),
                             'last_name': _t('directory', 'last_name')

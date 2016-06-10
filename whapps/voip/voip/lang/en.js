@@ -1,5 +1,5 @@
 window.translate['voip'] = {
-	welcome_to_your_voip: "Welcome to your VoIP Services Dashboard!",
+	welcome_to_your_voip: "Welcome to your Hosted PBX Dashboard!",
 	account_info: "Account Info",
 	numbers: "Numbers",
 	account: "Account:",
