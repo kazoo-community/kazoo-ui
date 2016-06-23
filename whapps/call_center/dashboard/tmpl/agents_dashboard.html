@@ -24,7 +24,13 @@
                 {{/if}}
                     <div class="row_data call_time">
                         {{if status === 'paused'}}
-                            <div class="data_title">${_t('break_time')}</div>
+                            <div class="data_title">
+                            {{if pause_alias}}
+                                ${pause_alias}
+                            {{else}}
+                                ${_t('break_time')}
+                            {{/if}}
+                            </div>
                             <div class="data_value">${call_time}</div>
                         {{else status === 'wrapup'}}
                             <div class="data_title">${_t('wrapping_up')}</div>

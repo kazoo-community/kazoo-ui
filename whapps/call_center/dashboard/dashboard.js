@@ -600,6 +600,9 @@ winkstart.module('call_center', 'dashboard', {
                         		else {
                             		formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
                             	}
+                                if('pause_alias' in agent_status) {
+                                    formatted_data.agents[k].pause_alias = agent_status.pause_alias;
+                                }
                         	}
                         	else {
                             	formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
