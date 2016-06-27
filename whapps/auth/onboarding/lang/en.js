@@ -37,7 +37,7 @@ window.translate['onboarding'] = {
 	email_address: "*Email Address",
 	verify_email_address: "*Verify Email Address",
 	type_of_account: "Type of Account",
-	choose_one_of_the_options: "Choose one of the options below to set up your account with 5 free seats.",
+	choose_one_of_the_options: "Choose one of the options below to set up your account.",
 	reseller: "Reseller",
 	manage_and_configure: "Manage and configure your customer's VoIP systems.",
 	small_office: "Small Office",
