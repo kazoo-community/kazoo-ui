@@ -41,6 +41,8 @@ window.translate['onboarding'] = {
 	reseller: "Reseller",
 	manage_and_configure: "Manage and configure your customer's VoIP systems.",
 	small_office: "Small Office",
+	medium_office: "Medium Office",
+	large_office: "Large Office",
 	create_and_customize: "Create and customize a unique phone system that matches your business needs.",
 	single_phone: "Single Phone",
 	get_start_with_a_single: "Get start with a single softphone or any SIP deskphone",

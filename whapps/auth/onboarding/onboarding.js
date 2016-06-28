@@ -7,6 +7,8 @@ winkstart.module('auth', 'onboarding', {
             new_onboarding: 'tmpl/onboarding.html',
             step1: 'tmpl/step1.html',
             small_office: 'tmpl/small_office.html',
+            medium_office: 'tmpl/small_office.html',
+            large_office: 'tmpl/small_office.html',
             reseller: 'tmpl/reseller.html'
         },
 
@@ -100,7 +102,12 @@ winkstart.module('auth', 'onboarding', {
                 }
             ]
 
-            if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
+            if(
+                form_data.account.role == 'small_office' || 
+                form_data.account.role == 'medium_office' ||
+                form_data.account.role == 'large_office' ||
+                form_data.account.role == 'reseller'
+            ) {
                 extension = $('#extension_1', target).val();
                 form_data.extensions[0].callflow.numbers.push(extension);
 

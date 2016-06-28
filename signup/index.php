@@ -36,6 +36,16 @@ $slack_post = (object)[
             "color"    => "good",
             "fields"   => [
                 (object)[
+                    "title" => "Date/Time",
+                    "value" => date("Y-m-d H:i:s"),
+                    "short" => false
+                ],
+                (object)[
+                    "title" => "Remote IP Address",
+                    "value" => $_SERVER["REMOTE_ADDR"],
+                    "short" => false
+                ],
+                (object)[
                     "title" => "Account Name",
                     "value" => ucfirst($account->name),
                     "short" => false
