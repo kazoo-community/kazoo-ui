@@ -1,120 +1,118 @@
 <div>
     <fieldset id="step1" class="step_content">
         <div style="padding: 0px; margin: 0px;">
-            <div id="pick_number_block">
-                <div class="pick_number_left">
-                    <div class="area_code_wrapper">
-                        #&nbsp;(<input type="text" class="area_code_input" name="field_data.area_code" id="area_code" maxlength="3" placeholder="${_t('area_code')}"/>)
+            <div class="onboarding_block">
+                <div class="onboarding_div_left">
+                    <div class="help_account wrapping_div"/>
+                    <div class="help_onboarding">${_t('you_can_change_this_information')}</div>
+                </div>
+                <div class="onboarding_div_right">
+                    <div class="onboarding_field">
+                        <label>${_t('first_last_name')}</label>
+                        <input type="text" name="extra.name" id="name"/>
                     </div>
-                    <button class="change_number" id="change_number"/>
-                    <span class="help_onboarding help_area_code">${_t('search_a_number_by_area_code')}</span>
+                    <div class="onboarding_field">
+                        <label>${_t('company_name')}</label>
+                        <input type="text" name="account.name" id="company_name"/>
+                    </div>
+                    <div class="onboarding_field">
+                        <label>${_t('password')}</label>
+                        <input type="password" name="extra.password" id="password"/>
+                    </div>
+                    <div class="onboarding_field">
+                        <label>${_t('confirm_password')}</label>
+                        <input type="password" name="extra.verify_password" id="verify_password"/>
+                    </div>
+                    <div class="onboarding_field">
+                        <label>${_t('email_address')}</label>
+                        <input type="text" name="extra.email" id="email"/>
+                    </div>
+                    <div class="onboarding_field">
+                        <label>${_t('verify_email_address')}</label>
+                        <input type="text" name="extra.verify_email" id="verify_email"/>
+                    </div>
+                </div>
+                <div class="clear"/>
+            </div>
+            <div class="onboarding_block">
+                <div class="type_title_bar">
+                    <div class="type_title">${_t('type_of_account')}: </div>
+                    ${_t('choose_one_of_the_options')}
                     <div class="clear"/>
                 </div>
-                <div class="pick_number_right">
-                    <div class="wrapping_div picked_number" id="picked_number" data-number=""/>
-                    <div class="help_onboarding link" id="change_number_link">${_t('i_dont_like_this_number')}</span>
+                <!-- Reseller -->
+                <div class="role_div">
+                    <div class="clear hr"/>
+                    <div class="role_row">
+                        <div class="role_icon reseller"/>
+                        <div class="role_title">${_t('reseller')}</div>
+                        <input type="radio" class="role_radio" name="account.role" value="reseller"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">${_t('manage_and_configure')}</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <!-- Large Office -->
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon small_office"/>
+                        <div class="role_title">${_t('large_office')}</div>
+                        <input type="radio" class="role_radio" name="account.role" value="large_office"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">${_t('create_and_customize')}</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <!-- Medium Office -->
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon small_office"/>
+                        <div class="role_title">${_t('medium_office')}</div>
+                        <input type="radio" class="role_radio" name="account.role" value="medium_office"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">${_t('create_and_customize')}</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <!-- Small Office -->
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon small_office"/>
+                        <div class="role_title">${_t('small_office')}</div>
+                        <input type="radio" class="role_radio" name="account.role" value="small_office"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">${_t('create_and_customize')}</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
+                    <div class="clear"/>
+                </div>
+                <!-- API Developer -->
+                <div class="role_div">
+                    <div class="hr"/>
+                    <div class="role_row">
+                        <div class="role_icon api_developer"/>
+                        <div class="role_title">${_t('api_developer')}</div>
+                        <input type="radio" class="role_radio" name="account.role" value="api_developer"/>
+                        <div class="role_description_wrapper">
+                            <div class="role_description">${_t('access_our_apis')}</div>
+                        </div>
+                    </div>
+                    <div class="role_content"/>
                     <div class="clear"/>
                 </div>
                 <div class="clear"/>
             </div>
-            <div class="clear"/>
-            <!--<div class="e911_block" id="e911_block">
-                <div class="hr" style="margin-bottom: 25px;"/>
-                <div class="onboarding_div_left">
-                    <div class="help_e911 wrapping_div"/>
-                    <div class="help_onboarding">* Your accurate address is required to make emergency calls (E911). </div>
-                </div>
-                <div class="onboarding_div_right">
-                    <div class="onboarding_field" style="padding-bottom: 8px;">
-                        <label>*Country</label>
-                        <select name="e911.country" id="e911_country">
-                            <option value="Other">Other country...</option>
-                            <option value="AD"> Andorra</option>
-                            <option value="AR"> Argentina</option>
-                            <option value="AU"> Australia</option>
-                            <option value="AT"> Austria</option>
-                            <option value="BD"> Bangladesh</option>
-                            <option value="BE"> Belgium</option>
-                            <option value="BR"> Brazil</option>
-                            <option value="BG"> Bulgaria</option>
-                            <option value="CA"> Canada</option>
-                            <option value="HR"> Croatia</option>
-                            <option value="CZ"> Czech Republic</option>
-                            <option value="DK"> Denmark</option>
-                            <option value="DO"> Dominican Republic</option>
-                            <option value="FO"> Faroe Islands</option>
-                            <option value="FI"> Finland</option>
-                            <option value="FR"> France</option>
-                            <option value="GF"> French Guiana</option>
-                            <option value="DE"> Germany</option>
-                            <option value="GL"> Greenland</option>
-                            <option value="GP"> Guadeloupe</option>
-                            <option value="GT"> Guatemala</option>
-                            <option value="HU"> Hungary</option>
-                            <option value="IS"> Iceland</option>
-                            <option value="IN"> India</option>
-                            <option value="IT"> Italy</option>
-                            <option value="JP"> Japan</option>
-                            <option value="LI"> Liechtenstein</option>
-                            <option value="LT"> Lithuania</option>
-                            <option value="LU"> Luxembourg</option>
-                            <option value="MK"> Macedonia</option>
-                            <option value="MY"> Malaysia</option>
-                            <option value="MQ"> Martinique</option>
-                            <option value="YT"> Mayotte</option>
-                            <option value="MX"> Mexico</option>
-                            <option value="MD"> Moldova</option>
-                            <option value="MC"> Monaco</option>
-                            <option value="NL"> Netherlands</option>
-                            <option value="NZ"> New Zealand</option>
-                            <option value="NO"> Norway</option>
-                            <option value="PK"> Pakistan</option>
-                            <option value="PH"> Philippines</option>
-                            <option value="PL"> Poland</option>
-                            <option value="PT"> Portugal</option>
-                            <option value="RU"> Russia</option>
-                            <option value="RE"> Réion</option>
-                            <option value="SM"> San Marino</option>
-                            <option value="SK"> Slovakia</option>
-                            <option value="SI"> Slovenia</option>
-                            <option value="ZA"> South Africa</option>
-                            <option value="ES"> Spain</option>
-                            <option value="LK"> Sri Lanka</option>
-                            <option value="SE"> Sweden</option>
-                            <option value="CH"> Switzerland</option>
-                            <option value="TH"> Thailand</option>
-                            <option value="TR"> Turkey</option>
-                            <option value="GB"> United Kingdom</option>
-                            <option value="US" selected="selected"> United States</option>
-                            <option value="VA"> Vatican City</option>
-                            <option value="WF"> Wallis and Futuna</option>
-                        </select>
-                    </div>
-                    <div class="onboarding_field">
-                        <label>*Postal Code</label>
-                        <input type="text" name="e911.postal_code" id="e911_postal_code"/>
-                    </div>
-                    <div class="onboarding_field">
-                        <label>*Address</label>
-                        <input type="text" name="e911.street_address" id="e911_street_address"/>
-                    </div>
-                    <div class="onboarding_field">
-                        <label>Apartment/Unit</label>
-                        <input type="text" name="e911.extended_address" id="e911_extended_address"/>
-                    </div>
-                    <div class="onboarding_field">
-                        <label>*State</label>
-                        <input type="text" name="e911.region" id="e911_region" />
-                    </div>
-                    <div class="onboarding_field">
-                        <label>*City</label>
-                        <input type="text" name="e911.locality" id="e911_locality" class="field_last"/>
-                    </div>
-                    <div class="clear"/>
-                </div>
-            </div>-->
         </div>
     </fieldset>
     <div class="clear"/>
 </div>
-
