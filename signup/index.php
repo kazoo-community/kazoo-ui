@@ -37,12 +37,12 @@ $slack_post = (object)[
             "fields"   => [
                 (object)[
                     "title" => "Account Name",
-                    "value" => $account->name,
+                    "value" => ucfirst($account->name),
                     "short" => false
                 ],
                 (object)[
                     "title" => "Account Type",
-                    "value" => $account->role,
+                    "value" => ucfirst($account->role),
                     "short" => false
                 ]
             ]
@@ -55,7 +55,7 @@ foreach($extensions as $ext) {
     if(!isset($ext->user) || !isset($ext->callflow)) continue;
     if(!isset($ext->user->first_name) || count($ext->callflow->numbers) < 1) continue;
 
-    $slack_post->attachments->fields[] = (object)[
+    $slack_post->attachments[0]->fields[] = (object)[
         "title" => ucfirst($ext->user->priv_level) . " Extension " . implode(",", $ext->callflow->numbers),
         "value" => $ext->user->first_name . (isset($ext->user->last_name) ? " {$ext->user->last_name}" : ''),
         "short" => false
