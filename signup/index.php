@@ -16,7 +16,7 @@ if($request === null) {
     echo json_encode((object)[
         "status" => "error",
         "data"   => (object)[
-            "message" => "Invalid payload."
+            "errors" => "Invalid payload."
         ]
     ]);
     die();
