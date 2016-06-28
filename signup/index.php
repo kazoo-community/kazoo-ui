@@ -7,12 +7,26 @@ define("SLACK_URL", "https://hooks.slack.com/services/T03C6TJQC/B1LQ0MVCG/lW80e3
 define("ZENDESK_EMAIL", "support@voxter.com");
 
 // Incoming request payload
-$request = file_get_contents("php://input");
+$request = json_decode(file_get_contents("php://input"));
+
+// Die on invalid JSON payload
+if($request === null) {
+    http_response_code(500);
+    header("Content-Type: application/json");
+    echo json_encode((object)[
+        "status" => "error",
+        "data"   => (object)[
+            "message" => "Invalid payload."
+        ]
+    ]);
+    die();
+}
 
 // Break down the payload
 $account = $request->data->account;
 $extensions = $request->data->extensions;
 
+// Build the Slack POST payload
 $slack_post = (object)[
     "attachments" => [
         (object)[
@@ -47,7 +61,7 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_USERAGENT,      'Vortex_2_by_Voxter_Communications');
 curl_setopt($curl, CURLOPT_URL,            SLACK_URL);
 curl_setopt($curl, CURLOPT_CUSTOMREQUEST,  'POST');
-curl_setopt($curl, CURLOPT_POSTFIELDS,     $slack_post);
+curl_setopt($curl, CURLOPT_POSTFIELDS,     "payload=".json_encode($slack_post));
 $result = curl_exec($curl); // TODO: handle the response if an error is encountered
 curl_close($curl);
 
