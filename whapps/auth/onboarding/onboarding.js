@@ -44,7 +44,7 @@ winkstart.module('auth', 'onboarding', {
     },
 
     {
-        error_handling: function(data, number) {
+        error_handling: function(data) {
             var THIS = this,
                 wrapper = $('#onboarding-view'),
                 formated_data = winkstart.print_r(data),
@@ -281,35 +281,21 @@ winkstart.module('auth', 'onboarding', {
 
                         var form_data = form2object('fast_onboarding_form');
 
-                        number = $('#picked_number', onboard_html).dataset('number');
-                        form_data.extra.number = number;
-
                         THIS.clean_form_data(form_data, onboard_html);
 
                         //form_data.invite_code = args.invite_code;
 
                         winkstart.request(true, 'onboard.create', {
-                                api_url: winkstart.apps['auth'].api_url,
                                 data: form_data
                             },
                             function (_data, status) {
-                                var callbacks = [],
-                                    callback_fn;
+                                console.log(_data, status);
 
-                                if(_data && _data.data.owner_id && _data.data.account_id && _data.data.auth_token) {
-
-                                    var success = function() {
-                                        $('#ws-content').empty();
-                                        winkstart.apps['auth'].user_id = _data.data.owner_id;
-                                        winkstart.apps['auth'].account_id = _data.data.account_id;
-                                        winkstart.apps['auth'].auth_token = _data.data.auth_token;
-
-                                        $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
-
-                                        winkstart.publish('auth.load_account');
-                                    };
-
-                                    success();
+                                if(_data) {
+                                    // Clear the current signup page
+                                    $('#ws-content').empty();
+                                    
+                                    // TODO: show success page
                                 }
                                 else {
                                     winkstart.alert('error', _t('onboarding', 'error_while_creating_your_account'));
@@ -318,7 +304,7 @@ winkstart.module('auth', 'onboarding', {
                             function (_data, status) {
                                 _data.data.errors = _data.data.errors || {};
 
-                                winkstart.publish('onboard.error_handling', _data, number);
+                                winkstart.publish('onboard.error_handling', _data);
 
                                 current_step = 1;
                                 THIS.move_to_step(1, onboard_html);
