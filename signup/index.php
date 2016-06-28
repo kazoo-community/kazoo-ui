@@ -30,8 +30,9 @@ $extensions = $request->data->extensions;
 $slack_post = (object)[
     "attachments" => [
         (object)[
-            "fallback" => "A signup request was received from " . $extensions[0]->user->first_name . " " . $extensions[0]->user->last-name . " " . $extensions[0]->user->email,
-            "pretext"  => "A signup request was received from " . $extensions[0]->user->first_name . " " . $extensions[0]->user->last-name . " " . $extensions[0]->user->email,
+            "fallback" => "A signup request was received! from " . $extensions[0]->user->first_name . " " . $extensions[0]->user->last_name . " " . $extensions[0]->user->email,
+            "pretext"  => "A signup request was received! from ",
+            "text"     => $extensions[0]->user->first_name . " " . $extensions[0]->user->last_name . " (" . $extensions[0]->user->email . ") has requested an account with the following details:",
             "color"    => "good",
             "fields"   => [
                 (object)[
