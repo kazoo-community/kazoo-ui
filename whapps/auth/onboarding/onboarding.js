@@ -93,9 +93,35 @@ winkstart.module('auth', 'onboarding', {
                         last_name: username.last_name,
                         email: form_data.extra.email,
                         apps: winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].apps : winkstart.config.register_apps
+                    },
+                    callflow: {
+                        numbers: []
                     }
                 }
             ]
+
+            if(form_data.account.role == 'small_office' || form_data.account.role == 'reseller') {
+                extension = $('#extension_1', target).val();
+                form_data.extensions[0].callflow.numbers.push(extension);
+
+                for(i=2; i<6; i++) {
+                    username = THIS.parse_username($('#name_'+i, target).val());
+                    extension = $('#extension_'+i, target).val();
+                    if(username.first_name){
+                        var user = {
+                            user: {
+                                first_name: username.first_name,
+                                last_name: username.last_name,
+                                priv_level: 'user'
+                            },
+                            callflow: {
+                                numbers: [ extension ]
+                            }
+                        }
+                        form_data.extensions.push(user);
+                    }
+                }
+            }
 
             form_data.account.available_apps = winkstart.config.onboard_roles ? winkstart.config.onboard_roles[form_data.account.role || 'default'].available_apps : [];
 
