@@ -328,10 +328,9 @@ winkstart.module('auth', 'onboarding', {
                                     // Clear the current signup page
                                     $('#ws-content').empty();
                                     
-                                    winkstart.alert('success', {
-                                        'text': "Success!",
+                                    winkstart.alert('info', {
                                         data: "Your request was successfully received! We will be contacting you shortly via email to complete the registration process."
-                                    });
+                                    }, function() { window.location = '/'; });
                                 }
                                 else {
                                     winkstart.alert('error', _t('onboarding', 'error_while_creating_your_account'));
