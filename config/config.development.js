@@ -5,7 +5,7 @@
         /* Was winkstart.debug */
         debug: false,
 
-        ws_server: 'wss://sbc01.tor1.voxter.net:8443',
+        ws_server: 'wss://sbc01.dev1.voxter.net:8443',
 
         advancedView: false,
 
