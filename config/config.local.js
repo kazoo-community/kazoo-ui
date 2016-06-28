@@ -5,7 +5,7 @@
         /* Was winkstart.debug */
         debug: false,
 
-        ws_server: 'wss://sbc01.dev1.voxter.net:8443',
+        ws_server: 'wss://sbc01.tor1.voxter.net:8443',
 
         advancedView: false,
 
@@ -61,39 +61,23 @@
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
                 default_api_url: 'http://devapi.voxter.com:8000/v1'
             },
-            'large_office': {
-                apps: {
-                    voip: {
-                        label: 'Hosted PBX',
-                        icon: 'phone',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
-                    },
-                    numbers: {
-                        label: 'Phone Numbers',
-                        icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
-                    }
-                },
-                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
-            },
-            'medium_office': {
-                apps: {
-                    voip: {
-                        label: 'Hosted PBX',
-                        icon: 'phone',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
-                    },
-                    numbers: {
-                        label: 'Phone Numbers',
-                        icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
-                    }
-                },
-                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
-            },
             'small_office': {
+                apps: {
+                    voip: {
+                        label: 'Hosted PBX',
+                        icon: 'phone',
+                        api_url: 'http://devapi.voxter.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Phone Numbers',
+                        icon: 'menu1',
+                        api_url: 'http://devapi.voxter.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://devapi.voxter.com:8000/v1'
+            },
+            'single_phone': {
                 apps: {
                     voip: {
                         label: 'Hosted PBX',
@@ -114,6 +98,22 @@
                     developer: {
                         label: 'Developer Tool',
                         icon: 'connectivity',
+                        api_url: 'http://devapi.voxter.com:8000/v1'
+                    },
+                    numbers: {
+                        label: 'Phone Numbers',
+                        icon: 'menu1',
+                        api_url: 'http://devapi.voxter.com:8000/v1'
+                    }
+                },
+                available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
+                default_api_url: 'http://devapi.voxter.com:8000/v1'
+            },
+            'voip_minutes': {
+                apps: {
+                    pbxs: {
+                        label: 'SIP Trunking',
+                        icon: 'device',
                         api_url: 'http://devapi.voxter.com:8000/v1'
                     },
                     numbers: {
