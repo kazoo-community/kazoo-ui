@@ -30,8 +30,8 @@ $extensions = $request->data->extensions;
 $slack_post = (object)[
     "attachments" => [
         (object)[
-            "fallback" => "A signup request was received! from " . $extensions[0]->user->first_name . " " . $extensions[0]->user->last_name . " " . $extensions[0]->user->email,
-            "pretext"  => "A signup request was received! from ",
+            "fallback" => "A signup request was received!",
+            "pretext"  => "A signup request was received!",
             "text"     => $extensions[0]->user->first_name . " " . $extensions[0]->user->last_name . " (" . $extensions[0]->user->email . ") has requested an account with the following details:",
             "color"    => "good",
             "fields"   => [
@@ -45,15 +45,21 @@ $slack_post = (object)[
                     "value" => $account->role,
                     "short" => false
                 ]
-                // (object)[
-                //     "title" => "Extension(s)",
-                //     "value" => 
-                //     "short" =>
-                // ]
             ]
         ]
     ]
 ];
+
+// Add the extensions
+foreach($extensions as $ext) {
+    if(!isset($ext->first_name) || count($ext->callflow->numbers) < 1) continue;
+
+    $slack_post->attachments->fields[] = (object)[
+        "title" => ucfirst($ext->priv_level) . " Extension " . implode(",", $ext->callflow->numbers),
+        "value" => $ext->first_name . (isset($ext->last_name) ? " {$ext->last_name}" : ''),
+        "short" => false
+    ];
+}
 
 // Send notification to Slack first
 $curl = curl_init();
