@@ -175,7 +175,7 @@ winkstart.module('call_center', 'dashboard', {
                                                                 .append(calls_html);
 
             THIS.render_timers(data);
-            
+
             $('.agent_title.ready').click(function(e) {
                 THIS.logout(this);
             });
@@ -751,7 +751,7 @@ winkstart.module('call_center', 'dashboard', {
 				data._t = function(param){
 					return window.translate['dashboard'][param];
 				};
-				
+
                 dashboard_html = THIS.templates.dashboard.tmpl({
 					_t: function(param){
 						return window.translate['dashboard'][param];
@@ -826,6 +826,9 @@ winkstart.module('call_center', 'dashboard', {
                     },
                     queues: function(callback) {
                         THIS.get_queues(loading, function(_data_queues) {
+                            _data_queues.data.sort(function(a, b) {
+                                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+                            });
                             callback(null, _data_queues);
                         });
                     },
@@ -1071,7 +1074,7 @@ winkstart.module('call_center', 'dashboard', {
             //TODO check render global data
             THIS.render_dashboard(parent);
         },
-        
+
         login: function(agent) {
             var agentId = $(agent).attr('id');
             winkstart.request(true, 'dashboard.agent.status', {
@@ -1092,7 +1095,7 @@ winkstart.module('call_center', 'dashboard', {
                 }
             );
         },
-        
+
         logout: function(agent) {
             var agentId = $(agent).attr('id');
             winkstart.request(true, 'dashboard.agent.status', {
