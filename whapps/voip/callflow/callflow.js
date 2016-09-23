@@ -2212,11 +2212,9 @@ winkstart.module('voip', 'callflow', {
                                 var popup, popup_html, _data = [];
 
                                 $.each(data.data, function() {
-                                    if(!this.featurecode && this.id != THIS.flow.id) {
-                                        this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
+                                    this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
 
-                                        _data.push(this);
-                                    }
+                                    _data.push(this);
                                 });
 
                                 popup_html = THIS.templates.edit_dialog.tmpl({
