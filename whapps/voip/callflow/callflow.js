@@ -401,7 +401,7 @@ winkstart.module('voip', 'callflow', {
             $('.copy_icon', '#ws_cf_flow').click(function() {
                 delete(THIS.dataCallflow.id);
                 delete(THIS.dataCallflow.numbers);
-                THIS.flow.name = '';    
+                THIS.flow.name = '';
                 THIS.flow.numbers = [];
                 THIS.flow.id = undefined;
                 THIS.renderFlow();
@@ -482,7 +482,7 @@ winkstart.module('voip', 'callflow', {
             return parent;
         },
 
-        construct_action: function(json) {  
+        construct_action: function(json) {
             var action = '';
 
             if('data' in json) {
@@ -2212,8 +2212,11 @@ winkstart.module('voip', 'callflow', {
                                 var popup, popup_html, _data = [];
 
                                 $.each(data.data, function() {
-                                    if(!this.featurecode && this.id != THIS.flow.id) {
+                                    if(!this.featurecode) {
                                         this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
+                                        if(this.id == THIS.flow.id) {
+                                            this.name += " (this callflow)";
+                                        }
 
                                         _data.push(this);
                                     }
@@ -2380,7 +2383,7 @@ winkstart.module('voip', 'callflow', {
                             var dataVars = {};
                             for(var i=0; i<formVars.length; i++) {
                                 if(i%2 != 0) continue; // Collate object pairs
-                                if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0) 
+                                if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0)
                                     dataVars[formVars[i].value] = {
                                         type: formVars[i+1].name,
                                         value: formVars[i+1].value
@@ -2415,7 +2418,7 @@ winkstart.module('voip', 'callflow', {
                                 var form = $("form .form_content", popup_html);
                                 var div = $('<div class="popup_field" style="white-space: nowrap;"></div>'); // Base div for new input
                                 var selected = $('#type_selector option:selected', type_popup_html).val();
-                                
+
                                 div.append('<input class="large" type="text" name="key[]" value="" placeholder="Variable name">&nbsp;:&nbsp;');
                                 if (selected == 'custom') {
                                     div.append('<input class="large" type="text" name="' + selected + '" value="" placeholder="Variable value">');
