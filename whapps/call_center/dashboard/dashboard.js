@@ -414,6 +414,10 @@ winkstart.module('call_center', 'dashboard', {
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
+                        _data.data.sort(function(a, b) {
+                            return (a.last_name + ' ' + a.first_name).toLowerCase() <
+                                    (b.last_name + ' ' + b.first_name).toLowerCase() ? -1 : 1;
+                        });
                         success(_data, status);
                     }
                 },
