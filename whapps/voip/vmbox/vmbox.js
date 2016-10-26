@@ -577,7 +577,7 @@ winkstart.module('voip', 'vmbox', {
             var THIS = this;
 
             $.extend(callflow_nodes, {
-                'voicemail[id=*]': {
+                'voicemail[id=*,action=compose]': {
                     name: _t('vmbox', 'voicemail'),
                     icon: 'voicemail',
                     category: _t('config', 'basic_cat'),
@@ -651,12 +651,15 @@ winkstart.module('voip', 'vmbox', {
                                 });
 
                                 $('#add', popup_html).click(function() {
-                                    node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+                                    var selector = $('#vmbox_selector', popup_html);
+                                    node.setMetadata('id', selector.val());
                                     if($('#route_var', popup_html).val().length > 0) {
                                         node.setMetadata('var', $('#route_var', popup_html).val());
                                     } else {
                                         node.deleteMetadata('var');
                                     }
+
+                                    node.caption = selector[0][selector[0].selectedIndex].text;
 
                                     popup.dialog('close');
                                 });
