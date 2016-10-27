@@ -53,12 +53,12 @@
                     }
 
                     if(settings.contentType == 'application/json') {
-                        if(settings.type == 'PUT' || settings.type == 'POST') {
-                                settings.data.verb = settings.type;
-                                settings.data = JSON.stringify(settings.data);
+                        if(settings.type == 'PUT' || settings.type == 'POST' || settings.type == 'PATCH') {
+                            settings.data.verb = settings.type;
+                            settings.data = JSON.stringify(settings.data);
                         }
                         else if(settings.type =='GET' || settings.type == 'DELETE') {
-                                settings.data = '';
+                            settings.data = '';
                         }
                     }
                     else {
