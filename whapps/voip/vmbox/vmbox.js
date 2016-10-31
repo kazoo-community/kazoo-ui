@@ -685,7 +685,8 @@ winkstart.module('voip', 'vmbox', {
                     module: 'voicemail',
                     tip: _t('vmbox', 'check_voicemail_tip'),
                     data: {
-                        action: 'check'
+                        action: 'check',
+                        callerid_match_login: true
                     },
                     rules: [
                         {
