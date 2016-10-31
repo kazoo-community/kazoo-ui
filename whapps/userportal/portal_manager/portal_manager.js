@@ -88,6 +88,16 @@ winkstart.module('userportal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'POST'
             },
+            'user_vmbox_msg.list': {
+                url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}/messages',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'user_vmbox_msg.update': {
+                url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}/messages',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
             'user_cdr.list': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}/cdrs?created_from={created_from}&created_to={created_to}',
                 contentType: 'application/json',
@@ -198,6 +208,48 @@ winkstart.module('userportal', 'portal_manager', {
                     }
                 },
                 winkstart.error_message.process_error()
+            );
+        },
+
+        get_vmbox_messages: function(vmbox_id, success, error) {
+            winkstart.request('user_vmbox_msg.list', {
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    vmbox_id: vmbox_id
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
+        },
+
+        update_vmbox_messages_folder: function(vmbox_id, msg_ids, folder, success, error) {
+            winkstart.request('user_vmbox_msg.update', {
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    vmbox_id: vmbox_id,
+                    data: {
+                        messages: msg_ids,
+                        folder: folder
+                    }
+                },
+                function(_data, status) {
+                    if(typeof success === 'function') {
+                        success(_data);
+                    }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
             );
         },
 
@@ -385,7 +437,7 @@ winkstart.module('userportal', 'portal_manager', {
             $('#quickcall_btn', parent).click(function() {
                 var device_id = $('#device_quickcall', parent).val(),
                     number = $('#manual_number', parent).val();
-                    
+
                 number = number.replace(/[^0-9+]/g, "");
 
                 if(device_id && device_id.length === 32) {
@@ -865,7 +917,7 @@ winkstart.module('userportal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    { 
+                    {
                         'sTitle': _t('portal_manager', 'date'),
                         'sWidth': '220px',
                         'iDataSort': 7
@@ -924,40 +976,39 @@ winkstart.module('userportal', 'portal_manager', {
                             vmboxes[vmbox_id] ? vmboxes[vmbox_id].push(row) : vmboxes[vmbox_id] = [row];
                         });
 
+                        // Loop over multiple voicemail boxes
                         $.each(vmboxes, function(key, rows) {
-                            THIS.get_vmbox(key, function(reply) {
-                                var msg_index;
+                            // Get messages for current box
+                            THIS.get_vmbox_messages(key, function(reply) {
+                                var msg_ids = [];
 
-                                if(reply.data.messages == undefined) {
-                                    return false;
-                                }
-
+                                // Build array of selected message IDs
                                 $.each(rows, function(i, row) {
-                                    msg_index = winkstart.table.voicemail.fnGetData(row, 1);
-
-                                    if($.inArray(action, ['saved', 'deleted', 'new']) > -1) {
-                                        reply.data.messages[msg_index].folder = action;
-                                    }
+                                    var msg_index = winkstart.table.voicemail.fnGetData(row, 1);
+                                    msg_ids.push(reply.data[msg_index].media_id);
                                 });
 
-                                THIS.update_vmbox(reply, function() {
-                                    //TODO Redraw
-                                    $.each(rows, function(i, row) {
-                                        if($.inArray(action, ['saved', 'new']) > -1) {
-                                            winkstart.table.voicemail.fnUpdate(action, row, 5);
-                                        }
-                                        else if(action == 'deleted') {
-                                            winkstart.table.voicemail.fnDeleteRow(row);
-                                        }
+                                if(msg_ids.length > 0) {
+                                    // Move selected message IDs to desired folder
+                                    THIS.update_vmbox_messages_folder(key, msg_ids, action, function() {
+                                        //TODO Redraw
+                                        $.each(rows, function(i, row) {
+                                            if($.inArray(action, ['saved', 'new']) > -1) {
+                                                winkstart.table.voicemail.fnUpdate(action, row, 5);
+                                            }
+                                            else if(action == 'deleted') {
+                                                winkstart.table.voicemail.fnDeleteRow(row);
+                                            }
+                                        });
+
+                                        $('.select-checkbox, #select_all_voicemails', parent).prop('checked', false);
                                     });
-
-                                    $('.select-checkbox, #select_all_voicemails', parent).prop('checked', false);
-                                });
+                                }
                             });
                         });
                     };
 
-                    if(action === 'delete') {
+                    if(action === 'deleted') {
                         winkstart.confirm(_t('portal_manager', 'are_you_sure_that_you_want_to_delete'), function() {
                             change_status();
                         });
@@ -975,32 +1026,30 @@ winkstart.module('userportal', 'portal_manager', {
             THIS.get_vmbox_by_owner(winkstart.apps['userportal'].user_id, function(_data_list) {
                 if(_data_list.data.length > 0) {
                     var vmbox_id = _data_list.data[0].id;
-                    THIS.get_vmbox(vmbox_id, function(_data_vmbox) {
-                        if(_data_vmbox.data.messages) {
-                            var tab_messages = [];
+                    THIS.get_vmbox_messages(vmbox_id, function(_data_messages) {
+                        var tab_messages = [];
 
-                            $.each(_data_vmbox.data.messages, function(index, msg) {
-                                if(this.folder != 'deleted') {
-                                    var msg_id = msg.media_id,
-                                        msg_uri = vmbox_id + '/messages/' + msg_id,
-                                        date = new Date((msg.timestamp - 62167219200)*1000),
-                                        month = date.getMonth() +1,
-                                        year = (date.getFullYear())%100,
-                                        day = date.getDate(),
-                                        humanDate = month+'/'+day+'/'+year,
-                                        humanTime = date.toLocaleTimeString(),
-                                        humanFullDate = humanDate + ' ' + humanTime;
+                        $.each(_data_messages.data, function(index, msg) {
+                            if(this.folder != 'deleted') {
+                                var msg_id = msg.media_id,
+                                    msg_uri = vmbox_id + '/messages/' + msg.media_id,
+                                    date = new Date((msg.timestamp - 62167219200)*1000),
+                                    month = date.getMonth() +1,
+                                    year = (date.getFullYear())%100,
+                                    day = date.getDate(),
+                                    humanDate = month+'/'+day+'/'+year,
+                                    humanTime = date.toLocaleTimeString(),
+                                    humanFullDate = humanDate + ' ' + humanTime;
 
-                                    humanFullDate = THIS.friendly_date(msg.timestamp);
+                                humanFullDate = THIS.friendly_date(msg.timestamp);
 
-                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
-                                }
-                            });
+                                tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
+                            }
+                        });
 
-                            winkstart.table.voicemail.fnAddData(tab_messages);
+                        winkstart.table.voicemail.fnAddData(tab_messages);
 
-                            $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', parent).attr('style', 'width:100%');
-                        }
+                        $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', parent).attr('style', 'width:100%');
                     });
                 }
             });
