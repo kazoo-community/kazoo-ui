@@ -781,6 +781,10 @@ winkstart.module('voip', 'vmbox', {
                     }
                 }
             });
+
+            $.extend(callflow_nodes, {
+                'voicemail[id=*,action=compose]': callflow_nodes["voicemail[id=*]"]
+            });
         }
     }
 );
