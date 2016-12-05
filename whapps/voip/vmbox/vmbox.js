@@ -657,6 +657,104 @@ winkstart.module('voip', 'vmbox', {
                     }
                 },
 
+                'voicemail[id=*,action=compose]': {
+                    name: _t('vmbox', 'voicemail'),
+                    icon: 'voicemail',
+                    //category: _t('config', 'basic_cat'),
+                    module: 'voicemail',
+                    tip: _t('vmbox', 'voicemail_tip'),
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'vmbox.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.vmbox_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['vmbox'][param];
+                                    },
+                                    items: winkstart.sort(data.data),
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
+                                });
+
+                                if($('#vmbox_selector option:selected', popup_html).val() == undefined) {
+                                    $('#edit_link', popup_html).hide();
+                                }
+
+                                $('.inline_action', popup_html).click(function(ev) {
+                                    var _data = ($(this).dataset('action') == 'edit') ?
+                                                    { id: $('#vmbox_selector', popup_html).val() } : {};
+
+                                    ev.preventDefault();
+
+                                    winkstart.publish('vmbox.popup_edit', _data, function(_data) {
+                                        node.setMetadata('id', _data.data.id || 'null');
+                                        if($('#route_var', popup_html).val().length > 0) {
+                                            node.setMetadata('var', $('#route_var', popup_html).val());
+                                        } else {
+                                            node.deleteMetadata('var');
+                                        }
+
+                                        node.caption = _data.data.name || '';
+
+                                        popup.dialog('close');
+                                    });
+                                });
+
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+
+                                    popup.dialog('close');
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: _t('vmbox', 'voicemail_title'),
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+
                 'voicemail[action=check]': {
                     name: _t('vmbox', 'check_voicemail'),
                     icon: 'voicemail',
