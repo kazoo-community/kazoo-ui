@@ -47,7 +47,7 @@ window.translate['queue'] = {
 	strategy_data_content: "De queue strategy voor connecting agents to caller",
 	round_robin: "Round Robin",
 	most_idle: "Most Idle",
-	call_recording_url: "Call Recording URL",
+	call_recording_url: "URL",
 	call_recording_url_data_content: "URL pointing naar een server that will host the recording of the calls processed by deze queue.",
 	call_wrapup_time: "Call Wrap-up Time (s)",
 	call_wrapup_time_data_content: "Automatic break time between calls voor the agents in deze queue.",
