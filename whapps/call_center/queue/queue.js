@@ -274,7 +274,8 @@ winkstart.module('call_center', 'queue', {
                             'first_name': 'First Name',
                             'last_name': 'Last Name'
                         }*/
-                    }
+                    },
+                    record_caller_disabled: 'disabled'
                 };
 
             winkstart.request(true, 'queue.media_list', {
@@ -321,6 +322,7 @@ winkstart.module('call_center', 'queue', {
                                             if('agents' in _data.data) {
                                                 render_data.field_data.old_list = _data.data.agents;
                                             }
+                                            render_data.record_caller_disabled = render_data.data.record_caller ? '' : 'disabled';
                                             THIS.render_edit_agents(render_data, target, callbacks);
 
                                             if(typeof callbacks.after_render == 'function') {
@@ -466,6 +468,9 @@ winkstart.module('call_center', 'queue', {
                 });
             });
 
+            $('#record_caller', queue_html).change(function() {
+                $('#call_recording_url, #preserve_metadata').prop('disabled', !this.checked);
+            });
 
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();
@@ -1057,7 +1062,7 @@ winkstart.module('call_center', 'queue', {
                                     } else {
                                         node.deleteMetadata('var');
                                     }
-                                        
+
                                     node.caption = $('#queue_selector option:selected', popup).text();
 
                                     popup.dialog('close');
@@ -1585,7 +1590,7 @@ winkstart.module('call_center', 'queue', {
                                     } else {
                                         node.deleteMetadata('var');
                                     }
-                                        
+
                                     node.caption = $('#queue_selector option:selected', popup).text();
 
                                     popup.dialog('close');

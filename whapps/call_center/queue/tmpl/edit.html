@@ -31,25 +31,6 @@
 
 				<div id="options">
                     <div class="clearfix">
-                        <div class="input">
-                            <ul class="inputs-list">
-                                <li>
-                                    <label>
-                                        <span rel="popover" data-content="${_t('call_recording_data_content')}">
-                                            {{if data.record_caller === true}}
-                                                <input type="checkbox" id="record_caller" name="record_caller" checked="checked" />
-                                            {{else}}
-                                                <input type="checkbox" id="record_caller" name="record_caller" />
-                                            {{/if}}
-                                            <span>${_t('call_recording')}</span>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
                         <label for="moh">${_t('music_on_hold')}</label>
                         <div class="input">
                             <span rel="popover" data-content="${_t('music_on_hold_data_content')}">
@@ -88,11 +69,50 @@
                     </div>
 
                     <div class="clearfix">
-						<label for="call_recording_url">${_t('call_recording_url')}</label>
+						<label>${_t('call_recording')}</label>
 						<div class="input">
-							<input class="span4" id="call_recording_url" name="call_recording_url" type="text" placeholder="http://xxx.yyy.com/call_recordings" value="${data.call_recording_url}" rel="popover" data-content="${_t('call_recording_url_data_content')}"/>
+                            <span class="sublabel">${_t('call_recording_url')}</span>
+                            <input class="span4" id="call_recording_url" name="call_recording_url" type="text" placeholder="http://xxx.yyy.com/call_recordings" value="${data.call_recording_url}" rel="popover" data-content="${_t('call_recording_url_data_content')}" ${record_caller_disabled}/>
 						</div>
 					</div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('call_recording_data_content')}">
+                                            {{if data.record_caller === true}}
+                                                <input type="checkbox" id="record_caller" name="record_caller" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="record_caller" name="record_caller" />
+                                            {{/if}}
+                                            <span>${_t('call_recording_enabled')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('preserve_metadata_data_content')}">
+                                            {{if data.preserve_metadata === true}}
+                                                <input type="checkbox" id="preserve_metadata" name="preserve_metadata" checked="checked" ${record_caller_disabled}/>
+                                            {{else}}
+                                                <input type="checkbox" id="preserve_metadata" name="preserve_metadata" />
+                                            {{/if}}
+                                            <span>${_t('preserve_metadata')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <div class="clearfix">
 						<label for="agent_wrapup_time">${_t('call_wrapup_time')}</label>
