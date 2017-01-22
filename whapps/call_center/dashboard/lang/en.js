@@ -2,7 +2,7 @@ window.translate['dashboard'] = {
 	dashboard: "Dashboard",
 	hide_logged_out_agents: "Hide Logged out Agents",
 	hide_queues: "Hide Queues",
-	break_time: "Break Time",
+	break_time: "Paused",
 	wrapping_up: "Wrapping up",
 	call_time: "Call Time",
 	busy_since: "Busy since",
@@ -19,5 +19,5 @@ window.translate['dashboard'] = {
 	devices_title: "Devices",
 	hide_queues_html: "Hide Queues",
 	show_queues_html: "Show Queues"
-	
+
 };
