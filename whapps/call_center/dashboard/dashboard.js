@@ -488,8 +488,10 @@ winkstart.module('call_center', 'dashboard', {
                     }
                 }
                 else {
-                    clearInterval(THIS.map_timers[type][id].timer);
-                    delete THIS.map_timers[type][id];
+                    if(THIS.map_timers[type][id]) {
+                        clearInterval(THIS.map_timers[type][id].timer);
+                        delete THIS.map_timers[type][id];
+                    }
                 }
             }, 1000);
         },
