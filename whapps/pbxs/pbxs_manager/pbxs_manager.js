@@ -157,6 +157,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                             },
                             billing_account_id: winkstart.apps['pbxs'].account_id,
                             DIDs_Unassigned: {},
+                            name: _data.data.name,
                             servers: []
                         };
 
@@ -441,7 +442,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
         normalize_data: function(data) {
             var THIS = this;
 
-            // We don't accept false for a disabled feature anymore, so we delete the key now. 
+            // We don't accept false for a disabled feature anymore, so we delete the key now.
             // We also delete empty key set at the servers level
             $.each(data.servers, function(k, server) {
                 delete data.servers[k][''];
@@ -475,23 +476,42 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
             THIS.normalize_data(data);
 
-            winkstart.request('old_trunkstore.update', {
-                    account_id: winkstart.apps['pbxs'].account_id,
-                    api_url: winkstart.apps['pbxs'].api_url,
-                    connectivity_id: winkstart.apps['pbxs'].connectivity_id,
-                    data: data
-                },
-                function(_data, status) {
-                    if(typeof success == 'function') {
-                        success(_data, status);
+            THIS.update_trunkstore_name(data, function(data) {
+                winkstart.request('old_trunkstore.update', {
+                        account_id: winkstart.apps['pbxs'].account_id,
+                        api_url: winkstart.apps['pbxs'].api_url,
+                        connectivity_id: winkstart.apps['pbxs'].connectivity_id,
+                        data: data
+                    },
+                    function(_data, status) {
+                        if(typeof success == 'function') {
+                            success(_data, status);
+                        }
+                    },
+                    function(_data, status) {
+                        if(typeof error == 'function') {
+                            error(_data, status);
+                        }
                     }
-                },
-                function(_data, status) {
-                    if(typeof error == 'function') {
-                        error(_data, status);
+                );
+            });
+        },
+
+        update_trunkstore_name: function(data, updateFn) {
+            if(data.name) {
+                updateFn(data);
+            }
+            else {
+                winkstart.request('pbxs_manager.get_account', {
+                        account_id: winkstart.apps['pbxs'].account_id,
+                        api_url: winkstart.apps['pbxs'].api_url
+                    },
+                    function(_data, status) {
+                        data.name = _data.data.name;
+                        updateFn(data);
                     }
-                }
-            );
+                );
+            }
         },
 
         popup_endpoint_settings: function(data, endpoint_data, callbacks) {
@@ -533,7 +553,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 endpoint_html;
 
             dataTemplate.options.inbound_format = dataTemplate.options.inbound_format == 'e.164' ? 'e164' : dataTemplate.options.inbound_format;
-            dataTemplate.options.flags = ('flags' in dataTemplate.options) && typeof dataTemplate.options.flags === 'object' ? dataTemplate.options.flags.join(", ") : "";           
+            dataTemplate.options.flags = ('flags' in dataTemplate.options) && typeof dataTemplate.options.flags === 'object' ? dataTemplate.options.flags.join(", ") : "";
 
             endpoint_html = THIS.templates.endpoint.tmpl(dataTemplate);
 
