@@ -47,6 +47,21 @@
                         <label>${_t('account_id')}</label>
                         <div class="input"><label class="text-inline">${data.id}</label></div>
                     </div>
+                    {{if isAdmin}}
+                    <div class="clearfix">
+                        {{if data.is_reseller}}
+                        <label>${_t('demote_reseller')}</label>
+                        <div class="input">
+                            <button class="btn primary accounts_manager-demote">${_t('demote')}</button>
+                        </div>
+                        {{else}}
+                        <label>${_t('promote_reseller')}</label>
+                        <div class="input">
+                            <button class="btn primary accounts_manager-promote">${_t('promote')}</button>
+                        </div>
+                        {{/if}}
+                    </div>
+                    {{/if}}
                     {{/if}}
                 </div>
 
