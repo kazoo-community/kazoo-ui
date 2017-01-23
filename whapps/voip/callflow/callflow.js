@@ -32,6 +32,8 @@ winkstart.module('voip', 'callflow', {
             edit_name: 'tmpl/edit_name.html',
             prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
             set_cid_callflow: 'tmpl/set_cid_callflow.html',
+	    check_cid_callflow: 'tmpl/check_cid_callflow.html',
+	    check_cid_child_callflow: 'tmpl/check_cid_child_callflow.html',
             response_callflow: 'tmpl/response_callflow.html',
             group_pickup: 'tmpl/group_pickup.html',
             language_callflow: 'tmpl/language_callflow.html',
@@ -2806,6 +2808,105 @@ winkstart.module('voip', 'callflow', {
                         });
                     }
                 },
+                'check_cid[]': {
+                    name: _t('callflow', 'check_cid'),
+                    icon: 'rightarrow',
+                    category: _t('config', 'advanced_cat'),
+                    module: 'check_cid',
+                    tip: _t('callflow', 'check_cid_tip'),
+                    data: {
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '2'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('use_absolute_mode') || '';
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.check_cid_callflow.tmpl({
+                                                        _t: function(param){
+                                                                return window.translate['callflow'][param];
+                                                        },
+                            data_cid: {
+                                'regex': node.getMetadata('regex') || ''
+                            }
+                        });
+
+                        $('#add', popup_html).click(function() {
+
+                            var regex_val = $('#regex', popup_html).val();
+
+                            node.setMetadata('regex', regex_val);
+                            node.setMetadata('use_absolute_mode', false);
+                            node.caption = regex;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'check_cid_title'),
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
+                    },
+                    key_caption: function(child_node, caption_map) {
+                        var key = child_node.key;
+
+                        return (key != '_') ? key : _t('callflow', 'check_cid_match');
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
+                    },
+		    key_edit: function(child_node, callback) {
+                        var popup, popup_html;
+
+                        popup_html = THIS.templates.check_cid_child_callflow.tmpl({
+                                                        _t: function(param){
+                                                                return window.translate['callflow'][param];
+                                                        },
+                            items: {
+                                'match': _t('callflow', 'check_cid_match'),
+                                'nomatch': _t('callflow', 'check_cid_nomatch')
+                            },
+                            selected: child_node.key
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            child_node.key = $('#menu_key_selector', popup).val();
+
+                            child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('callflow', 'check_cid_smatchnomatch'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+		   }
+                },
+
                 'language[]': {
                     name: _t('callflow', 'language'),
                     icon: 'earth',
