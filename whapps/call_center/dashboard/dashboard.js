@@ -711,7 +711,7 @@ winkstart.module('call_center', 'dashboard', {
 				data._t = function(param){
 					return window.translate['dashboard'][param];
 				};
-				
+
                 dashboard_html = THIS.templates.dashboard.tmpl({
 					_t: function(param){
 						return window.translate['dashboard'][param];
@@ -720,7 +720,6 @@ winkstart.module('call_center', 'dashboard', {
 
                 THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
                 THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));
-                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
 
                 THIS.poll_agents(data, parent);
 
@@ -729,6 +728,7 @@ winkstart.module('call_center', 'dashboard', {
                     .append(dashboard_html);
 
                 THIS.render_callwaiting_list(dashboard_html);
+                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
 
                 THIS.bind_live_events(parent);
                 THIS.render_timers(data);
@@ -1010,7 +1010,7 @@ winkstart.module('call_center', 'dashboard', {
             //TODO check render global data
             THIS.render_dashboard(parent);
         },
-        
+
         login: function(agent) {
             var agentId = $(agent).attr('id');
             winkstart.request(true, 'dashboard.agent.status', {
@@ -1031,7 +1031,7 @@ winkstart.module('call_center', 'dashboard', {
                 }
             );
         },
-        
+
         logout: function(agent) {
             var agentId = $(agent).attr('id');
             winkstart.request(true, 'dashboard.agent.status', {
