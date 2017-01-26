@@ -375,6 +375,10 @@ winkstart.module('call_center', 'dashboard', {
                 },
                 function(_data, status) {
                     if(typeof success == 'function') {
+                        _data.data.sort(function(a, b) {
+                            return (a.last_name + ' ' + a.first_name).toLowerCase() <
+                                    (b.last_name + ' ' + b.first_name).toLowerCase() ? -1 : 1;
+                        });
                         success(_data, status);
                     }
                 },
@@ -765,6 +769,9 @@ winkstart.module('call_center', 'dashboard', {
                     },
                     queues: function(callback) {
                         THIS.get_queues(loading, function(_data_queues) {
+                            _data_queues.data.sort(function(a, b) {
+                                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+                            });
                             callback(null, _data_queues);
                         });
                     },
