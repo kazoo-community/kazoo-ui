@@ -115,3 +115,8 @@
 h1.wrap {
     max-width: 400px;
 }
+
+span.sublabel {
+    margin-right: 10px;
+    color: #e6e6e6;
+}

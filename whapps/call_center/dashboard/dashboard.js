@@ -20,7 +20,7 @@ winkstart.module('call_center', 'dashboard', {
 
         resources: {
             'dashboard.restart_agent': {
-                url: 'http://awe01.van1.voxter.net:8000/v1/sup/acdc/agent_restart/{account_id}/{agent_id}',
+                url: 'https://awe01-van1.voxter.com:8443/v1/sup/acdc/agent_restart/{account_id}/{agent_id}',
                 contentType: 'application/json',
                 verb: 'GET'
             },
@@ -488,8 +488,10 @@ winkstart.module('call_center', 'dashboard', {
                     }
                 }
                 else {
-                    clearInterval(THIS.map_timers[type][id].timer);
-                    delete THIS.map_timers[type][id];
+                    if(THIS.map_timers[type][id]) {
+                        clearInterval(THIS.map_timers[type][id].timer);
+                        delete THIS.map_timers[type][id];
+                    }
                 }
             }, 1000);
         },
