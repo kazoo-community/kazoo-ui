@@ -299,7 +299,7 @@ winkstart.module('voip', 'prompt', {
 
 			$.each(data, function(k,v) {
 				var name = v.id,
-					promptSplit = name.split('%2F'),
+					promptSplit = name.split('/'),
 					prompt = {};
 
 				prompt.language = promptSplit.length > 1 ? promptSplit[0] : '-';
@@ -321,7 +321,7 @@ winkstart.module('voip', 'prompt', {
 
 		clean_form_data: function(form_data) {
 			form_data.description = form_data.extra.upload_prompt;
-			form_data.name = form_data.language + '%2F' + form_data.prompt_id;
+			form_data.name = form_data.language + '/' + form_data.prompt_id;
 
 			delete form_data.extra;
 
@@ -524,7 +524,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.getGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
+					prompt_id: encodeURIComponent(promptId)
 				};
 
 			if(!THIS.adminMode) {
@@ -560,7 +560,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.uploadGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId,
+					prompt_id: encodeURIComponent(promptId),
 					data: data
 				};
 
@@ -579,7 +579,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.deleteGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
+					prompt_id: encodeURIComponent(promptId)
 				};
 
 			if(!THIS.adminMode) {
