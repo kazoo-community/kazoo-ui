@@ -1,8 +1,11 @@
 <div>
     {{each(call_id, call) calls_waiting}}
         <li title="${call_id}" class="call-waiting list-element" style="display: block;" data-call_id="${call_id}" data-queue_id="${call.queue_id}">
-            <a href="#" data-module="activate" data-action="media">${call.friendly_title}</a>
+            {{if call.is_callback}}
+            	<img src="whapps/call_center/dashboard/css/images/callback.png" title="Callback"/>
+            {{/if}}
             <span class="timer">${call.friendly_duration}</span>
+            <a href="#" data-module="activate" data-action="media">${call.friendly_title}</a>
         </li>
     {{/each}}
 </div>

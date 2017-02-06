@@ -179,13 +179,18 @@
 }
 
 #dashboard-content #callwaiting-list .list-panel-anchor ul li {
+    height: 30px;
     cursor: default;
+}
+
+#dashboard-content #callwaiting-list .list-panel-anchor ul li > * {
+    display: block;
 }
 
 #dashboard-content #callwaiting-list .list-panel-anchor ul li a {
     padding-left: 5px;
-    width: 110px;
-    float: left;
+    height: 30px;
+    line-height: 30px;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -195,11 +200,19 @@
 }
 
 #dashboard-content #callwaiting-list .list-panel-anchor ul li .timer {
-    float: left;
     width: 45px;
-    height: 27px;
-    line-height: 27px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    float: right;
     color: #05addc;
+}
+
+#dashboard-content #callwaiting-list .list-panel-anchor ul li img {
+    margin-right: 5px;
+    padding: 3px 0px;
+    float: right;
 }
 
 /* Bottom-right content */
@@ -268,6 +281,24 @@
     font-size: 16px;
     font-weight: bold;
     color: #aaa;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .call_time .data_title {
+    width: auto;
+    text-align: left;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .call_time .data_value {
+    margin-right: 5px;
+    float: right;
+    text-align: right;
+    font-size: 16px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .call_time img {
+    float: right;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call {
