@@ -524,7 +524,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.getGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
+					prompt_id: encodeURIComponent(promptId)
 				};
 
 			if(!THIS.adminMode) {
@@ -560,7 +560,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.uploadGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId,
+					prompt_id: encodeURIComponent(promptId),
 					data: data
 				};
 
@@ -579,7 +579,7 @@ winkstart.module('voip', 'prompt', {
 				requestString = 'prompt.deleteGlobal',
 				paramsRequest = {
 					api_url: winkstart.apps['voip'].api_url,
-					prompt_id: promptId
+					prompt_id: encodeURIComponent(promptId)
 				};
 
 			if(!THIS.adminMode) {
