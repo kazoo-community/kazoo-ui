@@ -36,8 +36,11 @@
                             <div class="data_title">${_t('wrapping_up')}</div>
                             <div class="data_value">${call_time}</div>
                         {{else status === 'handling'}}
-                            <div class="data_title">${_t('call_time')}</div>
+                            {{if current_call.is_callback}}
+                                <img src="whapps/call_center/dashboard/css/images/callback-oncall.png" title="Callback"/>
+                            {{/if}}
                             <div class="data_value">${call_time}</div>
+                            <div class="data_title">${_t('call_time')}</div>
                         {{else status === 'busy'}}
                             <div class="data_title">${_t('busy_since')}</div>
                             <div class="data_value">${call_time}</div>
