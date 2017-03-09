@@ -634,6 +634,22 @@ winkstart.module('auth', 'auth',
 
                             winkstart.publish('auth.account.loaded', json.data);
 
+                            // Intercom
+                            winkstart.log('Intercom: User logged in');
+                            winkstart.log(json.data);
+                            winkstart.log('Intercom: Account details');
+                            winkstart.log(winkstart.apps['auth']);
+                            window.Intercom("boot", {
+                                app_id: "b0bhnm9h",
+                                account_id: winkstart.apps['auth'].account_id, // Kazoo Account ID
+                                user_id: winkstart.apps['auth'].account_id + '/' + json.data.id, // User ID is combination of account ID and user ID to avoid collisions between accounts
+                                name: json.data.first_name + ' ' + json.data.last_name, // Full name
+                                email: json.data.email, // Email address
+                                phone: ( !!json.data.caller_id.external.number ? json.data.caller_id.external.number : null ), // Phone number
+                                account_name: json.data.account_name, // Kazoo account name
+                                timezone: ( !!json.data.timezone ? json.data.timezone : 'America/Vancouver' ) // Should probably just detect browser timezone if not set in user object
+                            });
+
                             $.each(json.data.apps, function(k, v) {
                                 winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
                                 winkstart.apps[k] = v;
@@ -681,6 +697,10 @@ winkstart.module('auth', 'auth',
             var THIS = this;
 
             $.cookie('c_winkstart_auth', null);
+
+            // Intercom
+            winkstart.log("Intercom: Shutting down...");
+            window.Intercom("shutdown");
 
             window.location.reload();
         },
@@ -867,6 +887,10 @@ winkstart.module('auth', 'auth',
                     $.cookie('c_winkstart_auth', null);
 
                     $('#ws-content').empty();
+
+                    // Intercom
+                    winkstart.log('Intercom: Shutting down...');
+                    window.Intercom("shutdown");
 
                     // Temporary hack until module unloading works properly
                     if(URL_DATA['f']) {
