@@ -636,19 +636,22 @@ winkstart.module('auth', 'auth',
 
                             // Intercom
                             winkstart.log('Intercom: User logged in');
-                            winkstart.log(json.data);
-                            winkstart.log('Intercom: Account details');
-                            winkstart.log(winkstart.apps['auth']);
-                            window.Intercom("boot", {
+                            var user_data = {
                                 app_id: "b0bhnm9h",
                                 account_id: winkstart.apps['auth'].account_id, // Kazoo Account ID
                                 user_id: winkstart.apps['auth'].account_id + '/' + json.data.id, // User ID is combination of account ID and user ID to avoid collisions between accounts
                                 name: json.data.first_name + ' ' + json.data.last_name, // Full name
                                 email: json.data.email, // Email address
-                                phone: ( !!json.data.caller_id.external.number ? json.data.caller_id.external.number : null ), // Phone number
                                 account_name: json.data.account_name, // Kazoo account name
-                                timezone: ( !!json.data.timezone ? json.data.timezone : 'America/Vancouver' ) // Should probably just detect browser timezone if not set in user object
-                            });
+                                timezone: 'America/Vancouver' // Should probably just detect browser timezone if not set in user object
+                            };
+                            if(typeof json.data.caller_id !== 'undefined' && typeof json.data.caller_id.external !== 'undefined' && typeof json.data.caller_id.external.number !== 'undefined') {
+                                user_data.phone = json.data.caller_id.external.number;
+                            }
+                            if(typeof json.data.timezone !== 'undefined') {
+                                user_data.timezone = json.data.timezone;
+                            }
+                            window.Intercom("boot", user_data);
 
                             $.each(json.data.apps, function(k, v) {
                                 winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
