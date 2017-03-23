@@ -289,6 +289,10 @@ winkstart.module('userportal', 'portal_manager', {
                         data: normalized_data
                     },
                     function(_data, status) {
+                        // Intercom
+                        winkstart.log('Intercom: Updating user settings');
+                        winkstart.log(_data);
+
                         if(typeof success === 'function') {
                             success(_data);
                         }
