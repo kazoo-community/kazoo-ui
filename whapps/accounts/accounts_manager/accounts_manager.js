@@ -1207,6 +1207,9 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			THIS.masquerade_account(account.name);
 
+			winkstart.log('Intercom: Masquerading as ' + account.name + ' (' + account.id + ')');
+			window.Intercom('trackEvent', 'start-masquerade', {account_name: account.name, account_id: account.id});
+
 			if(typeof callback === 'function') {
 				callback();
 			}
@@ -1253,6 +1256,9 @@ winkstart.module('accounts', 'accounts_manager', {
 						THIS.masquerade_account(data.data.name);
 
 						winkstart.publish('accounts_manager.activate');
+
+						winkstart.log('Intercom: Masquerading as ' + data.data.name + ' (' + data.data.id + ')');
+						window.Intercom('trackEvent', 'start-masquerade', {account_name: data.data.name, account_id: data.data.id});
 					}
 				);
 			}
@@ -1264,6 +1270,9 @@ winkstart.module('accounts', 'accounts_manager', {
 				winkstart.publish('nav.company_name', function() { return winkstart.apps['accounts'].account_name });
 
 				winkstart.publish('accounts_manager.activate');
+
+				winkstart.log('Intercom: Masquerade ended, restoring account ' + winkstart.apps['accounts'].account_name + ' (' + id + ')');
+				window.Intercom('trackEvent', 'end-masquerade', {account_name: winkstart.apps['accounts'].account_name, account_id: id});
 			}
 		},
 
