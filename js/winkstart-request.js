@@ -125,6 +125,10 @@
                         $.cookie('c_winkstart_auth', null);
 
                         setTimeout(function() {
+                            // Intercom
+                            winkstart.log('Intercom: Shutting down...');
+                            window.Intercom("shutdown");
+
                             window.location.reload();
                         }, 5000);
                     }
