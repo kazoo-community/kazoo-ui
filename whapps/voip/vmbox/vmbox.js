@@ -651,12 +651,15 @@ winkstart.module('voip', 'vmbox', {
                                 });
 
                                 $('#add', popup_html).click(function() {
-                                    node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+                                    var selector = $('#vmbox_selector', popup_html);
+                                    node.setMetadata('id', selector.val());
                                     if($('#route_var', popup_html).val().length > 0) {
                                         node.setMetadata('var', $('#route_var', popup_html).val());
                                     } else {
                                         node.deleteMetadata('var');
                                     }
+
+                                    node.caption = selector[0][selector[0].selectedIndex].text;
 
                                     popup.dialog('close');
                                 });
@@ -682,7 +685,8 @@ winkstart.module('voip', 'vmbox', {
                     module: 'voicemail',
                     tip: _t('vmbox', 'check_voicemail_tip'),
                     data: {
-                        action: 'check'
+                        action: 'check',
+                        callerid_match_login: true
                     },
                     rules: [
                         {
@@ -700,6 +704,10 @@ winkstart.module('voip', 'vmbox', {
                         }
                     }
                 }
+            });
+
+            $.extend(callflow_nodes, {
+                'voicemail[id=*,action=compose]': callflow_nodes["voicemail[id=*]"]
             });
         }
     }
