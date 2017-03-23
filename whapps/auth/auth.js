@@ -651,7 +651,8 @@ winkstart.module('auth', 'auth',
                             if(typeof json.data.timezone !== 'undefined') {
                                 user_data.timezone = json.data.timezone;
                             }
-                            window.Intercom("boot", user_data);
+                            window.Intercom('boot', user_data);
+                            window.Intercom('trackEvent', 'logged-in', user_data);
 
                             $.each(json.data.apps, function(k, v) {
                                 winkstart.log('WhApps: Loading ' + k + ' from URL ' + v.api_url);
@@ -703,6 +704,7 @@ winkstart.module('auth', 'auth',
 
             // Intercom
             winkstart.log("Intercom: Shutting down...");
+            window.Intercom('trackEvent', 'logged-out');
             window.Intercom("shutdown");
 
             window.location.reload();
@@ -893,6 +895,7 @@ winkstart.module('auth', 'auth',
 
                     // Intercom
                     winkstart.log('Intercom: Shutting down...');
+                    window.Intercom('trackEvent', 'logged-out');
                     window.Intercom("shutdown");
 
                     // Temporary hack until module unloading works properly
