@@ -19,11 +19,6 @@ winkstart.module('call_center', 'dashboard', {
         },
 
         resources: {
-            'dashboard.restart_agent': {
-                url: 'https://awe01-van1.voxter.com:8443/v1/sup/acdc/agent_restart/{account_id}/{agent_id}',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
             'dashboard.queue_eavesdrop': {
                 url: '{api_url}/accounts/{account_id}/queues/{queue_id}/eavesdrop',
                 contentType: 'application/json',
@@ -118,6 +113,11 @@ winkstart.module('call_center', 'dashboard', {
             },
             'dashboard.agent.status': {
                 url: '{api_url}/accounts/{account_id}/agents/{agent_id}/status',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
+            'dashboard.agent.restart': {
+                url: '{api_url}/accounts/{account_id}/agents/{agent_id}/restart',
                 contentType: 'application/json',
                 verb: 'POST'
             }
@@ -1127,8 +1127,9 @@ winkstart.module('call_center', 'dashboard', {
             var THIS = this;
             var agentId = $(agent).attr('id');
 
-            winkstart.request(true, 'dashboard.restart_agent', {
+            winkstart.request(true, 'dashboard.agent.restart', {
                     account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url,
                     agent_id: agentId,
                     data: {}
                 },
