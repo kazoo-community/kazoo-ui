@@ -569,7 +569,7 @@ winkstart.module('voip', 'device', {
                         account_id: winkstart.apps['voip'].account_id,
                         api_url: winkstart.config.default_api_v2_url,
                         device_id: data.data.id,
-                        data: ''
+                        data: {}
                     },
                     function(_data, status) {
                         if(typeof success == 'function') {
