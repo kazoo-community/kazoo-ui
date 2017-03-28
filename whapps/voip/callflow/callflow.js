@@ -3160,7 +3160,7 @@ winkstart.module('voip', 'callflow', {
                     module: 'webhook',
                     tip: _t('callflow', 'webhook_tip'),
                     data: {
-                        http_verb: 'GET',
+                        http_verb: 'get',
                         retries: '3',
                         uri: ''
                     },
@@ -3183,7 +3183,7 @@ winkstart.module('voip', 'callflow', {
                             },
                             data_webhook: {
                                 'uri': node.getMetadata('uri') || '',
-                                'http_verb': node.getMetadata('http_verb') || 'GET',
+                                'http_verb': node.getMetadata('http_verb') || 'get',
                                 'retries': node.getMetadata('retries') || '3'
                             }
                         });
