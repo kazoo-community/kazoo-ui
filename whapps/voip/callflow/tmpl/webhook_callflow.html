@@ -11,12 +11,12 @@
                 <div class="popup_field">
                     <label for="webhook_http_verb_input">${_t('method')}: </label>
                     <select id="webhook_http_verb_input" style="width: 100px; height: 28px;">
-                        {{if data_webhook.http_verb === 'POST'}}
-                            <option value="POST" selected="selected">POST</option>
-                            <option value="GET">GET</option>
+                        {{if data_webhook.http_verb === 'post'}}
+                            <option value="post" selected="selected">POST</option>
+                            <option value="get">GET</option>
                         {{else}}
-                            <option value="POST">POST</option>
-                            <option value="GET" selected="selected">GET</option>
+                            <option value="post">POST</option>
+                            <option value="get" selected="selected">GET</option>
                         {{/if}}
                     </select>
                 </div>
