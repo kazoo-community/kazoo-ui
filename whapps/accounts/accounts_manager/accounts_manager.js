@@ -6,7 +6,10 @@ winkstart.module('accounts', 'accounts_manager', {
 		templates: {
 			accounts_manager: 'tmpl/accounts_manager.html',
 			edit: 'tmpl/edit.html',
+			notify: 'tmpl/notifications_templates_notify.html',
 			'switch_tmpl': 'tmpl/switch.html',
+			teletype: 'tmpl/notifications_templates_teletype.html',
+			teletype_deregister_row: 'tmpl/notifications_templates_teletype_deregister_row.html',
 			'credits': 'tmpl/credits.html'
 		},
 
@@ -19,14 +22,17 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		validation: [
-				{ name: '#vm_to_email_support_number',   regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
-				{ name: '#vm_to_email_support_email',    regex: _t('accounts', 'vm_to_email_support_email_regex') },
-				{ name: '#vm_to_email_send_from',        regex: _t('accounts', 'vm_to_email_support_email_regex') },
-				{ name: '#vm_to_email_service_url',      regex: /^.*$/ },
-				{ name: '#vm_to_email_service_provider', regex: /^.*$/ },
-				{ name: '#vm_to_email_service_name',     regex: /^.*$/ },
-				{ name: '#deregister_email',             regex: _t('accounts', 'vm_to_email_support_email_regex') },
-				{ name: '#realm',                        regex: /^[a-zA-Z0-9\.\-]*$/ }
+				{ name: '#teletype_deregister_from',            regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#teletype_fax_to_email_from',          regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#teletype_voicemail_to_email_from',    regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#vm_to_email_support_number',          regex: /^[\+]?[0-9\s\-\x\(\)]*$/ },
+				{ name: '#vm_to_email_support_email',           regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#vm_to_email_send_from',               regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#vm_to_email_service_url',             regex: /^.*$/ },
+				{ name: '#vm_to_email_service_provider',        regex: /^.*$/ },
+				{ name: '#vm_to_email_service_name',            regex: /^.*$/ },
+				{ name: '#deregister_email',                    regex: _t('accounts', 'vm_to_email_support_email_regex') },
+				{ name: '#realm',                               regex: /^[a-zA-Z0-9\.\-]*$/ }
 		],
 
 		resources: {
@@ -57,6 +63,21 @@ winkstart.module('accounts', 'accounts_manager', {
 			},
 			'accounts_manager.delete': {
 				url: '{api_url}/accounts/{account_id}',
+				contentType: 'application/json',
+				verb: 'DELETE'
+			},
+			'notifications.get': {
+				url: '{api_url}/accounts/{account_id}/notifications/{notification_id}',
+				contentType: 'application/json',
+				verb: 'GET'
+			},
+			'notifications.update': {
+				url: '{api_url}/accounts/{account_id}/notifications/{notification_id}',
+				contentType: 'application/json',
+				verb: 'POST'
+			},
+			'notifications.delete': {
+				url: '{api_url}/accounts/{account_id}/notifications/{notification_id}',
 				contentType: 'application/json',
 				verb: 'DELETE'
 			},
@@ -289,6 +310,7 @@ winkstart.module('accounts', 'accounts_manager', {
 					},
 					field_data: {
 						billing_account: 'parent',
+						deregister: false,
 						whitelabel: {
 							nav: {},
 							port: {}
@@ -296,7 +318,23 @@ winkstart.module('accounts', 'accounts_manager', {
 						display_limits: winkstart.apps['auth'].is_reseller || (winkstart.config.hasOwnProperty('reseller_id') ? (winkstart.config.reseller_id === winkstart.apps['auth'].account_id) : false),
 						call_restriction: {},
 						enable_call_restriction: false,
-						available_apps: []
+						available_apps: [],
+						sameTemplate: true,
+						teletype: {
+							deregister: {
+								from: '',
+								to: {
+									email_addresses: [],
+									type: 'specified'
+								}
+							},
+							fax_to_email: {
+								from: ''
+							},
+							voicemail_to_email: {
+								from: ''
+							}
+						}
 					},
 					role: winkstart.apps['auth'].role,
 					isAdmin: winkstart.apps.auth.superduper_admin,
@@ -347,6 +385,69 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 						else {
 							callback(null, defaults);
+						}
+					},
+					/**
+					 * Get notifications docs for the selected account if loaded
+					 *
+					 * @param {function} callback - The function to call with errors and results
+					 * as the first and second arguments, respectively.
+					 */
+					get_notifications: function(callback) {
+						if(typeof data === 'object' && data.id) {
+							var functions = {
+								voicemail_to_email: function(callback) {
+									winkstart.request('notifications.get', {
+											account_id: data.id,
+											api_url: winkstart.apps['accounts'].api_url,
+											notification_id: 'voicemail_to_email'
+										},
+										function(_data, status) {
+											// Won't be in the payload unless overridden, will be true if so
+											if(_data.data.account_overridden) {
+												defaults.field_data.teletype.voicemail_to_email.from = _data.data.from;
+											}
+											callback(null, _data);
+										}
+									);
+								},
+								fax_to_email: function(callback) {
+									winkstart.request('notifications.get', {
+											account_id: data.id,
+											api_url: winkstart.apps['accounts'].api_url,
+											notification_id: 'fax_inbound_to_email'
+										},
+										function(_data, status) {
+											if(_data.data.account_overridden) {
+												defaults.field_data.teletype.fax_to_email.from = _data.data.from;
+											}
+											callback(null, _data);
+										}
+									);
+
+								},
+								deregister: function(callback) {
+									winkstart.request('notifications.get', {
+											account_id: data.id,
+											api_url: winkstart.apps['accounts'].api_url,
+											notification_id: 'deregister'
+										},
+										function(_data, status) {
+											if(_data.data.account_overridden) {
+												defaults.field_data.teletype.deregister.from = _data.data.from;
+												$.extend(true, defaults.field_data.teletype.deregister.to, _data.data.to);
+											}
+											callback(null, _data);
+										}
+									);
+								}
+							};
+							async.parallel(functions, function(err, results) {
+								callback(err, results);
+							});
+						}
+						else {
+							callback(null, {});
 						}
 					},
 					get_credits: function(callback) {
@@ -440,7 +541,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				function(err, results) {
 					var render_data = defaults;
-					defaults.field_data.sameTemplate = true;
 					if(typeof data === 'object' && data.id) {
 						$.each(results.get_parent_account.data.available_apps, function(k, v) {
 							var tmp = {},
@@ -459,9 +559,35 @@ winkstart.module('accounts', 'accounts_manager', {
 							defaults.field_data.available_apps.push(tmp);
 						});
 
+						var account_data = results.get_account.data;
+						// Deregister enabled if sending to (original recipient or admins) || (nonempty array)
+						if(account_data.notification_preference == 'teletype' &&
+							($.inArray(defaults.field_data.teletype.deregister.to.type, ['original', 'admins']) > -1 ||
+								('email_addresses' in defaults.field_data.teletype.deregister.to &&
+									defaults.field_data.teletype.deregister.to.email_addresses.length > 0))) {
+							defaults.field_data.deregister = true;
+						}
+						// Deregister enabled if account has send_to value in doc
+						else if(account_data.notifications &&
+							'deregister' in account_data.notifications &&
+							account_data.notifications.deregister.send_to &&
+							account_data.notifications.deregister.send_to != '') {
+							defaults.field_data.deregister = true;
+						}
+
 						render_data = $.extend(true, defaults, results.get_account);
 
-						defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
+						if(account_data.notification_preference == 'teletype') {
+							var voicemail_to_email_from = defaults.field_data.teletype.voicemail_to_email.from,
+								fax_to_email_from = defaults.field_data.teletype.fax_to_email.from;
+							defaults.field_data.sameTemplate = voicemail_to_email_from != undefined &&
+															   fax_to_email_from != undefined &&
+															   voicemail_to_email_from == fax_to_email_from;
+
+						}
+						else {
+							defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
+						}
 					}
 
 					THIS.render_accounts_manager(render_data, target, callbacks);
@@ -531,13 +657,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				data.field_data = {};
 			}
 
-			if(data.data.notifications && 'deregister' in data.data.notifications && data.data.notifications.deregister.send_to && data.data.notifications.deregister.send_to != '') {
-				data.field_data.deregister = true;
-			}
-			else {
-				data.field_data.deregister = false;
-			}
-
 			if(data.data.billing_id === winkstart.apps['accounts'].account_id) {
 			   data.field_data.billing_account = 'parent';
 			}
@@ -562,7 +681,16 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			form_data.available_apps = available_apps;
 
-			if(form_data.extra.deregistration_notify === false) {
+			if(!('notifications' in form_data)) {
+				form_data.notifications = {
+					deregister: {},
+					fax_to_email: {},
+					voicemail_to_email: {}
+				};
+			}
+
+			if('deregistration_notify' in form_data.extra &&
+				form_data.extra.deregistration_notify === false) {
 				form_data.notifications.deregister.send_to = '';
 			}
 
@@ -634,6 +762,65 @@ winkstart.module('accounts', 'accounts_manager', {
 			}
 
 			delete data[''];
+
+			return data;
+		},
+
+		/**
+		 * Normalize data for teletype notifications API calls. Splits the data
+		 * into an object containing keys that are the IDs of notifications to
+		 * PUT/DELETE.
+		 *
+		 * @param {object} data - Form data from the notifications templates
+		 * @param {object} field_data - Initial data when the view was rendered
+		 */
+		normalize_teletype_data: function(data, field_data) {
+			// Fax-to-email
+			if(data.extra.sameTemplate) {
+				data.fax_to_email = data.voicemail_to_email;
+			}
+
+			if(!_.isEqual(data.fax_to_email, field_data.fax_to_email)) {
+				var fax_keys = [
+					'fax_inbound_to_email',
+					'fax_inbound_error_to_email',
+					'fax_outbound_to_email',
+					'fax_outbound_error_to_email'
+				];
+				fax_keys.forEach(function(key) {
+					data[key] = false;
+				});
+				if(data.fax_to_email.from !== '') {
+					fax_keys.forEach(function(key) {
+						data[key] = data.fax_to_email;
+					});
+				}
+			}
+			delete data.fax_to_email;
+
+			// Voicemail-to-email
+			if(_.isEqual(data.voicemail_to_email, field_data.voicemail_to_email)) {
+				delete data.voicemail_to_email;
+			}
+			else if(data.voicemail_to_email.from === '') {
+				data.voicemail_to_email = false;
+			}
+
+			// Deregister
+			if(_.isEqual(data.deregister, field_data.deregister)) {
+				delete data.deregister;
+			}
+			else if(data.extra.deregistration_teletype &&
+				data.deregister.from !== '' &&
+				(data.deregister.to.type != 'specified' ||
+					data.deregister.to.email_addresses.length > 0)) {
+				// Please don't make me negate this
+			}
+			else {
+				data.deregister = false;
+			}
+
+			delete data.extra;
 
 			return data;
 		},
@@ -753,11 +940,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
-				deregister = $('#deregister', account_html),
-				deregister_email = $('.deregister_email', account_html),
 				file,
-				checkbox_fax = $('#sameTemplate', account_html),
-				fax_to_email = $('.fax_to_email', account_html),
 
 				starting_values = {
 					amount_balance: parseFloat(data.credits.amount),
@@ -765,8 +948,6 @@ winkstart.module('accounts', 'accounts_manager', {
 					twoway_trunks: data.limits.twoway_trunks,
 					allow_prepay: data.limits.allow_prepay
 				};
-
-			winkstart.validate.set(THIS.config.validation, account_html);
 
 			var toggleResellerStatusClick = function(el, isReseller) {
 				$(el).prop('disabled', true);
@@ -785,9 +966,61 @@ winkstart.module('accounts', 'accounts_manager', {
 				toggleResellerStatusClick(this, false);
 			});
 
-			if(data.field_data.sameTemplate === true) {
-				$('.fax_to_email').hide();
+			// Show either notify or teletype notifications template configuration
+			if(data.data.notification_preference == 'teletype' ||
+				(winkstart.config.notification_app == 'teletype' &&
+					!data.data.notifications ||
+					(!data.data.notifications.voicemail_to_email || $.isEmptyObject(data.data.notifications.voicemail_to_email)) &&
+					(!data.data.notifications.fax_to_email || $.isEmptyObject(data.data.notifications.fax_to_email)))) {
+				var notifications_templates_html = THIS.templates.teletype.tmpl(data);
 			}
+			else {
+				var notifications_templates_html = THIS.templates.notify.tmpl(data);
+			}
+			var notifications_container = $('<div></div>');
+			notifications_container.append(notifications_templates_html);
+
+			var checkbox_fax = $('#sameTemplate', notifications_container),
+				fax_to_email = $('.fax_to_email', notifications_container),
+				deregister = $('#deregister', notifications_container),
+				deregister_email = $('.deregister_email', notifications_container);
+
+			deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
+
+			deregister.change(function() {
+				$(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
+			});
+
+			checkbox_fax.is(':checked') ? fax_to_email.hide() : fax_to_email.show();
+
+			if(data.field_data.sameTemplate === true) {
+				fax_to_email.hide();
+			}
+
+			$('#notifications_templates', account_html).append(notifications_container);
+
+			// Controls for teletype deregister emails
+			var teletype_deregister_to_type = $('#teletype_deregister_to_type', account_html);
+			var teletype_deregister_to_email_addresses = $('#teletype_deregister_to_email_addresses', account_html);
+			teletype_deregister_to_type.val() == 'specified' ?
+				teletype_deregister_to_email_addresses.show() :
+				teletype_deregister_to_email_addresses.hide();
+			teletype_deregister_to_type.change(function() {
+				var teletype_deregister_to_email_addresses = $('#teletype_deregister_to_email_addresses');
+				$(this).val() == 'specified' ?
+					teletype_deregister_to_email_addresses.show() :
+					teletype_deregister_to_email_addresses.hide();
+			});
+			$('#deregister_add_email_button', account_html).click(function() {
+				var row = THIS.templates.teletype_deregister_row.tmpl();
+				$('#teletype_deregister_to_email_addresses .rows').append(row);
+				$('.emails-to-notify .delete').click(function() {
+					$(this).closest('.row').remove();
+				});
+			});
+			$('.emails-to-notify .delete').click(function() {
+				$(this).closest('.row').remove();
+			});
 
 			$('*[rel=popover]:not([type="text"])', account_html).popover({
 				trigger: 'hover'
@@ -888,17 +1121,9 @@ winkstart.module('accounts', 'accounts_manager', {
 				}
 			});
 
-			deregister.is(':checked') ? deregister_email.show() : deregister_email.hide();
-
-			deregister.change(function() {
-				$(this).is(':checked') ? deregister_email.show('blind') : deregister_email.hide('blind');
-			});
-
-			checkbox_fax.is(':checked') ? fax_to_email.hide() : fax_to_email.show();
-
 			$('#sameTemplate', account_html).click(function(evt){
 				if($(this).prop('checked')) {
-					$('.fax_to_email').hide();
+					$('.fax_to_email').hide('blind');
 					$('#fax_to_email_support_number', account_html).val($('#vm_to_email_support_number', account_html).val());
 					$('#fax_to_email_support_email', account_html).val($('#vm_to_email_support_email', account_html).val());
 					$('#fax_to_email_send_from', account_html).val($('#vm_to_email_send_from', account_html).val());
@@ -907,10 +1132,13 @@ winkstart.module('accounts', 'accounts_manager', {
 					$('#fax_to_email_service_provider', account_html).val($('#vm_to_email_service_provider', account_html).val());
 				}
 				else {
-					$('.fax_to_email').show();
+					$('.fax_to_email').show('blind');
 					$('.text-val', account_html).val('');
 				}
 			});
+
+			// Must be done after all templates have been merged into account_html
+			winkstart.validate.set(THIS.config.validation, account_html);
 
 			$('.accounts_manager-save', account_html).click(function(ev) {
 				ev.preventDefault();
@@ -918,11 +1146,21 @@ winkstart.module('accounts', 'accounts_manager', {
 				winkstart.validate.is_valid(THIS.config.validation, account_html, function() {
 						var form_data = form2object('accounts_manager-form'),
 							whitelabel_data = {};
-						THIS.clean_form_data(form_data);
 
-						if('field_data' in data) {
-							delete data.field_data;
+						if('teletype' in form_data) {
+							var teletype_data = form_data.teletype;
+							teletype_data.extra = form_data.extra;
+							delete form_data.teletype;
+
+							teletype_data.deregister.to.email_addresses = [];
+							$('#teletype_deregister_to_email_addresses .rows .column.first input').each(function(index) {
+								teletype_data.deregister.to.email_addresses.push($(this).val());
+							});
+
+							var teletype_field_data = data.field_data.teletype;
 						}
+
+						THIS.clean_form_data(form_data);
 
 						if('whitelabel' in form_data) {
 							var whitelabel_data = form_data.whitelabel;
@@ -938,78 +1176,154 @@ winkstart.module('accounts', 'accounts_manager', {
 								THIS.save_accounts_manager(form_data, data,
 									function(_data_account, status) {
 										var account_id = _data_account.data.id,
-											upload_logo = function() {
-												if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
-													THIS.upload_file(file, account_id, function() {
-														if(typeof callbacks.save_success == 'function') {
-															callbacks.save_success(_data_account, status);
-														}
-													});
+											/**
+											 * Submit a variable number of notifications API requests, depending on
+											 * which fields have been modified in the notifications templates
+											 *
+											 * @param {function} callback - The function to call with errors and results
+											 * as the first and second arguments, respectively.
+											 */
+											update_notifications = function(callback) {
+												if(teletype_data === undefined) {
+													return callback(null, {});
 												}
-												else {
-													if(typeof callbacks.save_success == 'function') {
-														callbacks.save_success(_data_account, status);
-													}
-												}
-											};
 
-											upload_icon = function() {
-											if($('#upload_div_icon', account_html).is(':visible') && $('#file_icon', account_html).val() != '') {
-													THIS.upload_icon(icon_file, account_id, function() {
-														if(typeof callbacks.save_success == 'function') {
-															callbacks.save_success(_data_account, status);
-															upload_logo();
-														}
-													});
-												}
-												else {
-													if(typeof callbacks.save_success == 'function') {
-														callbacks.save_success(_data_account, status);
-													}
-													upload_logo();
-												}
-											};
+												var normalized_data = THIS.normalize_teletype_data(teletype_data, teletype_field_data),
+													requests = {};
 
-										/*
-										* We check if the whitelabel exist for this account,
-										* If yes, then we check if it has been updated and if it was, we update the whitelabel document.
-										* If it doesn't exist, we check if data is not empty before creating a whitelabel document
-										*/
-										winkstart.request('whitelabel.get', {
-												account_id: account_id,
-												api_url: winkstart.apps['accounts'].api_url
-											},
-											function(_data, status) {
-												whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
-
-												winkstart.request('whitelabel.update', {
+												// Build an object of the multiple notifications requests that take place
+												$.each(normalized_data, function(key, value) {
+													// Common arguments to update/delete
+													var options = {
 														account_id: account_id,
 														api_url: winkstart.apps['accounts'].api_url,
-														data: whitelabel_data
-													},
-													function(_data, status) {
-														upload_icon();
-													},
-													winkstart.error_message.process_error()
+														notification_id: key
+													};
+
+													// Specific arguments
+													if(value) {
+														var request_id = 'notifications.update';
+														options.data = value;
+													}
+													else {
+														var request_id = 'notifications.delete';
+													}
+
+													requests[key] = function(callback) {
+														winkstart.request(request_id,
+															options,
+															function(_data, status) {
+																callback(null, {});
+															},
+															function(_data, status) {
+																callback({
+																	data: _data,
+																	status: status
+																}, null);
+															}
+														);
+													};
+												});
+												async.parallel(requests,
+													function(err, results) {
+														callback(err, results);
+													}
 												);
 											},
-											function(_data, status) {
-												if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
-													winkstart.request('whitelabel.create', {
-															account_id: account_id,
-															api_url: winkstart.apps['accounts'].api_url,
-															data: whitelabel_data
-														},
-														function(_data, status) {
-															upload_icon();
-														},
-														winkstart.error_message.process_error()
-													);
+											upload_logo = function(callback) {
+												if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
+													THIS.upload_file(file, account_id, function() {
+														callback(null, {
+															data: _data_account,
+															status: status
+														});
+													});
 												}
 												else {
-													if(typeof callbacks.save_success == 'function') {
-														callbacks.save_success(_data_account, status);
-													}
+													callback(null, {
+														data: _data_account,
+														status: status
+													});
+												}
+											};
+
+											upload_icon = function(callback) {
+												if($('#upload_div_icon', account_html).is(':visible') && $('#file_icon', account_html).val() != '') {
+													THIS.upload_icon(icon_file, account_id, function() {
+														upload_logo(callback);
+													});
+												}
+												else {
+													upload_logo(callback);
+												}
+											};
+
+										// Do in series so we don't get half done whitelabel if something fails in update_notifications
+										async.series({
+												whitelabel: function(callback) {
+													/*
+													* We check if the whitelabel exist for this account,
+													* If yes, then we check if it has been updated and if it was, we update the whitelabel document.
+													* If it doesn't exist, we check if data is not empty before creating a whitelabel document
+													*/
+													winkstart.request('whitelabel.get', {
+															account_id: account_id,
+															api_url: winkstart.apps['accounts'].api_url
+														},
+														function(_data, status) {
+															whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
+
+															winkstart.request('whitelabel.update', {
+																	account_id: account_id,
+																	api_url: winkstart.apps['accounts'].api_url,
+																	data: whitelabel_data
+																},
+																function(_data, status) {
+																	upload_icon(callback);
+																},
+																function(_data, status) {
+																	callback({
+																		data: _data,
+																		status: status
+																	}, null);
+																}
+															);
+														},
+														function(_data, status) {
+															if(status === 404 && (whitelabel_data.domain != '' || whitelabel_data.company_name != '')) {
+																winkstart.request('whitelabel.create', {
+																		account_id: account_id,
+																		api_url: winkstart.apps['accounts'].api_url,
+																		data: whitelabel_data
+																	},
+																	function(_data, status) {
+																		upload_icon(callback);
+																	},
+																	function(_data, status) {
+																		callback({
+																			data: _data,
+																			status: status
+																		}, null);
+																	}
+																);
+															}
+															else {
+																callback(null, {
+																	data: _data,
+																	status: status
+																});
+															}
+														}
+													);
+												},
+												update_notifications: update_notifications
+											},
+											function(err, results) {
+												if(err) {
+													winkstart.error_message.process_error()(err.data, err.status);
+												}
+												else if(typeof callbacks.save_success == 'function') {
+													callbacks.save_success(_data_account, status);
 												}
 											}
 										);

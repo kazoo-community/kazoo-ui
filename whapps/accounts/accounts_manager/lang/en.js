@@ -26,7 +26,7 @@ window.translate['accounts'] = {
 	support_email: "Support Email",
 	support_email_data_content: "Input the support email address that will be inserted in the voicemail-to-email template",
 	send_from: "Send From",
-	send_from_data_content: "This will be displayed as the Send form field in the Voicemail-To-Email template",
+	send_from_data_content: "This will be displayed as the From field in the email",
 	template_fields_for_subaccounts: "Template fields for sub-accounts",
 	service_url: "Service URL",
 	service_url_data_content: "Input the Service URL",
@@ -39,6 +39,7 @@ window.translate['accounts'] = {
 	monitoring: "Monitoring",
 	notify_on_deregister: "Notify on de-register",
 	notify_on_deregister_data_content: "By checking this option, an email will be sent to the specified e-mail address each time a device of this account unregisters.",
+	notify_on_deregister_plural_data_content: "By checking this option, an email will be sent to the specified e-mail addresses each time a device of this account unregisters.",
 	general: "General",
 	company_name: "Company Name",
 	company_name_data_content: "The company name that you want to display wherever a company name is used in the GUI.",
@@ -83,6 +84,9 @@ window.translate['accounts'] = {
 	inherit: "Inherit",
 	email_to_notify: "Email to notify",
 	email_to_notify_data_content: "Email to notify",
+	emails_to_notify: "Emails to notify",
+	add_email: "Add Email",
+	remove_email: "Remove",
 	billing_account: "Billing Account",
 	billing_account_data_content: "Who is paying for calls made and phone numbers purchased on this account",
 	this_parent_account: "This Parent Account",
@@ -97,5 +101,9 @@ window.translate['accounts'] = {
 	customers_available_balance: "Customer's available balance for per-minute calls:",
 	delete_white_labeling: "Delete white labeling",
 	advanced: "Advanced",
-	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/,
+	email_placeholder: "name@email.com",
+	email_types_data_content: "What group to send emails to",
+	teletype_deregister_to_admins: "Admins Only",
+	teletype_deregister_to_specified: "Specific Addresses"
 };
