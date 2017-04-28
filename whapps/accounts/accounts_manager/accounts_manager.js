@@ -76,11 +76,6 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/json',
 				verb: 'POST'
 			},
-			'notifications.delete': {
-				url: '{api_url}/accounts/{account_id}/notifications/{notification_id}',
-				contentType: 'application/json',
-				verb: 'DELETE'
-			},
 			'whitelabel.get': {
 				url: '{api_url}/accounts/{account_id}/whitelabel',
 				contentType: 'application/json',
@@ -334,6 +329,11 @@ winkstart.module('accounts', 'accounts_manager', {
 							voicemail_to_email: {
 								from: ''
 							}
+						},
+						teletype_overridden: {
+							deregister: false,
+							fax_to_email: false,
+							voicemail_to_email: false
 						}
 					},
 					role: winkstart.apps['auth'].role,
@@ -428,6 +428,7 @@ winkstart.module('accounts', 'accounts_manager', {
 											notification_id: 'deregister'
 										},
 										function(_data, status) {
+											defaults.field_data.teletype.deregister.enabled = _data.data.enabled;
 											defaults.field_data.teletype.deregister.from = _data.data.from;
 											$.extend(true, defaults.field_data.teletype.deregister.to, _data.data.to);
 											callback(null, _data);
@@ -559,9 +560,11 @@ winkstart.module('accounts', 'accounts_manager', {
 								!account_data.notifications ||
 								(!account_data.notifications.voicemail_to_email || $.isEmptyObject(account_data.notifications.voicemail_to_email)) &&
 								(!account_data.notifications.fax_to_email || $.isEmptyObject(account_data.notifications.fax_to_email)))) &&
-							($.inArray(defaults.field_data.teletype.deregister.to.type, ['original', 'admins']) > -1 ||
-								('email_addresses' in defaults.field_data.teletype.deregister.to &&
-									defaults.field_data.teletype.deregister.to.email_addresses.length > 0))) {
+							((defaults.field_data.teletype.deregister.enabled == undefined ||
+								defaults.field_data.teletype.deregister.enabled) &&
+							$.inArray(defaults.field_data.teletype.deregister.to.type, ['original', 'admins']) > -1 ||
+							('email_addresses' in defaults.field_data.teletype.deregister.to &&
+								defaults.field_data.teletype.deregister.to.email_addresses.length > 0))) {
 							defaults.field_data.deregister = true;
 						}
 						// Deregister enabled if account has send_to value in doc
@@ -766,7 +769,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		/**
 		 * Normalize data for teletype notifications API calls. Splits the data
 		 * into an object containing keys that are the IDs of notifications to
-		 * PUT/DELETE.
+		 * update.
 		 *
 		 * @param {object} data - Form data from the notifications templates
 		 * @param {object} field_data - Initial data when the view was rendered
@@ -785,12 +788,10 @@ winkstart.module('accounts', 'accounts_manager', {
 					'fax_outbound_error_to_email'
 				];
 				fax_keys.forEach(function(key) {
-					data[key] = false;
+					data[key] = data.fax_to_email;
 				});
-				if(data.fax_to_email.from !== '') {
-					fax_keys.forEach(function(key) {
-						data[key] = data.fax_to_email;
-					});
+				if(data.fax_to_email.from === '') {
+					data.fax_to_email.enabled = false;
 				}
 			}
 			delete data.fax_to_email;
@@ -800,10 +801,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				delete data.voicemail_to_email;
 			}
 			else if(data.voicemail_to_email.from === '') {
-				data.voicemail_to_email = false;
+				data.voicemail_to_email.enabled = false;
 			}
 
 			// Deregister
+			delete field_data.teletype.deregister.enabled; // Don't preserve this value
 			if(data.extra.deregistration_teletype == field_data.deregister &&
 				_.isEqual(data.deregister, field_data.teletype.deregister)) {
 				delete data.deregister;
@@ -815,7 +817,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				// Please don't make me negate this
 			}
 			else {
-				data.deregister = false;
+				data.deregister.enabled = false;
 			}
 
 			delete data.extra;
@@ -1195,20 +1197,12 @@ winkstart.module('accounts', 'accounts_manager', {
 													var options = {
 														account_id: account_id,
 														api_url: winkstart.apps['accounts'].api_url,
-														notification_id: key
+														notification_id: key,
+														data: value
 													};
 
-													// Specific arguments
-													if(value) {
-														var request_id = 'notifications.update';
-														options.data = value;
-													}
-													else {
-														var request_id = 'notifications.delete';
-													}
-
 													requests[key] = function(callback) {
-														winkstart.request(request_id,
+														winkstart.request('notifications.update',
 															options,
 															function(_data, status) {
 																callback(null, {});
