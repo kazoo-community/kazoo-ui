@@ -403,10 +403,7 @@ winkstart.module('accounts', 'accounts_manager', {
 											notification_id: 'voicemail_to_email'
 										},
 										function(_data, status) {
-											// Won't be in the payload unless overridden, will be true if so
-											if(_data.data.account_overridden) {
-												defaults.field_data.teletype.voicemail_to_email.from = _data.data.from;
-											}
+											defaults.field_data.teletype.voicemail_to_email.from = _data.data.from;
 											callback(null, _data);
 										}
 									);
@@ -418,9 +415,7 @@ winkstart.module('accounts', 'accounts_manager', {
 											notification_id: 'fax_inbound_to_email'
 										},
 										function(_data, status) {
-											if(_data.data.account_overridden) {
-												defaults.field_data.teletype.fax_to_email.from = _data.data.from;
-											}
+											defaults.field_data.teletype.fax_to_email.from = _data.data.from;
 											callback(null, _data);
 										}
 									);
@@ -433,10 +428,8 @@ winkstart.module('accounts', 'accounts_manager', {
 											notification_id: 'deregister'
 										},
 										function(_data, status) {
-											if(_data.data.account_overridden) {
-												defaults.field_data.teletype.deregister.from = _data.data.from;
-												$.extend(true, defaults.field_data.teletype.deregister.to, _data.data.to);
-											}
+											defaults.field_data.teletype.deregister.from = _data.data.from;
+											$.extend(true, defaults.field_data.teletype.deregister.to, _data.data.to);
 											callback(null, _data);
 										}
 									);
