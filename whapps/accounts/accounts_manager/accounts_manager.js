@@ -554,7 +554,11 @@ winkstart.module('accounts', 'accounts_manager', {
 
 						var account_data = results.get_account.data;
 						// Deregister enabled if sending to (original recipient or admins) || (nonempty array)
-						if(account_data.notification_preference == 'teletype' &&
+						if((account_data.notification_preference == 'teletype' ||
+							(winkstart.config.notification_app == 'teletype' &&
+								!account_data.notifications ||
+								(!account_data.notifications.voicemail_to_email || $.isEmptyObject(account_data.notifications.voicemail_to_email)) &&
+								(!account_data.notifications.fax_to_email || $.isEmptyObject(account_data.notifications.fax_to_email)))) &&
 							($.inArray(defaults.field_data.teletype.deregister.to.type, ['original', 'admins']) > -1 ||
 								('email_addresses' in defaults.field_data.teletype.deregister.to &&
 									defaults.field_data.teletype.deregister.to.email_addresses.length > 0))) {
