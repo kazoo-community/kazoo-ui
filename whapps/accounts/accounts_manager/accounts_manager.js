@@ -777,7 +777,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				data.fax_to_email = data.voicemail_to_email;
 			}
 
-			if(!_.isEqual(data.fax_to_email, field_data.fax_to_email)) {
+			if(!_.isEqual(data.fax_to_email, field_data.teletype.fax_to_email)) {
 				var fax_keys = [
 					'fax_inbound_to_email',
 					'fax_inbound_error_to_email',
@@ -796,7 +796,7 @@ winkstart.module('accounts', 'accounts_manager', {
 			delete data.fax_to_email;
 
 			// Voicemail-to-email
-			if(_.isEqual(data.voicemail_to_email, field_data.voicemail_to_email)) {
+			if(_.isEqual(data.voicemail_to_email, field_data.teletype.voicemail_to_email)) {
 				delete data.voicemail_to_email;
 			}
 			else if(data.voicemail_to_email.from === '') {
@@ -804,7 +804,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			}
 
 			// Deregister
-			if(_.isEqual(data.deregister, field_data.deregister)) {
+			if(data.extra.deregistration_teletype == field_data.deregister &&
+				_.isEqual(data.deregister, field_data.teletype.deregister)) {
 				delete data.deregister;
 			}
 			else if(data.extra.deregistration_teletype &&
@@ -1154,7 +1155,7 @@ winkstart.module('accounts', 'accounts_manager', {
 								teletype_data.deregister.to.email_addresses.push($(this).val());
 							});
 
-							var teletype_field_data = data.field_data.teletype;
+							var teletype_field_data = data.field_data;
 						}
 
 						THIS.clean_form_data(form_data);
