@@ -68,3 +68,27 @@
     margin-left: 35px;
     font-weight: bold;
 }
+
+.emails-to-notify {
+    display: inline-block;
+}
+
+.emails-to-notify .first {
+    width: 232px;
+}
+
+.emails-to-notify .first input {
+    margin: 2px 6px;
+}
+
+.emails-to-notify .second {
+    padding: 0 8px;
+}
+
+.emails-to-notify .padded {
+    padding-left: 20px;
+}
+
+#deregister_add_email_button {
+    margin-top: 12px;
+}

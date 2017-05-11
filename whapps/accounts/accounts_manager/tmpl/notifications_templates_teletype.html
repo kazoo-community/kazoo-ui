@@ -1,0 +1,99 @@
+<div>
+    <h3>${_t('voicemail_to_email')}</h3>
+    <div class="clearfix">
+        <label for="teletype_voicemail_to_email_from">${_t('send_from')}</label>
+        <div class="input">
+            <input class="span4" id="teletype_voicemail_to_email_from" name="teletype.voicemail_to_email.from" type="text" placeholder="${_t('email_placeholder')}" value="${field_data.teletype.voicemail_to_email.from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
+        </div>
+    </div>
+    <hr/>
+
+    <h3>${_t('fax_to_email')}</h3>
+    <div class="clearfix">
+        <div class="input">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        {{if field_data.sameTemplate}}
+                            <input type="checkbox" name="extra.sameTemplate" checked="checked" id="sameTemplate"/>
+                        {{else}}
+                            <input type="checkbox" name="extra.sameTemplate" id="sameTemplate"/>
+                        {{/if}}
+                        <span>${_t('use_the_same_values_for_the_Fax_template')}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clearfix fax_to_email">
+        <div class="clearfix">
+            <label for="teletype_fax_to_email_from">${_t('send_from')}</label>
+            <div class="input">
+                <input  class="span4 text-val" id="teletype_fax_to_email_from" name="teletype.fax_to_email.from" type="text" placeholder="${_t('email_placeholder')}"  value="${field_data.teletype.fax_to_email.from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
+            </div>
+        </div>
+    </div>
+    <hr/>
+
+    <h3>${_t('monitoring')}</h3>
+    <div class="clearfix">
+        <div class="input">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        {{if field_data.deregister}}
+                        <input id="deregister" type="checkbox" name="extra.deregistration_teletype" checked="checked" rel="popover" data-content="${_t('notify_on_deregister_plural_data_content')}"/>
+                        {{else}}
+                        <input id="deregister" type="checkbox" name="extra.deregistration_teletype" rel="popover" data-content="${_t('notify_on_deregister_plural_data_content')}" />
+                        {{/if}}
+                        <span>${_t('notify_on_deregister')}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clearfix deregister_email">
+        <div class="clearfix">
+            <label for="teletype_deregister_from">${_t('send_from')}</label>
+            <div class="input">
+                {{if field_data.deregister}}
+                <input id="teletype_deregister_from" placeholder="${_t('email_placeholder')}" type="text" name="teletype.deregister.from" value="${field_data.teletype.deregister.from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
+                {{else}}
+                <input id="teletype_deregister_from" placeholder="${_t('email_placeholder')}" type="text" name="teletype.deregister.from" rel="popover" data-content="${_t('send_from_data_content')}"/>
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label>${_t('emails_to_notify')}</label>
+            <div id="teletype_deregister_to" class="input">
+                <span rel="popover" data-content="${_t('email_types_data_content')}">
+                    <select id="teletype_deregister_to_type" name="teletype.deregister.to.type">
+                        {{if field_data.teletype.deregister.to.type === 'admins'}}
+                            <option value="admins" selected="selected">${_t('teletype_deregister_to_admins')}</option>
+                            <option value="specified">${_t('teletype_deregister_to_specified')}</option>
+                        {{else}}
+                            <option value="admins">${_t('teletype_deregister_to_admins')}</option>
+                            <option value="specified" selected="selected">${_t('teletype_deregister_to_specified')}</option>
+                        {{/if}}
+                    </select>
+                </span>
+                <div></div>
+                <div id="teletype_deregister_to_email_addresses">
+                    <div class="small-table emails-to-notify">
+                        <div class="row title">
+                            <div class="column first"></div>
+                            <div class="column second">${_t('remove_email')}</div>
+                        </div>
+                        <div class="rows"></div>
+                    </div>
+                    <div class="clearfix">
+                        <button id="deregister_add_email_button" type="button" class="btn">${_t('add_email')}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+<div>
+    <h3>${_t('voicemail_to_email')}</h3>
+    <h3 class="notificationsTitle">${_t('template_fields')}</h3>
+    <div class="clearfix">
+        <label for="vm_to_email_support_number">${_t('support_number')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_support_number" name="notifications.voicemail_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.voicemail_to_email.support_number}" rel="popover" data-content="${_t('support_number_data_content')}"/>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <label for="vm_to_email_support_email">${_t('support_email')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_support_email" name="notifications.voicemail_to_email.support_email" type="text" placeholder="${_t('support_email')}" value="${data.notifications.voicemail_to_email.support_email}" rel="popover" data-content="${_t('support_email_data_content')}"/>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <label for="vm_to_email_send_from">${_t('send_from')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_send_from" name="notifications.voicemail_to_email.send_from" type="text" placeholder="${_t('send_from')}" value="${data.notifications.voicemail_to_email.send_from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
+        </div>
+    </div>
+
+    <h3 class="notificationsTitle">${_t('template_fields_for_subaccounts')}</h3>
+    <div class="clearfix">
+        <label for="vm_to_email_service_url">${_t('service_url')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_service_url" name="notifications.voicemail_to_email.service_url" type="text" placeholder="${_t('service_url')}" value="${data.notifications.voicemail_to_email.service_url}" rel="popover" data-content="${_t('service_url_data_content')}"/>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <label for="vm_to_email_service_name">${_t('service_name')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_service_name" name="notifications.voicemail_to_email.service_name" type="text" placeholder="${_t('service_name')}" value="${data.notifications.voicemail_to_email.service_name}" rel="popover" data-content="${_t('service_name_data_content')}"/>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <label for="vm_to_email_service_provider">${_t('service_provider')}</label>
+        <div class="input">
+            <input class="span4" id="vm_to_email_service_provider" name="notifications.voicemail_to_email.service_provider" type="text" placeholder="${_t('service_provider')}" value="${data.notifications.voicemail_to_email.service_provider}" rel="popover" data-content="${_t('service_provider_data_content')}"/>
+        </div>
+    </div>
+    <hr/>
+
+    <h3>${_t('fax_to_email')}</h3>
+    <div class="clearfix">
+        <div class="input">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        {{if field_data.sameTemplate}}
+                            <input type="checkbox" name="extra.sameTemplate" checked="checked" id="sameTemplate"/>
+                        {{else}}
+                            <input type="checkbox" name="extra.sameTemplate" id="sameTemplate"/>
+                        {{/if}}
+                        <span>${_t('use_the_same_values_for_the_Fax_template')}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clearfix fax_to_email">
+        <h3 class="notificationsTitle">${_t('template_fields')}</h3>
+        <div class="clearfix">
+            <label for="fax_to_email_support_number">${_t('support_number')}</label>
+            <div class="input">
+                <input class="span4 text-val" id="fax_to_email_support_number" name="notifications.fax_to_email.support_number" type="text" placeholder="${_t('support_number')}" value="${data.notifications.fax_to_email.support_number}" />
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fax_to_email_support_email">${_t('support_email')}</label>
+            <div class="input">
+                <input class="span4 text-val" id="fax_to_email_support_email" name="notifications.fax_to_email.support_email" type="text" placeholder="${_t('support_email')}"  value="${data.notifications.fax_to_email.support_email}"/>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fax_to_email_send_from">${_t('send_from')}</label>
+            <div class="input">
+                <input  class="span4 text-val" id="fax_to_email_send_from" name="notifications.fax_to_email.send_from" type="text" placeholder="${_t('send_from')}"  value="${data.notifications.fax_to_email.send_from}"/>
+            </div>
+        </div>
+
+        <h3 class="notificationsTitle">${_t('template_fields_for_subaccounts')}</h3>
+        <div class="clearfix">
+            <label for="fax_to_email_service_url">${_t('service_url')}</label>
+            <div class="input">
+                <input class="span4 text-val" id="fax_to_email_service_url" name="notifications.fax_to_email.service_url" type="text" placeholder="${_t('service_url')}" value="${data.notifications.fax_to_email.service_url}"/>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fax_to_email_service_name">${_t('service_name')}</label>
+            <div class="input">
+                <input class="span4 text-val" id="fax_to_email_service_name" name="notifications.fax_to_email.service_name" type="text" placeholder="${_t('service_name')}" value="${data.notifications.fax_to_email.service_name}"/>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fax_to_email_service_provider">${_t('service_provider')}</label>
+            <div class="input">
+                <input class="span4 text-val" id="fax_to_email_service_provider" name="notifications.fax_to_email.service_provider" type="text" placeholder="${_t('service_provider')}" value="${data.notifications.fax_to_email.service_provider}"/>
+            </div>
+        </div>
+    </div>
+    <hr/>
+
+    <h3>${_t('monitoring')}</h3>
+    <div class="clearfix">
+        <div class="input">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        {{if field_data.deregister}}
+                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" checked="checked" rel="popover" data-content="${_t('notify_on_deregister_data_content')}"/>
+                        {{else}}
+                        <input id="deregister" type="checkbox" name="extra.deregistration_notify" rel="popover" data-content="${_t('notify_on_deregister_data_content')}" />
+                        {{/if}}
+                        <span>${_t('notify_on_deregister')}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="clearfix deregister_email">
+        <label for="deregister_email">${_t('email_to_notify')}</label>
+        <div class="input">
+            {{if field_data.deregister}}
+            <input id="deregister_email" placeholder="${_t('email_placeholder')}" type="text" name="notifications.deregister.send_to" value="${data.notifications.deregister.send_to}" rel="popover" data-content="${_t('email_to_notify_data_content')}"/>
+            {{else}}
+            <input id="deregister_email" placeholder="${_t('email_placeholder')}" type="text" name="notifications.deregister.send_to" rel="popover" data-content="${_t('email_to_notify_data_content')}"/>
+            {{/if}}
+        </div>
+    </div>
+</div>

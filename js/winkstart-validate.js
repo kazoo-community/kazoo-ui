@@ -117,8 +117,9 @@
 
                 $.each(items, function(key, val) {
                     if('name' in val && 'regex' in val) {
-                        ret = $(val.name, parent)
-                                  .trigger('keyup')
+                        var jqElem = $(val.name, parent);
+                        ret = jqElem.length === 0 ||
+                                  jqElem.trigger('keyup')
                                   .parents('.validated')
                                   .hasClass('valid');
 
@@ -131,8 +132,9 @@
             else {
                 invalid_num = 1;
                 if('name' in items && 'regex' in items) {
-                    ret = $(items.name, parent)
-                              .trigger('keyup')
+                    var jqElem = $(val.name, parent);
+                    ret = jqElem.length === 0 ||
+                              jqElem.trigger('keyup')
                               .parents('.validated')
                               .hasClass('valid');
 

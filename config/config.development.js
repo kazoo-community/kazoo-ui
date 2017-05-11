@@ -234,7 +234,9 @@
                 icon: 'menu1',
                 desc: 'Manage your Call Center'
             }
-        }
+        },
+
+        notification_app: 'teletype'
     };
 
     winkstart.apps = {
