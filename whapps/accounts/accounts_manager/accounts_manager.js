@@ -934,9 +934,10 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		render_accounts_manager: function(data, target, callbacks) {
-			data._t = function(param){
+			var _t = function(param){
 				return window.translate['accounts'][param];
 			};
+			data._t = _t;
 
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
@@ -1011,12 +1012,33 @@ winkstart.module('accounts', 'accounts_manager', {
 					teletype_deregister_to_email_addresses.show() :
 					teletype_deregister_to_email_addresses.hide();
 			});
-			$('#deregister_add_email_button', account_html).click(function() {
-				var row = THIS.templates.teletype_deregister_row.tmpl();
-				$('#teletype_deregister_to_email_addresses .rows').append(row);
-				$('.emails-to-notify .delete').click(function() {
+
+			/**
+			 * Append a deregister specified email row to an html container.
+			 *
+			 * @param {string} email - A default email address to fill in the row
+			 * @param {object} container - jQuery container object with .rows
+			 * div that will have the new row appended
+			 */
+			function addDeregisterEmail(email = '', container = null) {
+				var row = THIS.templates.teletype_deregister_row.tmpl({
+					_t: _t,
+					email: email
+				});
+				$('#teletype_deregister_to_email_addresses .rows', container).append(row);
+				$('.delete', row).click(function() {
 					$(this).closest('.row').remove();
 				});
+			}
+			if(teletype_deregister_to_type.val() == 'specified') {
+				$.each(data.field_data.teletype.deregister.to.email_addresses, function(index, email) {
+					addDeregisterEmail(email, account_html);
+				});
+			}
+
+			$('#deregister_add_email_button', account_html).click(function() {
+				// Add without container since container is now in DOM
+				addDeregisterEmail();
 			});
 			$('.emails-to-notify .delete').click(function() {
 				$(this).closest('.row').remove();
