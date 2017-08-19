@@ -235,6 +235,7 @@ winkstart.module('voip', 'user', {
                 },
                 defaults = {
                     data: $.extend(true, {
+                        acdc_agent_priority: 0,
                         apps: {},
                         call_forward: {
                             substitute: true
@@ -626,6 +627,30 @@ winkstart.module('voip', 'user', {
                         }
                     }
                 });
+            });
+
+            $('#acdc_agent_priority', user_html).slider({
+                from: -128,
+                to: 128,
+                step: 64,
+                dimension: '',
+                scale: ['lowest', 'low', 'normal', 'high', 'highest'],
+                limits: false,
+                calculate: function(val) {
+                    return "";
+                },
+                onstatechange: function(val) {
+                    if(!this.hasOwnProperty('snapFlag')) {
+                        this.snapFlag = 0;
+                    }
+                    if(this.snapFlag == 0) {
+                        this.snapFlag = 1;
+                        $('#acdc_agent_priority').slider("value", val);
+                    }
+                    if(this.snapFlag == 1) {
+                        this.snapFlag = 0;
+                    }
+                }
             });
 
             $(user_html).delegate('.enabled_checkbox', 'click', function() {
