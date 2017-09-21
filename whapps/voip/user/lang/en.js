@@ -86,6 +86,8 @@ window.translate['user'] = {
 	queue_options: "Queue Options",
 	record_this_agent: "Record this agent(user)",
 	record_this_agent_data_content: "By checking this box, this agent will be recorded even if the global setting for the queue is set to not record agents.",
+	acdc_agent_priority: "Agent Priority",
+	acdc_agent_priority_data_content: "(Round-robin strategy only) Queue calls will be distributed to agents with higher priority before those with lower priority",
 	enable_call_forward: "Enable Call-Forward",
 	enable_call_forward_data_content: "If checked, call forwarding feature will be enabled for user.",
 	redirect_calls_to: "Redirect calls to",

@@ -141,6 +141,15 @@
     font-weight: bold;
 }
 
+#user-form .priority_wrapper {
+    margin-bottom: 10px;
+}
+
+#user-form .priority_wrapper .jslider {
+    width: 320px;
+    padding-bottom: 10px;
+}
+
 /* Hotdesk devices */
 #user-form #hotdesk_devices {
     /*width: 400px;*/
