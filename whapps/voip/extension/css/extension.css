@@ -1,0 +1,12 @@
+span.disabled {
+    color: #808080
+}
+
+.dialog_text {
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.dialog_button {
+    width: 180px;
+}

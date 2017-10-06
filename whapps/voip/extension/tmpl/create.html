@@ -1,0 +1,88 @@
+<div>
+    <div class="row">
+        <div class="whapp-header">
+            <h1>${_t('create_extension')}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <form id="extension-form">
+            <div class="pill-content">
+                <div class="active">
+                    <h3>${_t('info')}</h3>
+                    <div class="clearfix">
+                        <label for="name_first">${_t('name_first')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <input class="span4" id="name_first" name="name_first" type="text" placeholder="${_t('name_first_placeholder')}" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="name_last">${_t('name_last')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <input class="span4" id="name_last" name="name_last" type="text" placeholder="${_t('name_last_placeholder')}" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="email">${_t('email')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <input class="span4" id="email" name="email" type="text" placeholder="${_t('email_placeholder')}" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="phone_number">${_t('phone_number')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <select id="phone_number" name="phone_number">
+                                <option value="">${_t('none')}</option>
+                                {{each(k,v) phone_numbers}}
+                                    <option value="${v}">${v}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <!-- TODO popover -->
+                                        <span id="use_phone_number_as_outbound_cid_input">
+                                            <input id="use_phone_number_as_outbound_cid" class="checkbox" name="use_phone_number_as_outbound_cid" type="checkbox" disabled="disabled"/>
+                                            <span class="disabled">${_t('use_phone_number_as_outbound_cid')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="username">${_t('username')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <input class="span4" id="username" name="username" type="text" placeholder="${_t('username_placeholder')}" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="password">${_t('password')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <input class="span4" id="password" name="password" type="text" placeholder="${_t('password_placeholder')}" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="timezone">${_t('timezone')}</label>
+                        <div class="input">
+                            <!-- TODO popover -->
+                            <select id="timezone" name="timezone"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-right">
+            <button class="btn success extension-save">${_t('save')}</button>
+        </div>
+    </div>
+</div>

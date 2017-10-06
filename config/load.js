@@ -54,6 +54,7 @@ var langUrls = [
 	'whapps/voip/conference',
 	'whapps/voip/device',
 	'whapps/voip/directory',
+	'whapps/voip/extension',
 	'whapps/voip/featurecode',
 	'whapps/voip/groups',
 	'whapps/voip/media',
