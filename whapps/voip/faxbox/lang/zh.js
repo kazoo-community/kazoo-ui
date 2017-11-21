@@ -40,6 +40,9 @@ window.translate['faxbox'] = {
 
 	are_you_sure_you_want_to_delete: "您确定要删除传真盒吗?",
 
+    media_fax_option: "启用T38",
+    media_fax_option_data_content: "在此传真机上启用T38",
+
 	save: "保存",
 	delete: "删除"
 };

@@ -41,6 +41,9 @@ window.translate['faxbox'] = {
 
 	are_you_sure_you_want_to_delete: "Weet u zeker dat u deze fax box wilt verwijderen?",
 
+    media_fax_option: "Schakel T38 in",
+    media_fax_option_data_content: "Schakel T38 in op deze faxdoos?",
+
 	save: "Opslaan",
 	delete: "Verwijderen"
 };

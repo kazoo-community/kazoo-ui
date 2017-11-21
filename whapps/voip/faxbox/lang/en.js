@@ -62,6 +62,11 @@ window.translate['faxbox'] = {
 	default_settings_name_extension: "'s Faxbox",
 	default_settings_header_extension: " Fax Printer",
 
+    media_fax_option: "Enable T38",
+    media_fax_option_data_content: "Enable T38 on this Faxbox?",
+
+
+
 	ok: "OK",
 	save: "Save",
 	delete: "Delete"
