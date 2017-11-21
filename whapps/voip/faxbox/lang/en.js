@@ -65,8 +65,6 @@ window.translate['faxbox'] = {
     media_fax_option: "Enable T38",
     media_fax_option_data_content: "Enable T38 on this Faxbox?",
 
-
-
 	ok: "OK",
 	save: "Save",
 	delete: "Delete"
