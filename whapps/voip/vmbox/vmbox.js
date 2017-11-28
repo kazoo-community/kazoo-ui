@@ -559,7 +559,7 @@ winkstart.module('voip', 'vmbox', {
             var THIS = this;
 
             $.extend(callflow_nodes, {
-                'voicemail[id=*]': {
+                'voicemail[id=*,action=compose]': {
                     name: _t('vmbox', 'voicemail'),
                     icon: 'voicemail',
                     category: _t('config', 'basic_cat'),
@@ -783,8 +783,9 @@ winkstart.module('voip', 'vmbox', {
             });
 
             $.extend(callflow_nodes, {
-                'voicemail[id=*,action=compose]': callflow_nodes["voicemail[id=*]"]
+                'voicemail[id=*]': $.extend({}, callflow_nodes["voicemail[id=*,action=compose]"])
             });
+            delete callflow_nodes['voicemail[id=*]'].category;
         }
     }
 );
