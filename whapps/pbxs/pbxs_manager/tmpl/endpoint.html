@@ -53,10 +53,10 @@
                         <label>${_t('authenticate_by')}</label>
                         <div class="input auth-type">
                             {{if auth.auth_method === 'IP'}}
-                                <label><input type="radio" name="auth.auth_method" data-type="username" value="Password" /> ${_t('authenticate_by_username')}</label>
+                                <label><input type="radio" name="auth.auth_method" data-type="username" value="password" /> ${_t('authenticate_by_username')}</label>
                                 <label><input type="radio" name="auth.auth_method" data-type="ip" value="IP" checked /> ${_t('authenticate_by_ip')}</label>
                             {{else}}
-                                <label><input type="radio" name="auth.auth_method" data-type="username" value="Password" checked /> ${_t('authenticate_by_username')}</label>
+                                <label><input type="radio" name="auth.auth_method" data-type="username" value="password" checked /> ${_t('authenticate_by_username')}</label>
                                 <label><input type="radio" name="auth.auth_method" data-type="ip" value="IP" /> ${_t('authenticate_by_ip')}</label>
                             {{/if}}
                         </div>
