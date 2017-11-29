@@ -380,9 +380,9 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
             });
 
-            // (parent)
-            //     .empty()
-            //     .append(fields_html);
+            (parent)
+                .empty()
+                .append(fields_html);
 
             if(typeof callback == 'function') {
                 callback();
@@ -1230,10 +1230,10 @@ winkstart.module('numbers', 'numbers_manager', {
 
             var hasPort = !winkstart.config.hasOwnProperty('hide_port') || winkstart.config.hide_port === false,
             	htmlString = '<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button>' +
-            				 (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
+            				 // (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
             				 '<button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>';
 
-            // $('div.action_number', numbers_manager_html).html(htmlString);
+            $('div.action_number', numbers_manager_html).html(htmlString);
 
             /* Check if the flag is in the current account OR in the master account if masquerading */
             var account_id = winkstart.apps['numbers'].account_id;
@@ -1242,16 +1242,16 @@ winkstart.module('numbers', 'numbers_manager', {
                 account_id = winkstart.apps['accounts'].masquerade[0];
             }
 
-            // winkstart.request('numbers_manager.get_account', {
-            //         account_id: account_id,
-            //         api_url: winkstart.apps['numbers'].api_url,
-            //     },
-            //     function(_data, status) {
-            //         if(_data.data && _data.data.wnm_allow_additions) {
-            //             $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
-            //         }
-            //     }
-            // );
+            winkstart.request('numbers_manager.get_account', {
+                    account_id: account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                },
+                function(_data, status) {
+                    if(_data.data && _data.data.wnm_allow_additions) {
+                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
+                    }
+                }
+            );
 
             $('#numbers_manager-grid_filter input[type=text]', numbers_manager_html).first().focus();
 
