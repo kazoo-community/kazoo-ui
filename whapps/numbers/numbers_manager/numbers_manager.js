@@ -279,8 +279,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 number_data;
 
             if(numbers_data.length > 0) {
-                //var phone_number = numbers_data[0].phone_number.match(/^\+?1?([2-9]\d{9})$/),
-                var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
+                var phone_number = numbers_data[0].phone_number.match(/^(\+.*)$/),
                     error_function = function() {
                         winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
                             _t('numbers_manager', 'would_you_like_to_retry'),
@@ -326,7 +325,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 number_data;
 
             if(numbers_data.length > 0) {
-                var phone_number = numbers_data[0].phone_number.match(/^\+(.*)$/),
+                var phone_number = numbers_data[0].phone_number.match(/^(\+.*)$/),
                     error_function = function() {
                         winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
                             _t('numbers_manager', 'would_you_like_to_retry'),
@@ -380,9 +379,9 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
             });
 
-            // (parent)
-            //     .empty()
-            //     .append(fields_html);
+            (parent)
+                .empty()
+                .append(fields_html);
 
             if(typeof callback == 'function') {
                 callback();
@@ -430,7 +429,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -466,7 +465,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.cid_inbound', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -501,7 +500,7 @@ winkstart.module('numbers', 'numbers_manager', {
             $(numbers_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -718,8 +717,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 if(phone_numbers.length > 0) {
                     var phone_number;
                     $.each(phone_numbers, function(k, v) {
-                        //phone_number = v.match(/^\+?1?([2-9]\d{9})$/);
-                        phone_number = v.match(/^\+(.*)$/);
+                        phone_number = v.match(/^(\+.*)$/);
                         if(phone_number && phone_number[1]) {
                             numbers_data.push({phone_number: v});
                         }
@@ -1230,10 +1228,10 @@ winkstart.module('numbers', 'numbers_manager', {
 
             var hasPort = !winkstart.config.hasOwnProperty('hide_port') || winkstart.config.hide_port === false,
             	htmlString = '<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button>' +
-            				 (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
+            				 // (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
             				 '<button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>';
 
-            // $('div.action_number', numbers_manager_html).html(htmlString);
+            $('div.action_number', numbers_manager_html).html(htmlString);
 
             /* Check if the flag is in the current account OR in the master account if masquerading */
             var account_id = winkstart.apps['numbers'].account_id;
@@ -1242,16 +1240,16 @@ winkstart.module('numbers', 'numbers_manager', {
                 account_id = winkstart.apps['accounts'].masquerade[0];
             }
 
-            // winkstart.request('numbers_manager.get_account', {
-            //         account_id: account_id,
-            //         api_url: winkstart.apps['numbers'].api_url,
-            //     },
-            //     function(_data, status) {
-            //         if(_data.data && _data.data.wnm_allow_additions) {
-            //             $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
-            //         }
-            //     }
-            // );
+            winkstart.request('numbers_manager.get_account', {
+                    account_id: account_id,
+                    api_url: winkstart.apps['numbers'].api_url,
+                },
+                function(_data, status) {
+                    if(_data.data && _data.data.wnm_allow_additions) {
+                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
+                    }
+                }
+            );
 
             $('#numbers_manager-grid_filter input[type=text]', numbers_manager_html).first().focus();
 
