@@ -505,14 +505,14 @@ winkstart.module('numbers', 'numbers_manager', {
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
-                        THIS.render_e911_dialog(_data.data.dash_e911 || {}, function(e911_data) {
-                            _data.data.dash_e911 = $.extend({}, _data.data.dash_e911, e911_data);
+                        THIS.render_e911_dialog(_data.data.e911 || {}, function(e911_data) {
+                            _data.data.e911 = $.extend({}, _data.data.e911, e911_data);
 
                             THIS.clean_phone_number_data(_data.data);
 
 							var updateNumber = function() {
 								THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                        !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                        !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
                                     },
                                     function(_data_update) {
                                         winkstart.alert(_t('numbers_manager', 'failed_to_update_the_e911') + _data_update.message);
@@ -1144,7 +1144,7 @@ winkstart.module('numbers', 'numbers_manager', {
                         	var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false,
                         	    outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
 
-                        	v.e911 = $.inArray('dash_e911', v.features) >= 0 ? true : false;
+                        	v.e911 = $.inArray('e911', v.features) >= 0 ? true : false;
                         	v.caller_id = { inbound: inbound, outbound: outbound };
 
 							if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
