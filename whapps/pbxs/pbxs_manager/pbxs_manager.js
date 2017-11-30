@@ -771,15 +771,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
-                        THIS.render_e911_dialog(_data.data.dash_e911 || {}, function(e911_data) {
-                            _data.data.dash_e911 = $.extend({}, _data.data.dash_e911, e911_data);
+                        THIS.render_e911_dialog(_data.data.e911 || {}, function(e911_data) {
+                            _data.data.e911 = $.extend({}, _data.data.e911, e911_data);
 
                             THIS.clean_phone_number_data(_data.data);
 
                             winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
                                 function() {
                                     THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.dash_e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                            !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
                                         },
                                         function(_data_update) {
                                             winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
@@ -1139,7 +1139,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             var tab_data = [],
                                 cnam,
-                                dash_e911,
+                                e911,
                                 failover;
 
                             if('numbers' in _data_numbers.data) {
@@ -1147,13 +1147,13 @@ winkstart.module('pbxs', 'pbxs_manager', {
                                 	if(_data_numbers.data.numbers[k]) {
                                     	cnam = $.inArray('cnam', _data_numbers.data.numbers[k].features) > -1 ? true : false;
                                     	failover = $.inArray('failover', _data_numbers.data.numbers[k].features) > -1 ? true : false;
-                                    	dash_e911 = $.inArray('dash_e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+                                    	e911 = $.inArray('e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
 
 										if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
                                         	tab_data.push(['lol', k, failover, cnam, _data_numbers.data.numbers[k].state]);
                                         }
                                         else {
-                                        	tab_data.push(['lol', k, failover, cnam, dash_e911, _data_numbers.data.numbers[k].state]);
+                                        	tab_data.push(['lol', k, failover, cnam, e911, _data_numbers.data.numbers[k].state]);
                                         }
                                 	}
                             	});
