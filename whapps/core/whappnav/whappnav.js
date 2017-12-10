@@ -13,6 +13,7 @@ winkstart.module('core', 'whappnav', {
 
         subscribe: {
             'whappnav.add': 'add',
+            'whappnav.activate': 'activate',
             'whappnav.subnav.add': 'sub_add',
             'whappnav.subnav.show': 'show_menu',
             'whappnav.subnav.hide': 'hide_menu',
@@ -109,6 +110,19 @@ winkstart.module('core', 'whappnav', {
                     'min-width': '+= 140'
                 });
             }
+        },
+
+        /**
+         * Toggle the activated display state for a whapp to on
+         *
+         * @param {string} whapp_name The name of the whapp to activate
+         */
+        activate: function(whapp_name) {
+            var THIS = this,
+                whapp_list_html = $(THIS.config.targets.nav_bar);
+
+            $('.whapps .whapp > a').removeClass('activate');
+            $('.whapps .whapp[data-whapp="' + whapp_name + '"] > a').addClass('activate');
         },
 
         disable_whapp: function(whapp_name) {

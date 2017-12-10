@@ -6,6 +6,7 @@ window.translate['numbers_manager'] = {
 	caller_id: "Caller-ID",
 	E911: "E911",
 	state: "State",
+	used_by: "Used By",
 	numbers_popup_css: "css/numbers_popup.css",
 	find_area_code: "Find area code",
 	area_code_placeholder: "Area Code",
