@@ -534,6 +534,21 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
+            // Shortcut to callflow used by a number
+            $(numbers_manager_html).delegate('.used_by_callflow', 'click', function() {
+                var THIS = this;
+
+                // Load the callflow module, then edit the callflow that was created
+                winkstart.publish('whappnav.activate', 'voip');
+                winkstart.publish('callflow.activate', {
+                    callback: function() {
+                        winkstart.publish('callflow.edit-callflow', {
+                            id: $(THIS).attr('data-id')
+                        });
+                    }
+                });
+            });
+
             $(numbers_manager_html).delegate('#delete_number', 'click', function() {
                 var data_phone_number,
                     phone_number,
@@ -1127,37 +1142,158 @@ winkstart.module('numbers', 'numbers_manager', {
             THIS.render_numbers_manager();
         },
 
+        /**
+         * List numbers in the account
+         *
+         * @param {function} callback Function to execute once numbers have been listed
+         */
         list_numbers: function(callback) {
-            winkstart.request('numbers_manager.list', {
-                    account_id: winkstart.apps['numbers'].account_id,
-                    api_url: winkstart.apps['numbers'].api_url
+            this.load_numbers_data(function(err, results) {
+                winkstart.table.numbers_manager.fnClearTable();
+
+                var tab_data = [];
+
+                if('phone_numbers' in results) {
+                    $.each(results.phone_numbers.data.numbers, function(k, v) {
+                        var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false,
+                            outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
+
+                        v.e911 = $.inArray('e911', v.features) >= 0 ? true : false;
+                        v.caller_id = { inbound: inbound, outbound: outbound };
+
+                        // Add information about where the number is used, if applicable
+                        var used_by = {
+                            type: v.used_by
+                        };
+                        if(used_by.type == 'callflow' && winkstart.apps['voip']) {
+                            used_by.data = results.callflows[k];
+                        }
+                        else if(used_by.type == 'trunkstore' && winkstart.apps['pbxs']) {
+                            used_by.data = results.pbxs[k];
+                        }
+
+                        if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
+                            tab_data.push(['', k, v.caller_id, v.state, used_by]);
+                        }
+                        else {
+                            tab_data.push(['', k, v.caller_id, v.e911, v.state, used_by]);
+                        }
+                    });
+                }
+
+                winkstart.table.numbers_manager.fnAddData(tab_data);
+
+                if(typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+
+        /**
+         * Load extra data for populating the Used By column
+         *
+         * @param {function} callback Function to call with error/results from data load
+         */
+        load_numbers_data: function(callback) {
+            winkstart.parallel({
+                    callflows: function(callback) {
+                        if(!winkstart.apps['voip']) {
+                            callback(null, null);
+                            return;
+                        }
+                        winkstart.request('callflow.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                var callflowMap = {};
+                                $.each(_data.data, function(index, callflow) {
+                                    $.each(callflow.numbers, function(index2, number) {
+                                        callflowMap[number] = callflow;
+                                    });
+                                });
+                                callback(null, callflowMap);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    },
+                    pbxs: function(callback) {
+                        if(!winkstart.apps['pbxs']) {
+                            callback(null, null);
+                            return;
+                        }
+                        winkstart.request('old_trunkstore.list', {
+                                account_id: winkstart.apps['pbxs'].account_id,
+                                api_url: winkstart.apps['pbxs'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    },
+                    phone_numbers: function(callback) {
+                        winkstart.request('numbers_manager.list', {
+                                account_id: winkstart.apps['numbers'].account_id,
+                                api_url: winkstart.apps['numbers'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    }
                 },
-                function(_data, status) {
-                    winkstart.table.numbers_manager.fnClearTable();
-
-                    var tab_data = [];
-
-                    if('numbers' in _data.data) {
-                    	$.each(_data.data.numbers, function(k, v) {
-                        	var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false,
-                        	    outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
-
-                        	v.e911 = $.inArray('e911', v.features) >= 0 ? true : false;
-                        	v.caller_id = { inbound: inbound, outbound: outbound };
-
-							if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
-                        		tab_data.push(['', k, v.caller_id,  v.state]);
-							}
-							else {
-                        		tab_data.push(['', k, v.caller_id, v.e911, v.state]);
-							}
-                    	});
+                function(err, results) {
+                    if(err) {
+                        callback(err, null);
                     }
 
-                    winkstart.table.numbers_manager.fnAddData(tab_data);
+                    // Load all trunks
+                    if(results.pbxs) {
+                        var pbx_reqs = $.map(results.pbxs.data, function(pbx) {
+                            return function(callback) {
+                                winkstart.request('old_trunkstore.get', {
+                                        account_id: winkstart.apps['pbxs'].account_id,
+                                        api_url: winkstart.apps['pbxs'].api_url,
+                                        connectivity_id: pbx
+                                    },
+                                    function(_data, status) {
+                                        callback(null, _data);
+                                    },
+                                    function(_data, status) {
+                                        callback(status, null);
+                                    }
+                                );
+                            };
+                        });
 
-                    if(typeof callback === 'function') {
-                        callback();
+                        // Update PBXs data with full data of each
+                        winkstart.parallel(
+                            pbx_reqs,
+                            function(err, pbxResults) {
+                                var pbxMap = {};
+                                // Wow such nesting
+                                $.each(pbxResults, function(index, pbx) {
+                                    $.each(pbx.data.servers, function(index, server) {
+                                        $.each(server.DIDs, function(did) {
+                                            pbxMap[did] = pbx;
+                                        });
+                                    });
+                                });
+                                results.pbxs = pbxMap;
+                                callback(null, results);
+                            }
+                        );
+                    }
+                    else {
+                        callback(null, results);
                     }
                 }
             );
@@ -1214,6 +1350,27 @@ winkstart.module('numbers', 'numbers_manager', {
                     return state.charAt(0).toUpperCase() + state.substr(1);
                 }
             });
+
+            // If the user cannot see trunks or callflow, they shouldn't see the Used By column
+            if(winkstart.apps['voip'] || winkstart.apps['pbxs']) {
+                columns.push({
+                    'sTitle': _t('numbers_manager', 'used_by'),
+                    'fnRender': function(obj) {
+                        var data = obj.aData[obj.iDataColumn];
+                        if(data.type == 'callflow' && data.data) {
+                            var callflow_name = data.data.name || data.data.numbers.join(', ');
+                            return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + callflow_name + '</a>';
+                        }
+                        else if(data.type == 'trunkstore' && data.data) {
+                            // TODO handle trunkstore
+                            return '';
+                        }
+                        else {
+                            return '';
+                        }
+                    }
+                });
+            }
 
             winkstart.table.create('numbers_manager', $('#numbers_manager-grid', numbers_manager_html), columns, {}, {
                 sDom: '<"action_number">frtlip',
