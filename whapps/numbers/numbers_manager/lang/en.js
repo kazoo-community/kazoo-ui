@@ -120,5 +120,7 @@ window.translate['numbers_manager'] = {
 	error_mime_types: "The following files are not in pdf format: ",
 	error_size: "The following files are too big: ",
 	carrier_fault: "This number is currently used!",
-	state_transition: "Invalid state transition from available to released"
+	state_transition: "Invalid state transition from available to released",
+	callflow: 'Callflow',
+	pbx: 'Trunk'
 };
