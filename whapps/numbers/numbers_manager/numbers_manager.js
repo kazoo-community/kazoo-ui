@@ -541,6 +541,21 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
             });
 
+            // Shortcut to trunk used by a number
+            $(numbers_manager_html).delegate('.used_by_trunkstore', 'click', function() {
+                var THIS = this;
+
+                // Load the callflow module, then edit the callflow that was created
+                winkstart.publish('whappnav.activate', 'pbxs');
+                winkstart.publish('pbxs_manager.activate', {
+                    callback: function() {
+                        winkstart.publish('pbxs_manager.edit', {
+                            id: $(THIS).attr('data-id')
+                        });
+                    }
+                });
+            });
+
             $(numbers_manager_html).delegate('#delete_number', 'click', function() {
                 var data_phone_number,
                     phone_number,
@@ -1278,7 +1293,8 @@ winkstart.module('numbers', 'numbers_manager', {
                                 $.each(pbxResults, function(index, pbx) {
                                     $.each(pbx.data.servers, function(index, server) {
                                         $.each(server.DIDs, function(did) {
-                                            pbxMap[did] = pbx;
+                                            server.id = index;
+                                            pbxMap[did] = server;
                                         });
                                     });
                                 });
@@ -1363,8 +1379,7 @@ winkstart.module('numbers', 'numbers_manager', {
                         }
                         else if(data.type == 'trunkstore') {
                             if(data.data) {
-                                // TODO handle trunkstore
-                                return '';
+                                return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + data.data.server_name + '</a>';
                             }
                             else if(data.minimal_data) {
                                 return _t('numbers_manager', 'pbx')
