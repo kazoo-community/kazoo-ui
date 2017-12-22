@@ -1043,7 +1043,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             });
         },
 
-        render_list: function(parent) {
+        render_list: function(parent, callback) {
             var THIS = this,
                 parent = parent || $('#ws-content');
 
@@ -1089,18 +1089,26 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                     $('#' + k, $('#pbxs_manager-listpanel', parent)).prepend('<span><img class="img_style" src="whapps/pbxs/pbxs_manager/css/images/endpoints/'+ img_link +'.png" height="44" width=62"/></span>');
                 });
+
+                if(typeof callback == 'function') {
+                    callback();
+                }
             });
         },
 
-        activate: function(parent) {
+        activate: function(args) {
             var THIS = this,
+                args = args || {},
                 pbxs_manager_html = THIS.templates.pbxs_manager.tmpl();
 
-            (parent || $('#ws-content'))
-                .empty()
-                .append(pbxs_manager_html);
+            $('#ws-content').empty()
+                            .append(pbxs_manager_html);
 
-            THIS.render_list(pbxs_manager_html);
+            THIS.render_list(pbxs_manager_html, function() {
+                if(typeof args.callback == 'function') {
+                    args.callback();
+                }
+            });
         },
 
         list_numbers_by_pbx: function(id, callback) {
