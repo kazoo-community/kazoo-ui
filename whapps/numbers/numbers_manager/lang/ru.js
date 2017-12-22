@@ -112,5 +112,7 @@ window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbe
 	buy_numbers: "Купить номера",
 	edit_location_for: "Редактировать местоположение для ",
 	edit_911_location: "Редактировать местоположение для экстренных служб",
-	add_number_title: "Добавить номер"
+	add_number_title: "Добавить номер",
+	callflow: "Сценарий",
+	trunk: "Транк"
 });
