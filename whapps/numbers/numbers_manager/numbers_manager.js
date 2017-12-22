@@ -1362,34 +1362,31 @@ winkstart.module('numbers', 'numbers_manager', {
                 }
             });
 
-            // If the user cannot see trunks or callflow, they shouldn't see the Used By column
-            if(winkstart.apps['voip'] || winkstart.apps['pbxs']) {
-                columns.push({
-                    'sTitle': _t('numbers_manager', 'used_by'),
-                    'fnRender': function(obj) {
-                        var data = obj.aData[obj.iDataColumn];
-                        if(data.type == 'callflow') {
-                            if(data.data) {
-                                var callflow_name = data.data.name || data.data.numbers.join(', ');
-                                return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + callflow_name + '</a>';
-                            }
-                            else if(data.minimal_data) {
-                                return _t('numbers_manager', 'callflow');
-                            }
+            columns.push({
+                'sTitle': _t('numbers_manager', 'used_by'),
+                'fnRender': function(obj) {
+                    var data = obj.aData[obj.iDataColumn];
+                    if(data.type == 'callflow') {
+                        if(data.data) {
+                            var callflow_name = data.data.name || data.data.numbers.join(', ');
+                            return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + callflow_name + '</a>';
                         }
-                        else if(data.type == 'trunkstore') {
-                            if(data.data) {
-                                return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + data.data.server_name + '</a>';
-                            }
-                            else if(data.minimal_data) {
-                                return _t('numbers_manager', 'pbx')
-                            }
+                        else if(data.minimal_data) {
+                            return _t('numbers_manager', 'callflow');
                         }
-
-                        return '';
                     }
-                });
-            }
+                    else if(data.type == 'trunkstore') {
+                        if(data.data) {
+                            return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + data.data.server_name + '</a>';
+                        }
+                        else if(data.minimal_data) {
+                            return _t('numbers_manager', 'pbx')
+                        }
+                    }
+
+                    return '';
+                }
+            });
 
             winkstart.table.create('numbers_manager', $('#numbers_manager-grid', numbers_manager_html), columns, {}, {
                 sDom: '<"action_number">frtlip',
