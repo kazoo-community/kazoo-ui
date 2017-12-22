@@ -1150,11 +1150,21 @@ winkstart.module('numbers', 'numbers_manager', {
                         var used_by = {
                             type: v.used_by
                         };
-                        if(used_by.type == 'callflow' && winkstart.apps['voip']) {
-                            used_by.data = results.callflows[k];
+                        if(used_by.type == 'callflow') {
+                            if(winkstart.apps['voip']) {
+                                used_by.data = results.callflows[k];
+                            }
+                            else {
+                                used_by.minimal_data = true;
+                            }
                         }
-                        else if(used_by.type == 'trunkstore' && winkstart.apps['pbxs']) {
-                            used_by.data = results.pbxs[k];
+                        else if(used_by.type == 'trunkstore') {
+                            if(winkstart.apps['pbxs']) {
+                                used_by.data = results.pbxs[k];
+                            }
+                            else {
+                                used_by.minimal_data = true;
+                            }
                         }
 
                         if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
@@ -1342,17 +1352,26 @@ winkstart.module('numbers', 'numbers_manager', {
                     'sTitle': _t('numbers_manager', 'used_by'),
                     'fnRender': function(obj) {
                         var data = obj.aData[obj.iDataColumn];
-                        if(data.type == 'callflow' && data.data) {
-                            var callflow_name = data.data.name || data.data.numbers.join(', ');
-                            return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + callflow_name + '</a>';
+                        if(data.type == 'callflow') {
+                            if(data.data) {
+                                var callflow_name = data.data.name || data.data.numbers.join(', ');
+                                return '<a class="used_by_' + data.type + ' inactive" data-id="' + data.data.id + '">' + callflow_name + '</a>';
+                            }
+                            else if(data.minimal_data) {
+                                return _t('numbers_manager', 'callflow');
+                            }
                         }
-                        else if(data.type == 'trunkstore' && data.data) {
-                            // TODO handle trunkstore
-                            return '';
+                        else if(data.type == 'trunkstore') {
+                            if(data.data) {
+                                // TODO handle trunkstore
+                                return '';
+                            }
+                            else if(data.minimal_data) {
+                                return _t('numbers_manager', 'pbx')
+                            }
                         }
-                        else {
-                            return '';
-                        }
+
+                        return '';
                     }
                 });
             }
