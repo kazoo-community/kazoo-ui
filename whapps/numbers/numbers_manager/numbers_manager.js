@@ -451,11 +451,7 @@ winkstart.module('numbers', 'numbers_manager', {
 								updateNumber();
 							}
 							else {
-                            	winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                                	function() {
-                                		updateNumber();
-                                	}
-                            	);
+								THIS.display_credit_card_confirmation(updateNumber);
 							}
                         });
                     });
@@ -523,11 +519,7 @@ winkstart.module('numbers', 'numbers_manager', {
 								updateNumber();
 							}
 							else {
-								winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                                	function() {
-                                		updateNumber();
-                                	}
-                            	);
+								THIS.display_credit_card_confirmation(updateNumber);
 							}
                         });
                     });
@@ -608,10 +600,7 @@ winkstart.module('numbers', 'numbers_manager', {
 						portNumbers();
 					}
 					else {
-						winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'), function() {
-                            	portNumbers();
-                        	}
-                    	);
+						THIS.display_credit_card_confirmation(portNumbers);
 					}
                 });
             });
@@ -824,11 +813,7 @@ winkstart.module('numbers', 'numbers_manager', {
 					addNumbers();
 				}
 				else {
-					winkstart.confirm(_t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
-                        function() {
-                            addNumbers();
-                        }
-                    );
+					THIS.display_credit_card_confirmation(addNumbers);
 				}
 			});
 
@@ -1257,6 +1242,24 @@ winkstart.module('numbers', 'numbers_manager', {
                 $('#numbers_manager-grid_filter input[type=text]', numbers_manager_html).val('');
                 winkstart.table.numbers_manager.fnFilter('');
             });
+        },
+
+        /**
+         * Display credit card confirmation if enabled
+         *
+         * @param {function} callback Execute after confirmation or immediately
+         * if confirmation is disabled
+         */
+        display_credit_card_confirmation: function(callback) {
+            if(winkstart.config.hide_credit_card_confirmation) {
+                callback();
+            }
+            else {
+                winkstart.confirm(
+                    _t('numbers_manager', 'your_onfile_credit_card_will_immediately_be_charged'),
+                    callback
+                );
+            }
         }
     }
 );
