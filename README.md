@@ -1,4 +1,12 @@
-# kazoo-ui
+# THIS PROJECT IS DEPRECATED
+
+Kazoo-UI is not maintained by 2600Hz anymore, we encourage you to use [Monster-UI](https://github.com/2600hz/monster-ui) instead.
+
+If you want to keep adding features to Kazoo-UI, feel free to fork it and we will be more than happy to link your project here as an alternative solution
+
+---
+
+# Kazoo-UI [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Note that [Kazoo](https://github.com/2600hz/kazoo)'s default listening port is `8000`.
 [Kazoo-UI](https://github.com/2600hz/kazoo-ui) is a static website project that uses Kazoo's API.
