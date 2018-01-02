@@ -6,6 +6,7 @@ window.translate['numbers_manager'] = {
 	caller_id: "Caller-ID",
 	E911: "E911",
 	state: "State",
+	used_by: "Used By",
 	numbers_popup_css: "css/numbers_popup.css",
 	find_area_code: "Find area code",
 	area_code_placeholder: "Area Code",
@@ -119,5 +120,7 @@ window.translate['numbers_manager'] = {
 	error_mime_types: "The following files are not in pdf format: ",
 	error_size: "The following files are too big: ",
 	carrier_fault: "This number is currently used!",
-	state_transition: "Invalid state transition from available to released"
+	state_transition: "Invalid state transition from available to released",
+	callflow: 'Callflow',
+	pbx: 'Trunk'
 };
