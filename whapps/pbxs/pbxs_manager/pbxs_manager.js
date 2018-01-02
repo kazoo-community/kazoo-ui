@@ -720,17 +720,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_failover')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_failover')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -748,17 +746,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_caller_id')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_caller_id')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -776,17 +772,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -1319,6 +1313,24 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 $('#pbxs_manager-grid_filter input[type=text]', pbxs_manager_html).val('');
                 winkstart.table.pbxs_manager.fnFilter('');
             });
+        },
+
+        /**
+         * Display credit card confirmation if enabled
+         *
+         * @param {function} callback Execute after confirmation or immediately
+         * if confirmation is disabled
+         */
+        display_credit_card_confirmation: function(callback) {
+            if(winkstart.config.hide_credit_card_confirmation) {
+                callback();
+            }
+            else {
+                winkstart.confirm(
+                    _t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
+                    callback
+                );
+            }
         }
     }
 );
