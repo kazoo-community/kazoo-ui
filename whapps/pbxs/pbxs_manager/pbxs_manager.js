@@ -684,7 +684,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.failover', 'click', function() {
                 var $failover_cell = $(this),
                     data_phone_number = $failover_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -717,7 +717,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -743,7 +743,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -778,10 +778,10 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             $selected_checkboxes.each(function() {
                                 data_phone_number = $(this).parents('tr').attr('id'),
-                                phone_number = data_phone_number.match(/^\+(.*)$/);
+                                phone_number = data_phone_number.match(/^(\+.*)$/);
 
                                 if(phone_number[1]) {
-                                    array_DIDs.push('+' + phone_number[1]);
+                                    array_DIDs.push(phone_number[1]);
                                 }
                             });
 
@@ -962,8 +962,8 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 if(failover_form_data.raw_input.match(/^sip:/)) {
                     failover_form_data.sip = failover_form_data.raw_input;
                 }
-                else if(result = failover_form_data.raw_input.replace(/-|\(|\)|\s/g,'').match(/^\+(.*)$/)) {
-                    failover_form_data.e164 = '+' + result[1];
+                else if(result = failover_form_data.raw_input.replace(/-|\(|\)|\s/g,'').match(/^(\+.*)$/)) {
+                    failover_form_data.e164 = result[1];
                 }
                 else {
                     failover_form_data.e164 = '';
