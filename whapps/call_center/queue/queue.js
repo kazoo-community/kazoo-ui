@@ -283,6 +283,7 @@ winkstart.module('call_center', 'queue', {
                     api_url: winkstart.apps['call_center'].api_url
                 },
                 function(_data_media, status) {
+                    _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
                     _data_media.data.unshift(
                         {
                             id: '',
@@ -446,6 +447,19 @@ winkstart.module('call_center', 'queue', {
 
                 ev.preventDefault();
 
+                function sort_moh_select_list(){
+                    var select = $('#moh', queue_html);
+                    var selected = select.val(); 
+                    var opts_list = select.find('option');
+                    opts_list.sort(function(a, b) {
+                        if ($(a).text() == _t('queue', 'default_music') ||  $(a).text() == _t('queue', 'silence')) return -1;
+                        if ($(b).text() == _t('queue', 'default_music') ||  $(b).text() == _t('queue', 'silence')) return 1;
+                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1; 
+                    });
+                    select.html('').append(opts_list);
+                    select.val(selected); 
+                }
+
                 winkstart.publish('media.popup_edit', _data, function(_data) {
                     /* Create */
                     if(!_id) {
@@ -453,11 +467,13 @@ winkstart.module('call_center', 'queue', {
                         $('#moh', queue_html).val(_data.data.id);
 
                         $('#edit_link_media', queue_html).show();
+                        sort_moh_select_list();
                     }
                     else {
                         /* Update */
                         if('id' in _data.data) {
                             $('#moh #'+_data.data.id, queue_html).text(_data.data.name);
+                            sort_moh_select_list();
                         }
                         /* Delete */
                         else {
