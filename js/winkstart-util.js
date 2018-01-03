@@ -715,4 +715,56 @@
         });
 	};
 
+    /**
+     * Configure and schedule automatic auth token refreshes.
+     */
+    winkstart.autoRefreshAuth = function() {
+        /**
+         * Schedule an auth token refresh slightly before the current token's
+         * expiry.
+         */
+        function scheduleRefresh() {
+            var now = (new Date()).getTime() / 1000,
+                authData = jwt_decode(winkstart.apps['auth'].auth_token),
+                // Refresh auth token slightly before its expiry
+                refreshIn = Math.floor((authData.exp - now) * 0.9);
+
+            if(refreshIn > 0) {
+                winkstart.log('Next auth refresh in ' + refreshIn + ' seconds');
+
+                setTimeout(refreshAuth, refreshIn * 1000);
+            }
+        }
+
+        /**
+         * Perform a refresh_token auth action. Update auth_token in apps and
+         * schedule the next refresh.
+         */
+        function refreshAuth() {
+            winkstart.request('auth.action', {
+                    api_url: winkstart.apps['auth'].api_url,
+                    action: 'refresh_token',
+                    data: {}
+                },
+                function(data, status) {
+                    $.each(winkstart.apps, function(app_name, app_data) {
+                        // Only apps with non-shared auth should use the refreshed token
+                        if(winkstart.apps['auth'].api_url == winkstart.apps[app_name].api_url) {
+                            winkstart.apps[app_name].auth_token = data.auth_token;
+                        }
+                    });
+
+                    $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
+
+                    scheduleRefresh();
+                },
+                function(data, status) {
+                    scheduleRefresh();
+                }
+            );
+        }
+
+        scheduleRefresh();
+    };
+
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
