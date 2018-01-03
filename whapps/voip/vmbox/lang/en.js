@@ -38,6 +38,8 @@ window.translate['vmbox'] = {
 	skip_greeting_data_content: "Check to skip greetings by default",
 	skip_instructions: "Skip Instructions",
 	skip_instructions_data_content: "Check to skip instructions by default",
+	skip_envelope: "Skip Envelope",
+	skip_envelope_data_content: "Check to skip the voicemail envelope by default",
 	delete_after_notification: "Delete After Notification",
 	delete_after_notification_data_content: "Delete the voicemail after the notification has been sent",
 	not_configurable: "Configurable via menu?",
