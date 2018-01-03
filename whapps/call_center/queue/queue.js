@@ -283,7 +283,7 @@ winkstart.module('call_center', 'queue', {
                     api_url: winkstart.apps['call_center'].api_url
                 },
                 function(_data_media, status) {
-                    _data_media.data.sort(function(a, b){return a.name > b.name ? 1 : -1});
+                    _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
                     _data_media.data.unshift(
                         {
                             id: '',
@@ -454,7 +454,7 @@ winkstart.module('call_center', 'queue', {
                     opts_list.sort(function(a, b) {
                         if ($(a).text() == _t('queue', 'default_music') ||  $(a).text() == _t('queue', 'silence')) return -1;
                         if ($(b).text() == _t('queue', 'default_music') ||  $(b).text() == _t('queue', 'silence')) return 1;
-                        return $(a).text() > $(b).text() ? 1 : -1; 
+                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1; 
                     });
                     select.html('').append(opts_list);
                     select.val(selected); 
