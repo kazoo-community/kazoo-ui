@@ -49,6 +49,11 @@ winkstart.module('auth', 'auth',
         ],
 
         resources: {
+            'auth.action': {
+                url: '{api_url}/auth',
+                contentType: 'application/json',
+                verb: 'PUT'
+            },
             'auth.user_auth': {
                 url: '{api_url}/user_auth',
                 contentType: 'application/json',
@@ -659,6 +664,7 @@ winkstart.module('auth', 'auth',
                             }
 
                             winkstart.autoLogout();
+                            winkstart.autoRefreshAuth();
                         },
                         function(data, status) {
                             winkstart.alert('error', _t('auth', 'an_error_occurred_while_loading'),
