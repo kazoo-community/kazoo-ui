@@ -704,7 +704,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.failover', 'click', function() {
                 var $failover_cell = $(this),
                     data_phone_number = $failover_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -720,17 +720,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_failover')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.failover)) ? $failover_cell.removeClass('inactive').addClass('active') : $failover_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_failover')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -739,7 +737,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -748,17 +746,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_caller_id')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.cnam)) ? $cnam_cell.removeClass('inactive').addClass('active') : $cnam_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_caller_id')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -767,7 +763,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             $(pbxs_manager_html).delegate('.e911', 'click', function() {
                 var $e911_cell = $(this),
                     data_phone_number = $e911_cell.parents('tr').first().attr('id'),
-                    phone_number = data_phone_number.match(/^\+(.*)$/);
+                    phone_number = data_phone_number.match(/^(\+.*)$/);
 
                 if(phone_number[1]) {
                     THIS.get_number(phone_number[1], function(_data) {
@@ -776,17 +772,15 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             THIS.clean_phone_number_data(_data.data);
 
-                            winkstart.confirm(_t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
-                                function() {
-                                    THIS.update_number(phone_number[1], _data.data, function(_data_update) {
-                                            !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
-                                        },
-                                        function(_data_update) {
-                                            winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
-                                        }
-                                    );
-                                }
-                            );
+                            THIS.display_credit_card_confirmation(function() {
+                                THIS.update_number(phone_number[1], _data.data, function(_data_update) {
+                                        !($.isEmptyObject(_data.data.e911)) ? $e911_cell.removeClass('inactive').addClass('active') : $e911_cell.removeClass('active').addClass('inactive');
+                                    },
+                                    function(_data_update) {
+                                        winkstart.alert(_t('pbxs_manager', 'failed_to_update_the_e911')+_data_update.message);
+                                    }
+                                );
+                            });
                         });
                     });
                 }
@@ -804,10 +798,10 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                             $selected_checkboxes.each(function() {
                                 data_phone_number = $(this).parents('tr').attr('id'),
-                                phone_number = data_phone_number.match(/^\+(.*)$/);
+                                phone_number = data_phone_number.match(/^(\+.*)$/);
 
                                 if(phone_number[1]) {
-                                    array_DIDs.push('+' + phone_number[1]);
+                                    array_DIDs.push(phone_number[1]);
                                 }
                             });
 
@@ -988,8 +982,8 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 if(failover_form_data.raw_input.match(/^sip:/)) {
                     failover_form_data.sip = failover_form_data.raw_input;
                 }
-                else if(result = failover_form_data.raw_input.replace(/-|\(|\)|\s/g,'').match(/^\+(.*)$/)) {
-                    failover_form_data.e164 = '+' + result[1];
+                else if(result = failover_form_data.raw_input.replace(/-|\(|\)|\s/g,'').match(/^(\+.*)$/)) {
+                    failover_form_data.e164 = result[1];
                 }
                 else {
                     failover_form_data.e164 = '';
@@ -1069,7 +1063,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
             });
         },
 
-        render_list: function(parent) {
+        render_list: function(parent, callback) {
             var THIS = this,
                 parent = parent || $('#ws-content');
 
@@ -1115,18 +1109,26 @@ winkstart.module('pbxs', 'pbxs_manager', {
 
                     $('#' + k, $('#pbxs_manager-listpanel', parent)).prepend('<span><img class="img_style" src="whapps/pbxs/pbxs_manager/css/images/endpoints/'+ img_link +'.png" height="44" width=62"/></span>');
                 });
+
+                if(typeof callback == 'function') {
+                    callback();
+                }
             });
         },
 
-        activate: function(parent) {
+        activate: function(args) {
             var THIS = this,
+                args = args || {},
                 pbxs_manager_html = THIS.templates.pbxs_manager.tmpl();
 
-            (parent || $('#ws-content'))
-                .empty()
-                .append(pbxs_manager_html);
+            $('#ws-content').empty()
+                            .append(pbxs_manager_html);
 
-            THIS.render_list(pbxs_manager_html);
+            THIS.render_list(pbxs_manager_html, function() {
+                if(typeof args.callback == 'function') {
+                    args.callback();
+                }
+            });
         },
 
         list_numbers_by_pbx: function(id, callback) {
@@ -1319,6 +1321,24 @@ winkstart.module('pbxs', 'pbxs_manager', {
                 $('#pbxs_manager-grid_filter input[type=text]', pbxs_manager_html).val('');
                 winkstart.table.pbxs_manager.fnFilter('');
             });
+        },
+
+        /**
+         * Display credit card confirmation if enabled
+         *
+         * @param {function} callback Execute after confirmation or immediately
+         * if confirmation is disabled
+         */
+        display_credit_card_confirmation: function(callback) {
+            if(winkstart.config.hide_credit_card_confirmation) {
+                callback();
+            }
+            else {
+                winkstart.confirm(
+                    _t('pbxs_manager', 'your_on_file_credit_card_will_immediately'),
+                    callback
+                );
+            }
         }
     }
 );

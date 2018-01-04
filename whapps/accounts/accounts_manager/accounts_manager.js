@@ -818,6 +818,9 @@ winkstart.module('accounts', 'accounts_manager', {
 			}
 			else {
 				data.deregister.enabled = false;
+				if(data.deregister.from == '') {
+					delete data.deregister.from;
+				}
 			}
 
 			delete data.extra;

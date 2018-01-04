@@ -6,6 +6,7 @@ window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbe
 	caller_id: "Caller-ID",
 	E911: "Экстренные службы",
 	state: "Штат",
+	used_by: "Используется в",
 	numbers_popup_css: "css/numbers_popup.css",
 	find_area_code: "Найти по коду города",
 	area_code_placeholder: "Код города",
@@ -111,5 +112,7 @@ window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbe
 	buy_numbers: "Купить номера",
 	edit_location_for: "Редактировать местоположение для ",
 	edit_911_location: "Редактировать местоположение для экстренных служб",
-	add_number_title: "Добавить номер"
+	add_number_title: "Добавить номер",
+	callflow: "Сценарий",
+	trunk: "Транк"
 });
