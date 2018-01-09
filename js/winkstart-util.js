@@ -711,25 +711,32 @@
      */
     winkstart.autoRefreshAuth = function() {
         /**
-         * Schedule an auth token refresh slightly before the current token's
-         * expiry.
+         * Check time between token expiry and current time. If < threshold,
+         * perform a refresh. Schedule another check for 60s later.
          */
-        function scheduleRefresh() {
+        function checkRefresh() {
+            /**
+             * If auth expiry is in less than $threshold seconds, refresh auth.
+             */
+            var threshold = 600;
+
             var now = (new Date()).getTime() / 1000,
                 authData = jwt_decode(winkstart.apps['auth'].auth_token),
                 // Refresh auth token slightly before its expiry
-                refreshIn = Math.floor((authData.exp - now) * 0.9);
+                diff = Math.floor(authData.exp - now);
 
-            if(refreshIn > 0) {
-                winkstart.log('Next auth refresh in ' + refreshIn + ' seconds');
-
-                setTimeout(refreshAuth, refreshIn * 1000);
+            if(diff < threshold) {
+                refreshAuth();
+            }
+            else {
+                console.log('Next auth refresh in ~' + (diff - threshold) + ' seconds');
+                setTimeout(checkRefresh, 60000);
             }
         }
 
         /**
          * Perform a refresh_token auth action. Update auth_token in apps and
-         * schedule the next refresh.
+         * schedule the next check.
          */
         function refreshAuth() {
             winkstart.request('auth.action', {
@@ -747,15 +754,15 @@
 
                     $.cookie('c_winkstart_auth', JSON.stringify(winkstart.apps['auth']));
 
-                    scheduleRefresh();
+                    setTimeout(checkRefresh, 60000);
                 },
                 function(data, status) {
-                    scheduleRefresh();
+                    setTimeout(checkRefresh, 60000);
                 }
             );
         }
 
-        scheduleRefresh();
+        checkRefresh();
     };
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, jQuery);
