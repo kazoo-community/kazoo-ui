@@ -12,6 +12,9 @@ fpm -s dir \
     -a $ARCH \
     --prefix /var/www/html/kazoo-ui \
     \
+    --exclude ".buildkite" \
+    --exclude "scripts" \
+    \
     --config-files /var/www/html/kazoo-ui/config \
     \
     $@ .
