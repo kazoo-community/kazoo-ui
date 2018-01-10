@@ -104,8 +104,8 @@ window.translate['queue'] = {
 	seconds: " seconds",
 	please_enter_a_valid_number_of_seconds: "Please enter a valid number of seconds. It needs to be greater than 0.",
 	position_announcements_enabled: "Enable periodic position announcements to caller.",
-	holdtime_announcements_enabled: "Enable periodic average hold time announcements to caller.",
-	announcements_timer: "Announce Time (s)",
-	announcements_timer_data_content: "Time between position and hold time announcements.",
+	wait_time_announcements_enabled: "Enable periodic average wait time announcements to caller.",
+	announcements_interval: "Announce Time (s)",
+	announcements_interval_data_content: "Time between position and wait time announcements.",
 	route_var_ccv: "Route Variable"
 };
