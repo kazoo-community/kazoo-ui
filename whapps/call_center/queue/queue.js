@@ -265,9 +265,11 @@ winkstart.module('call_center', 'queue', {
                         moh: {},
                         notifications: {},
                         max_queue_size: '0',
-                        position_announcements_enabled: false,
-                        holdtime_announcements_enabled: false,
-                        announcements_timer: '30'
+                        announcements: {
+                            position_announcements_enabled: false,
+                            wait_time_announcements_enabled: false,
+                            interval: 30
+                        }
                     }, data_defaults || {}),
                     field_data: {
                         /*sort_by: {
@@ -449,15 +451,15 @@ winkstart.module('call_center', 'queue', {
 
                 function sort_moh_select_list(){
                     var select = $('#moh', queue_html);
-                    var selected = select.val(); 
+                    var selected = select.val();
                     var opts_list = select.find('option');
                     opts_list.sort(function(a, b) {
                         if ($(a).text() == _t('queue', 'default_music') ||  $(a).text() == _t('queue', 'silence')) return -1;
                         if ($(b).text() == _t('queue', 'default_music') ||  $(b).text() == _t('queue', 'silence')) return 1;
-                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1; 
+                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1;
                     });
                     select.html('').append(opts_list);
-                    select.val(selected); 
+                    select.val(selected);
                 }
 
                 winkstart.publish('media.popup_edit', _data, function(_data) {

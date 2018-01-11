@@ -1,0 +1,18 @@
+steps:
+  - label: ':construction: Build package'
+    command: './scripts/buildkite-build-rpm.sh'
+    artifact_paths: '*.rpm'
+    agents:
+      docker: 'true'
+    plugins:
+      docker#v1.0.0:
+        image: 'tenzer/fpm:no-entrypoint'
+        workdir: /app
+
+  - wait
+
+  - label: ':ship: Update YUM repo with new package'
+    command: './scripts/buildkite-deploy-rpm.sh'
+    agents:
+      queue: 'repo'
+      repo: 'yum'

@@ -94,8 +94,8 @@ winkstart.module('voip', 'registration',
                         stringToDisplay += '<br/>' + _t('registration', 'from_host') + this.from_host;
                         stringToDisplay += '<br/>' + _t('registration', 'from_user') + this.from_user;
                         stringToDisplay += '<br/>' + _t('registration', 'network_ip') + this.network_ip;
-                        stringToDisplay += '<br/>' + _t('registration', 'contact_ip') + this.contact_ip;
-                        stringToDisplay += '<br/>' + _t('registration', 'contact_port') + this.contact_port;
+                        stringToDisplay += '<br/>' + _t('registration', 'contact_ip') + this.source_ip;
+                        stringToDisplay += '<br/>' + _t('registration', 'contact_port') + this.source_port;
                         stringToDisplay += '<br/>' + _t('registration', 'network_port') + this.network_port;
                         stringToDisplay += '<br/>' + _t('registration', 'presence_hosts') + this.presence_hosts;
                         stringToDisplay += '<br/>' + _t('registration', 'profile_name') + this.profile_name;
@@ -109,7 +109,7 @@ winkstart.module('voip', 'registration',
                         stringToDisplay += '<br/>' + _t('registration', 'username') + this.username;
                         stringToDisplay += '<br/>' + _t('registration', 'date') + humanTime;
 
-                        tab_data.push([this.username, this.contact_ip, this.contact_port, humanTime, stringToDisplay]);
+                        tab_data.push([this.username, this.source_ip, this.source_port, humanTime, stringToDisplay]);
                     });
 
                     winkstart.table.registration.fnAddData(tab_data);
