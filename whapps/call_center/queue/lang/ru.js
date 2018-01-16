@@ -50,8 +50,6 @@ window.translate['queue'] = $.extend(true, {}, window.translate['queue'], {
 	most_idle: "Наменее занятый",
 	call_recording_url: "URL",
 	call_recording_url_data_content: "URL сервера записи разговоров для этой очереди.",
-	preserve_metadata: "Сохранить метаданные записей звонков",
-	preserve_metadata_data_content: "Сохранить метаданные записи звонков с доступом для медиа API",
 	call_wrapup_time: "Время завершения (сворачивания) вызова (с)",
 	call_wrapup_time_data_content: "Автоматическое время паузы между вызовами у операторов этой очереди.",
 	max_number_of_calls: "Максимальной количество звонков",

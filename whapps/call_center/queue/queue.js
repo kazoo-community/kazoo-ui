@@ -486,10 +486,6 @@ winkstart.module('call_center', 'queue', {
                 });
             });
 
-            $('#record_caller', queue_html).change(function() {
-                $('#call_recording_url, #preserve_metadata').prop('disabled', !this.checked);
-            });
-
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();
 
