@@ -57,8 +57,6 @@ window.translate['queue'] = {
 	most_idle: "Most Idle",
 	call_recording_url: "URL",
 	call_recording_url_data_content: "URL pointing to a server that will host the recording of the calls processed by this queue.",
-	preserve_metadata: "Preserve Call Recording Metadata",
-	preserve_metadata_data_content: "Keep metadata about call recording so it is retrievable by media API",
 	call_wrapup_time: "Call Wrap-up Time (s)",
 	call_wrapup_time_data_content: "Automatic break time between calls for the agents in this queue.",
 	max_number_of_calls: "Max Number of Calls",
