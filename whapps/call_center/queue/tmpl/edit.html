@@ -96,25 +96,6 @@
                     </div>
 
                     <div class="clearfix">
-                        <div class="input">
-                            <ul class="inputs-list">
-                                <li>
-                                    <label>
-                                        <span rel="popover" data-content="${_t('preserve_metadata_data_content')}">
-                                            {{if data.preserve_metadata === true}}
-                                                <input type="checkbox" id="preserve_metadata" name="preserve_metadata" checked="checked" ${record_caller_disabled}/>
-                                            {{else}}
-                                                <input type="checkbox" id="preserve_metadata" name="preserve_metadata" />
-                                            {{/if}}
-                                            <span>${_t('preserve_metadata')}</span>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
 						<label for="agent_wrapup_time">${_t('call_wrapup_time')}</label>
 						<div class="input">
 							<input class="span2" id="agent_wrapup_time" name="agent_wrapup_time" type="text" placeholder="30" value="${data.agent_wrapup_time}" rel="popover" data-content="${_t('call_wrapup_time_data_content')}"/>
