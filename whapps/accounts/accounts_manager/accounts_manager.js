@@ -804,10 +804,10 @@ winkstart.module('accounts', 'accounts_manager', {
 				];
 				fax_keys.forEach(function(key) {
 					data[key] = data.fax_to_email;
+					if(data.fax_to_email.from === '') {
+						data[key].enabled = false;
+					}
 				});
-				if(data.fax_to_email.from === '') {
-					data.fax_to_email.enabled = false;
-				}
 			}
 			if(data.extra.teletype_enabled.fax_inbound_error_to_email != field_data.teletype_enabled.fax_inbound_error_to_email) {
 				data.fax_inbound_error_to_email = data.fax_to_email;
