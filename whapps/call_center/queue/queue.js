@@ -1269,14 +1269,14 @@ winkstart.module('call_center', 'queue', {
                         );
                     }
                 },
-                'acdc_agent[action=pause]': {
+                'acdc_agent[action=paused]': {
                     name: _t('queue', 'agent_pause'),
                     icon: 'rightarrow',
                     category: _t('config', 'call_center_cat'),
                     module: 'acdc_agent',
                     tip: _t('queue', 'agent_pause_tip'),
                     data: {
-                        action: 'pause',
+                        action: 'paused',
                         timeout: '900',
                         presence_id: ''
                     },
