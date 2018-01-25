@@ -1468,6 +1468,11 @@ winkstart.module('call_center', 'queue', {
                     }
                 }
             });
+
+            $.extend(callflow_nodes, {
+                'acdc_agent[action=pause]': $.extend({}, callflow_nodes["acdc_agent[action=paused]"])
+            });
+            delete callflow_nodes['acdc_agent[action=pause]'].category;
         }
     }
 );
