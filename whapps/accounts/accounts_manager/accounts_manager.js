@@ -330,6 +330,9 @@ winkstart.module('accounts', 'accounts_manager', {
 								from: ''
 							}
 						},
+						teletype_enabled: {
+							fax_inbound_error_to_email: false
+						},
 						teletype_overridden: {
 							deregister: false,
 							fax_to_email: false,
@@ -419,7 +422,19 @@ winkstart.module('accounts', 'accounts_manager', {
 											callback(null, _data);
 										}
 									);
-
+								},
+								fax_inbound_error_to_email: function(callback) {
+									winkstart.request('notifications.get', {
+											account_id: data.id,
+											api_url: winkstart.apps['accounts'].api_url,
+											notification_id: 'fax_inbound_error_to_email'
+										},
+										function(_data, status) {
+											// Undefined to support inheritance from top-level
+											defaults.field_data.teletype_enabled.fax_inbound_error_to_email = _data.data.enabled === undefined || _data.data.enabled;
+											callback(null, _data);
+										}
+									);
 								},
 								deregister: function(callback) {
 									winkstart.request('notifications.get', {
@@ -789,10 +804,16 @@ winkstart.module('accounts', 'accounts_manager', {
 				];
 				fax_keys.forEach(function(key) {
 					data[key] = data.fax_to_email;
+					if(data.fax_to_email.from === '') {
+						data[key].enabled = false;
+					}
 				});
-				if(data.fax_to_email.from === '') {
-					data.fax_to_email.enabled = false;
-				}
+			}
+			if(data.extra.teletype_enabled.fax_inbound_error_to_email != field_data.teletype_enabled.fax_inbound_error_to_email) {
+				data.fax_inbound_error_to_email = data.fax_to_email;
+				// Enabled if from is not empty and checkbox checked
+				data.fax_inbound_error_to_email.enabled = data.fax_to_email.from !== '' &&
+					data.extra.teletype_enabled.fax_inbound_error_to_email;
 			}
 			delete data.fax_to_email;
 
