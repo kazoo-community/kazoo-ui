@@ -38,6 +38,8 @@ window.translate['vmbox'] = {
 	skip_greeting_data_content: "Check om de begroeting te omzeilen",
 	skip_instructions: "Skip Instructies",
 	skip_instructions_data_content: "Check om te instructies te omzeilen",
+	skip_envelope: "Envelop overslaan",
+	skip_envelope_data_content: "Vink aan om standaard de voicemail-envelop over te slaan",
 	delete_after_notification: "Verwijder na notificatie",
 	delete_after_notification_data_content: "verwijder het bericht nadat de notificatie is verstuurt",
 	delete: "Verwijder",
