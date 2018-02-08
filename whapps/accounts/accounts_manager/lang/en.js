@@ -105,5 +105,6 @@ window.translate['accounts'] = {
 	email_placeholder: "name@email.com",
 	email_types_data_content: "What group to send emails to",
 	teletype_deregister_to_admins: "Admins Only",
-	teletype_deregister_to_specified: "Specific Addresses"
+	teletype_deregister_to_specified: "Specific Addresses",
+	fax_inbound_error_to_email_enabled: 'Send notifications for inbound Fax-To-Email errors'
 };

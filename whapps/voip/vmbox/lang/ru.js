@@ -38,6 +38,8 @@ window.translate['vmbox'] = $.extend(true, {}, window.translate['vmbox'], {
 	skip_greeting_data_content: "Выберите для пропуска приветствия по умолчанию",
 	skip_instructions: "Пропустить инструкции",
 	skip_instructions_data_content: "Выберите для пропуска инструкций по умолчанию",
+	skip_envelope: "Пропустить Конверт",
+	skip_envelope_data_content: "Выберите, чтобы автоматически пропускать информацию о номере, дате и времени звонка",
 	delete_after_notification: "Удалить после уведомления",
 	delete_after_notification_data_content: "Удалять голосовое сообщение после отправки уведомления",
 	delete: "Удалить",
