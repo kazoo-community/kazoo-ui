@@ -344,7 +344,7 @@ winkstart.module('voip', 'cdr', {
                         var download_link = winkstart.apps['voip'].api_url + '/accounts/' +
                                             winkstart.apps['voip'].account_id + '/cdrs/csv?' +
                                             'auth_token=' + winkstart.apps['voip'].auth_token +
-                                            '&csv_file_name='+ csv_file_name +
+                                            '&file_name='+ csv_file_name +
                                             '&created_from=' +start_date +
                                             '&created_to=' + end_date;
 
