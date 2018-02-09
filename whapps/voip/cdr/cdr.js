@@ -309,78 +309,7 @@ winkstart.module('voip', 'cdr', {
 
                     var tab_data = [];
 
-                    /**
-                     * adding headings
-                     * @type {*[]}
-                     */
-                    var csv = [[
-                        'authorizing_id',
-                        'billing_seconds',
-                        'bridge_id',
-                        'call_id',
-                        'call_type',
-                        'callee_id_name',
-                        'callee_id_number',
-                        'caller_id_name',
-                        'caller_id_number',
-                        'calling_from',
-                        'cost',
-                        'datetime',
-                        'dialed_number',
-                        'direction',
-                        'duration_seconds',
-                        'from',
-                        'hangup_cause',
-                        'id',
-                        'iso_8601',
-                        'other_leg_call_id',
-                        'owner_id',
-                        'rate',
-                        'rate_name',
-                        'recording_url',
-                        'request',
-                        'rfc_1036',
-                        'timestamp',
-                        'to',
-                        'unix_timestamp'
-                    ]];
-
                     $.each(results.cdr_list.data, function () {
-                        /**
-                         * adding headings
-                         */
-                        csv.push([
-                            this.authorizing_id,
-                            this.billing_seconds,
-                            this.bridge_id,
-                            this.call_id,
-                            this.call_type,
-                            this.callee_id_name,
-                            this.callee_id_number,
-                            this.caller_id_name,
-                            this.caller_id_number,
-                            this.calling_from,
-                            this.cost,
-                            this.datetime,
-                            this.dialed_number,
-                            this.direction,
-                            this.duration_seconds,
-                            this.from,
-                            this.hangup_cause,
-                            this.id,
-                            this.iso_8601,
-                            this.other_leg_call_id,
-                            this.owner_id,
-                            this.rate,
-                            this.rate_name,
-                            this.recording_url,
-                            this.request,
-                            this.rfc_1036,
-                            this.timestamp,
-                            this.to,
-                            this.unix_timestamp
-                        ]);
-
                         cdr_id = this.cid || this.id;
                         user_name = this.owner_id ? find_user_name(this.owner_id) : '',
                             duration = this.duration_seconds >= 0 ? parse_duration(this.duration_seconds) : '--';
@@ -407,24 +336,26 @@ winkstart.module('voip', 'cdr', {
                     /**
                      * only download if there's data available.
                      */
-                    if (csv.length > 1) {
+                    if (tab_data.length > 1) {
                         /**
-                         * building final csv file.
-                         * @type {Array}
-                         */
-                        var csvRows = [];
+                         * Download the CSV directly through Crossbar API
+                        **/
+                        csv_file_name = parse_date(start_date).split(" ")[0].replace(/\//g, '-') + '_' + parse_date(end_date).split(" ")[0].replace(/\//g, '-') + '_cdr.csv';
+                        var download_link = winkstart.apps['voip'].api_url + '/accounts/' +
+                                            winkstart.apps['voip'].account_id + '/cdrs?' +
+                                            '&accept=text/csv' +
+                                            '&file_name=' + csv_file_name +
+                                            '&created_from=' + start_date +
+                                            '&created_to=' + end_date +
+                                            '&auth_token=' + winkstart.apps['voip'].auth_token;
 
-                        for (var i = 0, l = csv.length; i < l; ++i) {
-                            csvRows.push(csv[i].join(','));
+                        if (filter === 'queue') {
+                            download_link = download_link + '&has_key=custom_channel_vars.queue_id';
                         }
-
-                        var csvString = csvRows.join("%0A");
-                        var a = document.createElement('a');
-                        a.href = 'data:attachment/csv,' + csvString;
-                        a.target = '_blank';
-                        a.download = parse_date(start_date).split(" ")[0].replace(/\//g, '-') + '_' + parse_date(end_date).split(" ")[0].replace(/\//g, '-') + '_cdr.csv';
-                        document.body.appendChild(a);
-                        a.click();
+                        else if (filter === 'non-queue') {
+                            download_link = download_link + '&key_missing=custom_channel_vars.queue_id';
+                        }
+                        window.location.href = download_link;
                     }
 
                     call_duration = _t('cdr', 'total_duration') + parse_duration(call_duration, 'verbose');
