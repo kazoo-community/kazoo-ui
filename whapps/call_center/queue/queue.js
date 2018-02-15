@@ -29,6 +29,11 @@ winkstart.module('call_center', 'queue', {
         ],
 
         resources: {
+            'agent.update_queue_status': {
+                url: '{api_url}/accounts/{account_id}/agents/{agent_id}/queue_status',
+                contentType: 'application/json',
+                verb: 'POST'
+            },
             'queue.list': {
                 url: '{api_url}/accounts/{account_id}/queues',
                 contentType: 'application/json',
