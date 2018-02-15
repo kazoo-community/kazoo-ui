@@ -20,6 +20,9 @@
 		 	<li><a href="#call_forward">${_t('call_forward')}</a></li>
 		 	<li><a href="#password_management">${_t('password_management')}</a></li>
 		 	<li><a href="#hot_desking">${_t('hot_desking')}</a></li>
+		 	{{if field_data.call_center_enabled}}
+		 	<li><a href="#queue_options">${_t('queue_options')}</a></li>
+		 	{{/if}}
             <li><a href="#restrictions">${_t('restrictions')}</a></li>
 		</ul>
 		<form id="user-form" action="#" method="post">
@@ -288,63 +291,6 @@
                             </ul>
                        </div>
                     </div>
-                    <hr/>
-                    <h3>${_t('queue_options')}</h3>
-
-					<!--<div class="clearfix">
-						<div class="input">
-							<ul class="inputs-list">
-              					<li>
-	              					<label>
-	              						<span rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory).">
-											{{if data.enable_pin === true}}
-			                                <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" />
-			                                {{else}}
-			                                <input id="enable_pin" type="checkbox" name="enable_pin"/>
-			                                {{/if}}
-			                                <span>Enable Agent / PIN</span>
-		                                </span>
-                            		</label>
-                                </li>
-                            </ul>
-						</div>
-					</div>-->
-
-                    <!--<div class="queue_block">
-                        <div class="clearfix queue_pin">
-                            <label for="queue_pin">PIN</label>
-                            <div class="input">
-                                <input id="queue_pin" placeholder="3615" type="text" name="queue_pin" value="${data.queue_pin}" rel="popover" data-content="PIN used by the agent to login to a queue."/>
-                            </div>
-                        </div>
--->
-                    <div class="clearfix">
-                        <div class="input">
-                            <ul class="inputs-list">
-                                <li>
-                                    <label>
-                                        <span rel="popover" data-content="${_t('record_this_agent_data_content')}">
-                                            {{if data.record_call === true}}
-                                            <input id="record_call" type="checkbox" name="record_call" checked="checked" />
-                                            {{else}}
-                                            <input id="record_call" type="checkbox" name="record_call"/>
-                                            {{/if}}
-                                            <span>${_t('record_this_agent')}</span>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="clearfix">
-                        <label for="acdc_agent_priority" rel="popover" data-content="${_t('acdc_agent_priority_data_content')}">${_t('acdc_agent_priority')}</label>
-                        <div class="input priority_wrapper">
-                            <span>
-                                <input id="acdc_agent_priority" name="acdc_agent_priority" type="slider" value="${data.acdc_agent_priority}" />
-                            </span>
-                        </div>
-                    </div>
 	            </div>
 
 	            <div id="call_forward">
@@ -568,6 +514,73 @@
                         </div>
                     {{/if}}
 	            </div>
+
+                {{if field_data.call_center_enabled}}
+                <div id="queue_options">
+                    <!--<div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="Tick the checkbox to set this user as an agent and you will then be able to define a Queue PIN for this agent (not mandatory).">
+                                            {{if data.enable_pin === true}}
+                                            <input id="enable_pin" type="checkbox" name="enable_pin" checked="checked" />
+                                            {{else}}
+                                            <input id="enable_pin" type="checkbox" name="enable_pin"/>
+                                            {{/if}}
+                                            <span>Enable Agent / PIN</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>-->
+
+                    <!--<div class="queue_block">
+                        <div class="clearfix queue_pin">
+                            <label for="queue_pin">PIN</label>
+                            <div class="input">
+                                <input id="queue_pin" placeholder="3615" type="text" name="queue_pin" value="${data.queue_pin}" rel="popover" data-content="PIN used by the agent to login to a queue."/>
+                            </div>
+                        </div>
+                    </div>-->
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="${_t('record_this_agent_data_content')}">
+                                            {{if data.record_call === true}}
+                                            <input id="record_call" type="checkbox" name="record_call" checked="checked" />
+                                            {{else}}
+                                            <input id="record_call" type="checkbox" name="record_call"/>
+                                            {{/if}}
+                                            <span>${_t('record_this_agent')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="acdc_agent_priority" rel="popover" data-content="${_t('acdc_agent_priority_data_content')}">${_t('acdc_agent_priority')}</label>
+                        <div class="input priority_wrapper">
+                            <span>
+                                <input id="acdc_agent_priority" name="acdc_agent_priority" type="slider" value="${data.acdc_agent_priority}" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3>${_t('queue_membership')}</h3>
+
+                    <div class="clearfix">
+                        <button class="btn primary" id="add_queue">${_t('add_queue')}</button>
+                        <table id="queues-grid" class="display"></table>
+                    </div>
+                </div>
+                {{/if}}
 
                 <div id="restrictions">
                     <div class="clearfix">
