@@ -172,3 +172,11 @@
 #user-form #hotdesk_devices .row input[type="checkbox"] {
     margin-top: 10px;
 }
+
+#user-form .buttons_div {
+    margin-top: 10px;
+}
+
+#user-form .icon.x {
+    background-position: -992px -68px;
+}
