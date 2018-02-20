@@ -1,0 +1,40 @@
+<div>
+    <div id="wait_time_popup" class="dialog_popup">
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="explanation">${_t('wait_time_key_explanation')}</div>
+                <div class="popup_field">
+                    <div>
+                        <label class="radio">
+                            {{if mode == "threshold"}}
+                                <input name="mode" type="radio" value="threshold" checked="checked">
+                            {{else}}
+                                <input name="mode" type="radio" value="threshold">
+                            {{/if}}
+                            ${_t('threshold')}
+                        </label>
+                        <div class="threshold">
+                            <span class="validated"><input type="text" name="threshold" value="${threshold}"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <label class="radio">
+                        {{if mode == "default"}}
+                            <input name="mode" type="radio" value="default" checked="checked">
+                        {{else}}
+                            <input name="mode" type="radio" value="default">
+                        {{/if}}
+                        {{if default_taken}}
+                            ${_t('default_disabled')}
+                        {{else}}
+                            ${_t('default')}
+                        {{/if}}
+                    </label>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

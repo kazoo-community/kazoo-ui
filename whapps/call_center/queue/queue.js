@@ -11,6 +11,8 @@ winkstart.module('call_center', 'queue', {
             agent_presence_callflow: 'tmpl/agent_presence_callflow.html',
             agent_availability_callflow: 'tmpl/agent_availability_callflow.html',
             agent_availability_key_callflow: 'tmpl/agent_availability_key_callflow.html',
+            wait_time_callflow: 'tmpl/wait_time_callflow.html',
+            wait_time_key_callflow: 'tmpl/wait_time_key_callflow.html',
             add_agents: 'tmpl/add_agents.html',
             edit_agents: 'tmpl/edit_agents.html',
             selected_agent: 'tmpl/selected_agent.html',
@@ -1621,6 +1623,173 @@ winkstart.module('call_center', 'queue', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: _t('queue', 'agent_availability'),
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'acdc_wait_time[id=*]': {
+                    name: _t('queue', 'wait_time'),
+                    icon: 'temporal_route',
+                    category: _t('config', 'call_center_cat'),
+                    module: 'acdc_wait_time',
+                    tip: _t('queue', 'wait_time_tip'),
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [],
+                    isUsable: 'true',
+                    /**
+                     * Returns true if child_node already has a sibling that is set to default mode
+                     *
+                     * @param {object} child_node The node whose siblings to check
+                     * @return {boolean} True if child_node already has a sibling that is set to default mode
+                     */
+                    default_taken: function(child_node) {
+                        var default_taken = false;
+
+                        // Null when loading an existing callflow
+                        if(!child_node.parent) {
+                            return default_taken;
+                        }
+
+                        $.each(child_node.parent.children, function(index, child) {
+                            if(child != child_node && child.key == '_') {
+                                default_taken = true;
+                            }
+                        });
+
+                        return default_taken;
+                    },
+                    key_caption: function(child_node, caption_map) {
+                        // Automatically force threshold mode when adding subsequent children
+                        if(this.default_taken(child_node)) {
+                            child_node.key = "0";
+                        }
+
+                        if(child_node.key == '_') {
+                            return 'Default';
+                        }
+                        else {
+                            return 'Threshold: >' + child_node.key + 's';
+                        }
+                    },
+                    key_edit: function(child_node, callback) {
+                        var default_taken = this.default_taken(child_node);
+
+                        // Automatically force threshold mode when adding subsequent children
+                        var mode = (!default_taken && child_node.key == '_') ? 'default' : 'threshold',
+                            threshold = (default_taken && child_node.key == '_') ? '' : child_node.key,
+                            popup,
+                            popup_html = THIS.templates.wait_time_key_callflow.tmpl({
+                                _t: function(param){
+                                    return window.translate['queue'][param];
+                                },
+                                default_taken: default_taken,
+                                mode: mode,
+                                threshold: mode == 'threshold' ? threshold : ''
+                            });
+
+                        // Hiding/disabling is a pain in jquery-tmpl, just do it here
+                        if(mode == 'default') {
+                            $('.threshold', popup_html).hide();
+                        }
+                        if(default_taken) {
+                            $('input[name=mode][value=default]', popup_html).attr('disabled', 'disabled');
+                        }
+                        $('input[name=mode]', popup_html).change(function() {
+                            if($(this).val() == 'threshold') {
+                                $('#wait_time_popup .threshold', popup).show();
+                            }
+                            else {
+                                $('#wait_time_popup .threshold', popup).hide();
+                            }
+                        });
+
+                        $('#add', popup_html).click(function(event) {
+                            if($('input[name=mode]:checked', popup).val() == 'default') {
+                                child_node.key = '_';
+                                child_node.key_caption = 'Default';
+                            }
+                            else {
+                                var threshold = $('input[name=threshold]', popup);
+                                    thresholdValue = threshold.val();
+                                if(isNaN(parseInt(thresholdValue))) {
+                                    $('.threshold .validated', popup).addClass('invalid');
+                                    return;
+                                }
+                                child_node.key = thresholdValue;
+                                child_node.key_caption = 'Threshold: >' + child_node.key + 's';
+                            }
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('queue', 'wait_time'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'queue.list',  {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.wait_time_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['queue'][param];
+                                    },
+                                    title: _t('queue', 'wait_time_title'),
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#queue_selector', popup).val());
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+
+                                    node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: _t('queue', 'wait_time'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {
