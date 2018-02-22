@@ -679,6 +679,7 @@ winkstart.module('call_center', 'dashboard', {
                     formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
                     formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
                 }
+                formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
                 formatted_data.queues[k].total_calls++;
 
                 formatted_data.queues[k].current_calls++;
