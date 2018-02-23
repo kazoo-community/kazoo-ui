@@ -4,6 +4,7 @@ winkstart.module('voip', 'user', {
         ],
 
         templates: {
+            add_queue: 'tmpl/add_queue.html',
             user: 'tmpl/user.html',
             edit: 'tmpl/edit.html',
             user_callflow: 'tmpl/user_callflow.html',
@@ -251,7 +252,8 @@ winkstart.module('voip', 'user', {
                         contact_list: {
                             exclude: false,
                         },
-                        music_on_hold: {}
+                        music_on_hold: {},
+                        queues: []
                     }, data_defaults || {}),
                     field_data: {
                         device_types: {
@@ -263,7 +265,9 @@ winkstart.module('voip', 'user', {
                             softphone: _t('user', 'softphone_type'),
                             sip_uri: _t('user', 'sip_uri_type')
                         },
-                        call_restriction: {}
+                        call_center_enabled: winkstart.apps['call_center'] !== undefined,
+                        call_restriction: {},
+                        queues: {}
                     }
                 };
 
@@ -384,6 +388,28 @@ winkstart.module('voip', 'user', {
                     else {
                         callback(null, defaults);
                     }
+                },
+                queues_get: function(callback) {
+                    if(!winkstart.apps['call_center']) {
+                        callback(null, null);
+                        return;
+                    }
+
+                    winkstart.request('queue.list', {
+                            account_id: winkstart.apps['call_center'].account_id,
+                            api_url: winkstart.apps['call_center'].api_url
+                        },
+                        function(_data) {
+                            defaults.field_data.queues = _data.data.reduce(
+                                function(acc, value) {
+                                    acc[value.id] = value.name;
+                                    return acc;
+                                }, {}
+                            );
+                            callback(null, _data);
+                        },
+                        winkstart.error_message.process_error()
+                    );
                 }
             },
             function(err, results) {
@@ -710,6 +736,10 @@ winkstart.module('voip', 'user', {
                 }, defaults);
             });
 
+            if(winkstart.apps['call_center']) {
+                THIS.render_queue_options(user_html, data);
+            }
+
             (target)
                 .empty()
                 .append(user_html);
@@ -767,6 +797,118 @@ winkstart.module('voip', 'user', {
             }
         },
 
+        /**
+         * Render queue options tab, only if available (call_center app is
+         * present)
+         *
+         * @param {element} parent The parent container for the user view
+         * @param {Object} data User object and field data
+         */
+        render_queue_options: function(parent, data) {
+            var THIS = this;
+
+            // Queues table
+            var columns = [
+                {
+                    'sTitle': '<span class="icon medium queue"></span> Queue',
+                    'sWidth': '85%'
+                },
+                {
+                    'sTitle': _t('queue', 'actions_title'),
+                    'sWidth': '15%',
+                    'bSortable': false,
+                    'fnRender': function(obj) {
+                        var id = obj.aData[obj.iDataColumn];
+                        return '<a class="remove-queue icon medium x" data-id="'+ id +'"></a>';
+                    }
+                }
+            ];
+            winkstart.table.create('queues', $('#queues-grid', parent), columns, {}, {
+                sDom: '<"buttons_div">rtlip',
+                bAutoWidth: false,
+                aaSorting: [[0, 'asc']]
+            });
+
+            var tab_data = [],
+                otherQueues = $.extend({}, data.field_data.queues);
+            $.each(data.data.queues, function(index, queue_id) {
+                tab_data.push([data.field_data.queues[queue_id], queue_id]);
+                delete otherQueues[queue_id];
+            });
+            winkstart.table.queues.fnAddData(tab_data);
+
+            /**
+             * Handle the remove button being clicked for a queue
+             *
+             * @param {Event} event Dispatched event for the click
+             */
+            function onRemoveQueueClick(event) {
+                var THIS = this,
+                    queue_id = $(this).dataset('id');
+
+                winkstart.request('agent.update_queue_status', {
+                        account_id: winkstart.apps['call_center'].account_id,
+                        api_url: winkstart.apps['call_center'].api_url,
+                        agent_id: data.data.id,
+                        data: {
+                            action: 'logout',
+                            queue_id: queue_id
+                        }
+                    },
+                    function(_data, status) {
+                        winkstart.table.queues.fnDeleteRow($(THIS).parents('tr')[0]);
+                        otherQueues[queue_id] = data.field_data.queues[queue_id];
+                    }
+                );
+            }
+
+            // Add queue to user
+            $('#add_queue', parent).click(function(event) {
+                event.preventDefault();
+
+                var queueCount = Object.keys(otherQueues).length,
+                    add_queue_html = THIS.templates.add_queue.tmpl({
+                        _t: function(param){
+                            return window.translate['user'][param];
+                        },
+                        queues: otherQueues,
+                        queueCount: queueCount
+                    }),
+                    popup_queue = winkstart.dialog(add_queue_html);
+
+                $('#add', add_queue_html).click(function(event) {
+                    if(queueCount == 0) {
+                        $(popup_queue).dialog('close');
+                        return;
+                    }
+
+                    var queue_id = $('#queue_selector', add_queue_html).val();
+
+                    winkstart.request('agent.update_queue_status', {
+                            account_id: winkstart.apps['call_center'].account_id,
+                            api_url: winkstart.apps['call_center'].api_url,
+                            agent_id: data.data.id,
+                            data: {
+                                action: 'login',
+                                queue_id: queue_id
+                            }
+                        },
+                        function(_data, status) {
+                            var rows = winkstart.table.queues.fnAddData([data.field_data.queues[queue_id], queue_id]),
+                                rowEl = winkstart.table.queues.fnGetNodes(rows[0]);
+                            $('.remove-queue', rowEl).click(onRemoveQueueClick);
+                            delete otherQueues[queue_id];
+                            $(popup_queue).dialog('close');
+                        },
+                        winkstart.error_message.process_error()
+                    );
+                });
+            });
+
+            // Remove queue from user
+            $('.remove-queue', parent).click(onRemoveQueueClick);
+        },
+
         migrate_data: function(data) {
             if(!('priv_level' in data.data)) {
                 if('apps' in data.data && 'voip' in data.data.apps) {
@@ -796,6 +938,8 @@ winkstart.module('voip', 'user', {
 
             delete form_data.pwd_mngt_pwd1;
             delete form_data.pwd_mngt_pwd2;
+            // Caused by add/remove queues grid
+            delete form_data['queues-grid_length'];
             delete form_data.extra;
 
             return form_data;
@@ -847,6 +991,16 @@ winkstart.module('voip', 'user', {
 
             if(data.hotdesk.hasOwnProperty('endpoint_ids') && data.hotdesk.endpoint_ids.length === 0) {
                 delete data.hotdesk.endpoint_ids;
+            }
+
+            if(winkstart.table.queues) {
+                data.queues = [];
+
+                var queuesTableData = winkstart.table.queues.fnGetData();
+                $.each(queuesTableData, function(index, queue) {
+                    var queueId = $(queue[1]).attr('data-id');
+                    data.queues.push(queueId);
+                });
             }
 
             if(data.hasOwnProperty('call_forward') && data.call_forward.number === '') {
