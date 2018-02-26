@@ -173,6 +173,31 @@
     margin-top: 10px;
 }
 
+#user-form #queue_options .small-table {
+    margin-top: 0px;
+    display: inline-block;
+}
+
+#user-form #queue_options .small-table .first {
+    width: 232px;
+}
+
+#user-form #queue_options .small-table .first input {
+    margin: 2px 6px;
+}
+
+#user-form #queue_options .small-table .second {
+    padding: 0 8px;
+}
+
+#user-form #queue_options .small-table .padded {
+    padding-left: 20px;
+}
+
+#add_skill_button {
+    margin-top: 12px;
+}
+
 #user-form .buttons_div {
     margin-top: 10px;
 }

@@ -565,6 +565,24 @@
                     </div>
 
                     <div class="clearfix">
+                        <label>${_t('acdc_skills')}</label>
+                        <div class="input">
+                            <span rel="popover" data-content="${_t('acdc_skills_data_content')}">
+                                <div id="acdc_skills" class="small-table">
+                                    <div class="row title">
+                                        <div class="column first">${_t('skill')}</div>
+                                        <div class="column second">${_t('remove')}</div>
+                                    </div>
+                                    <div class="rows"></div>
+                                </div>
+                                <div class="clearfix">
+                                    <button id="add_skill_button" type="button" class="btn">${_t('add_skill')}</button>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
                         <label for="acdc_agent_priority" rel="popover" data-content="${_t('acdc_agent_priority_data_content')}">${_t('acdc_agent_priority')}</label>
                         <div class="input priority_wrapper">
                             <span>

@@ -8,7 +8,8 @@ winkstart.module('voip', 'user', {
             user: 'tmpl/user.html',
             edit: 'tmpl/edit.html',
             user_callflow: 'tmpl/user_callflow.html',
-            device_row: 'tmpl/device_row.html'
+            device_row: 'tmpl/device_row.html',
+            agent_skill_row: 'tmpl/agent_skill_row.html'
         },
 
         subscribe: {
@@ -237,6 +238,7 @@ winkstart.module('voip', 'user', {
                 defaults = {
                     data: $.extend(true, {
                         acdc_agent_priority: 0,
+                        acdc_skills: [],
                         apps: {},
                         call_forward: {
                             substitute: true
@@ -547,6 +549,17 @@ winkstart.module('voip', 'user', {
                             delete data.data.record_call;
                         }
 
+                        if($('#acdc_skills').length) {
+                            data.data.acdc_skills = [];
+                            form_data.acdc_skills = [];
+                            $('#acdc_skills .rows .column.first input').each(function(index) {
+                                var skill = $(this).val().trim();
+                                if(skill.length > 0) {
+                                    form_data.acdc_skills.push(skill);
+                                }
+                            });
+                        }
+
                         THIS.clean_form_data(form_data);
 
                         if('field_data' in data) {
@@ -809,6 +822,32 @@ winkstart.module('voip', 'user', {
         render_queue_options: function(parent, data) {
             var THIS = this;
 
+            /**
+             * Append an agent skill row to an html container.
+             *
+             * @param {string} skill - A default skill to fill in the row
+             * @param {object} container - jQuery container object with .rows
+             * div that will have the new row appended
+             */
+            function addSkillRow(skill = '', container = null) {
+                var row = THIS.templates.agent_skill_row.tmpl({
+                    _t: data._t,
+                    skill: skill
+                });
+                $('#acdc_skills .rows', container).append(row);
+                $('.delete', row).click(function() {
+                    $(this).closest('.row').remove();
+                });
+            }
+            $.each(data.data.acdc_skills, function(index, skill) {
+                addSkillRow(skill, parent);
+            });
+
+            $('#add_skill_button', parent).click(function() {
+                // Add without container since container is now in DOM
+                addSkillRow();
+            });
+
             $('#acdc_agent_priority', parent).slider({
                 from: -128,
                 to: 128,
@@ -967,6 +1006,8 @@ winkstart.module('voip', 'user', {
             // Caused by add/remove queues grid
             delete form_data['queues-grid_length'];
             delete form_data.extra;
+
+            delete form_data[''];
 
             return form_data;
         },
