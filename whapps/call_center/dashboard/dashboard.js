@@ -614,7 +614,7 @@ winkstart.module('call_center', 'dashboard', {
                             	formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
                         	}
                     	}
-                    	else if(current_status === 'connecting') {
+                    	else if($.inArray(current_status, ['connecting', 'handling']) >= 0) {
 							formatted_data.agents[k].current_call = { friendly_title: agent_status.caller_id_name || agent_status.caller_id_number || agent_status.call_id };
                     	}
 
@@ -679,6 +679,7 @@ winkstart.module('call_center', 'dashboard', {
                     formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
                     formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
                 }
+                formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
                 formatted_data.queues[k].total_calls++;
 
                 formatted_data.queues[k].current_calls++;

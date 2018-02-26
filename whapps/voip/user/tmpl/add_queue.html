@@ -1,0 +1,26 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('queue')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="form_content">
+                {{if queueCount}}
+                <div class="popup_field">
+                    <label for="queue_selector">${_t('queue')}</label>
+                    <div class="select_wrapper">
+                        <select id="queue_selector">
+                            {{each(id, queue) queues}}
+                                <option value="${id}">${queue}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                {{else}}
+                <span>${_t('all_queues_added')}</span>
+                {{/if}}
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>
