@@ -586,18 +586,26 @@ winkstart.module('pbxs', 'pbxs_manager', {
                     form_data.options.inbound_format = 'e.164';
                 }
 
-                //Manually getting the radio value since form2object doesn't properly handle radio buttons.
-                form_data.auth.auth_method = endpoint_html.find('#endpoint input[name="auth.auth_method"]:checked').val();
-                if(form_data.auth.auth_method.toLowerCase() === 'ip') {
-                    form_data.options.ip = form_data.auth.ip;
-                    delete form_data.auth.auth_user;
-                    delete form_data.auth.auth_password;
-                } else {
-                    delete form_data.options.ip;
-                    delete form_data.auth.ip;
-                }
-
                 THIS.get_account(function(global_data) {
+                    // Manually getting the radio value since form2object doesn't properly handle radio buttons.
+                    form_data.auth.auth_method = endpoint_html.find('#endpoint input[name="auth.auth_method"]:checked').val();
+                    if(form_data.auth.auth_method.toLowerCase() === 'ip') {
+                        form_data.options.ip = form_data.auth.ip;
+                        delete form_data.auth.auth_user;
+                        delete form_data.auth.auth_password;
+
+                        if(form_data.extra.serverid) {
+                            delete global_data.data.servers[form_data.extra.serverid].auth.auth_user;
+                            delete global_data.data.servers[form_data.extra.serverid].auth.auth_password;
+                        }
+                    } else {
+                        delete form_data.options.ip;
+                        delete form_data.auth.ip;
+
+                        if(form_data.extra.serverid) {
+                            delete global_data.data.servers[form_data.extra.serverid].auth.ip;
+                        }
+                    }
                     THIS.save_endpoint(form_data, global_data, function(_data) {
                         if(typeof callbacks.save_success == 'function') {
                             callbacks.save_success(_data);
