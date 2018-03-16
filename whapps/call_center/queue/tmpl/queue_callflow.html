@@ -24,6 +24,14 @@
             </div>
 
             <div class="parameter_div">
+                {{if enter_as_callback}}
+                <input type="checkbox" name="enter_as_callback" checked="checked"/> Enter as Callback
+                {{else}}
+                <input type="checkbox" name="enter_as_callback"/> Enter as Callback
+                {{/if}}
+            </div>
+
+            <div class="parameter_div">
                 {{if route_var.length == 0}}
                 <input type="checkbox" id="toggle_advanced"> Advanced
                 <div id="route_var_div" style="display: none;">

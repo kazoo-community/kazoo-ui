@@ -1026,6 +1026,10 @@ winkstart.module('call_center', 'queue', {
                             returned_value = caption_map[id].name;
                         }
 
+                        if(node.getMetadata('enter_as_callback')) {
+                            returned_value += ': Enter as callback';
+                        }
+
                         return returned_value;
                     },
                     edit: function(node, callback) {
@@ -1045,7 +1049,8 @@ winkstart.module('call_center', 'queue', {
 									title: _t('queue', 'connect_a_caller_to_a_queue'),
                                     items: data.data,
                                     selected: node.getMetadata('id') || '',
-                                    route_var: node.getMetadata('var') || ''
+                                    route_var: node.getMetadata('var') || '',
+                                    enter_as_callback: node.getMetadata('enter_as_callback')
                                 });
 
                                 if($('#queue_selector option:selected', popup_html).val() == undefined) {
@@ -1085,6 +1090,14 @@ winkstart.module('call_center', 'queue', {
                                     }
 
                                     node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    if($('[name=enter_as_callback]', popup_html).prop('checked')) {
+                                        node.setMetadata('enter_as_callback', true);
+                                        node.caption += ': Enter as callback';
+                                    }
+                                    else {
+                                        node.deleteMetadata('enter_as_callback');
+                                    }
 
                                     popup.dialog('close');
                                 });

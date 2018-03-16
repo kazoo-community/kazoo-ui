@@ -51,10 +51,9 @@
 }
 
 .dialog_popup .parameter_div {
-    padding: 10px 0px 10px 0px;
     width: auto;
     max-width: 300px;
-    margin: auto;
+    margin: 10px auto;
     display: block;
 }
 
