@@ -277,69 +277,88 @@ winkstart.module('call_center', 'queue', {
                     }
                 };
 
-            winkstart.request(true, 'queue.media_list', {
-                    account_id: winkstart.apps['call_center'].account_id,
-                    api_url: winkstart.apps['call_center'].api_url
+            winkstart.parallel({
+                    media_list: function(callback) {
+                        winkstart.request(true, 'queue.media_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data_media, status) {
+                                _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
+                                _data_media.data.unshift(
+                                    {
+                                        id: '',
+                                        name: _t('queue', 'default_music')
+                                    },
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: _t('queue', 'silence')
+                                    }
+                                );
+
+                                callback(null, _data_media.data);
+                            }
+                        );
+                    },
+                    queue_get: function(callback) {
+                        if(typeof data == 'object' && data.id) {
+                            //THIS.queue_get_stats(data.id, function(_data_stat) {
+                                winkstart.request(true, 'queue.get', {
+                                        account_id: winkstart.apps['call_center'].account_id,
+                                        api_url: winkstart.apps['call_center'].api_url,
+                                        queue_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        callback(null, _data);
+                                    }
+                                );
+                            //});
+                        }
+                        else {
+                            callback(null, null);
+                        }
+                    },
+                    user_list: function(callback) {
+                        winkstart.request(true, 'queue.user_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data, status) {
+                                var users = {};
+
+                                $.each(_data.data, function(k, v) {
+                                    users[v.id] = v;
+                                });
+
+                                callback(null, users);
+                            }
+                        );
+                    }
                 },
-                function(_data_media, status) {
-                    _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
-                    _data_media.data.unshift(
-                        {
-                            id: '',
-                            name: _t('queue', 'default_music')
-                        },
-                        {
-                            id: 'silence_stream://300000',
-                            name: _t('queue', 'silence')
+                function(err, results) {
+                    defaults.field_data.media = results.media_list;
+                    defaults.field_data.users = results.user_list;
+
+                    if(typeof data == 'object' && data.id) {
+                        var render_data = $.extend(true, defaults, results.queue_get);
+                        render_data.field_data.old_list = [];
+                        render_data.stats = {};// _data_stat.data;
+                        if('agents' in results.queue_get.data) {
+                            render_data.field_data.old_list = results.queue_get.data.agents;
                         }
-                    );
+                        THIS.render_edit_agents(render_data, target, callbacks);
 
-                    defaults.field_data.media = _data_media.data;
-
-                    winkstart.request(true, 'queue.user_list', {
-                            account_id: winkstart.apps['call_center'].account_id,
-                            api_url: winkstart.apps['call_center'].api_url
-                        },
-                        function(_data, status) {
-                            //defaults.field_data.users = _data.data;
-                            defaults.field_data.users = {};
-
-                            $.each(_data.data, function(k, v) {
-                                defaults.field_data.users[v.id] = v;
-                            });
-
-                            if(typeof data == 'object' && data.id) {
-                                //THIS.queue_get_stats(data.id, function(_data_stat) {
-                                    winkstart.request(true, 'queue.get', {
-                                            account_id: winkstart.apps['call_center'].account_id,
-                                            api_url: winkstart.apps['call_center'].api_url,
-                                            queue_id: data.id
-                                        },
-                                        function(_data, status) {
-                                            var render_data = $.extend(true, defaults, _data);
-                                            render_data.field_data.old_list = [];
-                                            render_data.stats = {};// _data_stat.data;
-                                            if('agents' in _data.data) {
-                                                render_data.field_data.old_list = _data.data.agents;
-                                            }
-                                            THIS.render_edit_agents(render_data, target, callbacks);
-
-                                            if(typeof callbacks.after_render == 'function') {
-                                                callbacks.after_render();
-                                            }
-                                        }
-                                    );
-                                //});
-                            }
-                            else {
-                                THIS.render_queue(defaults, target, callbacks);
-
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
-                                }
-                            }
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
                         }
-                    );
+                    }
+                    else {
+                        THIS.render_queue(defaults, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
+                    }
                 }
             );
         },
@@ -447,15 +466,15 @@ winkstart.module('call_center', 'queue', {
 
                 function sort_moh_select_list(){
                     var select = $('#moh', queue_html);
-                    var selected = select.val(); 
+                    var selected = select.val();
                     var opts_list = select.find('option');
                     opts_list.sort(function(a, b) {
                         if ($(a).text() == _t('queue', 'default_music') ||  $(a).text() == _t('queue', 'silence')) return -1;
                         if ($(b).text() == _t('queue', 'default_music') ||  $(b).text() == _t('queue', 'silence')) return 1;
-                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1; 
+                        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? 1 : -1;
                     });
                     select.html('').append(opts_list);
-                    select.val(selected); 
+                    select.val(selected);
                 }
 
                 winkstart.publish('media.popup_edit', _data, function(_data) {
@@ -1045,7 +1064,7 @@ winkstart.module('call_center', 'queue', {
                                     } else {
                                         node.deleteMetadata('var');
                                     }
-                                        
+
                                     node.caption = $('#queue_selector option:selected', popup).text();
 
                                     popup.dialog('close');
