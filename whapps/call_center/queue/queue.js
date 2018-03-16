@@ -364,6 +364,9 @@ winkstart.module('call_center', 'queue', {
                         }
                     }
                     else {
+                        defaults.data.breakout = {
+                            dtmf: '1'
+                        };
                         THIS.render_queue(defaults, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
@@ -542,6 +545,14 @@ winkstart.module('call_center', 'queue', {
         },
 
         normalize_data: function(form_data) {
+            if(typeof form_data.breakout.dtmf == 'boolean') {
+                if(form_data.breakout.dtmf) {
+                    form_data.breakout.dtmf = '1';
+                }
+                else {
+                    delete form_data.breakout;
+                }
+            }
             delete form_data.users;
             return form_data;
         },

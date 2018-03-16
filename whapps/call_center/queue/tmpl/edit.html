@@ -179,6 +179,24 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <label>${_t('callbacks')}</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if data.breakout}}
+                                        <input type="checkbox" name="breakout.dtmf" checked="checked">
+                                        {{else}}
+                                        <input type="checkbox" name="breakout.dtmf">
+                                        {{/if}}
+                                        <span>${_t('enabled')}</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="notifications">

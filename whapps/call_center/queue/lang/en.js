@@ -112,5 +112,7 @@ window.translate['queue'] = {
 	wait_time_announcements_enabled: "Enable periodic average wait time announcements to caller.",
 	announcements_interval: "Announce Time (s)",
 	announcements_interval_data_content: "Time between position and wait time announcements.",
-	route_var_ccv: "Route Variable"
+	route_var_ccv: "Route Variable",
+	callbacks: "Callbacks",
+	enabled: "Enabled"
 };
