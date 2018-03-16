@@ -120,3 +120,10 @@ span.sublabel {
     margin-right: 10px;
     color: #e6e6e6;
 }
+
+#wait_time_popup .explanation {
+    max-width: 400px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
