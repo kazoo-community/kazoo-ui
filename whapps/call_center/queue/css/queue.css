@@ -121,6 +121,15 @@ span.sublabel {
     color: #e6e6e6;
 }
 
+.queue-classifiers label {
+    width: 60px;
+    text-align: left;
+}
+
+.queue-classifiers .input {
+    margin-left: 80px !important;
+}
+
 #wait_time_popup .explanation {
     max-width: 400px;
     margin-bottom: 15px;

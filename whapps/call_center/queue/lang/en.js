@@ -114,5 +114,8 @@ window.translate['queue'] = {
 	announcements_interval_data_content: "Time between position and wait time announcements.",
 	route_var_ccv: "Route Variable",
 	callbacks: "Callbacks",
-	enabled: "Enabled"
+	enabled: "Enabled",
+	callbacks_permitted_from: "Callbacks Permitted From",
+	allow: "Allow",
+	deny: "Deny"
 };
