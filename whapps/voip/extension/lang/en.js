@@ -1,7 +1,9 @@
 window.translate['extension'] = {
+    components: "Components",
     create_another_extension: "Create Another Extension",
     create_extension: "Create Extension",
     created_extension: "Created extension",
+    devices: "Devices",
     email: "Email",
     email_placeholder: "Email",
     email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,

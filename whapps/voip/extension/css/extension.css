@@ -10,3 +10,30 @@ span.disabled {
 .dialog_button {
     width: 180px;
 }
+
+.extension_components {
+    margin-bottom: 18px;
+}
+
+.info_row {
+    margin-bottom: 18px;
+    padding-top: 6px;
+}
+
+.info_row span {
+    margin-left: 20px;
+}
+
+.info_row_item {
+    margin-left: 150px;
+}
+
+.info_row_item a {
+    color: #05addc;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.info_row_item a:hover {
+    color: #27cffe;
+}

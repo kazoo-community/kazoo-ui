@@ -5,12 +5,15 @@ winkstart.module('voip', 'extension', {
 
         templates: {
             create: 'tmpl/create.html',
+            edit: 'tmpl/edit.html',
             extension: 'tmpl/extension.html',
             popup_saved: 'tmpl/popup_saved.html'
         },
 
         subscribe: {
-            'extension.activate': 'activate'
+            'extension.activate': 'activate',
+            'extension.create': 'load_extension_create',
+            'extension.edit': 'load_extension_edit'
         },
 
         validation : [
@@ -106,12 +109,127 @@ winkstart.module('voip', 'extension', {
             (parent)
                 .empty()
                 .append(extension_html);
-            
-            THIS.load_extension_create({
-                    account_id: winkstart.apps['voip'].account_id
+
+            THIS.load_extension_list({
+                after_render: args.callback || {}
+            });
+        },
+
+        /**
+         * Load data for rendering list of extensions in the account.
+         *
+         * @param {Object} _callbacks - May contain callback to execute
+         * after render (after_render). The callback accepts 2 args: data,
+         * success
+         */
+        load_extension_list: function(_callbacks) {
+            var THIS = this,
+                _callbacks = _callbacks || {},
+                callbacks = {
+                    after_render: _callbacks.after_render
+                };
+
+            winkstart.parallel({
+                    callflow_list: function(callback) {
+                        winkstart.request('callflow.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            }
+                        );
+                    },
+                    device_list: function(callback) {
+                        winkstart.request('device.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            }
+                        );
+                    },
+                    user_list: function(callback) {
+                        winkstart.request('user.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            }
+                        );
+                    },
+                    vmbox_list: function(callback) {
+                        winkstart.request('vmbox.list', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            }
+                        );
+                    }
                 },
-                {
-                    after_render: args.callback || {}
+                function(err, results) {
+                    var extensions = {},
+                        // For looking up ID of user when matching callflows
+                        extensionIDMap = {};
+
+                    // Create user map
+                    $.each(results.user_list, function(index, user) {
+                        extensions[user.id] = user;
+                        extensions[user.id] = $.extend(user, {
+                            devices: [],
+                            vmboxes: []
+                        });
+                        extensionIDMap[user.username] = user.id;
+                    });
+
+                    // Add callflow if one is assigned to the extension
+                    $.each(results.callflow_list, function(index, callflow) {
+                        $.each(callflow.numbers, function(index, number) {
+                            if(extensionIDMap[number]) {
+                                extensions[extensionIDMap[number]].callflow = callflow;
+                            }
+                        });
+                    });
+
+                    // Add owned devices
+                    $.each(results.device_list, function(index, device) {
+                        if(extensions[device.owner_id]) {
+                            extensions[device.owner_id].devices.push(device);
+                        }
+                    });
+
+                    // Add owned VM boxes
+                    $.each(results.vmbox_list, function(index, vmbox) {
+                        if(extensions[vmbox.owner_id]) {
+                            extensions[vmbox.owner_id].vmboxes.push(vmbox);
+                        }
+                    });
+
+                    // Filter out non-numeric extensions
+                    function isInteger(value) {
+                        return !isNaN(value) &&
+                            parseInt(Number(value)) == value &&
+                            !isNaN(parseInt(value, 10));
+                    }
+                    Object.keys(extensionIDMap)
+                        .filter(function(usernameKey) {
+                            return !isInteger(usernameKey);
+                        })
+                        .forEach(function(usernameKey) {
+                            var id = extensionIDMap[usernameKey];
+                            delete extensions[id];
+                        });
+
+                    var extensionsArr = [];
+                    $.each(extensions, function(key, extension) {
+                        extensionsArr.push(extension);
+                    });
+
+                    THIS.render_extension_list(extensionsArr, callbacks);
                 }
             );
         },
@@ -119,13 +237,13 @@ winkstart.module('voip', 'extension', {
         /**
          * Load data required to initially populate the form.
          *
-         * @param {Object} data - Contains "account_id" that should be used for
-         * the requests
+         * @param {Object} data - Unused
+         * @param {Object} _parent - Container for all view data in this app
          * @param {Object} _callbacks - May contain callbacks to execute
          * after 1. "save_success" and 2. form render ("after_render"). Both
          * accept 2 args: data, success
          */
-        load_extension_create: function(data, _callbacks) {
+        load_extension_create: function(data, _parent, _callbacks) {
             var THIS = this,
                 _callbacks = _callbacks || {},
                 callbacks = {
@@ -138,7 +256,7 @@ winkstart.module('voip', 'extension', {
             winkstart.parallel({
                     account: function(callback) {
                         winkstart.request('extension.get_account', {
-                                account_id: data.account_id,
+                                account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
@@ -151,7 +269,7 @@ winkstart.module('voip', 'extension', {
                     },
                     callflows: function(callback) {
                         winkstart.request('extension.list_callflows', {
-                                account_id: data.account_id,
+                                account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
@@ -164,7 +282,7 @@ winkstart.module('voip', 'extension', {
                     },
                     phone_numbers: function(callback) {
                         winkstart.request('extension.list_phone_numbers', {
-                                account_id: data.account_id,
+                                account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
@@ -199,6 +317,77 @@ winkstart.module('voip', 'extension', {
         },
 
         /**
+         * Load data required to populate the extension components view.
+         *
+         * @param {Object} data - Unused
+         * @param {Object} _parent - Container for all view data in this app
+         */
+        load_extension_edit: function(data, _parent) {
+            data._t = function(param){
+                return window.translate['extension'][param];
+            }
+            var THIS = this,
+                edit_html = THIS.templates.edit.tmpl(data),
+                parent = $('#extension-content'),
+                target = $('#extension-view', parent);
+
+            (target)
+                .empty()
+                .append(edit_html);
+        },
+
+        /**
+         * Render list panel of extensions.
+         *
+         * @param {Object} data - Data fetched from the API for populating
+         * the list panel.
+         * @param {Object} callbacks
+         * @see load_extension_list
+         */
+        render_extension_list: function(data, callbacks) {
+            var map_crossbar_data = function(data) {
+                var new_list = [];
+
+                if(data.length > 0) {
+                    $.each(data, function(key, val) {
+                        new_list.push({
+                            id: val.id,
+                            title: val.username,
+                            devices: val.devices,
+                            first_name: val.first_name,
+                            last_name: val.last_name,
+                            username: val.username
+                        });
+                    });
+                }
+
+                new_list.sort(function(a, b) {
+                    return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+                });
+
+                return new_list;
+            };
+
+            var parent = $('#extension-content');
+            $('#extension-listpanel', parent)
+                .empty()
+                .listpanel({
+                    label: _t('extension', 'extensions_label'),
+                    identifier: 'extension-listview',
+                    new_entity_label: _t('extension', 'create_extension'),
+                    data: map_crossbar_data(data),
+                    publisher: winkstart.publish,
+                    notifyMethod: 'extension.edit',
+                    notifyCreateMethod: 'extension.create',
+                    notifyParent: parent
+                });
+
+            if(typeof callbacks.after_render == 'function') {
+                callbacks.after_render();
+            }
+        },
+
+        /**
          * Render template data for the form.
          *
          * @param {Object} data - Data fetched from the API for populating
@@ -214,9 +403,9 @@ winkstart.module('voip', 'extension', {
                 create_html = THIS.templates.create.tmpl(data),
                 parent = $('#extension-content'),
                 target = $('#extension-view', parent);
-                
+
             winkstart.validate.set(THIS.config.validation, create_html);
-            
+
             winkstart.timezone.populate_dropdown($('#timezone', create_html), data.account.timezone);
 
             $('#phone_number', create_html).change(function(ev) {
@@ -264,12 +453,20 @@ winkstart.module('voip', 'extension', {
                 },
                 popup_html = THIS.templates.popup_saved.tmpl(data),
                 dialog = winkstart.dialog(popup_html, {
+                    onClose: function() {
+                        // TODO also go the "edit" view for the extension
+                        winkstart.publish('extension.activate');
+                    },
                     title: window.translate['extension']['extensions_label']
                 });
 
             $('#create_another_extension', popup_html).click(function(ev) {
                 // Refresh the extension create screen
-                winkstart.publish('extension.activate');
+                winkstart.publish('extension.activate', {
+                    callback: function() {
+                        winkstart.publish('extension.create')
+                    }
+                });
                 dialog.dialog('close');
             });
 

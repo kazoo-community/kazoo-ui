@@ -1,0 +1,39 @@
+<div>
+    <div class="row">
+        <div class="whapp-header">
+            <h1>${_t('username')} ${username}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="pill-content extension_components">
+            <div class="active">
+                <h3>${_t('components')}</h3>
+                <div class="clearfix">
+                    <label>${_t('name_first')}</label>
+                    <div class="info_row">
+                        <span>${first_name}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label>${_t('name_last')}</label>
+                    <div class="info_row">
+                        <span>${last_name}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label>${_t('devices')}</label>
+                    <div class="info_row">
+                        {{each(k, device) devices}}
+                            <div class="info_row_item">
+                                <a>${device.name}</a>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-right">
+            <button class="btn success extension-save">${_t('save')}</button>
+        </div>
+    </div>
+</div>
