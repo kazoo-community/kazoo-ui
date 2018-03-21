@@ -6,7 +6,7 @@ steps:
       docker: 'true'
     plugins:
       docker#v1.0.0:
-        image: 'tenzer/fpm:no-entrypoint'
+        image: 'voxter/fpm'
         workdir: /app
 
   - wait
