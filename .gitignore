@@ -9,3 +9,5 @@ nbproject/
 *.orig
 config/config.js
 VERSION
+.DS_Store
+._.DS_Store

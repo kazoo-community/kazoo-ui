@@ -11,6 +11,8 @@ winkstart.module('call_center', 'queue', {
             agent_presence_callflow: 'tmpl/agent_presence_callflow.html',
             agent_availability_callflow: 'tmpl/agent_availability_callflow.html',
             agent_availability_key_callflow: 'tmpl/agent_availability_key_callflow.html',
+            wait_time_callflow: 'tmpl/wait_time_callflow.html',
+            wait_time_key_callflow: 'tmpl/wait_time_key_callflow.html',
             add_agents: 'tmpl/add_agents.html',
             edit_agents: 'tmpl/edit_agents.html',
             selected_agent: 'tmpl/selected_agent.html',
@@ -78,6 +80,11 @@ winkstart.module('call_center', 'queue', {
             },
             'queue.media_list': {
                 url: '{api_url}/accounts/{account_id}/media',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'queue.classifiers_list': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
                 contentType: 'application/json',
                 verb: 'GET'
             }
@@ -277,6 +284,7 @@ winkstart.module('call_center', 'queue', {
                         }
                     }, data_defaults || {}),
                     field_data: {
+                        classifiers: {}
                         /*sort_by: {
                             'first_name': 'First Name',
                             'last_name': 'Last Name'
@@ -285,70 +293,122 @@ winkstart.module('call_center', 'queue', {
                     record_caller_disabled: 'disabled'
                 };
 
-            winkstart.request(true, 'queue.media_list', {
-                    account_id: winkstart.apps['call_center'].account_id,
-                    api_url: winkstart.apps['call_center'].api_url
-                },
-                function(_data_media, status) {
-                    _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
-                    _data_media.data.unshift(
-                        {
-                            id: '',
-                            name: _t('queue', 'default_music')
-                        },
-                        {
-                            id: 'silence_stream://300000',
-                            name: _t('queue', 'silence')
-                        }
-                    );
+            winkstart.parallel({
+                    classifiers_list: function(callback) {
+                        winkstart.request(true, 'queue.classifiers_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data_classifiers, status) {
+                                var classifiers = {};
 
-                    defaults.field_data.media = _data_media.data;
-
-                    winkstart.request(true, 'queue.user_list', {
-                            account_id: winkstart.apps['call_center'].account_id,
-                            api_url: winkstart.apps['call_center'].api_url
-                        },
-                        function(_data, status) {
-                            //defaults.field_data.users = _data.data;
-                            defaults.field_data.users = {};
-
-                            $.each(_data.data, function(k, v) {
-                                defaults.field_data.users[v.id] = v;
-                            });
-
-                            if(typeof data == 'object' && data.id) {
-                                //THIS.queue_get_stats(data.id, function(_data_stat) {
-                                    winkstart.request(true, 'queue.get', {
-                                            account_id: winkstart.apps['call_center'].account_id,
-                                            api_url: winkstart.apps['call_center'].api_url,
-                                            queue_id: data.id
-                                        },
-                                        function(_data, status) {
-                                            var render_data = $.extend(true, defaults, _data);
-                                            render_data.field_data.old_list = [];
-                                            render_data.stats = {};// _data_stat.data;
-                                            if('agents' in _data.data) {
-                                                render_data.field_data.old_list = _data.data.agents;
-                                            }
-                                            render_data.record_caller_disabled = render_data.data.record_caller ? '' : 'disabled';
-                                            THIS.render_edit_agents(render_data, target, callbacks);
-
-                                            if(typeof callbacks.after_render == 'function') {
-                                                callbacks.after_render();
-                                            }
-                                        }
-                                    );
-                                //});
-                            }
-                            else {
-                                THIS.render_queue(defaults, target, callbacks);
-
-                                if(typeof callbacks.after_render == 'function') {
-                                    callbacks.after_render();
+                                if('data' in _data_classifiers) {
+                                    $.each(_data_classifiers.data, function(k, v) {
+                                        classifiers[k] = {
+                                            enabled: true,
+                                            friendly_name: v.friendly_name
+                                        };
+                                    });
                                 }
+
+                                callback(null, classifiers);
                             }
+                        );
+                    },
+                    media_list: function(callback) {
+                        winkstart.request(true, 'queue.media_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data_media, status) {
+                                _data_media.data.sort(function(a, b){return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1});
+                                _data_media.data.unshift(
+                                    {
+                                        id: '',
+                                        name: _t('queue', 'default_music')
+                                    },
+                                    {
+                                        id: 'silence_stream://300000',
+                                        name: _t('queue', 'silence')
+                                    }
+                                );
+
+                                callback(null, _data_media.data);
+                            }
+                        );
+                    },
+                    queue_get: function(callback) {
+                        if(typeof data == 'object' && data.id) {
+                            //THIS.queue_get_stats(data.id, function(_data_stat) {
+                                winkstart.request(true, 'queue.get', {
+                                        account_id: winkstart.apps['call_center'].account_id,
+                                        api_url: winkstart.apps['call_center'].api_url,
+                                        queue_id: data.id
+                                    },
+                                    function(_data, status) {
+                                        callback(null, _data);
+                                    }
+                                );
+                            //});
                         }
-                    );
+                        else {
+                            callback(null, null);
+                        }
+                    },
+                    user_list: function(callback) {
+                        winkstart.request(true, 'queue.user_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data, status) {
+                                var users = {};
+
+                                $.each(_data.data, function(k, v) {
+                                    users[v.id] = v;
+                                });
+
+                                callback(null, users);
+                            }
+                        );
+                    }
+                },
+                function(err, results) {
+                    defaults.field_data.classifiers = results.classifiers_list;
+                    defaults.field_data.media = results.media_list;
+                    defaults.field_data.users = results.user_list;
+
+                    if(typeof data == 'object' && data.id) {
+                        var render_data = $.extend(true, defaults, results.queue_get);
+                        render_data.field_data.old_list = [];
+                        render_data.stats = {};// _data_stat.data;
+                        if('agents' in results.queue_get.data) {
+                            render_data.field_data.old_list = results.queue_get.data.agents;
+                        }
+                        render_data.record_caller_disabled = render_data.data.record_caller ? '' : 'disabled';
+
+                        // Classifier default values
+                        if(render_data.data.breakout && render_data.data.breakout.classifiers) {
+                            $.each(render_data.data.breakout.classifiers, function(key, enabled) {
+                                defaults.field_data.classifiers[key].enabled = enabled;
+                            });
+                        }
+
+                        THIS.render_edit_agents(render_data, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
+                    }
+                    else {
+                        defaults.data.breakout = {
+                            dtmf: '1'
+                        };
+                        THIS.render_queue(defaults, target, callbacks);
+
+                        if(typeof callbacks.after_render == 'function') {
+                            callbacks.after_render();
+                        }
+                    }
                 }
             );
         },
@@ -491,6 +551,13 @@ winkstart.module('call_center', 'queue', {
                 });
             });
 
+            if(!data.data.breakout) {
+                $('.queue-classifiers-row', queue_html).hide();
+            }
+            $('input[name="breakout.dtmf"]', queue_html).change(function() {
+                $('.queue-classifiers-row', queue_html).toggle();
+            });
+
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -521,6 +588,24 @@ winkstart.module('call_center', 'queue', {
         },
 
         normalize_data: function(form_data) {
+            if(typeof form_data.breakout.dtmf == 'boolean') {
+                if(form_data.breakout.dtmf) {
+                    form_data.breakout.dtmf = '1';
+                }
+                else {
+                    delete form_data.breakout;
+                }
+            }
+            if(form_data.breakout && form_data.breakout.classifiers) {
+                var normalized_classifiers = {};
+                $.each(form_data.breakout.classifiers, function(key, value) {
+                    if(value == 'deny') {
+                        // True values not written as they are implied
+                        normalized_classifiers[key] = false;
+                    }
+                });
+                form_data.breakout.classifiers = normalized_classifiers;
+            }
             delete form_data.users;
             return form_data;
         },
@@ -1024,6 +1109,10 @@ winkstart.module('call_center', 'queue', {
                             returned_value = caption_map[id].name;
                         }
 
+                        if(node.getMetadata('enter_as_callback')) {
+                            returned_value += ': Enter as callback';
+                        }
+
                         return returned_value;
                     },
                     edit: function(node, callback) {
@@ -1043,7 +1132,8 @@ winkstart.module('call_center', 'queue', {
 									title: _t('queue', 'connect_a_caller_to_a_queue'),
                                     items: data.data,
                                     selected: node.getMetadata('id') || '',
-                                    route_var: node.getMetadata('var') || ''
+                                    route_var: node.getMetadata('var') || '',
+                                    enter_as_callback: node.getMetadata('enter_as_callback')
                                 });
 
                                 if($('#queue_selector option:selected', popup_html).val() == undefined) {
@@ -1083,6 +1173,14 @@ winkstart.module('call_center', 'queue', {
                                     }
 
                                     node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    if($('[name=enter_as_callback]', popup_html).prop('checked')) {
+                                        node.setMetadata('enter_as_callback', true);
+                                        node.caption += ': Enter as callback';
+                                    }
+                                    else {
+                                        node.deleteMetadata('enter_as_callback');
+                                    }
 
                                     popup.dialog('close');
                                 });
@@ -1621,6 +1719,173 @@ winkstart.module('call_center', 'queue', {
 
                                 popup = winkstart.dialog(popup_html, {
                                     title: _t('queue', 'agent_availability'),
+                                    minHeight: '0',
+                                    beforeClose: function() {
+                                        if(typeof callback == 'function') {
+                                            callback();
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                },
+                'acdc_wait_time[id=*]': {
+                    name: _t('queue', 'wait_time'),
+                    icon: 'temporal_route',
+                    category: _t('config', 'call_center_cat'),
+                    module: 'acdc_wait_time',
+                    tip: _t('queue', 'wait_time_tip'),
+                    data: {
+                        id: 'null'
+                    },
+                    rules: [],
+                    isUsable: 'true',
+                    /**
+                     * Returns true if child_node already has a sibling that is set to default mode
+                     *
+                     * @param {object} child_node The node whose siblings to check
+                     * @return {boolean} True if child_node already has a sibling that is set to default mode
+                     */
+                    default_taken: function(child_node) {
+                        var default_taken = false;
+
+                        // Null when loading an existing callflow
+                        if(!child_node.parent) {
+                            return default_taken;
+                        }
+
+                        $.each(child_node.parent.children, function(index, child) {
+                            if(child != child_node && child.key == '_') {
+                                default_taken = true;
+                            }
+                        });
+
+                        return default_taken;
+                    },
+                    key_caption: function(child_node, caption_map) {
+                        // Automatically force threshold mode when adding subsequent children
+                        if(this.default_taken(child_node)) {
+                            child_node.key = "0";
+                        }
+
+                        if(child_node.key == '_') {
+                            return 'Default';
+                        }
+                        else {
+                            return 'Threshold: >' + child_node.key + 's';
+                        }
+                    },
+                    key_edit: function(child_node, callback) {
+                        var default_taken = this.default_taken(child_node);
+
+                        // Automatically force threshold mode when adding subsequent children
+                        var mode = (!default_taken && child_node.key == '_') ? 'default' : 'threshold',
+                            threshold = (default_taken && child_node.key == '_') ? '' : child_node.key,
+                            popup,
+                            popup_html = THIS.templates.wait_time_key_callflow.tmpl({
+                                _t: function(param){
+                                    return window.translate['queue'][param];
+                                },
+                                default_taken: default_taken,
+                                mode: mode,
+                                threshold: mode == 'threshold' ? threshold : ''
+                            });
+
+                        // Hiding/disabling is a pain in jquery-tmpl, just do it here
+                        if(mode == 'default') {
+                            $('.threshold', popup_html).hide();
+                        }
+                        if(default_taken) {
+                            $('input[name=mode][value=default]', popup_html).attr('disabled', 'disabled');
+                        }
+                        $('input[name=mode]', popup_html).change(function() {
+                            if($(this).val() == 'threshold') {
+                                $('#wait_time_popup .threshold', popup).show();
+                            }
+                            else {
+                                $('#wait_time_popup .threshold', popup).hide();
+                            }
+                        });
+
+                        $('#add', popup_html).click(function(event) {
+                            if($('input[name=mode]:checked', popup).val() == 'default') {
+                                child_node.key = '_';
+                                child_node.key_caption = 'Default';
+                            }
+                            else {
+                                var threshold = $('input[name=threshold]', popup);
+                                    thresholdValue = threshold.val();
+                                if(isNaN(parseInt(thresholdValue))) {
+                                    $('.threshold .validated', popup).addClass('invalid');
+                                    return;
+                                }
+                                child_node.key = thresholdValue;
+                                child_node.key_caption = 'Threshold: >' + child_node.key + 's';
+                            }
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('queue', 'wait_time'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
+                    },
+                    caption: function(node, caption_map) {
+                        var id = node.getMetadata('id'),
+                            returned_value = '';
+
+                        if(id in caption_map) {
+                            returned_value = caption_map[id].name;
+                        }
+
+                        return returned_value;
+                    },
+                    edit: function(node, callback) {
+                        var _this = this;
+
+                        winkstart.request(true, 'queue.list',  {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            function(data, status) {
+                                var popup, popup_html;
+
+                                popup_html = THIS.templates.wait_time_callflow.tmpl({
+                                    _t: function(param){
+                                        return window.translate['queue'][param];
+                                    },
+                                    title: _t('queue', 'wait_time_title'),
+                                    items: data.data,
+                                    selected: node.getMetadata('id') || '',
+                                    route_var: node.getMetadata('var') || ''
+                                });
+
+                                $('#add', popup_html).click(function() {
+                                    node.setMetadata('id', $('#queue_selector', popup).val());
+                                    if($('#route_var', popup_html).val().length > 0) {
+                                        node.setMetadata('var', $('#route_var', popup_html).val());
+                                    } else {
+                                        node.deleteMetadata('var');
+                                    }
+
+                                    node.caption = $('#queue_selector option:selected', popup).text();
+
+                                    popup.dialog('close');
+                                });
+
+                                $('#toggle_advanced', popup_html).click(function () {
+                                    $('#route_var_div', popup_html).toggle();
+                                });
+
+                                popup = winkstart.dialog(popup_html, {
+                                    title: _t('queue', 'wait_time'),
                                     minHeight: '0',
                                     beforeClose: function() {
                                         if(typeof callback == 'function') {

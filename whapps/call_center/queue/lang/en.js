@@ -16,6 +16,8 @@ window.translate['queue'] = {
 	login_agent_tip: "!",
     agent_availability: "Agent Availability",
     agent_availability_tip: "Conditionally branch callflow based on availability of queue agents",
+    wait_time: "Wait Time",
+    wait_time_tip: "Conditionally branch callflow based on the current average wait time for a queue",
 	connect_a_caller_to_a_queue: "Connect a caller to a queue...",
 	queue_title: "Queue",
 	connects_an_agent_to_a_queue: "Connects an agent to a queue...",
@@ -35,6 +37,11 @@ window.translate['queue'] = {
     agent_availability_status: "Availability",
     availability_available: "Available",
     availability_unavailable: "Unavailable",
+    wait_time_title: "Conditionally branch callflow based on the current average wait time",
+    wait_time_key_explanation: "Select \"Threshold\" and define a threshold (in seconds) to compare with the current average wait time. The callflow will follow the branch with the highest threshold exceeded by the current average wait time. Select \"Default\" to define a branch to follow when none of the defined thresholds are exceeded.",
+    threshold: "Threshold",
+    default: "Default",
+    default_disabled: "Default (disabled - already defined)",
 	login_action: "Login",
 	edit_queue: "Edit Queue",
 	create_queue: "Create Queue",
@@ -105,5 +112,10 @@ window.translate['queue'] = {
 	wait_time_announcements_enabled: "Enable periodic average wait time announcements to caller.",
 	announcements_interval: "Announce Time (s)",
 	announcements_interval_data_content: "Time between position and wait time announcements.",
-	route_var_ccv: "Route Variable"
+	route_var_ccv: "Route Variable",
+	callbacks: "Callbacks",
+	enabled: "Enabled",
+	callbacks_permitted_from: "Callbacks Permitted From",
+	allow: "Allow",
+	deny: "Deny"
 };

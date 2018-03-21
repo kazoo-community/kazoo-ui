@@ -179,6 +179,46 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="clearfix">
+                        <label>${_t('callbacks')}</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if data.breakout}}
+                                        <input type="checkbox" name="breakout.dtmf" checked="checked">
+                                        {{else}}
+                                        <input type="checkbox" name="breakout.dtmf">
+                                        {{/if}}
+                                        <span>${_t('enabled')}</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="queue-classifiers-row clearfix">
+                        <label>${_t('callbacks_permitted_from')}</label>
+                        <div class="input">
+                            {{each(k, v) field_data.classifiers}}
+                                <div class="queue-classifiers clearfix">
+                                    <label>${v.friendly_name}</label>
+                                    <div class="input">
+                                        <select name="breakout.classifiers.${k}" class="medium">
+                                            {{if field_data.classifiers[k].enabled}}
+                                                <option value="allow" selected>${_t('allow')}</option>
+                                                <option value="deny">${_t('deny')}</option>
+                                            {{else}}
+                                                <option value="allow">${_t('allow')}</option>
+                                                <option value="deny" selected>${_t('deny')}</option>
+                                            {{/if}}
+                                        </select>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
                 </div>
 
                 <div id="notifications">

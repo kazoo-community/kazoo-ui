@@ -1,6 +1,6 @@
 <div>
     <div class="dialog_popup">
-        <h1>${title}</h1>
+        <h1 class="wrap">${title}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
@@ -15,20 +15,8 @@
                                 {{/if}}
                             {{/each}}
                         </select>
-                        <!--<div class="action_links_div">
-                            <div id="edit_link"><a class="inline_action" data-action="edit" href="javascript:void(0);">Edit queue options</a></div>
-                            <div><a class="inline_action" data-action="create" href="#">Create</a></div>
-                        </div>-->
                     </div>
                 </div>
-            </div>
-
-            <div class="parameter_div">
-                {{if enter_as_callback}}
-                <input type="checkbox" name="enter_as_callback" checked="checked"/> Enter as Callback
-                {{else}}
-                <input type="checkbox" name="enter_as_callback"/> Enter as Callback
-                {{/if}}
             </div>
 
             <div class="parameter_div">
