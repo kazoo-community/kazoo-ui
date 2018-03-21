@@ -82,6 +82,11 @@ winkstart.module('call_center', 'queue', {
                 url: '{api_url}/accounts/{account_id}/media',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'queue.classifiers_list': {
+                url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -279,6 +284,7 @@ winkstart.module('call_center', 'queue', {
                         }
                     }, data_defaults || {}),
                     field_data: {
+                        classifiers: {}
                         /*sort_by: {
                             'first_name': 'First Name',
                             'last_name': 'Last Name'
@@ -288,6 +294,27 @@ winkstart.module('call_center', 'queue', {
                 };
 
             winkstart.parallel({
+                    classifiers_list: function(callback) {
+                        winkstart.request(true, 'queue.classifiers_list', {
+                                account_id: winkstart.apps['call_center'].account_id,
+                                api_url: winkstart.apps['call_center'].api_url
+                            },
+                            function(_data_classifiers, status) {
+                                var classifiers = {};
+
+                                if('data' in _data_classifiers) {
+                                    $.each(_data_classifiers.data, function(k, v) {
+                                        classifiers[k] = {
+                                            enabled: true,
+                                            friendly_name: v.friendly_name
+                                        };
+                                    });
+                                }
+
+                                callback(null, classifiers);
+                            }
+                        );
+                    },
                     media_list: function(callback) {
                         winkstart.request(true, 'queue.media_list', {
                                 account_id: winkstart.apps['call_center'].account_id,
@@ -346,6 +373,7 @@ winkstart.module('call_center', 'queue', {
                     }
                 },
                 function(err, results) {
+                    defaults.field_data.classifiers = results.classifiers_list;
                     defaults.field_data.media = results.media_list;
                     defaults.field_data.users = results.user_list;
 
@@ -357,6 +385,14 @@ winkstart.module('call_center', 'queue', {
                             render_data.field_data.old_list = results.queue_get.data.agents;
                         }
                         render_data.record_caller_disabled = render_data.data.record_caller ? '' : 'disabled';
+
+                        // Classifier default values
+                        if(render_data.data.breakout && render_data.data.breakout.classifiers) {
+                            $.each(render_data.data.breakout.classifiers, function(key, enabled) {
+                                defaults.field_data.classifiers[key].enabled = enabled;
+                            });
+                        }
+
                         THIS.render_edit_agents(render_data, target, callbacks);
 
                         if(typeof callbacks.after_render == 'function') {
@@ -515,6 +551,13 @@ winkstart.module('call_center', 'queue', {
                 });
             });
 
+            if(!data.data.breakout) {
+                $('.queue-classifiers-row', queue_html).hide();
+            }
+            $('input[name="breakout.dtmf"]', queue_html).change(function() {
+                $('.queue-classifiers-row', queue_html).toggle();
+            });
+
             $('.queue-save', queue_html).click(function(ev) {
                 ev.preventDefault();
 
@@ -552,6 +595,16 @@ winkstart.module('call_center', 'queue', {
                 else {
                     delete form_data.breakout;
                 }
+            }
+            if(form_data.breakout && form_data.breakout.classifiers) {
+                var normalized_classifiers = {};
+                $.each(form_data.breakout.classifiers, function(key, value) {
+                    if(value == 'deny') {
+                        // True values not written as they are implied
+                        normalized_classifiers[key] = false;
+                    }
+                });
+                form_data.breakout.classifiers = normalized_classifiers;
             }
             delete form_data.users;
             return form_data;
