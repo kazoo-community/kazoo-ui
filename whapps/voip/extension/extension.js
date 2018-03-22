@@ -136,6 +136,10 @@ winkstart.module('voip', 'extension', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
+                                $.map(_data.data, function(callflow) {
+                                    callflow.name = callflow.name || callflow.numbers.join(', ');
+                                    return callflow;
+                                });
                                 callback(null, _data.data);
                             }
                         );
@@ -323,17 +327,35 @@ winkstart.module('voip', 'extension', {
          * @param {Object} _parent - Container for all view data in this app
          */
         load_extension_edit: function(data, _parent) {
-            data._t = function(param){
-                return window.translate['extension'][param];
-            }
             var THIS = this,
-                edit_html = THIS.templates.edit.tmpl(data),
-                parent = $('#extension-content'),
-                target = $('#extension-view', parent);
+                deviceReqs = {};
 
-            (target)
-                .empty()
-                .append(edit_html);
+            $.each(data.devices, function(index, device) {
+                deviceReqs[device.id] = function(callback) {
+                    winkstart.request('device.get', {
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url,
+                            device_id: device.id
+                        },
+                        function(_data, status) {
+                            callback(null, _data.data);
+                        },
+                        function(_data, status) {
+                            callback(status, null);
+                        }
+                    );
+                };
+            });
+
+            winkstart.parallel(deviceReqs, function(err, results) {
+                if(err) {
+                    winkstart.error_message.process_error()(results, err);
+                }
+                else {
+                    data.devices = results;
+                    THIS.render_extension_edit(data);
+                }
+            });
         },
 
         /**
@@ -350,13 +372,22 @@ winkstart.module('voip', 'extension', {
 
                 if(data.length > 0) {
                     $.each(data, function(key, val) {
+                        var priv_level = val.priv_level == 'admin' ? 'admin' : 'user';
+
                         new_list.push({
+                            // For the list panel
                             id: val.id,
                             title: val.username,
+
+                            // For our use
+                            callflow: val.callflow,
                             devices: val.devices,
+                            email: val.email,
                             first_name: val.first_name,
                             last_name: val.last_name,
-                            username: val.username
+                            priv_level: val.priv_level,
+                            username: val.username,
+                            vmboxes: val.vmboxes
                         });
                     });
                 }
@@ -434,6 +465,64 @@ winkstart.module('voip', 'extension', {
             if(typeof callbacks.after_render == 'function') {
                 callbacks.after_render();
             }
+        },
+
+        /**
+         * Render template data for the user/components.
+         *
+         * @param {Object} data - Data fetched from the API for populating
+         * the user and components views.
+         * @see load_extension_edit
+         */
+        render_extension_edit: function(data) {
+            data._t = function(param){
+                return window.translate['extension'][param];
+            }
+            var THIS = this,
+                edit_html = THIS.templates.edit.tmpl(data),
+                parent = $('#extension-content'),
+                target = $('#extension-view', parent);
+
+            // Allows viewing parts of the extensions without leaving app
+            $('.component_go', edit_html).click(function(ev) {
+                var THIS = this,
+                    model = $(this).attr('data-model');
+
+                switch(model) {
+                    // Unfortunately callflows not designed to be embedded, switch app
+                    case 'callflow':
+                        winkstart.publish('callflow.activate', {
+                            callback: function() {
+                                winkstart.publish('callflow.edit-callflow', {
+                                    id: $(THIS).attr('data-id')
+                                });
+                            }
+                        });
+                        break;
+
+                    case 'device':
+                    case 'user':
+                    case 'vmbox':
+                        winkstart.publish(model + '.edit', {
+                                id: $(THIS).attr('data-id'),
+                            },
+                            $('#extension-content'),
+                            $('#extension-view')
+                        );
+                        break;
+                }
+            });
+
+            // Delete the parts of the extension
+            $('.extension-delete', edit_html).click(function(ev) {
+                winkstart.confirm(data._t('do_you_really_want_to_delete'), function() {
+                    THIS.delete_extension(data);
+                });
+            });
+
+            (target)
+                .empty()
+                .append(edit_html);
         },
 
         /**
@@ -744,6 +833,78 @@ winkstart.module('voip', 'extension', {
                     }
                 }
             );
+        },
+
+        /**
+         * Delete an extension and all its components.
+         *
+         * @param {Object} data - Data object as generated by load_extension_list
+         * @see load_extension_list
+         */
+        delete_extension: function(data) {
+            var THIS = this,
+                reqs = {},
+                reqBaseData = {
+                    account_id: winkstart.apps['voip'].account_id,
+                    api_url: winkstart.apps['voip'].api_url
+                },
+                /**
+                 * Return a delete request function for the given model type.
+                 *
+                 * @param {string} model - The name of the data model type (e.g.
+                 * user or device)
+                 * @param {Object} data - Values to replace in the request's
+                 * query parameter placeholders
+                 */
+                reqFn = function(model, data) {
+                    return function(callback) {
+                        winkstart.request(
+                            model + '.delete',
+                            data,
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    };
+                };
+
+            reqs[data.id] = reqFn(
+                'user',
+                $.extend(reqBaseData, { user_id: data.id })
+            );
+
+            if(data.callflow) {
+                reqs[data.callflow.id] = reqFn(
+                    'callflow',
+                    $.extend(reqBaseData, { callflow_id: data.callflow.id })
+                );
+            }
+
+            $.each(data.devices, function(index, device) {
+                reqs[device.id] = reqFn(
+                    'device',
+                    $.extend(reqBaseData, { device_id: device.id })
+                );
+            });
+
+            $.each(data.vmboxes, function(index, vmbox) {
+                reqs[vmbox.id] = reqFn(
+                    'vmbox',
+                    $.extend(reqBaseData, { vmbox_id: vmbox.id })
+                );
+            });
+
+            winkstart.parallel(reqs, function(err, results) {
+                if(err) {
+                    winkstart.error_message.process_error()(results, err);
+                }
+                else {
+                    winkstart.publish('extension.activate');
+                }
+            });
         },
 
         /**
