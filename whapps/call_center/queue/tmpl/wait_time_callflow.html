@@ -2,8 +2,10 @@
     <div class="dialog_popup">
         <h1 class="wrap">${title}</h1>
         <form name="form" method="post" action="#">
+            <div class="explanation">${_t('wait_time_explanation')}</div>
+
             <div class="form_content">
-                <div class="popup_field">
+                <div class="popup_field center_field">
                     <label for="queue_selector">${_t('queue')}</label>
                     <div class="select_wrapper">
                         <select id="queue_selector">
@@ -16,6 +18,20 @@
                             {{/each}}
                         </select>
                     </div>
+                </div>
+
+                <div class="popup_field">
+                    <label for="wait_time_window">${_t('window')}</label>
+                    <input type="text" id="wait_time_window" value="${window}" />
+                    <select id="wait_time_window_unit">
+                        {{if window_unit == "minutes"}}
+                            <option value="minutes" SELECTED>${_t('minutes')}</option>
+                            <option value="hours">${_t('hours')}</option>
+                        {{else}}
+                            <option value="minutes">${_t('minutes')}</option>
+                            <option value="hours" SELECTED>${_t('hours')}</option>
+                        {{/if}}
+                    </select>
                 </div>
             </div>
 

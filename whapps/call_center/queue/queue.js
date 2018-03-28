@@ -1855,7 +1855,14 @@ winkstart.module('call_center', 'queue', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(data, status) {
-                                var popup, popup_html;
+                                var popup, popup_html,
+                                    eval_window = node.getMetadata('window') || 900,
+                                    window_unit = eval_window % 3600 == 0 ? 'hours' : 'minutes';
+
+                                eval_window /= 60;
+                                if(window_unit == 'hours') {
+                                    eval_window /= 60;
+                                }
 
                                 popup_html = THIS.templates.wait_time_callflow.tmpl({
                                     _t: function(param){
@@ -1864,11 +1871,20 @@ winkstart.module('call_center', 'queue', {
                                     title: _t('queue', 'wait_time_title'),
                                     items: data.data,
                                     selected: node.getMetadata('id') || '',
+                                    window: eval_window,
+                                    window_unit: window_unit,
                                     route_var: node.getMetadata('var') || ''
                                 });
 
                                 $('#add', popup_html).click(function() {
                                     node.setMetadata('id', $('#queue_selector', popup).val());
+
+                                    var eval_window = $('#wait_time_window').val() * 60;
+                                    if($('#wait_time_window_unit').val() == 'hours') {
+                                        eval_window *= 60;
+                                    }
+                                    node.setMetadata('window', eval_window);
+
                                     if($('#route_var', popup_html).val().length > 0) {
                                         node.setMetadata('var', $('#route_var', popup_html).val());
                                     } else {

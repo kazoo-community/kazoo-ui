@@ -130,9 +130,21 @@ span.sublabel {
     margin-left: 80px !important;
 }
 
-#wait_time_popup .explanation {
+.explanation {
     max-width: 400px;
     margin-bottom: 15px;
     font-size: 14px;
     font-weight: bold;
+}
+
+.center_field {
+    display: inline-block;
+}
+
+#wait_time_window {
+    max-width: 40px;
+}
+
+#wait_time_window_unit {
+    width: auto;
 }
