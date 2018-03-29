@@ -543,11 +543,21 @@ winkstart.module('voip', 'extension', {
                     case 'device':
                     case 'user':
                     case 'vmbox':
+                        var callbacks = {};
+                        if(model == 'user') {
+                            // If a user is deleted, the extension list must be
+                            // updated
+                            callbacks.delete_success = function() {
+                                winkstart.publish('extension.activate');
+                            };
+                        }
+
                         winkstart.publish(model + '.edit', {
                                 id: $(THIS).attr('data-id'),
                             },
                             $('#extension-content'),
-                            $('#extension-view')
+                            $('#extension-view'),
+                            callbacks
                         );
                         break;
                 }
