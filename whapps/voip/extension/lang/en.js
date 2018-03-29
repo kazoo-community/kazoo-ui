@@ -26,6 +26,7 @@ window.translate['extension'] = {
     name_last_placeholder: "Last Name",
     name_regex: /^[0-9a-zA-Z\s\-\']+$/,
     none: "None",
+    number: "Number",
     numeric_regex: /^[0-9]+$/,
     password: "PIN",
     password_placeholder: "Login and Voicemail PIN",

@@ -102,18 +102,42 @@
                                     ${device.name}
                                 </div>
                             </div>
-                            <div class="clearfix">
-                                <label>${_t('mac_address')}</label>
-                                <div class="info_row">
-                                    ${device.mac_address}
+                            {{if device.device_type == "sip_device" || device.device_type == "fax"}}
+                                <div class="clearfix">
+                                    <label>${_t('mac_address')}</label>
+                                    <div class="info_row">
+                                        ${device.mac_address}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="clearfix">
-                                <label>${_t('sip_username')}</label>
-                                <div class="info_row">
-                                    ${device.sip.username}
+                            {{/if}}
+                            {{if device.device_type == "cellphone" || device.device_type == "smartphone" || device.device_type == "landline" || device.device_type == "mobile"}}
+                                <div class="clearfix">
+                                    <label>${_t('number')}</label>
+                                    <div class="info_row">
+                                        {{if device.device_type == "mobile"}}
+                                            ${device.mobile.mdn}
+                                        {{else}}
+                                            ${device.call_forward.number}
+                                        {{/if}}
+                                    </div>
                                 </div>
-                            </div>
+                            {{/if}}
+                            {{if device.device_type == "sip_uri"}}
+                                <div class="clearfix">
+                                    <label>${_t('sip_uri')}</label>
+                                    <div class="info_row">
+                                        ${device.sip.route}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{if device.device_type == "sip_device" || device.device_type == "softphone" || device.device_type == "mobile"}}
+                                <div class="clearfix">
+                                    <label>${_t('sip_username')}</label>
+                                    <div class="info_row">
+                                        ${device.sip.username}
+                                    </div>
+                                </div>
+                            {{/if}}
                         </span>
                         <div class="component_controls">
                             <a class="component_go icon right_arrow" data-id="${device.id}" data-model="device"></a>
