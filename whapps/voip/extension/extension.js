@@ -220,8 +220,8 @@ winkstart.module('voip', 'extension', {
                 _callbacks = _callbacks || {},
                 callbacks = {
                     after_render: _callbacks.after_render,
-                    save_success: _callbacks.save_success || function(callflow_data) {
-                        THIS.render_save_success_popup(callflow_data);
+                    save_success: _callbacks.save_success || function(user_data) {
+                        THIS.render_save_success_popup(user_data);
                     }
                 };
 
@@ -577,25 +577,30 @@ winkstart.module('voip', 'extension', {
 
         /**
          * Display popup confirming success of extension creation. Offers two
-         * options - "Create Another Extension" and "Go to Callflow x".
+         * options - "Create Another Extension" and "Go to Extension x".
          *
-         * @param {Object} callflow_data - Data returned from the save_callflow
+         * @param {Object} user_data - Data returned from the save_user
          * operation.
          */
-        render_save_success_popup: function(callflow_data) {
+        render_save_success_popup: function(user_data) {
             var THIS = this,
                 data = {
                     _t: function(param) {
                         return window.translate['extension'][param];
                     },
-                    callflow_data: callflow_data
+                    user_data: user_data
                 },
                 popup_html = THIS.templates.popup_saved.tmpl(data),
+                goToExtension = function() {
+                    // Go to the extension edit screen for the new extension
+                    winkstart.publish('extension.activate', {
+                        callback: function() {
+                            winkstart.publish('extension.edit', user_data);
+                        }
+                    });
+                },
                 dialog = winkstart.dialog(popup_html, {
-                    onClose: function() {
-                        // TODO also go the "edit" view for the extension
-                        winkstart.publish('extension.activate');
-                    },
+                    onClose: goToExtension,
                     title: window.translate['extension']['extensions_label']
                 });
 
@@ -609,13 +614,8 @@ winkstart.module('voip', 'extension', {
                 dialog.dialog('close');
             });
 
-            $('#go_to_callflow', popup_html).click(function(ev) {
-                // Load the callflow module, then edit the callflow that was created
-                winkstart.publish('callflow.activate', {
-                    callback: function() {
-                        winkstart.publish('callflow.edit-callflow', callflow_data);
-                    }
-                });
+            $('#go_to_extension', popup_html).click(function(ev) {
+                goToExtension();
                 dialog.dialog('close');
             });
         },
@@ -875,7 +875,11 @@ winkstart.module('voip', 'extension', {
                     data: callflow_data
                 },
                 function(_data, status) {
-                    success(_data.data, status);
+                    // We send the user_data to success because it is used to
+                    // generate the success dialog. Callflow is also loaded
+                    // during list, so add it here
+                    user_data.callflow = _data.data;
+                    success(user_data, status);
                 },
                 function(_data, status) {
                     if(typeof error == 'function') {

@@ -13,7 +13,7 @@ window.translate['extension'] = {
     extension_created: "Extension Created",
     extensions_label: "Extensions",
     fax: "Fax",
-    go_to_callflow: "Go to Callflow",
+    go_to_extension: "Go to Extension",
     info: "Info",
     landline: "Landline",
     mac_address: "MAC Address",
