@@ -61,6 +61,18 @@ span.disabled {
     background-position: -960px -155px;
 }
 
+.component_icon .registration_status {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+    background-image: url('../../device/images/red.png');
+}
+
+.component_icon .registered {
+    background-image: url('../../device/images/green.png');
+}
+
 .component_detail {
     display: inline-block;
     vertical-align: middle;

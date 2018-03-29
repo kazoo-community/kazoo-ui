@@ -64,47 +64,53 @@
                 <h3>${_t('devices')}</h3>
                 {{each(k, device) devices}}
                     <div class="extension_component_box">
-                        {{if device.device_type == "sip_device"}}
-                            <span class="component_icon">
+                        <span class="component_icon">
+                            {{if device.device_type == "sip_device"}}
                                 <div class="icon phone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
                                 <div>${_t('voip_phone')}</div>
-                            </span>
-                        {{else device.device_type == "cellphone"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "cellphone"}}
                                 <div class="icon active_phone"></div>
                                 <div>${_t('cell_phone')}</div>
-                            </span>
-                        {{else device.device_type == "smartphone"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "smartphone"}}
                                 <div class="icon active_phone"></div>
                                 <div>${_t('smart_phone')}</div>
-                            </span>
-                        {{else device.device_type == "landline"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "landline"}}
                                 <div class="icon active_phone"></div>
                                 <div>${_t('landline')}</div>
-                            </span>
-                        {{else device.device_type == "softphone"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "softphone"}}
                                 <div class="icon menu1"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
                                 <div>${_t('soft_phone')}</div>
-                            </span>
-                        {{else device.device_type == "mobile"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "mobile"}}
                                 <div class="icon cellphone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
                                 <div>${_t('mobile')}</div>
-                            </span>
-                        {{else device.device_type == "fax"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "fax"}}
                                 <div class="icon phone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
                                 <div>${_t('fax')}</div>
-                            </span>
-                        {{else device.device_type == "sip_uri"}}
-                            <span class="component_icon">
+                            {{else device.device_type == "sip_uri"}}
                                 <div class="icon phone"></div>
                                 <div>${_t('sip_uri')}</div>
-                            </span>
-                        {{/if}}
+                            {{/if}}
+                        </span>
                         <span class="component_detail">
                             <div class="clearfix">
                                 <label>${_t('name')}</label>

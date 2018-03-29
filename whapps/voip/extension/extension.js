@@ -375,20 +375,41 @@ winkstart.module('voip', 'extension', {
                             );
                         });
 
+                        // Registration status
+                        reqs['device_status'] = function(callback) {
+                            winkstart.request('device.status', {
+                                    account_id: winkstart.apps['voip'].account_id,
+                                    api_url: winkstart.apps['voip'].api_url
+                                },
+                                function(_data, status) {
+                                    callback(null, _data.data);
+                                },
+                                function(_data, status) {
+                                    callback(status, null);
+                                }
+                            );
+                        };
+
                         winkstart.parallel(reqs, function(err, results) {
                             if(err) {
                                 winkstart.error_message.process_error()(results, err);
                             }
                             else {
-                                data.devices = [];
+                                data.devices = {};
                                 data.vmboxes = [];
 
                                 $.each(results, function(id, value) {
-                                    if(id.search('device.') == 0) {
-                                        data.devices.push(value);
+                                    if(id.search('device(?!_).') == 0) {
+                                        data.devices[id.replace('device.', '')] = value;
                                     }
-                                    else {
+                                    else if(id.search('vmbox.') == 0) {
                                         data.vmboxes.push(value);
+                                    }
+                                });
+
+                                $.each(results.device_status, function(index, value) {
+                                    if(data.devices[value.device_id]) {
+                                        data.devices[value.device_id].registered = true;
                                     }
                                 });
 
