@@ -40,12 +40,22 @@
                 <div class="active">
                     <h3>${_t('callflow')}</h3>
                     <div class="clearfix">
-                        <label>${_t('name')}</label>
                         <div class="component_controls">
                             <a class="component_go icon right_arrow" data-id="${callflow.id}" data-model="callflow"></a>
                         </div>
+                    </div>
+                    {{if callflow.name}}
+                        <div class="clearfix">
+                            <label>${_t('name')}</label>
+                            <div class="info_row">
+                                <span>${callflow.name}</span>
+                            </div>
+                        </div>
+                    {{/if}}
+                    <div class="clearfix">
+                        <label>${_t('numbers')}</label>
                         <div class="info_row">
-                            <span>${callflow.name}</span>
+                            <span>${callflow.numbers.join(', ')}</span>
                         </div>
                     </div>
                 </div>
