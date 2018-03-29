@@ -74,6 +74,16 @@ winkstart.module('voip', 'extension', {
                 url: '{api_url}/accounts/{account_id}/phone_numbers',
                 contentType: 'application/json',
                 verb: 'GET'
+            },
+            'extension.list_user_devices': {
+                url: '{api_url}/accounts/{account_id}/devices?filter_owner_id={owner_id}',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
+            'extension.list_user_vmboxes': {
+                url: '{api_url}/accounts/{account_id}/vmboxes?filter_owner_id={owner_id}',
+                contentType: 'application/json',
+                verb: 'GET'
             }
         }
     },
@@ -136,36 +146,12 @@ winkstart.module('voip', 'extension', {
                                 api_url: winkstart.apps['voip'].api_url
                             },
                             function(_data, status) {
-                                $.map(_data.data, function(callflow) {
-                                    callflow.name = callflow.name || callflow.numbers.join(', ');
-                                    return callflow;
-                                });
-                                callback(null, _data.data);
-                            }
-                        );
-                    },
-                    device_list: function(callback) {
-                        winkstart.request('device.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
                                 callback(null, _data.data);
                             }
                         );
                     },
                     user_list: function(callback) {
                         winkstart.request('user.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
-                                callback(null, _data.data);
-                            }
-                        );
-                    },
-                    vmbox_list: function(callback) {
-                        winkstart.request('vmbox.list', {
                                 account_id: winkstart.apps['voip'].account_id,
                                 api_url: winkstart.apps['voip'].api_url
                             },
@@ -183,10 +169,6 @@ winkstart.module('voip', 'extension', {
                     // Create user map
                     $.each(results.user_list, function(index, user) {
                         extensions[user.id] = user;
-                        extensions[user.id] = $.extend(user, {
-                            devices: [],
-                            vmboxes: []
-                        });
                         extensionIDMap[user.username] = user.id;
                     });
 
@@ -197,20 +179,6 @@ winkstart.module('voip', 'extension', {
                                 extensions[extensionIDMap[number]].callflow = callflow;
                             }
                         });
-                    });
-
-                    // Add owned devices
-                    $.each(results.device_list, function(index, device) {
-                        if(extensions[device.owner_id]) {
-                            extensions[device.owner_id].devices.push(device);
-                        }
-                    });
-
-                    // Add owned VM boxes
-                    $.each(results.vmbox_list, function(index, vmbox) {
-                        if(extensions[vmbox.owner_id]) {
-                            extensions[vmbox.owner_id].vmboxes.push(vmbox);
-                        }
                     });
 
                     // Filter out non-numeric extensions
@@ -323,39 +291,113 @@ winkstart.module('voip', 'extension', {
         /**
          * Load data required to populate the extension components view.
          *
-         * @param {Object} data - Unused
+         * @param {Object} data - Data containing the ID of the extension whose
+         * data to load.
          * @param {Object} _parent - Container for all view data in this app
          */
         load_extension_edit: function(data, _parent) {
-            var THIS = this,
-                deviceReqs = {};
+            var THIS = this;
 
-            $.each(data.devices, function(index, device) {
-                deviceReqs[device.id] = function(callback) {
-                    winkstart.request('device.get', {
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url,
-                            device_id: device.id
-                        },
-                        function(_data, status) {
-                            callback(null, _data.data);
-                        },
-                        function(_data, status) {
-                            callback(status, null);
-                        }
-                    );
-                };
-            });
+            winkstart.parallel({
+                    device_list: function(callback) {
+                        winkstart.request('extension.list_user_devices', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                owner_id: data.id
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    },
+                    vmbox_list: function(callback) {
+                        winkstart.request('extension.list_user_vmboxes', {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url,
+                                owner_id: data.id
+                            },
+                            function(_data, status) {
+                                callback(null, _data.data);
+                            },
+                            function(_data, status) {
+                                callback(status, null);
+                            }
+                        );
+                    }
+                },
+                function(err, results) {
+                    if(err) {
+                        winkstart.error_message.process_error()(results, err);
+                    }
+                    else {
+                        var reqs = {},
+                            reqBaseData = {
+                                account_id: winkstart.apps['voip'].account_id,
+                                api_url: winkstart.apps['voip'].api_url
+                            },
+                            /**
+                             * Return a get request function for the given model type.
+                             *
+                             * @param {string} model - The name of the data model type (e.g.
+                             * user or device)
+                             * @param {Object} data - Values to replace in the request's
+                             * query parameter placeholders
+                             */
+                            reqFn = function(model, data) {
+                                return function(callback) {
+                                    winkstart.request(
+                                        model + '.get',
+                                        data,
+                                        function(_data, status) {
+                                            callback(null, _data.data);
+                                        },
+                                        function(_data, status) {
+                                            callback(status, null);
+                                        }
+                                    );
+                                };
+                            };
 
-            winkstart.parallel(deviceReqs, function(err, results) {
-                if(err) {
-                    winkstart.error_message.process_error()(results, err);
+                        $.each(results.device_list, function(index, device) {
+                            reqs['device.' + device.id] = reqFn(
+                                'device',
+                                $.extend({}, reqBaseData, { device_id: device.id })
+                            );
+                        });
+
+                        $.each(results.vmbox_list, function(index, vmbox) {
+                            reqs['vmbox.' + vmbox.id] = reqFn(
+                                'vmbox',
+                                $.extend({}, reqBaseData, { vmbox_id: vmbox.id })
+                            );
+                        });
+
+                        winkstart.parallel(reqs, function(err, results) {
+                            if(err) {
+                                winkstart.error_message.process_error()(results, err);
+                            }
+                            else {
+                                data.devices = [];
+                                data.vmboxes = [];
+
+                                $.each(results, function(id, value) {
+                                    if(id.search('device.') == 0) {
+                                        data.devices.push(value);
+                                    }
+                                    else {
+                                        data.vmboxes.push(value);
+                                    }
+                                });
+
+                                THIS.render_extension_edit(data);
+                            }
+                        });
+                    }
                 }
-                else {
-                    data.devices = results;
-                    THIS.render_extension_edit(data);
-                }
-            });
+            );
         },
 
         /**
@@ -381,13 +423,11 @@ winkstart.module('voip', 'extension', {
 
                             // For our use
                             callflow: val.callflow,
-                            devices: val.devices,
                             email: val.email,
                             first_name: val.first_name,
                             last_name: val.last_name,
                             priv_level: val.priv_level,
-                            username: val.username,
-                            vmboxes: val.vmboxes
+                            username: val.username
                         });
                     });
                 }
@@ -873,27 +913,27 @@ winkstart.module('voip', 'extension', {
 
             reqs[data.id] = reqFn(
                 'user',
-                $.extend(reqBaseData, { user_id: data.id })
+                $.extend({}, reqBaseData, { user_id: data.id })
             );
 
             if(data.callflow) {
                 reqs[data.callflow.id] = reqFn(
                     'callflow',
-                    $.extend(reqBaseData, { callflow_id: data.callflow.id })
+                    $.extend({}, reqBaseData, { callflow_id: data.callflow.id })
                 );
             }
 
             $.each(data.devices, function(index, device) {
                 reqs[device.id] = reqFn(
                     'device',
-                    $.extend(reqBaseData, { device_id: device.id })
+                    $.extend({}, reqBaseData, { device_id: device.id })
                 );
             });
 
             $.each(data.vmboxes, function(index, vmbox) {
                 reqs[vmbox.id] = reqFn(
                     'vmbox',
-                    $.extend(reqBaseData, { vmbox_id: vmbox.id })
+                    $.extend({}, reqBaseData, { vmbox_id: vmbox.id })
                 );
             });
 
