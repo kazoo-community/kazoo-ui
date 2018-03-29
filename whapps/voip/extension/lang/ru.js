@@ -7,7 +7,7 @@ window.translate['extension'] = {
     email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     extension_created: "Создано Расширение",
     extensions_label: "Расширения",
-    go_to_callflow: "Перейти к Сценарию",
+    go_to_extension: "Перейти к Расширению",
     info: "Информация",
     name_first: "Имя",
     name_first_placeholder: "Имя",

@@ -22,6 +22,12 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		validation: [
+				{ name: '#caller_id_name_external',             regex: _t('account', 'caller_id_name_regex') },
+				{ name: '#caller_id_number_external',           regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+				{ name: '#caller_id_name_internal',             regex: _t('account', 'caller_id_name_regex') },
+				{ name: '#caller_id_number_internal',           regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+				{ name: '#caller_id_name_emergency',            regex: _t('account', 'caller_id_name_regex') },
+				{ name: '#caller_id_number_emergency',          regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
 				{ name: '#teletype_deregister_from',            regex: _t('accounts', 'vm_to_email_support_email_regex') },
 				{ name: '#teletype_fax_to_email_from',          regex: _t('accounts', 'vm_to_email_support_email_regex') },
 				{ name: '#teletype_voicemail_to_email_from',    regex: _t('accounts', 'vm_to_email_support_email_regex') },
@@ -289,6 +295,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				defaults = {
 					data: $.extend(true, {
+						caller_id: {
+							internal: {},
+							external: {},
+							emergency: {}
+						},
 						call_restriction: {},
 						notifications: {
 							voicemail_to_email: {},
@@ -696,6 +707,10 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			form_data.available_apps = available_apps;
 
+			form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|\-|\./g, '');
+			form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|\-|\./g, '');
+			form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|\-|\./g, '');
+
 			if(!('notifications' in form_data)) {
 				form_data.notifications = {
 					deregister: {},
@@ -750,6 +765,22 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		normalize_data: function(data) {
+			$.each(data.caller_id, function(key, val) {
+				$.each(val, function(_key, _val) {
+					if(_val == '') {
+						delete val[_key];
+					}
+				});
+
+				if($.isEmptyObject(val)) {
+					delete data.caller_id[key];
+				}
+			});
+
+			if($.isEmptyObject(data.caller_id)) {
+				delete data.caller_id;
+			}
+
 			$.each(data.notifications.voicemail_to_email, function(key, val) {
 				if(val === '') {
 					delete data.notifications.voicemail_to_email[key];
