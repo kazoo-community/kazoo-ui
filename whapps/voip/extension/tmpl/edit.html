@@ -1,0 +1,197 @@
+<div>
+    <div class="row">
+        <div class="whapp-header">
+            <h1>${_t('username')} ${username}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="pill-content extension_components">
+            <div class="active">
+                <h3>${_t('info')}</h3>
+                <div class="clearfix">
+                    <label>${_t('name_first')}</label>
+                    <div class="component_controls">
+                        <a class="component_go icon right_arrow" data-id="${id}" data-model="user"></a>
+                    </div>
+                    <div class="info_row">
+                        <span>${first_name}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label>${_t('name_last')}</label>
+                    <div class="info_row">
+                        <span>${last_name}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label>${_t('email')}</label>
+                    <div class="info_row">
+                        <span>${email}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label>${_t('priv_level')}</label>
+                    <div class="info_row">
+                        <span>${_t('priv_level_' + priv_level)}</span>
+                    </div>
+                </div>
+            </div>
+            {{if callflow}}
+                <div class="active">
+                    <h3>${_t('callflow')}</h3>
+                    <div class="clearfix">
+                        <div class="component_controls">
+                            <a class="component_go icon right_arrow" data-id="${callflow.id}" data-model="callflow"></a>
+                        </div>
+                    </div>
+                    {{if callflow.name}}
+                        <div class="clearfix">
+                            <label>${_t('name')}</label>
+                            <div class="info_row">
+                                <span>${callflow.name}</span>
+                            </div>
+                        </div>
+                    {{/if}}
+                    <div class="clearfix">
+                        <label>${_t('numbers')}</label>
+                        <div class="info_row">
+                            <span>${callflow.numbers.join(', ')}</span>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+            <div class="active">
+                <h3>${_t('devices')}</h3>
+                {{each(k, device) devices}}
+                    <div class="extension_component_box">
+                        <span class="component_icon">
+                            {{if device.device_type == "sip_device"}}
+                                <div class="icon phone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
+                                <div>${_t('voip_phone')}</div>
+                            {{else device.device_type == "cellphone"}}
+                                <div class="icon active_phone"></div>
+                                <div>${_t('cell_phone')}</div>
+                            {{else device.device_type == "smartphone"}}
+                                <div class="icon active_phone"></div>
+                                <div>${_t('smart_phone')}</div>
+                            {{else device.device_type == "landline"}}
+                                <div class="icon active_phone"></div>
+                                <div>${_t('landline')}</div>
+                            {{else device.device_type == "softphone"}}
+                                <div class="icon menu1"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
+                                <div>${_t('soft_phone')}</div>
+                            {{else device.device_type == "mobile"}}
+                                <div class="icon cellphone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
+                                <div>${_t('mobile')}</div>
+                            {{else device.device_type == "fax"}}
+                                <div class="icon phone"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
+                                <div>${_t('fax')}</div>
+                            {{else device.device_type == "sip_uri"}}
+                                <div class="icon phone"></div>
+                                <div>${_t('sip_uri')}</div>
+                            {{/if}}
+                        </span>
+                        <span class="component_detail">
+                            <div class="clearfix">
+                                <label>${_t('name')}</label>
+                                <div class="info_row">
+                                    ${device.name}
+                                </div>
+                            </div>
+                            {{if device.device_type == "sip_device" || device.device_type == "fax"}}
+                                <div class="clearfix">
+                                    <label>${_t('mac_address')}</label>
+                                    <div class="info_row">
+                                        ${device.mac_address}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{if device.device_type == "cellphone" || device.device_type == "smartphone" || device.device_type == "landline" || device.device_type == "mobile"}}
+                                <div class="clearfix">
+                                    <label>${_t('number')}</label>
+                                    <div class="info_row">
+                                        {{if device.device_type == "mobile"}}
+                                            ${device.mobile.mdn}
+                                        {{else}}
+                                            ${device.call_forward.number}
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{if device.device_type == "sip_uri"}}
+                                <div class="clearfix">
+                                    <label>${_t('sip_uri')}</label>
+                                    <div class="info_row">
+                                        ${device.sip.route}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{if device.device_type == "sip_device" || device.device_type == "softphone" || device.device_type == "mobile"}}
+                                <div class="clearfix">
+                                    <label>${_t('sip_username')}</label>
+                                    <div class="info_row">
+                                        ${device.sip.username}
+                                    </div>
+                                </div>
+                            {{/if}}
+                        </span>
+                        <div class="component_controls">
+                            <a class="component_go icon right_arrow" data-id="${device.id}" data-model="device"></a>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="active">
+                <h3>${_t('voicemail_boxes')}</h3>
+                {{each(k, vmbox) vmboxes}}
+                    <div class="extension_component_box">
+                        <span class="component_icon">
+                            <div class="icon voicemail"></div>
+                            <div>Voicemail box</div>
+                        </span>
+                        <span class="component_detail">
+                            <div class="clearfix">
+                                <label>${_t('name')}</label>
+                                <div class="info_row">
+                                    ${vmbox.name}
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <label>${_t('mailbox_number')}</label>
+                                <div class="info_row">
+                                    ${vmbox.mailbox}
+                                </div>
+                            </div>
+                        </span>
+                        <div class="component_controls">
+                            <a class="component_go icon right_arrow" data-id="${vmbox.id}" data-model="vmbox"></a>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="buttons-right">
+            <button class="btn danger extension-delete">${_t('delete')}</button>
+        </div>
+    </div>
+</div>

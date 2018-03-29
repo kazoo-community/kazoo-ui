@@ -10,3 +10,79 @@ span.disabled {
 .dialog_button {
     width: 180px;
 }
+
+.extension_components {
+    margin-bottom: 18px;
+}
+
+.info_row {
+    min-height: 18px;
+    margin-bottom: 18px;
+    margin-left: 150px;
+    padding-top: 6px;
+}
+
+.info_row_item a {
+    color: #05addc;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.info_row_item a:hover {
+    color: #27cffe;
+}
+
+.extension_component_box {
+    border: 1px solid #05addc;
+    margin-bottom: 10px;
+    padding: 18px 0px;
+    box-shadow: 1px 2px 5px 0px #363636;
+    -moz-box-shadow: 4px 5px 10px 1px #262626;
+    -webkit-box-shadow: 4px 5px 10px 1px #262626;
+}
+
+.extension_component_box:last-child {
+    margin-bottom: 20px;
+}
+
+.component_icon {
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 12px;
+    text-align: center;
+}
+
+.component_icon .icon.phone {
+    background-position: -510px -161px;
+}
+
+.component_icon .icon.voicemail {
+    background-position: -960px -155px;
+}
+
+.component_icon .registration_status {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+    background-image: url('../../device/images/red.png');
+}
+
+.component_icon .registered {
+    background-image: url('../../device/images/green.png');
+}
+
+.component_detail {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.component_controls {
+    float: right;
+    margin-right: 10px;
+}
+
+.component_go {
+    cursor: pointer;
+}
