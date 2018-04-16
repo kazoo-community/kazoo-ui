@@ -11,6 +11,8 @@ winkstart.module('call_center', 'queue', {
             agent_presence_callflow: 'tmpl/agent_presence_callflow.html',
             agent_availability_callflow: 'tmpl/agent_availability_callflow.html',
             agent_availability_key_callflow: 'tmpl/agent_availability_key_callflow.html',
+            required_skills_callflow: 'tmpl/required_skills_callflow.html',
+            required_skills_callflow_row: 'tmpl/required_skills_callflow_row.html',
             wait_time_callflow: 'tmpl/wait_time_callflow.html',
             wait_time_key_callflow: 'tmpl/wait_time_key_callflow.html',
             add_agents: 'tmpl/add_agents.html',
@@ -1728,6 +1730,107 @@ winkstart.module('call_center', 'queue', {
                                 });
                             }
                         );
+                    }
+                },
+                'acdc_required_skills[]': {
+                    name: _t('queue', 'required_skills'),
+                    icon: 'flag1',
+                    category: _t('config', 'call_center_cat'),
+                    module: 'acdc_required_skills',
+                    tip:  _t('queue', 'required_skills_tip'),
+                    data: {
+                        add: [],
+                        remove: []
+                    },
+                    rules: [
+                        {
+                            type: 'quantity',
+                            maxSize: '1'
+                        }
+                    ],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        var add = node.getMetadata('add') || [],
+                            remove = node.getMetadata('remove') || [];
+
+                        return window.translate['queue']['add'] + ': ' + add.length +
+                            ', ' + window.translate['queue']['remove'] + ': ' + remove.length;
+                    },
+                    edit: function(node, callback) {
+                        var popup, popup_html,
+                            _t = function(param) {
+                                return window.translate['queue'][param];
+                            };
+
+                        popup_html = THIS.templates.required_skills_callflow.tmpl({
+                            _t: _t,
+                            add: node.getMetadata('add'),
+                            remove: node.getMetadata('remove'),
+                            rowTmpl: THIS.templates.required_skills_callflow_row
+                        });
+
+                        $('.add_skill', popup_html).click(function() {
+                            $('.add_skills').append(THIS.templates.required_skills_callflow_row.tmpl({
+                                _t: _t,
+                                skill: '',
+                                add: true
+                            }));
+                        });
+
+                        $('.remove_skill', popup_html).click(function() {
+                            $('.remove_skills').append(THIS.templates.required_skills_callflow_row.tmpl({
+                                _t: _t,
+                                skill: '',
+                                add: false
+                            }));
+                        });
+
+                        $('.add_remove_skills', popup_html).delegate('.remove_row', 'click', function() {
+                            $(this).parent('.skill_row').remove();
+                        });
+
+                        $('#add', popup_html).click(function() {
+                            var add = [],
+                                remove = [];
+
+                            $('.add_skill_row').each(function() {
+                                var addSkill = $(this).val().trim();
+
+                                if(addSkill != '') {
+                                    add.push(addSkill);
+                                }
+                            });
+                            $('.remove_skill_row').each(function() {
+                                var removeSkill = $(this).val().trim(),
+                                    addIndex = add.indexOf(removeSkill);
+
+                                // If skill to remove is in add list, just remove it there
+                                if(addIndex != -1) {
+                                    add.splice(addIndex, 1);
+                                }
+                                else if(removeSkill != '') {
+                                    remove.push(removeSkill);
+                                }
+                            });
+
+                            node.setMetadata('add', add);
+                            node.setMetadata('remove', remove);
+
+                            node.caption = window.translate['queue']['add'] + ': ' + add.length +
+                                ', ' + window.translate['queue']['remove'] + ': ' + remove.length;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('queue', 'required_skills'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                     callback();
+                                }
+                            }
+                        });
                     }
                 },
                 'acdc_wait_time[id=*]': {

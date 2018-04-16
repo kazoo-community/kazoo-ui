@@ -1,0 +1,10 @@
+<div>
+    <div class="skill_row clearfix">
+        {{if add}}
+            <input class="span4 add_skill_row" type="text" placeholder="${_t('skill_placeholder')}" value="${skill}" />
+        {{else}}
+            <input class="span4 remove_skill_row" type="text" placeholder="${_t('skill_placeholder')}" value="${skill}" />
+        {{/if}}
+        <span class="remove_row icon minus_circle"></span>
+    </div>
+</div>

@@ -132,13 +132,32 @@ span.sublabel {
 
 .explanation {
     max-width: 400px;
-    margin-bottom: 15px;
+    margin: 0 auto 15px;
     font-size: 14px;
     font-weight: bold;
 }
 
 .center_field {
     display: inline-block;
+}
+
+.add_remove_skills {
+    width: 100%;
+    text-align: left;
+}
+
+.add_remove_skills .explanation {
+    text-align: center;
+}
+
+.skills_section_header {
+    display: inline-block;
+    vertical-align: middle;
+    text-shadow: 0px 0px;
+}
+
+form .skill_row {
+    margin-bottom: 8px !important;
 }
 
 #wait_time_window {
