@@ -16,6 +16,9 @@
                         ${first_name} ${last_name}
                     </div>
                     {{if allow_agent_restart}}<span class="agent_restart icon medium loop2" id="${id}" style="float: right; cursor: pointer;" title="Restart agent"/>{{/if}}
+                    {{if skills.length}}
+                        <span class="agent_skills icon medium flag1" data-id="${id}" rel="twipsy" data-animate="false" data-placement="below" title="Agent has skills" />
+                    {{/if}}
                 </div>
                 {{if status === 'ready' || status === 'logged_out'}}
                 <div class="agent_data ${status}" id="${id}" style="display: inline; cursor: pointer;">

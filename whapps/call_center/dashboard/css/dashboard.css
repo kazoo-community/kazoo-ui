@@ -442,6 +442,11 @@
     color: #ffbb33;
 }
 
+.icon.agent_skills {
+    float: right;
+    background-position: -224px -260px;
+}
+
 .skills_tooltip.pill-content {
     min-width: 80px;
     padding: 4px;

@@ -168,7 +168,7 @@ winkstart.module('call_center', 'dashboard', {
             // absolute at the body root node), but only after the new ones are
             // added (fixes flicker of mouseover)
             var oldTwipsies = [];
-            $('.call_skills').each(function() {
+            $('.agent_skills, .call_skills').each(function() {
                 var twipsy = $(this).data('twipsy');
                 if(twipsy) {
                     oldTwipsies.push(twipsy);
@@ -196,6 +196,13 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             // Skill tooltips, clean up old ones
+            $.each(param_data.agents, function(id, agent) {
+                $('.agent_skills[data-id="'+id+'"]').twipsy({
+                    template: THIS.templates.skills_tooltip.tmpl({
+                        skills: agent.skills
+                    })
+                });
+            });
             var addTooltip = function(call) {
                 $('.call_skills[data-id="'+call.id+'"]').twipsy({
                     template: THIS.templates.skills_tooltip.tmpl({
