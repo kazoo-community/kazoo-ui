@@ -59,9 +59,15 @@
                                     {{if data.strategy === 'most_idle'}}
                                         <option value="round_robin">${_t('round_robin')}</option>
                                         <option value="most_idle" selected="selected">${_t('most_idle')}</option>
-                                    {{else}}
+                                        <option value="skills_based_round_robin">${_t('skills_based_round_robin')}</option>
+                                    {{else data.strategy === 'round_robin'}}
                                         <option value="round_robin" selected="selected">${_t('round_robin')}</option>
                                         <option value="most_idle">${_t('most_idle')}</option>
+                                        <option value="skills_based_round_robin">${_t('skills_based_round_robin')}</option>
+                                    {{else}}
+                                        <option value="round_robin">${_t('round_robin')}</option>
+                                        <option value="most_idle">${_t('most_idle')}</option>
+                                        <option value="skills_based_round_robin" selected="selected">${_t('skills_based_round_robin')}</option>
                                     {{/if}}
                                 </select>
                             </span>
