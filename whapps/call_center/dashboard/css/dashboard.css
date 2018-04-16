@@ -215,6 +215,11 @@
     float: right;
 }
 
+.icon.call_skills {
+    float: right;
+    background-position: -220px -256px;
+}
+
 /* Bottom-right content */
 #dashboard-content .dashboard-bottom-right {
     padding: 10px 10px 10px 220px;
@@ -435,4 +440,10 @@
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .row_data.call_time .data_value{
     color: #ffbb33;
+}
+
+.skills_tooltip.pill-content {
+    min-width: 80px;
+    padding: 4px;
+    text-align: center;
 }
