@@ -4,9 +4,9 @@
             {{if call.is_callback}}
             	<img src="whapps/call_center/dashboard/css/images/callback.png" title="Callback"/>
             {{/if}}
-            {{if call.required_skills.length}}
+            {{if call.required_skills}}{{if call.required_skills.length}}
                 <span class="call_skills icon white flag1" data-id="${call.id}" rel="twipsy" data-animate="false" data-placement="below" title="Call requires skills" />
-            {{/if}}
+            {{/if}}{{/if}}
             <span class="timer">${call.friendly_duration}</span>
             <a href="#" data-module="activate" data-action="media">${call.friendly_title}</a>
         </li>
