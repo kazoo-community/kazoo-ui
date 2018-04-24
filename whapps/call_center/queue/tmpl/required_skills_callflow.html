@@ -1,0 +1,30 @@
+<div>
+    <div class="dialog_popup">
+        <h1>${_t('required_skills_title')}</h1>
+        <form id="add_remove_skills_form" name="form" method="post" action="#">
+            <div class="explanation">${_t('required_skills_explanation')}</div>
+
+            <div class="form_content add_remove_skills">
+                <div class="add_skills">
+                    <h2 class="skills_section_header">${_t('add')}</h2>
+                    <span class="icon plus_circle add_skill"></span>
+                    {{each(i, skill) add}}
+                        {{tmpl({_t: _t, skill: skill, add: true}) rowTmpl}}
+                    {{/each}}
+                </div>
+                <div class="remove_skills">
+                    <h2 class="skills_section_header">${_t('remove')}</h2>
+                    <span class="icon plus_circle remove_skill"></span>
+                    <div class="explanation">${_t('remove_skills_explanation')}</div>
+                    {{each(i, skill) remove}}
+                        {{tmpl({_t: _t, skill: skill, add: false}) rowTmpl}}
+                    {{/each}}
+                </div>
+            </div>
+        </form>
+
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

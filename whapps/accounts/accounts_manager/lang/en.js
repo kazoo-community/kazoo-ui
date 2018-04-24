@@ -5,7 +5,7 @@ window.translate['accounts'] = {
 	switch_account: "Switch account",
 	basic: "Basic",
 	caller_id: "Caller ID",
-	notifications_templates: "Notifications Templates",
+	notifications_templates: "Notifications",
 	options: "Options",
 	limits: "Limits",
 	available_apps: "Available Apps",

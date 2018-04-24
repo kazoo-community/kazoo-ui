@@ -382,4 +382,6 @@ form .clearfix:last-child {
 	border-bottom-left-radius:0;
 }
 
-
+.twipsy {
+	opacity: 1;
+}

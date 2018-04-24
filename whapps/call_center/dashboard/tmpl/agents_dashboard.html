@@ -16,6 +16,9 @@
                         ${first_name} ${last_name}
                     </div>
                     {{if allow_agent_restart}}<span class="agent_restart icon medium loop2" id="${id}" style="float: right; cursor: pointer;" title="Restart agent"/>{{/if}}
+                    {{if skills.length}}
+                        <span class="agent_skills icon medium flag1" data-id="${id}" rel="twipsy" data-animate="false" data-placement="below" title="Agent has skills" />
+                    {{/if}}
                 </div>
                 {{if status === 'ready' || status === 'logged_out'}}
                 <div class="agent_data ${status}" id="${id}" style="display: inline; cursor: pointer;">
@@ -39,6 +42,9 @@
                             {{if current_call.is_callback}}
                                 <img src="whapps/call_center/dashboard/css/images/callback-oncall.png" title="Callback"/>
                             {{/if}}
+                            {{if current_call.required_skills}}{{if current_call.required_skills.length}}
+                                <span class="call_skills icon green flag1" data-id="${current_call.id}" rel="twipsy" data-animate="false" data-placement="below" title="Call requires skills" />
+                            {{/if}}{{/if}}
                             <div class="data_value">${call_time}</div>
                             <div class="data_title">${_t('call_time')}</div>
                         {{else status === 'busy'}}

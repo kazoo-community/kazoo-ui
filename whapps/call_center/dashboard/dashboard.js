@@ -11,6 +11,7 @@ winkstart.module('call_center', 'dashboard', {
             list_devices: 'tmpl/list_devices.html',
             call: 'tmpl/call_list_element.html',
             agent_restart: 'tmpl/agent_restart.html',
+            skills_tooltip: 'tmpl/skills_tooltip.html'
         },
 
         subscribe: {
@@ -163,6 +164,17 @@ winkstart.module('call_center', 'dashboard', {
                 parent = _parent || $('#ws-content'),
                 scroll_value = $('.topbar-right .list_queues_inner', parent).scrollLeft() || 0;
 
+            // Remove all existing tooltips (since they are rendered as
+            // absolute at the body root node), but only after the new ones are
+            // added (fixes flicker of mouseover)
+            var oldTwipsies = [];
+            $('.agent_skills, .call_skills').each(function() {
+                var twipsy = $(this).data('twipsy');
+                if(twipsy) {
+                    oldTwipsies.push(twipsy);
+                }
+            });
+
             $('#dashboard-view', parent).empty()
                                         .append(agents_html);
 
@@ -181,6 +193,33 @@ winkstart.module('call_center', 'dashboard', {
             });
             $('.agent_title.logged_out').click(function(e) {
                 THIS.login(this);
+            });
+
+            // Skill tooltips, clean up old ones
+            $.each(param_data.agents, function(id, agent) {
+                $('.agent_skills[data-id="'+id+'"]').twipsy({
+                    template: THIS.templates.skills_tooltip.tmpl({
+                        skills: agent.skills
+                    })
+                });
+            });
+            var addTooltip = function(call) {
+                $('.call_skills[data-id="'+call.id+'"]').twipsy({
+                    template: THIS.templates.skills_tooltip.tmpl({
+                        skills: call.required_skills
+                    })
+                });
+            };
+            $.each(param_data.calls_waiting, function(index, call) {
+                addTooltip(call);
+            });
+            $.each(param_data.calls_in_progress, function(call_id, call) {
+                addTooltip(call);
+            });
+            $.each(oldTwipsies, function(index, twipsy) {
+                setTimeout(function() {
+                    twipsy.hide();
+                }, 1000);
             });
 
             $('.agent_restart').click(function(e) {
