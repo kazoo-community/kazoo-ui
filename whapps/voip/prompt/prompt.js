@@ -321,6 +321,7 @@ winkstart.module('voip', 'prompt', {
 
 		clean_form_data: function(form_data) {
 			form_data.description = form_data.extra.upload_prompt;
+			form_data.media_source = 'upload';
 			form_data.name = form_data.language + '/' + form_data.prompt_id;
 
 			delete form_data.extra;
