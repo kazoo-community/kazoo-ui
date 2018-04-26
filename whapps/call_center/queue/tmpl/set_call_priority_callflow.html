@@ -1,0 +1,18 @@
+<div>
+    <div class="dialog_popup">
+        <h1 class="wrap">${_t('set_call_priority')}</h1>
+        <form name="form" method="post" action="#">
+            <div class="explanation">${_t('set_call_priority_explanation')}</div>
+
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="call_priority">${_t('call_priority')}</label>
+                    <span class="validated" rel="popover" data-content="${_t('call_priority_validation_error')}"><input type="text" id="call_priority" class="small_numeric_field" value="${call_priority}" /></span>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="btn primary">OK</button>
+        </div>
+    </div>
+</div>

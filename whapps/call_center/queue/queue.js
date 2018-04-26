@@ -13,6 +13,7 @@ winkstart.module('call_center', 'queue', {
             agent_availability_key_callflow: 'tmpl/agent_availability_key_callflow.html',
             required_skills_callflow: 'tmpl/required_skills_callflow.html',
             required_skills_callflow_row: 'tmpl/required_skills_callflow_row.html',
+            set_call_priority_callflow: 'tmpl/set_call_priority_callflow.html',
             wait_time_callflow: 'tmpl/wait_time_callflow.html',
             wait_time_key_callflow: 'tmpl/wait_time_key_callflow.html',
             add_agents: 'tmpl/add_agents.html',
@@ -2014,6 +2015,56 @@ winkstart.module('call_center', 'queue', {
                                 });
                             }
                         );
+                    }
+                },
+                'set_variable[variable=call_priority]': {
+                    name: _t('queue', 'set_call_priority'),
+                    icon: 'star',
+                    category: _t('config', 'call_center_cat'),
+                    module: 'set_variable',
+                    tip: _t('queue', 'set_call_priority_tip'),
+                    data: {
+                        variable: 'call_priority',
+                        value: '0'
+                    },
+                    rules: [],
+                    isUsable: 'true',
+                    caption: function(node, caption_map) {
+                        return node.getMetadata('value');
+                    },
+                    edit: function(node, callback) {
+                        var popup,
+                            popup_html = THIS.templates.set_call_priority_callflow.tmpl({
+                                _t: function(param) {
+                                    return window.translate['queue'][param];
+                                },
+                                call_priority: node.getMetadata('value')
+                            });
+
+                        $('#add', popup_html).click(function() {
+                            var value = $('#call_priority', popup).val();
+
+                            if(isNaN(value) || parseInt(value) < 0 || parseInt(value) > 255) {
+                                $('.validated', popup).addClass('invalid');
+                                $('.validated[rel=popover]', popup_html).popover();
+                                return;
+                            }
+
+                            node.setMetadata('value', value);
+                            node.caption = value;
+
+                            popup.dialog('close');
+                        });
+
+                        popup = winkstart.dialog(popup_html, {
+                            title: _t('queue', 'set_call_priority'),
+                            minHeight: '0',
+                            beforeClose: function() {
+                                if(typeof callback == 'function') {
+                                    callback();
+                                }
+                            }
+                        });
                     }
                 }
             });

@@ -493,6 +493,10 @@ winkstart.module('voip', 'callflow', {
                 if('action' in json.data) {
                     action += 'action=' + json.data.action + ',';
                 }
+
+                if('variable' in json.data) {
+                    action += 'variable=' + json.data.variable + ',';
+                }
             }
 
             if(action != '') {
