@@ -160,7 +160,7 @@ form .skill_row {
     margin-bottom: 8px !important;
 }
 
-#wait_time_window {
+.small_numeric_field {
     max-width: 40px;
 }
 
