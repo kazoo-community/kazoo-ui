@@ -733,6 +733,12 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             formatted_data.calls_waiting.sort(function(a, b) {
+                if((a.caller_priority || 0) > (b.caller_priority || 0)) {
+                    return -1;
+                }
+                else if((a.caller_priority || 0) < (b.caller_priority || 0)) {
+                    return 1;
+                }
                 return a.entered_timestamp < b.entered_timestamp ? -1 : 1;
             });
 

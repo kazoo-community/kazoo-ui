@@ -27,6 +27,7 @@
                 {{/if}}
                     <div class="row_data call_time">
                         {{if status === 'paused'}}
+                            <div class="data_value">${call_time}</div>
                             <div class="data_title">
                             {{if pause_alias}}
                                 ${pause_alias}
@@ -34,10 +35,9 @@
                                 ${_t('break_time')}
                             {{/if}}
                             </div>
-                            <div class="data_value">${call_time}</div>
                         {{else status === 'wrapup'}}
-                            <div class="data_title">${_t('wrapping_up')}</div>
                             <div class="data_value">${call_time}</div>
+                            <div class="data_title">${_t('wrapping_up')}</div>
                         {{else status === 'handling'}}
                             {{if current_call.is_callback}}
                                 <img src="whapps/call_center/dashboard/css/images/callback-oncall.png" title="Callback"/>
@@ -45,14 +45,17 @@
                             {{if current_call.required_skills}}{{if current_call.required_skills.length}}
                                 <span class="call_skills icon green flag1" data-id="${current_call.id}" rel="twipsy" data-animate="false" data-placement="below" title="Call requires skills" />
                             {{/if}}{{/if}}
+                            {{if current_call.caller_priority}}
+                                <span class="caller_priority_offset icon green star" title="${_t('caller_priority')}: ${current_call.caller_priority}" />
+                            {{/if}}
                             <div class="data_value">${call_time}</div>
                             <div class="data_title">${_t('call_time')}</div>
                         {{else status === 'busy'}}
-                            <div class="data_title">${_t('busy_since')}</div>
                             <div class="data_value">${call_time}</div>
+                            <div class="data_title">${_t('busy_since')}</div>
                         {{else}}
-                            <div class="data_title">${_t('call_time')}</div>
                             <div class="data_value">-</div>
+                            <div class="data_title">${_t('call_time')}</div>
                         {{/if}}
                     </div>
                     <div class="row_data call">

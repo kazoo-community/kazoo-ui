@@ -7,6 +7,9 @@
             {{if call.required_skills}}{{if call.required_skills.length}}
                 <span class="call_skills icon white flag1" data-id="${call.id}" rel="twipsy" data-animate="false" data-placement="below" title="Call requires skills" />
             {{/if}}{{/if}}
+            {{if call.caller_priority}}
+                <span class="caller_priority icon white star" title="${_t('caller_priority')}: ${call.caller_priority}" />
+            {{/if}}
             <span class="timer">${call.friendly_duration}</span>
             <a href="#" data-module="activate" data-action="media">${call.friendly_title}</a>
         </li>
