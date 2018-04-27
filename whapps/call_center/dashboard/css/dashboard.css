@@ -168,6 +168,7 @@
 #dashboard-content #callwaiting-list {
     position:relative;
     float: left;
+    width: 256px;
 }
 
 #dashboard-content #callwaiting-list .add_flow {
@@ -176,6 +177,10 @@
     color: #05addc;
     font-size: 14px;
     font-weight: bold;
+}
+
+#dashboard-content #callwaiting-list .new_searchfield {
+    width: 205px;
 }
 
 #dashboard-content #callwaiting-list .list-panel-anchor ul li {
@@ -220,9 +225,20 @@
     background-position: -220px -256px;
 }
 
+.icon.caller_priority {
+    float: right;
+    width: 30px;
+    height: 30px;
+}
+
+.icon.caller_priority_offset {
+    float: right;
+    background-position: -288px -452px;
+}
+
 /* Bottom-right content */
 #dashboard-content .dashboard-bottom-right {
-    padding: 10px 10px 10px 220px;
+    padding: 10px 10px 10px 284px;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view {
@@ -291,6 +307,9 @@
 #dashboard-content .dashboard-bottom-right #agents-view .call_time .data_title {
     width: auto;
     text-align: left;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .call_time .data_value {
