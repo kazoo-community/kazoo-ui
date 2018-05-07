@@ -22,7 +22,7 @@
 
                 <div class="popup_field">
                     <label for="wait_time_window">${_t('window')}</label>
-                    <input type="text" id="wait_time_window" value="${window}" />
+                    <input type="text" id="wait_time_window" class="small_numeric_field" value="${window}" />
                     <select id="wait_time_window_unit">
                         {{if window_unit == "minutes"}}
                             <option value="minutes" SELECTED>${_t('minutes')}</option>
