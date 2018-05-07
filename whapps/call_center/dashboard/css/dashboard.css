@@ -222,6 +222,8 @@
 
 .icon.call_skills {
     float: right;
+    width: 30px;
+    height: 30px;
     background-position: -220px -256px;
 }
 
