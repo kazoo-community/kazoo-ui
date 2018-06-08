@@ -594,7 +594,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         delete form_data.auth.auth_user;
                         delete form_data.auth.auth_password;
 
-                        if(form_data.extra.serverid) {
+                        if(form_data.extra.serverid && form_data.extra.serverid != 'new') {
                             delete global_data.data.servers[form_data.extra.serverid].auth.auth_user;
                             delete global_data.data.servers[form_data.extra.serverid].auth.auth_password;
                         }
@@ -602,7 +602,7 @@ winkstart.module('pbxs', 'pbxs_manager', {
                         delete form_data.options.ip;
                         delete form_data.auth.ip;
 
-                        if(form_data.extra.serverid) {
+                        if(form_data.extra.serverid && form_data.extra.serverid != 'new') {
                             delete global_data.data.servers[form_data.extra.serverid].auth.ip;
                         }
                     }
