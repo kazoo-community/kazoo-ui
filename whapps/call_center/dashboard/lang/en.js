@@ -6,6 +6,7 @@ window.translate['dashboard'] = {
 	wrapping_up: "Wrapping up",
 	call_time: "Call Time",
 	busy_since: "Busy since",
+	calling_back: "Calling Back",
 	no_active_call: "No active call...",
 	total_calls: "Total Calls",
 	missed_calls: "Missed Calls",

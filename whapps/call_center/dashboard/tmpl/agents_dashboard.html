@@ -53,6 +53,14 @@
                         {{else status === 'busy'}}
                             <div class="data_value">${call_time}</div>
                             <div class="data_title">${_t('busy_since')}</div>
+                        {{else status === 'connecting'}}
+                            {{if current_call.is_callback}}
+                                <div class="data_value">${call_time}</div>
+                                <div class="data_title">${_t('calling_back')}</div>
+                            {{else}}
+                                <div class="data_value">-</div>
+                                <div class="data_title">${_t('call_time')}</div>
+                            {{/if}}
                         {{else}}
                             <div class="data_value">-</div>
                             <div class="data_title">${_t('call_time')}</div>
