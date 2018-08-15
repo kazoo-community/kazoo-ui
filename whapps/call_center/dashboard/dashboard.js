@@ -11,7 +11,8 @@ winkstart.module('call_center', 'dashboard', {
             list_devices: 'tmpl/list_devices.html',
             call: 'tmpl/call_list_element.html',
             agent_restart: 'tmpl/agent_restart.html',
-            skills_tooltip: 'tmpl/skills_tooltip.html'
+            skills_tooltip: 'tmpl/skills_tooltip.html',
+            calls_context_menu: 'tmpl/calls_context_menu.html'
         },
 
         subscribe: {
@@ -121,6 +122,11 @@ winkstart.module('call_center', 'dashboard', {
                 url: '{api_url}/accounts/{account_id}/agents/{agent_id}/restart',
                 contentType: 'application/json',
                 verb: 'POST'
+            },
+            'dashboard.remove_member': {
+                url: '{api_url}/accounts/{account_id}/queues/{queue_id}/members/{call_id}',
+                contentType: 'application/json',
+                verb: 'DELETE'
             }
         }
     },
@@ -187,6 +193,46 @@ winkstart.module('call_center', 'dashboard', {
                                                                 .append(calls_html);
 
             THIS.render_timers(data);
+
+            /**
+             * If a waiting call context menu is open, close it.
+             */
+            function removeCallsContextMenu() {
+                var menu = $('.calls-context-menu');
+                if(menu.length) {
+                    menu.remove();
+                }
+            }
+
+            // Context menu for deleting calls from queue
+            $('.call-waiting').bind('contextmenu', function(e) {
+                // Remove context menu if already open
+                removeCallsContextMenu();
+
+                // TODO add data
+                menu = THIS.templates.calls_context_menu.tmpl();
+                $('body').append(menu);
+
+                // Ensure that clicks on the context menu do not close it
+                $('.calls-context-menu').click(function(e1) {
+                    winkstart.confirm(data._t('confirm_remove_waiting_call'), function() {
+                        var callWaiting = $(e.currentTarget);
+                        THIS.remove_member(callWaiting.data('queue_id'), callWaiting.data('call_id'));
+                    });
+
+                    e1.stopPropagation();
+                });
+
+                // Align menu to click location
+                menu.css({left: e.pageX, top: e.pageY});
+
+                e.preventDefault();
+            });
+
+            // Close context menu
+            $(document).click(function(e) {
+                removeCallsContextMenu();
+            });
 
             $('.agent_title.ready').click(function(e) {
                 THIS.logout(this);
@@ -1195,6 +1241,23 @@ winkstart.module('call_center', 'dashboard', {
                     });
 
                     popup = winkstart.dialog(popup_html, {});
+                }
+            );
+        },
+
+        /**
+         * Remove a member from a queue.
+         *
+         * @param {string} queue_id - The ID of the queue.
+         * @param {string} call_id - The call ID that should be removed from
+         * the queue.
+         */
+        remove_member: function(queue_id, call_id) {
+            winkstart.request('dashboard.remove_member', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url,
+                    call_id: call_id,
+                    queue_id: queue_id
                 }
             );
         }
