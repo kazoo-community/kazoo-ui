@@ -394,6 +394,7 @@ winkstart.module('voip', 'user', {
                 },
                 queues_get: function(callback) {
                     if(!winkstart.apps['call_center']) {
+                        defaults.field_data.call_center_enabled = false;
                         callback(null, null);
                         return;
                     }
@@ -411,7 +412,16 @@ winkstart.module('voip', 'user', {
                             );
                             callback(null, _data);
                         },
-                        winkstart.error_message.process_error()
+                        function(_data, status) {
+                            if(status == 404) {
+                                // API module not loaded
+                                defaults.field_data.call_center_enabled = false;
+                                callback(null, null);
+                            }
+                            else {
+                                winkstart.error_message.process_error()(_data, status);
+                            }
+                        }
                     );
                 }
             },
@@ -751,7 +761,7 @@ winkstart.module('voip', 'user', {
                 }, defaults);
             });
 
-            if(winkstart.apps['call_center']) {
+            if(data.field_data.call_center_enabled) {
                 THIS.render_queue_options(user_html, data);
             }
 

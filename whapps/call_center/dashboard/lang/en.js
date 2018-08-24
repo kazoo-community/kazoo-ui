@@ -6,6 +6,7 @@ window.translate['dashboard'] = {
 	wrapping_up: "Wrapping up",
 	call_time: "Call Time",
 	busy_since: "Busy since",
+	calling_back: "Calling Back",
 	no_active_call: "No active call...",
 	total_calls: "Total Calls",
 	missed_calls: "Missed Calls",
@@ -19,5 +20,6 @@ window.translate['dashboard'] = {
 	devices_title: "Devices",
 	hide_queues_html: "Hide Queues",
 	show_queues_html: "Show Queues",
-	caller_priority: "Caller Priority"
+	caller_priority: "Caller Priority",
+	confirm_remove_waiting_call: "Are you sure you want to remove this waiting call? The caller will be dropped out of the queue. If the caller is registered for a callback, the call will not be returned."
 };
