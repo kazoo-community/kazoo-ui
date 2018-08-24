@@ -325,6 +325,8 @@ winkstart.module('accounts', 'accounts_manager', {
 						call_restriction: {},
 						enable_call_restriction: false,
 						available_apps: [],
+						parent_realm: '',
+						realm_placeholder: '',
 						sameTemplate: true,
 						teletype: {
 							deregister: {
@@ -378,6 +380,9 @@ winkstart.module('accounts', 'accounts_manager', {
 										}
 									});
 								}
+
+								defaults.field_data.parent_realm = _data_account.data.realm;
+								defaults.field_data.realm_placeholder = THIS.suggested_realm(null, _data_account.data.realm);
 
 								callback(null, _data_account);
 							}
@@ -600,6 +605,8 @@ winkstart.module('accounts', 'accounts_manager', {
 							account_data.notifications.deregister.send_to != '') {
 							defaults.field_data.deregister = true;
 						}
+
+						defaults.field_data.realm_placeholder = THIS.suggested_realm(results.get_account.data.name, results.get_parent_account.data.realm);
 
 						render_data = $.extend(true, defaults, results.get_account);
 
@@ -1005,6 +1012,11 @@ winkstart.module('accounts', 'accounts_manager', {
 					allow_prepay: data.limits.allow_prepay
 				};
 
+			// Keep the placeholder for account realm in the <name>.<parent_realm> format
+			$('#name', account_html).bind('input', function() {
+				$('#realm').attr('placeholder', THIS.suggested_realm($(this).val(), data.field_data.parent_realm));
+			});
+
 			var toggleResellerStatusClick = function(el, isReseller) {
 				$(el).prop('disabled', true);
 				THIS.toggle_reseller_status(data.data.id, isReseller, function(_data, status) {
@@ -1245,6 +1257,10 @@ winkstart.module('accounts', 'accounts_manager', {
 						}
 
 						data.data.apps = data.data.apps || [];
+
+						if(!form_data.realm) {
+							form_data.realm = THIS.suggested_realm(form_data.name, data.field_data.parent_realm);
+						}
 
 						if ( form_data.name === form_data.notifications.voicemail_to_email.send_from ) {
 							winkstart.alert('You cannot specify the company name as "Send From"!');
@@ -1674,6 +1690,19 @@ winkstart.module('accounts', 'accounts_manager', {
 				.append(accounts_manager_html);
 
 			THIS.render_list(accounts_manager_html);
+		},
+
+		/**
+		 * Generate a suggested realm for an account based on the parent's realm.
+		 * @param {string} account_name - The account whose name to make into a realm
+		 * @param {string} parent_realm - Parent account's realm to use as new realm suffix
+		 * @return {string} - The suggested realm for the account
+		 */
+		suggested_realm: function(account_name, parent_realm) {
+			return ((account_name || window.translate['accounts']['name'])
+					+ '.' + parent_realm)
+				.toLowerCase()
+				.replace(/[^a-zA-Z0-9\.\-]+/g, '');
 		}
 	}
 );
