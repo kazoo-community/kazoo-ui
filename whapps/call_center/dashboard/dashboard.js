@@ -194,20 +194,10 @@ winkstart.module('call_center', 'dashboard', {
 
             THIS.render_timers(data);
 
-            /**
-             * If a waiting call context menu is open, close it.
-             */
-            function removeCallsContextMenu() {
-                var menu = $('.calls-context-menu');
-                if(menu.length) {
-                    menu.remove();
-                }
-            }
-
             // Context menu for deleting calls from queue
             $('.call-waiting').bind('contextmenu', function(e) {
                 // Remove context menu if already open
-                removeCallsContextMenu();
+                $('.calls-context-menu').remove();
 
                 // TODO add data
                 menu = THIS.templates.calls_context_menu.tmpl();
@@ -227,11 +217,6 @@ winkstart.module('call_center', 'dashboard', {
                 menu.css({left: e.pageX, top: e.pageY});
 
                 e.preventDefault();
-            });
-
-            // Close context menu
-            $(document).click(function(e) {
-                removeCallsContextMenu();
             });
 
             $('.agent_title.ready').click(function(e) {
@@ -844,6 +829,11 @@ winkstart.module('call_center', 'dashboard', {
                 parent = _parent;
 
             THIS.clean_timers();
+
+            // Close waiting call context menu when clicking background
+            $(document).click(function(e) {
+                $('.calls-context-menu').remove();
+            });
 
             THIS.fetch_all_data(true, function(data) {
 				data._t = function(param){
