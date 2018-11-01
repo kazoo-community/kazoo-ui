@@ -83,6 +83,11 @@ winkstart.module('userportal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'user_vmbox.listMessages': {
+                url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}/messages',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'user_vmbox.update': {
                 url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}',
                 contentType: 'application/json',
@@ -176,16 +181,41 @@ winkstart.module('userportal', 'portal_manager', {
             );
         },
 
-        get_vmbox: function(vmbox_id, success, error) {
-            winkstart.request('user_vmbox.get', {
+        list_messages: function(vmbox_id, success, error) {
+            winkstart.request('user_vmbox.listMessages', {
                     api_url: winkstart.apps['userportal'].api_url,
                     account_id: winkstart.apps['userportal'].account_id,
                     vmbox_id: vmbox_id
                 },
                 function(_data, status) {
                     if(typeof success === 'function') {
-                        success(_data);
+                        success(_data.data);
                     }
+                },
+                function(_data, status) {
+                    if(typeof error === 'function') {
+                        error(_data);
+                    }
+                }
+            );
+        },
+
+        get_vmbox: function(vmbox_id, success, error) {
+            var self = this;
+
+            winkstart.request('user_vmbox.get', {
+                    api_url: winkstart.apps['userportal'].api_url,
+                    account_id: winkstart.apps['userportal'].account_id,
+                    vmbox_id: vmbox_id
+                },
+                function(_data, status) {
+                    self.list_messages(vmbox_id, function(messages) {
+                        _data.data.messages = messages;
+
+                        if(typeof success === 'function') {
+                            success(_data);
+                        }
+                    });
                 },
                 function(_data, status) {
                     if(typeof error === 'function') {
@@ -921,7 +951,7 @@ winkstart.module('userportal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    {
+                    { 
                         'sTitle': _t('portal_manager', 'date'),
                         'sWidth': '220px',
                         'iDataSort': 7
@@ -939,14 +969,7 @@ winkstart.module('userportal', 'portal_manager', {
                       'sWidth': '200px',
                       'fnRender': function(obj) {
                           var msg_uri = obj.aData[obj.iDataColumn];
-                          return '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="105" height="19">' +
-                                 '<param name="quality" value="high" />' +
-                                 '<param name="wmode" value="transparent">' +
-                                 '<param name="menu" value="false" />' +
-                                 '<embed src="whapps/userportal/portal_manager/assets/flash/xspf_player.swf?' +
-                                 'player_mode=mini&skin_mode=on&song_url=' + THIS.voicemail_uri(msg_uri) +
-                                 '&song_title=VM&autoload=1&bg_color=595959&txt_color=BCB5AB&button_color=BCB5AB"type="application/x-shockwave-flash" width="105" height="17"></embed>' +
-                                 '</object><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
+                          return '<audio style="width: 130px; vertical-align: middle;" controls="" src="'+THIS.voicemail_uri(msg_uri)+'"></audio><a href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
                       }
                     },
                     {
@@ -1030,39 +1053,41 @@ winkstart.module('userportal', 'portal_manager', {
             THIS.get_vmbox_by_owner(winkstart.apps['userportal'].user_id, function(_data_list) {
                 if(_data_list.data.length > 0) {
                     var vmbox_id = _data_list.data[0].id;
-                    THIS.get_vmbox_messages(vmbox_id, function(_data_messages) {
-                        var tab_messages = [];
+                    THIS.get_vmbox(vmbox_id, function(_data_vmbox) {
+                        if(_data_vmbox.data.messages) {
+                            var tab_messages = [];
 
-                        $.each(_data_messages.data, function(index, msg) {
-                            if(this.folder != 'deleted') {
-                                var msg_id = msg.media_id,
-                                    msg_uri = vmbox_id + '/messages/' + msg.media_id,
-                                    date = new Date((msg.timestamp - 62167219200)*1000),
-                                    month = date.getMonth() +1,
-                                    year = (date.getFullYear())%100,
-                                    day = date.getDate(),
-                                    humanDate = month+'/'+day+'/'+year,
-                                    humanTime = date.toLocaleTimeString(),
-                                    humanFullDate = humanDate + ' ' + humanTime;
+                            $.each(_data_vmbox.data.messages, function(index, msg) {
+                                if(this.folder != 'deleted') {
+                                    var msg_id = msg.media_id,
+                                        msg_uri = vmbox_id + '/messages/' + msg_id,
+                                        date = new Date((msg.timestamp - 62167219200)*1000),
+                                        month = date.getMonth() +1,
+                                        year = (date.getFullYear())%100,
+                                        day = date.getDate(),
+                                        humanDate = month+'/'+day+'/'+year,
+                                        humanTime = date.toLocaleTimeString(),
+                                        humanFullDate = humanDate + ' ' + humanTime;
 
-                                humanFullDate = THIS.friendly_date(msg.timestamp);
+                                    humanFullDate = THIS.friendly_date(msg.timestamp);
 
-                                tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
-                            }
-                        });
+                                    tab_messages.push(['0', index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
+                                }
+                            });
 
-                        winkstart.table.voicemail.fnAddData(tab_messages);
+                            winkstart.table.voicemail.fnAddData(tab_messages);
 
-                        $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', parent).attr('style', 'width:100%');
+                            $('.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table', parent).attr('style', 'width:100%');
+                        }
                     });
                 }
             });
         },
 
         voicemail_uri: function(msg_uri) {
-            return winkstart.apps['userportal'].api_url + '/accounts/' +
-                   winkstart.apps['userportal'].account_id + '/vmboxes/' +
-                   msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token + '&folder=saved';
+            var realUri =  winkstart.apps['userportal'].api_url + '/accounts/' + winkstart.apps['userportal'].account_id + '/vmboxes/' + msg_uri + '/raw?auth_token=' + winkstart.apps['userportal'].auth_token + '&folder=saved';
+
+            return realUri;
         }
     }
 );
