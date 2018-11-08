@@ -94,6 +94,11 @@ winkstart.module('voip', 'user', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+            'user.list_voicemail_configs': {
+                url: '{api_url}/accounts/{account_id}/configs/voicemail',
+                contentType: 'application/json',
+                verb: 'GET'
+            }
         }
     },
 
@@ -270,6 +275,7 @@ winkstart.module('voip', 'user', {
                         },
                         call_center_enabled: winkstart.apps['call_center'] !== undefined,
                         call_restriction: {},
+                        pin_pass_sync: false,
                         queues: {}
                     }
                 };
@@ -423,6 +429,20 @@ winkstart.module('voip', 'user', {
                             }
                         }
                     );
+                },
+                voicemail_configs_get: function(callback) {
+                    winkstart.request('user.list_voicemail_configs', {
+                            account_id: winkstart.apps['call_center'].account_id,
+                            api_url: winkstart.apps['call_center'].api_url
+                        },
+                        function(_data) {
+                            if(_data.data.pin_pass_sync) {
+                                defaults.field_data.pin_pass_sync = true;
+                            }
+                            callback(null, _data);
+                        },
+                        winkstart.error_message.process_error()
+                    );
                 }
             },
             function(err, results) {
@@ -572,11 +592,12 @@ winkstart.module('voip', 'user', {
 
                         THIS.clean_form_data(form_data);
 
+                        var validationType = (data.field_data.pin_pass_sync && !isNaN(data.data.username)) ? 'vm' : null;
+
                         if('field_data' in data) {
                             delete data.field_data;
                         }
 
-						var validationType = isNaN(data.data.username) ? null : "vm";
                         if(form_data.password === undefined || winkstart.is_password_valid(form_data.password, validationType)) {
 
                             winkstart.request('user.account_get', {

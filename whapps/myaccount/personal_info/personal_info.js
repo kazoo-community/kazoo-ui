@@ -15,6 +15,11 @@ winkstart.module('myaccount', 'personal_info', {
         },
 
         resources: {
+            'personal_info.list_voicemail_configs': {
+                url: '{api_url}/accounts/{account_id}/configs/voicemail',
+                contentType: 'application/json',
+                verb: 'GET'
+            },
             'personal_info.user_get': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
@@ -98,16 +103,24 @@ winkstart.module('myaccount', 'personal_info', {
                 ev.preventDefault();
 
                 if(pass == $('#infos_pwd2', info_html).val()) {
-                	var validationType = isNaN(data.data.username) ? null : "vm";
-                    if(winkstart.is_password_valid(pass, validationType)) {
-                        THIS.update_acct(data.data, {
-                                password: pass
-                            },
-                            function() {
-                                winkstart.alert('info', _t('personal-info', 'password_updated'));
+                    winkstart.request('personal_info.list_voicemail_configs', {
+                            account_id: winkstart.apps['myaccount'].account_id,
+                            api_url: winkstart.apps['myaccount'].api_url
+                        },
+                        function(_data) {
+                            var validationType = (_data.data.pin_pass_sync && !isNaN(data.data.username)) ? 'vm' : null;
+                            if(winkstart.is_password_valid(pass, validationType)) {
+                                THIS.update_acct(data.data, {
+                                        password: pass
+                                    },
+                                    function() {
+                                        winkstart.alert('info', _t('personal-info', 'password_updated'));
+                                    }
+                                );
                             }
-                        );
-                    }
+                        },
+                        winkstart.error_message.process_error()
+                    );
                 } else {
                     winkstart.alert(_t('personal-info', 'passwords_do_not_match'));
                 }
