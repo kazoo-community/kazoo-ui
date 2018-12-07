@@ -432,8 +432,8 @@ winkstart.module('voip', 'user', {
                 },
                 voicemail_configs_get: function(callback) {
                     winkstart.request('user.list_voicemail_configs', {
-                            account_id: winkstart.apps['call_center'].account_id,
-                            api_url: winkstart.apps['call_center'].api_url
+                            account_id: winkstart.apps['voip'].account_id,
+                            api_url: winkstart.apps['voip'].api_url
                         },
                         function(_data) {
                             if(_data.data.pin_pass_sync) {
