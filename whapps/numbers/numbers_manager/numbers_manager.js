@@ -1218,7 +1218,7 @@ winkstart.module('numbers', 'numbers_manager', {
                             function(_data, status) {
                                 var callflowMap = {};
                                 $.each(_data.data, function(index, callflow) {
-                                    $.each(callflow.numbers, function(index2, number) {
+                                    $.each(callflow.numbers || [], function(index2, number) {
                                         callflowMap[number] = callflow;
                                     });
                                 });
