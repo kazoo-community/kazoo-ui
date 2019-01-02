@@ -928,8 +928,10 @@ winkstart.module('voip', 'user', {
             var tab_data = [],
                 otherQueues = $.extend({}, data.field_data.queues);
             $.each(data.data.queues, function(index, queue_id) {
-                tab_data.push([data.field_data.queues[queue_id], queue_id]);
-                delete otherQueues[queue_id];
+                if (data.field_data.queues[queue_id]) {
+                    tab_data.push([data.field_data.queues[queue_id], queue_id]);
+                    delete otherQueues[queue_id];
+                }
             });
             winkstart.table.queues.fnAddData(tab_data);
 
