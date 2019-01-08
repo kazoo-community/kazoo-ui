@@ -167,9 +167,16 @@ winkstart.module('voip', 'extension', {
                         extensionIDMap = {};
 
                     // Create user map
+                    function isInteger(value) {
+                        return !isNaN(value) &&
+                            parseInt(Number(value)) == value &&
+                            !isNaN(parseInt(value, 10));
+                    }
                     $.each(results.user_list, function(index, user) {
-                        extensions[user.id] = user;
-                        extensionIDMap[user.username] = user.id;
+                        if(isInteger(user.username)) {
+                            extensions[user.id] = user;
+                            extensionIDMap[user.username] = user.id;
+                        }
                     });
 
                     // Add callflow if one is assigned to the extension
@@ -180,21 +187,6 @@ winkstart.module('voip', 'extension', {
                             }
                         });
                     });
-
-                    // Filter out non-numeric extensions
-                    function isInteger(value) {
-                        return !isNaN(value) &&
-                            parseInt(Number(value)) == value &&
-                            !isNaN(parseInt(value, 10));
-                    }
-                    Object.keys(extensionIDMap)
-                        .filter(function(usernameKey) {
-                            return !isInteger(usernameKey);
-                        })
-                        .forEach(function(usernameKey) {
-                            var id = extensionIDMap[usernameKey];
-                            delete extensions[id];
-                        });
 
                     var extensionsArr = [];
                     $.each(extensions, function(key, extension) {
