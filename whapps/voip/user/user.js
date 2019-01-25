@@ -592,7 +592,7 @@ winkstart.module('voip', 'user', {
 
                         THIS.clean_form_data(form_data);
 
-                        var validationType = (data.field_data.pin_pass_sync && !isNaN(data.data.username)) ? 'vm' : null;
+                        var validationType = (typeof data.field_data == 'object' && data.field_data.pin_pass_sync && !isNaN(data.data.username)) ? 'vm' : null;
 
                         if('field_data' in data) {
                             delete data.field_data;
@@ -1047,6 +1047,10 @@ winkstart.module('voip', 'user', {
 
             if($.isArray(data.directories)) {
                 data.directories = {};
+            }
+
+            if($.isArray(data.caller_id_options)) {
+                data.caller_id_options = {};
             }
 
             $.each(data.caller_id, function(key, val) {
