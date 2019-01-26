@@ -953,6 +953,10 @@ winkstart.module('voip', 'user', {
                 data.directories = {};
             }
 
+            if($.isArray(data.caller_id_options)) {
+                data.caller_id_options = {};
+            }
+
             $.each(data.caller_id, function(key, val) {
                 $.each(val, function(_key, _val) {
                     if(_val == '') {
