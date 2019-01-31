@@ -188,7 +188,8 @@ winkstart.module('voip', 'conference', {
                     data: $.extend(true, {
                         member: {},
                         play_entry_tone: true,
-                        play_exit_tone: true
+                        play_exit_tone: true,
+                        play_name: true
                     }, data_defaults || {}),
                     field_data: {
                         users: []
