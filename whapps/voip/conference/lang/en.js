@@ -38,6 +38,8 @@ window.translate['conference'] = {
 	member_pins_string_regex: /^[a-z0-9A-Z,\s]*$/,
 	play_entry_tone: "Play Entry Tone",
 	play_exit_tone: "Play Exit Tone",
+	play_name: "Play Name",
 	play_entry_tone_help: "Will play a tone whenever a caller joins the conference if checked",
-	play_exit_tone_help: "Will play a tone whenever a caller exits the conference if checked"
+	play_exit_tone_help: "Will play a tone whenever a caller exits the conference if checked",
+	play_name_help: "Will play the name of a caller who joins the conference if checked"
 };
