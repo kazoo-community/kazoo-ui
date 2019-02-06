@@ -613,7 +613,6 @@ winkstart.module('voip', 'extension', {
                     });
                 },
                 dialog = winkstart.dialog(popup_html, {
-                    onClose: goToExtension,
                     title: window.translate['extension']['extensions_label']
                 });
 
