@@ -189,6 +189,8 @@ winkstart.module('myaccount', 'report', {
                             credits: function(callback) {
                                 THIS.get_account_data({type: 'credits', account_id: account.id}, function(_data) {
                                     callback(null, _data.data);
+                                }, function(_data, _status) {
+                                    if (_status === 404) callback(null, { amount: 0 });
                                 });
                             },
                             limits: function(callback) {
