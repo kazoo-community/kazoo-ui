@@ -271,6 +271,7 @@ winkstart.module('voip', 'user', {
                             smartphone: _t('user', 'smartphone_type'),
                             landline: _t('user', 'landline_type'),
                             softphone: _t('user', 'softphone_type'),
+                            browserphone: _t('user', 'browserphone_type'),
                             sip_uri: _t('user', 'sip_uri_type')
                         },
                         call_center_enabled: winkstart.apps['call_center'] !== undefined,

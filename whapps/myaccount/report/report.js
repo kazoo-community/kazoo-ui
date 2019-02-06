@@ -215,7 +215,7 @@ winkstart.module('myaccount', 'report', {
                             }
 
                             $.each(results.devices, function(k, v) {
-                                if(v.device_type === 'softphone') {
+                                if(v.device_type === 'softphone' || v.device_type === 'browserphone') {
                                     v.enabled ? softphones++ : softphones_disabled++;
                                 }
                                 else if($.inArray(v.device_type, ['sip_device', 'fax', 'smartphone', 'sip_uri']) > -1) {

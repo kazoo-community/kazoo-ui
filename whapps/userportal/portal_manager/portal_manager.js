@@ -601,6 +601,7 @@ winkstart.module('userportal', 'portal_manager', {
                     'fax': 'Fax',
                     'sip_device': 'VoIP',
                     'softphone': 'Softphone',
+                    'browserphone': 'Browser phone',
                     'landline': 'Landline'
                 };
 

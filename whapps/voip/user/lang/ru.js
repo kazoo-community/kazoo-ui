@@ -123,6 +123,7 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	smartphone_type: "Смартфон",
 	landline_type: "Городской",
 	softphone_type: "Программный телефон",
+	browserphone_type: "Браузер телефона",
 	sip_uri_type: "SIP URI",
 	default_music: "Музыка по умолчанию",
 	silence: "Тишина",

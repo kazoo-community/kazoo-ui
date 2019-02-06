@@ -1,0 +1,440 @@
+<div>
+	<div class="row">
+		<div class="whapp-header">
+			<h1>${_t('edit_browserphone')}</h1>
+			<div class="buttons-right pasted view-buttons">
+				<button class="btn black basic activate">${_t('basic')}</button>
+				<button class="btn black advanced">${_t('advanced')}</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<ul class="tabs" data-tabs="tabs">
+			<li class="active"><a href="#basic">${_t('basic')}</a></li>
+			<li><a href="#caller_id_device">${_t('caller_id')}</a></li>
+			<li><a href="#sip_settings">${_t('sip_settings')}</a></li>
+			<li><a href="#audio_settings">${_t('audio_settings')}</a></li>
+			<li><a href="#video_settings">${_t('video_settings')}</a></li>
+			<li><a href="#options">${_t('options')}</a></li>
+			<li><a href="#restrictions">${_t('restrictions')}</a></li>
+		</ul>
+		<form id="device-form" action="" method="post">
+			<div class="pill-content">
+				<div class="active basic_view" id="basic">
+					<div class="clearfix">
+						<label for="name">${_t('device_nickname')}</label>
+						<div class="input">
+							<input class="span4" id="name" name="name" type="text" placeholder="${_t('name')}" value="${data.name}" rel="popover" data-content="${_t('name_data_content')}" />
+						</div>
+					</div>
+
+					{{if field_data.hide_owner}}
+					{{else}}
+						<div class="clearfix">
+							<label for="owner_id">${_t('assign_to')}</label>
+							<div class="input">
+								<span rel="popover" data-content="${_t('belongs_to_data_content')}">
+									<select name="owner_id" id="owner_id" class="medium">
+										{{each field_data.users}}
+											{{if data.owner_id == id}}
+												<option value="${id}" id="${id}" selected="selected">${first_name} ${last_name}</option>
+											{{else}}
+												<option value="${id}" id="${id}">${first_name} ${last_name}</option>
+											{{/if}}
+										{{/each}}
+									</select>
+									<div class="edit_create">
+										<a id="edit_link" class="inline_action" data-action="edit" href="#">${_t('edit')}</a>
+										<a class="inline_action" data-action="create" href="#">${_t('create')}</a>
+									</div>
+								</span>
+							</div>
+						</div>
+					{{/if}}
+
+					<div class="clearfix">
+						<label for="sip_realm">${_t('realm')}</label>
+						<div class="input">
+							<span class="uneditable-input">${field_data.sip.realm}</span>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_username">${_t('username')}</label>
+						<div class="input">
+							<input class="span4" id="sip_username" name="sip.username" type="text" placeholder="${_t('username')}" value="${data.sip.username}" rel="popover" data-content="${_t('username_data_content')}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_password">${_t('password')}</label>
+						<div class="input">
+							<input class="span4" id="sip_password" name="sip.password" type="password" placeholder="" value="${data.sip.password}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('enabled_data_content')}">
+											{{if data.enabled == true}}
+												<input type="checkbox" id="enabled" name="enabled" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="enabled" name="enabled" />
+											{{/if}}
+											<span>${_t('enabled')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="Uncheck to disable inbound calls to this device. The device can still place outbound calls.">
+											{{if data.follow_me == true}}
+												<input type="checkbox" id="follow_me" name="follow_me" checked="checked" />
+											{{else data.follow_me === undefined}}
+												<input type="checkbox" id="follow_me" name="follow_me" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="follow_me" name="follow_me" />
+											{{/if}}
+											<span>Follow-Me</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<input type="hidden" value="${data.device_type}" name="device_type" />
+				</div>
+
+				<div id="caller_id_device">
+					<div class="clearfix">
+						<label for="name">${_t('presence_id')}</label>
+						<div class="input">
+							<input class="span4" id="presence_id" name="presence_id" type="text" placeholder="${_t('presence_id_placeholder')}" value="${data.presence_id}" rel="popover" data-content="${_t('presence_id_help')}" />
+						</div>
+					</div>
+					<h3>${_t('in_house_calls')}</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_internal">${_t('caller_id_name')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_internal" name="caller_id.internal.name" type="text" placeholder="${_t('name')}" value="${data.caller_id.internal.name}" rel="popover" data-content="${_t('caller_id_name_data_content')}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="caller_id_number_internal">${_t('caller_id_number')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_internal" name="caller_id.internal.number" type="text" placeholder="+15555555555" value="${data.caller_id.internal.number}" rel="popover" data-content="${_t('caller_id_number_data_content')}" />
+						</div>
+					</div>
+					<hr />
+
+					<h3>${_t('outbound_calls')}</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_external">${_t('caller_id_name')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_external" name="caller_id.external.name" type="text" placeholder="Name" value="${data.caller_id.external.name}" rel="popover" data-content="${_t('caller_id_name_data_content2')}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="caller_id_number_external">${_t('caller_id_number')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_external" name="caller_id.external.number" type="text" placeholder="+15555555555" value="${data.caller_id.external.number}" rel="popover" data-content="${_t('caller_id_number_data_content2')}" />
+						</div>
+					</div>
+
+					<hr />
+
+					<h3>${_t('emergency')}</h3>
+					<div class="clearfix">
+						<label for="caller_id_name_emergency">${_t('caller_id_name')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_name_emergency" name="caller_id.emergency.name" type="text" placeholder="Name" value="${data.caller_id.emergency.name}" rel="popover" data-content="${_t('caller_id_name_data_content3')}" />
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="caller_id_number_emergency">${_t('caller_id_number')}</label>
+						<div class="input">
+							<input class="span4" id="caller_id_number_emergency" name="caller_id.emergency.number" type="text" placeholder="+15555555555" value="${data.caller_id.emergency.number}" rel="popover" data-content="${_t('caller_id_number_data_content3')}" />
+						</div>
+					</div>
+				</div>
+
+				<div id="sip_settings">
+					<div class="clearfix">
+						<label for="sip_method">${_t('authentication_method')}</label>
+						<div class="input">
+							<select name="sip.method" id="sip_method" class="medium" rel="popover" data-content="${_t('authentication_method_data_content')}">
+								{{each(key, val) field_data.sip.methods}}
+									{{if key != 'ip'}}
+										{{if data.sip.method == key}}
+											<option value="${key}" selected="selected">${val}</option>
+										{{else}}
+											<option value="${key}">${val}</option>
+										{{/if}}
+									{{/if}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_invite_format">${_t('invite_format')}</label>
+						<div class="input">
+							<select name="sip.invite_format" id="sip_invite_format" class="medium" rel="popover" data-content="${_t('invite_format_data_content')}">
+								{{each(key, val) field_data.sip.invite_formats}}
+									{{if data.sip.invite_format == key}}
+										<option value="${key}" selected="selected">${val}</option>
+									{{else}}
+										<option value="${key}">${val}</option>
+									{{/if}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="sip_expire_seconds">${_t('expire_seconds')}</label>
+						<div class="input">
+							<input class="span4" id="sip_expire_seconds" name="sip.expire_seconds" type="text" placeholder="${_t('expire_seconds')}" value="${data.sip.expire_seconds}" rel="popover" data-content="${_t('expire_seconds_data_content')}" />
+						</div>
+					</div>
+				</div>
+
+				<div id="audio_settings">
+					<div class="clearfix">
+						<label for="music_on_hold">${_t('music_on_hold')}</label>
+						<div class="input">
+							<span rel="popover" data-content="${_t('music_on_hold_data_content')}">
+								<select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
+									{{each field_data.music_on_hold}}
+										{{if data.music_on_hold.media_id == id}}
+											<option id="${id}" value="${id}" selected="selected">${name}</option>
+										{{else}}
+											<option id="${id}" value="${id}">${name}</option>
+										{{/if}}
+									{{/each}}
+								</select>
+								<div class="edit_create">
+									<a id="edit_link_media" class="inline_action_media" data-action="edit" href="#">${_t('edit')}</a>
+									<a class="inline_action_media" data-action="create" href="#">${_t('create')}</a>
+								</div>
+							</span>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="media_peer_to_peer">${_t('peer_to_peer_audio')}</label>
+						<div class="input">
+							<select name="media.peer_to_peer" id="media_peer_to_peer" class="medium" rel="popover" data-content="${_t('peer_to_peer_audio_data_content')}">
+								{{each(key, val) field_data.media.peer_to_peer_options}}
+									{{if data.media.peer_to_peer == key}}
+										<option value="${key}" selected="selected">${val}</option>
+									{{else}}
+										<option value="${key}">${val}</option>
+									{{/if}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<label for="secure_rtp">${_t('secure_rtp')}</label>
+						<div class="input">
+							<select name="extra.encryptionMethod" id="secure_rtp" class="medium" rel="popover" data-content="${_t('secure_rtp_help')}">
+								{{each(key, val) field_data.media.secure_rtp.options}}
+									{{if field_data.media.secure_rtp.value == key}}
+										<option value="${key}" selected="selected">${val}</option>
+									{{else}}
+										<option value="${key}">${val}</option>
+									{{/if}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
+
+					{{each(key, val) field_data.media.audio.codecs}}
+						<div>
+							<div class="input">
+								<ul class="inputs-list">
+									<li>
+										<label>
+											{{if functions.inArray(key, data.media.audio.codecs) }}
+												<input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" checked="checked" rel="popover" data-content="" value="${key}" />
+											{{else}}
+												<input type="checkbox" id="media_audio_codecs" name="media.audio.codecs[]" rel="popover" data-content="" value="${key}" />
+											{{/if}}
+											<span>${val}</span>
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+					{{/each}}
+				</div>
+
+				<div id="video_settings">
+					{{each(key, val) field_data.media.video.codecs}}
+						<div class="clearfix">
+							<div class="input">
+								<ul class="inputs-list">
+									<li>
+										<label>
+											{{if functions.inArray(key, data.media.video.codecs) }}
+												<input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" checked="checked" rel="popover" data-content="" value="${key}" />
+											{{else}}
+												<input type="checkbox" id="media_video_codecs" name="media.video.codecs[]" rel="popover" data-content="" value="${key}" />
+											{{/if}}
+											<span>${val}</span>
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+					{{/each}}
+				</div>
+
+				<div id="options">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('t_38_data_content')}">
+											{{if data.media.fax_option === true}}
+												<input id="media_fax_option" type="checkbox" name="media.fax_option" checked="checked" />
+											{{else}}
+												<input id="media_fax_option" type="checkbox" name="media.fax_option" />
+											{{/if}}
+											<span>${_t('t_38')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('hide_from_contact_list_data_content')}">
+											{{if data.contact_list.exclude === true}}
+												<input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" checked="checked" />
+											{{else}}
+												<input id="contact_list_exclude" type="checkbox" name="contact_list.exclude" />
+											{{/if}}
+											<span>${_t('hide_from_contact_list')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('ignore_completed_elsewhere_data_content')}">
+											{{if data.ignore_completed_elsewhere === true}}
+												<input id="ignore_completed_elsewhere" type="checkbox" name="ignore_completed_elsewhere" checked="checked" />
+											{{else}}
+												<input id="ignore_completed_elsewhere" type="checkbox" name="ignore_completed_elsewhere" />
+											{{/if}}
+											<span>${_t('ignore_completed_elsewhere')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<input type="hidden" name="extra.notify_unregister" value="false" />
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('exclude_from_queues_tip')}">
+											{{if data.exclude_from_queues === true}}
+												<input id="exclude_from_queues" type="checkbox" name="exclude_from_queues" checked="checked" />
+											{{else}}
+												<input id="exclude_from_queues" type="checkbox" name="exclude_from_queues" />
+											{{/if}}
+											<span>${_t('exclude_from_queues')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div id="restrictions">
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('closed_groups_data_content')}">
+											{{if data.call_restriction.closed_groups.action === 'deny'}}
+												<input type="checkbox" name="extra.closed_groups" checked="checked" />
+											{{else}}
+												<input type="checkbox" name="extra.closed_groups" />
+											{{/if}}
+											<span>${_t('closed_groups')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					{{each(k, v) field_data.call_restriction}}
+					<div class="clearfix">
+						<label>${v.friendly_name}</label>
+						<div class="input">
+							 <select name="call_restriction.${k}.action" class="medium" rel="popover">
+								{{if data.call_restriction[k].action === 'allow'}}
+									<option value="allow" selected>${_t('allow')}</option>
+									<option value="deny">${_t('deny')}</option>
+									<option value="inherit">${_t('inherit')}</option>
+								{{else data.call_restriction[k].action === 'deny'}}
+									<option value="allow">${_t('allow')}</option>
+									<option value="deny" selected>${_t('deny')}</option>
+									<option value="inherit">${_t('inherit')}</option>
+								{{else}}
+									<option value="allow">${_t('allow')}</option>
+									<option value="deny">${_t('deny')}</option>
+									<option value="inherit" selected>${_t('inherit')}</option>
+								{{/if}}
+							</select>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+			</div>
+		</form>
+		<div class="buttons-right">
+			{{if data.id}}
+				<button class="btn danger device-delete">${_t('delete')}</button>
+			{{/if}}
+			<button class="btn success device-save">${_t('save')}</button>
+		</div>
+	</div>
+</div>

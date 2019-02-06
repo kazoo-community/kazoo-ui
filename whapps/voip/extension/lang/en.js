@@ -41,6 +41,7 @@ window.translate['extension'] = {
     sip_username: "SIP Username",
     smart_phone: "Smart Phone",
     soft_phone: "Soft Phone",
+    browserphone: "Browser Phone",
     there_were_errors_on_the_form: "There were errors on the form, please correct!",
     timezone: "Timezone",
     unregistered: "Unregistered",

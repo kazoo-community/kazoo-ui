@@ -10,6 +10,7 @@ winkstart.module('voip', 'device', {
             landline: 'tmpl/landline.html',
             cellphone: 'tmpl/cellphone.html',
             softphone: 'tmpl/softphone.html',
+            browserphone: 'tmpl/browserphone.html',
             mobile: 'tmpl/mobile.html',
             sip_device: 'tmpl/edit.html',
             fax: 'tmpl/fax.html',
@@ -66,6 +67,17 @@ winkstart.module('voip', 'device', {
                 { name: '#call_forward_number', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ }
             ],
             softphone: [
+                { name: '#name',                      regex: _t('device', 'name_regex') },
+                { name: '#caller_id_name_internal',   regex: _t('device', 'caller_id_name_regex') },
+                { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_external',   regex: _t('device', 'caller_id_name_regex') },
+                { name: '#caller_id_number_external', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
+                { name: '#caller_id_name_emergency',  regex: _t('device', 'caller_id_name_regex') },
+                { name: '#sip_username',              regex: /^[^\s]+$/ },
+                { name: '#sip_expire_seconds',        regex: /^[0-9]+$/ }
+            ],
+            browserphone: [
                 { name: '#name',                      regex: _t('device', 'name_regex') },
                 { name: '#caller_id_name_internal',   regex: _t('device', 'caller_id_name_regex') },
                 { name: '#caller_id_number_internal', regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
@@ -604,7 +616,7 @@ winkstart.module('voip', 'device', {
                 device_html = THIS.templates[data.data.device_type].tmpl(data);
 
                 /* Do device type specific things here */
-                if($.inArray(data.data.device_type, ['fax', 'softphone', 'sip_device', 'smartphone', 'mobile']) > -1) {
+                if($.inArray(data.data.device_type, ['fax', 'softphone', 'browserphone', 'sip_device', 'smartphone', 'mobile']) > -1) {
                     device_html.delegate('#sip_password[type="password"]', 'focus', function() {
                         var value = $(this).val();
                         $('<input id="sip_password" name="sip.password" type="text"/>').insertBefore($(this)).val(value).focus();
@@ -964,7 +976,7 @@ winkstart.module('voip', 'device', {
                 delete data.ringtones.external;
             }
 
-            if($.inArray(data.device_type, ['fax', 'softphone', 'sip_device', 'smartphone']) < 0) {
+            if($.inArray(data.device_type, ['fax', 'softphone', 'browserphone', 'sip_device', 'smartphone']) < 0) {
                 delete data.call_restriction;
             }
 
@@ -1021,7 +1033,7 @@ winkstart.module('voip', 'device', {
                 form_data.call_restriction.closed_groups = { action: form_data.extra.closed_groups ? 'deny' : 'inherit' };
             }
 
-			if($.inArray(form_data.device_type, ['sip_device', 'mobile', 'softphone']) > -1) {
+			if($.inArray(form_data.device_type, ['sip_device', 'mobile', 'softphone', 'browserphone']) > -1) {
             	if('extra' in form_data) {
 					form_data.media.encryption = form_data.media.encryption || {};
 

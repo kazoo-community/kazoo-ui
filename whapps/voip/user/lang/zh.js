@@ -124,6 +124,7 @@ window.translate['user'] = {
 	smartphone_type: "智能电话",
 	landline_type: "固话",
 	softphone_type: "软电话",
+	browserphone_type: "浏览器手机",
 	sip_uri_type: "SIP URI",
 	default_music: "默认音乐",
 	silence: "静音",

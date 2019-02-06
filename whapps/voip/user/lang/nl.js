@@ -124,6 +124,7 @@ window.translate['user'] = {
 	smartphone_type: "Smartphone",
 	landline_type: "Vaste lijn",
 	softphone_type: "Softphone",
+	browserphone_type: "Browser phone",
 	sip_uri_type: "SIP URI",
 	default_music: "Default Music",
 	silence: "Stilte",

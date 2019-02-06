@@ -90,6 +90,14 @@
                                     <div class="registration_status" title="${_t('unregistered')}" />
                                 {{/if}}
                                 <div>${_t('soft_phone')}</div>
+                            {{else device.device_type == "browserphone"}}
+                                <div class="icon menu1"></div>
+                                {{if device.registered}}
+                                    <div class="registration_status registered" title="${_t('registered')}" />
+                                {{else}}
+                                    <div class="registration_status" title="${_t('unregistered')}" />
+                                {{/if}}
+                                <div>${_t('browserphone')}</div>
                             {{else device.device_type == "mobile"}}
                                 <div class="icon cellphone"></div>
                                 {{if device.registered}}
@@ -146,7 +154,7 @@
                                     </div>
                                 </div>
                             {{/if}}
-                            {{if device.device_type == "sip_device" || device.device_type == "softphone" || device.device_type == "mobile"}}
+                            {{if device.device_type == "sip_device" || device.device_type == "softphone" || device.device_type == "browserphone" || device.device_type == "mobile"}}
                                 <div class="clearfix">
                                     <label>${_t('sip_username')}</label>
                                     <div class="info_row">
