@@ -21,5 +21,14 @@ window.translate['bulk'] = {
 	an_error_occured_during: "An error occured during the bulk update...",
 	the_endpoints_selected: "The endpoints selected were updated successfuly!",
     enable: "Enable",
-    disable: "Disable"
+    disable: "Disable",
+    caller_id_name: "Caller ID Name",
+    caller_id_number: "Caller ID Number",
+    caller_id_external: "Caller ID (Outbound)",
+    caller_id_emergency: "Caller ID (Emergency)",
+    caller_id_external_name_content: "Define the Caller ID Name for Outbound Calls (max. 30 chars). If the Caller ID Name of the device and of the user is not set, this Caller ID Name will be used.",
+    caller_id_external_number_content: "Define the Caller ID Number for Outbound Calls. If the Caller ID Number of the device and of the user is not set, this Caller ID Number will be used.",
+    caller_id_emergency_name_content: "Define the Caller ID Name for Emergency Calls (max. 30 chars).",
+    caller_id_emergency_number_content: "Define the Caller ID Number for Emergency Calls.",
+    name_placeholder: "Name"
 };

@@ -52,6 +52,36 @@
                             </label>
                         </div>
 
+                        <div class="clearfix" id="line5">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('caller_id_external')}
+                            </label>
+                            <div class="input">
+                                <p>${_t('caller_id_name')}:</p>
+                                <input type="text" id="caller_id_name_external" name="caller_id.external.name" placeholder="${_t('name_placeholder')}" data-content="${_t('caller_id_external_name_content')}">
+                            </div>
+                            <br/>
+                            <div class="input">
+                                <p>${_t('caller_id_number')}:</p>
+                                <input type="text" id="caller_id_number_external" name="caller_id.external.number" placeholder="+15555555555" data-content="${_t('caller_id_external_number_content')}">
+                            </div>
+                        </div>
+
+                        <div class="clearfix" id="line6">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('caller_id_emergency')}
+                            </label>
+                            <div class="input">
+                                <p>${_t('caller_id_name')}:</p>
+                                <input type="text" id="caller_id_name_emergency" name="caller_id.emergency.name" placeholder="${_t('name_placeholder')}" data-content="${_t('caller_id_emergency_name_content')}">
+                            </div>
+                            <br/>
+                            <div class="input">
+                                <p>${_t('caller_id_number')}:</p>
+                                <input type="text" id="caller_id_number_emergency" name="caller_id.emergency.number" placeholder="+15555555555" data-content="${_t('caller_id_emergency_number_content')}">
+                            </div>
+                        </div>
+
                         <hr/>
                         <h3>${_t('restrictions')}</h3>
                         {{each(k, v) field_data.call_restriction}}
