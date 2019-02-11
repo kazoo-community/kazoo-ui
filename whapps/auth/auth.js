@@ -21,6 +21,7 @@ winkstart.module('auth', 'auth',
             'auth.load_account' : 'load_account',
             'auth.recover_password' : 'recover_password',
             'auth.new_password': 'new_password',
+            'auth.reset_password': 'reset_password',
             'auth.authenticate' : 'authenticate',
             'auth.shared_auth' : 'shared_auth',
             'auth.register' : 'register',
@@ -37,13 +38,10 @@ winkstart.module('auth', 'auth',
 
         validation_recover: [
             { name: '#username', regex: /^.+$/ },
-            { name: '#account_name', regex: /^.*$/ },
-            { name: '#account_realm', regex: /^.*$/ },
-            { name: '#phone_number', regex: /^.*$/ }
+            { name: '#account_name', regex: /^.*$/ }
         ],
 
         validation_new_password: [
-            { name: '#old_password', regex: '.+' },
             { name: '#new_password1', regex: '.+' },
             { name: '#new_password2', regex: '.+' }
         ],
@@ -82,12 +80,17 @@ winkstart.module('auth', 'auth',
             'auth.user.update': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}',
                 contentType: 'application/json',
-                verb: 'POST'
+                verb: 'PATCH'
             },
             'auth.recover_password': {
                 url: '{api_url}/user_auth/recovery',
                 contentType: 'application/json',
                 verb: 'PUT'
+            },
+            'auth.reset_password': {
+                url: '{api_url}/user_auth/recovery',
+                contentType: 'application/json',
+                verb: 'POST'
             },
             'auth.invite_code': {
                 url: '{api_url}/onboard/invite/{invite_code}',
@@ -127,6 +130,9 @@ winkstart.module('auth', 'auth',
 
         if('auth_url' in URL_DATA) {
             winkstart.apps['auth'].api_url = URL_DATA['auth_url'];
+        }
+        else if('recovery' in URL_DATA) {
+            winkstart.publish('auth.reset_password', URL_DATA['recovery']);
         }
         else {
             var host = URL.match(/^(?:https?:\/\/)*([^\/?#]+).*$/)[1];
@@ -770,7 +776,9 @@ winkstart.module('auth', 'auth',
                                 data: user_data
                             },
                             function(_data, status) {
-                                winkstart.alert('info', _t('auth', 'password_updated'));
+                                winkstart.alert('info', _t('auth', 'password_updated'), function() {
+                                    window.location.href = window.location.origin + window.location.pathname;
+                                });
                                 dialog_new_password.dialog('close');
                             },
                             function(_data, status) {
@@ -787,7 +795,7 @@ winkstart.module('auth', 'auth',
             });
         },
 
-        /* (╯°□°）︵ ┻━━┻━ */
+        /* ┬─┬ ノ( ^_^ノ) */
         recover_password: function(args) {
             var THIS = this;
 
@@ -804,9 +812,8 @@ winkstart.module('auth', 'auth',
                 event.preventDefault();
                 var data_recover = form2object('recover_password_form');
 
-                data_recover.account_realm == '' ? delete data_recover.account_realm : true;
                 data_recover.account_name == '' ? delete data_recover.account_name : true;
-                data_recover.phone_number == '' ? delete data_recover.phone_number : true;
+                data_recover.ui_url = window.location.origin + window.location.pathname;
 
                 winkstart.validate.is_valid(THIS.config.validation_recover, dialogRecover, function() {
                     winkstart.request(true, 'auth.recover_password', {
@@ -832,6 +839,27 @@ winkstart.module('auth', 'auth',
                     );
                 });
             });
+        },
+
+        reset_password: function(recovery_token) {
+            winkstart.request(true, 'auth.reset_password', {
+                    api_url: winkstart.apps.auth.api_url,
+                    data: {
+                        reset_id: recovery_token
+                    }
+                },
+                function(_data) {
+                    winkstart.apps['auth'].account_id = _data.data.account_id;
+                    winkstart.apps['auth'].auth_token = _data.auth_token;
+
+                    winkstart.publish('auth.new_password', {
+                        id: _data.data.owner_id
+                    });
+                },
+                function(_data, status) {
+                    winkstart.alert('error', 'Error: ' + status);
+                }
+            );
         },
 
         authenticate: function() {
