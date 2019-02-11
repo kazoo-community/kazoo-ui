@@ -432,7 +432,7 @@ winkstart.module('voip', 'extension', {
                         new_list.push({
                             // For the list panel
                             id: val.id,
-                            title: val.username,
+                            title: val.username + ', ' + val.first_name + ' ' + val.last_name,
 
                             // For our use
                             callflow: val.callflow,
