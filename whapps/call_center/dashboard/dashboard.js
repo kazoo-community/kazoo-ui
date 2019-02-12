@@ -243,6 +243,7 @@ winkstart.module('call_center', 'dashboard', {
                 map_agents[v.id] = 'logged_out';
             });
 
+            clearInterval(THIS.global_timer);
             THIS.global_timer = setInterval(huge_poll, polling_interval * 1000);
         },
 
