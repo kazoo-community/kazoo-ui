@@ -66,6 +66,12 @@ winkstart.module('call_center', 'queue', {
                 contentType: 'application/json',
                 verb: 'POST'
             },
+            'queue.list_users': {
+                url: '{api_url}/accounts/{account_id}/queues/{queue_id}/roster',
+                contentType: 'application/json',
+                verb: 'GET',
+                trigger_events: false
+            },
             'queue.update_users': {
                 url: '{api_url}/accounts/{account_id}/queues/{queue_id}/roster',
                 contentType: 'application/json',
@@ -109,6 +115,8 @@ winkstart.module('call_center', 'queue', {
     },
 
     {
+        global_timer: false,
+
         queue_get_stats: function(queue_id, success, error) {
             winkstart.request(true, 'queue.get_stats', {
                     account_id: winkstart.apps['call_center'].account_id,
@@ -237,13 +245,31 @@ winkstart.module('call_center', 'queue', {
             );
         },
 
-        update_users: function(data, queue_id, success) {
-            var THIS = this;
-
-            THIS.queue_update_users(data.new_list, queue_id, function() {
-                if(typeof success === 'function') {
-                    success();
+        get_users_list: function(queue_id, callback) {
+            winkstart.request(true, 'queue.list_users', {
+                    account_id: winkstart.apps['call_center'].account_id,
+                    api_url: winkstart.apps['call_center'].api_url,
+                    queue_id: queue_id
+                },
+                function(_data) {
+                    callback(_data.data);
                 }
+            );
+        },
+
+        update_users: function(data, queue_id, success) {
+            var THIS = this,
+                add_list = $(data.new_list).not(data.old_list).get(),
+                remove_list = $(data.old_list).not(data.new_list).get();
+
+            THIS.get_users_list(queue_id, function(current_list) {
+                var update_list = $.unique($(current_list.concat(add_list)).not(remove_list).get());
+
+                THIS.queue_update_users(update_list, queue_id, function() {
+                    if(typeof success === 'function') {
+                        success();
+                    }
+                });
             });
         },
 
@@ -401,6 +427,34 @@ winkstart.module('call_center', 'queue', {
                         if(typeof callbacks.after_render == 'function') {
                             callbacks.after_render();
                         }
+
+                        var polling_interval = 10,
+                            queue_poll = function() {
+                                if ($('#agents-form').size() === 0 || $('#update_list').size() !== 0) {
+                                    clearInterval(THIS.global_timer);
+                                } else {
+                                    THIS.get_users_list(data.id, function(current_list) {
+                                        var add_count = $(current_list).not(render_data.field_data.old_list).length,
+                                            remove_count = $(render_data.field_data.old_list).not(current_list).length;
+
+                                        if (add_count > 0 || remove_count > 0) {
+                                            $('#agents-grid_wrapper').before($('<div/>', {
+                                                'class': 'alert-message warning',
+                                                'style': 'cursor: pointer',
+                                                'id': 'update_list',
+                                                'html': '<p><strong>Agents List Has Changed!</strong> Click here to update the list.</p>',
+                                                'click': function() {
+                                                    $(this).remove();
+                                                    THIS.edit_queue({ id: data.id });
+                                                }
+                                            }));
+                                        }
+                                    });
+                                }
+                            };
+
+                        clearInterval(THIS.global_timer);
+                        THIS.global_timer = setInterval(queue_poll, polling_interval * 1000);
                     }
                     else {
                         defaults.data.breakout = {
