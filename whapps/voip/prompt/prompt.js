@@ -114,6 +114,15 @@ winkstart.module('voip', 'prompt', {
 				prompt_html.find('.basic_view')
 						   .append(THIS.templates.add_language.tmpl(data));
 
+			$('.custom_prompt', prompt_html).empty().hide();
+			$('.prompt_dropdown', prompt_html).change(function() {
+				if ($(this).val() === 'Other') {
+					$('.custom_prompt', prompt_html).show();
+				} else {
+					$('.custom_prompt', prompt_html).empty().hide();
+				}
+			});
+
 				$('#file', prompt_html).bind('change', function(evt){
 					var files = evt.target.files;
 
@@ -134,8 +143,13 @@ winkstart.module('voip', 'prompt', {
 				$('.prompt-save', prompt_html).click(function(ev) {
 					ev.preventDefault();
 
-					var form_data = form2object('prompt-form'),
-						clean_data = THIS.clean_form_data(form_data);
+				var form_data = form2object('prompt-form');
+
+				if ($('.prompt_dropdown', prompt_html).val() === 'Other') {
+					form_data.prompt_id = $('.custom_prompt', prompt_html).val();
+				}
+
+				var clean_data = THIS.clean_form_data(form_data);
 
 					if(file === 'updating') {
 						winkstart.alert(_t('prompt', 'the_file_you_want_to_apply'));
@@ -322,6 +336,7 @@ winkstart.module('voip', 'prompt', {
 		clean_form_data: function(form_data) {
 			form_data.description = form_data.extra.upload_prompt;
 			form_data.media_source = 'upload';
+		form_data.prompt_id = form_data.prompt_id.trim().replace(/\s+/g, '_');
 			form_data.name = form_data.language + '/' + form_data.prompt_id;
 
 			delete form_data.extra;

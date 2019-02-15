@@ -11,11 +11,13 @@
 					<div class="clearfix prompts">
 						<label for="prompt_id">${_t('prompt_id')}</label>
 						<div class="input">
-							<select class="medium" name="prompt_id" id="prompt_id">
+							<select class="prompt_dropdown" name="prompt_id" id="prompt_id">
 								{{each(k, curr) field_data.prompts}}
 									<option>${curr}</option>
 								{{/each}}
+								<option value="Other">${_t('other')}</option>
 							</select>
+							<input type="text" name="extra.custom_prompt_id" class="custom_prompt"/>
 						</div>
 					</div>
 				</div>

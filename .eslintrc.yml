@@ -10,6 +10,7 @@ env:
 
 globals:
   winkstart: true
+  form2object: true
   _t: true
 
 rules:
