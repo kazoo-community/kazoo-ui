@@ -57,6 +57,7 @@ window.translate['queue'] = $.extend(true, {}, window.translate['queue'], {
 	max_hold_time: "Максимальное время удержания (с)",
 	max_hold_time_data_content: "Как долго пытаться подключить звонящего перед обработкой сценария вызова после очереди (0 для снятия ограничения).",
 	allows_a_caller_to_enter_this_queue: "Позволяет поставить звонящего в очередь при отсутствии доступных операторов.",
+	hide_queue_in_dashboard: "Скрыть очередь в приборной панели",
 	notification_on_hangup: "Уведомление на завершение вызова",
 	notification_on_hangup_data_content: "URL для вызова при окончании звонка.",
 	notification_after_pickup: "Уведомление при принятии вызова",

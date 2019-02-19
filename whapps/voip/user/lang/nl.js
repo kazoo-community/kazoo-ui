@@ -82,6 +82,7 @@ window.translate['user'] = {
 	queue_options: "Queue Opties",
 	record_this_agent: "Record deze agent(user)",
 	record_this_agent_data_content: "Door dit aan te vinken worden gesprekken opgenomen, ook als de queue niet zo is ingesteld.",
+	hide_agent_in_dashboard: "Agent verbergen in dashboard",
 	enable_call_forward: "Activeer Doorschakelen",
 	enable_call_forward_data_content: "Door aan te vinken activeert u doorschakelen voor deze gebruiker.",
 	redirect_calls_to: "Schakel door naar",

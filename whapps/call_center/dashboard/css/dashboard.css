@@ -501,6 +501,18 @@
     background-position: -224px -260px;
 }
 
+.icon.hide_agent {
+    float: right;
+    cursor: pointer;
+    background-position: -98px -452px;
+}
+
+.icon.hide_queue {
+    position: absolute;
+    cursor: pointer;
+    margin-left: 22px;
+}
+
 .skills_tooltip.pill-content {
     min-width: 80px;
     padding: 4px;

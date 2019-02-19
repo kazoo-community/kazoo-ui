@@ -143,15 +143,51 @@ winkstart.module('call_center', 'dashboard', {
             icon: 'graph1_box',
             weight: '20'
         });
+
+        winkstart.apps.call_center.hidden_in_dashboard = THIS.hidden_in_dashboard;
+        winkstart.apps.call_center.set_visibility_in_dashboard = THIS.set_visibility_in_dashboard;
     },
 
     {
         global_timer: false,
+        update_visibility: false,
         current_queue_id: undefined,
         hide_logout: false,
         map_timers: {
             calls_waiting: {},
             calls_in_progress: {}
+        },
+
+        hidden_in_dashboard: function(id, type) {
+            var dashboard_settings = JSON.parse(localStorage.getItem('dashboard'));
+
+            return !!(
+                dashboard_settings &&
+                dashboard_settings['hide_' + type] &&
+                dashboard_settings['hide_' + type].indexOf(id) !== -1
+            );
+        },
+
+        set_visibility_in_dashboard: function(id, type, hide) {
+            var dashboard_settings = JSON.parse(localStorage.getItem('dashboard')),
+                hide_list = [];
+
+            if (dashboard_settings && dashboard_settings['hide_' + type]) {
+                hide_list = hide_list.concat(dashboard_settings['hide_' + type]);
+            }
+
+            var existing_id_index = hide_list.indexOf(id);
+
+            if (hide && existing_id_index === -1) {
+                hide_list.push(id);
+            } else if (!hide && existing_id_index !== -1) {
+                hide_list.splice(existing_id_index, 1);
+            }
+
+            var new_settings = {};
+            new_settings['hide_' + type] = hide_list;
+
+            localStorage.setItem('dashboard', JSON.stringify($.extend(dashboard_settings, new_settings)));
         },
 
         render_global_data: function(param_data, id, _parent) {
@@ -257,6 +293,20 @@ winkstart.module('call_center', 'dashboard', {
                 THIS.restart_agent(this);
             });
 
+            $('.hide_agent').click(function(e) {
+                winkstart.confirm(_t('dashboard', 'confirm_agent_hide'), function() {
+                    THIS.set_visibility_in_dashboard(e.target.id, 'agents', true);
+                    THIS.update_visibility = true;
+                });
+            });
+
+            $('.hide_queue').click(function(e) {
+                winkstart.confirm(_t('dashboard', 'confirm_queue_hide'), function() {
+                    THIS.set_visibility_in_dashboard(e.target.id, 'queues', true);
+                    THIS.update_visibility = true;
+                });
+            });
+
             $('.agent_data.ready').click(function(e) {
                 THIS.logout(this);
             });
@@ -336,7 +386,8 @@ winkstart.module('call_center', 'dashboard', {
                         THIS.clean_timers();
                     }
                     else {
-                        if(++cpt % 30 === 0) {
+                        if(++cpt % 30 === 0 || THIS.update_visibility) {
+                            THIS.update_visibility = false;
                             THIS.fetch_all_data(false, function(data) {
                                 THIS.render_global_data(data, THIS.current_queue_id);
                                 current_global_data = data;
@@ -779,45 +830,59 @@ winkstart.module('call_center', 'dashboard', {
 
         format_data: function(data) {
             var THIS = this,
-                formatted_data = {};
+                formatted_data = {},
+                hide_queues = [],
+                hide_agents = [],
+                dashboard_settings = JSON.parse(localStorage.getItem('dashboard'));
 
+            if (dashboard_settings) {
+                hide_queues = dashboard_settings.hide_queues || [];
+                hide_agents = dashboard_settings.hide_agents || [];
+            }
+            
             /* Formatting Queues */
             formatted_data.queues = {};
 
             $.each(data.queues, function(k, v) {
-                formatted_data.queues[v.id] = $.extend(true, {
-                    current_calls: 0,
-                    total_calls: 0,
-                    current_agents: 0,
-                    max_agents: 0,
-                    average_hold_time: THIS.get_time_seconds(0),
-                    total_wait_time: 0,
-                    abandoned_calls: 0
-                }, v);
+                if (hide_queues.indexOf(v.id) === -1) {
+                    formatted_data.queues[v.id] = $.extend(true, {
+                        current_calls: 0,
+                        total_calls: 0,
+                        current_agents: 0,
+                        max_agents: 0,
+                        average_hold_time: THIS.get_time_seconds(0),
+                        total_wait_time: 0,
+                        abandoned_calls: 0
+                    }, v);
+                }
             });
 
             /* Formatting Agents */
             formatted_data.agents = {};
 
             $.each(data.agents, function(k, v) {
-            	if(v.queues && v.queues.length > 0) {
-                	formatted_data.agents[v.id] = $.extend(true, {
-                    	status: 'logged_out',
-                    	missed_calls: 0,
-                    	total_calls: 0,
-                    	queues_list: {}
-                	}, v);
-                }
+                if (hide_agents.indexOf(v.id) === -1) {
+                    v.queues = $(v.queues).not(hide_queues).get();
 
-                $.each(v.queues, function(k, queue_id) {
-                    if(queue_id in formatted_data.queues) {
-                        formatted_data.queues[queue_id].max_agents++;
-                        formatted_data.agents[v.id].queues_list[queue_id] = {
+                    if(v.queues && v.queues.length > 0) {
+                        formatted_data.agents[v.id] = $.extend(true, {
+                            status: 'logged_out',
                             missed_calls: 0,
-                            total_calls: 0
-                        };
+                            total_calls: 0,
+                            queues_list: {}
+                        }, v);
                     }
-                });
+    
+                    $.each(v.queues, function(k, queue_id) {
+                        if(queue_id in formatted_data.queues) {
+                            formatted_data.queues[queue_id].max_agents++;
+                            formatted_data.agents[v.id].queues_list[queue_id] = {
+                                missed_calls: 0,
+                                total_calls: 0
+                            };
+                        }
+                    });
+                }
             });
 
             formatted_data = THIS.format_live_data(formatted_data, data);
@@ -1045,6 +1110,7 @@ winkstart.module('call_center', 'dashboard', {
                         $('#callwaiting-list li', parent).show();
                         $('.icon.edit_queue', parent).hide();
                         $('.icon.eavesdrop_queue', parent).hide();
+                        $('.icon.hide_queue', parent).hide();
                         $('.list_queues_inner > li', parent).removeClass('active');
                     }
                     else {
@@ -1086,9 +1152,11 @@ winkstart.module('call_center', 'dashboard', {
             $('.list_queues_inner > li', parent).removeClass('active');
             $('.icon.edit_queue', parent).hide();
             $('.icon.eavesdrop_queue', parent).hide();
+            $('.icon.hide_queue', parent).hide();
 
             $('.icon.edit_queue', $this_queue).show();
             $('.icon.eavesdrop_queue', $this_queue).show();
+            $('.icon.hide_queue', $this_queue).show();
             $this_queue.addClass('active');
 
             $('#callwaiting-list li', parent).each(function(k, v) {

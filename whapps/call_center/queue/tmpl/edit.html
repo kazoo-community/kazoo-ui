@@ -173,6 +173,25 @@
                                 <li>
                                     <label>
                                         <span rel="popover" data-content="">
+                                            {{if data.hide_in_dashboard === true}}
+                                                <input type="checkbox" id="hide_in_dashboard" name="hide_in_dashboard" checked="checked" />
+                                            {{else}}
+                                                <input type="checkbox" id="hide_in_dashboard" name="hide_in_dashboard" />
+                                            {{/if}}
+                                            <span>${_t('hide_queue_in_dashboard')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
                                             {{if data.enter_when_empty === true}}
                                                 <input type="checkbox" id="enter_when_empty" name="enter_when_empty" checked="checked" />
                                             {{else}}

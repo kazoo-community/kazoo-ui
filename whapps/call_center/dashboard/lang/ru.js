@@ -17,5 +17,7 @@ window.translate['dashboard'] = $.extend(true, {}, window.translate['dashboard']
 	eavesdrop_request_failed: "Попытка присоединения не удалась. Ошибка #",
 	devices_title: "Устройства",
 	hide_queues_html: "Скрыть очереди",
-	show_queues_html: "Показать очереди"
+	show_queues_html: "Показать очереди",
+	hide_agent_in_dashboard: "Скрыть агент в приборной панели",
+	hide_queue_in_dashboard: "Скрыть очередь в приборной панели"
 });

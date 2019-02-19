@@ -88,6 +88,7 @@ window.translate['user'] = {
 	queue_membership: "Queue Membership",
 	record_this_agent: "Record this agent(user)",
 	record_this_agent_data_content: "By checking this box, this agent will be recorded even if the global setting for the queue is set to not record agents.",
+	hide_agent_in_dashboard: "Hide agent in dashboard",
 	acdc_agent_priority: "Agent Priority",
 	acdc_agent_priority_data_content: "(Round-robin strategy only) Queue calls will be distributed to agents with higher priority before those with lower priority",
 	acdc_skills: "Agent Skills",

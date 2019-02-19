@@ -414,6 +414,7 @@ winkstart.module('call_center', 'queue', {
                             render_data.field_data.old_list = results.queue_get.data.agents;
                         }
                         render_data.record_caller_disabled = render_data.data.record_caller ? '' : 'disabled';
+                        render_data.data.hide_in_dashboard = winkstart.apps.call_center.hidden_in_dashboard(render_data.data.id, 'queues');
 
                         // Classifier default values
                         if(render_data.data.breakout && render_data.data.breakout.classifiers) {
@@ -624,6 +625,8 @@ winkstart.module('call_center', 'queue', {
                         THIS.clean_form_data(form_data);
 
                         THIS.save_queue(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
+
+                        winkstart.apps.call_center.set_visibility_in_dashboard(data.data.id, 'queues', form_data.hide_in_dashboard);
                     },
                     function() {
                         winkstart.alert(_t('queue', 'there_were_errors_on_the_form'));
