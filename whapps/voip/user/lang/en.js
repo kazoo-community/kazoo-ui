@@ -88,6 +88,7 @@ window.translate['user'] = {
 	queue_membership: "Queue Membership",
 	record_this_agent: "Record this agent(user)",
 	record_this_agent_data_content: "By checking this box, this agent will be recorded even if the global setting for the queue is set to not record agents.",
+	hide_agent_in_dashboard: "Hide agent in dashboard",
 	add_queue: "Add Queue",
 	all_queues_added: "All Queues Added",
 	enable_call_forward: "Enable Call-Forward",

@@ -82,6 +82,7 @@ window.translate['user'] = {
 	queue_options: "队列选项",
 	record_this_agent: "坐席录音(用户)",
 	record_this_agent_data_content: "勾选后，即使队列配置不对此坐席进行录音，仍然会进行坐席录音.",
+	hide_agent_in_dashboard: "在仪表板中隐藏代理",
 	enable_call_forward: "打开呼叫前转",
 	enable_call_forward_data_content: "勾选后将开启用户呼叫前转功能.",
 	redirect_calls_to: "前转到",

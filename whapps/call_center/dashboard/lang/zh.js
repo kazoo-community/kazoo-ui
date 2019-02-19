@@ -18,6 +18,7 @@ window.translate['dashboard'] = {
 	eavesdrop_request_failed: "坚挺请求失败. 错误 #",
 	devices_title: "设备",
 	hide_queues_html: "隐藏队列",
-	show_queues_html: "显示队列"
-	
+	show_queues_html: "显示队列",
+	hide_agent_in_dashboard: "在仪表板中隐藏代理",
+	hide_queue_in_dashboard: "隐藏仪表板中的队列"
 };

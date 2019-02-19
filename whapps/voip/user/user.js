@@ -418,6 +418,10 @@ winkstart.module('voip', 'user', {
                     render_data = $.extend(true, defaults, results.user_get);
                 }
 
+                if (winkstart.apps.call_center) {
+                    render_data.data.hide_in_dashboard = winkstart.apps.call_center.hidden_in_dashboard(render_data.data.id, 'agents');
+                }
+
                 THIS.render_user(render_data, target, callbacks);
 
                 if(typeof callbacks.after_render == 'function') {
@@ -598,6 +602,10 @@ winkstart.module('voip', 'user', {
                                             }
                                         }
                                     }, winkstart.error_message.process_error(callbacks.save_error));
+
+                                    if (winkstart.apps.call_center) {
+                                        winkstart.apps.call_center.set_visibility_in_dashboard(data.data.id, 'agents', form_data.hide_in_dashboard);
+                                    }
                                 }
                             );
 

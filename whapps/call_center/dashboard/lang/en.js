@@ -18,6 +18,9 @@ window.translate['dashboard'] = {
 	eavesdrop_request_failed: "Eavesdrop Request failed. Error #",
 	devices_title: "Devices",
 	hide_queues_html: "Hide Queues",
-	show_queues_html: "Show Queues"
-	
+	show_queues_html: "Show Queues",
+	hide_agent_in_dashboard: "Hide agent in dashboard",
+	hide_queue_in_dashboard: "Hide queue in dashboard",
+	confirm_agent_hide: "Are you sure you want to hide this agent in the dashboard?<br>NOTE: This can be changed in agent settings.",
+	confirm_queue_hide: "Are you sure you want to hide this queue in the dashboard?<br>NOTE: This can be changed in queue settings."
 };
