@@ -56,6 +56,7 @@ window.translate['queue'] = {
 	max_hold_time: "Max Hold Time (s)",
 	max_hold_time_data_content: "In seconds, how long to try to connect the beller before progressing past the queue callflow action (0 voor no limit).",
 	allows_a_caller_to_enter_this_queue: "Allows a beller to enter deze queue wanneer no agents are available.",
+	hide_queue_in_dashboard: "Hide queue in dashboard",
 	notification_on_hangup: "Notification on Hangup",
 	notification_on_hangup_data_content: "URL voor a callback wanneer the call ends to tell the customer on their own servers that a call has ended.",
 	notification_after_pickup: "Notification after Pickup",

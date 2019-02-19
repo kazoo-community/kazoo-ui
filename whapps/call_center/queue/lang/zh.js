@@ -57,6 +57,7 @@ window.translate['queue'] = {
 	max_hold_time: "最长等待时间 (秒)",
 	max_hold_time_data_content: "单位为秒, 主叫在队列中最长等待时间 (0表示无限制).",
 	allows_a_caller_to_enter_this_queue: "无坐席可用时允许主叫进入队列.",
+	hide_queue_in_dashboard: "隐藏仪表板中的队列",
 	notification_on_hangup: "挂断时通知",
 	notification_on_hangup_data_content: "呼叫结束时回调这个URL通知用户服务器.",
 	notification_after_pickup: "接通时通知",

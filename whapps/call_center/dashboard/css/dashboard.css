@@ -405,3 +405,15 @@
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .row_data.call_time .data_value{
     color: #ffbb33;
 }
+
+.icon.hide_agent {
+    float: right;
+    cursor: pointer;
+    background-position: -98px -452px;
+}
+
+.icon.hide_queue {
+    position: absolute;
+    cursor: pointer;
+    margin-left: 22px;
+}

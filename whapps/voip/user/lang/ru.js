@@ -81,6 +81,7 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	queue_options: "Настройки очереди",
 	record_this_agent: "Записывать этого оператора (пользователя)",
 	record_this_agent_data_content: "Если выбрать эту настройку, оператор будет записываться вне зависимости от настроек записи очереди.",
+	hide_agent_in_dashboard: "Скрыть агент в приборной панели",
 	enable_call_forward: "Включить переадресацию",
 	enable_call_forward_data_content: "Если выбрано, то у пользователя будет включена переадресация звонков.",
 	redirect_calls_to: "Перадресовывать звонки на",

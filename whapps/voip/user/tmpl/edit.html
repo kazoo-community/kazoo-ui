@@ -563,6 +563,25 @@
                             </ul>
                         </div>
                     </div>
+					
+                    <div class="clearfix">
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        <span rel="popover" data-content="">
+                                            {{if data.hide_in_dashboard === true}}
+                                                <input id="hide_in_dashboard" type="checkbox" name="hide_in_dashboard" checked="checked" />
+                                            {{else}}
+                                                <input id="hide_in_dashboard" type="checkbox" name="hide_in_dashboard"/>
+                                            {{/if}}
+                                            <span>${_t('hide_agent_in_dashboard')}</span>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <h3>${_t('queue_membership')}</h3>
 

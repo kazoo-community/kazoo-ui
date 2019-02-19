@@ -17,6 +17,7 @@ window.translate['dashboard'] = {
 	eavesdrop_request_failed: "Eavesdrop Verzoek mislukt. Erro #",
 	devices_title: "Devices",
 	hide_queues_html: "Verberg Queues",
-	show_queues_html: "Toon Queues"
-	
+	show_queues_html: "Toon Queues",
+	hide_agent_in_dashboard: "Agent verbergen in dashboard",
+	hide_queue_in_dashboard: "Hide queue in dashboard"
 };
