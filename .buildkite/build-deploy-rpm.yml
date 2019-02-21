@@ -1,4 +1,13 @@
 steps:
+  - trigger: 'kazoo-ui-tests'
+    branches: '${BUILDKITE_BRANCH}'
+    build:
+      message: '${BUILDKITE_MESSAGE}'
+      commit: '${BUILDKITE_COMMIT}'
+      branch: '${BUILDKITE_BRANCH}'
+
+  - wait
+
   - label: ':construction: Build package'
     command: './scripts/buildkite-build-rpm.sh'
     artifact_paths: '*.rpm'
