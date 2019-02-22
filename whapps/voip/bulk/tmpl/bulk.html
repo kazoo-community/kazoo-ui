@@ -40,6 +40,15 @@
                             </div>
                         </div>
 
+                        <div class="clearfix" id="line3">
+                            <label class="checkbox checkbox-label">
+                                <input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('outbound_flags')}
+                            </label>
+                            <div class="input">
+                                <input type="text" id="outbound_flags" name="outbound_flags" data-content="${_t('outbound_flags_data_content')}"/>
+                            </div>
+                        </div>
+
                         <hr/>
                         <h3>${_t('restrictions')}</h3>
                         {{each(k, v) field_data.call_restriction}}
