@@ -1,4 +1,6 @@
 window.translate['bulk'] = {
+	outbound_flags: 'Outbound Flags',
+	outbound_flags_data_content: 'Outbound flags die Device verwacht of de Carrier. (ex: flag1, flag2, flag3)',
 	how_to_use_this_bulk_module:	'Hoe,  gebruikt u de Bulk module:',
 	select_users_or_and_devices: "1) Selecteer gebruikers/Devices uit de tabel.",
 	choose_what_fields: "2) Kies welke velden u wilt aanpassen voor die gebruikers/Devices.",
