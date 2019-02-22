@@ -187,7 +187,7 @@ function(args) {
 				};
                 var bulk_html = THIS.templates.bulk.tmpl(defaults);
 
-                THIS.bind_events(bulk_html);
+			THIS.bind_events(bulk_html, map_endpoints);
 
                 $('#ws-content').empty().append(bulk_html);
 
@@ -211,7 +211,7 @@ function(args) {
         );
 	},
 
-    bind_events: function(parent) {
+	bind_events: function(parent, endpoints) {
         winkstart.timezone.populate_dropdown($('#timezone', parent));
 
         $('.input', $('.bulk-edit-checkbox', parent).parents('.clearfix')).hide();
@@ -235,6 +235,27 @@ function(args) {
             });
 
             delete form_data.extra;
+
+			if ('outbound_flags' in form_data) {
+				/* Get rid of users & fax devices */
+				var new_ids = [];
+				$.each(selected_endpoints, function(k, id) {
+					if (endpoints[id] && endpoints[id].device_type && endpoints[id].device_type !== 'fax') {
+						new_ids.push(id);
+					}
+				});
+				selected_endpoints = new_ids;
+
+				/* Get rid of empty strings & spaces */
+				var new_flags = [];
+				$.each(form_data.outbound_flags.split(/,/), function(k, v) {
+					v = v.replace(/\s/g, '');
+					if (v !== '') {
+						new_flags.push(v);
+					}
+				});
+				form_data.outbound_flags = new_flags;
+			}
 
             var data_api = {
                 ids: selected_endpoints,

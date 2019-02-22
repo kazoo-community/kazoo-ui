@@ -1,4 +1,6 @@
 window.translate['bulk'] = $.extend(true, {}, window.translate['bulk'], {
+	outbound_flags: 'Исходящие флаги',
+	outbound_flags_data_content: 'Введите через запятую исходящие флаги, которые устройство ожидает от оператора.',
 	how_to_use_this_bulk_module:	'Как использовать режим массовых обновлений:',
 	select_users_or_and_devices: "1) Выберите пользователей и/или устройства в таблице.",
 	choose_what_fields: "2) Выберите, какое поле вы собираетесь изменить у выбранных пользователей и/или устройств.",

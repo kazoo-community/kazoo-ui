@@ -1,4 +1,6 @@
 window.translate['bulk'] = {
+	outbound_flags: '外呼标志',
+	outbound_flags_data_content: '输入运营商要求的外呼标志. 多个标志以逗号分隔(例如: flag1, flag2, flag3)',
 	how_to_use_this_bulk_module:	'如何使用批量模块:',
 	select_users_or_and_devices: "1) 选择表格中的用户和设备.",
 	choose_what_fields: "2) 选择您想更新的字段.",

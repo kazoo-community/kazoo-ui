@@ -1,4 +1,6 @@
 window.translate['bulk'] = {
+	outbound_flags: 'Outbound Flags',
+	outbound_flags_data_content: 'Enter outbound flags these devices require to be present on the carrier(s). Type a comma between each flag in order to have multiple outbound flags (ex: flag1, flag2, flag3)',
 	how_to_use_this_bulk_module:	'How to use this Bulk module:',
 	select_users_or_and_devices: "1) Select users or/and devices in the table.",
 	choose_what_fields: "2) Choose what fields you would like to update for the selected devices/users.",
