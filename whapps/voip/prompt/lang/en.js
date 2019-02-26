@@ -7,6 +7,7 @@ window.translate['prompt'] = {
 	change_file: "Change File",
 	download_file: "Download File",
 	prompt_id: "Prompt ID",
+	other: 'Other',
 	delete: "Delete",
 	language: "Language",
 	language_placeholder: "en-US",
