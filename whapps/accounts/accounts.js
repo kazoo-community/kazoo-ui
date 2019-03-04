@@ -5,10 +5,12 @@
             'accounts.module_activate': 'module_activate',
         }
     },
-    /* The code in this initialization function is required for
-     * loading routine.
-     */
-    function() {
+/**
+ * The code in this initialization function is required for
+ * loading routine.
+ * @param {Object} account_config - current account configuration
+ */
+function(account_config) {
         var THIS = this;
 
         if('modules' in winkstart.apps[THIS.__module]) {
@@ -40,6 +42,12 @@
         });
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+
+	if (winkstart.apps.auth.role === 'admin') {
+		THIS.check_configuration(account_config, 'notify');
+	}
+
+	winkstart.apps.accounts.check_configuration = THIS.check_configuration;
     },
     {
         
@@ -52,6 +60,61 @@
         is_initialized: false,
 
         uninitialized_count: 1337,
+
+	check_configuration: function(config, action) {
+		var failed_checks = [],
+			configuration_checks = {
+				'caller_id_name_emergency': function(config) { return config.caller_id.emergency && config.caller_id.emergency.name; },
+				'caller_id_number_emergency': function(config) { return config.caller_id.emergency && config.caller_id.emergency.number; },
+				'caller_id_name_external': function(config) { return config.caller_id.external && config.caller_id.external.name; },
+				'caller_id_number_external': function(config) { return config.caller_id.external && config.caller_id.external.number; }
+			};
+
+		$.each(configuration_checks, function(key, check) {
+			if (!check(config)) {
+				failed_checks.push(key);
+			}
+		});
+
+		if (failed_checks.length) {
+			switch (action) {
+				case 'highlight':
+					$.each(failed_checks, function(k, v) {
+						$('<span/>', { 'class': 'validated invalid required-field', 'data-content': 'Required Field!' })
+							.popover({ 'placement': 'right', 'trigger': 'hover' })
+							.insertAfter($('#' + v));
+					});
+
+					var related_tabs = $('.required-field').map(function(k, v) {
+						return $(v).parentsUntil('.pill-content').last().attr('id');
+					});
+
+					$.each($.unique(related_tabs), function(k, v) {
+						$('<span/>', { 'class': 'validated invalid', 'style': 'margin-right: -5px' })
+							.appendTo($('[href=#' + v + ']'));
+					});
+
+					break;
+				case 'notify':
+					var message = '<p><strong>Account Configuration Incomplete!</strong> Click here to update settings.</p>',
+						notification = $('<div/>', {
+							'class': 'alert-message warning',
+							'style': 'cursor: pointer; width: 250px; position: absolute; right: -300px; top: 90px;',
+							'html': '<a class="close" href="#" onclick="$(this).parent().remove()">×</a>' + message
+						});
+
+					notification
+						.click(function() {
+							winkstart.publish('voip.module_activate', { 'name': 'account' });
+							notification.remove();
+						})
+						.appendTo($('body'))
+						.animate({ right: '15px' }, 1000);
+
+					break;
+			}
+		}
+	},
 
         initialized: function() {
             var THIS = this;
