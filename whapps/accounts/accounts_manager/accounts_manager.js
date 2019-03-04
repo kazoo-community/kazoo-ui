@@ -1512,6 +1512,8 @@ winkstart.module('accounts', 'accounts_manager', {
 					}, callbacks.delete_error);
 				});
 			});
+
+		winkstart.apps.accounts.check_configuration(data.data, 'highlight');
 		},
 
 		render_list: function(parent) {
