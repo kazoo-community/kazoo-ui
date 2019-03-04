@@ -496,6 +496,8 @@ winkstart.module('voip', 'account', {
 			if(winkstart.publish('call_center.render_account_fields', $(account_html), data, final_render)) {
 				final_render();
 			}
+
+		winkstart.apps.accounts.check_configuration(data.data, 'highlight');
         },
 
         activate: function(parent) {
