@@ -1,4 +1,6 @@
 window.translate['queue'] = {
+	caller_exit_key: 'Caller Exit Key',
+	caller_exit_key_data_content: 'Key caller can press while on hold to exit the queue and continue in the callflow.',
 	manage_queues: "Manage Queues",
 	queue: "Queue",
 	queue_tip: "Direct a Caller to a Queue.",
