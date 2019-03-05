@@ -1,3 +1,9 @@
+.audio-codecs {
+	-moz-columns: 3;
+	-webkit-columns: 3;
+	columns: 3;
+}
+
 #bulk-view {
     margin: 30px auto auto;
     width: 90%;
