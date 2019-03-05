@@ -90,7 +90,26 @@ function(args) {
                     call_restriction: {}
                 },
                 field_data: {
-                    call_restriction: {}
+					call_restriction: {},
+					media: {
+						audio: {
+							codecs: {
+								'OPUS': 'OPUS',
+								'CELT@32000h': 'Siren @ 32Khz',
+								'G7221@32000h': 'G722.1 @ 32khz',
+								'G7221@16000h': 'G722.1 @ 16khz',
+								'G722': 'G722',
+								'speex@32000h': 'Speex @ 32khz',
+								'speex@16000h': 'Speex @ 16khz',
+								'PCMU': 'G711u / PCMU - 64kbps (North America)',
+								'PCMA': 'G711a / PCMA - 64kbps (Elsewhere)',
+								'G729': 'G729 - 8kbps (Requires License)',
+								'GSM': 'GSM',
+								'CELT@48000h': 'Siren (HD) @ 48kHz',
+								'CELT@64000h': 'Siren (HD) @ 64kHz'
+							}
+						}
+					}
                 }
             };
 
@@ -132,7 +151,7 @@ function(args) {
                                         name: _t('bulk', 'silence')
                                     }
                                 );
-                                defaults.field_data.media = _data.data;
+						defaults.field_data.music_on_hold = _data.data;
                             }
 
                             callback(null, _data);
@@ -275,6 +294,10 @@ function(args) {
 					}
 				});
 				form_data.outbound_flags = new_flags;
+			}
+
+			if ('media' in form_data && 'audio' in form_data.media && 'codecs' in form_data.media.audio) {
+				form_data.media.audio.codecs = $(form_data.media.audio.codecs).filter(function(key, value) { return !!value; }).toArray();
 			}
 
             var data_api = {

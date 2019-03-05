@@ -24,7 +24,7 @@
                             </label>
                             <div class="input">
                                 <select name="music_on_hold.media_id" id="music_on_hold_media_id" class="medium">
-                                    {{each field_data.media}}
+                                    {{each field_data.music_on_hold}}
                                         <option id="${id}" value="${id}">${name}</option>
                                     {{/each}}
                                 </select>
@@ -90,6 +90,24 @@
                                 <input type="text" id="outbound_flags" name="outbound_flags" data-content="${_t('outbound_flags_data_content')}"/>
                             </div>
                         </div>
+
+						<div class="clearfix" id="line8">
+							<label class="checkbox checkbox-label">
+								<input type="checkbox" name="extra.checkbox" class="bulk-edit-checkbox"> ${_t('audio_codecs')}
+							</label>
+							<div class="input">
+								<ul class="inputs-list audio-codecs">
+									{{each(key, val) field_data.media.audio.codecs}}
+									<li>
+										<label>
+											<input type="checkbox" name="media.audio.codecs[]" value="${key}"/>
+											<span>${val}</span>
+										</label>
+									</li>
+									{{/each}}
+								</ul>
+							</div>
+						</div>
 
                         <hr/>
                         <h3>${_t('restrictions')}</h3>
