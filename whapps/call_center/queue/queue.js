@@ -25,7 +25,8 @@ winkstart.module('call_center', 'queue', {
         },
 
         validation: [
-            { name: '#name', regex: /.+/ }
+		{ name: '#name', regex: /.+/ },
+		{ name: '#caller_exit_key', regex: /^[0-9*#]{0,1}$/ }
         ],
 
         resources: {
@@ -589,6 +590,9 @@ winkstart.module('call_center', 'queue', {
         },
 
         normalize_data: function(form_data) {
+		if (typeof form_data.caller_exit_key === 'string' && form_data.caller_exit_key.length === 0) {
+			delete form_data.caller_exit_key;
+		}
             delete form_data.users;
             return form_data;
         },
