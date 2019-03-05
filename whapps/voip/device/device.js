@@ -807,14 +807,19 @@ winkstart.module('voip', 'device', {
         },
 
         format_data: function(data) {
-            if(data.data.device_type === 'smartphone' || data.data.device_type === 'landline' || data.data.device_type === 'cellphone') {
+		if (data.data.device_type === 'smartphone' || data.data.device_type === 'cellphone') {
                 data.data.call_forward = {
                     enabled: true,
                     require_keypress: true,
                     keep_caller_id: true
                 };
-            }
-            else {
+		} else if (data.data.device_type === 'landline') {
+			data.data.call_forward = {
+				enabled: true,
+				require_keypress: false,
+				keep_caller_id: true
+			};
+		} else {
                 data.data.call_forward = {
                     enabled: false
                 };
