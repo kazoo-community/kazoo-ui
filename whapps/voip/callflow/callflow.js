@@ -755,6 +755,17 @@ winkstart.module('voip', 'callflow', {
             THIS.flow.nodes = THIS.flow.root.nodes();
         },
 
+	callflow_placeholder_name(flow) {
+		if (flow.nodes && flow.nodes[1] && flow.nodes[1].module === 'user') {
+			var number = flow.numbers && flow.numbers[0] !== '' ? flow.numbers[0] : '(no number)',
+				name = flow.nodes[1].caption ? ', ' + flow.nodes[1].caption : '';
+
+			return number + name;
+		}
+
+		return flow.name || 'Callflow';
+	},
+
         _renderFlow: function() {
             var THIS = this;
 
@@ -777,7 +788,7 @@ winkstart.module('voip', 'callflow', {
 
                 if (node.actionName == 'root') {
                     $node.removeClass('icons_black root');
-                    node_html = THIS.templates.root.tmpl({name: THIS.flow.name || 'Callflow'});
+				node_html = THIS.templates.root.tmpl({ name: THIS.callflow_placeholder_name(THIS.flow) });
 
                     $('.edit_icon', node_html).click(function() {
                         THIS.flow = $.extend(true, { contact_list: { exclude: false }} , THIS.flow);
@@ -1340,52 +1351,40 @@ winkstart.module('voip', 'callflow', {
                     api_url: winkstart.apps['voip'].api_url
                 },
                 function (data, status) {
+			THIS.users_list(function(users) {
+				var options = {
+					label: _t('callflow', 'callflow_module_label'),
+					identifier: 'callflow-module-listview',
+					new_entity_label: _t('callflow', 'add_callflow_label'),
+					data: [],
+					publisher: winkstart.publish,
+					notifyMethod: 'callflow.list-panel-click',
+					notifyCreateMethod: 'callflow.edit-callflow' /* Edit with no ID = Create */
+				};
 
-                    // List Data that would be sent back from server
-                    function map_crossbar_data(crossbar_data){
-                        var new_list = [],
-                            answer;
+				$.each(data.data, function(index, flow) {
+					if (!flow.featurecode) {
+						var user = $(users).filter(function(index, user) { return user.id === flow.user_id; })[0],
+							number = flow.numbers && flow.numbers[0] !== '' ? (user ? flow.numbers[0] : flow.numbers.join()) : '(no number)',
+							name = user ? ', ' + user.first_name + ' ' + user.last_name : '';
 
-                        if(crossbar_data.length > 0) {
-                            _.each(crossbar_data, function(elem){
-                                if(elem.numbers) {
-                                    for(var i = 0; i < elem.numbers.length; i++) {
-                                        elem.numbers[i] = elem.numbers[i].replace(/^$/, '(no number)');
-                                    }
-                                }
-                                if($.isArray(elem.numbers) && elem.featurecode == false) {
-                                    new_list.push({
-                                        id: elem.id,
-                                        title: (elem.name) ? elem.name : (elem.numbers ? elem.numbers.toString() : '')
-                                    });
-                                }
-                            });
-                        }
+						options.data.push({
+							id: flow.id,
+							title: flow.name ? flow.name : number + name
+						});
+					}
+				});
 
-                        new_list.sort(function(a, b) {
-                            a.title.toLowerCase() < b.title.toLowerCase() ? answer = -1 : answer = 1;
+				options.data.sort(function(first, second) {
+					return first.title.toLowerCase() < second.title.toLowerCase() ? -1 : 1;
+				});
 
-                            return answer;
-                        });
+				$('#callflow-listpanel').empty().listpanel(options);
 
-                        return new_list;
-                    }
-
-                    var options = {};
-                    options.label = _t('callflow', 'callflow_module_label');
-                    options.identifier = 'callflow-module-listview';
-                    options.new_entity_label = _t('callflow', 'add_callflow_label');
-                    options.data = map_crossbar_data(data.data);
-                    options.publisher = winkstart.publish;
-                    options.notifyMethod = 'callflow.list-panel-click';
-                    options.notifyCreateMethod = 'callflow.edit-callflow';  /* Edit with no ID = Create */
-
-                    $("#callflow-listpanel").empty();
-                    $("#callflow-listpanel").listpanel(options);
-
-                    if(typeof callback == 'function') {
-                        callback();
-                    }
+				if (typeof callback === 'function') {
+					callback();
+				}
+			});
                 }
             );
         },
