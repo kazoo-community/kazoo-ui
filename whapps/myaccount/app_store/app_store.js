@@ -97,7 +97,7 @@ winkstart.module('myaccount', 'app_store', {
         },
 
         add_sublink: function(data, user_data) {
-            if((data.data.available_apps && data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin')) {
+		if ((data.data.available_apps && data.data.available_apps.length > 0) && (!user_data.priv_level || user_data.priv_level === 'admin' || (user_data.priv_level === 'user' && winkstart.config.show_app_store_for_users))) {
                 winkstart.publish('nav.add_sublink', {
                     link: 'nav',
                     sublink: 'app_store',

@@ -225,7 +225,9 @@
                 icon: 'menu1',
                 desc: _t('config', 'browserphone_desc')
             }
-        }
+        },
+
+		show_app_store_for_users: true
     };
 
     winkstart.apps = {
