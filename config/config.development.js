@@ -236,6 +236,7 @@
             }
         },
 
+		show_app_store_for_users: true,
         hide_credit_card_confirmation: true,
         notification_app: 'teletype'
     };
