@@ -1,0 +1,99 @@
+version: 2
+
+working_directory: &working_directory
+  "~/kazoo-ui"
+
+dependency_cache_key: &dependency_cache_key
+  v1-dependency-cache-{{ checksum "package.json" }}
+
+docker_cache_key: &docker_cache_key
+  v1-docker-{{ .Branch }}-{{ .Revision }}
+
+restore_dependency_cache: &restore_dependency_cache
+  restore_cache:
+    key: *dependency_cache_key
+
+save_dependency_cache: &save_dependency_cache
+  save_cache:
+    key: *dependency_cache_key
+    paths: "./node_modules"
+
+restore_docker_cache: &restore_docker_cache
+  restore_cache:
+    key: *docker_cache_key
+
+save_docker_cache: &save_docker_cache
+    save_cache:
+      key: *docker_cache_key
+      paths: "/caches/app.tar"
+
+jobs:
+  test:
+    docker:
+    - image: "node:6.12.0"
+    working_directory: *working_directory
+    steps:
+    - checkout
+    - *restore_dependency_cache
+    - run:
+        name: "npm install"
+        command: "npm install"
+    - *save_dependency_cache
+    - run:
+        name: "run tests"
+        command: "npm run test"
+  build-container:
+    docker:
+    - image: "google/cloud-sdk:236.0.0"
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/gcloud-service-key.json"
+      GOOGLE_PROJECT: "voxter-build-328d"
+      APPLICATION: "kazoo-ui"
+    working_directory: *working_directory
+    steps:
+    - checkout
+    - setup_remote_docker
+    - *restore_docker_cache
+    - run:
+        name: "Load Docker image layer cache"
+        command: |
+          set +o pipefail
+          docker load -i /caches/app.tar | true
+    - run:
+        name: "Build Docker image"
+        command: "docker build --cache-from=app -t ${APPLICATION} ."
+    - run:
+        name: "Save Docker image layer cache"
+        command: |
+          mkdir -p /caches
+          docker save -o /caches/app.tar ${APPLICATION}
+    - *save_docker_cache
+    - run:
+        name: "Push Docker image to GCR"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            echo $CIRCLECI_BUILD_CREDS | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+
+            gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+            gcloud --quiet config set project ${GOOGLE_PROJECT}
+            gcloud auth configure-docker
+
+            docker tag ${APPLICATION} us.gcr.io/${GOOGLE_PROJECT}/${APPLICATION}:latest
+            docker tag ${APPLICATION} us.gcr.io/${GOOGLE_PROJECT}/${APPLICATION}:${CIRCLE_SHA1}
+
+            docker push us.gcr.io/${GOOGLE_PROJECT}/${APPLICATION}:latest
+            docker push us.gcr.io/${GOOGLE_PROJECT}/${APPLICATION}:${CIRCLE_SHA1}
+          else
+            echo "Skipping image push as branch is not master..."
+          fi
+
+workflows:
+  version: 2
+  test-build-push:
+    jobs:
+    - test
+    # Want test to run first as it gives quicker
+    # feedback to developers.
+    - build-container:
+        requires:
+        - test
