@@ -43,7 +43,7 @@ function(account_config) {
 
         winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-	if (winkstart.apps.auth.role === 'admin') {
+	if (winkstart.apps.auth.role === 'admin' && !winkstart.apps.auth.is_reseller) {
 		THIS.check_configuration(account_config, 'notify');
 	}
 
