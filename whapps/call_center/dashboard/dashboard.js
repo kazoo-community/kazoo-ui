@@ -779,32 +779,40 @@ winkstart.module('call_center', 'dashboard', {
             });
 
             $.each(data.queues_live_stats.Summarized, function(id, queue_summary) {
-                formatted_data.queues[id].current_calls = 0;
-                formatted_data.queues[id].total_wait_time = queue_summary.total_wait_time || 0;
-                formatted_data.queues[id].abandoned_calls = queue_summary.abandoned_calls || 0;
-                formatted_data.queues[id].total_calls = queue_summary.total_calls || 0;
+			if (formatted_data.queues[id]) {
+				formatted_data.queues[id].current_calls = 0;
+				formatted_data.queues[id].total_wait_time = queue_summary.total_wait_time || 0;
+				formatted_data.queues[id].abandoned_calls = queue_summary.abandoned_calls || 0;
+				formatted_data.queues[id].total_calls = queue_summary.total_calls || 0;
+			}
             });
             $.each(data.queues_live_stats.Waiting, function(index, queue_stats) {
                 var k = queue_stats.queue_id,
                     call_id = queue_stats.call_id;
-                queue_stats.friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
-                queue_stats.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                formatted_data.calls_waiting.push(queue_stats);
-                formatted_data.queues[k].current_calls++;
+
+			if (formatted_data.queues[k]) {
+				queue_stats.friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
+				queue_stats.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+				formatted_data.calls_waiting.push(queue_stats);
+				formatted_data.queues[k].current_calls++;
+			}
             });
             $.each(data.queues_live_stats.Handled, function(index, queue_stats) {
                 var k = queue_stats.queue_id,
                     call_id = queue_stats.call_id;
-                formatted_data.calls_in_progress[call_id] = queue_stats;
-                if(formatted_data.agents[queue_stats.agent_id]) {
-                    formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
-                    formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
-                    formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                }
-                formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
-                formatted_data.queues[k].total_calls++;
 
-                formatted_data.queues[k].current_calls++;
+			if (formatted_data.queues[k]) {
+				formatted_data.calls_in_progress[call_id] = queue_stats;
+				if (formatted_data.agents[queue_stats.agent_id]) {
+					formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
+					formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
+					formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+				}
+				formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
+				formatted_data.queues[k].total_calls++;
+
+				formatted_data.queues[k].current_calls++;
+			}
             });
 
             $.each(formatted_data.queues, function(k, v) {
