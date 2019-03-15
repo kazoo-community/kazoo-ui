@@ -670,33 +670,35 @@ winkstart.module('call_center', 'dashboard', {
                     var k = queue_stats.queue_id,
                         call_id = queue_stats.call_id;
 
-                    formatted_data.queues[k].current_calls = formatted_data.queues[k].current_calls || 0;
+                    if (formatted_data.queues[k]) {
+                        formatted_data.queues[k].current_calls = formatted_data.queues[k].current_calls || 0;
 
-                    if('wait_time' in queue_stats && queue_stats.status !== 'abandoned') {
-                        formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
-                    }
+                        if('wait_time' in queue_stats && queue_stats.status !== 'abandoned') {
+                            formatted_data.queues[k].total_wait_time += queue_stats.wait_time;
+                        }
 
-                    if(queue_stats.status === 'abandoned') {
-                        formatted_data.queues[k].abandoned_calls++;
-                        formatted_data.queues[k].total_calls++;
-                    }
-                    else if(queue_stats.status === 'waiting') {
-                        formatted_data.calls_waiting[call_id] = queue_stats;
-                        formatted_data.calls_waiting[call_id].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
-                        formatted_data.calls_waiting[call_id].friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                        formatted_data.queues[k].current_calls++;
-                    }
-                    else if(queue_stats.status === 'handled') {
-                        formatted_data.calls_in_progress[call_id] = queue_stats;
-                        formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
-                        formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
-                        formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
-                        formatted_data.queues[k].total_calls++;
+                        if(queue_stats.status === 'abandoned') {
+                            formatted_data.queues[k].abandoned_calls++;
+                            formatted_data.queues[k].total_calls++;
+                        }
+                        else if(queue_stats.status === 'waiting') {
+                            formatted_data.calls_waiting[call_id] = queue_stats;
+                            formatted_data.calls_waiting[call_id].friendly_duration = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.entered_timestamp);
+                            formatted_data.calls_waiting[call_id].friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                            formatted_data.queues[k].current_calls++;
+                        }
+                        else if(queue_stats.status === 'handled') {
+                            formatted_data.calls_in_progress[call_id] = queue_stats;
+                            formatted_data.agents[queue_stats.agent_id].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - queue_stats.handled_timestamp);
+                            formatted_data.agents[queue_stats.agent_id].current_call = queue_stats;
+                            formatted_data.agents[queue_stats.agent_id].current_call.friendly_title = queue_stats.caller_id_name || queue_stats.caller_id_number || call_id;
+                            formatted_data.queues[k].total_calls++;
 
-                        formatted_data.queues[k].current_calls++;
-                    }
-                    else if(queue_stats.status === 'processed') {
-                        formatted_data.queues[k].total_calls++;
+                            formatted_data.queues[k].current_calls++;
+                        }
+                        else if(queue_stats.status === 'processed') {
+                            formatted_data.queues[k].total_calls++;
+                        }
                     }
                 });
             }
