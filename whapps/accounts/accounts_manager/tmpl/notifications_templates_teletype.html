@@ -75,7 +75,7 @@
         <div class="clearfix">
             <label for="teletype_deregister_from">${_t('send_from')}</label>
             <div class="input">
-                {{if field_data.deregister}}
+                {{if field_data.teletype.deregister.from}}
                 <input id="teletype_deregister_from" placeholder="${_t('email_placeholder')}" type="text" name="teletype.deregister.from" value="${field_data.teletype.deregister.from}" rel="popover" data-content="${_t('send_from_data_content')}"/>
                 {{else}}
                 <input id="teletype_deregister_from" placeholder="${_t('email_placeholder')}" type="text" name="teletype.deregister.from" rel="popover" data-content="${_t('send_from_data_content')}"/>

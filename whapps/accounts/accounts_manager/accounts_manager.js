@@ -585,26 +585,42 @@ winkstart.module('accounts', 'accounts_manager', {
 						});
 
 						var account_data = results.get_account.data;
-						// Deregister enabled if sending to (original recipient or admins) || (nonempty array)
-						if((account_data.notification_preference == 'teletype' ||
-							(winkstart.config.notification_app == 'teletype' &&
-								!account_data.notifications ||
-								(!account_data.notifications.voicemail_to_email || $.isEmptyObject(account_data.notifications.voicemail_to_email)) &&
-								(!account_data.notifications.fax_to_email || $.isEmptyObject(account_data.notifications.fax_to_email)))) &&
-							((defaults.field_data.teletype.deregister.enabled == undefined ||
-								defaults.field_data.teletype.deregister.enabled) &&
-							$.inArray(defaults.field_data.teletype.deregister.to.type, ['original', 'admins']) > -1 ||
-							('email_addresses' in defaults.field_data.teletype.deregister.to &&
-								defaults.field_data.teletype.deregister.to.email_addresses.length > 0))) {
-							defaults.field_data.deregister = true;
-						}
-						// Deregister enabled if account has send_to value in doc
-						else if(account_data.notifications &&
-							'deregister' in account_data.notifications &&
-							account_data.notifications.deregister.send_to &&
-							account_data.notifications.deregister.send_to != '') {
-							defaults.field_data.deregister = true;
-						}
+				// Deregister enabled if sending to (specified recipients or admins) || account has send_to value in doc
+				if (
+					(
+						(
+							account_data.notification_preference === 'teletype'
+							|| (
+								winkstart.config.notification_app === 'teletype'
+								&& (
+									!account_data.notifications
+									|| (
+										(
+											!account_data.notifications.voicemail_to_email
+											|| $.isEmptyObject(account_data.notifications.voicemail_to_email)
+										) && (
+											!account_data.notifications.fax_to_email
+											|| $.isEmptyObject(account_data.notifications.fax_to_email)
+										)
+									)
+								)
+							)
+						) && (
+							$.inArray(defaults.field_data.teletype.deregister.to.type, ['specified', 'admins']) > -1
+							&& (
+								defaults.field_data.teletype.deregister.enabled === undefined
+								|| defaults.field_data.teletype.deregister.enabled
+							)
+						)
+					) || (
+						account_data.notifications
+						&& 'deregister' in account_data.notifications
+						&& account_data.notifications.deregister.send_to
+						&& account_data.notifications.deregister.send_to !== ''
+					)
+				) {
+					defaults.field_data.deregister = true;
+				}
 
 						defaults.field_data.realm_placeholder = THIS.suggested_realm(results.get_account.data.name, results.get_parent_account.data.realm);
 
@@ -868,19 +884,14 @@ winkstart.module('accounts', 'accounts_manager', {
 			if(data.extra.deregistration_teletype == field_data.deregister &&
 				_.isEqual(data.deregister, field_data.teletype.deregister)) {
 				delete data.deregister;
-			}
-			else if(data.extra.deregistration_teletype &&
-				data.deregister.from !== '' &&
-				(data.deregister.to.type != 'specified' ||
-					data.deregister.to.email_addresses.length > 0)) {
-				// Please don't make me negate this
-			}
-			else {
+		} else if (!(data.extra.deregistration_teletype && data.deregister.from !== '')) {
 				data.deregister.enabled = false;
 				if(data.deregister.from == '') {
 					delete data.deregister.from;
 				}
-			}
+		} else if (data.extra.deregistration_teletype && !field_data.deregister) {
+			data.deregister.enabled = true;
+		}
 
 			delete data.extra;
 
