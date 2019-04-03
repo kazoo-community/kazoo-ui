@@ -159,7 +159,7 @@ winkstart.module('voip', 'timeofday', {
                         ],
 
                         cycle: [
-                            { id: 'date', value: 'Date' },
+					{ id: 'date', value: 'Date' },
                             { id: 'weekly', value: 'Weekly' },
                             { id: 'monthly', value:'Monthly' },
                             { id: 'yearly', value:'Yearly' }
@@ -271,9 +271,9 @@ winkstart.module('voip', 'timeofday', {
             $('#weekdays', timeofday_html).hide();
             $('#specific_day', timeofday_html).hide();
 
-            $('#every', timeofday_html).show();
-            $('#on', timeofday_html).show();
-            $('#start_date_label', timeofday_html).text(_t('timeofday', 'start_date'));
+		$('#every', timeofday_html).show();
+		$('#on', timeofday_html).show();
+		$('#start_date_label', timeofday_html).text(_t('timeofday', 'start_date'));
 
             if(data.data.id == undefined) {
                 $('#weekly_every', timeofday_html).show();
@@ -287,10 +287,10 @@ winkstart.module('voip', 'timeofday', {
                     } else {
                         $('#weekdays', timeofday_html).show();
                     }
-                } else if(data.data.cycle == 'date') {
-                    $('#every', timeofday_html).hide();
-                    $('#on', timeofday_html).hide();
-                    $('#start_date_label', timeofday_html).text(_t('timeofday', 'on'));
+			} else if (data.data.cycle === 'date') {
+				$('#every', timeofday_html).hide();
+				$('#on', timeofday_html).hide();
+				$('#start_date_label', timeofday_html).text(_t('timeofday', 'on'));
 
                 } else if(data.data.cycle == 'yearly') {
                     $('#yearly_every', timeofday_html).show();
@@ -329,16 +329,16 @@ winkstart.module('voip', 'timeofday', {
                 $('#weekdays', timeofday_html).hide();
                 $('#specific_day', timeofday_html).hide();
 
-                $('#every', timeofday_html).show();
-                $('#on', timeofday_html).show();
-                $('#start_date_label', timeofday_html).text(_t('timeofday', 'start_date'));
+			$('#every', timeofday_html).show();
+			$('#on', timeofday_html).show();
+			$('#start_date_label', timeofday_html).text(_t('timeofday', 'start_date'));
 
                 switch($(this).val()) {
-                    case 'date':
-                        $('#every', timeofday_html).hide();
-                        $('#on', timeofday_html).hide();
-                        $('#start_date_label', timeofday_html).text(_t('timeofday', 'on'));
-                        break;
+				case 'date':
+					$('#every', timeofday_html).hide();
+					$('#on', timeofday_html).hide();
+					$('#start_date_label', timeofday_html).text(_t('timeofday', 'on'));
+					break;
 
                     case 'yearly':
                         $('#yearly_every', timeofday_html).show();
