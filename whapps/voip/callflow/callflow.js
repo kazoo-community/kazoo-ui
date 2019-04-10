@@ -1297,7 +1297,9 @@ winkstart.module('voip', 'callflow', {
 
                 if(THIS.flow.name !== '') {
                     data_request.name = THIS.flow.name;
-                }
+			} else {
+				delete THIS.dataCallflow.name;
+			}
 
                 if('contact_list' in THIS.flow) {
                     data_request.contact_list = { exclude: THIS.flow.contact_list.exclude || false };
