@@ -1,4 +1,8 @@
 window.translate['featurecode'] = {
+	dnd_cat: '请勿打扰',
+	enable_donotdisturb: '启用免打扰',
+	disable_donotdisturb: '禁用请勿打扰',
+	toggle_donotdisturb: '切换请勿打扰',
 	feature_codes: "业务码",
 	show_all: "显示所有",
 	show: "显示",

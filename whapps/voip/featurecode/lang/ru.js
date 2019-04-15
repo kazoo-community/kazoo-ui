@@ -1,4 +1,8 @@
 window.translate['featurecode'] = $.extend(true, {}, window.translate['featurecode'], {
+	dnd_cat: 'Не&nbsp;беспокоить',
+	enable_donotdisturb: 'Включить не беспокоить',
+	disable_donotdisturb: 'Отключить не беспокоить',
+	toggle_donotdisturb: 'Переключить не беспокоить',
 	feature_codes: "Коды ДВО",
 	show_all: "Показать все",
 	show: "Показать",

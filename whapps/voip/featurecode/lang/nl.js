@@ -1,4 +1,8 @@
 window.translate['featurecode'] = {
+	dnd_cat: 'Niet&nbsp;storen',
+	enable_donotdisturb: 'Schakel Niet storen in',
+	disable_donotdisturb: 'Schakel Niet storen uit',
+	toggle_donotdisturb: 'Schakel Niet storen in',
 	feature_codes: "Feature Codes",
 	show_all: "Toon Alles",
 	show: "Toon",
