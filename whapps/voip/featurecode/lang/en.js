@@ -1,4 +1,12 @@
 window.translate['featurecode'] = {
+	dnd_cat: 'Do&nbsp;Not&nbsp;Disturb',
+	enable_donotdisturb: 'Enable Do Not Disturb',
+	disable_donotdisturb: 'Disable Do Not Disturb',
+	toggle_donotdisturb: 'Toggle Do Not Disturb',
+	follow_me_cat: 'Follow-Me',
+	enable_follow_me: 'Enable Follow-Me',
+	disable_follow_me: 'Disable Follow-Me',
+	toggle_follow_me: 'Toggle Follow-Me',
 	feature_codes: "Feature Codes",
 	show_all: "Show All",
 	show: "Show",

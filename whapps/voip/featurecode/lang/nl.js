@@ -1,4 +1,12 @@
 window.translate['featurecode'] = {
+	dnd_cat: 'Niet&nbsp;storen',
+	enable_donotdisturb: 'Schakel Niet storen in',
+	disable_donotdisturb: 'Schakel Niet storen uit',
+	toggle_donotdisturb: 'Schakel Niet storen in',
+	follow_me_cat: 'Volg&nbsp;mij',
+	enable_follow_me: 'Schakel volg mij in',
+	disable_follow_me: 'Schakel mij uit',
+	toggle_follow_me: 'Volg mij',
 	feature_codes: "Feature Codes",
 	show_all: "Toon Alles",
 	show: "Toon",

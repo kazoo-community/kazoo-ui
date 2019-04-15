@@ -10,3 +10,7 @@ label.after {
     margin-left: 6px;
     text-align: left;
 }
+
+#featurecode-view label.featurecode_name {
+	width: 135px;
+}

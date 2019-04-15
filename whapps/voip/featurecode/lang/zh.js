@@ -1,4 +1,12 @@
 window.translate['featurecode'] = {
+	dnd_cat: '请勿打扰',
+	enable_donotdisturb: '启用免打扰',
+	disable_donotdisturb: '禁用请勿打扰',
+	toggle_donotdisturb: '切换请勿打扰',
+	follow_me_cat: '跟着我',
+	enable_follow_me: '启用关注我',
+	disable_follow_me: '禁用跟我来',
+	toggle_follow_me: '切换跟着我',
 	feature_codes: "业务码",
 	show_all: "显示所有",
 	show: "显示",

@@ -1,4 +1,12 @@
 window.translate['featurecode'] = $.extend(true, {}, window.translate['featurecode'], {
+	dnd_cat: 'Не&nbsp;беспокоить',
+	enable_donotdisturb: 'Включить не беспокоить',
+	disable_donotdisturb: 'Отключить не беспокоить',
+	toggle_donotdisturb: 'Переключить не беспокоить',
+	follow_me_cat: 'Подписывайтесь&nbsp;на&nbsp;меня',
+	enable_follow_me: 'Включить следуй за мной',
+	disable_follow_me: 'Отключить следуй за мной',
+	toggle_follow_me: 'Переключить следуй за мной',
 	feature_codes: "Коды ДВО",
 	show_all: "Показать все",
 	show: "Показать",
