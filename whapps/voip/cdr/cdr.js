@@ -421,7 +421,7 @@ winkstart.module('voip', 'cdr', {
             });
         },
 
-        parse_data_cdr: function (data) {
+	parse_data_cdr: function(data, parent_key) {
             var return_data = [],
                 return_sub_data,
                 THIS = this;
@@ -432,7 +432,7 @@ winkstart.module('voip', 'cdr', {
 
             $.each(data, function (k, v) {
                 if (typeof v == 'object') {
-                    return_sub_data = THIS.parse_data_cdr(this);
+				return_sub_data = THIS.parse_data_cdr(this, k);
 
                     $.each(return_sub_data, function (k2, v2) {
                         if (jQuery.inArray(v2.key, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
@@ -444,7 +444,7 @@ winkstart.module('voip', 'cdr', {
                 else {
                     if (jQuery.inArray(k, ['app_name', 'app_version', 'server_id', 'id']) < 0) {
                         v = hide_fqdn(v);
-                        return_data.push({'key': k, 'value': v});
+					return_data.push({ 'key': typeof k === 'number' ? parent_key + '_' + k : k, 'value': v });
                     }
                 }
             });
