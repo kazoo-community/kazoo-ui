@@ -1,0 +1,18 @@
+<div>
+	<div class="dialog_popup">
+		<h1>${_t('park')}</h1>
+		<form name="form" method="post" action="#">
+			<div class="explanation">${_t('park_max_slot_number_explanation')}</div>
+
+			<div class="form_content">
+				<div class="popup_field">
+					<label for="park_max_slot_number_input">${_t('park_max_slot_number')}: </label>
+					<input type="text" id="park_max_slot_number_input" class="medium" value="${data_park.max_slot_number}"/>
+				</div>
+			</div>
+		</form>
+		<div class="buttons-center">
+			<button id="add" class="btn primary">${_t('ok')}</button>
+		</div>
+	</div>
+</div>
