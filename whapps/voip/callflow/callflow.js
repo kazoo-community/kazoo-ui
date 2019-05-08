@@ -8,6 +8,7 @@ winkstart.module('voip', 'callflow', {
         ],
 
         templates: {
+		park_callflow: 'tmpl/park_callflow.html',
             alert_info_callflow: 'tmpl/alert_info_callflow.html',
             callflow: 'tmpl/callflow.html',
             callflow_main: 'tmpl/callflow_main.html',
@@ -3584,7 +3585,61 @@ winkstart.module('voip', 'callflow', {
                             }
                         });
                     }
-                },
+			},
+			'park[action=direct_park]': {
+				name: _t('callflow', 'park'),
+				icon: 'hand',
+				category: _t('config', 'advanced_cat'),
+				module: 'park',
+				tip: _t('callflow', 'park_tip'),
+				data: {
+					action: 'direct_park'
+				},
+				rules: [
+					{
+						type: 'quantity',
+						maxSize: '1'
+					}
+				],
+				isUsable: 'true',
+				caption: function(node) {
+					var max_slot_number = node.getMetadata('max_slot_number');
+					return max_slot_number ? _t('callflow', 'park_max_slot_number') + ': ' + (max_slot_number - 100) : '';
+				},
+				edit: function(node, callback) {
+					var popup, popup_html;
+
+					popup_html = THIS.templates.park_callflow.tmpl({
+						_t: function(param) {
+							return window.translate.callflow[param];
+						},
+						data_park: {
+							'max_slot_number': node.getMetadata('max_slot_number') ? node.getMetadata('max_slot_number') - 100 : ''
+						}
+					});
+
+					$('#add', popup_html).click(function() {
+						var max_slot_number = parseInt($('#park_max_slot_number_input', popup_html).val());
+						if (!isNaN(max_slot_number)) {
+							node.setMetadata('max_slot_number', max_slot_number + 100);
+						} else {
+							node.deleteMetadata('max_slot_number');
+						}
+						node.caption = max_slot_number ? _t('callflow', 'park_max_slot_number') + ': ' + max_slot_number : '';
+						popup.dialog('close');
+					});
+
+					popup = winkstart.dialog(popup_html, {
+						title: _t('callflow', 'park'),
+						minHeight: '0',
+						beforeClose: function() {
+							if (typeof callback === 'function') {
+								callback();
+							}
+						}
+					});
+				}
+			}
             });
 
             /* Migration callflows, fixes our goofs. To be removed eventually */

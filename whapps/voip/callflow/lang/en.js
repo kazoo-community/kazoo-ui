@@ -1,4 +1,9 @@
 window.translate['callflow'] = {
+	ok: 'OK',
+	park: 'Park',
+	park_tip: 'Places a call in a numbered slot where it will remain until it is retrieved or the caller hangs up.',
+	park_max_slot_number: 'Max Slots',
+	park_max_slot_number_explanation: 'Continue past this module if the selected slot number exceeds this number. Used to restrict the max number of auto-generated slot numbers. Slots numbers start at 101.',
 	duplicate_callflow: "Duplicate callflow",
 	css_callflow: "css/callflow.css",
 	delete_callflow: "Delete callflow",
