@@ -592,6 +592,11 @@ winkstart.module('call_center', 'dashboard', {
 
 			if(data.agents_live_status) {
             	$.each(data.agents_live_status, function(k, agent_status) {
+				// As of kazoo bb2a98a, even when requesting non-recent
+				// statuses, there is a nested timestamp object. Since were are
+				// not specifying "recent": true, there's only one key
+				agent_status = agent_status[Object.keys(agent_status)[0]];
+
                 	if(k in formatted_data.agents) {
                     	if(agent_status.status === 'outbound') {
                         	agent_status.status = 'busy';
