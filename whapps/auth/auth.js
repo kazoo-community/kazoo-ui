@@ -641,6 +641,13 @@ winkstart.module('auth', 'auth',
 
                     winkstart.getJSON('auth.get_user', rest_data,
                         function (json, xhr) {
+							Sentry.configureScope(function(scope) {
+								scope.setUser({
+									account_id: winkstart.apps.auth.account_id,
+									user_id: winkstart.apps.auth.user_id
+								});
+							});
+
                             json.data.account_name = (_data.data || {}).name || winkstart.config.company_name;
                             json.data.apps = json.data.apps || {};
                             winkstart.apps['auth'].role = json.data.priv_level;
@@ -722,6 +729,10 @@ winkstart.module('auth', 'auth',
 
         _logout: function() {
             var THIS = this;
+
+			Sentry.configureScope(function(scope) {
+				scope.setUser(null);
+			});
 
             $.cookie('c_winkstart_auth', null);
 
@@ -924,6 +935,10 @@ winkstart.module('auth', 'auth',
             }
             else {
                 winkstart.confirm(_t('auth', 'are_you_sure_that_you_want_to_log_out'), function() {
+					Sentry.configureScope(function(scope) {
+						scope.setUser(null);
+					});
+
                     // Remove any individual keys
                     $.each(winkstart.apps, function(k, v) {
                         // TODO: ADD APP UNLOADING CODE HERE. Remove CSS and scripts. This should inherently delete apps.

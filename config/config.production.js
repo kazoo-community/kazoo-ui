@@ -238,7 +238,11 @@
 
 		show_app_store_for_users: true,
         hide_credit_card_confirmation: true,
-        notification_app: 'teletype'
+		notification_app: 'teletype',
+
+		sentry: {
+			dsn: 'https://bafc6b2e935a40df884a14ce126ec709@sentry.io/1467668'
+		}
     };
 
     winkstart.apps = {
