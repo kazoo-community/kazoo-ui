@@ -470,9 +470,9 @@ winkstart.module('voip', 'user', {
 			},
 			current_user: function(callback) {
 				winkstart.request('user.get', {
-					account_id: winkstart.apps.voip.account_id,
-					api_url: winkstart.apps.voip.api_url,
-					user_id: winkstart.apps.myaccount.user_id
+					account_id: winkstart.apps.auth.account_id,
+					api_url: winkstart.apps.auth.api_url,
+					user_id: winkstart.apps.auth.user_id
 				},
 				function(_data, status) {
 					callback(null, _data);
