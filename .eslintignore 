@@ -1,6 +1,0 @@
-js/amplify
-js/external
-lib
-node_modules
-whapps/cluster
-whapps/voip/phone
