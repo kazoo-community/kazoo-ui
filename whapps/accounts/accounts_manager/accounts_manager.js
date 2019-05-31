@@ -1647,6 +1647,13 @@ winkstart.module('accounts', 'accounts_manager', {
 				});
 			}
 			else {
+			Sentry.configureScope(function(scope) {
+				scope.setUser({
+					account_id: winkstart.apps.auth.account_id,
+					user_id: winkstart.apps.auth.user_id
+				});
+			});
+
 				winkstart.publish('accounts.end_masquerade');
 				$.each(winkstart.apps, function(k, v) {
 					winkstart.publish('whappnav.subnav.enable', k);
@@ -1694,6 +1701,14 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		masquerade_account: function(account_name) {
 			var THIS = this;
+
+		Sentry.configureScope(function(scope) {
+			scope.setUser({
+				account_id: winkstart.apps.auth.account_id,
+				masquerade_id: winkstart.apps.accounts.account_id,
+				user_id: winkstart.apps.auth.user_id
+			});
+		});
 
 			winkstart.publish('nav.company_name', function() { return 'as ' + account_name + ' (restore)' });
 		},

@@ -19,6 +19,27 @@ winkstart.module('core', 'core',
 				winkstart.module('core', 'layout').init({ parent: $('body') }, function() {
 					winkstart.module('core', 'whappnav').init({ parent: $('body') }, function() {
 						winkstart.module('core', 'linknav').init({ parent: $('body') }, function() {
+							if (!window.location.hostname.match(/localhost|192\.168\./) && winkstart.config.sentry.dsn !== '') {
+								Sentry.init({
+									dsn: winkstart.config.sentry.dsn,
+									environment: window.location.hostname,
+									release: winkstart.config.version
+								});
+
+								$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+									Sentry.withScope(function(scope) {
+										scope.setLevel('error');
+
+										scope.setExtra('type', ajaxSettings.type);
+										scope.setExtra('url', ajaxSettings.url);
+										scope.setExtra('status', jqXHR.status);
+										scope.setExtra('response', jqXHR.responseText.substring(0, 100));
+
+										Sentry.captureMessage(thrownError || jqXHR.statusText);
+									});
+								});
+							}
+
 							// This is not such a great hack.
 							// We need to load auth, and then, myaccount
 							var arrayApps = ['myaccount', 'auth'];

@@ -12,6 +12,7 @@ globals:
   winkstart: true
   form2object: true
   _t: true
+  Sentry: true
 
 rules:
   no-tabs: 0
