@@ -28,8 +28,11 @@ winkstart.module('core', 'core',
 
 								$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
 									if (
-										thrownError === 'Not Found'
-										&& ajaxSettings.url.match(/\/braintree\/credits|\/whitelabel/)
+										jqXHR.status === 401
+										|| (
+											jqXHR.status === 404
+											&& ajaxSettings.url.match(/\/braintree\/credits|\/whitelabel/)
+										)
 									) {
 										return;
 									}
@@ -39,10 +42,19 @@ winkstart.module('core', 'core',
 
 										scope.setExtra('type', ajaxSettings.type);
 										scope.setExtra('url', ajaxSettings.url);
+										scope.setExtra('resource', ajaxSettings.resourceId);
 										scope.setExtra('status', jqXHR.status);
 										scope.setExtra('response', jqXHR.responseText.substring(0, 100));
 
-										Sentry.captureMessage(thrownError || jqXHR.statusText);
+										if (typeof ajaxSettings.resourceId === 'string') {
+											Sentry.captureMessage(jqXHR.status + ': ' + ajaxSettings.resourceId);
+										} else if (jqXHR.statusText !== 'error') {
+											Sentry.captureMessage(jqXHR.statusText);
+										} else if (thrownError) {
+											Sentry.captureMessage(thrownError);
+										} else {
+											Sentry.captureMessage('Unknown Error');
+										}
 									});
 								});
 							}
