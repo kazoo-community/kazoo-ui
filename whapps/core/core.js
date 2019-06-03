@@ -27,6 +27,13 @@ winkstart.module('core', 'core',
 								});
 
 								$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+									if (
+										thrownError === 'Not Found'
+										&& ajaxSettings.url.match(/\/braintree\/credits|\/whitelabel/)
+									) {
+										return;
+									}
+
 									Sentry.withScope(function(scope) {
 										scope.setLevel('error');
 
