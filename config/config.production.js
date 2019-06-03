@@ -66,64 +66,64 @@
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     },
                     numbers: {
                         label: 'Phone Numbers',
                         icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
+				default_api_url: 'https://api.voxter.com:8443/v1'
             },
             'medium_office': {
                 apps: {
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     },
                     numbers: {
                         label: 'Phone Numbers',
                         icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
+				default_api_url: 'https://api.voxter.com:8443/v1'
             },
             'small_office': {
                 apps: {
                     voip: {
                         label: 'Hosted PBX',
                         icon: 'phone',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     },
                     numbers: {
                         label: 'Phone Numbers',
                         icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
+				default_api_url: 'https://api.voxter.com:8443/v1'
             },
             'api_developer': {
                 apps: {
                     developer: {
                         label: 'Developer Tool',
                         icon: 'connectivity',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     },
                     numbers: {
                         label: 'Phone Numbers',
                         icon: 'menu1',
-                        api_url: 'http://devapi.voxter.com:8000/v1'
+						api_url: 'https://api.voxter.com:8443/v1'
                     }
                 },
                 available_apps: ['voip', 'cluster', 'userportal', 'accounts', 'developer', 'numbers', 'pbxs'],
-                default_api_url: 'http://devapi.voxter.com:8000/v1'
+				default_api_url: 'https://api.voxter.com:8443/v1'
             }
         },
 
