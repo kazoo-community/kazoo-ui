@@ -643,8 +643,8 @@ winkstart.module('auth', 'auth',
                         function (json, xhr) {
 							Sentry.configureScope(function(scope) {
 								scope.setUser({
-									account_id: winkstart.apps.auth.account_id,
-									user_id: winkstart.apps.auth.user_id
+									id: winkstart.apps.auth.user_id,
+									account_id: winkstart.apps.auth.account_id
 								});
 							});
 

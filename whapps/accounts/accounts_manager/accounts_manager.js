@@ -1649,8 +1649,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			else {
 			Sentry.configureScope(function(scope) {
 				scope.setUser({
-					account_id: winkstart.apps.auth.account_id,
-					user_id: winkstart.apps.auth.user_id
+					id: winkstart.apps.auth.user_id,
+					account_id: winkstart.apps.auth.account_id
 				});
 			});
 
@@ -1704,9 +1704,9 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		Sentry.configureScope(function(scope) {
 			scope.setUser({
+				id: winkstart.apps.auth.user_id,
 				account_id: winkstart.apps.auth.account_id,
-				masquerade_id: winkstart.apps.accounts.account_id,
-				user_id: winkstart.apps.auth.user_id
+				masquerade_id: winkstart.apps.accounts.account_id
 			});
 		});
 
