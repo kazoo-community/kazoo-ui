@@ -25,7 +25,7 @@ winkstart.module('core', 'core',
 									environment: window.location.hostname,
 									release: winkstart.config.version,
 
-									beforeSend(event) {
+									beforeSend: function(event) {
 										if (event.extra && event.extra.resource && event.extra.resource !== '') {
 											event.culprit = event.extra.resource;
 										}
