@@ -23,7 +23,15 @@ winkstart.module('core', 'core',
 								Sentry.init({
 									dsn: winkstart.config.sentry.dsn,
 									environment: window.location.hostname,
-									release: winkstart.config.version
+									release: winkstart.config.version,
+
+									beforeSend(event) {
+										if (event.extra && event.extra.resource && event.extra.resource !== '') {
+											event.culprit = event.extra.resource;
+										}
+
+										return event;
+									}
 								});
 
 								$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
@@ -44,17 +52,22 @@ winkstart.module('core', 'core',
 										scope.setExtra('url', ajaxSettings.url);
 										scope.setExtra('resource', ajaxSettings.resourceId);
 										scope.setExtra('status', jqXHR.status);
-										scope.setExtra('response', jqXHR.responseText.substring(0, 100));
 
-										if (typeof ajaxSettings.resourceId === 'string') {
-											Sentry.captureMessage(jqXHR.status + ': ' + ajaxSettings.resourceId);
-										} else if (jqXHR.statusText !== 'error') {
-											Sentry.captureMessage(jqXHR.statusText);
-										} else if (thrownError) {
-											Sentry.captureMessage(thrownError);
-										} else {
-											Sentry.captureMessage('Unknown Error');
+										var responseJSON = {};
+
+										try {
+											responseJSON = JSON.parse(jqXHR.responseText);
+
+											scope.setExtra('data', responseJSON.data);
+											scope.setExtra('request_id', responseJSON.request_id);
+										} catch (e) {
+											scope.setExtra('response', jqXHR.responseText);
 										}
+
+										var ajaxError = new Error(responseJSON.message || thrownError || jqXHR.statusText || 'Unknown');
+										ajaxError.name = 'AjaxError';
+
+										Sentry.captureException(ajaxError);
 									});
 								});
 							}
