@@ -147,17 +147,33 @@
 	                    <div class="help_box">
 	                        ${_t('the_following_devices_are_mapped')}
 	                    </div>
-	                    <div id="tab_devices">
-	                        <div class="row title">
-	                            <div class="column first">${_t('device_name')}&nbsp;&nbsp;<span class="icon medium device"/></div>
-	                            <div class="column second">${_t('type')}&nbsp;&nbsp;<span class="icon medium iphone" style="margin-bottom: 4px;"/></div>
-	                            <div class="column third">${_t('status')}</div>
-	                            <div class="column fourth">${_t('enabled')}</div>
-	                            <div class="column fifth">${_t('actions')}&nbsp;&nbsp;<span class="icon medium settings" style="margin-bottom: 2px;"/></div>
-	                        </div>
-	                        <div class="rows">
-	                        </div>
-	                    </div>
+						<div class="table-container">
+							<div id="tab_devices" class="user_info_table">
+								<div class="row title">
+									<div class="column first">${_t('device_name')}&nbsp;&nbsp;<span class="icon medium device"/></div>
+									<div class="column second">${_t('type')}&nbsp;&nbsp;<span class="icon medium iphone" style="margin-bottom: 4px;"/></div>
+									<div class="column third">${_t('status')}</div>
+									<div class="column fourth">${_t('enabled')}</div>
+									<div class="column fifth">${_t('actions')}&nbsp;&nbsp;<span class="icon medium settings" style="margin-bottom: 2px;"/></div>
+								</div>
+								<div class="rows">
+								</div>
+							</div>
+							<div id="dnd" class="user_info_table">
+								<div class="row title">	
+									<div class="column first fifth">${_t('dnd_status')}</div>
+								</div>
+								<div class="row content">
+									{{if data.do_not_disturb.enabled}}
+										<img src="whapps/voip/user/icons/dnd.svg" class="status-icon" alt="" />
+										<span>${_t('dnd_enabled')}</span>
+									{{else}}
+										<img src="whapps/voip/user/icons/available.svg" class="status-icon" alt="" />
+										<span>${_t('dnd_disabled')}</span>
+									{{/if}}
+								</div>
+							</div>
+						</div>
 
 	                    {{if field_data.new_user}}
 	                        <button type="button" class="btn add_device" data-new_user="${field_data.new_user}">${_t('add_a_new_device')}</button>

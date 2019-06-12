@@ -138,5 +138,8 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	first_last_name_regex: /^[0-9a-zA-Z\s\-\']+$/,
 	username_regex: /^[0-9a-zA-Z+@._-]{3,256}$/,
 	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/
+	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/,
+	dnd_status: 'Статус не беспокоить',
+	dnd_enabled: 'Включена',
+	dnd_disabled: 'Отключена'
 });

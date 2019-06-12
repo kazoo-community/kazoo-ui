@@ -155,5 +155,8 @@ window.translate['user'] = {
 	username_regex: /^[0-9a-zA-Z+@._-]{3,256}$/,
 	email_regex: /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,30}$/,
-	route_var_ccv: "Route Variable"
+	route_var_ccv: 'Route Variable',
+	dnd_status: 'DND Status',
+	dnd_enabled: 'Enabled',
+	dnd_disabled: 'Disabled'
 };

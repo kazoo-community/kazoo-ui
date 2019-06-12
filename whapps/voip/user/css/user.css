@@ -30,11 +30,11 @@
     width: 25px;
 }
 
-#user-form #equipment #tab_devices  {
+#user-form #equipment .user_info_table {
     border: 2px solid #666666;
     border-radius: 15px 15px 15px 15px;
     color: #666666;
-    margin: 20px auto auto;
+    float: left;
     width: 560px;
 }
 
@@ -107,23 +107,24 @@
     width: 560px;
 }
 
-#user-form #equipment #tab_devices .row {
+#user-form #equipment .user_info_table .row {
     height: 30px;
+    line-height: 30px;
     margin-left: 0px;
 }
 
-#user-form #equipment #tab_devices .row.title {
+#user-form #equipment .user_info_table .row.title {
     background-color: #dddddd !important;
     border-bottom: 2px solid #666666 !important;
     border-radius: 15px 15px 0px 0px;
     font-weight: bold;
 }
 
-#user-form #equipment #tab_devices .row:not(:last-child) {
+#user-form #equipment .user_info_table .row:not(:last-child) {
     border-bottom: 1px solid #A6A6A6;
 }
 
-#user-form #equipment #tab_devices .row:last-child {
+#user-form #equipment .user_info_table .row:last-child {
     border-radius: 0px 0px 15px 15px;
 }
 
@@ -133,6 +134,26 @@
 
 #user-form #equipment #tab_devices .row:nth-child(even) {
     background-color: #dddddd;
+}
+
+#user-form .table-container {
+    margin-top: 20px;
+}
+
+#user-form #dnd#dnd {
+    width: unset;
+    float: right;
+}
+
+#user-form #dnd .row.content {
+    padding: 0 15px;
+    background-color: #eeeeee;
+}
+
+#user-form #dnd .status-icon{
+    width: 20px;
+    margin: -2px 5px 0 0;
+    vertical-align: middle;
 }
 
 #user-form #username_label {

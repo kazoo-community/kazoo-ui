@@ -256,6 +256,9 @@ winkstart.module('voip', 'user', {
                             external: {},
                             emergency: {}
                         },
+					do_not_disturb: {
+						enabled: false
+					},
                         hotdesk: {},
                         contact_list: {
                             exclude: false,
