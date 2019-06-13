@@ -36,7 +36,7 @@ winkstart.module('core', 'core',
 
 								$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
 									if (
-										jqXHR.status === 401
+										[0, 400, 401].indexOf(jqXHR.status) !== -1
 										|| (
 											jqXHR.status === 404
 											&& ajaxSettings.url.match(/\/braintree\/credits|\/whitelabel/)
