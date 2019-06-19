@@ -1665,6 +1665,11 @@ winkstart.module('accounts', 'accounts_manager', {
 		},
 
 		restore_masquerading: function() {
+		// Handle users trying to un-masquerade from the top level account
+		if (!winkstart.apps.accounts.masquerade || !winkstart.apps.accounts.masquerade.length) {
+			return;
+		}
+
 			var THIS = this,
 				id = winkstart.apps['accounts'].masquerade.pop();
 
