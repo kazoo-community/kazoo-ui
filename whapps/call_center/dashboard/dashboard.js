@@ -225,8 +225,25 @@ winkstart.module('call_center', 'dashboard', {
 
             $('.topbar-right .list_queues_inner', parent).animate({ scrollLeft: scroll_value }, 0);
 
-            $('#callwaiting-list .list-panel-anchor ul', parent).empty()
-                                                                .append(calls_html);
+		// Reinitialize jScrollPane if length of callList changed, otherwise scrollbar may not show.
+		var callList = $('#callwaiting-list .list-panel-anchor ul', parent);
+		var reRenderCallList = callList.children().length !== $(calls_html).filter('li').length;
+
+		callList.empty()
+			.append(calls_html);
+
+		if (reRenderCallList) {
+			$('#callwaiting-list .list-panel-anchor').data('jsp').reinitialise();
+		}
+
+		// Vertically center timer and icons
+		callList.find('li.call-waiting a')
+			.each(function(_index, link) {
+				var newHeight = $(link).height();
+				if (newHeight !== parseInt($(link).css('line-height'))) {
+					$(link).siblings('span, img').css('margin-top', (newHeight - 30) / 2);
+				}
+			});
 
             THIS.render_timers(data);
 
