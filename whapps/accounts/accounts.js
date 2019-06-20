@@ -64,10 +64,18 @@ function(account_config) {
 	check_configuration: function(config, action) {
 		var failed_checks = [],
 			configuration_checks = {
-				'caller_id_name_emergency': function(config) { return config.caller_id.emergency && config.caller_id.emergency.name; },
-				'caller_id_number_emergency': function(config) { return config.caller_id.emergency && config.caller_id.emergency.number; },
-				'caller_id_name_external': function(config) { return config.caller_id.external && config.caller_id.external.name; },
-				'caller_id_number_external': function(config) { return config.caller_id.external && config.caller_id.external.number; }
+				'caller_id_name_emergency': function(config) {
+					return config && config.caller_id && config.caller_id.emergency && config.caller_id.emergency.name;
+				},
+				'caller_id_number_emergency': function(config) {
+					return config && config.caller_id && config.caller_id.emergency && config.caller_id.emergency.number;
+				},
+				'caller_id_name_external': function(config) {
+					return config && config.caller_id && config.caller_id.external && config.caller_id.external.name;
+				},
+				'caller_id_number_external': function(config) {
+					return config && config.caller_id && config.caller_id.external && config.caller_id.external.number;
+				}
 			};
 
 		$.each(configuration_checks, function(key, check) {
