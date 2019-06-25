@@ -19,7 +19,12 @@ winkstart.module('core', 'core',
 				winkstart.module('core', 'layout').init({ parent: $('body') }, function() {
 					winkstart.module('core', 'whappnav').init({ parent: $('body') }, function() {
 						winkstart.module('core', 'linknav').init({ parent: $('body') }, function() {
-							if (!window.location.hostname.match(/localhost|192\.168\./) && winkstart.config.sentry.dsn !== '') {
+							if (
+								!window.location.hostname.match(/localhost|192\.168\./)
+								&& winkstart.config.sentry
+								&& winkstart.config.sentry.dsn
+								&& winkstart.config.sentry.dsn !== ''
+							) {
 								Sentry.init({
 									dsn: winkstart.config.sentry.dsn,
 									environment: window.location.hostname,
