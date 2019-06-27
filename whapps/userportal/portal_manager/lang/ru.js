@@ -23,6 +23,7 @@ window.translate['portal_manager'] = $.extend(true, {}, window.translate['portal
 	caller_id: "Caller ID",
 	status: "Состояние",
 	listen: "Прослушать",
+	transcription: 'Транскрипция голосовой почты',
 	name: "Имя",
 	internal_number: "Внутренний номер",
 	external_number: "Внешний номер",

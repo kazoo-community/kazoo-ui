@@ -23,6 +23,7 @@ window.translate['portal_manager'] = {
 	caller_id: "显示主叫号码",
 	status: "状态",
 	listen: "收听",
+	transcription: '语音信箱的转录',
 	name: "姓名",
 	internal_number: "内线号码",
 	external_number: "外线号码",
