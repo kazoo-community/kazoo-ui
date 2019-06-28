@@ -114,5 +114,17 @@ window.translate['numbers_manager'] = $.extend(true, {}, window.translate['numbe
 	edit_911_location: "Редактировать местоположение для экстренных служб",
 	add_number_title: "Добавить номер",
 	callflow: "Сценарий",
-	trunk: "Транк"
+	trunk: 'Транк',
+	check_portability: 'Проверьте мобильность',
+	check_external_number_portability: 'Проверьте, можно ли перенести числа в',
+	launch_portability_button: 'Проверить номер Переносимость',
+	portable: 'портативный',
+	not_portable: 'Не портативный',
+	unknown_rate_center: 'Этот номер находится в непроверенном тарифном центре. Может потребоваться несколько дней, чтобы подтвердить, что этот номер является переносимым.',
+	invalid_phone_number: 'Неправильный номер телефона',
+	lrn_data_not_found: 'Информация о маршрутизации (LRN) не найдена',
+	no_coverage: 'У нас нет покрытия в этой области',
+	already_being_ported: 'Этот номер уже переносится',
+	telnyx_number: 'Этот номер уже зарегистрирован у нашего провайдера',
+	error_portability_generic: 'В настоящее время у нас возникают проблемы с проверкой переносимости, повторите попытку позже.'
 });

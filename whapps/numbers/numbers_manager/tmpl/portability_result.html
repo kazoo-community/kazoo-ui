@@ -1,0 +1,30 @@
+<div>
+	<ul class="portability_output">
+	{{each data.numbers}}
+		<li class="portability_row">
+			<div class="portability_col">${phone_number}</div>
+			<div class="portability_col">
+				{{if !portable}}
+					<span>${_t('not_portable')}</span>
+					<span class="icon exclaim_circle red portability_error" 
+						rel="twipsy" 
+						title="${_t(not_portable_reason)}"
+						data-placement="right"
+						data-animate="false">
+					</span>
+				{{else}}
+					<span>${_t('portable')}</span>
+					{{if portability_status !== 'confirmed'}}
+						<span class="icon exclamation2 yellow scale-from-large portability_warning" 
+							rel="twipsy" 
+							title="${_t('unknown_rate_center')}"
+							data-placement="right"
+							data-animate="false">
+						</span>
+					{{/if}}
+				{{/if}}
+			</div>
+		</li>
+	{{/each}}
+	</ul>
+</div>

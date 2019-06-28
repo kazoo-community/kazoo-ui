@@ -113,5 +113,17 @@ window.translate['numbers_manager'] = {
 	buy_numbers: "Koop Nummers",
 	edit_location_for: "Bewerk Locatie voor ",
 	edit_911_location: "Bewerk 112 Locatie",
-	add_number_title: "Voeg nummer toe"
+	add_number_title: 'Voeg nummer toe',
+	check_portability: 'Controleer draagbaarheid',
+	check_external_number_portability: 'Controleer of nummers kunnen worden geporteerd',
+	launch_portability_button: 'Controleer nummer draagbaarheid',
+	portable: 'Portabel',
+	not_portable: 'Niet portabel',
+	unknown_rate_center: 'Dit nummer bevindt zich in een niet-geverifieerd Rate Center. Het kan enkele dagen duren om te bevestigen dat dit nummer portabel is.',
+	invalid_phone_number: 'Ongeldig telefoonnummer',
+	lrn_data_not_found: 'Routing (LRN) -informatie niet gevonden',
+	no_coverage: 'We hebben geen dekking op dat gebied',
+	already_being_ported: 'Dit nummer wordt al geporteerd',
+	telnyx_number: 'Dit nummer is al geregistreerd bij onze provider',
+	error_portability_generic: 'We hebben momenteel problemen met het controleren van draagbaarheid. Probeer het later opnieuw.'
 };

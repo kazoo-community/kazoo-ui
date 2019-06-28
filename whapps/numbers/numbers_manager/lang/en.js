@@ -122,5 +122,18 @@ window.translate['numbers_manager'] = {
 	carrier_fault: "This number is currently used!",
 	state_transition: "Invalid state transition from available to released",
 	callflow: 'Callflow',
-	pbx: 'Trunk'
+	pbx: 'Trunk',
+	check_portability: 'Check Portability',
+	check_external_number_portability: 'Check if numbers can be ported in',
+	launch_portability_button: 'Check Number Portability',
+	portable: 'Portable',
+	not_portable: 'Not Portable',
+	unknown_rate_center: 'This number is in an unverified Rate Center. It may take a few days to confirm that this number is portable.',
+	invalid_phone_number: 'Invalid Phone Number',
+	lrn_data_not_found: 'Routing (LRN) information not found',
+	no_coverage: 'We do not have coverage in that area',
+	already_being_ported: 'This number is already being ported-in',
+	telnyx_number: 'This number is already registered with our provider',
+	error_portability_generic: 'We are having trouble checking portability at this time, please try again later.'
+
 };

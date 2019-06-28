@@ -113,5 +113,17 @@ window.translate['numbers_manager'] = {
 	buy_numbers: "购买号码",
 	edit_location_for: "编辑地址 ",
 	edit_911_location: "编辑911地址",
-	add_number_title: "添加号码"
+	add_number_title: '添加号码',
+	check_portability: '检查可移植性',
+	check_external_number_portability: '检查是否可以移入号码',
+	launch_portability_button: '检查号码携带能力',
+	portable: '携带',
+	not_portable: '不便携',
+	unknown_rate_center: '此号码位于未经验证的费率中心。 可能需要几天时间才能确认此号码是否可移植。',
+	invalid_phone_number: '无效的电话号码',
+	lrn_data_not_found: '未找到路由（LRN）信息',
+	no_coverage: '我们没有该领域的报道',
+	already_being_ported: '这个号码已经被移植了',
+	telnyx_number: '此号码已在我们的提供商处注册',
+	error_portability_generic: '我们目前无法检查可移植性，请稍后再试'
 };

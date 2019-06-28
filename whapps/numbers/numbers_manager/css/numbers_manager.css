@@ -33,3 +33,48 @@
     margin-left: 5px;
 }
 
+#numbers_output .portability_output {
+	list-style: none;
+	background-color: #eee;
+	border: 2px solid #666;
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+#numbers_output .portability_output .portability_row {
+	padding: 8px 10px;
+	color: #333;
+}
+
+#numbers_output .portability_output .portability_row:nth-child(odd) {
+	background-color: #ddd;
+}
+
+#numbers_output .portability_output .portability_row::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#numbers_output .portability_output .portability_row:not(:last-of-type) {
+	border-bottom: solid 1px #ddd;
+}
+
+#numbers_output .portability_output .portability_col {
+	float: left;
+	width: 40%;
+}
+
+#numbers_output .portability_output .icon {
+	transform: scale(0.7);
+	margin: -7px 0;
+}
+
+.portability_twipsy .twipsy-arrow,
+.portability_twipsy .twipsy-inner {
+	margin-top: -10px !important;
+}
+
+.twipsy.in {
+	z-index: 200003;
+}

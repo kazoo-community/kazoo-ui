@@ -12,7 +12,9 @@ winkstart.module('numbers', 'numbers_manager', {
             freeform_number_dialog: 'tmpl/freeform_number_dialog.html',
             add_number_search_results: 'tmpl/add_number_search_results.html',
             port_dialog: 'tmpl/port_dialog.html',
-            fields: 'tmpl/fields.html'
+		fields: 'tmpl/fields.html',
+		portability_result: 'tmpl/portability_result.html',
+		portability_twipsy: 'tmpl/portability_twipsy.html'
         },
 
         subscribe: {
@@ -85,7 +87,12 @@ winkstart.module('numbers', 'numbers_manager', {
                 url: '{api_url}/accounts/{account_id}/port_requests/{request_id}/attachments?filename={document_name}',
                 contentType: 'application/pdf',
                 verb: 'PUT'
-            }
+		},
+		'numbers_manager.check_portability': {
+			url: '{api_url}/accounts/{account_id}/phone_numbers/check_portability',
+			contentType: 'application/json',
+			verb: 'POST'
+		}
         }
     },
 
@@ -426,6 +433,10 @@ winkstart.module('numbers', 'numbers_manager', {
                 });
             });
 
+		$(numbers_manager_html).delegate('#launch_portability_dialog', 'click', function() {
+			THIS.render_portability_check_dialog();
+		});
+
             $(numbers_manager_html).delegate('.cid', 'click', function() {
                 var $cnam_cell = $(this),
                     data_phone_number = $cnam_cell.parents('tr').first().attr('id'),
@@ -721,11 +732,12 @@ winkstart.module('numbers', 'numbers_manager', {
                 popup_html = THIS.templates.freeform_number_dialog.tmpl({
 					_t: function(param){
 						return window.translate['numbers_manager'][param];
-					}
+				},
+				action_button_label: _t('numbers_manager', 'add')
 				}),
                 popup;
 
-            $('.add', popup_html).click(function(ev) {
+		$('.submit', popup_html).click(function(ev) {
                 ev.preventDefault();
 
                 var phone_numbers = $('#freeform_numbers', popup_html).val().replace(/\n/g,',');
@@ -760,7 +772,7 @@ winkstart.module('numbers', 'numbers_manager', {
                 position: ['center', 20]
             });
 
-            $('.add', popup).focus();
+		$('.submit', popup).focus();
         },
 
 		formatBuyNumberData: function(data) {
@@ -1125,6 +1137,99 @@ winkstart.module('numbers', 'numbers_manager', {
             });
         },
 
+	/**
+	 * Open a dialog where users can submit a portability check request for multiple numbers
+	 *
+	 * @return void
+	 */
+	render_portability_check_dialog: function() {
+		var THIS = this,
+			popup_html = THIS.templates.freeform_number_dialog.tmpl({
+				_t: function(param) {
+					return window.translate.numbers_manager[param];
+				},
+				action_button_label: _t('numbers_manager', 'check_portability')
+			}),
+			popup = winkstart.dialog(popup_html, {
+				title: _t('numbers_manager', 'check_external_number_portability'),
+				position: ['center', 20],
+				dialogClass: 'portability_check_dialog'
+			});
+
+		$('.submit', popup_html).click(function(e) {
+			e.preventDefault();
+
+			// Filter input for anything non-numeric (or +) and split into an array
+			var phone_numbers = $('#freeform_numbers', popup_html)
+				.val()
+				.replace(/[^+\d\n]/g, '')
+				.split(/\n/)
+				.filter(Boolean);
+
+			if (phone_numbers.length > 0) {
+				THIS.check_portability(phone_numbers,
+					function(numbers) {
+						// Sort non-portable numbers first
+						var sortedNums = numbers.sort(function(a, b) {
+							return a.portable - b.portable;
+						});
+						var results = THIS.templates.portability_result.tmpl({
+							_t: function(param) {
+								return window.translate.numbers_manager[param];
+							},
+							data: { numbers: sortedNums }
+						});
+						$('.portability_error, .portability_warning', results)
+							.twipsy({ template: THIS.templates.portability_twipsy.prop('outerHTML') });
+						$('#numbers_output', popup).empty().append(results);
+					},
+					function(resp) {
+						// Display remote (carrier) API errors
+						var errors = [];
+						for (var key in resp.data) {
+							if (key.indexOf('error_knm') !== -1) {
+								errors.push(key + ': ' + resp.data[key]);
+							}
+						}
+						if (!errors.length) {
+							errors = [_t('numbers_manager', 'error_portability_generic')];
+						}
+						winkstart.alert('error', errors.join('<br />'));
+					}
+				);
+			} else {
+				winkstart.alert(_t('numbers_manager', 'you_didnt_enter_any_valid_phone_number'));
+			}
+		});
+	},
+
+	/**
+	 * Call the kazoo check_portability endpoint with the given array of numbers
+	 *
+	 * @param {array} numbers - Array of numbers to be checked
+	 * @param {function} success - Called on success, will be passed an array of number objects
+	 * @param {function} error - Called on an error from the carriers' API(s)
+	 *
+	 * @return void
+	 */
+	check_portability: function(numbers, success, error) {
+		winkstart.request('numbers_manager.check_portability', {
+			api_url: winkstart.apps.numbers.api_url,
+			account_id: winkstart.apps.numbers.account_id,
+			data: { numbers: numbers }
+		},
+		function(resp) {
+			var numbers = resp && resp.data && resp.data.phone_numbers;
+			if (typeof success === 'function' && Array.isArray(numbers)) {
+				success(numbers);
+			} else if (typeof error === 'function') {
+				error(resp);
+			}
+		},
+		winkstart.error_message.process_error()
+		);
+	},
+
         check_toll_free: function(number) {
             var toll_free = false,
                 toll_free_number = number.match(/^(\+?1)?(8(00|55|66|77|88)[2-9]\d{6})$/);
@@ -1419,7 +1524,9 @@ winkstart.module('numbers', 'numbers_manager', {
                 },
                 function(_data, status) {
                     if(_data.data && _data.data.wnm_allow_additions) {
-                        $('div.action_number', numbers_manager_html).prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
+				$('div.action_number', numbers_manager_html)
+					.prepend('<button class="btn" id="launch_portability_dialog">' + _t('numbers_manager', 'launch_portability_button') + '</button>')
+					.prepend('<button class="btn" id="add_number">' + _t('numbers_manager', 'add_number') + '</button>');
                     }
                 }
             );
