@@ -565,13 +565,20 @@ winkstart.module('voip', 'user', {
                                 function(_data, status) {
                                     if(form_data.priv_level == 'admin') {
                                         form_data.apps = form_data.apps || {};
-                                        if(!('voip' in form_data.apps) && $.inArray('voip', (_data.data.available_apps || [])) > -1) {
-                                            form_data.apps['voip'] = {
-                                                label: _t('user', 'voip_services_label'),
-                                                icon: 'device',
-                                                api_url: winkstart.apps['voip'].api_url
-                                            }
-                                        }
+
+							if (!(typeof data.data === 'object' && data.data.id)) {
+								// For brand new admins, automatically enable all available apps on the account
+								$.each(_data.data.available_apps || [], function(index, app) {
+									var appConfig = winkstart.config.available_apps[app];
+									if (!(app in form_data.apps) && appConfig) {
+										form_data.apps[app] = {
+											api_url: winkstart.config.default_api_url,
+											label: appConfig.label,
+											icon: appConfig.icon
+										};
+									}
+								});
+							}
                                     }
                                     else if(form_data.priv_level == 'user' && $.inArray('userportal', (_data.data.available_apps || [])) > -1) {
                                         form_data.apps = form_data.apps || {};
