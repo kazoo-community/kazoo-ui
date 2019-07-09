@@ -497,7 +497,9 @@ winkstart.module('voip', 'account', {
 				final_render();
 			}
 
-		winkstart.apps.accounts.check_configuration(data.data, 'highlight');
+		if (winkstart.apps.accounts && typeof winkstart.apps.accounts.check_configuration === 'function') {
+			winkstart.apps.accounts.check_configuration(data.data, 'highlight');
+		}
         },
 
         activate: function(parent) {
