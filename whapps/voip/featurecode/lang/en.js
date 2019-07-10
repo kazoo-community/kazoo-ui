@@ -1,4 +1,8 @@
 window.translate['featurecode'] = {
+	dnd_cat: 'Do&nbsp;Not&nbsp;Disturb',
+	enable_donotdisturb: 'Enable Do Not Disturb',
+	disable_donotdisturb: 'Disable Do Not Disturb',
+	toggle_donotdisturb: 'Toggle Do Not Disturb',
 	feature_codes: "Feature Codes",
 	show_all: "Show All",
 	show: "Show",

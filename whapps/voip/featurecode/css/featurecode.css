@@ -5,3 +5,7 @@
 #featurecode-view .buttons-right {
 	margin-top: 10px;
 }
+
+#featurecode-view label.featurecode_name {
+	width: 135px;
+}

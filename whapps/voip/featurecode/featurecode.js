@@ -406,7 +406,51 @@ winkstart.module('voip', 'featurecode', {
                         return '*'+number;
                     }
                 },
-
+			'donotdisturb[action="activate"]': {
+				name: _t('featurecode', 'enable_donotdisturb'),
+				category: _t('featurecode', 'dnd_cat'),
+				module: 'do_not_disturb',
+				number_type: 'pattern',
+				data: {
+					action: 'activate'
+				},
+				enabled: false,
+				default_number: '78',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*' + number + '([0-9]*)$';
+				}
+			},
+			'donotdisturb[action="deactivate"]': {
+				name: _t('featurecode', 'disable_donotdisturb'),
+				category: _t('featurecode', 'dnd_cat'),
+				module: 'do_not_disturb',
+				number_type: 'pattern',
+				data: {
+					action: 'deactivate'
+				},
+				enabled: false,
+				default_number: '79',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*' + number + '([0-9]*)$';
+				}
+			},
+			'donotdisturb[action="toggle"]': {
+				name: _t('featurecode', 'toggle_donotdisturb'),
+				category: _t('featurecode', 'dnd_cat'),
+				module: 'do_not_disturb',
+				number_type: 'pattern',
+				data: {
+					action: 'toggle'
+				},
+				enabled: false,
+				default_number: '76',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*' + number + '([0-9]*)$';
+				}
+			},
                 'hotdesk[action=login]': {
                     name: _t('featurecode', 'enable_hot_desking'),
                     icon: 'phone',
@@ -627,54 +671,6 @@ winkstart.module('voip', 'featurecode', {
                     number: this.default_number,
                     build_regex: function(number) {
                         return '*'+number;
-                    }
-                },
-                'donotdisturb[action="enable"]': {
-                    name: 'Enable Do not disturb',
-                    icon: 'phone',
-                    category: 'Do not disturb',
-                    module: 'do_not_disturb',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'enable'
-                    },
-                    enabled: false,
-                    default_number: '78',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'donotdisturb[action="disable"]': {
-                    name: 'Disable Do not disturb',
-                    icon: 'phone',
-                    category: 'Do not disturb',
-                    module: 'do_not_disturb',
-                    number_type: 'number',
-                    data: {
-                        action: 'disable'
-                    },
-                    enabled: false,
-                    default_number: '79',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'donotdisturb[action="toggle"]': {
-                    name: 'Toggle Do not disturb',
-                    icon: 'phone',
-                    category: 'Do not disturb',
-                    module: 'do_not_disturb',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'toggle'
-                    },
-                    enabled: false,
-                    default_number: '76',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
                     }
                 },
                 'directory': {
