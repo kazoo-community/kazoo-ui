@@ -65,6 +65,15 @@
 						</div>
 					</div>
 
+					{{if data.show_seat_types}}
+						<div class="clearfix">
+							<label for="seat_type">Seat Type</label>
+							<div class="input">
+								 <select id="seat_type" name="seat_type" class="medium" rel="popover" data-content="${_t('seat_type_data_content')}"></select>
+							</div>
+						</div>
+					{{/if}}
+
 					<div class="clearfix">
 						<label for="priv_level">${_t('user_privilege_level')}</label>
 						<div class="input">
@@ -163,7 +172,7 @@
 								</div>
 							</div>
 							<div id="dnd" class="user_info_table">
-								<div class="row title">	
+								<div class="row title"> 
 									<div class="column first fifth">${_t('dnd_status')}</div>
 								</div>
 								<div class="row content">

@@ -467,7 +467,20 @@ winkstart.module('voip', 'user', {
                         },
                         winkstart.error_message.process_error()
                     );
-                }
+			},
+			current_user: function(callback) {
+				winkstart.request('user.get', {
+					account_id: winkstart.apps.voip.account_id,
+					api_url: winkstart.apps.voip.api_url,
+					user_id: winkstart.apps.myaccount.user_id
+				},
+				function(_data, status) {
+					callback(null, _data);
+				},
+				function(_data, status) {
+					callback(status, null);
+				});
+			}
             },
             function(err, results) {
                 var render_data = defaults;
@@ -497,6 +510,11 @@ winkstart.module('voip', 'user', {
 
 					delete render_data.data.hero_apps;
 				}
+			}
+
+			render_data.data.show_seat_types = false;
+			if (winkstart.config.seat_types && results.current_user.data.priv_level === 'admin') {
+				render_data.data.show_seat_types = true;
 			}
 
                 THIS.render_user(render_data, target, callbacks);
@@ -610,6 +628,16 @@ winkstart.module('voip', 'user', {
             hotdesk_pin_require.change(function() {
                 $(this).is(':checked') ? hotdesk_pin.show('blind') : hotdesk_pin.hide('blind');
             });
+
+		if (!data.data.seat_type) {
+			data.data.seat_type = winkstart.config.default_seat_type || 'unknown';
+		}
+		if (data.data.show_seat_types) {
+			$.each(winkstart.config.seat_types, function(i, seat_type) {
+				var selected = data.data.seat_type === seat_type.id ? 'SELECTED' : '';
+				$('#seat_type', user_html).append('<option id="' + seat_type.id + '" value="' + seat_type.id + '" ' + selected + '>' + seat_type.name + '</option>');
+			});
+		}
 
             $('.user-save', user_html).click(function(ev) {
                 ev.preventDefault();
@@ -1088,6 +1116,10 @@ winkstart.module('voip', 'user', {
             if(!form_data.hotdesk.require_pin) {
                 delete form_data.hotdesk.pin;
             }
+
+		if (!form_data.seat_type || form_data.seat_type === '') {
+			delete form_data.seat_type;
+		}
 
             if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
                 form_data.password = form_data.pwd_mngt_pwd1;

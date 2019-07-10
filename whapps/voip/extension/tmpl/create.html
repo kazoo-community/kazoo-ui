@@ -30,6 +30,16 @@
                             <input class="span4" id="email" name="email" type="text" placeholder="${_t('email_placeholder')}" />
                         </div>
                     </div>
+
+				{{if show_seat_types}}
+					<div class="clearfix">
+						<label for="seat_type">Seat Type</label>
+						<div class="input">
+							 <select id="seat_type" name="seat_type" class="medium" rel="popover" data-content="${_t('seat_type_data_content')}"></select>
+						</div>
+					</div>
+				{{/if}}
+
                     <div class="clearfix">
                         <label for="phone_number">${_t('phone_number')}</label>
                         <div class="input">

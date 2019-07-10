@@ -14,6 +14,7 @@ window.translate['bulk'] = {
 	deny: "Weigeren",
 	inherit: "Overnemen/ervan",
 	save: "Opslaan",
+	seat_type: 'Zitplaats',
 	bulk_edit_label: "Bulk bewerken",
 	name_stitle: "Naam",
 	endpoint_type_stitle: "Endpoint Type",

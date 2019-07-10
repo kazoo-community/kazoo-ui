@@ -109,7 +109,8 @@ function(args) {
 								'CELT@64000h': 'Siren (HD) @ 64kHz'
 							}
 						}
-					}
+					},
+					seat_types: winkstart.config.seat_types
                 }
             };
 

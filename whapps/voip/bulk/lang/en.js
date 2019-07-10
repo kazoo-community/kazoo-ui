@@ -15,6 +15,7 @@ window.translate['bulk'] = {
 	deny: "Deny",
 	inherit: "Inherit",
 	save: "Save",
+	seat_type: 'Seat Type',
 	bulk_edit_label: "Bulk Edit",
 	name_stitle: "Name",
 	endpoint_type_stitle: "Endpoint Type",

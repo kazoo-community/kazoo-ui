@@ -65,6 +65,11 @@ winkstart.module('voip', 'extension', {
                 contentType: 'application/json',
                 verb: 'GET'
             },
+		'extension.get_user': {
+			url: '{api_url}/accounts/{account_id}/users/{user_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
             'extension.list_callflows': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -256,7 +261,20 @@ winkstart.module('voip', 'extension', {
                                 callback(status, null);
                             }
                         );
-                    }
+			},
+			current_user: function(callback) {
+				winkstart.request('extension.get_user', {
+					account_id: winkstart.apps.voip.account_id,
+					api_url: winkstart.apps.voip.api_url,
+					user_id: winkstart.apps.myaccount.user_id
+				},
+				function(_data, status) {
+					callback(null, _data);
+				},
+				function(_data, status) {
+					callback(status, null);
+				});
+			}
                 },
                 function(err, results) {
                     // Filter out phone number that are already in use on a callflow
@@ -275,6 +293,10 @@ winkstart.module('voip', 'extension', {
                     });
                     results.phone_numbers = phone_numbers;
 
+			results.show_seat_types = false;
+			if (winkstart.config.seat_types && results.current_user.data.priv_level === 'admin') {
+				results.show_seat_types = true;
+			}
                     THIS.render_extension_create(results, callbacks);
                 }
             );
@@ -492,6 +514,12 @@ winkstart.module('voip', 'extension', {
 
             winkstart.timezone.populate_dropdown($('#timezone', create_html), data.account.timezone);
 
+		if (data.show_seat_types) {
+			$.each(winkstart.config.seat_types, function(i, seat_type) {
+				$('#seat_type', create_html).append('<option id="' + seat_type.id + '" value="' + seat_type.id + '">' + seat_type.name + '</option>');
+			});
+		}
+
             $('#phone_number', create_html).change(function(ev) {
                 $('#use_phone_number_as_outbound_cid_input > input').prop('disabled', this.value == '');
                 $('#use_phone_number_as_outbound_cid_input > span').toggleClass('disabled', this.value == '');
@@ -677,7 +705,8 @@ winkstart.module('voip', 'extension', {
                     last_name: form_data.name_last,
                     password: form_data.password,
                     timezone: form_data.timezone,
-                    username: form_data.username
+				username: form_data.username,
+				seat_type: form_data.seat_type || winkstart.config.default_seat_type || 'unknown'
                 };
 
             // Default apps
