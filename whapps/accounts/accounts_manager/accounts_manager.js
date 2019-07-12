@@ -469,6 +469,10 @@ winkstart.module('accounts', 'accounts_manager', {
 
 						defaults.field_data.sameTemplate = _.isEqual(render_data.data.notifications.fax_to_email, render_data.data.notifications.voicemail_to_email);
 					}
+			else {
+				// Default timezone to that of the parent
+				defaults.data.timezone = results.get_parent_account.data.timezone;
+			}
 
 					THIS.render_accounts_manager(render_data, target, callbacks);
 
@@ -789,6 +793,8 @@ winkstart.module('accounts', 'accounts_manager', {
 			if(data.field_data.sameTemplate === true) {
 				$('.fax_to_email').hide();
 			}
+
+		winkstart.timezone.populate_dropdown($('#timezone', account_html), data.data.timezone);
 
 			$('*[rel=popover]:not([type="text"])', account_html).popover({
 				trigger: 'hover'
