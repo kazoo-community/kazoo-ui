@@ -23,6 +23,7 @@ window.translate['portal_manager'] = {
 	caller_id: "Caller ID",
 	status: "Status",
 	listen: "Listen",
+	transcription: 'Transcription of voicemail',
 	name: "Name",
 	internal_number: "Internal Number",
 	external_number: "External Number",

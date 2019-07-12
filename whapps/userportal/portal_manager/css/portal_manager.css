@@ -218,3 +218,14 @@
     border-radius: 5px;
     padding-left: 15px;
 }
+
+.portal-view #voicemail-grid .dt-body-left {
+	text-align: left;
+}
+
+.alert_additional_text {
+	padding-top: 15px;
+	padding-left: 15px;
+	font-size: 14px;
+	line-height: 18px;
+}

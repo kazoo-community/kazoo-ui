@@ -4,6 +4,7 @@ winkstart.module('userportal', 'portal_manager', {
         ],
 
         templates: {
+		transcription: 'tmpl/transcription.html',
             portal_manager: 'tmpl/portal_manager.html',
             device_line: 'tmpl/device_line.html'
         },
@@ -93,6 +94,11 @@ winkstart.module('userportal', 'portal_manager', {
                 contentType: 'application/json',
                 verb: 'POST'
             },
+		'user_vmbox_msg.get': {
+			url: '{api_url}/accounts/{account_id}/vmboxes/{vmbox_id}/messages/{vm_msg_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
             'user_cdr.list': {
                 url: '{api_url}/accounts/{account_id}/users/{user_id}/cdrs?created_from={created_from}&created_to={created_to}',
                 contentType: 'application/json',
@@ -230,6 +236,29 @@ winkstart.module('userportal', 'portal_manager', {
                 winkstart.error_message.process_error()
             );
         },
+
+
+	get_vmbox_message: function(vmbox_id, vm_msg_id, success, error) {
+		winkstart.request(
+			'user_vmbox_msg.get',
+			{
+				api_url: winkstart.apps.userportal.api_url,
+				account_id: winkstart.apps.userportal.account_id,
+				vmbox_id: vmbox_id,
+				vm_msg_id: vm_msg_id
+			},
+			function(_data, status) {
+				if (typeof success === 'function') {
+					success(_data);
+				}
+			},
+			function(_data, status) {
+				if (typeof error === 'function') {
+					error(_data);
+				}
+			}
+		);
+	},
 
         get_settings: function(success, error) {
             var THIS = this;
@@ -884,27 +913,31 @@ winkstart.module('userportal', 'portal_manager', {
                       'bSearchable': false,
                       'bVisible': false
                     },
-                    { 
-                        'sTitle': _t('portal_manager', 'date'),
-                        'sWidth': '220px',
-                        'iDataSort': 7
-                    },
+				{
+					'sTitle': _t('portal_manager', 'date'),
+					'sWidth': '200px',
+					'iDataSort': 7
+				},
                     {
                       'sTitle': _t('portal_manager', 'caller_id'),
                       'sWidth': '150px'
                     },
-                    { 'sTitle': _t('portal_manager', 'status'),
-                      'sWidth': '130px'
-                    },
-                    {
-                      'sTitle': _t('portal_manager', 'listen'),
-                      'bSortable': false,
-                      'sWidth': '200px',
-                      'fnRender': function(obj) {
-                          var msg_uri = obj.aData[obj.iDataColumn];
-                          return '<audio style="width: 130px; height: 19px;" controls="" src="'+THIS.voicemail_uri(msg_uri)+'"></audio><a style="position:relative; top: -10px;" href="' + THIS.voicemail_uri(msg_uri)  + '"><span class="icon medium download" alt="Download"/></a>';
-                      }
-                    },
+				{
+					'sTitle': _t('portal_manager', 'status'),
+					'sWidth': '126px'
+				},
+				{
+					'sTitle': _t('portal_manager', 'listen'),
+					'bSortable': false,
+					'sWidth': '224px',
+					'sClass': 'dt-body-left',
+					'fnRender': function(obj) {
+						var column_data = obj.aData[obj.iDataColumn];
+						var msg_uri = column_data[0];
+						var transcribed = column_data[1];
+						return '<audio style="width: 130px; vertical-align: middle;" controls="" src="' + THIS.voicemail_uri(msg_uri) + '"></audio><a href="' + THIS.voicemail_uri(msg_uri) + '"><span class="icon medium download" alt="Download"/></a>' + (transcribed ? '<a href="javascript:void(0);" data-msg_uri="' + msg_uri + '" class="table_transcription_link"><span class="icon medium dot_chat" alt="Transcription"/></a>' : '');
+					}
+				},
                     {
                         'sTitle': 'timestamp',
                         'bSearchable': false,
@@ -912,11 +945,42 @@ winkstart.module('userportal', 'portal_manager', {
                     }
                 ];
 
-            winkstart.table.create('voicemail', $('#voicemail-grid', parent), columns, {}, {
-                sDom: '<"actions_voicemail">frtlip',
-                sScrollY: '150px',
-                aaSorting: [[3, 'desc']]
-            });
+		var voicemail_grid = $('#voicemail-grid', parent);
+
+		voicemail_grid.delegate('.table_transcription_link', 'click', function() {
+			var msg_uri = $(this).dataset('msg_uri').split('/');
+			var vmbox_id = msg_uri[0];
+			var vm_msg_id = msg_uri[2];
+
+			THIS.get_vmbox_message(vmbox_id, vm_msg_id, function(reply) {
+				if (reply.data && reply.data.transcription) {
+					var tmpl_data = {
+						_t: function(param) {
+							return window.translate.portal_manager[param];
+						},
+						text: reply.data.transcription.text,
+						caller_id: reply.data.caller_id_number + (reply.data.caller_id_name ? ' (' + reply.data.caller_id_name + ')' : ''),
+						friendly_date: THIS.friendly_date(reply.data.timestamp)
+					};
+					var transcription_html = THIS.templates.transcription.tmpl(tmpl_data);
+					var popup = winkstart.dialog(transcription_html, {
+						title: _t('portal_manager', 'transcription'),
+						width: '500px',
+						height: 'auto'
+					});
+
+					$('.ok_button', transcription_html).click(function() {
+						popup.dialog('close');
+					});
+				}
+			});
+		});
+
+		winkstart.table.create('voicemail', voicemail_grid, columns, {}, {
+			sDom: '<"actions_voicemail">frtlip',
+			sScrollY: '150px',
+			aaSorting: [[3, 'desc']]
+		});
 
             $.fn.dataTableExt.afnFiltering.pop();
 
@@ -941,7 +1005,7 @@ winkstart.module('userportal', 'portal_manager', {
 
                                     humanFullDate = THIS.friendly_date(msg.timestamp);
 
-                                    tab_messages.push([index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, msg_uri, msg.timestamp]);
+								tab_messages.push([index, vmbox_id, humanFullDate, msg.caller_id_number, msg.folder, [msg_uri, !!msg.transcribed], msg.timestamp]);
                                 }
                             });
 
