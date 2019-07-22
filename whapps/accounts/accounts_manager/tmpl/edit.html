@@ -185,7 +185,7 @@
                 <div id="applications">
 
                     <div class="clearfix">
-                        <label for="">${_t('available_apps')}</label>
+                        <label for=""><strong>${_t('web')}</strong></label>
                         <div class="input">
                             <ul class="inputs-list">
                                 {{each(i, app) field_data.available_apps}}
@@ -204,7 +204,31 @@
                                 {{/each}}
                             </ul>
                         </div>
-                    </div>
+					</div>
+					
+					{{if hero_apps}}
+						<div class="clearfix">
+							<label for=""><strong>${_t('desktop')}</strong></label>
+							<div class="input">
+								<ul class="inputs-list">
+									{{each(i, app) hero_apps}}
+										<li>
+											<label>
+												<span rel="popover" data-content="${app.description}">
+													{{if app.available}}
+														<input type="checkbox" id="hero_apps_${app.id}" name="hero_apps[]" value="${app.id}" checked="checked"/>
+													{{else}}
+														<input type="checkbox" id="hero_apps_${app.id}" name="hero_apps[]" value="${app.id}"/>
+													{{/if}}
+													<span>${app.label}</span>
+												</span>
+											</label>
+										</li>
+									{{/each}}
+								</ul>
+							</div>
+						</div>
+					{{/if}}
 
                 </div>
 

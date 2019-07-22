@@ -72,6 +72,16 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/json',
 				verb: 'DELETE'
 			},
+		'hero_apps.get': {
+			url: '{api_url}/accounts/{account_id}/hero/apps',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'hero_apps.update': {
+			url: '{api_url}/accounts/{account_id}/hero/apps',
+			contentType: 'application/json',
+			verb: 'POST'
+		},
 			'notifications.get': {
 				url: '{api_url}/accounts/{account_id}/notifications/{notification_id}',
 				contentType: 'application/json',
@@ -176,6 +186,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		save_accounts_manager: function(form_data, data, success, error) {
 			delete data.data.available_apps;
+		delete data.data.hero_apps;
 
 			var THIS = this,
 				normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
@@ -365,6 +376,26 @@ winkstart.module('accounts', 'accounts_manager', {
 				};
 
 			async.parallel({
+			get_hero_apps: function(callback) {
+				winkstart.request('hero_apps.get', {
+					account_id: data.id,
+					api_url: winkstart.apps.accounts.api_url
+				},
+				function(_data) {
+					if (
+						typeof _data === 'object'
+						&& $.isArray(_data.data)
+						&& _data.data.length > 0
+					) {
+						defaults.hero_apps = _data.data;
+					}
+
+					callback(null, _data || {});
+				},
+				function() {
+					callback(null, {});
+				});
+			},
 					get_parent_account: function(callback) {
 						winkstart.request(true, 'accounts_manager.get', {
 								account_id: winkstart.apps['accounts'].account_id,
@@ -1366,6 +1397,48 @@ winkstart.module('accounts', 'accounts_manager', {
 
 										// Do in series so we don't get half done whitelabel if something fails in update_notifications
 										async.series({
+									update_hero_apps: function(callback) {
+										if (
+											typeof data === 'object'
+											&& typeof form_data === 'object'
+											&& $.isArray(data.hero_apps)
+											&& $.isArray(form_data.hero_apps)
+										) {
+											var is_updated = false;
+
+											$.each(data.hero_apps, function(i, app) {
+												var is_app_available = form_data.hero_apps.indexOf(app.id) !== -1;
+
+												if (app.available !== is_app_available) {
+													app.available = is_app_available;
+													is_updated = true;
+												}
+											});
+
+											if (is_updated) {
+												winkstart.request(true, 'hero_apps.update', {
+													account_id: data.data.id,
+													api_url: winkstart.apps.accounts.api_url,
+													data: {
+														apps: data.hero_apps
+													}
+												},
+												function(_data) {
+													callback(null, {});
+												},
+												function(_data, status) {
+													var err = {
+														data: _data,
+														status: status
+													};
+
+													callback(err, null);
+												});
+											} else {
+												callback(null, {});
+											}
+										}
+									},
 												whitelabel: function(callback) {
 													/*
 													* We check if the whitelabel exist for this account,

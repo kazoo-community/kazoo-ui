@@ -287,6 +287,26 @@ winkstart.module('voip', 'user', {
             THIS.random_id = false;
 
             winkstart.parallel({
+			get_hero_apps: function(callback) {
+				winkstart.request('hero_apps.get', {
+					account_id: winkstart.apps.voip.account_id,
+					api_url: winkstart.apps.voip.api_url
+				},
+				function(_data) {
+					if (
+						typeof _data === 'object'
+						&& $.isArray(_data.data)
+						&& _data.data.length > 0
+					) {
+						defaults.hero_apps = _data.data;
+					}
+
+					callback(null, _data || {});
+				},
+				function() {
+					callback(null, {});
+				});
+			},
                 list_classifiers: function(callback) {
                     winkstart.request('user.list_classifiers', {
                             account_id: winkstart.apps['voip'].account_id,
@@ -458,6 +478,26 @@ winkstart.module('voip', 'user', {
                 if (winkstart.apps.call_center) {
                     render_data.data.hide_in_dashboard = winkstart.apps.call_center.hidden_in_dashboard(render_data.data.id, 'agents');
                 }
+
+			if (render_data.hero_apps) {
+				var has_apps_available = render_data.hero_apps.some(function(app) {
+					return app.available;
+				});
+
+				if (!has_apps_available) {
+					delete render_data.hero_apps;
+				} else if (
+					typeof render_data.data === 'object'
+					&& $.isArray(render_data.data.hero_apps)
+					&& render_data.data.hero_apps.length > 0
+				) {
+					$.each(render_data.hero_apps, function(i, app) {
+						app.enabled = render_data.data.hero_apps.indexOf(app.id) !== -1;
+					});
+
+					delete render_data.data.hero_apps;
+				}
+			}
 
                 THIS.render_user(render_data, target, callbacks);
 
@@ -1060,6 +1100,10 @@ winkstart.module('voip', 'user', {
             delete form_data.extra;
 
             delete form_data[''];
+
+		if ('hero_apps' in form_data) {
+			form_data.hero_apps = form_data.hero_apps.filter(Boolean);
+		}
 
             return form_data;
         },

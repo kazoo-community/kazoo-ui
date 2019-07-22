@@ -1,4 +1,6 @@
 window.translate['accounts'] = {
+	web: 'Admin Portal',
+	desktop: 'Desktop Client',
 	add_account: "Add Account",
 	create_account: "Create Account",
 	edit_account: "Edit Account",

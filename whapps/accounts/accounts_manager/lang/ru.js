@@ -1,4 +1,6 @@
 window.translate['accounts'] = $.extend(true, {}, window.translate['accounts'], {
+	web: 'Администрация портала',
+	desktop: 'Настольный клиент',
 	add_account: "Добавить клиента",
 	create_account: "Создать клиента",
 	edit_account: "Редактировать клиента",

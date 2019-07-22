@@ -1,4 +1,6 @@
 window.translate['user'] = {
+	desktop: '桌面客户端',
+	available_apps: '可用应用',
 	user: "用户",
 	user_tip: "将呼叫转给某个用户",
 	hot_desk_login: "代接登录",
@@ -24,7 +26,7 @@ window.translate['user'] = {
 	caller_id: "主叫标识",
 	options: "选项",
 	call_forward: "呼叫前转",
-	password_management: "密码管理",
+	password_management: '密码',
 	hot_desking: "代接",
 	restrictions: "限制",
 	basic_settings: "基本配置",

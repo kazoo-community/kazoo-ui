@@ -1,4 +1,6 @@
 window.translate['user'] = {
+	desktop: 'Desktop Client',
+	available_apps: 'Available Apps',
 	user: "User",
 	user_tip: "Direct a caller to a specific user",
 	hot_desk_login: "Hot Desk login",
@@ -24,7 +26,7 @@ window.translate['user'] = {
 	caller_id: "Caller ID",
 	options: "Options",
 	call_forward: "Call Forward",
-	password_management: "Password Management",
+	password_management: 'Password',
 	hot_desking: "Hot Desking",
 	restrictions: "Restrictions",
 	basic_settings: "Basic Settings",

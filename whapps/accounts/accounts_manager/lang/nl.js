@@ -1,4 +1,6 @@
 window.translate['accounts'] = {
+	web: 'Beheerportal',
+	desktop: 'Desktop Client',
 	add_account: "Voeg account toe",
 	create_account: "Maak Account",
 	edit_account: "Bewerk Account",

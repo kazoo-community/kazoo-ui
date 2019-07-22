@@ -1,4 +1,6 @@
 window.translate['accounts'] = {
+	web: '管理员门户',
+	desktop: '桌面客户端',
 	add_account: "添加账户",
 	create_account: "创建账户",
 	edit_account: "编辑账户",

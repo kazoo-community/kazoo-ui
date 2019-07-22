@@ -1,4 +1,6 @@
 window.translate['user'] = $.extend(true, {}, window.translate['user'], {
+	desktop: 'Настольный клиент',
+	available_apps: 'Доступные приложения',
 	user: "Пользователь",
 	user_tip: "Перевести звонящего на указанного пользователя",
 	hot_desk_login: "Вход с присвоением телефона",
@@ -24,7 +26,7 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	caller_id: "Caller ID",
 	options: "Настройки",
 	call_forward: "Переадресация вызовов",
-	password_management: "Управление паролем",
+	password_management: 'пароль',
 	hot_desking: "Присвоение телефона",
 	restrictions: "Запреты",
 	basic_settings: "Базовые настройки",

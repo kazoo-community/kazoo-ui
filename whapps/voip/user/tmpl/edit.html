@@ -22,6 +22,9 @@
 		 	<li><a href="#hot_desking">${_t('hot_desking')}</a></li>
 		 	{{if field_data.call_center_enabled}}
 		 	<li><a href="#queue_options">${_t('queue_options')}</a></li>
+			{{/if}}
+		 	{{if hero_apps}}
+		 	<li><a href="#available_apps">${_t('available_apps')}</a></li>
 		 	{{/if}}
             <li><a href="#restrictions">${_t('restrictions')}</a></li>
 		</ul>
@@ -633,7 +636,35 @@
                         <table id="queues-grid" class="display"></table>
                     </div>
                 </div>
-                {{/if}}
+				{{/if}}
+				
+				{{if hero_apps}}
+					<div id="available_apps">
+						<div class="clearfix">
+							<label for=""><strong>${_t('desktop')}</strong></label>
+							<div class="input">
+								<ul class="inputs-list">
+									{{each(i, app) hero_apps}}
+										{{if app.available}}
+											<li>
+												<label>
+													<span rel="popover" data-content="${app.description}">
+														{{if app.enabled}}
+															<input type="checkbox" id="hero_apps_${app.id}" name="hero_apps[]" value="${app.id}" checked="checked"/>
+														{{else}}
+															<input type="checkbox" id="hero_apps_${app.id}" name="hero_apps[]" value="${app.id}"/>
+														{{/if}}
+														<span>${app.label}</span>
+													</span>
+												</label>
+											</li>
+										{{/if}}
+									{{/each}}
+								</ul>
+							</div>
+						</div>
+					</div>
+				{{/if}}
 
                 <div id="restrictions">
                     <div class="clearfix">
