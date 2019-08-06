@@ -29,6 +29,7 @@ winkstart.module('core', 'core',
 									dsn: winkstart.config.sentry.dsn,
 									environment: window.location.hostname,
 									release: winkstart.config.version,
+									integrations: [new Sentry.Integrations.Dedupe()],
 
 									beforeSend: function(event) {
 										if (event.extra && event.extra.resource && event.extra.resource !== '') {
