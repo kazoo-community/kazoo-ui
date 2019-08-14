@@ -1437,6 +1437,8 @@ winkstart.module('accounts', 'accounts_manager', {
 											} else {
 												callback(null, {});
 											}
+										} else {
+											callback(null, {});
 										}
 									},
 												whitelabel: function(callback) {
