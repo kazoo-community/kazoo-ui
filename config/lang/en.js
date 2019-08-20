@@ -35,6 +35,7 @@ window.translate['config'] = {
 	call_center_cat: "Call-Center",
 	hotdesking_cat: "Hotdesking",
 	time_of_day_cat: "Time Of Day",
+	integrations_cat: 'Integrations',
 	/*-------------------------------------*/
 	advanced_menu_cat: "advanced",
 	

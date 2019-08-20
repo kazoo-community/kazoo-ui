@@ -92,7 +92,8 @@ winkstart.module('voip', 'voip', {
                     'prompt': false,
                     'phone': false,
                     'blacklist': false,
-                    'extension': false
+				'extension': false,
+				'integration_tray': false
                 }
             }
             var init_list = {};

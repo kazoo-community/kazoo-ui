@@ -1,0 +1,4 @@
+/* Large enough min-height to display most tray config windows without scrolling */
+#integrations-iframe {
+    min-height: 500px;
+}

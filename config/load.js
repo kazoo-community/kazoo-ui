@@ -68,7 +68,8 @@ var langUrls = [
 	'whapps/voip/user',
 	'whapps/voip/vmbox',
 	'whapps/voip/faxbox',
-	'whapps/voip/voip'
+	'whapps/voip/voip',
+	'whapps/voip/integration_tray'
 ];
 
 function loadLanguages(language) {
