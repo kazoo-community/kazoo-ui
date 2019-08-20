@@ -6,7 +6,7 @@
                 <div class="select_wrapper">
                     <select id="type_selector">
                         {{each(i, type) types}}
-                            <option value="${i}">${type}</option>
+                            <option value="${type}">${_t('routing_variables_type_name_' + type)}</option>
                         {{/each}}
                     </select>
                 </div>
@@ -14,7 +14,7 @@
         </form>
 
         <div class="buttons-center">
-            <button id="ok" class="btn primary">OK</button>
+            <button id="ok" class="btn primary">${_t('ok')}</button>
         </div>
     </div>
 </div>

@@ -2315,215 +2315,222 @@ winkstart.module('voip', 'callflow', {
                         return '';
                     },
                     edit: function(node, callback) {
-						var popup, popup_html,
-							select_row_tmpl = THIS.templates.routing_variables_callflow_select_row,
-							text_row_tmpl = THIS.templates.routing_variables_callflow_text_row,
-							_t = function(param) {
-								return window.translate['callflow'][param];
+					var types = {},
+						/**
+						 * Load a list of docs of the desired type
+						 *
+						 * @param {string} type - The desired doc type to load
+						 * @param {function(err: ?string, Object[])} callback - Called upon success or failure
+						 * when making the request to load the docs
+						 */
+						loadType = function(type, callback) {
+							winkstart.request(type + '.list', {
+								account_id: winkstart.apps.voip.account_id,
+								api_url: winkstart.apps.voip.api_url
+							},
+							function(data, status) {
+								callback(null, data.data);
+							},
+							function(data, status) {
+								callback(status, data);
+							});
+						};
+
+					// Produce list of types needed for initial render
+					$.each(node.data.data, function(key, item) {
+						if (item.type && item.type !== 'custom' && !types[item.type]) {
+							types[item.type] = function(callback) {
+								loadType(item.type, callback);
 							};
+						}
+					});
 
-                        popup_html = THIS.templates.routing_variables_callflow.tmpl({
-							_t: _t,
-							selectRowTmpl: select_row_tmpl,
-							textRowTmpl: text_row_tmpl
-                        });
+					// Parallel load types needed for initial render
+					winkstart.parallel(types,
+						function(err, results) {
+							if (err) {
+								winkstart.error_message.process_error()(results[Object.keys(results)[0]], err);
+								return;
+							}
 
-                        var form = $("form .form_content", popup_html);
-                        $.each(node.data.data, function(key, item) {
-                            if (key === 'kvs_mode') return;
+							var popup, popup_html,
+								select_row_tmpl = THIS.templates.routing_variables_callflow_select_row,
+								text_row_tmpl = THIS.templates.routing_variables_callflow_text_row,
+								_t = function(param) {
+									return window.translate.callflow[param];
+								};
 
-                            if (item.type == 'custom') {
-								var row_html = text_row_tmpl.tmpl({
+							// Add initial render items
+							var items = $.map(node.data.data, function(item, key) {
+								if (key === 'kvs_mode') {
+									return;
+								}
+
+								item.key = key;
+								return item;
+							});
+
+							var options = {},
+								/**
+								 * Update cached list of options for a given doc type. The cached list is used
+								 * to populate the dropdowns in the popup.
+								 *
+								 * @param {string} type - The doc type for which to cache new options
+								 * @param {Object[]} data - Items to be cached for `type`. May be transformed
+								 * ahead of time
+								 */
+								updateOptions = function(type, data) {
+									if (type === 'user') {
+										var tmp = [];
+										$.each(data, function() {
+											this.name = this.first_name + ' ' + this.last_name;
+											tmp.push(this);
+										});
+										data = tmp;
+									} else if (type === 'callflow') {
+										var tmp = [];
+										$.each(data, function() {
+											if (!this.featurecode) {
+												this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
+												tmp.push(this);
+											}
+										});
+										data = tmp;
+									}
+
+									options[type] = winkstart.sort(data);
+								};
+
+							// Configure available options for each application var type
+							$.each(results, updateOptions);
+
+							popup_html = THIS.templates.routing_variables_callflow.tmpl({
+								_t: _t,
+								items: items,
+								options: options,
+								selectRowTmpl: select_row_tmpl,
+								textRowTmpl: text_row_tmpl
+							});
+
+							var form = $('form .form_content', popup_html),
+								/**
+								 * Remove row from callflow vars form when its delete button is clicked
+								 */
+								onDeleteBtnClick = function(e) {
+									e.preventDefault();
+									$(this).parent().remove();
+								};
+							$('button', form).click(onDeleteBtnClick);
+
+							$('#ok', popup_html).click(function() {
+								var formVars = $('form', popup_html).serializeArray();
+								var dataVars = {};
+								for (var i = 0; i < formVars.length; i++) {
+									if (i % 2 !== 0) {
+										continue; // Collate object pairs
+									}
+									if (formVars[i].value.length > 0 && formVars[i + 1].value.length > 0) {
+										dataVars[formVars[i].value] = {
+											type: formVars[i + 1].name,
+											value: formVars[i + 1].value
+										};
+									}
+								}
+								dataVars.kvs_mode = 'json';
+								node.data.data = dataVars;
+
+								popup.dialog('close');
+							});
+
+							$('#add', popup_html).click(function() {
+								var type_popup, type_popup_html;
+
+								type_popup_html = THIS.templates.routing_vars_callflow_type.tmpl({
 									_t: _t,
-									item: {
-										key: key,
-										type: item.type,
-										value: item.value
+									types: [
+										'user',
+										'vmbox',
+										'device',
+										'media',
+										'menu',
+										'queue',
+										'callflow',
+										'custom'
+									]
+								});
+
+								$('#ok', type_popup_html).click(function() {
+									var selected = $('#type_selector option:selected', type_popup_html).val();
+
+									/**
+									 * Dynamically add a new row to the callflow vars form
+									 *
+									 * @param {string} type - the type of the custom var to be added. Affects
+									 * the options available in a dropdown, if the type requires selection
+									 */
+									var addRow = function(type) {
+										if (type === 'custom') {
+											var row_tmpl = THIS.templates.routing_variables_callflow_text_row;
+										} else {
+											var row_tmpl = THIS.templates.routing_variables_callflow_select_row;
+										}
+										var row_html = row_tmpl.tmpl({
+											_t: _t,
+											item: { type: type },
+											options: options[type]
+										});
+										$('button', row_html).click(onDeleteBtnClick);
+										form.append(row_html);
+									};
+
+									if (selected === 'custom') {
+										addRow(selected);
+										type_popup.dialog('close');
+									} else {
+										if (options[selected]) {
+											addRow(selected);
+											type_popup.dialog('close');
+										} else {
+											loadType(selected, function(err, data) {
+												if (err) {
+													winkstart.error_message.process_error()(data, err);
+													return;
+												}
+
+												updateOptions(selected, data);
+												addRow(selected);
+												type_popup.dialog('close');
+											});
+										}
 									}
 								});
 
-								var del_btn = $('button', row_html);
-                                del_btn.click(function(e) {
-                                    e.preventDefault();
-                                    $(this).parent().remove();
-                                });
-								form.append(row_html);
-                            } else {
-                                winkstart.request(false, item.type + '.list', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url
-                                },
-                                function(data, status) {
-                                    if(item.type == 'user') {
-                                        var tmp = [];
-                                        $.each(data.data, function() {
-                                            this.name = this.first_name + ' ' + this.last_name;
-                                            tmp.push(this);
-                                        });
-                                        data.data = tmp;
-                                    }
+								type_popup = winkstart.dialog(type_popup_html, {
+									title: _t('callflow', 'routing_variables_type'),
+									minHeight: '0',
+									beforeClose: function() {
+										if (typeof callback === 'function') {
+											callback();
+										}
+									}
+								});
+							});
 
-                                    if(item.type == 'callflow') {
-                                        var tmp = [];
-                                        $.each(data.data, function() {
-                                            if(!this.featurecode) {
-                                                this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
-                                                tmp.push(this);
-                                            }
-                                        });
-                                        data.data = tmp;
-                                    }
+							popup = winkstart.dialog(popup_html, {
+								title: _t('callflow', 'routing_variables'),
+								minHeight: '0',
+								beforeClose: function() {
+									if (typeof callback === 'function') {
+										callback();
+									}
+								}
+							});
 
-									var options = [];
-                                    $.each(winkstart.sort(data.data), function() {
-										options.push({
-											id: this.id,
-											name: this.name,
-											selected: this.id == item.value
-										});
-									});
-
-									var row_html = select_row_tmpl.tmpl({
-										_t: _t,
-										item: {
-											key: key,
-											type: item.type,
-											value: item.value
-										},
-										options: options
-									});
-
-									var del_btn = $('button', row_html);
-                                    del_btn.click(function(e) {
-                                        e.preventDefault();
-                                        $(this).parent().remove();
-                                    });
-									form.append(row_html);
-                                });
-                            }
-                        });
-
-                        $('#ok', popup_html).click(function() {
-                            var formVars = $("form", popup_html).serializeArray();
-                            var dataVars = {};
-                            for(var i=0; i<formVars.length; i++) {
-                                if(i%2 != 0) continue; // Collate object pairs
-                                if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0)
-                                    dataVars[formVars[i].value] = {
-                                        type: formVars[i+1].name,
-                                        value: formVars[i+1].value
-                                    };
-                            }
-                            dataVars["kvs_mode"] = "json";
-                            node.data.data = dataVars;
-
-                            popup.dialog('close');
-                        });
-
-                        $('#add', popup_html).click(function() {
-                            var type_popup, type_popup_html;
-
-                            type_popup_html = THIS.templates.routing_vars_callflow_type.tmpl({
-                                _t: function(param){
-                                    return window.translate['callflow'][param];
-                                },
-                                types: {
-                                    "user": "User",
-                                    "vmbox": "Voicemail",
-                                    "device": "Device",
-                                    "media": "Media",
-                                    "menu": "Menu",
-                                    "queue": "Queue",
-                                    "callflow": "Callflow",
-                                    "custom": "Custom"
-                                }
-                            });
-
-                            $("#ok", type_popup_html).click(function() {
-                                var form = $("form .form_content", popup_html);
-                                var div = $('<div class="popup_field" style="white-space: nowrap;"></div>'); // Base div for new input
-                                var selected = $('#type_selector option:selected', type_popup_html).val();
-
-                                div.append('<input class="large" type="text" name="key[]" value="" placeholder="Variable name">&nbsp;:&nbsp;');
-                                if (selected == 'custom') {
-                                    div.append('<input class="large" type="text" name="' + selected + '" value="" placeholder="Variable value">');
-
-                                    var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                    del_btn.click(function(e) {
-                                        e.preventDefault();
-                                        $(this).parent().remove();
-                                    });
-                                    div.append(del_btn);
-                                    form.append(div);
-                                } else {
-                                    winkstart.request(true, selected + '.list', {
-                                        account_id: winkstart.apps['voip'].account_id,
-                                        api_url: winkstart.apps['voip'].api_url
-                                    },
-                                    function(data, status) {
-                                        if(selected == 'user') {
-                                            var tmp = [];
-                                            $.each(data.data, function() {
-                                                this.name = this.first_name + ' ' + this.last_name;
-                                                tmp.push(this);
-                                            });
-                                            data.data = tmp;
-                                        }
-
-                                        if(selected == 'callflow') {
-                                            var tmp = [];
-                                            $.each(data.data, function() {
-                                                if(!this.featurecode) {
-                                                    this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : _t('callflow', 'no_numbers'));
-                                                    tmp.push(this);
-                                                }
-                                            });
-                                            data.data = tmp;
-                                        }
-
-                                        var select = $('<select name="' + selected + '" style="width: 210px !important; max-width: 210px !important;"></select>');
-                                        $.each(winkstart.sort(data.data), function() {
-                                            select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                        });
-                                        div.append(select);
-
-                                        var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
-                                        del_btn.click(function(e) {
-                                            e.preventDefault();
-                                            $(this).parent().remove();
-                                        });
-                                        div.append(del_btn);
-                                        form.append(div);
-                                    });
-                                }
-
-                                type_popup.dialog('close');
-                            });
-
-                            type_popup = winkstart.dialog(type_popup_html, {
-                                title: _t('callflow', 'routing_variables_type'),
-                                minHeight: '0',
-                                beforeClose: function() {
-                                    if(typeof callback == 'function') {
-                                         callback();
-                                    }
-                                }
-                            });
-                        });
-
-                        popup = winkstart.dialog(popup_html, {
-                            title: _t('callflow', 'routing_variables'),
-                            minHeight: '0',
-                            beforeClose: function() {
-                                if(typeof callback == 'function') {
-                                     callback();
-                                }
-                            }
-                        });
-
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
+							if (typeof callback === 'function') {
+								callback();
+							}
+						}
+					);
                     }
                 },
                 'ring_group[]': {

@@ -4,18 +4,18 @@
         <form name="form" method="post" action="#">
             <div class="form_content">
                 {{each(i, item) items}}
-                {{if item.type == "custom"}}
-                    {{tmpl({_t: _t, item: item}) textRowTmpl}}
-                {{else}}
-                    {{tmpl({_t: _t, item: item}) selectRowTmpl}}
-                {{/if}}
+                    {{if item.type == "custom"}}
+                        {{tmpl({_t: _t, item: item}) textRowTmpl}}
+                    {{else}}
+                        {{tmpl({_t: _t, item: item, options: options[item.type]}) selectRowTmpl}}
+                    {{/if}}
                 {{/each}}
             </div>
         </form>
 
         <div class="buttons-center">
-            <button id="add" class="btn success">Add Variable</button>
-            <button id="ok" class="btn primary">OK</button>
+            <button id="add" class="btn success">${_t('routing_variables_add_variable')}</button>
+            <button id="ok" class="btn primary">${_t('ok')}</button>
         </div>
     </div>
 </div>
