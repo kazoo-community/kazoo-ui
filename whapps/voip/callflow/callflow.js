@@ -2403,10 +2403,6 @@ winkstart.module('voip', 'callflow', {
                             }
                         });
 
-                        $('#toggle_advanced', popup_html).click(function () {
-                            $('#route_var_div', popup_html).toggle();
-                        });
-
                         $('#ok', popup_html).click(function() {
                             var formVars = $("form", popup_html).serializeArray();
                             var dataVars = {};
