@@ -40,8 +40,10 @@ winkstart.module('voip', 'callflow', {
             response_callflow: 'tmpl/response_callflow.html',
             group_pickup: 'tmpl/group_pickup.html',
             language_callflow: 'tmpl/language_callflow.html',
-            routing_variables_callflow: 'tmpl/routing_variables_callflow.html',
-            routing_vars_callflow_type: 'tmpl/routing_vars_callflow_type.html',
+		routing_variables_callflow: 'tmpl/routing_variables_callflow.html',
+		routing_variables_callflow_select_row: 'tmpl/routing_variables_callflow_select_row.html',
+		routing_variables_callflow_text_row: 'tmpl/routing_variables_callflow_text_row.html',
+		routing_vars_callflow_type: 'tmpl/routing_vars_callflow_type.html',
             collect_dtmf_callflow: 'tmpl/collect_dtmf_callflow.html'
         },
 
@@ -2313,31 +2315,39 @@ winkstart.module('voip', 'callflow', {
                         return '';
                     },
                     edit: function(node, callback) {
-                        var popup, popup_html;
+						var popup, popup_html,
+							select_row_tmpl = THIS.templates.routing_variables_callflow_select_row,
+							text_row_tmpl = THIS.templates.routing_variables_callflow_text_row,
+							_t = function(param) {
+								return window.translate['callflow'][param];
+							};
 
                         popup_html = THIS.templates.routing_variables_callflow.tmpl({
-                            _t: function(param){
-                                return window.translate['callflow'][param];
-                            }
+							_t: _t,
+							selectRowTmpl: select_row_tmpl,
+							textRowTmpl: text_row_tmpl
                         });
 
                         var form = $("form .form_content", popup_html);
                         $.each(node.data.data, function(key, item) {
                             if (key === 'kvs_mode') return;
 
-                            var div = $('<div class="popup_field" style="white-space: nowrap; padding-bottom: 0.25em;"></div>'); // Base div for new input
-                            div.append('<input class="large" type="text" name="key[]" value="' + key + '" placeholder="Variable name">&nbsp;:&nbsp;');
-
                             if (item.type == 'custom') {
-                                div.append('<input class="large" type="text" name="' + item.type + '" value="' + item.value + '" placeholder="Variable value">');
+								var row_html = text_row_tmpl.tmpl({
+									_t: _t,
+									item: {
+										key: key,
+										type: item.type,
+										value: item.value
+									}
+								});
 
-                                var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
+								var del_btn = $('button', row_html);
                                 del_btn.click(function(e) {
                                     e.preventDefault();
                                     $(this).parent().remove();
                                 });
-                                div.append(del_btn);
-                                form.append(div);
+								form.append(row_html);
                             } else {
                                 winkstart.request(false, item.type + '.list', {
                                     account_id: winkstart.apps['voip'].account_id,
@@ -2364,20 +2374,31 @@ winkstart.module('voip', 'callflow', {
                                         data.data = tmp;
                                     }
 
-                                    var select = $('<select name="' + item.type + '" style="width: 210px !important; max-width: 210px !important;"></select>');
+									var options = [];
                                     $.each(winkstart.sort(data.data), function() {
-                                        select.append('<option value="' + this.id + '">' + this.name + '</option>');
-                                    });
-                                    select.val(item.value);
-                                    div.append(select);
+										options.push({
+											id: this.id,
+											name: this.name,
+											selected: this.id == item.value
+										});
+									});
 
-                                    var del_btn = $('<button id="del' + form.children().length + '" class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>');
+									var row_html = select_row_tmpl.tmpl({
+										_t: _t,
+										item: {
+											key: key,
+											type: item.type,
+											value: item.value
+										},
+										options: options
+									});
+
+									var del_btn = $('button', row_html);
                                     del_btn.click(function(e) {
                                         e.preventDefault();
                                         $(this).parent().remove();
                                     });
-                                    div.append(del_btn);
-                                    form.append(div);
+									form.append(row_html);
                                 });
                             }
                         });

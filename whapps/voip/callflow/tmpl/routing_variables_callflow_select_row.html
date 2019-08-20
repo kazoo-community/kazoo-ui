@@ -1,0 +1,15 @@
+<div>
+    <div class="popup_field" style="white-space: nowrap; padding-bottom: 0.25em;">
+        <input class="large" type="text" name="key[]" value="${item.key}" placeholder="Variable name"/>&nbsp;:&nbsp;
+        <select name="${item.type}" style="width: 210px !important; max-width: 210px !important;">
+            {{each(i, option) options}}
+            {{if option.selected}}
+            <option value="${option.id}" selected="selected">${option.name}</option>
+            {{else}}
+            <option value="${option.id}">${option.name}</option>
+            {{/if}}
+            {{/each}}
+        </select>
+        <button class="btn danger" style="padding: 0; min-width: 20px; width: 20px;">X</button>
+    </div>
+</div>
