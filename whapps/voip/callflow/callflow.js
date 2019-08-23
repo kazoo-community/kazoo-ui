@@ -756,7 +756,7 @@ winkstart.module('voip', 'callflow', {
             THIS.flow.nodes = THIS.flow.root.nodes();
         },
 
-	callflow_placeholder_name(flow) {
+	callflow_placeholder_name: function(flow) {
 		if (flow.nodes && flow.nodes[1] && flow.nodes[1].module === 'user') {
 			var number = flow.numbers && flow.numbers[0] !== '' ? flow.numbers[0] : '(no number)',
 				name = flow.nodes[1].caption ? ', ' + flow.nodes[1].caption : '';

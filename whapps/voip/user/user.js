@@ -940,23 +940,24 @@ winkstart.module('voip', 'user', {
         render_queue_options: function(parent, data) {
             var THIS = this;
 
-            /**
-             * Append an agent skill row to an html container.
-             *
-             * @param {string} skill - A default skill to fill in the row
-             * @param {object} container - jQuery container object with .rows
-             * div that will have the new row appended
-             */
-            function addSkillRow(skill = '', container = null) {
-                var row = THIS.templates.agent_skill_row.tmpl({
-                    _t: data._t,
-                    skill: skill
-                });
-                $('#acdc_skills .rows', container).append(row);
-                $('.delete', row).click(function() {
-                    $(this).closest('.row').remove();
-                });
-            }
+		/**
+		 * Append an agent skill row to an html container.
+		 *
+		 * @param {?string} skill - A default skill to fill in the row
+		 * @param {?object} container - jQuery container object with .rows
+		 * div that will have the new row appended
+		 */
+		function addSkillRow(skill, container) {
+			var row = THIS.templates.agent_skill_row.tmpl({
+				_t: data._t,
+				skill: skill || ''
+			});
+			$('#acdc_skills .rows', (container || null)).append(row);
+			$('.delete', row).click(function() {
+				$(this).closest('.row').remove();
+			});
+		}
+
             $.each(data.data.acdc_skills, function(index, skill) {
                 addSkillRow(skill, parent);
             });
