@@ -98,7 +98,12 @@ winkstart.module('voip', 'user', {
                 url: '{api_url}/accounts/{account_id}/configs/voicemail',
                 contentType: 'application/json',
                 verb: 'GET'
-            }
+		},
+		'hero_apps.get': {
+			url: '{api_url}/accounts/{account_id}/hero/apps',
+			contentType: 'application/json',
+			verb: 'GET'
+		}
         }
     },
 
