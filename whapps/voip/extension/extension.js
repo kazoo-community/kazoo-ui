@@ -462,7 +462,8 @@ winkstart.module('voip', 'extension', {
                             first_name: val.first_name,
                             last_name: val.last_name,
                             priv_level: val.priv_level,
-                            username: val.username
+						username: val.username,
+						seat_type: val.seat_type
                         });
                     });
                 }

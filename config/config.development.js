@@ -246,7 +246,12 @@
 			{ id: 'advanced', name: 'Advanced' },
 			{ id: 'call_center', name: 'Call Center' },
 			{ id: 'conference', name: 'Conference' },
-			{ id: 'sms', name: 'SMS' }
+			{ id: 'sms', name: 'SMS' },
+			{ id: 'call_forward', name: 'Call Forward' },
+			{ id: 'voicemail', name: 'Voicemail Only' },
+			{ id: 'demo', name: 'Demo' },
+			{ id: 'ata_analog', name: 'ATA/Analog' },
+			{ id: 'fax', name: 'Fax' }
 		],
 		default_seat_type: 'essentials',
 

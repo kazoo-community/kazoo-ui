@@ -37,6 +37,7 @@ window.translate['extension'] = {
     priv_level_user: "User",
     registered: "Registered",
     save: "Save",
+	seat_type: 'Seat Type',
     sip_uri: "SIP URI",
     sip_username: "SIP Username",
     smart_phone: "Smart Phone",
