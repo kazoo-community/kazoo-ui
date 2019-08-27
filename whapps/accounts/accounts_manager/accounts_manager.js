@@ -377,24 +377,28 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			async.parallel({
 			get_hero_apps: function(callback) {
-				winkstart.request('hero_apps.get', {
-					account_id: data.id,
-					api_url: winkstart.apps.accounts.api_url
-				},
-				function(_data) {
-					if (
-						typeof _data === 'object'
-						&& $.isArray(_data.data)
-						&& _data.data.length > 0
-					) {
-						defaults.hero_apps = _data.data;
-					}
+				if (typeof data === 'object' && data.id) {
+					winkstart.request('hero_apps.get', {
+						account_id: data.id,
+						api_url: winkstart.apps.accounts.api_url
+					},
+					function(_data) {
+						if (
+							typeof _data === 'object'
+							&& $.isArray(_data.data)
+							&& _data.data.length > 0
+						) {
+							defaults.hero_apps = _data.data;
+						}
 
-					callback(null, _data || {});
-				},
-				function() {
+						callback(null, _data || {});
+					},
+					function() {
+						callback(null, {});
+					});
+				} else {
 					callback(null, {});
-				});
+				}
 			},
 					get_parent_account: function(callback) {
 						winkstart.request(true, 'accounts_manager.get', {
