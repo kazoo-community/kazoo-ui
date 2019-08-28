@@ -1187,14 +1187,22 @@ winkstart.module('call_center', 'queue', {
                                 api_url: winkstart.apps['call_center'].api_url
                             },
                             function(data, status) {
-                                var popup, popup_html;
+						var popup,
+							queues = data
+								&& Array.isArray(data.data)
+								&& data.data.sort(function(a, b) {
+									var nameA = String(a.name),
+										nameB = String(b.name);
 
-                                popup_html = THIS.templates.queue_callflow.tmpl({
+									// Natural sort by queue name
+									return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+								}),
+							popup_html = THIS.templates.queue_callflow.tmpl({
                                     _t: function(param){
 										return window.translate['queue'][param];
 									},
 									title: _t('queue', 'connect_a_caller_to_a_queue'),
-                                    items: data.data,
+								items: queues,
                                     selected: node.getMetadata('id') || '',
                                     route_var: node.getMetadata('var') || '',
                                     enter_as_callback: node.getMetadata('enter_as_callback')
