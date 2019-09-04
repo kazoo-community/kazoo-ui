@@ -254,7 +254,8 @@
 			{ id: 'voicemail', name: 'Voicemail Only' },
 			{ id: 'demo', name: 'Demo' },
 			{ id: 'ata_analog', name: 'ATA/Analog' },
-			{ id: 'fax', name: 'Fax' }
+			{ id: 'fax', name: 'Fax' },
+			{ id: 'admin', name: 'Admin' }
 		],
 		default_seat_type: 'essentials'
     };
