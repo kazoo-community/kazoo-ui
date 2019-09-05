@@ -234,7 +234,9 @@
                 icon: 'menu1',
                 desc: 'Manage your Call Center'
             }
-        }
+		},
+
+		show_app_store_for_users: true
     };
 
     winkstart.apps = {

@@ -236,7 +236,7 @@
             }
         },
 
-		show_app_store_for_users: true,
+		show_app_store_for_users: false,
         hide_credit_card_confirmation: true,
 		notification_app: 'teletype',
 
