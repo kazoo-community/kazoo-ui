@@ -2,6 +2,7 @@ window.translate['dashboard'] = {
 	dashboard: "仪表盘",
 	hide_logged_out_agents: "隐藏登出的坐席",
 	hide_queues: "隐藏队列",
+	unhide_all_agents: '显示所有代理商',
 	break_time: "休息时间",
 	wrapping_up: "汇总",
 	call_time: "呼叫时长",

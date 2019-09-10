@@ -2,6 +2,7 @@ window.translate['dashboard'] = {
 	dashboard: "Dashboard",
 	hide_logged_out_agents: "Hide Logged out Agents",
 	hide_queues: "Hide Queues",
+	unhide_all_agents: 'Show All Agents',
 	break_time: "Break Time",
 	wrapping_up: "Wrapping up",
 	call_time: "Call Time",

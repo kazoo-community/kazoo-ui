@@ -17,12 +17,19 @@
     margin-right: 10px;
 }
 
-#dashboard-content #dashboard-topbar .settings-bar .toggle-button {
+#dashboard-content #dashboard-topbar .settings-bar #unhide_all_agents {
+	margin-right: 20px;
+	display: none;
+}
+
+#dashboard-content #dashboard-topbar .settings-bar .toggle-button,
+#dashboard-content #dashboard-topbar .settings-bar #unhide_all_agents {
     text-decoration: underline;
     cursor: pointer;
 }
 
-#dashboard-content #dashboard-topbar .settings-bar .toggle-button:hover {
+#dashboard-content #dashboard-topbar .settings-bar .toggle-button:hover,
+#dashboard-content #dashboard-topbar .settings-bar #unhide_all_agents:hover {
     font-weight: bold;
 }
 
