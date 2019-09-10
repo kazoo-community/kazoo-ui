@@ -1,6 +1,7 @@
 window.translate['dashboard'] = $.extend(true, {}, window.translate['dashboard'], {
 	hide_logged_out_agents: "Скрыть операторов, не зарегистрированных в системе",
 	hide_queues: "Скрыть очереди",
+	unhide_all_agents: 'Показать всех агентов',
 	break_time: "Время паузы",
 	wrapping_up: "Закругление",
 	call_time: "Время звонка",
