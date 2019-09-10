@@ -384,7 +384,7 @@ winkstart.module('auth', 'auth',
             $('.login', contentDiv).click(function(event) {
                 event.preventDefault(); // Don't run the usual "click" handler
 
-                var login_username = $('#login', contentDiv).val(),
+				var login_username = $('#login', contentDiv).val().toLowerCase(),
                     login_password = $('#password', contentDiv).val(),
                     login_account_name = $('#account_name', contentDiv).val(),
                     hashed_creds = $.md5(login_username + ':' + login_password),
