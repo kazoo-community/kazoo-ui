@@ -1,6 +1,7 @@
 window.translate['dashboard'] = {
 	hide_logged_out_agents: "Verberg uitgelogde Agents",
 	hide_queues: "Verberg Queues",
+	unhide_all_agents: 'Alle agenten weergeven',
 	break_time: "Pauze Tijd",
 	wrapping_up: "Wrapping up",
 	call_time: "Gesprekstijd",

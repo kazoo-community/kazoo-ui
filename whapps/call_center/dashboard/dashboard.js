@@ -155,6 +155,16 @@ winkstart.module('call_center', 'dashboard', {
             );
         },
 
+	has_hidden_agents: function() {
+		var dashboard_settings = JSON.parse(localStorage.getItem('dashboard'));
+
+		return (
+			dashboard_settings
+			&& dashboard_settings.hide_agents
+			&& dashboard_settings.hide_agents.length !== 0
+		);
+	},
+
         set_visibility_in_dashboard: function(id, type, hide) {
             var dashboard_settings = JSON.parse(localStorage.getItem('dashboard')),
                 hide_list = [];
@@ -229,6 +239,10 @@ winkstart.module('call_center', 'dashboard', {
             if(id) {
                 THIS.detail_stat(id, parent);
             }
+
+		if (THIS.has_hidden_agents()) {
+			$('#unhide_all_agents').show();
+		}
         },
 
         poll_agents: function(global_data, _parent) {
@@ -936,9 +950,30 @@ winkstart.module('call_center', 'dashboard', {
             $('#hide_logout_agents', parent).die().live('click', function(event) {
                 var checked = $(this).is(':checked');
                 THIS.hide_logout = checked;
+			$('#unhide_all_agents').toggle(checked || THIS.has_hidden_agents());
 
                 checked ? $('#agents-view', parent).addClass('hide-logout') : $('#agents-view', parent).removeClass('hide-logout');
             });
+
+		$('#unhide_all_agents', parent).die().live('click', function() {
+			var dashboard_settings = JSON.parse(localStorage.getItem('dashboard')),
+				hide_logout_agents = $('#hide_logout_agents', parent);
+
+			localStorage.setItem('dashboard', JSON.stringify({
+				hide_agents: [],
+				hide_queues: (dashboard_settings && dashboard_settings.hide_queues) || []
+			}));
+
+			if (hide_logout_agents.is(':checked')) {
+				hide_logout_agents.prop('checked', false);
+				THIS.hide_logout = false;
+				$('#agents-view', parent).removeClass('hide-logout');
+			}
+
+			THIS.update_visibility = true;
+
+			$('#unhide_all_agents').hide();
+		});
 
             $('.toggle-button', parent).die().live('click', function(event) {
                 var $topbar = $('.topbar-right', parent),
