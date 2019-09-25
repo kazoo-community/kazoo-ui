@@ -122,6 +122,21 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/x-base64',
 				verb: 'POST'
 			},
+		'whitelabel.update_hero_icon': {
+			url: '{api_url}/accounts/{account_id}/whitelabel/hero_icon',
+			contentType: 'application/x-base64',
+			verb: 'POST'
+		},
+		'whitelabel.update_hero_logo': {
+			url: '{api_url}/accounts/{account_id}/whitelabel/hero_logo',
+			contentType: 'application/x-base64',
+			verb: 'POST'
+		},
+		'whitelabel.update_hero_internal_logo': {
+			url: '{api_url}/accounts/{account_id}/whitelabel/hero_internal_logo',
+			contentType: 'application/x-base64',
+			verb: 'POST'
+		},
 			'accounts_manager.credits.get': {
 				url: '{api_url}/accounts/{account_id}/{billing_provider}/credits',
 				contentType: 'application/json',
@@ -558,6 +573,9 @@ winkstart.module('accounts', 'accounts_manager', {
 									defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
 									defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 									defaults.field_data.whitelabel.icon_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/icon?auth_token='+winkstart.apps['accounts'].auth_token;
+						defaults.field_data.whitelabel.hero_icon_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_icon?auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_logo?auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_internal_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_internal_logo?auth_token=' + winkstart.apps.accounts.auth_token;
 
 									callback(null, _data_wl);
 								},
@@ -813,6 +831,24 @@ winkstart.module('accounts', 'accounts_manager', {
 				delete form_data.whitelabel.icon_desc;
 			}
 
+		form_data.whitelabel.hero.icon_desc = form_data.extra.upload_hero_icon;
+
+		if (form_data.whitelabel.hero.icon_desc === '') {
+			delete form_data.whitelabel.hero.icon_desc;
+		}
+
+		form_data.whitelabel.hero.logo_desc = form_data.extra.upload_hero_logo;
+
+		if (form_data.whitelabel.hero.logo_desc === '') {
+			delete form_data.whitelabel.hero.logo_desc;
+		}
+
+		form_data.whitelabel.hero.internal_logo_desc = form_data.extra.upload_hero_internal_logo;
+
+		if (form_data.whitelabel.hero.internal_logo_desc === '') {
+			delete form_data.whitelabel.hero.internal_logo_desc;
+		}
+
 			if(form_data.extra.sameTemplate) {
 				form_data.notifications.fax_to_email = {};
 
@@ -967,6 +1003,54 @@ winkstart.module('accounts', 'accounts_manager', {
 			);
 		},
 
+	upload_hero_icon: function(data, account_id, callback) {
+		winkstart.request('whitelabel.update_hero_icon',
+			{
+				account_id: account_id,
+				api_url: winkstart.apps.accounts.api_url,
+				data: data
+			},
+			function(_data, status) {
+				if (typeof callback === 'function') {
+					callback();
+				}
+			},
+			winkstart.error_message.process_error()
+		);
+	},
+
+	upload_hero_logo: function(data, account_id, callback) {
+		winkstart.request('whitelabel.update_hero_logo',
+			{
+				account_id: account_id,
+				api_url: winkstart.apps.accounts.api_url,
+				data: data
+			},
+			function(_data, status) {
+				if (typeof callback === 'function') {
+					callback();
+				}
+			},
+			winkstart.error_message.process_error()
+		);
+	},
+
+	upload_hero_internal_logo: function(data, account_id, callback) {
+		winkstart.request('whitelabel.update_hero_internal_logo',
+			{
+				account_id: account_id,
+				api_url: winkstart.apps.accounts.api_url,
+				data: data
+			},
+			function(_data, status) {
+				if (typeof callback === 'function') {
+					callback();
+				}
+			},
+			winkstart.error_message.process_error()
+		);
+	},
+
 		update_limits: function(limits, account_id, success, error) {
 			var THIS = this;
 
@@ -1051,9 +1135,16 @@ winkstart.module('accounts', 'accounts_manager', {
 			};
 			data._t = _t;
 
+		if (data.field_data.whitelabel.hero === undefined) {
+			data.field_data.whitelabel.hero = {};
+		}
+
 			var THIS = this,
 				account_html = THIS.templates.edit.tmpl(data),
 				file,
+			hero_icon_file,
+			hero_logo_file,
+			hero_internal_logo_file,
 
 				starting_values = {
 					amount_balance: parseFloat(data.credits.amount),
@@ -1176,6 +1267,9 @@ winkstart.module('accounts', 'accounts_manager', {
 
 			$('.logo_div', account_html).css('background-image', 'url('+data.field_data.whitelabel.logo_url+ '&_=' + new Date().getTime()+')');
 			$('.icon_div', account_html).css('background-image', 'url('+data.field_data.whitelabel.icon_url+ '&_=' + new Date().getTime()+')');
+		$('.hero_icon_div', account_html).css('background-image', 'url(' + data.field_data.whitelabel.hero_icon_url + '&_=' + new Date().getTime() + ')');
+		$('.hero_logo_div', account_html).css('background-image', 'url(' + data.field_data.whitelabel.hero_logo_url + '&_=' + new Date().getTime() + ')');
+		$('.hero_internal_logo_div', account_html).css('background-image', 'url(' + data.field_data.whitelabel.hero_internal_logo_url + '&_=' + new Date().getTime() + ')');
 
 			if(data.field_data.whitelabel.description) {
 				$('#upload_div', account_html).hide();
@@ -1186,6 +1280,21 @@ winkstart.module('accounts', 'accounts_manager', {
 				$('#upload_div_icon', account_html).hide();
 				$('.player_file_icon', account_html).show();
 			}
+
+		if (data.field_data.whitelabel.hero.icon_desc) {
+			$('#upload_div_hero_icon', account_html).hide();
+			$('.player_file_hero_icon', account_html).show();
+		}
+
+		if (data.field_data.whitelabel.hero.logo_desc) {
+			$('#upload_div_hero_logo', account_html).hide();
+			$('.player_file_hero_logo', account_html).show();
+		}
+
+		if (data.field_data.whitelabel.hero.internal_logo_desc) {
+			$('#upload_div_hero_internal_logo', account_html).hide();
+			$('.player_file_hero_internal_logo', account_html).show();
+		}
 
 			if(data.limits.allow_prepay === false) {
 				$('#credit_block', account_html).hide();
@@ -1246,6 +1355,45 @@ winkstart.module('accounts', 'accounts_manager', {
 				winkstart.apps['accounts'].auth_token;
 			});
 
+		$('#change_hero_icon_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			$('#upload_div_hero_icon', account_html).show();
+			$('.player_file_hero_icon', account_html).hide();
+		});
+
+		$('#download_hero_icon_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			window.location.href = winkstart.apps.accounts.api_url + '/accounts/'
+				+ data.data.id + '/whitelabel/hero_icon?auth_token='
+				+ winkstart.apps.accounts.auth_token;
+		});
+
+		$('#change_hero_logo_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			$('#upload_div_hero_logo', account_html).show();
+			$('.player_file_hero_logo', account_html).hide();
+		});
+
+		$('#download_hero_logo_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			window.location.href = winkstart.apps.accounts.api_url + '/accounts/'
+				+ data.data.id + '/whitelabel/hero_logo?auth_token='
+				+ winkstart.apps.accounts.auth_token;
+		});
+
+		$('#change_hero_internal_logo_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			$('#upload_div_hero_internal_logo', account_html).show();
+			$('.player_file_hero_internal_logo', account_html).hide();
+		});
+
+		$('#download_hero_internal_logo_link', account_html).click(function(ev) {
+			ev.preventDefault();
+			window.location.href = winkstart.apps.accounts.api_url + '/accounts/'
+				+ data.data.id + '/whitelabel/hero_internal_logo?auth_token='
+				+ winkstart.apps.accounts.auth_token;
+		});
+
 			$('#file_icon', account_html).bind('change', function(evt){
 				var files = evt.target.files;
 
@@ -1262,6 +1410,28 @@ winkstart.module('accounts', 'accounts_manager', {
 					reader.readAsDataURL(files[0]);
 				}
 			});
+
+		function fileChangeWatcher(evt, onLoadEndEvent) {
+			var files = evt.target.files;
+			if (files.length > 0) {
+				var reader = new FileReader();
+				reader.onloadend = onLoadEndEvent;
+
+				reader.readAsDataURL(files[0]);
+			}
+		}
+
+		$('#hero_file_icon', account_html).bind('change', function(evt) {
+			fileChangeWatcher(evt, function(onLoadEndEvt) { hero_icon_file = onLoadEndEvt.target.result; });
+		});
+
+		$('#hero_file_logo', account_html).bind('change', function(evt) {
+			fileChangeWatcher(evt, function(onLoadEndEvt) { hero_logo_file = onLoadEndEvt.target.result; });
+		});
+
+		$('#hero_file_internal_logo', account_html).bind('change', function(evt) {
+			fileChangeWatcher(evt, function(onLoadEndEvt) { hero_internal_logo_file = onLoadEndEvt.target.result; });
+		});
 
 			$('#sameTemplate', account_html).click(function(evt){
 				if($(this).prop('checked')) {
@@ -1372,20 +1542,51 @@ winkstart.module('accounts', 'accounts_manager', {
 													}
 												);
 											},
+
+									upload_hero_icon = function(callback) {
+										if ($('#upload_div_hero_icon', account_html).is(':visible') && $('#hero_file_icon', account_html).val() !== '') {
+											THIS.upload_hero_icon(hero_icon_file, account_id, function() {
+												upload_hero_logo(callback);
+											});
+										} else {
+											upload_hero_logo(callback);
+										}
+									},
+
+									upload_hero_logo = function(callback) {
+										if ($('#upload_div_hero_logo', account_html).is(':visible') && $('#hero_file_logo', account_html).val() !== '') {
+											THIS.upload_hero_logo(hero_logo_file, account_id, function() {
+												upload_hero_internal_logo(callback);
+											});
+										} else {
+											upload_hero_internal_logo(callback);
+										}
+									},
+
+									upload_hero_internal_logo = function(callback) {
+										if ($('#upload_div_hero_internal_logo', account_html).is(':visible') && $('#hero_file_internal_logo', account_html).val() !== '') {
+											THIS.upload_hero_internal_logo(hero_internal_logo_file, account_id, function() {
+												callback(null, {
+													data: _data_account,
+													status: status
+												});
+											});
+										} else {
+											callback(null, {
+												data: _data_account,
+												status: status
+											});
+										}
+									},
+
 											upload_logo = function(callback) {
 												if($('#upload_div', account_html).is(':visible') && $('#file', account_html).val() != '') {
 													THIS.upload_file(file, account_id, function() {
-														callback(null, {
-															data: _data_account,
-															status: status
-														});
+												upload_hero_icon(callback);
 													});
 												}
 												else {
-													callback(null, {
-														data: _data_account,
-														status: status
-													});
+											upload_hero_icon(callback);
 												}
 											};
 
@@ -1583,6 +1784,24 @@ winkstart.module('accounts', 'accounts_manager', {
 					winkstart.publish('accounts_manager.activate');
 				});
 			});
+
+		if (data.field_data.whitelabel.hero.support_enabled === undefined) {
+			data.field_data.whitelabel.hero.support_enabled = false;
+		}
+
+		$('#hero_support_enabled', account_html).click(function(ev) {
+			$('#hero_support_email_row').toggle(this.checked);
+			$('#hero_privacy_policy_row').toggle(this.checked);
+		});
+
+		$('#hero_support_email_row', account_html).toggle(data.field_data.whitelabel.hero.support_enabled);
+		$('#hero_privacy_policy_row', account_html).toggle(data.field_data.whitelabel.hero.support_enabled);
+
+		$('#white_label_hero_primary_branding_color', account_html).spectrum({
+			preferredFormat: 'hex',
+			showInput: true,
+			showPalette: false
+		});
 
 			var render_acc = function() {
 				(target)

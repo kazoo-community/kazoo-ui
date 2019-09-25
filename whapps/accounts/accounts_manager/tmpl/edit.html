@@ -366,6 +366,111 @@
                     </div>
 
                     <hr/>
+                    <h3>${_t('desktop_client')}</h3>
+
+                    <div class="clearfix">
+                        <label for="white_label_hero_name">${_t('hero_app_name')}</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_hero_name" name="whitelabel.hero.name" type="text" placeholder="${_t('hero_placeholder_app_name')}" value="${field_data.whitelabel.hero.name}" rel="popover" data-content="${_t('hero_name_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_hero_support_enabled">${_t('hero_enable_support')}</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                    <label>
+                                        {{if field_data.whitelabel.hero.support_enabled}}
+                                            <input id="hero_support_enabled" type="checkbox" name="whitelabel.hero.support_enabled" checked="checked" rel="popover" data-content="${_t('hero_enable_support_data_content')}"/>
+                                        {{else}}
+                                            <input id="hero_support_enabled" type="checkbox" name="whitelabel.hero.support_enabled" rel="popover" data-content="${_t('hero_enable_support_data_content')}"/>
+                                        {{/if}}
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix" id='hero_support_email_row'>
+                        <label for="white_label_hero_support_email">${_t('hero_support_email')}</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_hero_support_email" name="whitelabel.hero.support_email" type="text" placeholder="${_t('hero_support_email_placeholder')}" value="${field_data.whitelabel.hero.support_email}" rel="popover" data-content="${_t('hero_support_email_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix" id='hero_privacy_policy_row'>
+                        <label for="white_label_hero_privacy_policy_url">${_t('hero_privacy_policy_url')}</label>
+                        <div class="input">
+                            <input class="span4" id="white_label_hero_privacy_policy_url" name="whitelabel.hero.privacy_policy_url" type="text" placeholder="${_t('hero_privacy_policy_url_placeholder')}" value="${field_data.whitelabel.hero.privacy_policy_url}" rel="popover" data-content="${_t('hero_privacy_policy_url_data_content')}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="white_label_hero_primary_branding_color">${_t('hero_primary_branding_color')}</label>
+                        <div class="input">
+                            <input type='text' id="white_label_hero_primary_branding_color" name="whitelabel.hero.primary_branding_color"  value="${field_data.whitelabel.hero.primary_branding_color}"/>
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="fileInput">${_t('hero_application_icon')}</label>
+                        <div id="upload_div_hero_icon" class="input">
+                            <input class="input-file" id="hero_file_icon" name="extra.upload_hero_icon" type="file" rel="popover" data-content="${_t('hero_icon_data_content')}">
+                        </div>
+                        {{if field_data.whitelabel.hero.icon_desc}}
+                        <div class="input player_file_hero_icon">
+                            <span class="uneditable-input">${field_data.whitelabel.hero.icon_desc}</span>
+                            <div class="hero_icon_div" rel="popover" data-content="${_t('hero_icon_data_content')}"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix player_file_hero_icon">
+                        <div class="input">
+                           <button class="btn primary" id="change_hero_icon_link">${_t('change_file')}</button>
+                           <button class="btn primary" id="download_hero_icon_link">${_t('download_file')}</button>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="fileInput">${_t('hero_application_logo')}</label>
+                        <div id="upload_div_hero_logo" class="input">
+                            <input class="input-file" id="hero_file_logo" name="extra.upload_hero_logo" type="file"  rel="popover" data-content="${_t('hero_logo_data_content')}">
+                        </div>
+                        {{if field_data.whitelabel.hero.logo_desc}}
+                        <div class="input player_file_hero_logo">
+                            <span class="uneditable-input">${field_data.whitelabel.hero.logo_desc}</span>
+                            <div class="hero_logo_div"  rel="popover" data-content="${_t('hero_logo_data_content')}"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix player_file_hero_logo">
+                        <div class="input">
+                           <button class="btn primary" id="change_hero_logo_link">${_t('change_file')}</button>
+                           <button class="btn primary" id="download_hero_logo_link">${_t('download_file')}</button>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    <div class="clearfix">
+                        <label for="fileInput">${_t('hero_internal_application_logo')}</label>
+                        <div id="upload_div_hero_internal_logo" class="input">
+                            <input class="input-file" id="hero_file_internal_logo" name="extra.upload_hero_internal_logo" type="file"  rel="popover" data-content="${_t('hero_internal_logo_data_content')}">
+                        </div>
+                        {{if field_data.whitelabel.hero.internal_logo_desc}}
+                        <div class="input player_file_hero_internal_logo">
+                            <span class="uneditable-input">${field_data.whitelabel.hero.internal_logo_desc}</span>
+                            <div class="hero_internal_logo_div"  rel="popover" data-content="${_t('hero_internal_logo_data_content')}"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix player_file_hero_internal_logo">
+                        <div class="input">
+                           <button class="btn primary" id="change_hero_internal_logo_link">${_t('change_file')}</button>
+                           <button class="btn primary" id="download_hero_internal_logo_link">${_t('download_file')}</button>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    <hr/>
                     <h3>${_t('porting')}</h3>
 
                     <div class="clearfix">

@@ -21,6 +21,11 @@
     border: 1px solid #444;
 }
 
+#accounts_manager-form .player_file_icon .uneditable-input {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 #accounts_manager-form .player_file_icon .icon_div {
     margin-top: 10px;
     width: 64px;
@@ -29,6 +34,54 @@
     background-position: center;
     background-repeat: no-repeat;
     border: 1px solid #444;
+}
+
+#accounts_manager-form .player_file_hero_icon .uneditable-input {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#accounts_manager-form .player_file_hero_icon .hero_icon_div {
+    margin-top: 10px;
+    width: 190px;
+    height: 190px;
+    overflow: hidden;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #444;
+    background-size: 190px;
+}
+
+#accounts_manager-form .player_file_hero_logo .uneditable-input {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#accounts_manager-form .player_file_hero_logo .hero_logo_div {
+    margin-top: 10px;
+    width: 350px;
+    height: 45px;
+    overflow: hidden;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #444;
+    background-size: 340px;
+}
+
+#accounts_manager-form .player_file_hero_internal_logo .uneditable-input {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#accounts_manager-form .player_file_hero_internal_logo .hero_internal_logo_div {
+    margin-top: 10px;
+    width: 310px;
+    height: 85px;
+    overflow: hidden;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #444;
+    background-size: 300px;
 }
 
 #accounts_manager-form .refresh_text {
