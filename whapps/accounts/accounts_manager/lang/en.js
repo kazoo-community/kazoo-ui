@@ -143,5 +143,12 @@ window.translate['accounts'] = {
 	hero_application_logo: 'App Login Logo',
 	hero_logo_data_content: 'This logo should be approximately 1820x215',
 	hero_internal_application_logo: 'App Internal Logo',
-	hero_internal_logo_data_content: 'The Internal logo should be approximately 1600x410'
+	hero_internal_logo_data_content: 'The Internal logo should be approximately 1600x410',
+	search_name_or_id: 'Filter by Account Name or ID',
+	hide_descendants: 'Hide Children in Search',
+	no_subaccounts: 'This account has no subaccounts',
+	children: 'Children',
+	child: 'Child',
+	accounts: 'Accounts',
+	no_matches: 'No results found'
 };

@@ -1,0 +1,28 @@
+<div>
+    <li data-id="${id.toLowerCase()}" data-name="${name.toLowerCase()}">
+        <div class="account_links" data-id="${id}" data-name="${name}">
+
+            {{if childrenCount}}
+                <a class="children_link" href="#">
+                    <span class="account_name has_children">${name}</span>
+                    <em>
+                        {{if childrenCount === 1}}
+                            (${childrenCount} ${_t('child')})
+                        {{else}}
+                            (${childrenCount} ${_t('children')})
+                        {{/if}}
+                    </em>
+                </a>
+            {{else}}
+                <span class="account_name">${name}</span>
+            {{/if}}
+
+            {{if showLinks}}
+                <div class="buttons">
+                    <button class="edit_link btn success">${_t('edit_account')}</button>
+                    <button class="masquerade_link btn primary">${_t('use_account')}</button>
+                </div>
+            {{/if}}
+        </div>
+    </li>
+</div>

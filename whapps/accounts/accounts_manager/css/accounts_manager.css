@@ -145,3 +145,137 @@
 #deregister_add_email_button {
     margin-top: 12px;
 }
+
+/**
+ * Visibility Rules to render directory interactions
+ */
+
+#accounts_treeview li {
+    color: #eee;
+    display: none;
+}
+
+#accounts_treeview li.force_open,
+#accounts_treeview li.highlight,
+#accounts_treeview li.expanded {
+    display: list-item;
+}
+
+#accounts_treeview li.expanded > ul > li {
+    display: list-item;
+}
+
+#accounts_treeview li[data-name="current account"] {
+    display: list-item;
+}
+
+#accounts_treeview.no_matches li[data-name="current account"] {
+    display: none;
+}
+
+#accounts_treeview .no_subaccounts {
+    display: block;
+    margin: 20%;
+    text-align: center;
+}
+
+#accounts_treeview #no_matches {
+    display: none;
+}
+
+#accounts_treeview.no_matches #no_matches {
+    display: block;
+}
+
+/**
+ * Visuals for the Accounts Directory
+ */
+
+#descendants_search {
+    width: 50%;
+    float: right;
+}
+
+#accounts_treeview {
+    position: relative;
+    height: 75vh;
+    padding: 15px 30px;
+    overflow-y: auto;
+}
+
+#accounts_treeview ul {
+    list-style: none;
+}
+
+#accounts_treeview ul.nested {
+    padding-left: 2em;
+    border-left: 1px solid #444;
+}
+
+#accounts_treeview .account_links {
+    position: relative;
+    padding-top: 3px;
+    font-size: 13px;
+}
+
+#accounts_treeview .account_links .account_name {
+    padding: 1px 4px;
+}
+
+#accounts_treeview li .buttons {
+    display: none;
+    margin: -3px 0;
+    padding-left: 30px;
+}
+
+#accounts_treeview .btn {
+    min-width: unset;
+    padding: 3px 10px;
+}
+
+#accounts_treeview .btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#accounts_treeview .btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#accounts_treeview .account_links:hover > .buttons {
+    display: inline-block;
+}
+
+#accounts_treeview .account_links:hover a,
+#accounts_treeview .account_links:hover .account_name {
+    color: #05ADDC;
+}
+
+#accounts_treeview li.highlight > .account_links .account_name {
+    background-color: rgba(5, 173, 220, 0.35);
+}
+
+/**
+ * Directory Dropdown Arrows
+ */
+
+#accounts_treeview span.has_children::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -13px;
+    padding: 3px;
+    opacity: 0.4;
+    border: solid;
+    border-width: 0 2px 2px 0;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+#accounts_treeview li.expanded > .account_links span.has_children::before {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    left: -11px;
+    top: 6px;
+}

@@ -98,5 +98,12 @@ window.translate['accounts'] = {
 	customers_available_balance: "客户的按时计费呼叫余额:",
 	delete_white_labeling: "删除白标",
 	advanced: "高级",
-	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+)*$/,
+	search_name_or_id: '按帐户名称或ID过滤',
+	hide_descendants: '隐藏搜索中的孩子',
+	no_subaccounts: '该帐户没有子帐户',
+	children: '小孩儿',
+	child: '儿童',
+	accounts: '帐目',
+	no_matches: '未找到结果'
 };

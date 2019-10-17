@@ -5,12 +5,14 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		templates: {
 			accounts_manager: 'tmpl/accounts_manager.html',
+		accounts_treeview: 'tmpl/accounts_treeview.html',
 			edit: 'tmpl/edit.html',
 			notify: 'tmpl/notifications_templates_notify.html',
 			'switch_tmpl': 'tmpl/switch.html',
 			teletype: 'tmpl/notifications_templates_teletype.html',
 			teletype_deregister_row: 'tmpl/notifications_templates_teletype_deregister_row.html',
-			'credits': 'tmpl/credits.html'
+		'credits': 'tmpl/credits.html',
+		treeview_element: 'tmpl/treeview_element.html'
 		},
 
 		subscribe: {
@@ -52,6 +54,11 @@ winkstart.module('accounts', 'accounts_manager', {
 				contentType: 'application/json',
 				verb: 'GET'
 			},
+		'accounts_manager.list_descendants': {
+			url: '{api_url}/accounts/{account_id}/descendants',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
 			'accounts_manager.get': {
 				url: '{api_url}/accounts/{account_id}',
 				contentType: 'application/json',
@@ -2032,6 +2039,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				.append(accounts_manager_html);
 
 			THIS.render_list(accounts_manager_html);
+		this.renderAccountsDirectory(accounts_manager_html);
 		},
 
 		/**
@@ -2045,6 +2053,250 @@ winkstart.module('accounts', 'accounts_manager', {
 					+ '.' + parent_realm)
 				.toLowerCase()
 				.replace(/[^a-zA-Z0-9\.\-]+/g, '');
+	},
+
+	/**
+	 * Render a filterable, expandable directory of this account's descendant accounts
+	 *
+	 * @param {jQuery} container - parent container to render into
+	 */
+	renderAccountsDirectory: function(container) {
+		var THIS = this;
+
+		/**
+		 * Render a message in case the account being used has no subaccounts
+		 */
+		var renderEmptyView = function() {
+			var noSubaccountsDiv = $('<div class="pill-content"></div>')
+				.append('<span class="no_subaccounts">' + window.translate.accounts.no_subaccounts + '</span>');
+			$('#accounts_manager-view', container).append(noSubaccountsDiv);
+		};
+
+		winkstart.request(
+			'accounts_manager.list_descendants',
+			{
+				account_id: winkstart.apps.accounts.account_id,
+				api_url: winkstart.apps.accounts.api_url
+			},
+			function(data) {
+				var flatAccountsList = (data && data.data) || [];
+
+				if (!flatAccountsList.length) {
+					renderEmptyView();
+					return;
+				}
+
+				var nestedAccounts = THIS.accountsArrayToObject(flatAccountsList), // Build nested accounts object
+					accountsDomElement = THIS.generateAccountDomTree(nestedAccounts); // Build DOM elements
+
+				THIS.attachHandlers(accountsDomElement);
+
+				$('#accounts_manager-view', container).append(accountsDomElement); // Render
+			}
+		);
+	},
+
+	/**
+	 * Convert the passed array of accounts into a nested object
+	 *
+	 * @param {Object[]} flatList - array of accounts as returned by the API
+	 *
+	 * @returns {Object} Top-level account object, contains all descendant accounts
+	 */
+	accountsArrayToObject: function(flatList) {
+		var list = flatList.slice(),
+			map = {},
+			topLevelAccount = {
+				id: winkstart.apps.accounts.account_id,
+				name: 'Current Account',
+				realm: '',
+				tree: []
+			};
+
+		// Sort by number of parents (so parents will run through the second loop
+		// before their children), then alphabetically
+		list.sort(function(elem1, elem2) {
+			return elem1.tree.length - elem2.tree.length
+				|| (elem1.name.toLowerCase() > elem2.name.toLowerCase() ? 1 : -1);
+		});
+
+		list.unshift(topLevelAccount);
+
+		// For each account, add it to the map (so its children can find it)
+		// and then add it as a child of its parent
+		for (var i = 0; i < list.length; i++) {
+			var account = list[i],
+				parent = Array.isArray(account.tree)
+					&& account.tree[account.tree.length - 1];
+
+			map[account.id] = i; // Add this account to map
+			account.children = []; // Initialize the children array
+
+			// Add this account to it's parent's children array
+			if (parent
+					&& (map[parent] || map[parent] === 0)
+					&& list[map[parent]]
+					&& Array.isArray(list[map[parent]].children)
+			) {
+				list[map[parent]].children.push(account);
+			}
 		}
+
+		return topLevelAccount; // Contains all descendants in the children array
+	},
+
+	/**
+	 * Build a tree of DOM elements to represent the passed account tree
+	 *
+	 * @param {Object} accounts - Top-level account, must contain children in `accounts.children` array
+	 *
+	 * @return {jQuery} Template containing the account directory DOM tree
+	 */
+	generateAccountDomTree: function(accounts) {
+		var parent = this.templates.accounts_treeview.tmpl({
+			_t: function(param) {
+				return window.translate.accounts[param];
+			}
+		});
+
+		$('#treeview_root', parent)
+			.append(this.generateAccountDomElement(accounts)[0], false);
+
+		$('#treeview_root > li', parent)
+			.addClass('expanded');
+
+		return parent;
+	},
+
+	/**
+	 * Function to build a list element from the given account.
+	 * Runs recursively through all of the account's children, if present
+	 *
+	 * @param {Object} account - Account to build into a DOM element
+	 * @param {boolean} showLinks - Set true to show `Edit/Use Account links`
+	 *
+	 * @return {jQuery} DOM element for this account (and it's children, if any)
+	 */
+	generateAccountDomElement: function(account, showLinks) {
+		var THIS = this,
+			listElement = this.templates.treeview_element.tmpl({
+				_t: function(param) {
+					return window.translate.accounts[param];
+				},
+				id: account.id || '',
+				name: account.name || '',
+				showLinks: showLinks,
+				childrenCount: account.children.length || 0
+			});
+
+		if (Array.isArray(account.children) && account.children.length) {
+			var nested = $('<ul class="nested" />');
+			account.children.forEach(function(child) {
+				nested.append(THIS.generateAccountDomElement(child, true));
+			});
+			listElement.append(nested);
+		}
+		return listElement;
+	},
+
+	/**
+	 * Attach click and search handlers to the template
+	 *
+	 * @param {jQuery} template - Accounts DOM tree from template
+	 */
+	attachHandlers: function(template) {
+		var THIS = this;
+
+		$('#descendants_search', template)
+			.change(this.handleSearch)
+			.keyup(this.handleSearch);
+
+		$('.children_link', template)
+			.click(this.toggleChildren);
+
+		$('.edit_link', template).click(function(e) {
+			e.stopPropagation();
+			var id = $(e.target).closest('li').attr('data-id');
+			THIS.edit_accounts_manager({ id: id });
+		});
+
+		$('.masquerade_link', template).click(function(e) {
+			e.stopPropagation();
+			var account = {
+				id: $(e.target).closest('li').attr('data-id'),
+				name: $(e.target).closest('li').attr('data-name')
+			};
+			winkstart.publish('accounts_manager.trigger_masquerade', { account: account }, function() {
+				winkstart.publish('accounts_manager.activate');
+			});
+		});
+	},
+
+	/**
+	 * Handle rerending the DOM when the user searches through the accounts directory
+	 * Filter by account ID or (partial) Name
+	 * Hides all accounts except those searched for (and their ancestors)
+	 * Highlights the accounts searched for
+	 *
+	 * @param {Event} e - Search event
+	 */
+	handleSearch: function(e) {
+		e.stopPropagation();
+		var term = $('#descendants_search').val().toLowerCase(),
+			nameSelector = '#accounts_treeview li[data-name*="' + term + '"]',
+			idSelector = '#accounts_treeview li[data-id="' + term + '"]',
+			matches = $(nameSelector + ', ' + idSelector);
+
+		/**
+		 * Apply classes to the matched elements for highlighting and display
+		 *
+		 * @param {jQuery} matches - Set of elements that match the search term
+		 */
+		var renderMatches = function(matches) {
+			matches
+				.addClass('highlight');
+
+			matches.parents('li')
+				.addClass('force_open');
+		};
+
+		// Reset classes applied in previous searches
+		$('li.force_open').removeClass('force_open');
+		$('li.highlight').removeClass('highlight');
+		$('li.expanded').removeClass('expanded');
+		$('#accounts_treeview.no_matches').removeClass('no_matches');
+
+		if (term.length < 2) {
+			$('#treeview_root > li')
+				.addClass('expanded');
+			$('#treeview_root > li')
+				.addClass('expanded');
+			return;
+		}
+
+		if (!matches.length) {
+			$('#accounts_treeview').addClass('no_matches');
+		} else {
+			renderMatches(matches);
+		}
+	},
+
+	/**
+	 * Click handler to expand/hide the children of the clicked account
+	 *
+	 * @param {ClickEvent} e
+	 */
+	toggleChildren: function(e) {
+		e.stopPropagation();
+		var elem = $(e.target).closest('li');
+
+		if (elem.hasClass('expanded')) {
+			elem.removeClass('expanded');
+			$('li.expanded', elem).removeClass('expanded');
+		} else {
+			elem.addClass('expanded');
+		}
+	}
+
 	}
 );

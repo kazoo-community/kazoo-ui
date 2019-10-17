@@ -98,5 +98,12 @@ window.translate['accounts'] = {
 	customers_available_balance: "Klant's beschikbare credit voor deze kosten per minuut gesprekken:",
 	delete_white_labeling: "Verwijder white labeling",
 	advanced: "Geavanceerd",
-	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+)*$/
+	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+)*$/,
+	search_name_or_id: 'Filteren op accountnaam of ID',
+	hide_descendants: 'Kinderen verbergen in zoeken',
+	no_subaccounts: 'Dit account heeft geen subaccounts',
+	children: 'Kinderen',
+	child: 'Kind',
+	accounts: 'Accounts',
+	no_matches: 'Geen resultaten gevonden'
 };
