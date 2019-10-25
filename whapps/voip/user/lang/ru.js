@@ -143,5 +143,6 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/,
 	dnd_status: 'Статус не беспокоить',
 	dnd_enabled: 'Включена',
-	dnd_disabled: 'Отключена'
+	dnd_disabled: 'Отключена',
+	seat_type: 'Тип сиденья'
 });

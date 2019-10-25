@@ -25,6 +25,11 @@ winkstart.module('voip', 'extension', {
         ],
 
         resources: {
+		'account_config.get': {
+			url: '{api_url}/accounts/{account_id}/configs/accounts',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
             'extension.create_callflow': {
                 url: '{api_url}/accounts/{account_id}/callflows',
                 contentType: 'application/json',
@@ -274,6 +279,24 @@ winkstart.module('voip', 'extension', {
 				function(_data, status) {
 					callback(status, null);
 				});
+			},
+			/**
+			 * Retrieves the seat types list from account config
+			 *
+			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
+			 * as the first and second arguments, respectively.
+			 */
+			seat_types_list: function(callback) {
+				winkstart.request('account_config.get',
+					{
+						account_id: winkstart.apps.voip.account_id,
+						api_url: winkstart.apps.voip.api_url
+					},
+					function(_data, status) {
+						var seat_types_list = _data.data ? _data.data.seat_types_list : [];
+						callback(null, seat_types_list);
+					}
+				);
 			}
                 },
                 function(err, results) {
@@ -294,7 +317,7 @@ winkstart.module('voip', 'extension', {
                     results.phone_numbers = phone_numbers;
 
 			results.show_seat_types = false;
-			if (winkstart.config.seat_types && results.current_user.data.priv_level === 'admin') {
+			if (results.seat_types_list && results.seat_types_list.length > 0 && results.current_user.data.priv_level === 'admin') {
 				results.show_seat_types = true;
 			}
                     THIS.render_extension_create(results, callbacks);
@@ -515,12 +538,6 @@ winkstart.module('voip', 'extension', {
 
             winkstart.timezone.populate_dropdown($('#timezone', create_html), data.account.timezone);
 
-		if (data.show_seat_types) {
-			$.each(winkstart.config.seat_types, function(i, seat_type) {
-				$('#seat_type', create_html).append('<option id="' + seat_type.id + '" value="' + seat_type.id + '">' + seat_type.name + '</option>');
-			});
-		}
-
             $('#phone_number', create_html).change(function(ev) {
                 $('#use_phone_number_as_outbound_cid_input > input').prop('disabled', this.value == '');
                 $('#use_phone_number_as_outbound_cid_input > span').toggleClass('disabled', this.value == '');
@@ -670,17 +687,51 @@ winkstart.module('voip', 'extension', {
          */
         load_save_prereqs: function(form_data, callbacks) {
             var THIS = this;
+		winkstart.parallel(
+			{
+				account_data: function(callback) {
+					winkstart.request('extension.get_account',
+						{
+							account_id: winkstart.apps.voip.account_id,
+							api_url: winkstart.apps.voip.api_url
+						},
+						function(_data, status) {
+							callback(null, _data.data);
+						},
+						function(_data, status) {
+							callback(status, null);
+						}
+					);
+				},
+				seat_type_data: function(callback) {
+					// If we don't have a seat type in form_data, attempt to get it from the account config
+					winkstart.request('account_config.get',
+						{
+							account_id: winkstart.apps.voip.account_id,
+							api_url: winkstart.apps.voip.api_url
+						},
+						function(_data, status) {
+							callback(null, _data.data);
+						},
+						function(_data, status) {
+							callback(status, null);
+						}
+					);
+				}
+			},
+			function(err, results) {
+				if (err) {
+					winkstart.error_message.process_error()(err);
+				} else {
+					if (results.seat_type_data) {
+						form_data.seat_type = form_data.seat_type || results.seat_type_data.default_seat_type;
+					}
+					form_data.seat_type = form_data.seat_type || 'unknown';
 
-            winkstart.request('extension.get_account', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(_data, status) {
-                    THIS.save_user(_data.data, form_data, callbacks.save_success,
-                        THIS.format_error(winkstart.error_message.process_error()));
-                },
-                winkstart.error_message.process_error()
-            );
+					THIS.save_user(results.account_data, form_data, callbacks.save_success, THIS.format_error(winkstart.error_message.process_error()));
+				}
+			}
+		);
         },
 
         /**
@@ -707,7 +758,7 @@ winkstart.module('voip', 'extension', {
                     password: form_data.password,
                     timezone: form_data.timezone,
 				username: form_data.username,
-				seat_type: form_data.seat_type || winkstart.config.default_seat_type || 'unknown'
+				seat_type: form_data.seat_type
                 };
 
             // Default apps

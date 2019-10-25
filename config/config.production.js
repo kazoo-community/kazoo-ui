@@ -242,22 +242,7 @@
 
 		sentry: {
 			dsn: 'https://bafc6b2e935a40df884a14ce126ec709@sentry.io/1467668'
-		},
-		seat_types: [
-			{ id: 'essentials', name: 'Essentials' },
-			{ id: 'courtesy', name: 'Courtesy' },
-			{ id: 'advanced', name: 'Advanced' },
-			{ id: 'call_center', name: 'Call Center' },
-			{ id: 'conference', name: 'Conference' },
-			{ id: 'sms', name: 'SMS' },
-			{ id: 'call_forward', name: 'Call Forward' },
-			{ id: 'voicemail', name: 'Voicemail Only' },
-			{ id: 'demo', name: 'Demo' },
-			{ id: 'ata_analog', name: 'ATA/Analog' },
-			{ id: 'fax', name: 'Fax' },
-			{ id: 'admin', name: 'Admin' }
-		],
-		default_seat_type: 'essentials'
+		}
     };
 
     winkstart.apps = {
