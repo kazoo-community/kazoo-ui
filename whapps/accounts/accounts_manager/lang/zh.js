@@ -98,6 +98,7 @@ window.translate['accounts'] = {
 	customers_available_balance: "客户的按时计费呼叫余额:",
 	delete_white_labeling: "删除白标",
 	advanced: "高级",
+	account_type: '帐户类型',
 	vm_to_email_support_email_regex: /^(([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+)*$/,
 	search_name_or_id: '按帐户名称或ID过滤',
 	hide_descendants: '隐藏搜索中的孩子',

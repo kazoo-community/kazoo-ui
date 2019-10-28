@@ -44,6 +44,16 @@ winkstart.module('accounts', 'accounts_manager', {
 		],
 
 		resources: {
+		'system_config.get': {
+			url: '{api_url}/system_configs/{config_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'accounts_manager.config.get': {
+			url: '{api_url}/accounts/{account_id}/configs/{config_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
 			'accounts_manager.list_classifiers': {
 				url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
 				contentType: 'application/json',
@@ -348,6 +358,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						amount: 0
 					},
 					field_data: {
+					account_types_list: [],
 						billing_account: 'parent',
 						deregister: false,
 						whitelabel: {
@@ -622,6 +633,48 @@ winkstart.module('accounts', 'accounts_manager', {
 						else {
 							callback(null, {});
 						}
+			},
+			/**
+			 * Retrieves the account types list from account config if account id is available (editing an account).
+			 * If we have access to the account id of a parent account, attempt to use this to get the list of account
+			 * types from the parent account_config (When creating an account)
+			 * Otherwise uses the system config if we have no account id for some reason
+			 *
+			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
+			 * as the first and second arguments, respectively.
+			 */
+			get_account_types_list: function(callback) {
+				// If editing an account, get the account config for the current account
+				var account_id = (typeof data === 'object' && data.id) ? data.id : null;
+				// If you are creating a new account, use the account id from the parent account
+				account_id = (account_id == null && winkstart.apps.accounts.account_id) ? winkstart.apps.accounts.account_id : account_id;
+
+				if (account_id) {
+					winkstart.request('accounts_manager.config.get',
+						{
+							account_id: account_id,
+							config_id: 'accounts',
+							api_url: winkstart.apps.accounts.api_url,
+							data: {}
+						},
+						function(_data, status) {
+							defaults.field_data.account_types_list = _data.data.account_types_list;
+							callback(null, _data);
+						}
+					);
+				} else {
+					winkstart.request('system_config.get',
+						{
+							config_id: 'accounts',
+							api_url: winkstart.apps.accounts.api_url,
+							data: {}
+						},
+						function(_data, status) {
+							defaults.field_data.account_types_list = _data.data.default.account_types_list;
+							callback(null, _data);
+						}
+					);
+				}
 					}
 				},
 				function(err, results) {
