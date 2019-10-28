@@ -1,3 +1,4 @@
+var SECONDS_PER_WEEK = 7 * 86400;
 winkstart.module('accounts', 'accounts_manager', {
 		css: [
 			'css/accounts_manager.css'
@@ -591,9 +592,9 @@ winkstart.module('accounts', 'accounts_manager', {
 									defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
 									defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 									defaults.field_data.whitelabel.icon_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/icon?auth_token='+winkstart.apps['accounts'].auth_token;
-						defaults.field_data.whitelabel.hero_icon_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_icon?auth_token=' + winkstart.apps.accounts.auth_token;
-						defaults.field_data.whitelabel.hero_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_logo?auth_token=' + winkstart.apps.accounts.auth_token;
-						defaults.field_data.whitelabel.hero_internal_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_internal_logo?auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_icon_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_icon?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_logo?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_internal_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_internal_logo?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
 
 									callback(null, _data_wl);
 								},
@@ -1720,6 +1721,12 @@ winkstart.module('accounts', 'accounts_manager', {
 														function(_data, status) {
 															whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
+											// Convert release delay from weeks to seconds
+											if (whitelabel_data.hero && whitelabel_data.hero.release_delay) {
+												var delayInWeeks = whitelabel_data.hero.release_delay;
+												whitelabel_data.hero.release_delay = delayInWeeks * SECONDS_PER_WEEK;
+											}
+
 															winkstart.request('whitelabel.update', {
 																	account_id: account_id,
 																	api_url: winkstart.apps['accounts'].api_url,
@@ -1847,6 +1854,13 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		if (data.field_data.whitelabel.hero.support_enabled === undefined) {
 			data.field_data.whitelabel.hero.support_enabled = false;
+		}
+
+		// Convert seconds to weeks
+		if (data.field_data.whitelabel.hero.release_delay > 0) {
+			var delayInSeconds = data.field_data.whitelabel.hero.release_delay;
+			data.field_data.whitelabel.hero.release_delay = delayInSeconds / SECONDS_PER_WEEK;
+			$('#white_label_hero_release_delay', account_html).val(data.field_data.whitelabel.hero.release_delay);
 		}
 
 		$('#hero_support_enabled', account_html).click(function(ev) {
