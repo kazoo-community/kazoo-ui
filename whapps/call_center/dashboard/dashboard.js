@@ -940,36 +940,27 @@ winkstart.module('call_center', 'dashboard', {
                 $('.calls-context-menu').remove();
             });
 
-            THIS.fetch_all_data(true, function(data) {
-				data._t = function(param){
+		THIS.fetch_all_data(true, function(data) {
+			var dashboard_html = THIS.templates.dashboard.tmpl({
+				_t: function(param) {
 					return window.translate['dashboard'][param];
-				};
+				}
+			});
 
-                dashboard_html = THIS.templates.dashboard.tmpl({
-					_t: function(param){
-						return window.translate['dashboard'][param];
-					}
-				});
+			THIS.poll_agents(data, parent);
 
-                THIS.templates.queues_dashboard.tmpl(data).appendTo($('.topbar-right', dashboard_html));
-                THIS.templates.agents_dashboard.tmpl(data).appendTo($('#dashboard-view', dashboard_html));
+			(parent)
+				.empty()
+				.append(dashboard_html);
 
-                THIS.poll_agents(data, parent);
+			THIS.render_callwaiting_list(dashboard_html);
+			THIS.bind_live_events(parent);
+			THIS.render_global_data(data, THIS.current_queue_id);
 
-                (parent)
-                    .empty()
-                    .append(dashboard_html);
-
-                THIS.render_callwaiting_list(dashboard_html);
-                THIS.templates.calls_dashboard.tmpl(data).appendTo($('#callwaiting-list .list-panel-anchor ul', dashboard_html));
-
-                THIS.bind_live_events(parent);
-                THIS.render_timers(data);
-
-                if(typeof callback === 'function') {
-                    callback()
-                }
-            });
+			if (typeof callback === 'function') {
+				callback();
+			}
+		});
         },
 
         fetch_all_data: function(loading, callback) {
