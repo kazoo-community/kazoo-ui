@@ -144,7 +144,7 @@ window.translate['accounts'] = {
 	hero_logo_data_content: 'This logo should be approximately 1820x215 and an svg',
 	hero_internal_application_logo: 'App Internal Logo',
 	account_type: 'Account Type',
-	search_name_or_id: 'Filter by Account Name or ID',
+	search_name_or_id: 'Filter by Account Name, ID, or Realm',
 	hide_descendants: 'Hide Children in Search',
 	no_subaccounts: 'This account has no subaccounts',
 	children: 'Children',

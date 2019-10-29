@@ -2252,6 +2252,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				id: account.id || '',
 				name: account.name || '',
+				realm: account.realm || '',
 				showLinks: showLinks,
 				childrenCount: account.children.length || 0
 			});
@@ -2275,7 +2276,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		var THIS = this;
 
 		$('#descendants_search', template)
-			.change(this.handleSearch)
+			.blur(this.handleSearch)
 			.keyup(this.handleSearch);
 
 		$('.children_link', template)
@@ -2301,7 +2302,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 	/**
 	 * Handle rerending the DOM when the user searches through the accounts directory
-	 * Filter by account ID or (partial) Name
+	 * Filter by account ID, (partial) Name, or realm
 	 * Hides all accounts except those searched for (and their ancestors)
 	 * Highlights the accounts searched for
 	 *
@@ -2310,9 +2311,10 @@ winkstart.module('accounts', 'accounts_manager', {
 	handleSearch: function(e) {
 		e.stopPropagation();
 		var term = $('#descendants_search').val().toLowerCase(),
-			nameSelector = '#accounts_treeview li[data-name*="' + term + '"]',
+			nameSelector = '#accounts_treeview li[data-search-name*="' + term + '"]',
 			idSelector = '#accounts_treeview li[data-id="' + term + '"]',
-			matches = $(nameSelector + ', ' + idSelector);
+			realmSelector = '#accounts_treeview li[data-realm^="' + term + '"]',
+			matches = $(nameSelector + ', ' + idSelector + ', ' + realmSelector);
 
 		/**
 		 * Apply classes to the matched elements for highlighting and display
