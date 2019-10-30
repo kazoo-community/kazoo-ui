@@ -3,7 +3,7 @@
         <input class="large" type="text" name="key[]" value="${item.key}" placeholder="${_t('routing_variables_variable_name')}"/>&nbsp;:&nbsp;
         <select name="${item.type}" style="width: 210px !important; max-width: 210px !important;">
             {{each(i, option) options}}
-                {{if option.selected}}
+                {{if option.id === item.value}}
                     <option value="${option.id}" selected="selected">${option.name}</option>
                 {{else}}
                     <option value="${option.id}">${option.name}</option>
