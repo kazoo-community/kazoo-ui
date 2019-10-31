@@ -8,10 +8,6 @@ if (language == 'auto'){
 
 window.language = language;
 
-function loadScript(url){
-	$LAB.script(url);
-}
-
 _t = function(module, param){				//Global function translate
 	if(module && param) {
 		response = window.translate[module][param]
@@ -71,9 +67,9 @@ var langUrls = [
 ];
 
 function loadLanguages(language) {
-	for(var i = 0; i < langUrls.length; i++){
-	 	 loadScript(langUrls[i]+'/lang/'+language+'.js');
-	}
+    for (var i = 0; i < langUrls.length; i++) {
+        $LAB.script(langUrls[i] + '/lang/' + language + '.js?_=' + CACHE_BUSTER);
+    }
 }
 
 loadLanguages('en');
@@ -85,5 +81,3 @@ if(window.language !== 'en') {
 $LAB.script('config/config.js')
 	.wait()
 	.script('config/loadFavicon.js');
-
-
