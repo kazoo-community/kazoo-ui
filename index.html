@@ -19,6 +19,12 @@
 
                     return url_data;
                 }();
+
+            var CACHE_BUSTER = function() {
+                var now = new Date();
+                var this_minute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+                return this_minute.getTime();
+            }();
         </script>
 
         <script type="text/javascript" src="js/external/jquery-1.6.2.min.js"></script>
@@ -93,4 +99,3 @@
     <body class="background">
     </body>
 </html>
-

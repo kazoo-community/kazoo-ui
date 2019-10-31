@@ -489,35 +489,23 @@ amplify.module = function(whapp, module, config, construct, methods) {
 };
 
 amplify.module.loadApp = function(whapp, callback) {
-    // Cache buster
+    var src = 'whapps/' + whapp + '/' + whapp + '.js';
     if (amplify.cache === false) {
-	$LAB.script('whapps/' + whapp + '/' + whapp + '.js?_=' + (new Date()))
-		.wait(function() {
-			callback.call( amplify.module(whapp, whapp) );
-		});
-    } else {
-	$LAB.script('whapps/' + whapp + '/' + whapp + '.js')
-		.wait(function() {
-			callback.call( amplify.module(whapp, whapp) );
-		});
+        src += '?_=' + CACHE_BUSTER;
     }
+    $LAB.script(src).wait(function() {
+        callback.call(amplify.module(whapp, whapp));
+    });
 };
 
 amplify.module.loadModule = function(whapp, module, callback) {
-	//console.log("locale " + module + " loaded");
+    var src = 'whapps/' + whapp + '/' + module + '/' + module + '.js';
     if (amplify.cache === false) {
-	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js?_=' + (new Date()))
-		.wait(function() {
-			//console.log(module + " loaded");
-			callback.call( amplify.module(whapp, module) );
-		});
-    } else {
-	$LAB.script('whapps/' + whapp + '/' + module + '/' + module + '.js')
-		.wait(function() {
-			//console.log(module + " loaded with cache");
-			callback.call( amplify.module(whapp, module) );
-		});
+        src += '?_=' + CACHE_BUSTER;
     }
+    $LAB.script(src).wait(function() {
+        callback.call(amplify.module(whapp, module));
+    });
 };
 
 // This is the method that may be overloaded to change the way in which the module is
@@ -527,4 +515,3 @@ amplify.module.constructor = function(args, callback) { callback(); };
 amplify.module.using = amplify.module.loadApp;
 
 })( this.amplify = this.amplify || {}, jQuery );
-
