@@ -7,7 +7,7 @@
     winkstart.get_version = function(callback) {
         $.ajax({
             url: 'VERSION',
-            cache: false,
+            cache: amplify.cache,
             success: function(template) {
             	template = template.replace(/[\n\s]/g,'');
 
@@ -66,10 +66,9 @@
                     THIS.templates[name] = winkstart.templates[THIS.__whapp][THIS.__module + '/' + url];
                 }
                 else {
-                    // Make sure you set cache = false, or things really suck
                     $.ajax({
                         url: 'whapps/' + THIS.__whapp + '/' + THIS.__module + '/' + url,
-                        cache: false,
+                        cache: amplify.cache,
                         success: function(template) {
                             completed--;
                             THIS.templates[name] = $(template);

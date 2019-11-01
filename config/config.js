@@ -176,57 +176,6 @@
         default_api_url: 'https://api.zswitch.net:8443/v1', //'https://api.zswitch.net:8443/v1',
         default_api_v2_url: 'https://api.zswitch.net:8443/v2',
 
-        available_apps: {
-            'voip': {
-                id: 'voip',
-                label: _t('config', 'voip_label'),
-                icon: 'device',
-                desc: _t('config', 'voip_desc')
-            },
-            'cluster': {
-                id: 'cluster',
-                label: _t('config', 'cluster_label'),
-                icon: 'cluster_manager',
-                desc: _t('config', 'cluster_desc')
-            },
-            'userportal': {
-                id: 'userportal',
-                label: _t('config', 'userportal_label'),
-                icon: 'user',
-                desc: _t('config', 'userportal_desc')
-            },
-            'accounts': {
-                id: 'accounts',
-                label: _t('config', 'accounts_label'),
-                icon: 'account',
-                desc: _t('config', 'accounts_desc')
-            },
-            'developer': {
-                id: 'developer',
-                label: _t('config', 'developer_label'),
-                icon: 'connectivity',
-                desc: _t('config', 'developer_desc')
-            },
-            'pbxs': {
-                id: 'pbxs',
-                label:  _t('config', 'pbxs_label'),
-                icon: 'device',
-                desc: _t('config', 'pbxs_desc')
-            },
-            'numbers': {
-                id: 'numbers',
-                label:  _t('config', 'numbers_label'),
-                icon: 'menu1',
-                desc: _t('config', 'numbers_desc')
-            },
-            'browserphone': {
-                id: 'browserphone',
-                label: _t('config', 'browserphone_label'),
-                icon: 'menu1',
-                desc: _t('config', 'browserphone_desc')
-            }
-        },
-
 		show_app_store_for_users: true
     };
 
@@ -243,6 +192,12 @@
         'myaccount': {}
     };
 
-    amplify.cache = false;
+	/**
+	 * If enabled, you must configure your HTTP server to send the Cache-Control header in order for
+	 * the browser to cache your content. e.g. for Apache:
+	 * `Header set Cache-Control "public, max-age=3600"`
+	 * Don't worry, this will not cache API responses.
+	 */
+	amplify.cache = false;
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, window.language, jQuery);
