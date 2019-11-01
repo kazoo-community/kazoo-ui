@@ -33,7 +33,6 @@
                 dataType: resource.dataType || 'json',
                 type: resource.verb,
                 processData: resource.verb == 'GET',
-                cache: false,
                 beforeSend: function(ampXHR, settings) {
                     ampXHR.setRequestHeader('X-Auth-Token', winkstart.apps[app_name]['auth_token']);
 

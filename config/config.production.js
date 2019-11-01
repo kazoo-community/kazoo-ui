@@ -258,6 +258,12 @@
         'myaccount': {}
     };
 
-    amplify.cache = false;
+	/**
+	 * If enabled, you must configure your HTTP server to send the Cache-Control header in order for
+	 * the browser to cache your content. e.g. for Apache:
+	 * `Header set Cache-Control "public, max-age=3600"`
+	 * Don't worry, this will not cache API responses.
+	 */
+	amplify.cache = true;
 
 })(window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {}, window.language, jQuery);
