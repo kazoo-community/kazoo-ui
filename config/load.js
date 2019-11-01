@@ -66,18 +66,40 @@ var langUrls = [
 	'whapps/voip/voip'
 ];
 
-function loadLanguages(language) {
-    for (var i = 0; i < langUrls.length; i++) {
-        $LAB.script(langUrls[i] + '/lang/' + language + '.js?_=' + CACHE_BUSTER);
-    }
+/**
+ * Load requested language translation file.
+ *
+ * @param {string} language - the locale of the lang to load
+ * @param {function()} done - callback executed when lang translation file loaded
+ */
+function loadLanguage(language, done) {
+	var labChain = $LAB;
+	for (var i = 0; i < langUrls.length; i++) {
+		var src = langUrls[i] + '/lang/' + language + '.js';
+		if (window.amplify.cache === false) {
+			src += '?_' + CACHE_BUSTER;
+		}
+		labChain = labChain.script(src);
+	}
+	labChain.wait(done);
 }
 
-loadLanguages('en');
-
-if(window.language !== 'en') {
-	loadLanguages(window.language);
+/**
+ * Load remaining items (available apps & favicon)
+ */
+function loadRemaining() {
+	$LAB.script('config/availableApps.js')
+		.wait()
+		.script('config/loadFavicon.js');
 }
 
 $LAB.script('config/config.js')
-	.wait()
-	.script('config/loadFavicon.js');
+	.wait(function() {
+		loadLanguage('en', function() {
+			if (window.language !== 'en') {
+				loadLanguage(window.language, loadRemaining);
+			} else {
+				loadRemaining();
+			}
+		});
+	});
