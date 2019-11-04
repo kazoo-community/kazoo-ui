@@ -1,5 +1,5 @@
 (function(winkstart, amplify, undefined) {
-    var locked_requests = {};
+	var locked_requests = {};
 
 	winkstart.registerResources = function(app_name, resources) {
 		var THIS = this;
@@ -10,94 +10,94 @@
 			amplify.request.define( key, 'ajax', {
 				url: resource.url,
 				decoder: function(data, status, ampXHR, success, error) {
-                    if(status == 'success') {
+					if(status == 'success') {
 					    success(data, ampXHR.status);
-                    }
-                    else {
-                        if(data == null && 'responseText' in ampXHR) {
-                            var _data = null;
+					}
+					else {
+						if(data == null && 'responseText' in ampXHR) {
+							var _data = null;
 
-                            try {
-                                _data = JSON.parse(ampXHR.responseText);
-                            }
-                            catch(err) {}
+							try {
+								_data = JSON.parse(ampXHR.responseText);
+							}
+							catch(err) {}
 
-                            _data = (typeof _data == 'object') ? _data : null;
-                        }
+							_data = (typeof _data == 'object') ? _data : null;
+						}
 
 					    error(data || _data || {}, ampXHR.status);
-                    }
+					}
 				},
-                global: (typeof resource.trigger_events == 'boolean') ? resource.trigger_events : true,
-                contentType: resource.contentType || 'application/json',
-                dataType: resource.dataType || 'json',
-                type: resource.verb,
-                processData: resource.verb == 'GET',
-                beforeSend: function(ampXHR, settings) {
-                    ampXHR.setRequestHeader('X-Auth-Token', winkstart.apps[app_name]['auth_token']);
+				global: (typeof resource.trigger_events == 'boolean') ? resource.trigger_events : true,
+				contentType: resource.contentType || 'application/json',
+				dataType: resource.dataType || 'json',
+				type: resource.verb,
+				processData: resource.verb == 'GET',
+				beforeSend: function(ampXHR, settings) {
+					ampXHR.setRequestHeader('X-Auth-Token', winkstart.apps[app_name]['auth_token']);
 
-                    if(typeof settings.data == 'object' && 'headers' in settings.data) {
-                        $.each(settings.data.headers, function(key, val) {
-                            switch(key) {
-                                case 'Content-Type':
-                                    ampXHR.overrideMimeType(val);
-                                    break;
+					if(typeof settings.data == 'object' && 'headers' in settings.data) {
+						$.each(settings.data.headers, function(key, val) {
+							switch(key) {
+								case 'Content-Type':
+									ampXHR.overrideMimeType(val);
+									break;
 
-                                default:
-                                    ampXHR.setRequestHeader(key, val);
-                            }
-                        });
+								default:
+									ampXHR.setRequestHeader(key, val);
+							}
+						});
 
-                        delete settings.data.headers;
-                    }
+						delete settings.data.headers;
+					}
 
-                    if(settings.contentType == 'application/json') {
-                        if(settings.type == 'PUT' || settings.type == 'POST' || settings.type == 'PATCH') {
-                            settings.data.verb = settings.type;
-                            settings.data = JSON.stringify(settings.data);
-                        }
-                        else if(settings.type =='GET' || settings.type == 'DELETE') {
-                            settings.data = '';
-                        }
-                    }
-                    else {
-                        if(typeof settings.data == 'object' && settings.data.data) {
-                            settings.data = settings.data.data;
-                        }
-                    }
+					if(settings.contentType == 'application/json') {
+						if(settings.type == 'PUT' || settings.type == 'POST' || settings.type == 'PATCH') {
+							settings.data.verb = settings.type;
+							settings.data = JSON.stringify(settings.data);
+						}
+						else if(settings.type =='GET' || settings.type == 'DELETE') {
+							settings.data = '';
+						}
+					}
+					else {
+						if(typeof settings.data == 'object' && settings.data.data) {
+							settings.data = settings.data.data;
+						}
+					}
 
 
-                    // Without returning true, our decoder will not run.
-                    return true;
-                }
+					// Without returning true, our decoder will not run.
+					return true;
+				}
 			});
 		}
 	};
 
-    winkstart.request = function(locking, resource_name, params, success, error) {
-        var THIS = this;
+	winkstart.request = function(locking, resource_name, params, success, error) {
+		var THIS = this;
 
-        if(typeof locking !== 'boolean') {
-            error = success;
-            success = params;
-            params = resource_name;
-            resource_name = locking;
-            locking = false;
-        }
+		if(typeof locking !== 'boolean') {
+			error = success;
+			success = params;
+			params = resource_name;
+			resource_name = locking;
+			locking = false;
+		}
 
-        // Delete the lame crossbar param if it exists
-        if('crossbar' in params) {
-            delete params.crossbar;
-        }
+		// Delete the lame crossbar param if it exists
+		if('crossbar' in params) {
+			delete params.crossbar;
+		}
 
-        if(locking === true) {
-            if(resource_name in locked_requests) {
-                return false;
-            }
-            else {
-                locked_requests[resource_name] = true;
-            }
-        }
+		if(locking === true) {
+			if(resource_name in locked_requests) {
+				return false;
+			}
+			else {
+				locked_requests[resource_name] = true;
+			}
+		}
 
 		if(params.data) {
 			params.data.ui_metadata = $.extend(true, params.data.ui_metadata || {}, {
@@ -106,49 +106,49 @@
 			});
 		}
 
-        var request = {
-                resourceId: resource_name,
-                data: params,
-                success: function(data, status) {
-                    if(typeof success == 'function') {
-                        success(data, status);
-                    }
+		var request = {
+			resourceId: resource_name,
+			data: params,
+			success: function(data, status) {
+				if(typeof success == 'function') {
+					success(data, status);
+				}
 
-                    if(locking === true) {
-                        delete locked_requests[resource_name];
-                    }
-                },
-                error: function(data, status) {
-                    if(status === 401 && resource_name !== 'auth.user_auth') {
-                        winkstart.alert('It appears your session expired, the UI will automatically send you back to the login screen in 5 seconds.');
-                        $.cookie('c_winkstart_auth', null);
+				if(locking === true) {
+					delete locked_requests[resource_name];
+				}
+			},
+			error: function(data, status) {
+				if(status === 401 && resource_name !== 'auth.user_auth') {
+					winkstart.alert('It appears your session expired, the UI will automatically send you back to the login screen in 5 seconds.');
+					$.cookie('c_winkstart_auth', null);
 
-                        setTimeout(function() {
-                            // Intercom
-                            winkstart.log('Intercom: Shutting down...');
-                            window.Intercom("shutdown");
+					setTimeout(function() {
+						// Intercom
+						winkstart.log('Intercom: Shutting down...');
+						window.Intercom("shutdown");
 
-                            window.location.reload();
-                        }, 5000);
-                    }
-                    else if(status  == "402" && typeof request.accept_charges === "undefined") {
-                            winkstart.charges(data.data, function() {
-                                request.data.accept_charges = true;
-                                amplify.request(request);
-                            });
-                    } 
-                    else if(typeof error == 'function') {
-                        error(data, status);
-                    }
+						window.location.reload();
+					}, 5000);
+				}
+				else if(status  == "402" && typeof request.accept_charges === "undefined") {
+					winkstart.charges(data.data, function() {
+						request.data.accept_charges = true;
+						amplify.request(request);
+					});
+				} 
+				else if(typeof error == 'function') {
+					error(data, status);
+				}
 
-                    if(locking === true) {
-                        delete locked_requests[resource_name];
-                    }
-                }
-            };
+				if(locking === true) {
+					delete locked_requests[resource_name];
+				}
+			}
+		};
 
-        amplify.request(request);
-    };
+		amplify.request(request);
+	};
 
 	winkstart.getJSON = function(locking, resource_name, params, success, error) {
 		winkstart.request(locking, resource_name, params, success, error);

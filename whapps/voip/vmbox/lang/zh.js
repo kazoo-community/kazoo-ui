@@ -53,13 +53,13 @@ window.translate['vmbox'] = {
 	edit_voicemail_box_title: "编辑语音邮箱",
 	create_voicemail_box_title: "创建语音邮箱",
 	name_regex: /^[a-zA-Z0-9\s_']+$/,
-    extension_dialing: "拨打分机",
-    allow_caller_to_dial_extensions: "允许主叫拨打分机",
-    allow_caller_to_dial_extensions_data_content: "勾选后用户可以从这个菜单拨打分机",
-    whitelist_of_numbers: "号码白名单",
-    whitelist_of_numbers_placeholder: "正则表达式",
-    whitelist_of_numbers_data_content: "用户允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式允许用户拨打0~11)",
-    blacklist_of_numbers: "号码黑名单",
-    blacklist_of_numbers_placeholder: "正则表达式",
-    blacklist_of_numbers_data_content: "用户不允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式禁止用户拨打0~11)"
+	extension_dialing: "拨打分机",
+	allow_caller_to_dial_extensions: "允许主叫拨打分机",
+	allow_caller_to_dial_extensions_data_content: "勾选后用户可以从这个菜单拨打分机",
+	whitelist_of_numbers: "号码白名单",
+	whitelist_of_numbers_placeholder: "正则表达式",
+	whitelist_of_numbers_data_content: "用户允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式允许用户拨打0~11)",
+	blacklist_of_numbers: "号码黑名单",
+	blacklist_of_numbers_placeholder: "正则表达式",
+	blacklist_of_numbers_data_content: "用户不允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式禁止用户拨打0~11)"
 };

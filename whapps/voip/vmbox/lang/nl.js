@@ -55,13 +55,13 @@ window.translate['vmbox'] = {
 	edit_voicemail_box_title: "Bewerk voicemail box",
 	create_voicemail_box_title: "Nieuwe voicemail box",
 	name_regex: /^[a-zA-Z0-9\s_']+$/,
-    extension_dialing: "Extensie Kiezen",
-    allow_caller_to_dial_extensions: "Sta beller toe extesies te aan te kiezen in dit menu",
-    allow_caller_to_dial_extensions_data_content: "Sta beller toe extesies te aan te kiezen in dit Menu",
-    whitelist_of_numbers: "Whitelist of Nummers",
-    whitelist_of_numbers_placeholder: "Regex",
-    whitelist_of_numbers_data_content: "Lijst of nummers die bellers kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)",
-    blacklist_of_numbers: "Blacklist of nummers",
-    blacklist_of_numbers_placeholder: "Regex",
-    blacklist_of_numbers_data_content: "Lijst of nummers die bellers niet kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)"
+	extension_dialing: "Extensie Kiezen",
+	allow_caller_to_dial_extensions: "Sta beller toe extesies te aan te kiezen in dit menu",
+	allow_caller_to_dial_extensions_data_content: "Sta beller toe extesies te aan te kiezen in dit Menu",
+	whitelist_of_numbers: "Whitelist of Nummers",
+	whitelist_of_numbers_placeholder: "Regex",
+	whitelist_of_numbers_data_content: "Lijst of nummers die bellers kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)",
+	blacklist_of_numbers: "Blacklist of nummers",
+	blacklist_of_numbers_placeholder: "Regex",
+	blacklist_of_numbers_data_content: "Lijst of nummers die bellers niet kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)"
 };;

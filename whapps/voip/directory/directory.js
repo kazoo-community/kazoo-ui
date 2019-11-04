@@ -1,723 +1,724 @@
 winkstart.module('voip', 'directory', {
-        css: [
-            'css/directory.css'
-        ],
+	css: [
+		'css/directory.css'
+	],
 
-        templates: {
-            directory: 'tmpl/directory.html',
-            edit: 'tmpl/edit.html',
-            directory_callflow: 'tmpl/directory_callflow.html',
-            user_row: 'tmpl/user_row.html'
-        },
+	templates: {
+		directory: 'tmpl/directory.html',
+		edit: 'tmpl/edit.html',
+		directory_callflow: 'tmpl/directory_callflow.html',
+		user_row: 'tmpl/user_row.html'
+	},
 
-        subscribe: {
-            'directory.activate': 'activate',
-            'directory.edit': 'edit_directory',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes',
-            'directory.popup_edit': 'popup_edit_directory'
-        },
+	subscribe: {
+		'directory.activate': 'activate',
+		'directory.edit': 'edit_directory',
+		'callflow.define_callflow_nodes': 'define_callflow_nodes',
+		'directory.popup_edit': 'popup_edit_directory'
+	},
 
-        validation: [
-            { name: '#name',                 regex: /^.*/ },
-            { name: '#min_dtmf',           regex: /^[0-9]{0,2}$/ },
-            { name: '#max_dtmf',            regex: /^[0-9]{0,2}$/ }
-        ],
+	validation: [
+		{ name: '#name',                 regex: /^.*/ },
+		{ name: '#min_dtmf',           regex: /^[0-9]{0,2}$/ },
+		{ name: '#max_dtmf',            regex: /^[0-9]{0,2}$/ }
+	],
 
-        resources: {
-            'directory.list': {
-                url: '{api_url}/accounts/{account_id}/directories',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'directory.get': {
-                url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'directory.create': {
-                url: '{api_url}/accounts/{account_id}/directories',
-                contentType: 'application/json',
-                verb: 'PUT'
-            },
-            'directory.update': {
-                url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-            'directory.delete': {
-                url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
-                contentType: 'application/json',
-                verb: 'DELETE'
-            },
-            'directory.user_list': {
-                url: '{api_url}/accounts/{account_id}/users',
-                contentType: 'application/json',
-                verb: 'GET'
-            }
-        }
-    },
+	resources: {
+		'directory.list': {
+			url: '{api_url}/accounts/{account_id}/directories',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'directory.get': {
+			url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'directory.create': {
+			url: '{api_url}/accounts/{account_id}/directories',
+			contentType: 'application/json',
+			verb: 'PUT'
+		},
+		'directory.update': {
+			url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
+			contentType: 'application/json',
+			verb: 'POST'
+		},
+		'directory.delete': {
+			url: '{api_url}/accounts/{account_id}/directories/{directory_id}',
+			contentType: 'application/json',
+			verb: 'DELETE'
+		},
+		'directory.user_list': {
+			url: '{api_url}/accounts/{account_id}/users',
+			contentType: 'application/json',
+			verb: 'GET'
+		}
+	}
+},
 
-    function(args) {
-        var THIS = this;
+function(args) {
+	var THIS = this;
 
-        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+	winkstart.registerResources(THIS.__whapp, THIS.config.resources);
 
-        winkstart.publish('whappnav.subnav.add', {
-            whapp: 'voip',
-            module: THIS.__module,
-            label: _t('directory', 'directory_label'),
-            icon: 'book',
-            weight: '55',
-            category: _t('config', 'advanced_menu_cat')
-        });
-    },
+	winkstart.publish('whappnav.subnav.add', {
+		whapp: 'voip',
+		module: THIS.__module,
+		label: _t('directory', 'directory_label'),
+		icon: 'book',
+		weight: '55',
+		category: _t('config', 'advanced_menu_cat')
+	});
+},
 
-    {
-        save_directory: function(form_data, data, success, error) {
-            var THIS = this,
-                normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
+{
+	save_directory: function(form_data, data, success, error) {
+		var THIS = this,
+			normalized_data = THIS.normalize_data($.extend(true, {}, data.data, form_data));
 
-            if (typeof data.data == 'object' && data.data.id) {
-                winkstart.request(true, 'directory.update', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        directory_id: data.data.id,
-                        data: normalized_data
-                    },
-                    function(_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id, function() {
-                            if(typeof success == 'function') {
-                                success(_data, status, 'update');
-                            }
-                        });
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'update');
-                        }
-                    }
-                );
-            }
-            else {
-                winkstart.request(true, 'directory.create', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        data: normalized_data
-                    },
-                    function (_data, status) {
-                        THIS.update_users(data.field_data.user_list, _data.data.id, function() {
-                            if(typeof success == 'function') {
-                                success(_data, status, 'create');
-                            }
-                        });
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'update');
-                        }
-                    }
+		if (typeof data.data == 'object' && data.data.id) {
+			winkstart.request(true, 'directory.update', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				directory_id: data.data.id,
+				data: normalized_data
+			},
+			function(_data, status) {
+				THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+					if(typeof success == 'function') {
+						success(_data, status, 'update');
+					}
+				});
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status, 'update');
+				}
+			}
+			);
+		}
+		else {
+			winkstart.request(true, 'directory.create', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				data: normalized_data
+			},
+			function (_data, status) {
+				THIS.update_users(data.field_data.user_list, _data.data.id, function() {
+					if(typeof success == 'function') {
+						success(_data, status, 'create');
+					}
+				});
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status, 'update');
+				}
+			}
 
-                );
-            }
-        },
+			);
+		}
+	},
 
-        update_single_user: function(user_id, directory_id, callflow_id, callback) {
-            var THIS = this;
+	update_single_user: function(user_id, directory_id, callflow_id, callback) {
+		var THIS = this;
 
-            winkstart.request(false, 'user.get', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url,
-                    user_id: user_id
-                },
-                function(_data, status) {
-                    if(callflow_id) {
-                        if(!_data.data.directories || $.isArray(_data.data.directories)) {
-                            _data.data.directories = {};
-                        }
-                        _data.data.directories[directory_id] = callflow_id;
-                    }
-                    else {
-                        delete _data.data.directories[directory_id];
-                    }
-                    winkstart.request(false, 'user.update', {
-                            account_id: winkstart.apps['voip'].account_id,
-                            api_url: winkstart.apps['voip'].api_url,
-                            user_id: user_id,
-                            data: _data.data
-                        },
-                        function(_data, status) {
-                            if(typeof callback === 'function') {
-                                callback();
-                            }
-                        },
-                        function(_data, status) {
-                            if(typeof callback === 'function') {
-                                callback();
-                            }
-                        }
-                    );
-                }
-            );
-        },
+		winkstart.request(false, 'user.get', {
+			account_id: winkstart.apps['voip'].account_id,
+			api_url: winkstart.apps['voip'].api_url,
+			user_id: user_id
+		},
+		function(_data, status) {
+			if(callflow_id) {
+				if(!_data.data.directories || $.isArray(_data.data.directories)) {
+					_data.data.directories = {};
+				}
+				_data.data.directories[directory_id] = callflow_id;
+			}
+			else {
+				delete _data.data.directories[directory_id];
+			}
+			winkstart.request(false, 'user.update', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				user_id: user_id,
+				data: _data.data
+			},
+			function(_data, status) {
+				if(typeof callback === 'function') {
+					callback();
+				}
+			},
+			function(_data, status) {
+				if(typeof callback === 'function') {
+					callback();
+				}
+			}
+			);
+		}
+		);
+	},
 
-        update_users: function(data, directory_id, success) {
-            var old_directory_user_list = data.old_list,
-                new_directory_user_list = data.new_list,
-                THIS = this,
-                users_updated_count = 0,
-                users_count = 0,
-                callback = function() {
-                    users_updated_count++;
-                    if(users_updated_count >= users_count) {
-                        success();
-                    }
-                };
-
-            if(old_directory_user_list) {
-                $.each(old_directory_user_list, function(k, v) {
-                    if(!(k in new_directory_user_list)) {
-                        //Request to update user without this directory.
-                        users_count++;
-                        THIS.update_single_user(k, directory_id, undefined, callback);
-                    }
-                });
-
-                $.each(new_directory_user_list, function(k, v) {
-                    if(k in old_directory_user_list) {
-                        if(old_directory_user_list[k] != v) {
-                            //Request to update user
-                            users_count++;
-                            THIS.update_single_user(k, directory_id, v, callback);
-                        }
-                        //else it has not been updated
-                    }
-                    else {
-                        users_count++;
-                        THIS.update_single_user(k, directory_id, v, callback);
-                    }
-                });
-            }
-            else {
-                if(new_directory_user_list) {
-                    $.each(new_directory_user_list, function(k, v) {
-                        users_count++;
-                        THIS.update_single_user(k, directory_id, v, callback);
-                    });
-                }
-            }
-
-            if(users_count === 0) {
-                success();
-            }
-        },
-
-        edit_directory: function(data, _parent, _target, _callbacks, data_defaults){
-            var THIS = this,
-                parent = _parent || $('#directory-content'),
-                target = _target || $('#directory-view', parent),
-                _callbacks = _callbacks || {},
-                callbacks = {
-                    save_success: _callbacks.save_success || function(_data) {
-                        THIS.render_list(parent);
-
-                        THIS.edit_directory({ id: _data.data.id }, parent, target, callbacks);
-                    },
-
-                    save_error: _callbacks.save_error,
-
-                    delete_success: _callbacks.delete_success || function() {
-                        target.empty();
-
-                        THIS.render_list(parent);
-                    },
-
-                    delete_error: _callbacks.delete_error,
-
-                    after_render: _callbacks.after_render
-                },
-                defaults = {
-                    data: $.extend(true, {
-                        min_dtmf: '3',
-                        max_dtmf: '0',
-                        sort_by: 'last_name',
-                        confirm_match: false
-                    }, data_defaults || {}),
-                    field_data: {
-                        search_fields: {
-                            'both': _t('directory', 'both_names'),
-                            'first_name': _t('directory', 'first_name'),
-                            'last_name': _t('directory', 'last_name')
-                        },
-                        sort_by: {
-                            'first_name': _t('directory', 'first_name'),
-                            'last_name': _t('directory', 'last_name')
-                        }
-                    }
-                };
-
-            winkstart.parallel({
-                    callflow_list: function(callback) {
-                        winkstart.request(true, 'callflow.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
-                                var list_callflows = [];
-                                $.each(_data.data, function() {
-                                    if(this.featurecode == false) {
-                                        list_callflows.push(this);
-                                    }
-                                });
-
-								list_callflows.sort(function(a,b) {
-									var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
-										bName = (b.name || (b.numbers[0] + '')).toLowerCase();
-
-									return aName < bName ? -1 : 1;
-								});
-
-                                defaults.field_data.callflows = list_callflows;
-
-                                callback(null, _data);
-                            }
-                        );
-                    },
-                    user_list: function(callback) {
-                        winkstart.request(true, 'user.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
-                            	_data.data.sort(function(a,b) {
-                            		var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
-                            			bName = (b.first_name + ' ' + b.last_name).toLowerCase();
-
-									return aName < bName ? -1 : 1;
-                            	});
-
-                                defaults.field_data.users = _data.data;
-
-                                callback(null, _data);
-                            }
-                        );
-                    },
-                    directory_get: function(callback) {
-                        if(typeof data === 'object' && data.id) {
-                            winkstart.request(true, 'directory.get', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url,
-                                    directory_id: data.id
-                                },
-                                function(_data, status) {
-                                    defaults.field_data.old_list = {};
-
-                                    if('users' in _data.data) {
-                                        $.each(_data.data.users, function(k, v) {
-                                            defaults.field_data.old_list[v.user_id] = v.callflow_id;
-                                        });
-                                    }
-
-                                    callback(null, _data);
-                                }
-                            );
-                        }
-                        else {
-                            callback(null, {});
-                        }
-                    }
-                },
-                function(err, results) {
-                    var render_data = defaults;
-
-                    if(typeof data === 'object' && data.id) {
-                        render_data = $.extend(true, defaults, results.directory_get);
-                    }
-
-                    THIS.render_directory(render_data, target, callbacks);
-
-                    if(typeof callbacks.after_render == 'function') {
-                        callbacks.after_render();
-                    }
-                }
-            );
-        },
-
-        delete_directory: function(data, success, error) {
-            var THIS = this;
-
-            if(typeof data.data == 'object' && data.data.id) {
-                winkstart.request(true, 'directory.delete', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        directory_id: data.data.id
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status);
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status);
-                        }
-                    }
-                );
-            }
-        },
-
-        render_directory: function(data, target, callbacks){
-			data._t = function(param){
-				return window.translate['directory'][param];
+	update_users: function(data, directory_id, success) {
+		var old_directory_user_list = data.old_list,
+			new_directory_user_list = data.new_list,
+			THIS = this,
+			users_updated_count = 0,
+			users_count = 0,
+			callback = function() {
+				users_updated_count++;
+				if(users_updated_count >= users_count) {
+					success();
+				}
 			};
-            var THIS = this,
-                directory_html = THIS.templates.edit.tmpl(data);
 
-            THIS.render_user_list(data, directory_html);
+		if(old_directory_user_list) {
+			$.each(old_directory_user_list, function(k, v) {
+				if(!(k in new_directory_user_list)) {
+					//Request to update user without this directory.
+					users_count++;
+					THIS.update_single_user(k, directory_id, undefined, callback);
+				}
+			});
 
-            winkstart.validate.set(THIS.config.validation, directory_html);
+			$.each(new_directory_user_list, function(k, v) {
+				if(k in old_directory_user_list) {
+					if(old_directory_user_list[k] != v) {
+						//Request to update user
+						users_count++;
+						THIS.update_single_user(k, directory_id, v, callback);
+					}
+					//else it has not been updated
+				}
+				else {
+					users_count++;
+					THIS.update_single_user(k, directory_id, v, callback);
+				}
+			});
+		}
+		else {
+			if(new_directory_user_list) {
+				$.each(new_directory_user_list, function(k, v) {
+					users_count++;
+					THIS.update_single_user(k, directory_id, v, callback);
+				});
+			}
+		}
 
-            $('*[rel=popover]:not([type="text"])', directory_html).popover({
-                trigger: 'hover'
-            });
+		if(users_count === 0) {
+			success();
+		}
+	},
 
-            $('*[rel=popover][type="text"]', directory_html).popover({
-                trigger: 'focus'
-            });
+	edit_directory: function(data, _parent, _target, _callbacks, data_defaults){
+		var THIS = this,
+			parent = _parent || $('#directory-content'),
+			target = _target || $('#directory-view', parent),
+			_callbacks = _callbacks || {},
+			callbacks = {
+				save_success: _callbacks.save_success || function(_data) {
+					THIS.render_list(parent);
 
-            winkstart.tabs($('.view-buttons', directory_html), $('.tabs', directory_html));
+					THIS.edit_directory({ id: _data.data.id }, parent, target, callbacks);
+				},
 
-            $('.directory-save', directory_html).click(function(ev) {
-                ev.preventDefault();
+				save_error: _callbacks.save_error,
 
-                winkstart.validate.is_valid(THIS.config.validation, directory_html, function() {
-                        var form_data = form2object('directory-form');
+				delete_success: _callbacks.delete_success || function() {
+					target.empty();
 
-                        THIS.clean_form_data(form_data);
+					THIS.render_list(parent);
+				},
 
-                        var old_list = {},
-                            new_list = {};
+				delete_error: _callbacks.delete_error,
 
-                        $('.rows .row:not(#row_no_data)', directory_html).each(function() {
-                            new_list[$(this).dataset('id')] = $('#user_callflow_id', $(this)).val();
-                        });
+				after_render: _callbacks.after_render
+			},
+			defaults = {
+				data: $.extend(true, {
+					min_dtmf: '3',
+					max_dtmf: '0',
+					sort_by: 'last_name',
+					confirm_match: false
+				}, data_defaults || {}),
+				field_data: {
+					search_fields: {
+						'both': _t('directory', 'both_names'),
+						'first_name': _t('directory', 'first_name'),
+						'last_name': _t('directory', 'last_name')
+					},
+					sort_by: {
+						'first_name': _t('directory', 'first_name'),
+						'last_name': _t('directory', 'last_name')
+					}
+				}
+			};
 
-                        data.field_data.user_list = {
-                            old_list: data.field_data.old_list,
-                            new_list: new_list
-                        };
+		winkstart.parallel({
+			callflow_list: function(callback) {
+				winkstart.request(true, 'callflow.list', {
+					account_id: winkstart.apps['voip'].account_id,
+					api_url: winkstart.apps['voip'].api_url
+				},
+				function(_data, status) {
+					var list_callflows = [];
+					$.each(_data.data, function() {
+						if(this.featurecode == false) {
+							list_callflows.push(this);
+						}
+					});
 
-                        THIS.save_directory(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
-                    },
-                    function() {
-                        winkstart.alert(_t('directory', 'there_were_errors_on_the_form'));
-                    }
-                );
-            });
+					list_callflows.sort(function(a,b) {
+						var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
+							bName = (b.name || (b.numbers[0] + '')).toLowerCase();
 
-            $('.directory-delete', directory_html).click(function(ev) {
-                ev.preventDefault();
+						return aName < bName ? -1 : 1;
+					});
 
-                winkstart.confirm(_t('directory', 'are_you_sure_you_want_to_delete'), function() {
-                    THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
-                });
-            });
+					defaults.field_data.callflows = list_callflows;
 
-            $('.add_user_div', directory_html).click(function() {
-                var $user = $('#select_user_id', directory_html);
-                var $callflow = $('#callflow_id', directory_html);
+					callback(null, _data);
+				}
+				);
+			},
+			user_list: function(callback) {
+				winkstart.request(true, 'user.list', {
+					account_id: winkstart.apps['voip'].account_id,
+					api_url: winkstart.apps['voip'].api_url
+				},
+				function(_data, status) {
+					_data.data.sort(function(a,b) {
+						var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
+							bName = (b.first_name + ' ' + b.last_name).toLowerCase();
 
-                if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
-                    var user_id = $user.val(),
-                        user_data = {
-                            user_id: user_id,
-                            user_name: $('#option_user_'+user_id, directory_html).text(),
-                            callflow_id: $callflow.val(),
-                            field_data: {
-                                callflows: data.field_data.callflows
-                            },
+						return aName < bName ? -1 : 1;
+					});
+
+					defaults.field_data.users = _data.data;
+
+					callback(null, _data);
+				}
+				);
+			},
+			directory_get: function(callback) {
+				if(typeof data === 'object' && data.id) {
+					winkstart.request(true, 'directory.get', {
+						account_id: winkstart.apps['voip'].account_id,
+						api_url: winkstart.apps['voip'].api_url,
+						directory_id: data.id
+					},
+					function(_data, status) {
+						defaults.field_data.old_list = {};
+
+						if('users' in _data.data) {
+							$.each(_data.data.users, function(k, v) {
+								defaults.field_data.old_list[v.user_id] = v.callflow_id;
+							});
+						}
+
+						callback(null, _data);
+					}
+					);
+				}
+				else {
+					callback(null, {});
+				}
+			}
+		},
+		function(err, results) {
+			var render_data = defaults;
+
+			if(typeof data === 'object' && data.id) {
+				render_data = $.extend(true, defaults, results.directory_get);
+			}
+
+			THIS.render_directory(render_data, target, callbacks);
+
+			if(typeof callbacks.after_render == 'function') {
+				callbacks.after_render();
+			}
+		}
+		);
+	},
+
+	delete_directory: function(data, success, error) {
+		var THIS = this;
+
+		if(typeof data.data == 'object' && data.data.id) {
+			winkstart.request(true, 'directory.delete', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				directory_id: data.data.id
+			},
+			function(_data, status) {
+				if(typeof success == 'function') {
+					success(_data, status);
+				}
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status);
+				}
+			}
+			);
+		}
+	},
+
+	render_directory: function(data, target, callbacks){
+		data._t = function(param){
+			return window.translate['directory'][param];
+		};
+		var THIS = this,
+			directory_html = THIS.templates.edit.tmpl(data);
+
+		THIS.render_user_list(data, directory_html);
+
+		winkstart.validate.set(THIS.config.validation, directory_html);
+
+		$('*[rel=popover]:not([type="text"])', directory_html).popover({
+			trigger: 'hover'
+		});
+
+		$('*[rel=popover][type="text"]', directory_html).popover({
+			trigger: 'focus'
+		});
+
+		winkstart.tabs($('.view-buttons', directory_html), $('.tabs', directory_html));
+
+		$('.directory-save', directory_html).click(function(ev) {
+			ev.preventDefault();
+
+			winkstart.validate.is_valid(THIS.config.validation, directory_html, function() {
+				var form_data = form2object('directory-form');
+
+				THIS.clean_form_data(form_data);
+
+				var old_list = {},
+					new_list = {};
+
+				$('.rows .row:not(#row_no_data)', directory_html).each(function() {
+					new_list[$(this).dataset('id')] = $('#user_callflow_id', $(this)).val();
+				});
+
+				data.field_data.user_list = {
+					old_list: data.field_data.old_list,
+					new_list: new_list
+				};
+
+				THIS.save_directory(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
+			},
+			function() {
+				winkstart.alert(_t('directory', 'there_were_errors_on_the_form'));
+			}
+			);
+		});
+
+		$('.directory-delete', directory_html).click(function(ev) {
+			ev.preventDefault();
+
+			winkstart.confirm(_t('directory', 'are_you_sure_you_want_to_delete'), function() {
+				THIS.delete_directory(data, callbacks.delete_success, callbacks.delete_error);
+			});
+		});
+
+		$('.add_user_div', directory_html).click(function() {
+			var $user = $('#select_user_id', directory_html);
+			var $callflow = $('#callflow_id', directory_html);
+
+			if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
+				var user_id = $user.val(),
+					user_data = {
+						user_id: user_id,
+						user_name: $('#option_user_'+user_id, directory_html).text(),
+						callflow_id: $callflow.val(),
+						field_data: {
+							callflows: data.field_data.callflows
+						},
+						_t: function(param){
+							return window.translate['directory'][param];
+						}
+					};
+
+				if($('#row_no_data', directory_html).size() > 0) {
+					$('#row_no_data', directory_html).remove();
+				}
+
+				var existingUsers = $('.rows .row', directory_html);
+				for(var i = 0; i < existingUsers.length; i++) {
+					var userEl = $('.column.first', existingUsers[i]);
+					if(user_data.user_name.toLowerCase() <
+						userEl.text().toLowerCase()
+					) {
+						THIS.templates.user_row.tmpl(user_data).insertBefore(existingUsers[i]);
+						break;
+					}
+					if(i == existingUsers.length-1) {
+						$('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+					}
+				}
+				if(existingUsers.length == 0) {
+					$('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
+				}
+				$('#option_user_'+user_id, directory_html).hide();
+
+				$user.val('empty_option_user');
+				$callflow.val('empty_option_callflow');
+			}
+		});
+
+		$(directory_html).delegate('.action_user.delete', 'click', function() {
+			var user_id = $(this).dataset('id');
+			//removes it from the grid
+			$('#row_user_'+user_id, directory_html).remove();
+			//re-add it to the dropdown
+			$('#option_user_'+user_id, directory_html).show();
+			//if grid empty, add no data line
+			if($('.rows .row', directory_html).size() == 0) {
+				$('.rows', directory_html).append(THIS.templates.user_row.tmpl({
+					_t: function(param){
+						return window.translate['directory'][param];
+					}
+				}));
+			}
+		});
+
+		(target)
+			.empty()
+			.append(directory_html);
+	},
+
+	normalize_data: function(form_data) {
+		delete form_data.users;
+		return form_data;
+	},
+
+	clean_form_data: function(form_data) {
+		if(!(form_data.max_dtmf > 0)) {
+			delete form_data.max_dtmf;
+		}
+
+		delete form_data.user_callflow_id;
+		delete form_data.user_id;
+		delete form_data.callflow_id;
+	},
+
+	render_list: function(_parent){
+		var THIS = this,
+			parent = _parent || $('#directory-content');;
+
+		winkstart.request(true, 'directory.list', {
+			account_id: winkstart.apps['voip'].account_id,
+			api_url: winkstart.apps['voip'].api_url
+		},
+		function (data, status) {
+			var map_crossbar_data = function(data) {
+				var new_list = [];
+
+				if(data.length > 0) {
+					$.each(data, function(key, val) {
+						new_list.push({
+							id: val.id,
+							title: val.name || _t('directory', 'no_name')
+						});
+					});
+				}
+
+				new_list.sort(function(a, b) {
+					return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+				});
+
+				return new_list;
+			};
+
+			$('#directory-listpanel', parent)
+				.empty()
+				.listpanel({
+					label: _t('directory', 'directories_label'),
+					identifier: 'directory-listview',
+					new_entity_label: _t('directory', 'add_directory_label'),
+					data: map_crossbar_data(data.data),
+					publisher: winkstart.publish,
+					notifyMethod: 'directory.edit',
+					notifyCreateMethod: 'directory.edit',
+					notifyParent: parent
+				});
+		}
+		);
+	},
+
+	activate: function(parent) {
+		var THIS = this,
+			directory_html = THIS.templates.directory.tmpl();
+
+		(parent || $('#ws-content'))
+			.empty()
+			.append(directory_html);
+
+		THIS.render_list(directory_html);
+	},
+
+	render_user_list: function(data, parent) {
+		var THIS = this;
+
+		if(data.data.id) {
+			if('users' in data.data && data.data.users.length > 0) {
+				var user_item;
+				$.each(data.field_data.users, function(k, v) {
+					if(v.id in data.field_data.old_list) {
+						user_item = {
+							user_id: v.id,
+							user_name: v.first_name + ' ' + v.last_name,
+							callflow_id: data.field_data.old_list[v.id],
+							field_data: {
+								callflows: data.field_data.callflows
+							},
 							_t: function(param){
 								return window.translate['directory'][param];
 							}
-                        };
+						};
 
-                    if($('#row_no_data', directory_html).size() > 0) {
-                        $('#row_no_data', directory_html).remove();
-                    }
-
-                    var existingUsers = $('.rows .row', directory_html);
-                    for(var i = 0; i < existingUsers.length; i++) {
-                        var userEl = $('.column.first', existingUsers[i]);
-                        if(user_data.user_name.toLowerCase() <
-                                userEl.text().toLowerCase()) {
-                            THIS.templates.user_row.tmpl(user_data).insertBefore(existingUsers[i]);
-                            break;
-                        }
-                        if(i == existingUsers.length-1) {
-                            $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
-                        }
-                    }
-                    if(existingUsers.length == 0) {
-                        $('.rows', directory_html).append(THIS.templates.user_row.tmpl(user_data));
-                    }
-                    $('#option_user_'+user_id, directory_html).hide();
-
-                    $user.val('empty_option_user');
-                    $callflow.val('empty_option_callflow');
-                }
-            });
-
-            $(directory_html).delegate('.action_user.delete', 'click', function() {
-                var user_id = $(this).dataset('id');
-                //removes it from the grid
-                $('#row_user_'+user_id, directory_html).remove();
-                //re-add it to the dropdown
-                $('#option_user_'+user_id, directory_html).show();
-                //if grid empty, add no data line
-                if($('.rows .row', directory_html).size() == 0) {
-                    $('.rows', directory_html).append(THIS.templates.user_row.tmpl({
+						$('.rows', parent).append(THIS.templates.user_row.tmpl(user_item));
+						$('#option_user_'+v.id, parent).hide();
+					}
+				});
+			}
+			else {
+				$('.rows', parent).empty()
+					.append(THIS.templates.user_row.tmpl({
 						_t: function(param){
 							return window.translate['directory'][param];
 						}
 					}));
-                }
-            });
+			}
+		}
+		else {
+			$('.rows', parent).empty()
+				.append(THIS.templates.user_row.tmpl({
+					_t: function(param){
+						return window.translate['directory'][param];
+					}
+				}));
+		}
+	},
 
-            (target)
-                .empty()
-                .append(directory_html);
-        },
+	popup_edit_directory: function(data, callback, data_defaults) {
+		var popup, popup_html;
 
-        normalize_data: function(form_data) {
-            delete form_data.users;
-            return form_data;
-        },
+		popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
 
-        clean_form_data: function(form_data) {
-            if(!(form_data.max_dtmf > 0)) {
-                delete form_data.max_dtmf;
-            }
+		winkstart.publish('directory.edit', data, popup_html, $('.inline_content', popup_html), {
+			save_success: function(_data) {
+				popup.dialog('close');
 
-            delete form_data.user_callflow_id;
-            delete form_data.user_id;
-            delete form_data.callflow_id;
-        },
+				if(typeof callback == 'function') {
+					callback(_data);
+				}
+			},
+			delete_success: function() {
+				popup.dialog('close');
 
-        render_list: function(_parent){
-            var THIS = this,
-                parent = _parent || $('#directory-content');;
+				if(typeof callback == 'function') {
+					callback({ data: {} });
+				}
+			},
+			after_render: function() {
+				popup = winkstart.dialog(popup_html, {
+					title: (data.id) ? _t('directory', 'edit_directory') : _t('directory', 'create_directory')
+				});
+			}
+		}, data_defaults);
+	},
 
-            winkstart.request(true, 'directory.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function (data, status) {
-                    var map_crossbar_data = function(data) {
-                       var new_list = [];
+	define_callflow_nodes: function(callflow_nodes) {
+		var THIS = this;
 
-                        if(data.length > 0) {
-                            $.each(data, function(key, val) {
-                                new_list.push({
-                                    id: val.id,
-                                    title: val.name || _t('directory', 'no_name')
-                                });
-                            });
-                        }
+		$.extend(callflow_nodes, {
+			'directory[id=*]': {
+				name: _t('directory', 'directory'),
+				icon: 'book',
+				category: _t('config', 'advanced_cat'),
+				module: 'directory',
+				tip: _t('directory', 'directory_tip'),
+				data: {
+					id: 'null'
+				},
+				rules: [
+					{
+						type: 'quantity',
+						maxSize: '1'
+					}
+				],
+				isUsable: 'true',
+				caption: function(node, caption_map) {
+					var id = node.getMetadata('id'),
+						returned_value = '';
 
-                        new_list.sort(function(a, b) {
-                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-                        });
+					if(id in caption_map) {
+						returned_value = caption_map[id].name;
+					}
 
-                        return new_list;
-                    };
+					return returned_value;
+				},
+				edit: function(node, callback) {
+					var _this = this;
 
-                    $('#directory-listpanel', parent)
-                        .empty()
-                        .listpanel({
-                            label: _t('directory', 'directories_label'),
-                            identifier: 'directory-listview',
-                            new_entity_label: _t('directory', 'add_directory_label'),
-                            data: map_crossbar_data(data.data),
-                            publisher: winkstart.publish,
-                            notifyMethod: 'directory.edit',
-                            notifyCreateMethod: 'directory.edit',
-                            notifyParent: parent
-                        });
-                }
-            );
-        },
+					winkstart.request(true, 'directory.list',  {
+						account_id: winkstart.apps['voip'].account_id,
+						api_url: winkstart.apps['voip'].api_url
+					},
+					function(data, status) {
+						var popup, popup_html;
 
-        activate: function(parent) {
-            var THIS = this,
-                directory_html = THIS.templates.directory.tmpl();
+						popup_html = THIS.templates.directory_callflow.tmpl({
+							_t: function(param){
+								return window.translate['directory'][param];
+							},
+							items: winkstart.sort(data.data),
+							selected: node.getMetadata('id') || ''
+						});
 
-            (parent || $('#ws-content'))
-                .empty()
-                .append(directory_html);
+						if($('#directory_selector option:selected', popup_html).val() == undefined) {
+							$('#edit_link', popup_html).hide();
+						}
 
-            THIS.render_list(directory_html);
-        },
+						$('.inline_action', popup_html).click(function(ev) {
+							var _data = ($(this).dataset('action') == 'edit') ?
+								{ id: $('#directory_selector', popup_html).val() } : {};
 
-        render_user_list: function(data, parent) {
-            var THIS = this;
+							ev.preventDefault();
 
-            if(data.data.id) {
-                if('users' in data.data && data.data.users.length > 0) {
-                    var user_item;
-                    $.each(data.field_data.users, function(k, v) {
-                        if(v.id in data.field_data.old_list) {
-                            user_item = {
-                                user_id: v.id,
-                                user_name: v.first_name + ' ' + v.last_name,
-                                callflow_id: data.field_data.old_list[v.id],
-                                field_data: {
-                                    callflows: data.field_data.callflows
-                                },
-								_t: function(param){
-									return window.translate['directory'][param];
+							winkstart.publish('directory.popup_edit', _data, function(_data) {
+								node.setMetadata('id', _data.data.id || 'null');
+
+								node.caption = _data.data.name || '';
+
+								popup.dialog('close');
+							});
+						});
+
+						$('#add', popup_html).click(function() {
+							node.setMetadata('id', $('#directory_selector', popup).val());
+
+							node.caption = $('#directory_selector option:selected', popup).text();
+
+							popup.dialog('close');
+						});
+
+						popup = winkstart.dialog(popup_html, {
+							title: _t('directory', 'directory_title'),
+							minHeight: '0',
+							beforeClose: function() {
+								if(typeof callback == 'function') {
+									callback();
 								}
-                            };
-
-                            $('.rows', parent).append(THIS.templates.user_row.tmpl(user_item));
-                            $('#option_user_'+v.id, parent).hide();
-                        }
-                    });
-                }
-                else {
-                    $('.rows', parent).empty()
-                                      .append(THIS.templates.user_row.tmpl({
-										_t: function(param){
-											return window.translate['directory'][param];
-										}
-									  }));
-                }
-            }
-            else {
-                $('.rows', parent).empty()
-                                  .append(THIS.templates.user_row.tmpl({
-										_t: function(param){
-											return window.translate['directory'][param];
-										}
-									  }));
-            }
-        },
-
-        popup_edit_directory: function(data, callback, data_defaults) {
-            var popup, popup_html;
-
-            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
-
-            winkstart.publish('directory.edit', data, popup_html, $('.inline_content', popup_html), {
-                save_success: function(_data) {
-                    popup.dialog('close');
-
-                    if(typeof callback == 'function') {
-                        callback(_data);
-                    }
-                },
-                delete_success: function() {
-                    popup.dialog('close');
-
-                    if(typeof callback == 'function') {
-                        callback({ data: {} });
-                    }
-                },
-                after_render: function() {
-                    popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? _t('directory', 'edit_directory') : _t('directory', 'create_directory')
-                    });
-                }
-            }, data_defaults);
-        },
-
-        define_callflow_nodes: function(callflow_nodes) {
-            var THIS = this;
-
-            $.extend(callflow_nodes, {
-                'directory[id=*]': {
-                    name: _t('directory', 'directory'),
-                    icon: 'book',
-                    category: _t('config', 'advanced_cat'),
-                    module: 'directory',
-                    tip: _t('directory', 'directory_tip'),
-                    data: {
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var id = node.getMetadata('id'),
-                            returned_value = '';
-
-                        if(id in caption_map) {
-                            returned_value = caption_map[id].name;
-                        }
-
-                        return returned_value;
-                    },
-                    edit: function(node, callback) {
-                        var _this = this;
-
-                        winkstart.request(true, 'directory.list',  {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                popup_html = THIS.templates.directory_callflow.tmpl({
-									_t: function(param){
-										return window.translate['directory'][param];
-									},
-                                    items: winkstart.sort(data.data),
-                                    selected: node.getMetadata('id') || ''
-                                });
-
-                                if($('#directory_selector option:selected', popup_html).val() == undefined) {
-                                    $('#edit_link', popup_html).hide();
-                                }
-
-                                $('.inline_action', popup_html).click(function(ev) {
-                                    var _data = ($(this).dataset('action') == 'edit') ?
-                                                    { id: $('#directory_selector', popup_html).val() } : {};
-
-                                    ev.preventDefault();
-
-                                    winkstart.publish('directory.popup_edit', _data, function(_data) {
-                                        node.setMetadata('id', _data.data.id || 'null');
-
-                                        node.caption = _data.data.name || '';
-
-                                        popup.dialog('close');
-                                    });
-                                });
-
-                                $('#add', popup_html).click(function() {
-                                    node.setMetadata('id', $('#directory_selector', popup).val());
-
-                                    node.caption = $('#directory_selector option:selected', popup).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: _t('directory', 'directory_title'),
-                                    minHeight: '0',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                }
-            });
-        }
-    }
+							}
+						});
+					}
+					);
+				}
+			}
+		});
+	}
+}
 );

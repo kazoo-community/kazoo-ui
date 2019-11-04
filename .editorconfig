@@ -14,7 +14,7 @@ indent_size = tab
 tab_width = 4
 
 # Line ending file format (lf|crlf|cr)
-# end_of_line = crlf
+end_of_line = lf
 
 # File character encoding (latin1|utf-8|utf-16be|utf-16le)
 charset = utf-8

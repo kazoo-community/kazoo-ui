@@ -4,7 +4,6 @@ extends:
   - plugin:es5/no-es2015
 plugins:
   - standard
-  - promise
 env:
   browser: true
   jquery: true
@@ -18,6 +17,7 @@ globals:
 rules:
   no-tabs: 0
   indent: [ "error", "tab", { "SwitchCase": 1 }]
+  linebreak-style: [ "error", "unix" ]
   semi:
     - error
     - always

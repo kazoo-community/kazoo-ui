@@ -1,144 +1,144 @@
 winkstart.module('pbxs', 'pbxs', {
-        subscribe: {
-            'pbxs.activate' : 'activate',
-            'pbxs.initialized' : 'initialized',
-            'pbxs.module_activate': 'module_activate',
-        }
-    },
-    /* The code in this initialization function is required for
-     * loading routine.
-     */
-    function() {
-        var THIS = this;
+	subscribe: {
+		'pbxs.activate' : 'activate',
+		'pbxs.initialized' : 'initialized',
+		'pbxs.module_activate': 'module_activate',
+	}
+},
+/* The code in this initialization function is required for
+ * loading routine.
+ */
+function() {
+	var THIS = this;
 
-        if('modules' in winkstart.apps[THIS.__module]) {
-            if('whitelist' in winkstart.apps[THIS.__module].modules) {
-                THIS.modules = {};
+	if('modules' in winkstart.apps[THIS.__module]) {
+		if('whitelist' in winkstart.apps[THIS.__module].modules) {
+			THIS.modules = {};
 
-                $.each(winkstart.apps[THIS.__module].modules.whitelist, function(k, v) {
-                    THIS.modules[v] = false;
-                });
-            }
+			$.each(winkstart.apps[THIS.__module].modules.whitelist, function(k, v) {
+				THIS.modules[v] = false;
+			});
+		}
 
-            if('blacklist' in winkstart.apps[THIS.__module].modules) {
-                $.each(winkstart.apps[THIS.__module].modules.blacklist, function(k, v) {
-                    if(v in THIS.modules) {
-                        delete THIS.modules[v];
-                    }
-                });
-            }
-        }
+		if('blacklist' in winkstart.apps[THIS.__module].modules) {
+			$.each(winkstart.apps[THIS.__module].modules.blacklist, function(k, v) {
+				if(v in THIS.modules) {
+					delete THIS.modules[v];
+				}
+			});
+		}
+	}
 
-        THIS.uninitialized_count = THIS._count(THIS.modules);
+	THIS.uninitialized_count = THIS._count(THIS.modules);
 
-        THIS.whapp_auth(function() {
-            winkstart.publish('whappnav.add', {
-                name : THIS.__module,
-                weight: 20
-            });
+	THIS.whapp_auth(function() {
+		winkstart.publish('whappnav.add', {
+			name : THIS.__module,
+			weight: 20
+		});
 
-            THIS.initialization_check();
-        });
+		THIS.initialization_check();
+	});
 
-        THIS.whapp_config();
+	THIS.whapp_config();
 
-        winkstart.registerResources(THIS.__whapp, THIS.config.resources);
-    },
-    {
-        modules: {
-            'pbxs_manager': false
-        },
+	winkstart.registerResources(THIS.__whapp, THIS.config.resources);
+},
+{
+	modules: {
+		'pbxs_manager': false
+	},
 
-        is_initialized: false,
+	is_initialized: false,
 
-        uninitialized_count: 1337,
+	uninitialized_count: 1337,
 
-        initialized: function() {
-            var THIS = this;
+	initialized: function() {
+		var THIS = this;
 
-            THIS.is_initialized = true;
+		THIS.is_initialized = true;
 
-            if(winkstart.apps['pbxs']['default']) {
-                $('[data-whapp="pbxs"] > a').addClass('activate');
-                THIS.setup_page();
-            }
-        },
+		if(winkstart.apps['pbxs']['default']) {
+			$('[data-whapp="pbxs"] > a').addClass('activate');
+			THIS.setup_page();
+		}
+	},
 
-        activate: function() {
-            var THIS = this;
+	activate: function() {
+		var THIS = this;
 
-            THIS.whapp_auth(function() {
-                THIS.initialization_check();
-            });
-        },
+		THIS.whapp_auth(function() {
+			THIS.initialization_check();
+		});
+	},
 
-        initialization_check: function() {
-            var THIS = this;
+	initialization_check: function() {
+		var THIS = this;
 
-            if (!THIS.is_initialized) {
-                // Load the modules
-                $.each(THIS.modules, function(k, v) {
-                    if(!v) {
-                        THIS.modules[k] = true;
-                        winkstart.module(THIS.__module, k).init(function() {
-                            winkstart.log(THIS.__module + ': Initialized ' + k);
+		if (!THIS.is_initialized) {
+			// Load the modules
+			$.each(THIS.modules, function(k, v) {
+				if(!v) {
+					THIS.modules[k] = true;
+					winkstart.module(THIS.__module, k).init(function() {
+						winkstart.log(THIS.__module + ': Initialized ' + k);
 
-                            if(!--THIS.uninitialized_count) {
-                                winkstart.publish(THIS.__module + '.initialized', {});
-                            }
-                        });
-                    }
-                });
-            }
-            else {
-                THIS.setup_page();
-            }
-        },
+						if(!--THIS.uninitialized_count) {
+							winkstart.publish(THIS.__module + '.initialized', {});
+						}
+					});
+				}
+			});
+		}
+		else {
+			THIS.setup_page();
+		}
+	},
 
-        module_activate: function(args) {
-            var THIS = this;
+	module_activate: function(args) {
+		var THIS = this;
 
-            THIS.whapp_auth(function() {
-                winkstart.publish(args.name + '.activate');
-            });
-        },
+		THIS.whapp_auth(function() {
+			winkstart.publish(args.name + '.activate');
+		});
+	},
 
-        whapp_auth: function(callback) {
-            var THIS = this;
+	whapp_auth: function(callback) {
+		var THIS = this;
 
-            if('auth_token' in winkstart.apps[THIS.__module] && winkstart.apps[THIS.__module].auth_token) {
-                callback();
-            }
-            else {
-                winkstart.publish('auth.shared_auth', {
-                    app_name: THIS.__module,
-                    callback: (typeof callback == 'function') ? callback : undefined
-                });
-            }
-        },
+		if('auth_token' in winkstart.apps[THIS.__module] && winkstart.apps[THIS.__module].auth_token) {
+			callback();
+		}
+		else {
+			winkstart.publish('auth.shared_auth', {
+				app_name: THIS.__module,
+				callback: (typeof callback == 'function') ? callback : undefined
+			});
+		}
+	},
 
-        _count: function(obj) {
-            var count = 0;
+	_count: function(obj) {
+		var count = 0;
 
-            $.each(obj, function() {
-                count++;
-            });
+		$.each(obj, function() {
+			count++;
+		});
 
-            return count;
-        },
+		return count;
+	},
 
-        setup_page: function() {
-            var THIS = this;
+	setup_page: function() {
+		var THIS = this;
 
-            winkstart.publish('pbxs.module_activate', {name: 'pbxs_manager'});
-        },
+		winkstart.publish('pbxs.module_activate', {name: 'pbxs_manager'});
+	},
 
-        whapp_config: function() {
-            var THIS = this;
+	whapp_config: function() {
+		var THIS = this;
 
-            winkstart.apps['pbxs'] = $.extend(true, {
-                is_masqueradable: true
-            }, winkstart.apps['pbxs']);
-        }
-    }
+		winkstart.apps['pbxs'] = $.extend(true, {
+			is_masqueradable: true
+		}, winkstart.apps['pbxs']);
+	}
+}
 );
