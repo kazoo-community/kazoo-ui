@@ -1,411 +1,411 @@
 winkstart.module('voip', 'featurecode', {
-        css: [
-            'css/featurecode.css'
-        ],
+	css: [
+		'css/featurecode.css'
+	],
 
-        templates: {
-            featurecode: 'tmpl/featurecode.html',
-       },
+	templates: {
+		featurecode: 'tmpl/featurecode.html',
+	},
 
-        subscribe: {
-            'featurecode.activate' : 'activate',
-            'featurecode.define_featurecodes': 'define_featurecodes'
-        },
+	subscribe: {
+		'featurecode.activate' : 'activate',
+		'featurecode.define_featurecodes': 'define_featurecodes'
+	},
 
-        resources: {
-            'featurecode.list': {
-                url: '{api_url}/accounts/{account_id}/callflows',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'featurecode.get': {
-                url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'featurecode.create': {
-                url: '{api_url}/accounts/{account_id}/callflows',
-                contentType: 'application/json',
-                verb: 'PUT'
-            },
-            'featurecode.update': {
-                url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-            'featurecode.delete': {
-                url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
-                contentType: 'application/json',
-                verb: 'DELETE'
-            }
-        }
-    },
-    function (args) {
-        winkstart.registerResources(this.__whapp, this.config.resources);
+	resources: {
+		'featurecode.list': {
+			url: '{api_url}/accounts/{account_id}/callflows',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'featurecode.get': {
+			url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'featurecode.create': {
+			url: '{api_url}/accounts/{account_id}/callflows',
+			contentType: 'application/json',
+			verb: 'PUT'
+		},
+		'featurecode.update': {
+			url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
+			contentType: 'application/json',
+			verb: 'POST'
+		},
+		'featurecode.delete': {
+			url: '{api_url}/accounts/{account_id}/callflows/{featurecode_id}',
+			contentType: 'application/json',
+			verb: 'DELETE'
+		}
+	}
+},
+function (args) {
+	winkstart.registerResources(this.__whapp, this.config.resources);
 
-        winkstart.publish('whappnav.subnav.add', {
-            whapp: 'voip',
-            module: this.__module,
-            label: _t('featurecode', 'feature_codes_label'),
-            icon: 'sip',
-            weight: '95'
-        });
-    },
-    {
-        actions: {},
-        categories: {},
+	winkstart.publish('whappnav.subnav.add', {
+		whapp: 'voip',
+		module: this.__module,
+		label: _t('featurecode', 'feature_codes_label'),
+		icon: 'sip',
+		weight: '95'
+	});
+},
+{
+	actions: {},
+	categories: {},
 
-        activate: function () {
-            var THIS = this,
-                featurecode_html;
+	activate: function () {
+		var THIS = this,
+			featurecode_html;
 
-            $('#ws-content').empty();
-            THIS.categories = {};
-            THIS.actions = {};
-            winkstart.publish('featurecode.define_featurecodes', THIS.actions);
+		$('#ws-content').empty();
+		THIS.categories = {};
+		THIS.actions = {};
+		winkstart.publish('featurecode.define_featurecodes', THIS.actions);
 
-            $.each(THIS.actions, function(i, data) {
-                this.tag = i;
-                this.number = data.number == undefined ? data.default_number : data.number;
-                if('category' in data) {
-                    data.category in THIS.categories ? true : THIS.categories[data.category] = [];
-                    THIS.categories[data.category].push(data);
-                }
-            });
+		$.each(THIS.actions, function(i, data) {
+			this.tag = i;
+			this.number = data.number == undefined ? data.default_number : data.number;
+			if('category' in data) {
+				data.category in THIS.categories ? true : THIS.categories[data.category] = [];
+				THIS.categories[data.category].push(data);
+			}
+		});
 
-            winkstart.getJSON('featurecode.list', {
-                    crossbar: true,
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(data, status) {
+		winkstart.getJSON('featurecode.list', {
+			crossbar: true,
+			account_id: winkstart.apps['voip'].account_id,
+			api_url: winkstart.apps['voip'].api_url
+		},
+		function(data, status) {
 
-                    $.each(data.data, function() {
-                        if('featurecode' in this && this.featurecode != false) {
-                            if(this.featurecode.name in THIS.actions) {
-                                THIS.actions[this.featurecode.name].id = this.id;
-                                THIS.actions[this.featurecode.name].enabled = true;
-                                THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
-                            }
-                        }
-                    });
+			$.each(data.data, function() {
+				if('featurecode' in this && this.featurecode != false) {
+					if(this.featurecode.name in THIS.actions) {
+						THIS.actions[this.featurecode.name].id = this.id;
+						THIS.actions[this.featurecode.name].enabled = true;
+						THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
+					}
+				}
+			});
 
-                    var data = {
-						'categories': THIS.categories,
-						'label':'data',
-						_t: function(param){
-							return window.translate['featurecode'][param];
-						}
-					},
-					featurecode_html = THIS.templates.featurecode.tmpl(data);
+			var data = {
+					'categories': THIS.categories,
+					'label':'data',
+					_t: function(param){
+						return window.translate['featurecode'][param];
+					}
+				},
+				featurecode_html = THIS.templates.featurecode.tmpl(data);
 
-                    winkstart.accordion(featurecode_html);
+			winkstart.accordion(featurecode_html);
 
-                    $('*[rel=popover]:not([type="text"])', featurecode_html).popover({
-                        trigger: 'hover'
-                    });
+			$('*[rel=popover]:not([type="text"])', featurecode_html).popover({
+				trigger: 'hover'
+			});
 
-                    $('*[rel=popover][type="text"]', featurecode_html).popover({
-                        trigger: 'focus'
-                    });
+			$('*[rel=popover][type="text"]', featurecode_html).popover({
+				trigger: 'focus'
+			});
 
-                    $('.featurecode_number', featurecode_html).bind('blur keyup focus', function(){
-                        var action_wrapper = $(this).parents('.action_wrapper');
+			$('.featurecode_number', featurecode_html).bind('blur keyup focus', function(){
+				var action_wrapper = $(this).parents('.action_wrapper');
 
-                        action_wrapper.dataset('number', $(this).val());
+				action_wrapper.dataset('number', $(this).val());
 
-                        if($(this).val() != THIS.actions[action_wrapper.dataset('action')].number) {
-                            action_wrapper.addClass('changed');
-                        } else {
-                            action_wrapper.removeClass('changed');
-                        }
-                    });
+				if($(this).val() != THIS.actions[action_wrapper.dataset('action')].number) {
+					action_wrapper.addClass('changed');
+				} else {
+					action_wrapper.removeClass('changed');
+				}
+			});
 
-                    $('.featurecode_enabled', featurecode_html).each(function() {
-                            var action_wrapper = $(this).parents('.action_wrapper'),
-                                number_field = action_wrapper.find('.featurecode_number');
+			$('.featurecode_enabled', featurecode_html).each(function() {
+				var action_wrapper = $(this).parents('.action_wrapper'),
+					number_field = action_wrapper.find('.featurecode_number');
 
-                            !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
-                    });
+				!$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
+			});
 
-                    $('.featurecode_enabled', featurecode_html).change(function() {
-                        var action_wrapper = $(this).parents('.action_wrapper');
+			$('.featurecode_enabled', featurecode_html).change(function() {
+				var action_wrapper = $(this).parents('.action_wrapper');
 
-                        if(!$(this).is(':checked') && action_wrapper.dataset('enabled') == 'true') {
-                            action_wrapper.addClass('disabled');
-                        } else if($(this).is(':checked') && action_wrapper.dataset('enabled') == 'false'){
-                            action_wrapper.addClass('enabled');
-                        } else {
-                            action_wrapper.removeClass('enabled');
-                            action_wrapper.removeClass('disabled');
-                        }
+				if(!$(this).is(':checked') && action_wrapper.dataset('enabled') == 'true') {
+					action_wrapper.addClass('disabled');
+				} else if($(this).is(':checked') && action_wrapper.dataset('enabled') == 'false'){
+					action_wrapper.addClass('enabled');
+				} else {
+					action_wrapper.removeClass('enabled');
+					action_wrapper.removeClass('disabled');
+				}
 
-                        var number_field = action_wrapper.find('.featurecode_number');
-                        !$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
+				var number_field = action_wrapper.find('.featurecode_number');
+				!$(this).is(':checked') ? $(number_field).attr('disabled', '') : $(number_field).removeAttr('disabled');
 
-                    });
+			});
 
-                    $('.featurecode-save', featurecode_html).click(function() {
-                        var form_data = THIS.clean_form_data();
+			$('.featurecode-save', featurecode_html).click(function() {
+				var form_data = THIS.clean_form_data();
 
-                        THIS.update_list_featurecodes(form_data);
+				THIS.update_list_featurecodes(form_data);
 
-                        return false;
-                    });
+				return false;
+			});
 
-                    $('#ws-content')
-                        .empty()
-                        .append(featurecode_html);
-                }
-            );
-        },
+			$('#ws-content')
+				.empty()
+				.append(featurecode_html);
+		}
+		);
+	},
 
-        update_list_featurecodes: function(form_data) {
-            var THIS = this,
-                count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
+	update_list_featurecodes: function(form_data) {
+		var THIS = this,
+			count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
-            if(count == 0) {
-                winkstart.alert('info', _t('featurecode', 'nothing_to_save'));
-                return;
-            }
+		if(count == 0) {
+			winkstart.alert('info', _t('featurecode', 'nothing_to_save'));
+			return;
+		}
 
-            $.each(form_data.created_callflows, function() {
-                winkstart.putJSON('featurecode.create', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        featurecode_id: this.id,
-                        data: {
-                            flow: this.flow,
-                            patterns: this.patterns,
-                            numbers: this.numbers,
-                            featurecode: {
-                                name: this.action,
-                                number: this.number
-                            }
-                        }
-                    },
-                    function(data, status) {
-                        if(!--count) {
-                            winkstart.publish('featurecode.activate');
-                        }
-                    }
-                );
-            });
+		$.each(form_data.created_callflows, function() {
+			winkstart.putJSON('featurecode.create', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				featurecode_id: this.id,
+				data: {
+					flow: this.flow,
+					patterns: this.patterns,
+					numbers: this.numbers,
+					featurecode: {
+						name: this.action,
+						number: this.number
+					}
+				}
+			},
+			function(data, status) {
+				if(!--count) {
+					winkstart.publish('featurecode.activate');
+				}
+			}
+			);
+		});
 
-            $.each(form_data.updated_callflows, function() {
-                winkstart.postJSON('featurecode.update', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        featurecode_id: this.id,
-                        data: {
-                            flow: this.flow,
-                            patterns: this.patterns,
-                            numbers: this.numbers,
-                            featurecode: {
-                                name: this.action,
-                                number: this.number
-                            }
-                        }
-                    },
-                    function(data, status) {
-                        if(!--count) {
-                            winkstart.publish('featurecode.activate');
-                        }
-                    }
-                );
-            });
+		$.each(form_data.updated_callflows, function() {
+			winkstart.postJSON('featurecode.update', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				featurecode_id: this.id,
+				data: {
+					flow: this.flow,
+					patterns: this.patterns,
+					numbers: this.numbers,
+					featurecode: {
+						name: this.action,
+						number: this.number
+					}
+				}
+			},
+			function(data, status) {
+				if(!--count) {
+					winkstart.publish('featurecode.activate');
+				}
+			}
+			);
+		});
 
 
-            $.each(form_data.deleted_callflows, function() {
-                winkstart.deleteJSON('featurecode.delete', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        featurecode_id: this.id
-                    },
-                    function() {
-                        if(!--count) {
-                            winkstart.publish('featurecode.activate');
-                        }
-                    }
-                );
-            });
-        },
+		$.each(form_data.deleted_callflows, function() {
+			winkstart.deleteJSON('featurecode.delete', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				featurecode_id: this.id
+			},
+			function() {
+				if(!--count) {
+					winkstart.publish('featurecode.activate');
+				}
+			}
+			);
+		});
+	},
 
-        render_featurecodes: function() {
-            var THIS = this;
+	render_featurecodes: function() {
+		var THIS = this;
 
-            winkstart.getJSON('featurecode.list', {
-                    crossbar: true,
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(data, status) {
-                    $.each(data.data, function() {
-                        if('featurecode' in this && this.featurecode != false) {
-                            if(this.featurecode.name in THIS.actions) {
-                                THIS.actions[this.featurecode.name].id = this.id;
-                                THIS.actions[this.featurecode.name].enabled = true;
-                                THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
-                            }
-                        }
-                    });
-                    var data = {
-						'categories': THIS.categories,
-						'label':'data',
-						_t: function(param){
-							return window.translate['featurecode'][param];
-						}
-					},
-					featurecode_html = THIS.templates.featurecode.tmpl(data);
+		winkstart.getJSON('featurecode.list', {
+			crossbar: true,
+			account_id: winkstart.apps['voip'].account_id,
+			api_url: winkstart.apps['voip'].api_url
+		},
+		function(data, status) {
+			$.each(data.data, function() {
+				if('featurecode' in this && this.featurecode != false) {
+					if(this.featurecode.name in THIS.actions) {
+						THIS.actions[this.featurecode.name].id = this.id;
+						THIS.actions[this.featurecode.name].enabled = true;
+						THIS.actions[this.featurecode.name].number = this.featurecode.number.replace('\\', '');
+					}
+				}
+			});
+			var data = {
+					'categories': THIS.categories,
+					'label':'data',
+					_t: function(param){
+						return window.translate['featurecode'][param];
+					}
+				},
+				featurecode_html = THIS.templates.featurecode.tmpl(data);
 
-                    $('#ws-content')
-                        .empty()
-                        .append(featurecode_html);
-                }
-            );
-        },
+			$('#ws-content')
+				.empty()
+				.append(featurecode_html);
+		}
+		);
+	},
 
-        clean_form_data: function() {
-            var THIS = this;
+	clean_form_data: function() {
+		var THIS = this;
 
-            var form_data = {
-                created_callflows: [],
-                deleted_callflows: [],
-                updated_callflows: []
-            };
+		var form_data = {
+			created_callflows: [],
+			deleted_callflows: [],
+			updated_callflows: []
+		};
 
-            $('.enabled', '#featurecode-view').each(function() {
-                var callflow = $(this).dataset();
+		$('.enabled', '#featurecode-view').each(function() {
+			var callflow = $(this).dataset();
 
-                callflow.flow = {
-                    data: THIS.actions[callflow.action].data,
-                    module: THIS.actions[callflow.action].module,
-                    children: {}
-                };
+			callflow.flow = {
+				data: THIS.actions[callflow.action].data,
+				module: THIS.actions[callflow.action].module,
+				children: {}
+			};
 
-                callflow.type += 's';
+			callflow.type += 's';
 
-                /* if a star is in the pattern, then we need to escape it */
-                if(callflow.type === 'patterns') {
-                    callflow.number = callflow.number.replace(/([*])/g,'\\$1');
-                }
+			/* if a star is in the pattern, then we need to escape it */
+			if(callflow.type === 'patterns') {
+				callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+			}
 
-                callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
-                form_data.created_callflows.push(callflow);
-            });
+			callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
+			form_data.created_callflows.push(callflow);
+		});
 
-            $('.disabled', '#featurecode-view').each(function() {
-                var callflow = $(this).dataset();
-                form_data.deleted_callflows.push(callflow);
-            });
+		$('.disabled', '#featurecode-view').each(function() {
+			var callflow = $(this).dataset();
+			form_data.deleted_callflows.push(callflow);
+		});
 
-            $('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
-                if($(this).dataset('enabled') == 'true') {
-                    var callflow = $(this).dataset();
+		$('.changed:not(.enabled, .disabled)', '#featurecode-view').each(function() {
+			if($(this).dataset('enabled') == 'true') {
+				var callflow = $(this).dataset();
 
-                    callflow.flow = {
-                        data: THIS.actions[callflow.action].data,
-                        module: THIS.actions[callflow.action].module,
-                        children: {}
-                    };
+				callflow.flow = {
+					data: THIS.actions[callflow.action].data,
+					module: THIS.actions[callflow.action].module,
+					children: {}
+				};
 
-                    //callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
-                    callflow.type += 's';
+				//callflow.patterns = [THIS.actions[callflow.action].build_regex(callflow.number)];
+				callflow.type += 's';
 
-                    /* if a star is in the pattern, then we need to escape it */
-                    if(callflow.type === 'patterns') {
-                        callflow.number = callflow.number.replace(/([*])/g,'\\$1');
-                    }
+				/* if a star is in the pattern, then we need to escape it */
+				if(callflow.type === 'patterns') {
+					callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+				}
 
-                    callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
+				callflow[callflow.type] = [THIS.actions[callflow.action].build_regex(callflow.number)];
 
-                    form_data.updated_callflows.push(callflow);
-                }
-            });
+				form_data.updated_callflows.push(callflow);
+			}
+		});
 
-            return form_data;
-        },
+		return form_data;
+	},
 
-        construct_action: function(json) {
-            var action = [];
+	construct_action: function(json) {
+		var action = [];
 
-            if('data' in json) {
-                if('action' in json.data) {
-                    action += '{action=' + json.data.action + '}';
-                }
-            }
+		if('data' in json) {
+			if('action' in json.data) {
+				action += '{action=' + json.data.action + '}';
+			}
+		}
 
-            return json.module + action;
-        },
+		return json.module + action;
+	},
 
-        define_featurecodes: function(featurecodes) {
-            var THIS = this;
+	define_featurecodes: function(featurecodes) {
+		var THIS = this;
 
-            $.extend(featurecodes, {
-               'call_forward[action=activate]': {
-                    name: _t('featurecode', 'enable_call_forward'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'call_forward_cat'),
-                    module: 'call_forward',
-                    number_type: 'number',
-                    data: {
-                        action: 'activate'
-                    },
-                    enabled: false,
-                    default_number: '72',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'call_forward[action=deactivate]': {
-                    name: _t('featurecode', 'disable_call_forward'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'call_forward_cat'),
-                    module: 'call_forward',
-                    number_type: 'number',
-                    data: {
-                        action: 'deactivate'
-                    },
-                    enabled: false,
-                    default_number: '73',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'call_forward[action=toggle]': {
-                    name: _t('featurecode', 'toggle_call_forward'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'call_forward_cat'),
-                    module: 'call_forward',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'toggle'
-                    },
-                    enabled: false,
-                    default_number: '74',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'call_forward[action=update]': {
-                    name: _t('featurecode', 'update_call_forward'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'call_forward_cat'),
-                    module: 'call_forward',
-                    number_type: 'number',
-                    data: {
-                        action: 'update'
-                    },
-                    enabled: false,
-                    default_number: '56',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
+		$.extend(featurecodes, {
+			'call_forward[action=activate]': {
+				name: _t('featurecode', 'enable_call_forward'),
+				icon: 'phone',
+				category: _t('featurecode', 'call_forward_cat'),
+				module: 'call_forward',
+				number_type: 'number',
+				data: {
+					action: 'activate'
+				},
+				enabled: false,
+				default_number: '72',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'call_forward[action=deactivate]': {
+				name: _t('featurecode', 'disable_call_forward'),
+				icon: 'phone',
+				category: _t('featurecode', 'call_forward_cat'),
+				module: 'call_forward',
+				number_type: 'number',
+				data: {
+					action: 'deactivate'
+				},
+				enabled: false,
+				default_number: '73',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'call_forward[action=toggle]': {
+				name: _t('featurecode', 'toggle_call_forward'),
+				icon: 'phone',
+				category: _t('featurecode', 'call_forward_cat'),
+				module: 'call_forward',
+				number_type: 'pattern',
+				data: {
+					action: 'toggle'
+				},
+				enabled: false,
+				default_number: '74',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'call_forward[action=update]': {
+				name: _t('featurecode', 'update_call_forward'),
+				icon: 'phone',
+				category: _t('featurecode', 'call_forward_cat'),
+				module: 'call_forward',
+				number_type: 'number',
+				data: {
+					action: 'update'
+				},
+				enabled: false,
+				default_number: '56',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
 			'donotdisturb[action="activate"]': {
 				name: _t('featurecode', 'enable_donotdisturb'),
 				category: _t('featurecode', 'dnd_cat'),
@@ -451,165 +451,165 @@ winkstart.module('voip', 'featurecode', {
 					return '^\\*' + number + '([0-9]*)$';
 				}
 			},
-                'hotdesk[action=login]': {
-                    name: _t('featurecode', 'enable_hot_desking'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'hot_desking_cat'),
-                    module: 'hotdesk',
-                    number_type: 'number',
-                    data: {
-                        action: 'login'
-                    },
-                    enabled: false,
-                    default_number: '11',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'hotdesk[action=logout]': {
-                    name: _t('featurecode', 'disable_hot_desking'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'hot_desking_cat'),
-                    module: 'hotdesk',
-                    number_type: 'number',
-                    data: {
-                        action: 'logout'
-                    },
-                    enabled: false,
-                    default_number: '12',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'hotdesk[action=toggle]': {
-                    name: _t('featurecode', 'toggle_hot_desking'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'hot_desking_cat'),
-                    module: 'hotdesk',
-                    number_type: 'number',
-                    data: {
-                        action: 'toggle'
-                    },
-                    enabled: false,
-                    default_number: '13',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'voicemail[action=check]': {
-                    name: _t('featurecode', 'check_voicemail'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'miscellaneous_cat'),
-                    module: 'voicemail',
-                    number_type: 'number',
-                    data: {
-                        action: 'check'
-                    },
-                    enabled: false,
-                    default_number: '97',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'voicemail[action="direct"]': {
-                    name: _t('featurecode', 'direct_to_voicemail'),
-                    category: _t('featurecode', 'miscellaneous_cat'),
-                    module: 'voicemail',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'compose'
-                    },
-                    enabled: false,
-                    default_number: '*',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'intercom': {
-                    name: _t('featurecode', 'intercom'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'miscellaneous_cat'),
-                    module: 'intercom',
-                    number_type: 'pattern',
-                    data: {
-                    },
-                    enabled: false,
-                    default_number: '0',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'privacy[mode=full]': {
-                    name: _t('featurecode', 'privacy'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'miscellaneous_cat'),
-                    module: 'privacy',
-                    number_type: 'pattern',
-                    data: {
-                        mode: 'full'
-                    },
-                    enabled: false,
-                    default_number: '67',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'park_and_retrieve': {
-                    name: _t('featurecode', 'park_and_retrieve'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'parking_cat'),
-                    module: 'park',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'auto'
-                    },
-                    enabled: false,
-                    default_number: '3',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'valet': {
-                    name: _t('featurecode', 'valet'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'parking_cat'),
-                    module: 'park',
-                    number_type: 'number',
-                    data: {
-                        action: 'park'
-                    },
-                    enabled: false,
-                    default_number: '4',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'retrieve': {
-                    name: _t('featurecode', 'retrieve'),
-                    icon: 'phone',
-                    category: _t('featurecode', 'parking_cat'),
-                    module: 'park',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'retrieve'
-                    },
-                    enabled: false,
-                    default_number: '5',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                }
-                /*'call_forward[action=on_busy_enable]': {
+			'hotdesk[action=login]': {
+				name: _t('featurecode', 'enable_hot_desking'),
+				icon: 'phone',
+				category: _t('featurecode', 'hot_desking_cat'),
+				module: 'hotdesk',
+				number_type: 'number',
+				data: {
+					action: 'login'
+				},
+				enabled: false,
+				default_number: '11',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'hotdesk[action=logout]': {
+				name: _t('featurecode', 'disable_hot_desking'),
+				icon: 'phone',
+				category: _t('featurecode', 'hot_desking_cat'),
+				module: 'hotdesk',
+				number_type: 'number',
+				data: {
+					action: 'logout'
+				},
+				enabled: false,
+				default_number: '12',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'hotdesk[action=toggle]': {
+				name: _t('featurecode', 'toggle_hot_desking'),
+				icon: 'phone',
+				category: _t('featurecode', 'hot_desking_cat'),
+				module: 'hotdesk',
+				number_type: 'number',
+				data: {
+					action: 'toggle'
+				},
+				enabled: false,
+				default_number: '13',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'voicemail[action=check]': {
+				name: _t('featurecode', 'check_voicemail'),
+				icon: 'phone',
+				category: _t('featurecode', 'miscellaneous_cat'),
+				module: 'voicemail',
+				number_type: 'number',
+				data: {
+					action: 'check'
+				},
+				enabled: false,
+				default_number: '97',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'voicemail[action="direct"]': {
+				name: _t('featurecode', 'direct_to_voicemail'),
+				category: _t('featurecode', 'miscellaneous_cat'),
+				module: 'voicemail',
+				number_type: 'pattern',
+				data: {
+					action: 'compose'
+				},
+				enabled: false,
+				default_number: '*',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'intercom': {
+				name: _t('featurecode', 'intercom'),
+				icon: 'phone',
+				category: _t('featurecode', 'miscellaneous_cat'),
+				module: 'intercom',
+				number_type: 'pattern',
+				data: {
+				},
+				enabled: false,
+				default_number: '0',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'privacy[mode=full]': {
+				name: _t('featurecode', 'privacy'),
+				icon: 'phone',
+				category: _t('featurecode', 'miscellaneous_cat'),
+				module: 'privacy',
+				number_type: 'pattern',
+				data: {
+					mode: 'full'
+				},
+				enabled: false,
+				default_number: '67',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'park_and_retrieve': {
+				name: _t('featurecode', 'park_and_retrieve'),
+				icon: 'phone',
+				category: _t('featurecode', 'parking_cat'),
+				module: 'park',
+				number_type: 'pattern',
+				data: {
+					action: 'auto'
+				},
+				enabled: false,
+				default_number: '3',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'valet': {
+				name: _t('featurecode', 'valet'),
+				icon: 'phone',
+				category: _t('featurecode', 'parking_cat'),
+				module: 'park',
+				number_type: 'number',
+				data: {
+					action: 'park'
+				},
+				enabled: false,
+				default_number: '4',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'retrieve': {
+				name: _t('featurecode', 'retrieve'),
+				icon: 'phone',
+				category: _t('featurecode', 'parking_cat'),
+				module: 'park',
+				number_type: 'pattern',
+				data: {
+					action: 'retrieve'
+				},
+				enabled: false,
+				default_number: '5',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			}
+			/*'call_forward[action=on_busy_enable]': {
                     name: 'Enable Call-Forward on Busy',
                     icon: 'phone',
                     category: 'Call-Forward',
@@ -771,7 +771,7 @@ winkstart.module('voip', 'featurecode', {
                         return '^\\*'+number+'([0-9]*)$';
                     }
                 }*/
-            });
-        }
-    }
+		});
+	}
+}
 );

@@ -1,661 +1,661 @@
 winkstart.module('voip', 'conference', {
-        css: [
-            'css/style.css'
-        ],
+	css: [
+		'css/style.css'
+	],
 
-        templates: {
-            conference: 'tmpl/conference.html',
-            edit: 'tmpl/edit.html',
-            conference_callflow: 'tmpl/conference_callflow.html'
-        },
+	templates: {
+		conference: 'tmpl/conference.html',
+		edit: 'tmpl/edit.html',
+		conference_callflow: 'tmpl/conference_callflow.html'
+	},
 
-        subscribe: {
-            'conference.activate': 'activate',
-            'conference.edit': 'edit_conference',
-            'callflow.define_callflow_nodes': 'define_callflow_nodes',
-            'conference.popup_edit': 'popup_edit_conference'
-        },
+	subscribe: {
+		'conference.activate': 'activate',
+		'conference.edit': 'edit_conference',
+		'callflow.define_callflow_nodes': 'define_callflow_nodes',
+		'conference.popup_edit': 'popup_edit_conference'
+	},
 
-        resources: {
-            'conference.list': {
-                url: '{api_url}/accounts/{account_id}/conferences',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'conference.get': {
-                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-                contentType: 'application/json',
-                verb: 'GET'
-            },
-            'conference.create': {
-                url: '{api_url}/accounts/{account_id}/conferences',
-                contentType: 'application/json',
-                verb: 'PUT'
-            },
-            'conference.update': {
-                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-                contentType: 'application/json',
-                verb: 'POST'
-            },
-            'conference.delete': {
-                url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
-                contentType: 'application/json',
-                verb: 'DELETE'
-            },
-            'user.list': {
-                url: '{api_url}/accounts/{account_id}/users',
-                contentType: 'application/json',
-                verb: 'GET'
-            }
-        },
+	resources: {
+		'conference.list': {
+			url: '{api_url}/accounts/{account_id}/conferences',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'conference.get': {
+			url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'conference.create': {
+			url: '{api_url}/accounts/{account_id}/conferences',
+			contentType: 'application/json',
+			verb: 'PUT'
+		},
+		'conference.update': {
+			url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+			contentType: 'application/json',
+			verb: 'POST'
+		},
+		'conference.delete': {
+			url: '{api_url}/accounts/{account_id}/conferences/{conference_id}',
+			contentType: 'application/json',
+			verb: 'DELETE'
+		},
+		'user.list': {
+			url: '{api_url}/accounts/{account_id}/users',
+			contentType: 'application/json',
+			verb: 'GET'
+		}
+	},
 
-        validation: [
-            { name: '#name',                  regex: /^.+$/ },
-            { name: '#member_pins_string',    regex: _t('conference', 'member_pins_string_regex') },
-            { name: '#member_numbers_string', regex: /^[0-9,\s]*$/ }
-        ]
-    },
-    function(args) {
-        var THIS = this;
+	validation: [
+		{ name: '#name',                  regex: /^.+$/ },
+		{ name: '#member_pins_string',    regex: _t('conference', 'member_pins_string_regex') },
+		{ name: '#member_numbers_string', regex: /^[0-9,\s]*$/ }
+	]
+},
+function(args) {
+	var THIS = this;
 
-        winkstart.registerResources(this.__whapp, this.config.resources);
+	winkstart.registerResources(this.__whapp, this.config.resources);
 
-        winkstart.publish('whappnav.subnav.add', {
-            whapp: 'voip',
-            module: this.__module,
-            label: _t('conference', 'conferences_label'),
-            icon: 'conference',
-            weight: '05',
-            category: _t('config', 'advanced_menu_cat')
-        });
-    },
-    {
-        letters_to_numbers: function(string) {
-            var result = '';
+	winkstart.publish('whappnav.subnav.add', {
+		whapp: 'voip',
+		module: this.__module,
+		label: _t('conference', 'conferences_label'),
+		icon: 'conference',
+		weight: '05',
+		category: _t('config', 'advanced_menu_cat')
+	});
+},
+{
+	letters_to_numbers: function(string) {
+		var result = '';
 
-            $.each(string.split(''), function(index, value) {
-                if(value.match(/^[aAbBcC]$/)) {
-                    result += '2';
-                }
-                else if(value.match(/^[dDeEfF]$/)) {
-                    result += '3';
-                }
-                else if(value.match(/^[gGhHiI]$/)) {
-                    result += '4';
-                }
-                else if(value.match(/^[jJkKlL]$/)) {
-                    result += '5';
-                }
-                else if(value.match(/^[mMnNoO]$/)) {
-                    result += '6';
-                }
-                else if(value.match(/^[pPqQrRsS]$/)) {
-                    result += '7';
-                }
-                else if(value.match(/^[tTuUvV]$/)) {
-                    result += '8';
-                }
-                else if(value.match(/^[wWxXyYzZ]$/)) {
-                    result += '9';
-                }
-                else {
-                    result += value;
-                }
-            });
+		$.each(string.split(''), function(index, value) {
+			if(value.match(/^[aAbBcC]$/)) {
+				result += '2';
+			}
+			else if(value.match(/^[dDeEfF]$/)) {
+				result += '3';
+			}
+			else if(value.match(/^[gGhHiI]$/)) {
+				result += '4';
+			}
+			else if(value.match(/^[jJkKlL]$/)) {
+				result += '5';
+			}
+			else if(value.match(/^[mMnNoO]$/)) {
+				result += '6';
+			}
+			else if(value.match(/^[pPqQrRsS]$/)) {
+				result += '7';
+			}
+			else if(value.match(/^[tTuUvV]$/)) {
+				result += '8';
+			}
+			else if(value.match(/^[wWxXyYzZ]$/)) {
+				result += '9';
+			}
+			else {
+				result += value;
+			}
+		});
 
-            return result;
-        },
+		return result;
+	},
 
-		/* Since the extend function doesn't override arrays, we need to do that */
-        fix_arrays: function(merged_data, form_data) {
-			var THIS = this;
+	/* Since the extend function doesn't override arrays, we need to do that */
+	fix_arrays: function(merged_data, form_data) {
+		var THIS = this;
 
-			if('member' in form_data && 'numbers' in form_data.member) {
-				merged_data.member.numbers = form_data.member.numbers;
+		if('member' in form_data && 'numbers' in form_data.member) {
+			merged_data.member.numbers = form_data.member.numbers;
+		}
+
+		return merged_data;
+	},
+
+	save_conference: function(form_data, data, success, error) {
+		var THIS = this,
+			normalized_data = THIS.fix_arrays(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
+
+		if(typeof data.data == 'object' && data.data.id) {
+			winkstart.request(true, 'conference.update', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				conference_id: data.data.id,
+				data: normalized_data
+			},
+			function(_data, status) {
+				if(typeof success == 'function') {
+					success(_data, status, 'update');
+				}
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status, 'update');
+				}
+			}
+			);
+		}
+		else {
+			winkstart.request(true, 'conference.create', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				data: normalized_data
+			},
+			function(_data, status) {
+				if(typeof success == 'function') {
+					success(_data, status, 'create');
+				}
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status, 'create');
+				}
+			}
+			);
+		}
+	},
+
+	edit_conference: function(data, _parent, _target, _callbacks, data_defaults){
+		var THIS = this,
+			parent = _parent || $('#conference-content'),
+			target = _target || $('#conference-view', parent),
+			_callbacks = _callbacks || {},
+			callbacks = {
+				save_success: _callbacks.save_success || function(_data) {
+					THIS.render_list(parent);
+
+					THIS.edit_conference({ id: _data.data.id }, parent, target, callbacks);
+				},
+
+				save_error: _callbacks.save_error,
+
+				delete_success: _callbacks.delete_success || function() {
+					target.empty(),
+
+					THIS.render_list(parent);
+				},
+
+				delete_error: _callbacks.delete_error,
+
+				after_render: _callbacks.after_render
+			},
+			defaults = {
+				data: $.extend(true, {
+					member: {},
+					play_entry_tone: true,
+					play_exit_tone: true,
+					play_name: true
+				}, data_defaults || {}),
+				field_data: {
+					users: []
+				}
+			};
+
+		winkstart.parallel({
+			user_list: function(callback) {
+				winkstart.request(true, 'user.list', {
+					account_id: winkstart.apps['voip'].account_id,
+					api_url: winkstart.apps['voip'].api_url
+				},
+				function(_data, status) {
+					_data.data.unshift({
+						id: '',
+						first_name: '- No',
+						last_name: 'owner -'
+					});
+
+					defaults.field_data.users = _data.data;
+
+					callback(null, _data);
+				}
+				);
+			},
+			get_conference: function(callback) {
+				if(typeof data == 'object' && data.id) {
+					winkstart.request(true, 'conference.get', {
+						account_id: winkstart.apps['voip'].account_id,
+						api_url: winkstart.apps['voip'].api_url,
+						conference_id: data.id
+					},
+					function(_data, status) {
+						THIS.migrate_data(_data);
+
+						THIS.format_data(_data);
+
+						callback(null, _data);
+					}
+					);
+				}
+				else {
+					callback(null, {});
+				}
+			}
+		},
+		function(err, results) {
+			var render_data = defaults;
+
+			if(typeof data === 'object' && data.id) {
+				render_data = $.extend(true, defaults, results.get_conference);
 			}
 
-			return merged_data;
-        },
+			THIS.render_conference(render_data, target, callbacks);
 
-        save_conference: function(form_data, data, success, error) {
-            var THIS = this,
-                normalized_data = THIS.fix_arrays(THIS.normalize_data($.extend(true, {}, data.data, form_data)), form_data);
+			if(typeof callbacks.after_render == 'function') {
+				callbacks.after_render();
+			}
+		}
+		);
+	},
 
-            if(typeof data.data == 'object' && data.data.id) {
-                winkstart.request(true, 'conference.update', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        conference_id: data.data.id,
-                        data: normalized_data
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'update');
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'update');
-                        }
-                    }
-                );
-            }
-            else {
-                winkstart.request(true, 'conference.create', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        data: normalized_data
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status, 'create');
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status, 'create');
-                        }
-                    }
-                );
-            }
-        },
+	delete_conference: function(data, success, error) {
+		var THIS = this;
 
-        edit_conference: function(data, _parent, _target, _callbacks, data_defaults){
-            var THIS = this,
-                parent = _parent || $('#conference-content'),
-                target = _target || $('#conference-view', parent),
-                _callbacks = _callbacks || {},
-                callbacks = {
-                    save_success: _callbacks.save_success || function(_data) {
-                        THIS.render_list(parent);
+		if(data.data.id) {
+			winkstart.request(true, 'conference.delete', {
+				account_id: winkstart.apps['voip'].account_id,
+				api_url: winkstart.apps['voip'].api_url,
+				conference_id: data.data.id
+			},
+			function(_data, status) {
+				if(typeof success == 'function') {
+					success(_data, status);
+				}
+			},
+			function(_data, status) {
+				if(typeof error == 'function') {
+					error(_data, status);
+				}
+			}
+			);
+		}
+	},
 
-                        THIS.edit_conference({ id: _data.data.id }, parent, target, callbacks);
-                    },
+	render_conference: function(data, target, callbacks){
+		data._t = function(param){
+			return window.translate['conference'][param];
+		};
+		var THIS = this,
+			conference_html = THIS.templates.edit.tmpl(data);
 
-                    save_error: _callbacks.save_error,
+		winkstart.validate.set(THIS.config.validation, conference_html);
 
-                    delete_success: _callbacks.delete_success || function() {
-                        target.empty(),
+		$('*[rel=popover]:not([type="text"])', conference_html).popover({
+			trigger: 'hover'
+		});
 
-                        THIS.render_list(parent);
-                    },
+		$('*[rel=popover][type="text"]', conference_html).popover({
+			trigger: 'focus'
+		});
 
-                    delete_error: _callbacks.delete_error,
+		winkstart.tabs($('.view-buttons', conference_html), $('.tabs', conference_html));
 
-                    after_render: _callbacks.after_render
-                },
-                defaults = {
-                    data: $.extend(true, {
-                        member: {},
-                        play_entry_tone: true,
-                        play_exit_tone: true,
-                        play_name: true
-                    }, data_defaults || {}),
-                    field_data: {
-                        users: []
-                    }
-                };
+		if(!$('#owner_id', conference_html).val()) {
+			$('#edit_link', conference_html).hide();
+		}
 
-            winkstart.parallel({
-                    user_list: function(callback) {
-                        winkstart.request(true, 'user.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(_data, status) {
-                                _data.data.unshift({
-                                    id: '',
-                                    first_name: '- No',
-                                    last_name: 'owner -'
-                                });
+		$('#owner_id', conference_html).change(function() {
+			!$('#owner_id option:selected', conference_html).val() ? $('#edit_link', conference_html).hide() : $('#edit_link', conference_html).show();
+		});
 
-                                defaults.field_data.users = _data.data;
+		$('.inline_action', conference_html).click(function(ev) {
+			var _data = ($(this).dataset('action') == 'edit') ? { id: $('#owner_id', conference_html).val() } : {},
+				_id = _data.id;
 
-                                callback(null, _data);
-                            }
-                        );
-                    },
-                    get_conference: function(callback) {
-                        if(typeof data == 'object' && data.id) {
-                            winkstart.request(true, 'conference.get', {
-                                    account_id: winkstart.apps['voip'].account_id,
-                                    api_url: winkstart.apps['voip'].api_url,
-                                    conference_id: data.id
-                                },
-                                function(_data, status) {
-                                    THIS.migrate_data(_data);
+			ev.preventDefault();
 
-                                    THIS.format_data(_data);
+			winkstart.publish('user.popup_edit', _data, function(_data) {
+				/* Create */
+				if(!_id) {
+					$('#owner_id', conference_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>');
+					$('#owner_id', conference_html).val(_data.data.id);
+					$('#edit_link', conference_html).show();
+				}
+				else {
+					/* Update */
+					if('id' in _data.data) {
+						$('#owner_id #'+_data.data.id, conference_html).text(_data.data.first_name + ' ' + _data.data.last_name);
+					}
+					/* Delete */
+					else {
+						$('#owner_id #'+_id, conference_html).remove();
+						$('#edit_link', conference_html).hide();
+					}
+				}
+			});
+		});
 
-                                    callback(null, _data);
-                                }
-                            );
-                        }
-                        else {
-                            callback(null, {});
-                        }
-                    }
-                },
-                function(err, results) {
-                    var render_data = defaults;
+		$('.conference-save', conference_html).click(function(ev) {
+			ev.preventDefault();
 
-                    if(typeof data === 'object' && data.id) {
-                        render_data = $.extend(true, defaults, results.get_conference);
-                    }
+			winkstart.validate.is_valid(THIS.config.validation, conference_html, function() {
+				var form_data = form2object('conference-form');
 
-                    THIS.render_conference(render_data, target, callbacks);
+				THIS.clean_form_data(form_data);
 
-                    if(typeof callbacks.after_render == 'function') {
-                        callbacks.after_render();
-                    }
-                }
-            );
-        },
+				data.data.member.pins = form_data.member.pins;
 
-        delete_conference: function(data, success, error) {
-            var THIS = this;
+				if('field_data' in data) {
+					delete data.field_data;
+				}
 
-            if(data.data.id) {
-                winkstart.request(true, 'conference.delete', {
-                        account_id: winkstart.apps['voip'].account_id,
-                        api_url: winkstart.apps['voip'].api_url,
-                        conference_id: data.data.id
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status);
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status);
-                        }
-                    }
-                );
-            }
-        },
+				THIS.save_conference(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
+			},
+			function() {
+				winkstart.alert(_t('conference', 'there_were_errors_on_the_form'));
+			}
+			);
+		});
 
-        render_conference: function(data, target, callbacks){
-			data._t = function(param){
-				return window.translate['conference'][param];
+		$('.conference-delete', conference_html).click(function(ev) {
+			ev.preventDefault();
+
+			winkstart.confirm(_t('conference', 'are_you_sure_you_want_to_delete'), function() {
+				THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
+			});
+		});
+
+		(target)
+			.empty()
+			.append(conference_html);
+	},
+
+	migrate_data: function(data) {
+		if($.isArray(data.data.conference_numbers)) {
+			if(data.data.member.numbers == undefined) {
+				data.data.member.numbers = data.data.conference_numbers;
+			}
+
+			delete data.data.conference_numbers;
+		}
+
+		if(data.data.member_play_name) {
+			if(data.data.play_name_on_join == undefined) {
+				data.data.play_name_on_join = data.data.member_play_name;
+			}
+
+			delete data.data.member_play_name;
+		}
+
+		if(data.data.member_join_muted) {
+			if(data.data.member.join_muted == undefined) {
+				data.data.member.join_muted = data.data.member_join_muted;
+			}
+
+			delete data.data.member_join_muted;
+		}
+
+		if(data.data.member_join_deaf) {
+			if(data.data.member.join_deaf == undefined) {
+				data.data.member.join_deaf = data.data.member_join_deaf;
+			}
+
+			delete data.data.member_join_deaf;
+		}
+
+		return data;
+	},
+
+	format_data: function(data) {
+		if(typeof data.data.member == 'object') {
+			if($.isArray(data.data.member.pins)) {
+				data.data.member.pins_string = data.data.member.pins.join(', ');
+			}
+
+			if($.isArray(data.data.member.numbers)) {
+				data.data.member.numbers_string = data.data.member.numbers.join(', ');
+			}
+		}
+
+		return data;
+	},
+
+	normalize_data: function(data) {
+		if(!data.member.pins.length) {
+			delete data.member.pins;
+		}
+
+		if(!data.member.numbers.length) {
+			delete data.member.numbers;
+		}
+
+		if(!data.owner_id) {
+			delete data.owner_id;
+		}
+
+		delete data.member.pins_string;
+		delete data.member.numbers_string;
+
+		return data;
+	},
+
+	clean_form_data: function(form_data){
+		var THIS = this;
+		form_data.member.pins_string = THIS.letters_to_numbers(form_data.member.pins_string);
+
+		form_data.member.pins = $.map(form_data.member.pins_string.split(','), function(val) {
+			var pin = $.trim(val);
+
+			if(pin != '') {
+				return pin;
+			}
+			else {
+				return null;
+			}
+		});
+
+		form_data.member.numbers = $.map(form_data.member.numbers_string.split(','), function(val) {
+			var number = $.trim(val);
+
+			if(number != '') {
+				return number;
+			}
+			else {
+				return null;
+			}
+		});
+
+		return form_data;
+	},
+
+	render_list: function(parent){
+		var THIS = this;
+
+		winkstart.request(true, 'conference.list', {
+			account_id: winkstart.apps['voip'].account_id,
+			api_url: winkstart.apps['voip'].api_url
+		},
+		function(data, status) {
+			var map_crossbar_data = function(data) {
+				var new_list = [];
+
+				if(data.length > 0) {
+					$.each(data, function(key, val) {
+						new_list.push({
+							id: val.id,
+							title: val.name || _t('conference', 'name')
+						});
+					});
+				}
+
+				new_list.sort(function(a, b) {
+					return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+				});
+
+				return new_list;
 			};
-            var THIS = this,
-                conference_html = THIS.templates.edit.tmpl(data);
-
-            winkstart.validate.set(THIS.config.validation, conference_html);
-
-            $('*[rel=popover]:not([type="text"])', conference_html).popover({
-                trigger: 'hover'
-            });
-
-            $('*[rel=popover][type="text"]', conference_html).popover({
-                trigger: 'focus'
-            });
-
-            winkstart.tabs($('.view-buttons', conference_html), $('.tabs', conference_html));
-
-            if(!$('#owner_id', conference_html).val()) {
-                $('#edit_link', conference_html).hide();
-            }
-
-            $('#owner_id', conference_html).change(function() {
-                !$('#owner_id option:selected', conference_html).val() ? $('#edit_link', conference_html).hide() : $('#edit_link', conference_html).show();
-            });
-
-            $('.inline_action', conference_html).click(function(ev) {
-                var _data = ($(this).dataset('action') == 'edit') ? { id: $('#owner_id', conference_html).val() } : {},
-                    _id = _data.id;
-
-                ev.preventDefault();
-
-                winkstart.publish('user.popup_edit', _data, function(_data) {
-                    /* Create */
-                    if(!_id) {
-                        $('#owner_id', conference_html).append('<option id="'+ _data.data.id  +'" value="'+ _data.data.id +'">'+ _data.data.first_name + ' ' + _data.data.last_name  +'</option>');
-                        $('#owner_id', conference_html).val(_data.data.id);
-                        $('#edit_link', conference_html).show();
-                    }
-                    else {
-                        /* Update */
-                        if('id' in _data.data) {
-                            $('#owner_id #'+_data.data.id, conference_html).text(_data.data.first_name + ' ' + _data.data.last_name);
-                        }
-                        /* Delete */
-                        else {
-                            $('#owner_id #'+_id, conference_html).remove();
-                            $('#edit_link', conference_html).hide();
-                        }
-                    }
-                });
-            });
-
-            $('.conference-save', conference_html).click(function(ev) {
-                ev.preventDefault();
-
-                winkstart.validate.is_valid(THIS.config.validation, conference_html, function() {
-                        var form_data = form2object('conference-form');
-
-                        THIS.clean_form_data(form_data);
-
-                        data.data.member.pins = form_data.member.pins;
-
-                        if('field_data' in data) {
-                            delete data.field_data;
-                        }
-
-                        THIS.save_conference(form_data, data, callbacks.save_success, winkstart.error_message.process_error(callbacks.save_error));
-                    },
-                    function() {
-                        winkstart.alert(_t('conference', 'there_were_errors_on_the_form'));
-                    }
-                );
-            });
-
-            $('.conference-delete', conference_html).click(function(ev) {
-                ev.preventDefault();
-
-                winkstart.confirm(_t('conference', 'are_you_sure_you_want_to_delete'), function() {
-                    THIS.delete_conference(data, callbacks.delete_success, callbacks.delete_error);
-                });
-            });
-
-            (target)
-                .empty()
-                .append(conference_html);
-        },
-
-        migrate_data: function(data) {
-            if($.isArray(data.data.conference_numbers)) {
-                if(data.data.member.numbers == undefined) {
-                    data.data.member.numbers = data.data.conference_numbers;
-                }
-
-                delete data.data.conference_numbers;
-            }
-
-            if(data.data.member_play_name) {
-                if(data.data.play_name_on_join == undefined) {
-                    data.data.play_name_on_join = data.data.member_play_name;
-                }
-
-                delete data.data.member_play_name;
-            }
-
-            if(data.data.member_join_muted) {
-                if(data.data.member.join_muted == undefined) {
-                    data.data.member.join_muted = data.data.member_join_muted;
-                }
-
-                delete data.data.member_join_muted;
-            }
-
-            if(data.data.member_join_deaf) {
-                if(data.data.member.join_deaf == undefined) {
-                    data.data.member.join_deaf = data.data.member_join_deaf;
-                }
-
-                delete data.data.member_join_deaf;
-            }
-
-            return data;
-        },
-
-        format_data: function(data) {
-            if(typeof data.data.member == 'object') {
-                if($.isArray(data.data.member.pins)) {
-                    data.data.member.pins_string = data.data.member.pins.join(', ');
-                }
-
-                if($.isArray(data.data.member.numbers)) {
-                    data.data.member.numbers_string = data.data.member.numbers.join(', ');
-                }
-            }
-
-            return data;
-        },
-
-        normalize_data: function(data) {
-            if(!data.member.pins.length) {
-                delete data.member.pins;
-            }
-
-            if(!data.member.numbers.length) {
-                delete data.member.numbers;
-            }
-
-            if(!data.owner_id) {
-                delete data.owner_id;
-            }
-
-            delete data.member.pins_string;
-            delete data.member.numbers_string;
-
-            return data;
-        },
-
-        clean_form_data: function(form_data){
-            var THIS = this;
-            form_data.member.pins_string = THIS.letters_to_numbers(form_data.member.pins_string);
-
-            form_data.member.pins = $.map(form_data.member.pins_string.split(','), function(val) {
-                var pin = $.trim(val);
-
-                if(pin != '') {
-                    return pin;
-                }
-                else {
-                    return null;
-                }
-            });
-
-            form_data.member.numbers = $.map(form_data.member.numbers_string.split(','), function(val) {
-                var number = $.trim(val);
-
-                if(number != '') {
-                    return number;
-                }
-                else {
-                    return null;
-                }
-            });
-
-            return form_data;
-        },
-
-        render_list: function(parent){
-            var THIS = this;
-
-            winkstart.request(true, 'conference.list', {
-                    account_id: winkstart.apps['voip'].account_id,
-                    api_url: winkstart.apps['voip'].api_url
-                },
-                function(data, status) {
-                    var map_crossbar_data = function(data) {
-                        var new_list = [];
-
-                        if(data.length > 0) {
-                            $.each(data, function(key, val) {
-                                new_list.push({
-                                    id: val.id,
-                                    title: val.name || _t('conference', 'name')
-                                });
-                            });
-                        }
-
-                        new_list.sort(function(a, b) {
-                            return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-                        });
-
-                        return new_list;
-                };
-
-                $('#conference-listpanel', parent)
-                    .empty()
-                    .listpanel({
-                        label: _t('conference', 'conferences_label'),
-                        identifier: 'conference-listview',
-                        new_entity_label: _t('conference', 'add_conference_label'),
-                        data: map_crossbar_data(data.data),
-                        publisher: winkstart.publish,
-                        notifyMethod: 'conference.edit',
-                        notifyCreateMethod: 'conference.edit',
-                        notifyParent: parent
-                    });
-               });
-        },
-
-        activate: function(parent) {
-            var THIS = this,
-                conference_html = THIS.templates.conference.tmpl();
-
-            (parent || $('#ws-content'))
-                .empty()
-                .append(conference_html);
-
-            THIS.render_list(conference_html);
-        },
-
-        popup_edit_conference: function(data, callback, data_defaults) {
-            var popup, popup_html;
-
-            popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
-
-            winkstart.publish('conference.edit', data, popup_html, $('.inline_content', popup_html), {
-                save_success: function(_data) {
-                    popup.dialog('close');
-
-                    if(typeof callback == 'function') {
-                        callback(_data);
-                    }
-                },
-                delete_success: function() {
-                    popup.dialog('close');
-
-                    if(typeof callback == 'function') {
-                        callback({ data: {} });
-                    }
-                },
-                after_render: function() {
-                    popup = winkstart.dialog(popup_html, {
-                        title: (data.id) ? _t('conference', 'edit_conference') : _t('conference', 'create_conference')
-                    });
-                }
-            }, data_defaults);
-        },
-
-        define_callflow_nodes: function(callflow_nodes) {
-            var THIS = this;
-
-            $.extend(callflow_nodes, {
-                'conference[id=*]': {
-                    name: _t('conference', 'conference'),
-                    icon: 'conference',
-                    category: _t('config', 'basic_cat'),
-                    module: 'conference',
-                    tip: _t('conference', 'conference_tip'),
-                    data: {
-                        id: 'null'
-                    },
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node, caption_map) {
-                        var id = node.getMetadata('id'),
-                            returned_value = '';
-
-                        if(id in caption_map) {
-                            returned_value = caption_map[id].name;
-                        }
-
-                        return returned_value;
-                    },
-                    edit: function(node, callback) {
-                        var _this = this;
-
-                        winkstart.request(true, 'conference.list', {
-                                account_id: winkstart.apps['voip'].account_id,
-                                api_url: winkstart.apps['voip'].api_url
-                            },
-                            function(data, status) {
-                                var popup, popup_html;
-
-                                popup_html = THIS.templates.conference_callflow.tmpl({
-                                    _t: function(param){
-                                        return window.translate['conference'][param];
-                                    },
-                                    items: winkstart.sort(data.data),
-                                    selected: node.getMetadata('id') || '!'
-                                });
-
-                                if($('#conference_selector option:selected', popup_html).val() == undefined) {
-                                    $('#edit_link', popup_html).hide();
-                                }
-
-                                $('.inline_action', popup_html).click(function(ev) {
-                                    var _data = ($(this).dataset('action') == 'edit') ?
-                                                    { id: $('#conference_selector', popup_html).val() } : {};
-
-                                    ev.preventDefault();
-
-                                    winkstart.publish('conference.popup_edit', _data, function(_data) {
-                                        node.setMetadata('id', _data.data.id || 'null');
-
-                                        node.caption = _data.data.name || '';
-
-                                        popup.dialog('close');
-                                    });
-                                });
-
-                                $('#add', popup_html).click(function() {
-                                    node.setMetadata('id', $('#conference_selector', popup_html).val());
-
-                                    node.caption = $('#conference_selector option:selected', popup_html).text();
-
-                                    popup.dialog('close');
-                                });
-
-                                popup = winkstart.dialog(popup_html, {
-                                    title: _t('conference', 'conference'),
-                                    minHeight: '0',
-                                    beforeClose: function() {
-                                        if(typeof callback == 'function') {
-                                            callback();
-                                        }
-                                    }
-                                });
-                            }
-                        );
-                    }
-                },
-
-                'conference[]': {
-                    name: _t('conference', 'conference_service'),
-                    icon: 'conference',
-                    category: _t('config', 'advanced_cat'),
-                    module: 'conference',
-                    tip: _t('conference', 'conference_service_tip'),
-                    data: {},
-                    rules: [
-                        {
-                            type: 'quantity',
-                            maxSize: '1'
-                        }
-                    ],
-                    isUsable: 'true',
-                    caption: function(node) {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        if(typeof callback == 'function') {
-                            callback();
-                        }
-                    }
-                }
-            });
-        }
-    }
+
+			$('#conference-listpanel', parent)
+				.empty()
+				.listpanel({
+					label: _t('conference', 'conferences_label'),
+					identifier: 'conference-listview',
+					new_entity_label: _t('conference', 'add_conference_label'),
+					data: map_crossbar_data(data.data),
+					publisher: winkstart.publish,
+					notifyMethod: 'conference.edit',
+					notifyCreateMethod: 'conference.edit',
+					notifyParent: parent
+				});
+		});
+	},
+
+	activate: function(parent) {
+		var THIS = this,
+			conference_html = THIS.templates.conference.tmpl();
+
+		(parent || $('#ws-content'))
+			.empty()
+			.append(conference_html);
+
+		THIS.render_list(conference_html);
+	},
+
+	popup_edit_conference: function(data, callback, data_defaults) {
+		var popup, popup_html;
+
+		popup_html = $('<div class="inline_popup"><div class="inline_content main_content"/></div>');
+
+		winkstart.publish('conference.edit', data, popup_html, $('.inline_content', popup_html), {
+			save_success: function(_data) {
+				popup.dialog('close');
+
+				if(typeof callback == 'function') {
+					callback(_data);
+				}
+			},
+			delete_success: function() {
+				popup.dialog('close');
+
+				if(typeof callback == 'function') {
+					callback({ data: {} });
+				}
+			},
+			after_render: function() {
+				popup = winkstart.dialog(popup_html, {
+					title: (data.id) ? _t('conference', 'edit_conference') : _t('conference', 'create_conference')
+				});
+			}
+		}, data_defaults);
+	},
+
+	define_callflow_nodes: function(callflow_nodes) {
+		var THIS = this;
+
+		$.extend(callflow_nodes, {
+			'conference[id=*]': {
+				name: _t('conference', 'conference'),
+				icon: 'conference',
+				category: _t('config', 'basic_cat'),
+				module: 'conference',
+				tip: _t('conference', 'conference_tip'),
+				data: {
+					id: 'null'
+				},
+				rules: [
+					{
+						type: 'quantity',
+						maxSize: '1'
+					}
+				],
+				isUsable: 'true',
+				caption: function(node, caption_map) {
+					var id = node.getMetadata('id'),
+						returned_value = '';
+
+					if(id in caption_map) {
+						returned_value = caption_map[id].name;
+					}
+
+					return returned_value;
+				},
+				edit: function(node, callback) {
+					var _this = this;
+
+					winkstart.request(true, 'conference.list', {
+						account_id: winkstart.apps['voip'].account_id,
+						api_url: winkstart.apps['voip'].api_url
+					},
+					function(data, status) {
+						var popup, popup_html;
+
+						popup_html = THIS.templates.conference_callflow.tmpl({
+							_t: function(param){
+								return window.translate['conference'][param];
+							},
+							items: winkstart.sort(data.data),
+							selected: node.getMetadata('id') || '!'
+						});
+
+						if($('#conference_selector option:selected', popup_html).val() == undefined) {
+							$('#edit_link', popup_html).hide();
+						}
+
+						$('.inline_action', popup_html).click(function(ev) {
+							var _data = ($(this).dataset('action') == 'edit') ?
+								{ id: $('#conference_selector', popup_html).val() } : {};
+
+							ev.preventDefault();
+
+							winkstart.publish('conference.popup_edit', _data, function(_data) {
+								node.setMetadata('id', _data.data.id || 'null');
+
+								node.caption = _data.data.name || '';
+
+								popup.dialog('close');
+							});
+						});
+
+						$('#add', popup_html).click(function() {
+							node.setMetadata('id', $('#conference_selector', popup_html).val());
+
+							node.caption = $('#conference_selector option:selected', popup_html).text();
+
+							popup.dialog('close');
+						});
+
+						popup = winkstart.dialog(popup_html, {
+							title: _t('conference', 'conference'),
+							minHeight: '0',
+							beforeClose: function() {
+								if(typeof callback == 'function') {
+									callback();
+								}
+							}
+						});
+					}
+					);
+				}
+			},
+
+			'conference[]': {
+				name: _t('conference', 'conference_service'),
+				icon: 'conference',
+				category: _t('config', 'advanced_cat'),
+				module: 'conference',
+				tip: _t('conference', 'conference_service_tip'),
+				data: {},
+				rules: [
+					{
+						type: 'quantity',
+						maxSize: '1'
+					}
+				],
+				isUsable: 'true',
+				caption: function(node) {
+					return '';
+				},
+				edit: function(node, callback) {
+					if(typeof callback == 'function') {
+						callback();
+					}
+				}
+			}
+		});
+	}
+}
 );

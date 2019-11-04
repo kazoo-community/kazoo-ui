@@ -1,4 +1,4 @@
 window.translate['nav'] = {
-css_style_css: "css/style.css",
-sign_out: "登出"
+	css_style_css: "css/style.css",
+	sign_out: "登出"
 };

@@ -1,7 +1,7 @@
 winkstart.module('skeleton', 'sub_module',
 	{
 		css: [
-            'css/sub_module.css'
+			'css/sub_module.css'
 		],
 
 		templates: {
@@ -37,19 +37,19 @@ winkstart.module('skeleton', 'sub_module',
 		activate: function(data) {
 			var THIS = this;
 
-            /* Change me! */
-            winkstart.request('sub_module.get_account', {
-                    api_url: winkstart.apps['skeleton'].api_url,
-                    account_id: winkstart.apps['skeleton'].account_id
-                },
-                function(_data, status) {
-                    var sub_module_html = $('#ws-content').empty()
-                                                          .append(THIS.templates.sub_module.tmpl(_data.data));
-                },
-                function(_data, status) {
-                    winkstart.alert('Couldn\'t get your account!');
-                }
-            );
+			/* Change me! */
+			winkstart.request('sub_module.get_account', {
+				api_url: winkstart.apps['skeleton'].api_url,
+				account_id: winkstart.apps['skeleton'].account_id
+			},
+			function(_data, status) {
+				var sub_module_html = $('#ws-content').empty()
+					.append(THIS.templates.sub_module.tmpl(_data.data));
+			},
+			function(_data, status) {
+				winkstart.alert('Couldn\'t get your account!');
+			}
+			);
 		}
 	}
 );
