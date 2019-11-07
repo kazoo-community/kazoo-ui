@@ -1,7 +1,6 @@
 # Original source from OpenTelecom:ci-linting, mira-t on github
 plugins:
   - standard
-  - promise
 env:
   browser: true
   jquery: true
@@ -10,8 +9,8 @@ globals:
   winkstart: true
   form2object: true
   _t: true
-  Sentry: true
 
 rules:
   no-tabs: 0
   indent: [ "error", "tab", { "SwitchCase": 1 }]
+  linebreak-style: [ "error", "unix" ]
