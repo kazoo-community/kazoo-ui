@@ -50,9 +50,9 @@ function() {
 	},
 
 	/* A modules object is required for the loading routine.
-         * The format is as follows:
-         * <module name>: <initialization status>
-         */
+	 * The format is as follows:
+	 * <module name>: <initialization status>
+	 */
 	modules: {
 		'app_store': false,
 		'billing': false,
@@ -63,11 +63,11 @@ function() {
 		'credits': false
 	},
 	/* The following code is generic and should be abstracted.
-         * For the time being, you can just copy and paste this
-         * into other whapps.
-         *
-         * BEGIN COPY AND PASTE CODE
-         */
+	 * For the time being, you can just copy and paste this
+	 * into other whapps.
+	 *
+	 * BEGIN COPY AND PASTE CODE
+	 */
 	is_initialized: false,
 
 	uninitialized_count: 1337,
@@ -146,8 +146,8 @@ function() {
 		return count;
 	},
 	/* END COPY AND PASTE CODE
-         * (Really need to figure out a better way...)
-         */
+	 * (Really need to figure out a better way...)
+	 */
 
 	// A setup_page function is required for the copy and paste code
 	setup_page: function(user_data) {

@@ -78,14 +78,15 @@ function() {
 		winkstart.publish('linknav.sub_add', args);
 
 		/*
-            winkstart.publish('linknav.get', {
-                    link: args.link
-                },
-                function(link_html) {
-                    THIS.update_size(link_html);
-                }
-            );
-            */
+		winkstart.publish('linknav.get',
+			{
+				link: args.link
+			},
+			function(link_html) {
+				THIS.update_size(link_html);
+			}
+		);
+		*/
 	},
 
 	update_size: function(link_html) {

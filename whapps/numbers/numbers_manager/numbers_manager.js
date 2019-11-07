@@ -281,14 +281,15 @@ function(args) {
 		if(numbers_data.length > 0) {
 			var phone_number = numbers_data[0].phone_number.match(/^(\+.*)$/),
 				error_function = function() {
-					winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
-                            _t('numbers_manager', 'would_you_like_to_retry'),
-					function() {
-						THIS.add_freeform_numbers(numbers_data, callback);
-					},
-					function() {
-						THIS.add_freeform_numbers(numbers_data.slice(1), callback);
-					}
+					winkstart.confirm(
+						_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
+							_t('numbers_manager', 'would_you_like_to_retry'),
+						function() {
+							THIS.add_freeform_numbers(numbers_data, callback);
+						},
+						function() {
+							THIS.add_freeform_numbers(numbers_data.slice(1), callback);
+						}
 					);
 				};
 
@@ -327,14 +328,15 @@ function(args) {
 		if(numbers_data.length > 0) {
 			var phone_number = numbers_data[0].phone_number.match(/^(\+.*)$/),
 				error_function = function() {
-					winkstart.confirm(_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
-                            _t('numbers_manager', 'would_you_like_to_retry'),
-					function() {
-						THIS.add_numbers(numbers_data, callback);
-					},
-					function() {
-						THIS.add_numbers(numbers_data.slice(1), callback);
-					}
+					winkstart.confirm(
+						_t('numbers_manager', 'there_was_an_error') + numbers_data[0].phone_number +
+							_t('numbers_manager', 'would_you_like_to_retry'),
+						function() {
+							THIS.add_numbers(numbers_data, callback);
+						},
+						function() {
+							THIS.add_numbers(numbers_data.slice(1), callback);
+						}
 					);
 				};
 
@@ -604,7 +606,7 @@ function(args) {
 
 			THIS.render_port_dialog(function(port_data, popup) {
 				var ports_done = 0,
-					    portNumbers = function() {
+					portNumbers = function() {
 						var attachments = { bill: port_data.files, loa: port_data.loa };
 
 						delete port_data.files;
@@ -624,7 +626,7 @@ function(args) {
 							});
 						});
 
-                    	};
+					};
 
 				if(winkstart.apps.numbers.api_url.slice(-2) === 'v2') {
 					portNumbers();
@@ -806,8 +808,8 @@ function(args) {
 			npa_data.prefix = npa + nxx;
 
 			THIS.search_numbers(npa_data, function(results_data) {
-                	var formattedData = THIS.formatBuyNumberData(results_data),
-                    	results_html = THIS.templates.add_number_search_results.tmpl({
+				var formattedData = THIS.formatBuyNumberData(results_data),
+					results_html = THIS.templates.add_number_search_results.tmpl({
 						data: formattedData,
 						_t: function(param){
 							return window.translate['numbers_manager'][param];
@@ -871,8 +873,8 @@ function(args) {
 	get_port_price: function(callback) {
 		var THIS = this,
 			errorCallback = function() {
-                	/* This is a hack, if the API fails, which shouldn't happen, to show the UI as it was before, with a hardcoded 5$ */
-                	callback && callback('$5');
+				/* This is a hack, if the API fails, which shouldn't happen, to show the UI as it was before, with a hardcoded 5$ */
+				callback && callback('$5');
 			};
 
 		winkstart.request('numbers_manager.getCurrentServicePlan', {
@@ -880,7 +882,7 @@ function(args) {
 			api_url: winkstart.apps['numbers'].api_url
 		},
 		function(_dataPlan, status) {
-                	var keyPlan = '';
+			var keyPlan = '';
 
 			if('plans' in _dataPlan.data) {
 				for(var plan in _dataPlan.data.plans) {
@@ -890,23 +892,24 @@ function(args) {
 				}
 			}
 
-                	winkstart.request('numbers_manager.getServicePlan', {
-                    		account_id: winkstart.apps['numbers'].account_id,
-                    		api_url: winkstart.apps['numbers'].api_url,
-                    		name: keyPlan
-                    	},
-                    	function(_data,status) {
-				var portPrice = '0';
+			winkstart.request('numbers_manager.getServicePlan',
+				{
+					account_id: winkstart.apps['numbers'].account_id,
+					api_url: winkstart.apps['numbers'].api_url,
+					name: keyPlan
+				},
+				function(_data,status) {
+					var portPrice = '0';
 
-                			if('plan' in _data.data && 'number_services' in _data.data.plan && 'port' in _data.data.plan.number_services && 'activation_charge' in _data.data.plan.number_services.port) {
-					portPrice = _data.data.plan.number_services.port.activation_charge;
-                			}
+					if('plan' in _data.data && 'number_services' in _data.data.plan && 'port' in _data.data.plan.number_services && 'activation_charge' in _data.data.plan.number_services.port) {
+						portPrice = _data.data.plan.number_services.port.activation_charge;
+					}
 
-                			portPrice = '$' + portPrice;
+					portPrice = '$' + portPrice;
 
-                			callback && callback(portPrice);
-                    	},
-                    	errorCallback
+					callback && callback(portPrice);
+				},
+				errorCallback
 			);
 		},
 		errorCallback
@@ -917,78 +920,78 @@ function(args) {
 		var THIS = this;
 
 		THIS.get_port_price(function(portPrice) {
-            	var port_form_data = {},
-                	popup_html = THIS.templates.port_dialog.tmpl({
+			var port_form_data = {},
+				popup_html = THIS.templates.port_dialog.tmpl({
 					_t: function(param){
 						return window.translate['numbers_manager'][param];
 					},
 					porting_price: portPrice,
-                    	company_name: winkstart.config.company_name || '2600hz',
-                    	support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
-                    	support_file_upload: (File && FileReader)
-                	}),
-                	popup,
-                	files,
-                	loa,
-                	phone_numbers,
-                	current_step = 1,
-                	max_steps = 4,
-                	$prev_step = $('.prev_step', popup_html),
-                	$next_step = $('.next_step', popup_html),
-                	$submit_btn = $('.submit_btn', popup_html);
+					company_name: winkstart.config.company_name || '2600hz',
+					support_email: (winkstart.config.port || {}).support_email || 'support@2600hz.com',
+					support_file_upload: (File && FileReader)
+				}),
+				popup,
+				files,
+				loa,
+				phone_numbers,
+				current_step = 1,
+				max_steps = 4,
+				$prev_step = $('.prev_step', popup_html),
+				$next_step = $('.next_step', popup_html),
+				$submit_btn = $('.submit_btn', popup_html);
 
-            	/* White label links, have to do it in JS because template doesn't eval variables in href :( */
-            	$('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://2600hz.com/porting/2600hz_loa.pdf');
-            	$('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://2600hz.com/porting/2600hz_resporg.pdf');
-            	$('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
-            	$('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
+			/* White label links, have to do it in JS because template doesn't eval variables in href :( */
+			$('#loa_link', popup_html).attr('href', ((winkstart.config.port || {}).loa) || 'http://2600hz.com/porting/2600hz_loa.pdf');
+			$('#resporg_link', popup_html).attr('href', ((winkstart.config.port || {}).resporg) || 'http://2600hz.com/porting/2600hz_resporg.pdf');
+			$('#features_link', popup_html).attr('href', ((winkstart.config.port || {}).features) || 'http://www.2600hz.com/features');
+			$('#terms_link', popup_html).attr('href', ((winkstart.config.port || {}).terms) || 'http://www.2600hz.com/terms');
 
-            	$('.step_div:not(.first)', popup_html).hide();
-            	$prev_step.hide();
-            	$submit_btn.hide();
+			$('.step_div:not(.first)', popup_html).hide();
+			$prev_step.hide();
+			$submit_btn.hide();
 
-            	$('.other_carrier', popup_html).hide();
+			$('.other_carrier', popup_html).hide();
 
-            	$('.carrier_dropdown', popup_html).change(function() {
-                	if($(this).val() === 'Other') {
-                    	$('.other_carrier', popup_html).show();
-                	}
-                	else {
-                    	$('.other_carrier', popup_html).empty().hide();
-                	}
-            	});
+			$('.carrier_dropdown', popup_html).change(function() {
+				if($(this).val() === 'Other') {
+					$('.other_carrier', popup_html).show();
+				}
+				else {
+					$('.other_carrier', popup_html).empty().hide();
+				}
+			});
 
-            	$('#postal_code', popup_html).blur(function() {
-                	$.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country=US&callback=?', { postalcode: $(this).val() }, function(response) {
-                    	if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
-                        	$('#locality', popup_html).val(response.postalcodes[0].placeName);
-                        	$('#region', popup_html).val(response.postalcodes[0].adminName1);
-                    	}
-                	});
-            	});
+			$('#postal_code', popup_html).blur(function() {
+				$.getJSON('http://www.geonames.org/postalCodeLookupJSON?&country=US&callback=?', { postalcode: $(this).val() }, function(response) {
+					if (response && response.postalcodes.length && response.postalcodes[0].placeName) {
+						$('#locality', popup_html).val(response.postalcodes[0].placeName);
+						$('#region', popup_html).val(response.postalcodes[0].adminName1);
+					}
+				});
+			});
 
-            	$('.prev_step', popup_html).click(function() {
-                	$next_step.show();
-                	$submit_btn.hide();
-                	$('.step_div', popup_html).hide();
-                	$('.step_div:nth-child(' + --current_step + ')', popup_html).show();
-                	$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
-                	$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+			$('.prev_step', popup_html).click(function() {
+				$next_step.show();
+				$submit_btn.hide();
+				$('.step_div', popup_html).hide();
+				$('.step_div:nth-child(' + --current_step + ')', popup_html).show();
+				$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+				$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
 
-                	current_step === 1 ? $('.prev_step', popup_html).hide() : true;
-            	});
+				current_step === 1 ? $('.prev_step', popup_html).hide() : true;
+			});
 
-            	$('.next_step', popup_html).click(function() {
-                	$prev_step.show();
-                	$('.step_div', popup_html).hide();
-                	$('.step_div:nth-child(' + ++current_step + ')', popup_html).show();
-                	$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
-                	$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
-                	if(current_step === max_steps) {
-                    	$next_step.hide();
-                    	$submit_btn.show();
-                	}
-            	});
+			$('.next_step', popup_html).click(function() {
+				$prev_step.show();
+				$('.step_div', popup_html).hide();
+				$('.step_div:nth-child(' + ++current_step + ')', popup_html).show();
+				$('.wizard_nav .steps_text li, .wizard_nav .steps_image .round_circle').removeClass('current');
+				$('#step_title_'+current_step +', .wizard_nav .steps_image .round_circle:nth-child('+ current_step +')', popup_html).addClass('current');
+				if(current_step === max_steps) {
+					$next_step.hide();
+					$submit_btn.show();
+				}
+			});
 
 			$('.files, .loa', popup_html).each(function(idx, el) {
 				var el = $(el),
@@ -1022,106 +1025,106 @@ function(args) {
 				});
 			});
 
-            	$('.submit_btn', popup_html).click(function(ev) {
-                	ev.preventDefault();
-                	port_form_data = form2object('port');
+			$('.submit_btn', popup_html).click(function(ev) {
+				ev.preventDefault();
+				port_form_data = form2object('port');
 
 				delete port_form_data[''];
 
 				port_form_data.bill.address += ' ' + port_form_data.bill.extended_address
 				delete port_form_data.bill.extended_address;
 
-                	var string_alert = '';
+				var string_alert = '';
 
-                	if($('.carrier_dropdown', popup_html).val() === 'Other') {
-                    	port_form_data.carrier = $('.other_carrier', popup_html).val();
-                	}
+				if($('.carrier_dropdown', popup_html).val() === 'Other') {
+					port_form_data.carrier = $('.other_carrier', popup_html).val();
+				}
 
-                	if(!port_form_data.extra.agreed) {
-                    	string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
-                	}
+				if(!port_form_data.extra.agreed) {
+					string_alert += _t('numbers_manager', 'you_must_agree_to_the_terms');
+				}
 
 				if (port_form_data.name === '') {
 					string_alert += _t('numbers_manager', 'you_need_to_name');
 				}
 
-                	$.each(port_form_data.extra.cb, function(k, v) {
-                    	if(v === false) {
-                        	string_alert += _t('numbers_manager', 'you_must_confirm_the_first_conditions');
-                        	return false;
-                    	}
-                	});
+				$.each(port_form_data.extra.cb, function(k, v) {
+					if(v === false) {
+						string_alert += _t('numbers_manager', 'you_must_confirm_the_first_conditions');
+						return false;
+					}
+				});
 
-                	port_form_data.numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
-                	port_form_data.numbers = port_form_data.numbers.replace(/[\s-\(\)\.]/g, '').split(',');
+				port_form_data.numbers = $('.numbers_text', popup_html).val().replace(/\n/g,',');
+				port_form_data.numbers = port_form_data.numbers.replace(/[\s-\(\)\.]/g, '').split(',');
 
-                	port_form_data.main_number = port_form_data.main_number.replace(/[\s-\(\)\.]/g, '');
+				port_form_data.main_number = port_form_data.main_number.replace(/[\s-\(\)\.]/g, '');
 
-                	var res = port_form_data.main_number.match(/^\+?1?([2-9]\d{9})$/);
-                	res ? port_form_data.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
+				var res = port_form_data.main_number.match(/^\+?1?([2-9]\d{9})$/);
+				res ? port_form_data.main_number = '+1' + res[1] : string_alert += _t('numbers_manager', 'you_need_to_enter_main_number');
 
-                	var is_toll_free_main = THIS.check_toll_free(port_form_data.main_number);
+				var is_toll_free_main = THIS.check_toll_free(port_form_data.main_number);
 
-                	port_form_data.numbers.unshift(port_form_data.main_number);
+				port_form_data.numbers.unshift(port_form_data.main_number);
 				delete port_form_data.main_number;
 
-                	phone_numbers = {};
-                	var error_toll_free = [];
-                	$.each(port_form_data.numbers, function(i, val) {
-                    	var result = val.match(/^\+?1?([2-9]\d{9})$/);
+				phone_numbers = {};
+				var error_toll_free = [];
+				$.each(port_form_data.numbers, function(i, val) {
+					var result = val.match(/^\+?1?([2-9]\d{9})$/);
 
-                    	if(result) {
-                        	if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
+					if(result) {
+						if(THIS.check_toll_free(result[1]) === is_toll_free_main) {
 							phone_numbers['+1' + result[1]] = {};
-                        	}
-                        	else {
-                            	error_toll_free.push(result[1]);
-                        	}
-                    	}
-                    	else {
-                        	if(val !== '') {
-                            	string_alert += val + _t('numbers_manager', 'this_phone_number_is_not_valid');
-                        	}
-                    	}
-                	});
+						}
+						else {
+							error_toll_free.push(result[1]);
+						}
+					}
+					else {
+						if(val !== '') {
+							string_alert += val + _t('numbers_manager', 'this_phone_number_is_not_valid');
+						}
+					}
+				});
 
-                	if(error_toll_free.length > 0) {
-                    	$.each(error_toll_free, function(k, v) {
-                        	string_alert += v + ', ';
-                    	});
+				if(error_toll_free.length > 0) {
+					$.each(error_toll_free, function(k, v) {
+						string_alert += v + ', ';
+					});
 
-                    	if(is_toll_free_main) {
-                        	string_alert += _t('numbers_manager', 'these_numbers_are_not_toll_free_numbers');
-                    	}
-                    	else {
-                        	string_alert += _t('numbers_manager', 'these_numbers_are_toll_free_numbers');
-                    	}
-                	}
+					if(is_toll_free_main) {
+						string_alert += _t('numbers_manager', 'these_numbers_are_not_toll_free_numbers');
+					}
+					else {
+						string_alert += _t('numbers_manager', 'these_numbers_are_toll_free_numbers');
+					}
+				}
 
-                	port_form_data.numbers = phone_numbers;
+				port_form_data.numbers = phone_numbers;
 
-                	files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
-                	loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
+				files ? port_form_data.files = files : string_alert += _t('numbers_manager', 'you_need_to_upload_a_bill');
+				loa ? port_form_data.loa = loa : string_alert += _t('numbers_manager', 'you_need_to_upload_a_letter_of_authorization');
 
-                	if(!port_form_data.notifications.email.send_to.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
-                    	string_alert += _t('numbers_manager', 'the_email_address_you_entered');
-                	}
+				if(!port_form_data.notifications.email.send_to.match(/^([0-9A-Za-z_\-\+\.]+@[0-9A-Za-z_\-\.]+\.[0-9A-Za-z]+)?$/)) {
+					string_alert += _t('numbers_manager', 'the_email_address_you_entered');
+				}
 
-                	if(string_alert === '') {
-                    	delete port_form_data.extra;
+				if(string_alert === '') {
+					delete port_form_data.extra;
 
-                    	if(typeof callback === 'function') {
-                        	callback(port_form_data, popup);
-                    	}
-                	}
-                	else {
-                    	winkstart.alert(string_alert);
-                	}
-            	});
+					if(typeof callback === 'function') {
+						callback(port_form_data, popup);
+					}
+				}
+				else {
+					winkstart.alert(string_alert);
+				}
+			});
 
-            	popup = winkstart.dialog(popup_html, {
-                	title: _t('numbers_manager', 'port_a_number_title')
-            	});
+			popup = winkstart.dialog(popup_html, {
+				title: _t('numbers_manager', 'port_a_number_title')
+			});
 		});
 	},
 
@@ -1143,10 +1146,10 @@ function(args) {
 	},
 
 	/**
-         * List numbers in the account
-         *
-         * @param {function} callback Function to execute once numbers have been listed
-         */
+	 * List numbers in the account
+	 *
+	 * @param {function} callback Function to execute once numbers have been listed
+	 */
 	list_numbers: function(callback) {
 		this.load_numbers_data(function(err, results) {
 			winkstart.table.numbers_manager.fnClearTable();
@@ -1200,10 +1203,10 @@ function(args) {
 	},
 
 	/**
-         * Load extra data for populating the Used By column
-         *
-         * @param {function} callback Function to call with error/results from data load
-         */
+	 * Load extra data for populating the Used By column
+	 *
+	 * @param {function} callback Function to call with error/results from data load
+	 */
 	load_numbers_data: function(callback) {
 		winkstart.parallel({
 			callflows: function(callback) {
@@ -1400,9 +1403,9 @@ function(args) {
 
 
 		var hasPort = !winkstart.config.hasOwnProperty('hide_port') || winkstart.config.hide_port === false,
-            	htmlString = '<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button>' +
-            				 (hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
-            				 '<button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>';
+			htmlString = '<button class="btn success" id="buy_number">' + _t('numbers_manager', 'buy_number') + '</button>' +
+				(hasPort ? '<button class="btn primary" id="port_numbers">' + _t('numbers_manager', 'port_a_number') + '</button>' : '') +
+				'<button class="btn danger" id="delete_number">' + _t('numbers_manager', 'delete_selected_numbers') + '</button>';
 
 		$('div.action_number', numbers_manager_html).html(htmlString);
 
@@ -1433,11 +1436,11 @@ function(args) {
 	},
 
 	/**
-         * Display credit card confirmation if enabled
-         *
-         * @param {function} callback Execute after confirmation or immediately
-         * if confirmation is disabled
-         */
+	 * Display credit card confirmation if enabled
+	 *
+	 * @param {function} callback Execute after confirmation or immediately
+	 * if confirmation is disabled
+	 */
 	display_credit_card_confirmation: function(callback) {
 		if(winkstart.config.hide_credit_card_confirmation) {
 			callback();

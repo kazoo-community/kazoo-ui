@@ -283,12 +283,12 @@ function(args) {
 					api_url: winkstart.apps['voip'].api_url
 				},
 				function(_data, status) {
-                            	_data.data.sort(function(a,b) {
-                            		var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
-                            			bName = (b.first_name + ' ' + b.last_name).toLowerCase();
+					_data.data.sort(function(a,b) {
+						var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
+							bName = (b.first_name + ' ' + b.last_name).toLowerCase();
 
 						return aName > bName;
-                            	});
+					});
 
 					defaults.field_data.users = _data.data;
 
@@ -569,7 +569,7 @@ function(args) {
 						_t: function(param){
 							return window.translate['directory'][param];
 						}
-									  }));
+					}));
 			}
 		}
 		else {
@@ -578,7 +578,7 @@ function(args) {
 					_t: function(param){
 						return window.translate['directory'][param];
 					}
-									  }));
+				}));
 		}
 	},
 

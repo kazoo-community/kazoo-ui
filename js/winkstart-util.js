@@ -240,16 +240,16 @@
 
 		if(type_temp == 'error') {
 			html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span>' +
-                content +
-                '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
+				content +
+				'</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
 
 			if(content && content.data) {
 				html = $('<div class="center"><div class="alert_img error_alert"></div><div class="alert_text_wrapper error_alert"><span><p>' +
-                    content.text +
-                    '<p>' +
-                    '<p><button class="btn small danger json">Show Errors</button>' +
-                    '</p><p style="display:none" class="json_error"></p>' +
-                    '</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
+					content.text +
+					'<p>' +
+					'<p><button class="btn small danger json">Show Errors</button>' +
+					'</p><p style="display:none" class="json_error"></p>' +
+					'</span></div><div class="clear"/><div class="alert_buttons_wrapper"><button class="btn primary alert_button">' + _t('config', 'CLOSE') + '</button></div></div>');
 			}
 		}
 		else if(type_temp == 'info'){
@@ -317,7 +317,7 @@
 
 					if(typeof options.onClose == 'function') {
 						/* jQuery FREAKS out and gets into an infinite loop if the following function kicks back an error.
-                       Hence the try/catch. */
+						Hence the try/catch. */
 						try {
 							options.onClose();
 						}
@@ -406,7 +406,7 @@
 	winkstart.link_form = function(html){
 		$('input', html).bind('change.link keyup.link focus.link', function() {
 			var input = $(this),
-            	name = input.attr('name'),
+				name = input.attr('name'),
 				type = input.attr('type'),
 				value = input.val(),
 				id = input.attr('id'),
@@ -418,13 +418,13 @@
 					(input.attr('checked')) ? input_fields.attr('checked', 'checked') : input_fields.removeAttr('checked');
 				}
 				else {
-                	$.each(input_fields, function(k, v) {
-                		var element = $(v);
+					$.each(input_fields, function(k, v) {
+						var element = $(v);
 
-                		if(element.attr('id') !== id) {
-                			element.val(value);
+						if(element.attr('id') !== id) {
+							element.val(value);
 						}
-                	});
+					});
 				}
 			}
 			else {
@@ -647,22 +647,22 @@
 	/* Automatically sorts an array of objects. secondArg can either be a custom sort to be applied to the dataset, or a fieldName to sort alphabetically on */
 	winkstart.sort = function(dataSet, secondArg) {
 		var fieldName = 'name',
-    		sortFunction = function(a, b) {
-    			var aString = a[fieldName].toLowerCase(),
-    				bString = b[fieldName].toLowerCase(),
-    				result = (aString > bString) ? 1 : (aString < bString) ? -1 : 0;;
+			sortFunction = function(a, b) {
+				var aString = a[fieldName].toLowerCase(),
+					bString = b[fieldName].toLowerCase(),
+					result = (aString > bString) ? 1 : (aString < bString) ? -1 : 0;;
 
 				return result;
-    		};
+			};
 
-    	if(typeof secondArg === 'function') {
+		if(typeof secondArg === 'function') {
 			sortFunction = secondArg;
-    	}
-    	else if(typeof secondArg === 'string') {
+		}
+		else if(typeof secondArg === 'string') {
 			fieldName = secondArg;
-    	}
+		}
 
-    	result = dataSet.sort(sortFunction);
+		result = dataSet.sort(sortFunction);
 
 		return result;
 	};
@@ -707,17 +707,17 @@
 	};
 
 	/**
-     * Configure and schedule automatic auth token refreshes.
-     */
+	 * Configure and schedule automatic auth token refreshes.
+	 */
 	winkstart.autoRefreshAuth = function() {
 		/**
-         * Check time between token expiry and current time. If < threshold,
-         * perform a refresh. Schedule another check for 60s later.
-         */
+		 * Check time between token expiry and current time. If < threshold,
+		 * perform a refresh. Schedule another check for 60s later.
+		 */
 		function checkRefresh() {
 			/**
-             * If auth expiry is in less than $threshold seconds, refresh auth.
-             */
+			 * If auth expiry is in less than $threshold seconds, refresh auth.
+			 */
 			var threshold = 600;
 
 			var now = (new Date()).getTime() / 1000,
@@ -735,9 +735,9 @@
 		}
 
 		/**
-         * Perform a refresh_token auth action. Update auth_token in apps and
-         * schedule the next check.
-         */
+		 * Perform a refresh_token auth action. Update auth_token in apps and
+		 * schedule the next check.
+		 */
 		function refreshAuth() {
 			winkstart.request('auth.action', {
 				api_url: winkstart.apps['auth'].api_url,

@@ -57,8 +57,8 @@ function(args) {
 	}
 
 	/*$('#ws-content .welcomediv').click(function() {
-            winkstart.publish('nav.get_started');
-        });*/
+		winkstart.publish('nav.get_started');
+	});*/
 
 	$('#ws-topbar .links .help').click(function() {
 		winkstart.publish('nav.my_help_click');
@@ -133,10 +133,10 @@ function(args) {
 		});
 
 		$('#ws-topbar .brand.logo', layout_html).click(function() {
-            	if ($.cookie('c_winkstart_auth')){
-            		$('.whapps .whapp > a').removeClass('activate');
-            		winkstart.publish('auth.landing');
-            	}
+			if ($.cookie('c_winkstart_auth')){
+				$('.whapps .whapp > a').removeClass('activate');
+				winkstart.publish('auth.landing');
+			}
 		});
 
 		winkstart.request('layout.get_logo', {
@@ -166,7 +166,7 @@ function(args) {
 		},
 		function(_data, status) {
 			var src = winkstart.config.favicon || 'img/wsLogo.png';
-                    
+
 			winkstart.changeFavIcon(src);
 		}
 		);
@@ -175,9 +175,9 @@ function(args) {
 	render_welcome: function(args) {
 		var THIS = this;
 		/*if(navigator.appName == 'Microsoft Internet Explorer') {
-                THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
-            }
-            else {*/
+			THIS.templates.not_supported_browsers.tmpl().appendTo($('#ws-content'));
+		}
+		else {*/
 		layout_welcome_html = THIS.templates.layout_welcome.tmpl().appendTo($('#ws-content'));
 		var data_welcome = {
 			company_name: winkstart.config.company_name,

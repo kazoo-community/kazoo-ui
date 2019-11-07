@@ -45,7 +45,7 @@ function(args) {
 
 	init_table: function(parent) {
 		var bulk_html = parent,
-		    columns = [
+			columns = [
 				{
 					'sTitle': '<input type="checkbox" id="select_all_endpoints"/>',
 					'fnRender': function(obj) {

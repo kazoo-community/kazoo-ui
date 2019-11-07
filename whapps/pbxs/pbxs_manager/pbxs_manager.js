@@ -415,23 +415,24 @@ function(args) {
 			}
 
 			THIS.update_old_trunkstore(new_data, success, error);
-			/*winkstart.request('old_trunkstore.update', {
-                        account_id: winkstart.apps['pbxs'].account_id,
-                        api_url: winkstart.apps['pbxs'].api_url,
-                        connectivity_id: winkstart.apps['pbxs'].connectivity_id,
-                        data: new_data
-                    },
-                    function(_data, status) {
-                        if(typeof success == 'function') {
-                            success(_data, status);
-                        }
-                    },
-                    function(_data, status) {
-                        if(typeof error == 'function') {
-                            error(_data, status);
-                        }
-                    }
-                );*/
+			/*winkstart.request('old_trunkstore.update',
+				{
+					account_id: winkstart.apps['pbxs'].account_id,
+					api_url: winkstart.apps['pbxs'].api_url,
+					connectivity_id: winkstart.apps['pbxs'].connectivity_id,
+					data: new_data
+				},
+				function(_data, status) {
+					if(typeof success == 'function') {
+						success(_data, status);
+					}
+				},
+				function(_data, status) {
+					if(typeof error == 'function') {
+						error(_data, status);
+					}
+				}
+			);*/
 		}
 		else {
 			winkstart.alert(_t('pbxs_manager', 'you_need_to_specify_a_name'));
@@ -639,7 +640,7 @@ function(args) {
 			.append(endpoint_html);
 
 		/* Hack to display the selected PBX first in the list
-               Or if new, scroll to the first pbx */
+		Or if new, scroll to the first pbx */
 		$('.pbxs', endpoint_html).animate({ scrollLeft: 0 }, 0);
 
 		var pbx_type = (endpoint_data.server_type || 'other').replace(/\.|\s/g, '').toLowerCase();
@@ -1133,20 +1134,20 @@ function(args) {
 						failover;
 
 					if('numbers' in _data_numbers.data) {
-                            	$.each(_data.data.servers[id].DIDs, function(k, v) {
-                                	if(_data_numbers.data.numbers[k]) {
-                                    	cnam = $.inArray('cnam', _data_numbers.data.numbers[k].features) > -1 ? true : false;
-                                    	failover = $.inArray('failover', _data_numbers.data.numbers[k].features) > -1 ? true : false;
-                                    	e911 = $.inArray('e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+						$.each(_data.data.servers[id].DIDs, function(k, v) {
+							if(_data_numbers.data.numbers[k]) {
+								cnam = $.inArray('cnam', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+								failover = $.inArray('failover', _data_numbers.data.numbers[k].features) > -1 ? true : false;
+								e911 = $.inArray('e911', _data_numbers.data.numbers[k].features) > -1 ? true : false;
 
 								if(winkstart.config.hasOwnProperty('hide_e911') && winkstart.config.hide_e911 === true) {
-                                        	tab_data.push(['lol', k, failover, cnam, _data_numbers.data.numbers[k].state]);
+									tab_data.push(['lol', k, failover, cnam, _data_numbers.data.numbers[k].state]);
 								}
 								else {
-                                        	tab_data.push(['lol', k, failover, cnam, e911, _data_numbers.data.numbers[k].state]);
+									tab_data.push(['lol', k, failover, cnam, e911, _data_numbers.data.numbers[k].state]);
 								}
-                                	}
-                            	});
+							}
+						});
 					}
 
 					winkstart.table.pbxs_manager.fnAddData(tab_data);
@@ -1188,9 +1189,9 @@ function(args) {
 
 					//Build available numbers list
 					if('numbers' in _data_numbers.data) {
-                        	$.each(_data_numbers.data.numbers, function(k, v) {
-                            	tab_data.push(['lol', k]);
-                        	});
+						$.each(_data_numbers.data.numbers, function(k, v) {
+							tab_data.push(['lol', k]);
+						});
 					}
 
 					winkstart.table.assign_number.fnAddData(tab_data);
@@ -1276,14 +1277,14 @@ function(args) {
 		});
 
 		if(!winkstart.config.hasOwnProperty('hide_e911') || winkstart.config.hide_e911 === false) {
-            	columns.push({
-                	'sTitle': 'E911',
-                	'fnRender': function(obj) {
-                    	var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
-                    	return '<a class="'+ e911  +'">E911</a>';
-                	},
-                	'bSortable': false
-            	});
+			columns.push({
+				'sTitle': 'E911',
+				'fnRender': function(obj) {
+					var e911 = 'e911 ' + (obj.aData[obj.iDataColumn] ? 'active' : 'inactive');
+					return '<a class="'+ e911  +'">E911</a>';
+				},
+				'bSortable': false
+			});
 		}
 
 		columns.push({
@@ -1312,11 +1313,11 @@ function(args) {
 	},
 
 	/**
-         * Display credit card confirmation if enabled
-         *
-         * @param {function} callback Execute after confirmation or immediately
-         * if confirmation is disabled
-         */
+	 * Display credit card confirmation if enabled
+	 *
+	 * @param {function} callback Execute after confirmation or immediately
+	 * if confirmation is disabled
+	 */
 	display_credit_card_confirmation: function(callback) {
 		if(winkstart.config.hide_credit_card_confirmation) {
 			callback();

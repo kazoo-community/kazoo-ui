@@ -183,11 +183,11 @@
 		'auth' : {
 			api_url: 'https://api.zswitch.net:8443/v1' //'https://api.zswitch.net:8443/v1',
 			/* These are some settings that are set automatically. You are free to override them here.
-            account_id: null,
-            auth_token: null,
-            user_id: null,
-            realm: null
-            */
+			account_id: null,
+			auth_token: null,
+			user_id: null,
+			realm: null
+			*/
 		},
 		'myaccount': {}
 	};

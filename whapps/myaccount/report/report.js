@@ -205,9 +205,9 @@ function(args) {
 						twoway_trunks = results.limits.twoway_trunks || 0;
 
 					if('numbers' in results.dids) {
-                            	$.each(results.dids.numbers, function(k, v) {
-                                	dids++;
-                            	});
+						$.each(results.dids.numbers, function(k, v) {
+							dids++;
+						});
 					}
 
 					$.each(results.devices, function(k, v) {

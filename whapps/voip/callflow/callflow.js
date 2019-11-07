@@ -33,8 +33,8 @@ winkstart.module('voip', 'callflow', {
 		edit_name: 'tmpl/edit_name.html',
 		prepend_cid_callflow: 'tmpl/prepend_cid_callflow.html',
 		set_cid_callflow: 'tmpl/set_cid_callflow.html',
-	    check_cid_callflow: 'tmpl/check_cid_callflow.html',
-	    check_cid_child_callflow: 'tmpl/check_cid_child_callflow.html',
+		check_cid_callflow: 'tmpl/check_cid_callflow.html',
+		check_cid_child_callflow: 'tmpl/check_cid_child_callflow.html',
 		response_callflow: 'tmpl/response_callflow.html',
 		group_pickup: 'tmpl/group_pickup.html',
 		language_callflow: 'tmpl/language_callflow.html',
@@ -274,7 +274,7 @@ function (args) {
 
 	activate: function (args) {
 		var THIS = this,
-            	args = args || {},
+			args = args || {},
 			callflow_html = THIS.templates.callflow_main.tmpl();
 
 		$('#ws-content').empty()
@@ -303,19 +303,19 @@ function (args) {
 		function(_data_numbers, status) {
 			THIS.list_numbers_callflow(
 				function(number_callflows, status) {
-                        	if('numbers' in _data_numbers.data) {
-                            	$.each(number_callflows, function(k, v) {
-                                	delete _data_numbers.data.numbers[k];
-                            	});
+					if('numbers' in _data_numbers.data) {
+						$.each(number_callflows, function(k, v) {
+							delete _data_numbers.data.numbers[k];
+						});
 					}
 
 					if(typeof success === 'function') {
 						THIS.list_numbers_trunkstore(
 							function(numbers_trunkstore) {
-                                    	if('numbers' in _data_numbers.data) {
-                                        	$.each(numbers_trunkstore, function(k, v) {
-                                            	delete _data_numbers.data.numbers[k];
-                                        	});
+								if('numbers' in _data_numbers.data) {
+									$.each(numbers_trunkstore, function(k, v) {
+										delete _data_numbers.data.numbers[k];
+									});
 								}
 
 								success(_data_numbers);
@@ -401,7 +401,7 @@ function (args) {
 		$('.copy_icon', '#ws_cf_flow').click(function() {
 			delete(THIS.dataCallflow.id);
 			delete(THIS.dataCallflow.numbers);
-			THIS.flow.name = '';    
+			THIS.flow.name = '';
 			THIS.flow.numbers = [];
 			THIS.flow.id = undefined;
 			THIS.renderFlow();
@@ -482,7 +482,7 @@ function (args) {
 		return parent;
 	},
 
-	construct_action: function(json) {  
+	construct_action: function(json) {
 		var action = '';
 
 		if('data' in json) {
@@ -510,8 +510,8 @@ function (args) {
 
 		// Let it there for now, if we need to save callflows automatically again.
 		/*if('savable' in THIS.flow) {
-                THIS.save_callflow_no_loading();
-            }*/
+			THIS.save_callflow_no_loading();
+		}*/
 
 		THIS.flow.savable = true;
 
@@ -831,9 +831,9 @@ function (args) {
 						var phone_numbers = [];
 
 						if('numbers' in _data.data) {
-                            	$.each(_data.data.numbers, function(k,v) {
+							$.each(_data.data.numbers, function(k,v) {
 								phone_numbers.push(k);
-                            	});
+							});
 						}
 						phone_numbers.sort();
 
@@ -861,10 +861,10 @@ function (args) {
 								phone_numbers = [];
 
 								if('numbers' in _data.data) {
-                            			$.each(_data.data.numbers, function(k,v) {
-                                    		phone_numbers.push(k);
-                            			});
-                            		}
+									$.each(_data.data.numbers, function(k,v) {
+										phone_numbers.push(k);
+									});
+								}
 
 								phone_numbers.sort();
 
@@ -1820,7 +1820,7 @@ function (args) {
 							}
 						});
 
-                            		unselected_groups = winkstart.sort(unselected_groups);
+						unselected_groups = winkstart.sort(unselected_groups);
 
 						winkstart.request('user.list', {
 							account_id: winkstart.apps['voip'].account_id,
@@ -1852,9 +1852,9 @@ function (args) {
 								});
 
 								popup_html = THIS.templates.ring_group_dialog.tmpl({
-        												_t: function(param){
-        													return window.translate['callflow'][param];
-        												},
+									_t: function(param){
+										return window.translate['callflow'][param];
+									},
 									form: {
 										name: node.getMetadata('name') || '',
 										strategy: {
@@ -2381,7 +2381,7 @@ function (args) {
 						var dataVars = {};
 						for(var i=0; i<formVars.length; i++) {
 							if(i%2 != 0) continue; // Collate object pairs
-							if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0) 
+							if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0)
 								dataVars[formVars[i].value] = {
 									type: formVars[i+1].name,
 									value: formVars[i+1].value
@@ -2416,7 +2416,7 @@ function (args) {
 							var form = $("form .form_content", popup_html);
 							var div = $('<div class="popup_field" style="white-space: nowrap;"></div>'); // Base div for new input
 							var selected = $('#type_selector option:selected', type_popup_html).val();
-                                
+
 							div.append('<input class="large" type="text" name="key[]" value="" placeholder="Variable name">&nbsp;:&nbsp;');
 							if (selected == 'custom') {
 								div.append('<input class="large" type="text" name="' + selected + '" value="" placeholder="Variable value">');
@@ -2875,7 +2875,7 @@ function (args) {
 
 					return returned_value;
 				},
-		    key_edit: function(child_node, callback) {
+				key_edit: function(child_node, callback) {
 					var popup, popup_html;
 
 					popup_html = THIS.templates.check_cid_child_callflow.tmpl({
@@ -2906,7 +2906,7 @@ function (args) {
 							}
 						}
 					});
-		   }
+				}
 			},
 
 			'language[]': {
@@ -2976,64 +2976,65 @@ function (args) {
 					return node.getMetadata('name') || '';
 				},
 				edit: function(node, callback) {
-                    	winkstart.parallel({
-						groups: function(callback) {
-							THIS.groups_list(function(groups) {
-								callback(null, groups);
-							});
+					winkstart.parallel(
+						{
+							groups: function(callback) {
+								THIS.groups_list(function(groups) {
+									callback(null, groups);
+								});
+							},
+							users: function(callback) {
+								THIS.users_list(function(users) {
+									callback(null, users);
+								});
+							},
+							devices: function(callback) {
+								THIS.devices_list(function(devices) {
+									callback(null, devices);
+								});
+							}
 						},
-						users: function(callback) {
-							THIS.users_list(function(users) {
-								callback(null, users);
+						function(err, results) {
+							var popup, popup_html;
+
+							popup_html = THIS.templates.group_pickup.tmpl({
+								_t: function(param){
+									return window.translate['callflow'][param];
+								},
+								data: {
+									items: results,
+									selected: node.getMetadata('device_id') || node.getMetadata('group_id') || node.getMetadata('user_id') || ''
+								}
 							});
-						},
-						devices: function(callback) {
-							THIS.devices_list(function(devices) {
-								callback(null, devices);
+
+							$('#add', popup_html).click(function() {
+								var selector = $('#endpoint_selector', popup_html),
+									id = selector.val(),
+									name = selector.find('#'+id).html(),
+									type = $('#'+ id, popup_html).data('type'),
+									type_id = type.substring(type, type.length - 1) + '_id';
+
+								/* Clear all the useless attributes */
+								node.data.data = {};
+								node.setMetadata(type_id, id);
+								node.setMetadata('name', name);
+
+								node.caption = name;
+
+								popup.dialog('close');
+							});
+
+							popup = winkstart.dialog(popup_html, {
+								title: _t('callflow', 'select_endpoint_title'),
+								minHeight: '0',
+								beforeClose: function() {
+									if(typeof callback == 'function') {
+										callback();
+									}
+								}
 							});
 						}
-					},
-					function(err, results) {
-						var popup, popup_html;
-
-						popup_html = THIS.templates.group_pickup.tmpl({
-							_t: function(param){
-								return window.translate['callflow'][param];
-							},
-							data: {
-								items: results,
-								selected: node.getMetadata('device_id') || node.getMetadata('group_id') || node.getMetadata('user_id') || ''
-							}
-						});
-
-						$('#add', popup_html).click(function() {
-							var selector = $('#endpoint_selector', popup_html),
-								id = selector.val(),
-								name = selector.find('#'+id).html(),
-								type = $('#'+ id, popup_html).data('type'),
-									    type_id = type.substring(type, type.length - 1) + '_id';
-
-							/* Clear all the useless attributes */
-							node.data.data = {};
-							node.setMetadata(type_id, id);
-							node.setMetadata('name', name);
-
-							node.caption = name;
-
-							popup.dialog('close');
-						});
-
-						popup = winkstart.dialog(popup_html, {
-							title: _t('callflow', 'select_endpoint_title'),
-							minHeight: '0',
-							beforeClose: function() {
-								if(typeof callback == 'function') {
-									callback();
-								}
-							}
-						});
-					}
-                    	);
+					);
 				}
 			},
 			'receive_fax[]': {
@@ -3350,13 +3351,15 @@ function (args) {
 						});
 
 						if($('#media_selector option:selected', popup_html).val() == undefined
-                                || $('#media_selector option:selected', popup_html).val() == 'null') {
+							|| $('#media_selector option:selected', popup_html).val() == 'null'
+						) {
 							$('#edit_link', popup_html).hide();
 						}
 
 						$('#media_selector', popup_html).change(function() {
 							if($('#media_selector option:selected', popup_html).val() == undefined
-                                    || $('#media_selector option:selected', popup_html).val() == 'null') {
+								|| $('#media_selector option:selected', popup_html).val() == 'null'
+							) {
 								$('#edit_link', popup_html).hide();
 							} else {
 								$('#edit_link', popup_html).show();

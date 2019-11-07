@@ -22,11 +22,11 @@ winkstart.module('auth', 'onboarding', {
 		//phone_number
 		step1: [
 			/*{ name: '#e911_street_address',     regex: /^.+$/ },
-                { name: '#e911_extended_address',   regex: /^.*$/ },
-                { name: '#e911_region',             regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_locality',           regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_country',            regex: /^[a-zA-Z\_\-\s]+$/ },
-                { name: '#e911_postal_code',        regex: /^[0-9\-]{4,10}$/ }*/
+			{ name: '#e911_extended_address',   regex: /^.*$/ },
+			{ name: '#e911_region',             regex: /^[a-zA-Z\_\-\s]+$/ },
+			{ name: '#e911_locality',           regex: /^[a-zA-Z\_\-\s]+$/ },
+			{ name: '#e911_country',            regex: /^[a-zA-Z\_\-\s]+$/ },
+			{ name: '#e911_postal_code',        regex: /^[0-9\-]{4,10}$/ }*/
 		],
 		//braintree
 		step2: [
@@ -632,4 +632,3 @@ function(args) {
 	}
 }
 );
-

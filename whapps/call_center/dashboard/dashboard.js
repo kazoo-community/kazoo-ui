@@ -150,8 +150,8 @@ function(args) {
 
 		return !!(
 			dashboard_settings &&
-                dashboard_settings['hide_' + type] &&
-                dashboard_settings['hide_' + type].indexOf(id) !== -1
+				dashboard_settings['hide_' + type] &&
+				dashboard_settings['hide_' + type].indexOf(id) !== -1
 		);
 	},
 
@@ -214,7 +214,7 @@ function(args) {
 			.append(calls_html);
 
 		THIS.render_timers(data);
-            
+
 		$('.agent_wrapper.ready').click(function(e) {
 			THIS.logout(this);
 		});
@@ -274,7 +274,7 @@ function(args) {
 								callback(null, _data_status);
 							},
 							function(_data_status) {
-                                    	callback(null, {});
+								callback(null, {});
 							});
 						}
 					},
@@ -443,7 +443,7 @@ function(args) {
 			if(typeof success == 'function') {
 				_data.data.sort(function(a, b) {
 					return (a.last_name + ' ' + a.first_name).toLowerCase() <
-                                    (b.last_name + ' ' + b.first_name).toLowerCase() ? -1 : 1;
+						(b.last_name + ' ' + b.first_name).toLowerCase() ? -1 : 1;
 				});
 				success(_data, status);
 			}
@@ -569,12 +569,12 @@ function(args) {
 			if('paused' in data.agent_status) {
 				$.each(data.agent_status.paused, function(agent_id, data_status) {
 					if('pause_time' in data_status) {
-                        	data_status.duration = data_status.pause_time - (data.current_timestamp - data_status.timestamp);
-                        	THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+						data_status.duration = data_status.pause_time - (data.current_timestamp - data_status.timestamp);
+						THIS.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
 					}
-                       	else {
-                        	data_status.duration = data.current_timestamp - data_status.timestamp;
-                        	THIS.start_timer('agent_status', {data: data_status, id: agent_id});
+					else {
+						data_status.duration = data.current_timestamp - data_status.timestamp;
+						THIS.start_timer('agent_status', {data: data_status, id: agent_id});
 					}
 				});
 			}
@@ -605,60 +605,60 @@ function(args) {
 		});
 
 		if(data.agents_live_status) {
-            	$.each(data.agents_live_status, function(k, agent_status) {
+				$.each(data.agents_live_status, function(k, agent_status) {
 				// As of kazoo bb2a98a, even when requesting non-recent
 				// statuses, there is a nested timestamp object. Since were are
 				// not specifying "recent": true, there's only one key
 				agent_status = agent_status[Object.keys(agent_status)[0]];
 
-                	if(k in formatted_data.agents) {
-                    	if(agent_status.status === 'outbound') {
-                        	agent_status.status = 'busy';
-                    	}
+					if(k in formatted_data.agents) {
+						if(agent_status.status === 'outbound') {
+							agent_status.status = 'busy';
+						}
 
-                    	if(agent_status.status === 'connected') {
-                        	agent_status.status = 'handling';
-                    	}
+						if(agent_status.status === 'connected') {
+							agent_status.status = 'handling';
+						}
 
-                    	var current_status = agent_status.status;
+						var current_status = agent_status.status;
 
-                    	formatted_data.agents[k].status = current_status;
-                    	formatted_data.agents[k].status_started = agent_status.timestamp;
+						formatted_data.agents[k].status = current_status;
+						formatted_data.agents[k].status_started = agent_status.timestamp;
 
-                    	if($.inArray(current_status, ['busy', 'wrapup', 'paused']) >= 0) {
-                        	formatted_data.agent_status[current_status][k] = agent_status;
+						if($.inArray(current_status, ['busy', 'wrapup', 'paused']) >= 0) {
+							formatted_data.agent_status[current_status][k] = agent_status;
 
-                        	if(current_status === 'busy') {
-                            	formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
-                        	}
-                        	else if(current_status === 'paused') {
-                        		if('pause_time' in agent_status) {
-                            		formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.pause_time - (formatted_data.current_timestamp - agent_status.timestamp))
-                        		}
-                        		else {
-                            		formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
-                            	}
-                        	}
-                        	else {
-                            	formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
-                        	}
-                    	}
-                    	else if(current_status === 'connecting') {
+							if(current_status === 'busy') {
+								formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
+							}
+							else if(current_status === 'paused') {
+								if('pause_time' in agent_status) {
+									formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.pause_time - (formatted_data.current_timestamp - agent_status.timestamp))
+								}
+								else {
+									formatted_data.agents[k].call_time = THIS.get_time_seconds(formatted_data.current_timestamp - agent_status.timestamp)
+								}
+							}
+							else {
+								formatted_data.agents[k].call_time = THIS.get_time_seconds(agent_status.wait_time  - (formatted_data.current_timestamp - agent_status.timestamp));
+							}
+						}
+						else if(current_status === 'connecting') {
 						formatted_data.agents[k].current_call = { friendly_title: agent_status.caller_id_name || agent_status.caller_id_number || agent_status.call_id };
-                    	}
+					}
 
-                    	if(current_status !== 'logged_out') {
-                        	$.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
-                            	if(!(queue_id in current_agents_by_queue)) {
-                                	current_agents_by_queue[queue_id] = 1;
-                            	}
-                            	else {
-                                	current_agents_by_queue[queue_id]++;
-                            	}
-                        	});
-                    	}
-                	}
-            	});
+					if(current_status !== 'logged_out') {
+						$.each(formatted_data.agents[k].queues_list, function(queue_id, queue_data) {
+							if(!(queue_id in current_agents_by_queue)) {
+								current_agents_by_queue[queue_id] = 1;
+							}
+							else {
+								current_agents_by_queue[queue_id]++;
+							}
+						});
+					}
+				}
+			});
 		}
 
 		$.each(current_agents_by_queue, function(queue_id, count) {
@@ -674,11 +674,11 @@ function(args) {
 
 				if('queues' in agent_stats) {
 					$.each(agent_stats.queues, function(queue_id, queue_stat) {
-                        	if(queue_id in formatted_data.agents[k].queues_list) {
-                            	formatted_data.agents[k].queues_list[queue_id] = {
-                                	missed_calls: queue_stat.missed_calls || 0,
-                                	total_calls: queue_stat.total_calls || 0
-                            	};
+						if(queue_id in formatted_data.agents[k].queues_list) {
+							formatted_data.agents[k].queues_list[queue_id] = {
+								missed_calls: queue_stat.missed_calls || 0,
+								total_calls: queue_stat.total_calls || 0
+							};
 						}
 					});
 				}
@@ -725,7 +725,7 @@ function(args) {
 
 		$.each(formatted_data.queues, function(k, v) {
 			if(v.total_calls > 0) {
-                	var completed_calls = v.total_calls - v.abandoned_calls;
+				var completed_calls = v.total_calls - v.abandoned_calls;
 
 				v.average_hold_time = THIS.get_time_seconds(v.total_wait_time / completed_calls);
 			}
@@ -745,7 +745,7 @@ function(args) {
 			hide_queues = dashboard_settings.hide_queues || [];
 			hide_agents = dashboard_settings.hide_agents || [];
 		}
-            
+
 		/* Formatting Queues */
 		formatted_data.queues = {};
 
@@ -778,7 +778,7 @@ function(args) {
 						queues_list: {}
 					}, v);
 				}
-    
+
 				$.each(v.queues, function(k, queue_id) {
 					if(queue_id in formatted_data.queues) {
 						formatted_data.queues[queue_id].max_agents++;
@@ -841,12 +841,12 @@ function(args) {
 			},
 			agents_status: function(callback) {
 				THIS.get_agents_status(loading,
-                        	function(_data_live_status) {
-                            	callback(null, _data_live_status);
-                        	},
-                        	function(_data_live_status) {
-                        		callback(null, {});
-                        	}
+					function(_data_live_status) {
+						callback(null, _data_live_status);
+					},
+					function(_data_live_status) {
+						callback(null, {});
+					}
 				);
 			},
 			queues: function(callback) {

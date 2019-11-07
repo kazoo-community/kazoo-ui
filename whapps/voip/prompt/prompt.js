@@ -99,7 +99,7 @@ function(args) {
 
 		THIS.getListAvailablePrompts(function(prompts) {
 			var data = {
-						 _t: function(param) {
+					_t: function(param) {
 						return window.translate['prompt'][param]
 					},
 					data: {},
@@ -112,7 +112,7 @@ function(args) {
 			var prompt_html = THIS.templates.create.tmpl(data);
 
 			prompt_html.find('.basic_view')
-						   .append(THIS.templates.add_language.tmpl(data));
+				.append(THIS.templates.add_language.tmpl(data));
 
 			$('#file', prompt_html).bind('change', function(evt){
 				var files = evt.target.files;
@@ -161,7 +161,7 @@ function(args) {
 
 		THIS.getDataEditPrompt(data.id, function(dataPrompts) {
 			var dataTemplate = {
-					 _t: function(param) {
+				_t: function(param) {
 					return window.translate['prompt'][param]
 				},
 				data: {
@@ -189,14 +189,14 @@ function(args) {
 			});
 
 			target.empty()
-					  .append(prompt_html);
+				.append(prompt_html);
 		});
 	},
 
 	display_add_language_dialog: function(globalPromptId) {
 		var THIS = this,
 			dataTemplate = {
-					 _t: function(param) {
+				_t: function(param) {
 					return window.translate['prompt'][param]
 				},
 				data: {
@@ -208,7 +208,7 @@ function(args) {
 			addLanguageTemplate = THIS.templates.add_language.tmpl(dataTemplate);
 
 		dialogTemplate.find('.add-language-content')
-						  .append(addLanguageTemplate);
+			.append(addLanguageTemplate);
 
 		dialogTemplate.find('#add_language').click(function(ev) {
 			ev.preventDefault();
@@ -395,7 +395,7 @@ function(args) {
 			THIS.getGlobalPrompts(function(dataRequest) {
 				globalCallback && globalCallback(dataRequest, callback)
 			});
-				
+
 		}
 		else {
 			THIS.getAccountPrompts(function(dataRequest) {

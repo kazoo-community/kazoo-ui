@@ -180,7 +180,7 @@ function(args) {
 		}
 
 		if('media' in data2 && 'encryption' in data2.media && 'methods' in data2.media.encryption) {
-            	data.media.encryption = data.media.encryption || {};
+			data.media.encryption = data.media.encryption || {};
 			data.media.encryption.methods = data2.media.encryption.methods;
 		}
 
@@ -295,7 +295,7 @@ function(args) {
 					ringtones: {},
 					call_restriction: { closed_groups: 'inherit' },
 					media: {
-                        	secure_rtp: 'none',
+						secure_rtp: 'none',
 						peer_to_peer: 'auto',
 						audio: {
 							codecs: ['PCMU', 'PCMA']
@@ -337,14 +337,14 @@ function(args) {
 						}
 					},
 					media: {
-                        	secure_rtp: {
-                        		value: 'none',
+						secure_rtp: {
+							value: 'none',
 							options: {
-                                	'none': _t('device', 'none'),
-                                	'srtp': _t('device', 'srtp'),
-                                	'zrtp': _t('device', 'zrtp')
+								'none': _t('device', 'none'),
+								'srtp': _t('device', 'srtp'),
+								'zrtp': _t('device', 'zrtp')
 							}
-                        	},
+						},
 						peer_to_peer_options: {
 							'auto': _t('device', 'automatic'),
 							'true': _t('device', 'always'),
@@ -515,7 +515,7 @@ function(args) {
 			if(typeof data === 'object' && data.id) {
 				render_data = $.extend(true, defaults, results.get_device);
 			}
-                
+
 			if(results.get_device.data.media.hasOwnProperty('audio')) {
 				// If the codecs property is defined, override the defaults with it. Indeed, when an empty array is set as the
 				// list of codecs, it gets overwritten by the extend function otherwise.
@@ -899,7 +899,7 @@ function(args) {
 		}
 
 		if('media' in data && 'secure_rtp' in data.media) {
-            	delete data.media.secure_rtp;
+			delete data.media.secure_rtp;
 		}
 
 		if('media' in data && 'bypass_media' in data.media) {
@@ -1024,7 +1024,7 @@ function(args) {
 		}
 
 		if($.inArray(form_data.device_type, ['sip_device', 'mobile', 'softphone']) > -1) {
-            	if('extra' in form_data) {
+			if('extra' in form_data) {
 				form_data.media.encryption = form_data.media.encryption || {};
 
 				if($.inArray(form_data.extra.encryptionMethod, ['srtp', 'zrtp']) > -1) {
@@ -1035,7 +1035,7 @@ function(args) {
 					form_data.media.encryption.methods = [];
 					form_data.media.encryption.enforce_security = false;
 				}
-            	}
+			}
 		}
 
 		delete form_data.extra;
@@ -1285,7 +1285,7 @@ function(args) {
 							} else {
 								node.deleteMetadata('var');
 							}
-                                        
+
 							node.caption = $('#device_selector option:selected', popup_html).text();
 
 							popup.dialog('close');
@@ -1308,4 +1308,3 @@ function(args) {
 	}
 }
 );
-

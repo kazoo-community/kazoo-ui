@@ -141,7 +141,7 @@ function(args) {
 			},
 			defaults = {
 				data: $.extend(true, {
-                    	endpoints: {},
+					endpoints: {},
 					music_on_hold: {}
 				}, data_defaults || {}),
 				field_data: {}
@@ -267,7 +267,7 @@ function(args) {
 				form_data.endpoints = {};
 
 				$('.rows .row:not(#row_no_data)', groups_html).each(function(k, v) {
-					form_data.endpoints[$(v).dataset('id')] = { 
+					form_data.endpoints[$(v).dataset('id')] = {
 						type: $(v).dataset('type'),
 						weight: k+1
 					};
@@ -426,40 +426,40 @@ function(args) {
 	},
 
 	format_data: function(data){
-	        var user_item,
-	            list_endpoint = [];
+		var user_item,
+			list_endpoint = [];
 
-	        $.each(data.field_data.users, function(k, v) {
-	            if(v.id in data.data.endpoints) {
-	                endpoint_item = {
-	                    endpoint_type: 'user',
-	                    endpoint_id: v.id,
-	                    endpoint_name: v.first_name + ' ' + v.last_name,
+		$.each(data.field_data.users, function(k, v) {
+			if(v.id in data.data.endpoints) {
+				endpoint_item = {
+					endpoint_type: 'user',
+					endpoint_id: v.id,
+					endpoint_name: v.first_name + ' ' + v.last_name,
 					endpoint_weight: data.data.endpoints[v.id].weight || 0
-	                };
+				};
 
-	                list_endpoint.push(endpoint_item);
-	            }
-	        });
+				list_endpoint.push(endpoint_item);
+			}
+		});
 
-	        $.each(data.field_data.devices, function(k, v) {
-	            if(v.id in data.data.endpoints) {
-	                endpoint_item = {
-	                    endpoint_type: 'device',
-	                    endpoint_id: v.id,
-	                    endpoint_name: v.name,
+		$.each(data.field_data.devices, function(k, v) {
+			if(v.id in data.data.endpoints) {
+				endpoint_item = {
+					endpoint_type: 'device',
+					endpoint_id: v.id,
+					endpoint_name: v.name,
 					endpoint_weight: data.data.endpoints[v.id].weight || 0
-	                };
+				};
 
-	                list_endpoint.push(endpoint_item);
-	            }
-	        });
+				list_endpoint.push(endpoint_item);
+			}
+		});
 
-	        list_endpoint.sort(function(a,b){
-	            return a.endpoint_weight - b.endpoint_weight;
-	        });
+		list_endpoint.sort(function(a,b){
+			return a.endpoint_weight - b.endpoint_weight;
+		});
 
-	        data.data.endpoints = list_endpoint;
+		data.data.endpoints = list_endpoint;
 
 		return data;
 	},
@@ -563,7 +563,7 @@ function(args) {
 					_t: function(param){
 						return window.translate['groups'][param];
 					}
-								  }));
+				}));
 		}
 	},
 

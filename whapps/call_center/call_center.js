@@ -6,8 +6,8 @@ winkstart.module('call_center', 'call_center', {
 	}
 },
 /* The code in this initialization function is required for
-     * loading routine.
-     */
+ * loading routine.
+ */
 function() {
 	var THIS = this;
 

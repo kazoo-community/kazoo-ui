@@ -510,7 +510,7 @@ function(args) {
 						_t: function(param){
 							return window.translate['voip_queue'][param];
 						}
-									  }));
+					}));
 			}
 		}
 		else {
@@ -519,7 +519,7 @@ function(args) {
 					_t: function(param){
 						return window.translate['voip_queue'][param];
 					}
-								  }));
+				}));
 		}
 	},
 
@@ -635,7 +635,7 @@ function(args) {
 							} else {
 								node.deleteMetadata('var');
 							}
-                                        
+
 							node.caption = $('#queue_selector option:selected', popup).text();
 
 							popup.dialog('close');

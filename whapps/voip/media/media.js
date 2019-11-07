@@ -246,8 +246,8 @@ function(args) {
 		$('#download_link', media_html).click(function(ev) {
 			ev.preventDefault();
 			window.location.href = winkstart.apps['voip'].api_url + '/accounts/' +
-                                       winkstart.apps['voip'].account_id + '/media/' +
-                                       data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
+				winkstart.apps['voip'].account_id + '/media/' +
+				data.data.id + '/raw?auth_token=' + winkstart.apps['voip'].auth_token;
 		});
 
 		$('#file', media_html).bind('change', function(evt){
@@ -379,9 +379,9 @@ function(args) {
 
 	format_data: function(data) {
 		/* On creation, crossbar store streamable as a string, and as a boolean on update
-            * And as we're using the same template for both behaviors, we need the same kind of data.
-            * TODO: delete once this bug is fixed!
-            */
+		 * And as we're using the same template for both behaviors, we need the same kind of data.
+		 * TODO: delete once this bug is fixed!
+		 */
 		if(data.data.streamable == 'false') {
 			data.data.streamable = false;
 		}
@@ -576,7 +576,7 @@ function(args) {
 							} else {
 								node.deleteMetadata('var');
 							}
-                                        
+
 							node.caption = $('#media_selector option:selected', popup_html).text();
 
 							popup.dialog('close');

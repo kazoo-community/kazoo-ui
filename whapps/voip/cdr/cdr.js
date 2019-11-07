@@ -334,20 +334,20 @@ function (args) {
 			});
 
 			/**
-                     * only download if there's data available.
-                     */
+			 * only download if there's data available.
+			 */
 			if (tab_data.length > 1) {
 				/**
-                         * Download the CSV directly through Crossbar API
-                        **/
+				 * Download the CSV directly through Crossbar API
+				 **/
 				csv_file_name = parse_date(start_date).split(" ")[0].replace(/\//g, '-') + '_' + parse_date(end_date).split(" ")[0].replace(/\//g, '-') + '_cdr.csv';
 				var download_link = winkstart.apps['voip'].api_url + '/accounts/' +
-                                            winkstart.apps['voip'].account_id + '/cdrs?' +
-                                            '&accept=text/csv' +
-                                            '&file_name=' + csv_file_name +
-                                            '&created_from=' + start_date +
-                                            '&created_to=' + end_date +
-                                            '&auth_token=' + winkstart.apps['voip'].auth_token;
+					winkstart.apps['voip'].account_id + '/cdrs?' +
+					'&accept=text/csv' +
+					'&file_name=' + csv_file_name +
+					'&created_from=' + start_date +
+					'&created_to=' + end_date +
+					'&auth_token=' + winkstart.apps['voip'].auth_token;
 
 				if (filter === 'queue') {
 					download_link = download_link + '&has_key=custom_channel_vars.queue_id';

@@ -9,7 +9,7 @@
 			url: 'VERSION',
 			cache: amplify.cache,
 			success: function(template) {
-            	template = template.replace(/[\n\s]/g,'');
+				template = template.replace(/[\n\s]/g,'');
 
 				callback(template);
 			}
@@ -137,16 +137,15 @@
 		// Create an instance of the core module, which loads layouts and all whApps
 		this.init();
 
-		/*          winkstart.module.loadModule('core', 'layout', function() {
-                this.init({ parent: $('body') }, function() {
+		/* winkstart.module.loadModule('core', 'layout', function() {
+			this.init({ parent: $('body') }, function() {
 
-                    //Bootstrap some form data
-                    $.getJSON('endpoint/form/data.json', function(data){
-                        amplify.store('form_data', data);
-                    });
-                });
-            });
-        });*/
+				//Bootstrap some form data
+				$.getJSON('endpoint/form/data.json', function(data){
+					amplify.store('form_data', data);
+				});
+			});
+		});*/
 	});
 
 })( window.winkstart = window.winkstart || {}, window.amplify = window.amplify || {});

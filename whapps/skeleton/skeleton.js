@@ -53,19 +53,19 @@ function() {
 },
 {
 	/* A modules object is required for the loading routine.
-         * The format is as follows:
-         * <module name>: <initialization status>
-         */
+	 * The format is as follows:
+	 * <module name>: <initialization status>
+	 */
 	modules: {
 		'sub_module': false
 	},
 
 	/* The following code is generic and should be abstracted.
-         * For the time being, you can just copy and paste this
-         * into other whapps.
-         *
-         * BEGIN COPY AND PASTE CODE
-         */
+	 * For the time being, you can just copy and paste this
+	 * into other whapps.
+	 *
+	 * BEGIN COPY AND PASTE CODE
+	 */
 	is_initialized: false,
 
 	uninitialized_count: 1337,
@@ -147,10 +147,10 @@ function() {
 		var THIS = this;
 
 		/* Uncomment if you want this whapp to be masqueradable
-            winkstart.apps['skeleton'] = $.extend(true, {
-                is_masqueradable: true
-            }, winkstart.apps['skeleton']);
-            */
+		winkstart.apps['skeleton'] = $.extend(true, {
+			is_masqueradable: true
+		}, winkstart.apps['skeleton']);
+		*/
 	},
 
 	/* A setup_page function is required for the copy and paste code */

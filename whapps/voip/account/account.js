@@ -373,7 +373,7 @@ function(args) {
 
 			$('#blacklist_select', account_html).append($("<option></option>")
 				.attr("value",id)
-				.text(name)); 
+				.text(name));
 
 			parent.remove();
 		});
@@ -445,7 +445,8 @@ function(args) {
 
 		// if at least one field isn't empty, and technical fields are equals to billing fields
 		if( ($tech_email.val().length>0 || $tech_number.val().length>0)
-              && $tech_number.val() == $bill_number.val() && $tech_email.val() == $bill_email.val()) {
+			&& $tech_number.val() == $bill_number.val() && $tech_email.val() == $bill_email.val()
+		) {
 			$('#contact_copy_checkbox', account_html).attr('checked','checked');
 			$('.contact-technical', account_html).hide();
 			is_identical_contact = true;
@@ -488,9 +489,9 @@ function(args) {
 		});
 
 		var final_render = function() {
-            	(target)
-                	.empty()
-                	.append(account_html);
+			(target)
+				.empty()
+				.append(account_html);
 		};
 
 		if(winkstart.publish('call_center.render_account_fields', $(account_html), data, final_render)) {

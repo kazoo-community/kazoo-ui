@@ -118,9 +118,10 @@ winkstart.module('auth', 'auth',
 		else if(jsonCookie && winkstart.apps.auth.api_url !== jsonCookie.api_url) {
 			$.cookie('c_winkstart_auth', null);
 
-			winkstart.publish('layout.render_welcome', { callback: function() {
-            		winkstart.publish('auth.welcome');
-            	}
+			winkstart.publish('layout.render_welcome', {
+				callback: function() {
+					winkstart.publish('auth.welcome');
+				}
 			});
 		}
 
@@ -332,17 +333,17 @@ winkstart.module('auth', 'auth',
 			function(data, status) {
 				window.location.replace(url+'?error='+status);
 				/*if(status === 400) {
-                        winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
-                    }
-                    else if($.inArray(status, [401, 403]) > -1) {
-                        winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
-                    }
-                    else if(status === 'error') {
-                        winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
-                    }
-                    else {
-                        winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
-                    }*/
+					winkstart.alert('Invalid credentials, please check that your username and account name are correct.');
+				}
+				else if($.inArray(status, [401, 403]) > -1) {
+					winkstart.alert('Invalid credentials, please check that your password and account name are correct.');
+				}
+				else if(status === 'error') {
+					winkstart.alert('Oh no! We are having trouble contacting the server, please try again later...');
+				}
+				else {
+					winkstart.alert('An error was encountered while attempting to process your request (Error: ' + status + ')');
+				}*/
 			}
 			);
 		},
@@ -884,16 +885,16 @@ winkstart.module('auth', 'auth',
 		},
 
 		activate: function() {
-			/*            if(ACTIVATION_KEY) {
-                var rest_data = { activtion_key : ACTIVATION_KEY, data: {} };
-                winkstart.postJSON('auth.activate', rest_data, function (json, xhr) {
-                    winkstart.log(json);
-                    REALM_LOGIN = json.data.account.realm;
-                    alert('You are now registered');
-                });
-                ACTIVATION_KEY = null;
-            }
-            else */
+			/* if(ACTIVATION_KEY) {
+				var rest_data = { activtion_key : ACTIVATION_KEY, data: {} };
+				winkstart.postJSON('auth.activate', rest_data, function (json, xhr) {
+					winkstart.log(json);
+					REALM_LOGIN = json.data.account.realm;
+					alert('You are now registered');
+				});
+				ACTIVATION_KEY = null;
+			}
+			else */
 			if(winkstart.apps['auth'].auth_token == null) {
 				winkstart.publish('auth.login');
 			}
@@ -925,4 +926,3 @@ winkstart.module('auth', 'auth',
 		}
 	}
 );
-

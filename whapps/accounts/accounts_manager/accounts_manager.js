@@ -549,7 +549,7 @@ function(args) {
 		}
 
 		if(data.data.billing_id === winkstart.apps['accounts'].account_id) {
-			   data.field_data.billing_account = 'parent';
+			data.field_data.billing_account = 'parent';
 		}
 		else if(data.data.billing_id === data.data.id) {
 			data.field_data.billing_account = 'self'
@@ -844,8 +844,8 @@ function(args) {
 		$('#download_link', account_html).click(function(ev) {
 			ev.preventDefault();
 			window.location.href = winkstart.apps['accounts'].api_url + '/accounts/' +
-									   data.data.id + '/whitelabel/logo?auth_token=' +
-									   winkstart.apps['accounts'].auth_token;
+				data.data.id + '/whitelabel/logo?auth_token=' +
+				winkstart.apps['accounts'].auth_token;
 		});
 
 		$('#file', account_html).bind('change', function(evt){

@@ -551,7 +551,7 @@ function(args) {
 		var THIS = this;
 
 		$.extend(callflow_nodes, {
-				 'faxbox[id=*]': {
+			'faxbox[id=*]': {
 				name: _t('faxbox', 'faxboxes_label'),
 				icon: 'printer2',
 				category: _t('config', 'advanced_cat'),

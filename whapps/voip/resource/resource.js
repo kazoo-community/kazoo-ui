@@ -104,7 +104,7 @@ function(args) {
 },
 
 {
-    	fix_array: function(data, formData) {
+	fix_array: function(data, formData) {
 		$.each(data.gateways, function(k, gateway) {
 			gateway.codecs = formData.gateways[0].codecs;
 		});
@@ -112,7 +112,7 @@ function(args) {
 		data.flags = formData.flags;
 
 		return data;
-    	},
+	},
 
 	save_resource: function(form_data, data, success, error) {
 		var THIS = this,
@@ -744,10 +744,10 @@ function(args) {
 					});
 
 					$('#add', popup_html).click(function() {
-                        	var hunt_id = $('#hunt_account_id', popup_html).val();
+						var hunt_id = $('#hunt_account_id', popup_html).val();
 
-                        	if(hunt_id) {
-                            	node.setMetadata('hunt_account_id', hunt_id);
+						if(hunt_id) {
+							node.setMetadata('hunt_account_id', hunt_id);
 						}
 
 						popup.dialog('close');

@@ -113,10 +113,10 @@ function() {
 	},
 
 	/**
-         * Toggle the activated display state for a whapp to on
-         *
-         * @param {string} whapp_name The name of the whapp to activate
-         */
+	 * Toggle the activated display state for a whapp to on
+	 *
+	 * @param {string} whapp_name The name of the whapp to activate
+	 */
 	activate: function(whapp_name) {
 		var THIS = this,
 			whapp_list_html = $(THIS.config.targets.nav_bar);

@@ -610,167 +610,167 @@ function (args) {
 				}
 			}
 			/*'call_forward[action=on_busy_enable]': {
-                    name: 'Enable Call-Forward on Busy',
-                    icon: 'phone',
-                    category: 'Call-Forward',
-                    module: 'call_forward',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'on_busy_enable'
-                    },
-                    enabled: false,
-                    default_number: '90',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'call_forward[action=on_busy_disable]': {
-                    name: 'Disable Call-Forward on Busy',
-                    icon: 'phone',
-                    category: 'Call-Forward',
-                    module: 'call_forward',
-                    number_type: 'number',
-                    data: {
-                        action: 'on_busy_disable'
-                    },
-                    enabled: false,
-                    default_number: '91',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'call_forward[action=no_answer_enable]': {
-                    name: 'Enable Call-Forward No Answer',
-                    icon: 'phone',
-                    category: 'Call-Forward',
-                    module: 'call_forward',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'no_answer_enable'
-                    },
-                    enabled: false,
-                    default_number: '53',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'call_forward[action=no_answer_disable]': {
-                    name: 'Disable Call-Forward No Answer',
-                    icon: 'phone',
-                    category: 'Call-Forward',
-                    module: 'call_forward',
-                    number_type: 'number',
-                    data: {
-                        action: 'no_answer_disable'
-                    },
-                    enabled: false,
-                    default_number: '52',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
-                'directory': {
-                    name: 'Directory',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'directory',
-                    number_type: 'pattern',
-                    data: {
-                        action: ''
-                    },
-                    enabled: false,
-                    default_number: '411',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'time': {
-                    name: 'Check Time',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'time',
-                    number_type: 'pattern',
-                    data: {
-                        action: ''
-                    },
-                    enabled: false,
-                    default_number: '60',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'call_waiting[action=enable]': {
-                    name: 'Enable Call-Waiting',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'call_waiting',
-                    number_type: 'pattern',
-                    data: {
-                        action: 'enable'
-                    },
-                    enabled: false,
-                    default_number: '70',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
-                'call_waiting[action=disable]': {
-                    name: 'Disable Call-Waiting',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'call_waiting',
-                    number_type: 'number',
-                    data: {
-                        action: 'disable'
-                    },
-                    enabled: false,
-                    default_number: '71',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '*'+number;
-                    }
-                },
+				name: 'Enable Call-Forward on Busy',
+				icon: 'phone',
+				category: 'Call-Forward',
+				module: 'call_forward',
+				number_type: 'pattern',
+				data: {
+					action: 'on_busy_enable'
+				},
+				enabled: false,
+				default_number: '90',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'call_forward[action=on_busy_disable]': {
+				name: 'Disable Call-Forward on Busy',
+				icon: 'phone',
+				category: 'Call-Forward',
+				module: 'call_forward',
+				number_type: 'number',
+				data: {
+					action: 'on_busy_disable'
+				},
+				enabled: false,
+				default_number: '91',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'call_forward[action=no_answer_enable]': {
+				name: 'Enable Call-Forward No Answer',
+				icon: 'phone',
+				category: 'Call-Forward',
+				module: 'call_forward',
+				number_type: 'pattern',
+				data: {
+					action: 'no_answer_enable'
+				},
+				enabled: false,
+				default_number: '53',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'call_forward[action=no_answer_disable]': {
+				name: 'Disable Call-Forward No Answer',
+				icon: 'phone',
+				category: 'Call-Forward',
+				module: 'call_forward',
+				number_type: 'number',
+				data: {
+					action: 'no_answer_disable'
+				},
+				enabled: false,
+				default_number: '52',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
+			'directory': {
+				name: 'Directory',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: 'directory',
+				number_type: 'pattern',
+				data: {
+					action: ''
+				},
+				enabled: false,
+				default_number: '411',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'time': {
+				name: 'Check Time',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: 'time',
+				number_type: 'pattern',
+				data: {
+					action: ''
+				},
+				enabled: false,
+				default_number: '60',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'call_waiting[action=enable]': {
+				name: 'Enable Call-Waiting',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: 'call_waiting',
+				number_type: 'pattern',
+				data: {
+					action: 'enable'
+				},
+				enabled: false,
+				default_number: '70',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
+			'call_waiting[action=disable]': {
+				name: 'Disable Call-Waiting',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: 'call_waiting',
+				number_type: 'number',
+				data: {
+					action: 'disable'
+				},
+				enabled: false,
+				default_number: '71',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '*'+number;
+				}
+			},
 
-                'sound_test_service': {
-                    name: 'Sound Test Service',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: '',
-                    number_type: 'pattern',
-                    data: {
-                        action: ''
-                    },
-                    enabled: false,
-                    default_number: '43',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                },
+			'sound_test_service': {
+				name: 'Sound Test Service',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: '',
+				number_type: 'pattern',
+				data: {
+					action: ''
+				},
+				enabled: false,
+				default_number: '43',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			},
 
-                'call_recording': {
-                    name: 'Call Recording',
-                    icon: 'phone',
-                    category: 'Miscellaneous',
-                    module: 'call_recording',
-                    number_type: 'pattern',
-                    data: {
-                        action: ''
-                    },
-                    enabled: false,
-                    default_number: '1',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*'+number+'([0-9]*)$';
-                    }
-                }*/
+			'call_recording': {
+				name: 'Call Recording',
+				icon: 'phone',
+				category: 'Miscellaneous',
+				module: 'call_recording',
+				number_type: 'pattern',
+				data: {
+					action: ''
+				},
+				enabled: false,
+				default_number: '1',
+				number: this.default_number,
+				build_regex: function(number) {
+					return '^\\*'+number+'([0-9]*)$';
+				}
+			}*/
 		});
 	}
 }

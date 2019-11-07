@@ -6,8 +6,8 @@ winkstart.module('pbxs', 'pbxs', {
 	}
 },
 /* The code in this initialization function is required for
-     * loading routine.
-     */
+ * loading routine.
+ */
 function() {
 	var THIS = this;
 

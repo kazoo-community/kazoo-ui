@@ -521,14 +521,14 @@ function(args) {
 	},
 
 	format_data: function(data) {
-        	var tmp_date = new Date();
+		var tmp_date = new Date();
 
-        	if(data.data.start_date) {
+		if(data.data.start_date) {
 			tmp_date = new Date((data.data.start_date - 62167219200)* 1000); // Local Time
-        	}
+		}
 
 		var month = tmp_date.getUTCMonth()+1 < 10 ? '0'+(tmp_date.getUTCMonth()+1) : tmp_date.getUTCMonth()+1,
-            	day = tmp_date.getUTCDate() < 10 ? '0'+tmp_date.getUTCDate() : tmp_date.getUTCDate();
+			day = tmp_date.getUTCDate() < 10 ? '0'+tmp_date.getUTCDate() : tmp_date.getUTCDate();
 
 		tmp_date = month + '/' + day + '/'  + tmp_date.getUTCFullYear();
 

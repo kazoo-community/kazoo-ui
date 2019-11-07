@@ -50,7 +50,7 @@ function(account_config) {
 	winkstart.apps.accounts.check_configuration = THIS.check_configuration;
 },
 {
-        
+
 	billing_provider: 'braintree',
 
 	modules: {

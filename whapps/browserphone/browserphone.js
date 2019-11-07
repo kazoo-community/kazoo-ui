@@ -104,17 +104,17 @@ function() {
 },
 {
 	/* A modules object is required for the loading routine.
-         * The format is as follows:
-         * <module name>: <initialization status>
-         */
+	 * The format is as follows:
+	 * <module name>: <initialization status>
+	 */
 	modules: {},
 
 	/* The following code is generic and should be abstracted.
-         * For the time being, you can just copy and paste this
-         * into other whapps.
-         *
-         * BEGIN COPY AND PASTE CODE
-         */
+	 * For the time being, you can just copy and paste this
+	 * into other whapps.
+	 *
+	 * BEGIN COPY AND PASTE CODE
+	 */
 	is_initialized: true,
 
 	uninitialized_count: 1337,
@@ -196,10 +196,10 @@ function() {
 		var THIS = this;
 
 		/* Uncomment if you want this whapp to be masqueradable
-            winkstart.apps['browserphone'] = $.extend(true, {
-                is_masqueradable: true
-            }, winkstart.apps['browserphone']);
-            */
+		winkstart.apps['browserphone'] = $.extend(true, {
+			is_masqueradable: true
+		}, winkstart.apps['browserphone']);
+		*/
 	},
 
 	/* A setup_page function is required for the copy and paste code */
@@ -331,16 +331,16 @@ function() {
 
 
 	/**
-         * Generic error popup.
-         */
+	 * Generic error popup.
+	 */
 	browserphone_error: function(error_msg, data, status) {
 		// @todo More information.
 		winkstart.alert(error_msg);
 	},
 
 	/**
-         * Starts the softphone, or focuses it if it is already started.
-         */
+	 * Starts the softphone, or focuses it if it is already started.
+	 */
 	maybe_start_softphone: function(callback) {
 		var THIS = this,
 			features = 'menubar=no,location=no,resizable=no,scrollbars=no,status=no,addressbar=no,width=320,height=480';
@@ -383,12 +383,12 @@ function() {
 	},
 
 	/**
-         * Obtain this user's softphone credentials or create a new softphone.
-         */
+	 * Obtain this user's softphone credentials or create a new softphone.
+	 */
 	get_sip_credentials: function(success) {
 		var device_id,
 			device_data
-		THIS  = this,
+		THIS = this,
 		// Success/error callbacks
 		fnSuccess = function(data) {
 			if (typeof success === 'function') {
@@ -455,10 +455,10 @@ function() {
 	},
 
 	/**
-         * Pops up a window that prompts the user to enter credentials.
-         *
-         * Called when the browserphone is registered elswhere already.
-         */
+	 * Pops up a window that prompts the user to enter credentials.
+	 *
+	 * Called when the browserphone is registered elswhere already.
+	 */
 	popup_get_credentials: function(success) {
 		var dialog,
 			credentials_data,
@@ -507,8 +507,8 @@ function() {
 	},
 
 	/**
-         * Creates the initial data for a new browserphone.
-         */
+	 * Creates the initial data for a new browserphone.
+	 */
 	new_browserphone_data: function(user) {
 		// @todo Extract defaults into config, so they can be reused here
 		// and in device.js
@@ -545,8 +545,8 @@ function() {
 	},
 
 	/**
-         * Extracts credentials from the result of an API call to /devices/{id}.
-         */
+	 * Extracts credentials from the result of an API call to /devices/{id}.
+	 */
 	creds_from_device_data: function(device, callback) {
 		var user = {};
 
@@ -568,11 +568,11 @@ function() {
 	},
 
 	/**
-         * Makes a call to the target number or SIP endpoint.
-         *
-         * Also takes an array of events (see SIP.js' session event types) and
-         * a callback that is called when those events are triggered.
-         */
+	 * Makes a call to the target number or SIP endpoint.
+	 *
+	 * Also takes an array of events (see SIP.js' session event types) and
+	 * a callback that is called when those events are triggered.
+	 */
 	make_call: function(target, publish, events) {
 		var session,
 			THIS = this;
@@ -585,11 +585,11 @@ function() {
 	},
 
 	/**
-         * Binds a callback to a number of events to a SIP.js session object.
-         *
-         * Takes a function and a list of event types to bind that callback to.
-         * The callback is called as publish(event_name, event_data).
-         */
+	 * Binds a callback to a number of events to a SIP.js session object.
+	 *
+	 * Takes a function and a list of event types to bind that callback to.
+	 * The callback is called as publish(event_name, event_data).
+	 */
 	bind_call_events: function(session, publish, events) {
 		if (session != null && typeof publish === 'function') {
 			$.each(events, function(index, evt) {
@@ -601,11 +601,11 @@ function() {
 	},
 
 	/**
-         * Publishes a notification when an incoming call is received.
-         *
-         * Notifies subscribers that a call has been received, and allows them
-         * to bind to events on that call.
-         */
+	 * Publishes a notification when an incoming call is received.
+	 *
+	 * Notifies subscribers that a call has been received, and allows them
+	 * to bind to events on that call.
+	 */
 	incoming_call: function(session) {
 		var bindCallback,
 			THIS = this;
@@ -622,12 +622,12 @@ function() {
 	},
 
 	/**
-         * Allows subscribers to be notified when a call is made from the browserphone.
-         *
-         * Warning: If your whapp started the call (via the 'browserphone.make_call' event),
-         * be careful not to bind to events on the same call twice!
-         * @todo Hook into the ctx phone so that this event actually fires!
-         */
+	 * Allows subscribers to be notified when a call is made from the browserphone.
+	 *
+	 * Warning: If your whapp started the call (via the 'browserphone.make_call' event),
+	 * be careful not to bind to events on the same call twice!
+	 * @todo Hook into the ctx phone so that this event actually fires!
+	 */
 	outgoing_call: function(session) {
 		var bindCallback,
 			THIS = this;

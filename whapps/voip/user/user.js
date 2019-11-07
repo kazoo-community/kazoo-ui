@@ -347,7 +347,7 @@ function(args) {
 						user_id: data.id
 					},
 					function(_data_devices) {
-                            	defaults.field_data.hotdesk_enabled = true;
+						defaults.field_data.hotdesk_enabled = true;
 						defaults.field_data.device_list = {};
 
 						$.each(_data_devices.data, function(k, v) {
@@ -808,17 +808,17 @@ function(args) {
 					_t: function(param){
 						return window.translate['user'][param];
 					}
-								  }));
+				}));
 		}
 	},
 
 	/**
-         * Render queue options tab, only if available (call_center app is
-         * present)
-         *
-         * @param {element} parent The parent container for the user view
-         * @param {Object} data User object and field data
-         */
+	 * Render queue options tab, only if available (call_center app is
+	 * present)
+	 *
+	 * @param {element} parent The parent container for the user view
+	 * @param {Object} data User object and field data
+	 */
 	render_queue_options: function(parent, data) {
 		var THIS = this;
 
@@ -855,10 +855,10 @@ function(args) {
 		winkstart.table.queues.fnAddData(tab_data);
 
 		/**
-             * Handle the remove button being clicked for a queue
-             *
-             * @param {Event} event Dispatched event for the click
-             */
+		 * Handle the remove button being clicked for a queue
+		 *
+		 * @param {Event} event Dispatched event for the click
+		 */
 		function onRemoveQueueClick(event) {
 			var THIS = this,
 				queue_id = $(this).dataset('id');
@@ -1084,7 +1084,7 @@ function(args) {
 
 	activate: function(args) {
 		var THIS = this,
-            	args = args || {},
+			args = args || {},
 			user_html = THIS.templates.user.tmpl(),
 			parent = args.parent || $('#ws-content');
 
@@ -1093,7 +1093,7 @@ function(args) {
 			.append(user_html);
 
 		THIS.render_list(user_html, function() {
-            	args.callback && args.callback();
+			args.callback && args.callback();
 		});
 	},
 
@@ -1264,7 +1264,7 @@ function(args) {
 							} else {
 								node.deleteMetadata('var');
 							}
-                                    
+
 							node.caption = $('#user_selector option:selected', popup_html).text();
 
 							popup.dialog('close');

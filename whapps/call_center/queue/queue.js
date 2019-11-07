@@ -298,9 +298,9 @@ function(args) {
 				}, data_defaults || {}),
 				field_data: {
 					/*sort_by: {
-                            'first_name': 'First Name',
-                            'last_name': 'Last Name'
-                        }*/
+						'first_name': 'First Name',
+						'last_name': 'Last Name'
+					}*/
 				}
 			};
 
@@ -1354,7 +1354,7 @@ function(args) {
 
 					$('#add', popup_html).click(function() {
 						var timeout = parseInt($('#timeout', popup_html).val()),
-                            	presence_id = $('#presence_id', popup_html).val();
+							presence_id = $('#presence_id', popup_html).val();
 
 						if(timeout > 0) {
 							node.setMetadata('timeout', timeout);
@@ -1405,14 +1405,14 @@ function(args) {
 					return '';
 				},
 				edit: function(node, callback) {
-                    	var popup, popup_html;
+					var popup, popup_html;
 
 					popup_html = THIS.templates.agent_presence_callflow.tmpl({
 						_t: function(param){
 							return window.translate['queue'][param];
 						},
 						data_agent: {
-                            	'action': _t('queue', 'resume_action'),
+							'action': _t('queue', 'resume_action'),
 							'presence_id': node.getMetadata('presence_id')
 						}
 					});
@@ -1461,14 +1461,14 @@ function(args) {
 					return '';
 				},
 				edit: function(node, callback) {
-                    	var popup, popup_html;
+					var popup, popup_html;
 
 					popup_html = THIS.templates.agent_presence_callflow.tmpl({
 						_t: function(param){
 							return window.translate['queue'][param];
 						},
 						data_agent: {
-                            	'action': _t('queue', 'logout_action'),
+							'action': _t('queue', 'logout_action'),
 							'presence_id': node.getMetadata('presence_id')
 						}
 					});
@@ -1524,7 +1524,7 @@ function(args) {
 							return window.translate['queue'][param];
 						},
 						data_agent: {
-                            	'action': _t('queue', 'login_action'),
+							'action': _t('queue', 'login_action'),
 							'presence_id': node.getMetadata('presence_id')
 						}
 					});
