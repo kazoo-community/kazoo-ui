@@ -2362,12 +2362,7 @@ function (args) {
 
 							// Add initial render items
 							var items = $.map(node.data.data, function(item, key) {
-								if (key === 'kvs_mode') {
-									return;
-								}
-
-								item.key = key;
-								return item;
+								return $.extend({ key: key }, item);
 							});
 
 							var options = {},
@@ -2436,7 +2431,6 @@ function (args) {
 										};
 									}
 								}
-								dataVars.kvs_mode = 'json';
 								node.data.data = dataVars;
 
 								popup.dialog('close');
