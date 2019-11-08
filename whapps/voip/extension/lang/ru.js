@@ -24,5 +24,6 @@ window.translate['extension'] = {
     timezone: "Часовой пояс",
     use_phone_number_as_outbound_cid: "Указывать этот номер телефона на исходящих звонках",
     username: "Расширение",
-    username_placeholder: "Номер Расширения"
+	username_placeholder: 'Номер Расширения',
+	seat_type: 'Тип сиденья'
 };

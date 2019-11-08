@@ -36,6 +36,11 @@ winkstart.module('voip', 'user', {
         ],
 
         resources: {
+		'account_config.get': {
+			url: '{api_url}/accounts/{account_id}/configs/accounts',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
             'user.list_classifiers': {
                 url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
                 contentType: 'application/json',
@@ -285,7 +290,8 @@ winkstart.module('voip', 'user', {
                         call_center_enabled: winkstart.apps['call_center'] !== undefined,
                         call_restriction: {},
                         pin_pass_sync: false,
-                        queues: {}
+					queues: {},
+					seat_types: []
                     }
                 };
 
@@ -485,6 +491,32 @@ winkstart.module('voip', 'user', {
 				function(_data, status) {
 					callback(status, null);
 				});
+			},
+			/**
+			 * Retrieves the seat types list and default seat type from account config
+			 *
+			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
+			 * as the first and second arguments, respectively.
+			 */
+			get_seat_type_data: function(callback) {
+				winkstart.request('account_config.get',
+					{
+						account_id: winkstart.apps.voip.account_id,
+						api_url: winkstart.apps.voip.api_url
+					},
+					function(_data, status) {
+						if (_data.data) {
+							if (_data.data.default_seat_type) {
+								defaults.data.default_seat_type = _data.data.default_seat_type;
+							}
+							if (_data.data.seat_types_list) {
+								defaults.field_data.seat_types = _data.data.seat_types_list;
+							}
+						}
+						callback(null, _data);
+					},
+					winkstart.error_message.process_error()
+				);
 			}
             },
             function(err, results) {
@@ -518,7 +550,7 @@ winkstart.module('voip', 'user', {
 			}
 
 			render_data.data.show_seat_types = false;
-			if (winkstart.config.seat_types && results.current_user.data.priv_level === 'admin') {
+			if (defaults.field_data.seat_types.length > 0 && results.current_user.data.priv_level === 'admin') {
 				render_data.data.show_seat_types = true;
 			}
 
@@ -635,13 +667,7 @@ winkstart.module('voip', 'user', {
             });
 
 		if (!data.data.seat_type) {
-			data.data.seat_type = winkstart.config.default_seat_type || 'unknown';
-		}
-		if (data.data.show_seat_types) {
-			$.each(winkstart.config.seat_types, function(i, seat_type) {
-				var selected = data.data.seat_type === seat_type.id ? 'SELECTED' : '';
-				$('#seat_type', user_html).append('<option id="' + seat_type.id + '" value="' + seat_type.id + '" ' + selected + '>' + seat_type.name + '</option>');
-			});
+			data.data.seat_type = data.data.default_seat_type || 'unknown';
 		}
 
             $('.user-save', user_html).click(function(ev) {

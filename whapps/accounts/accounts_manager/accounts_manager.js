@@ -1,3 +1,4 @@
+var SECONDS_PER_WEEK = 7 * 86400;
 winkstart.module('accounts', 'accounts_manager', {
 		css: [
 			'css/accounts_manager.css'
@@ -44,6 +45,16 @@ winkstart.module('accounts', 'accounts_manager', {
 		],
 
 		resources: {
+		'system_config.get': {
+			url: '{api_url}/system_configs/{config_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
+		'accounts_manager.config.get': {
+			url: '{api_url}/accounts/{account_id}/configs/{config_id}',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
 			'accounts_manager.list_classifiers': {
 				url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
 				contentType: 'application/json',
@@ -348,6 +359,7 @@ winkstart.module('accounts', 'accounts_manager', {
 						amount: 0
 					},
 					field_data: {
+					account_types_list: [],
 						billing_account: 'parent',
 						deregister: false,
 						whitelabel: {
@@ -580,9 +592,9 @@ winkstart.module('accounts', 'accounts_manager', {
 									defaults.field_data.whitelabel = $.extend(true, defaults.field_data.whitelabel, _data_wl.data);
 									defaults.field_data.whitelabel.logo_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/logo?auth_token='+winkstart.apps['accounts'].auth_token;
 									defaults.field_data.whitelabel.icon_url = winkstart.apps['accounts'].api_url + '/accounts/'+data.id+'/whitelabel/icon?auth_token='+winkstart.apps['accounts'].auth_token;
-						defaults.field_data.whitelabel.hero_icon_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_icon?auth_token=' + winkstart.apps.accounts.auth_token;
-						defaults.field_data.whitelabel.hero_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_logo?auth_token=' + winkstart.apps.accounts.auth_token;
-						defaults.field_data.whitelabel.hero_internal_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_internal_logo?auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_icon_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_icon?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_logo?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
+						defaults.field_data.whitelabel.hero_internal_logo_url = winkstart.apps.accounts.api_url + '/accounts/' + data.id + '/whitelabel/hero_internal_logo?file_type=png&auth_token=' + winkstart.apps.accounts.auth_token;
 
 									callback(null, _data_wl);
 								},
@@ -622,6 +634,48 @@ winkstart.module('accounts', 'accounts_manager', {
 						else {
 							callback(null, {});
 						}
+			},
+			/**
+			 * Retrieves the account types list from account config if account id is available (editing an account).
+			 * If we have access to the account id of a parent account, attempt to use this to get the list of account
+			 * types from the parent account_config (When creating an account)
+			 * Otherwise uses the system config if we have no account id for some reason
+			 *
+			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
+			 * as the first and second arguments, respectively.
+			 */
+			get_account_types_list: function(callback) {
+				// If editing an account, get the account config for the current account
+				var account_id = (typeof data === 'object' && data.id) ? data.id : null;
+				// If you are creating a new account, use the account id from the parent account
+				account_id = (account_id == null && winkstart.apps.accounts.account_id) ? winkstart.apps.accounts.account_id : account_id;
+
+				if (account_id) {
+					winkstart.request('accounts_manager.config.get',
+						{
+							account_id: account_id,
+							config_id: 'accounts',
+							api_url: winkstart.apps.accounts.api_url,
+							data: {}
+						},
+						function(_data, status) {
+							defaults.field_data.account_types_list = _data.data.account_types_list;
+							callback(null, _data);
+						}
+					);
+				} else {
+					winkstart.request('system_config.get',
+						{
+							config_id: 'accounts',
+							api_url: winkstart.apps.accounts.api_url,
+							data: {}
+						},
+						function(_data, status) {
+							defaults.field_data.account_types_list = _data.data.default.account_types_list;
+							callback(null, _data);
+						}
+					);
+				}
 					}
 				},
 				function(err, results) {
@@ -1667,6 +1721,12 @@ winkstart.module('accounts', 'accounts_manager', {
 														function(_data, status) {
 															whitelabel_data = $.extend(true, {}, _data.data, whitelabel_data);
 
+											// Convert release delay from weeks to seconds
+											if (whitelabel_data.hero && whitelabel_data.hero.release_delay) {
+												var delayInWeeks = whitelabel_data.hero.release_delay;
+												whitelabel_data.hero.release_delay = delayInWeeks * SECONDS_PER_WEEK;
+											}
+
 															winkstart.request('whitelabel.update', {
 																	account_id: account_id,
 																	api_url: winkstart.apps['accounts'].api_url,
@@ -1794,6 +1854,13 @@ winkstart.module('accounts', 'accounts_manager', {
 
 		if (data.field_data.whitelabel.hero.support_enabled === undefined) {
 			data.field_data.whitelabel.hero.support_enabled = false;
+		}
+
+		// Convert seconds to weeks
+		if (data.field_data.whitelabel.hero.release_delay > 0) {
+			var delayInSeconds = data.field_data.whitelabel.hero.release_delay;
+			data.field_data.whitelabel.hero.release_delay = delayInSeconds / SECONDS_PER_WEEK;
+			$('#white_label_hero_release_delay', account_html).val(data.field_data.whitelabel.hero.release_delay);
 		}
 
 		$('#hero_support_enabled', account_html).click(function(ev) {
@@ -2185,6 +2252,7 @@ winkstart.module('accounts', 'accounts_manager', {
 				},
 				id: account.id || '',
 				name: account.name || '',
+				realm: account.realm || '',
 				showLinks: showLinks,
 				childrenCount: account.children.length || 0
 			});
@@ -2208,7 +2276,7 @@ winkstart.module('accounts', 'accounts_manager', {
 		var THIS = this;
 
 		$('#descendants_search', template)
-			.change(this.handleSearch)
+			.blur(this.handleSearch)
 			.keyup(this.handleSearch);
 
 		$('.children_link', template)
@@ -2234,7 +2302,7 @@ winkstart.module('accounts', 'accounts_manager', {
 
 	/**
 	 * Handle rerending the DOM when the user searches through the accounts directory
-	 * Filter by account ID or (partial) Name
+	 * Filter by account ID, (partial) Name, or realm
 	 * Hides all accounts except those searched for (and their ancestors)
 	 * Highlights the accounts searched for
 	 *
@@ -2243,9 +2311,10 @@ winkstart.module('accounts', 'accounts_manager', {
 	handleSearch: function(e) {
 		e.stopPropagation();
 		var term = $('#descendants_search').val().toLowerCase(),
-			nameSelector = '#accounts_treeview li[data-name*="' + term + '"]',
+			nameSelector = '#accounts_treeview li[data-search-name*="' + term + '"]',
 			idSelector = '#accounts_treeview li[data-id="' + term + '"]',
-			matches = $(nameSelector + ', ' + idSelector);
+			realmSelector = '#accounts_treeview li[data-realm^="' + term + '"]',
+			matches = $(nameSelector + ', ' + idSelector + ', ' + realmSelector);
 
 		/**
 		 * Apply classes to the matched elements for highlighting and display

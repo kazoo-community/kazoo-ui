@@ -144,5 +144,6 @@ window.translate['user'] = {
 	caller_id_name_regex: /^[0-9A-Za-z ,]{0,15}$/,
 	dnd_status: 'Status niet-storen',
 	dnd_enabled: 'Ingeschakeld',
-	dnd_disabled: 'Uitgeschakeld'
+	dnd_disabled: 'Uitgeschakeld',
+	seat_type: 'Zitplaats'
 };

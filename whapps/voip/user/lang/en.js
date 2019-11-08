@@ -160,5 +160,6 @@ window.translate['user'] = {
 	route_var_ccv: 'Route Variable',
 	dnd_status: 'DND Status',
 	dnd_enabled: 'Enabled',
-	dnd_disabled: 'Disabled'
+	dnd_disabled: 'Disabled',
+	seat_type: 'Seat Type'
 };

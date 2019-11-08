@@ -12,6 +12,11 @@ winkstart.module('voip', 'bulk', {
 	},
 
 	resources: {
+		'account_config.get': {
+			url: '{api_url}/accounts/{account_id}/configs/accounts',
+			contentType: 'application/json',
+			verb: 'GET'
+		},
         'bulk.list_classifiers': {
 			url: '{api_url}/accounts/{account_id}/phone_numbers/classifiers',
 			contentType: 'application/json',
@@ -110,7 +115,7 @@ function(args) {
 							}
 						}
 					},
-					seat_types: winkstart.config.seat_types
+					seat_types: []
                 }
             };
 
@@ -199,7 +204,33 @@ function(args) {
                             callback(null, _data);
                         }
                     );
-                }
+			},
+			/**
+			 * Retrieves the seat types list and default seat type from account config
+			 *
+			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
+			 * as the first and second arguments, respectively.
+			 */
+			get_seat_type_data: function(callback) {
+				winkstart.request('account_config.get',
+					{
+						account_id: winkstart.apps.voip.account_id,
+						api_url: winkstart.apps.voip.api_url
+					},
+					function(_data, status) {
+						if (_data.data) {
+							if (_data.data.default_seat_type) {
+								defaults.data.default_seat_type = _data.data.default_seat_type;
+							}
+							if (_data.data.seat_types_list) {
+								defaults.field_data.seat_types = _data.data.seat_types_list;
+							}
+						}
+						callback(null, _data);
+					},
+					winkstart.error_message.process_error()
+				);
+			}
             },
             function(err, results) {
 				defaults._t = function(param){

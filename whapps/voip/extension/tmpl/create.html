@@ -31,14 +31,18 @@
                         </div>
                     </div>
 
-				{{if show_seat_types}}
+					{{if show_seat_types}}
 					<div class="clearfix">
-						<label for="seat_type">Seat Type</label>
+						<label for="seat_type">${_t('seat_type')}</label>
 						<div class="input">
-							 <select id="seat_type" name="seat_type" class="medium" rel="popover" data-content="${_t('seat_type_data_content')}"></select>
+							<select name="seat_type" id="seat_type" class="medium">
+								{{each seat_types_list}}
+									<option id="${id}" value="${id}">${display_name}</option>
+								{{/each}}
+							</select>
 						</div>
 					</div>
-				{{/if}}
+					{{/if}}
 
                     <div class="clearfix">
                         <label for="phone_number">${_t('phone_number')}</label>
