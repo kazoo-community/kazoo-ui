@@ -1,0 +1,28 @@
+{
+	"name": "kazoo-ui",
+	"version": "4.0.0",
+	"description": "Kazoo-UI",
+	"scripts": {
+		"test": "lint-diff HEAD~$(git rev-list --count origin/master..HEAD)"
+	},
+	"author": "2600hz",
+	"dependencies": {},
+	"devDependencies": {
+		"eslint": "^5.16.0",
+		"eslint-config-standard": "^12.0.0",
+		"eslint-plugin-es5": "^1.4.1",
+		"eslint-plugin-import": "^2.16.0",
+		"eslint-plugin-node": "^8.0.1",
+		"eslint-plugin-promise": "^4.0.1",
+		"eslint-plugin-standard": "^4.0.0",
+		"lint-diff": "^1.2.1"
+	},
+	"eslintIgnore": [
+		"js/amplify",
+		"js/external",
+		"lib",
+		"node_modules",
+		"whapps/cluster",
+		"whapps/voip/phone"
+	]
+}

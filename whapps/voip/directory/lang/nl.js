@@ -34,7 +34,7 @@ window.translate['directory'] = {
 	directory_label: "Directory",
 	first_name: "Voornaam",
 	last_name: "Achternaam",
-    there_were_errors_on_the_form: "Er stonden fouten in het voormulier, corrigeer deze aub!",
+	there_were_errors_on_the_form: "Er stonden fouten in het voormulier, corrigeer deze aub!",
 	are_you_sure_you_want_to_delete: "Weet u zeker dat u Directory wilt verwijderen?",
 	no_name: "(no name)",
 	directories_label: "Directories",

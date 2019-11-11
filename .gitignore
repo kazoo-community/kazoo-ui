@@ -6,3 +6,4 @@ test/
 nbproject/
 .idea
 *.iml
+node_modules
