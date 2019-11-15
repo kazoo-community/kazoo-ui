@@ -46,12 +46,12 @@
 					<div class="clearfix">
 						<label for="account_type">${_t('account_type')}</label>
 						<div class="input">
-							<select name="account_type" id="account_type">
-								{{each(i, acc_type) field_data.account_types_list}}
-									{{if acc_type == data.account_type}}
-										<option value="${acc_type}" selected>${acc_type}</option>
+							<select name="account_type" id="account_type" class="medium">
+								{{each field_data.account_types_list}}
+									{{if id == data.account_type}}
+										<option id="${id}" value="${id}" selected>${display_name}</option>
 									{{else}}
-										<option value="${acc_type}">${acc_type}</option>
+										<option id="${id}" value="${id}">${display_name}</option>
 									{{/if}}
 								{{/each}}
 							</select>
