@@ -382,10 +382,20 @@ function(args) {
 							}
 						},
 						fax_to_email: {
-							from: ''
+							from: '',
+							to: {
+								email_addresses: [],
+								type: 'specified'
+							},
+							subject: ''
 						},
 						voicemail_to_email: {
-							from: ''
+							from: '',
+							to: {
+								email_addresses: [],
+								type: 'specified'
+							},
+							subject: ''
 						}
 					},
 					teletype_enabled: {
@@ -492,6 +502,9 @@ function(args) {
 							},
 							function(_data, status) {
 								defaults.field_data.teletype.voicemail_to_email.from = _data.data.from;
+								$.extend(true, defaults.field_data.teletype.voicemail_to_email.to, _data.data.to);
+								defaults.field_data.teletype.voicemail_to_email.subject = _data.data.subject;
+
 								callback(null, _data);
 							}
 							);
@@ -504,6 +517,8 @@ function(args) {
 							},
 							function(_data, status) {
 								defaults.field_data.teletype.fax_to_email.from = _data.data.from;
+								$.extend(true, defaults.field_data.teletype.fax_to_email.to, _data.data.to);
+								defaults.field_data.teletype.fax_to_email.subject = _data.data.subject;
 								callback(null, _data);
 							}
 							);
@@ -980,6 +995,11 @@ function(args) {
 		 * @param {object} field_data - Initial data when the view was rendered
 		 */
 	normalize_teletype_data: function(data, field_data) {
+
+		// Get missing fields from field_data
+		data.fax_to_email = $.extend({}, field_data.teletype.fax_to_email, data.fax_to_email);
+		data.voicemail_to_email = $.extend({}, field_data.teletype.voicemail_to_email, data.voicemail_to_email);
+
 		// Fax-to-email
 		if(data.extra.sameTemplate) {
 			data.fax_to_email = data.voicemail_to_email;
