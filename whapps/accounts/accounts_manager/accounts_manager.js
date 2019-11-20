@@ -504,7 +504,6 @@ function(args) {
 								defaults.field_data.teletype.voicemail_to_email.from = _data.data.from;
 								$.extend(true, defaults.field_data.teletype.voicemail_to_email.to, _data.data.to);
 								defaults.field_data.teletype.voicemail_to_email.subject = _data.data.subject;
-
 								callback(null, _data);
 							}
 							);
