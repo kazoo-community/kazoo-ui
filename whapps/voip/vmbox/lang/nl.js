@@ -63,5 +63,6 @@ window.translate['vmbox'] = {
 	whitelist_of_numbers_data_content: "Lijst of nummers die bellers kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)",
 	blacklist_of_numbers: "Blacklist of nummers",
 	blacklist_of_numbers_placeholder: "Regex",
-	blacklist_of_numbers_data_content: "Lijst of nummers die bellers niet kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)"
+	blacklist_of_numbers_data_content: 'Lijst of nummers die bellers niet kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)',
+	max_message_length: 'Max voicemail berichtlengte (seconden)'
 };;

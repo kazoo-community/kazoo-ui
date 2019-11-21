@@ -61,5 +61,6 @@ window.translate['vmbox'] = {
 	whitelist_of_numbers_data_content: "用户允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式允许用户拨打0~11)",
 	blacklist_of_numbers: "号码黑名单",
 	blacklist_of_numbers_placeholder: "正则表达式",
-	blacklist_of_numbers_data_content: "用户不允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式禁止用户拨打0~11)"
+	blacklist_of_numbers_data_content: '用户不允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式禁止用户拨打0~11)',
+	max_message_length: '语音信箱留言的最大长度（秒'
 };

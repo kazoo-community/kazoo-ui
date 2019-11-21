@@ -23,7 +23,10 @@
                     </div>
                     <div class="clear"/>
                 </div>
-
+                <label for="max_message_length_div">${_t('max_message_length')}</label>
+                <div id="max_message_length_div">
+                    <input type="number" min="1" step="1" id="max_message_length" value="${max_message_length}"/>
+                </div>
                 <div class="parameter_div">
                     {{if route_var.length == 0}}
                     <input type="checkbox" id="toggle_advanced"> Advanced

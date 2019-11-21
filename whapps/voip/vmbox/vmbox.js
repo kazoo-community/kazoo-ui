@@ -619,7 +619,8 @@ function(args) {
 							},
 							items: winkstart.sort(data.data),
 							selected: node.getMetadata('id') || '',
-							route_var: node.getMetadata('var') || ''
+							route_var: node.getMetadata('var') || '',
+							max_message_length: node.getMetadata('max_message_length') || ''
 						});
 
 						if($('#vmbox_selector option:selected', popup_html).val() == undefined) {
@@ -657,6 +658,11 @@ function(args) {
 								node.setMetadata('var', $('#route_var', popup_html).val());
 							} else {
 								node.deleteMetadata('var');
+							}
+							if ($('#max_message_length', popup_html).val() > 0) {
+								node.setMetadata('max_message_length', $('#max_message_length', popup_html).val());
+							} else {
+								node.deleteMetadata('max_message_length');
 							}
 
 							node.caption = selector[0][selector[0].selectedIndex].text;
