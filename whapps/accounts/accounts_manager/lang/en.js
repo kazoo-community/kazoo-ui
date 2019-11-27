@@ -143,6 +143,8 @@ window.translate['accounts'] = {
 	hero_application_logo: 'App Login Logo',
 	hero_logo_data_content: 'This logo should be approximately 1820x215 and an svg',
 	hero_internal_application_logo: 'App Internal Logo',
+	hero_prefilled_account_name: 'Prefilled Account Name',
+	hero_prefilled_account_name_data_content: 'Automatically fills in this account name on the login screen. The field is hidden and the value cannot be changed.',
 	account_type: 'Account Type',
 	search_name_or_id: 'Filter by Account Name, ID, or Realm',
 	hide_descendants: 'Hide Children in Search',

@@ -534,6 +534,20 @@
                         {{/if}}
                     </div>
 
+                    <div class="clearfix">
+                        <label for="white_label_hero_prefilled_account_name">${_t('hero_prefilled_account_name')}</label>
+                        <div class="input">
+                            <input
+                                class="span4"
+                                name="whitelabel.hero.prefilled_account_name"
+                                type="text"
+                                value="${field_data.whitelabel.hero.prefilled_account_name}"
+                                rel="popover"
+                                data-content="${_t('hero_prefilled_account_name_data_content')}"
+                            />
+                        </div>
+                    </div>
+
                     <hr/>
                     <h3>${_t('porting')}</h3>
 

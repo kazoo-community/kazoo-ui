@@ -1558,6 +1558,10 @@ function(args) {
 					var whitelabel_data = form_data.whitelabel;
 					delete form_data.whitelabel;
 
+					if (whitelabel_data.hero.prefilled_account_name === '') {
+						delete whitelabel_data.hero.prefilled_account_name;
+					}
+
 					if(whitelabel_data.port.support_email === '') {
 						delete whitelabel_data.port.support_email;
 					}
