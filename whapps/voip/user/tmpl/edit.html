@@ -71,7 +71,7 @@
 							<div class="input">
 								<select name="seat_type" id="seat_type" class="medium">
 									{{each field_data.seat_types}}
-										{{if id == data.seat_type }}
+										{{if id == data.seat_type}}
 											<option id="${id}" value="${id}" selected>${display_name}</option>
 										{{else}}
 											<option id="${id}" value="${id}">${display_name}</option>
@@ -81,7 +81,20 @@
 							</div>
 						</div>
 					{{/if}}
-
+					<div class="clearfix">
+						<label for="location">${_t('location')}</label>
+						<div class="input">
+							<select name="location" id="location" class="medium">
+								{{each field_data.locations}}
+									{{if id == data.location}}
+										<option id="${id}" value="${id}" selected>${display_name}</option>
+									{{else}}
+										<option id="${id}" value="${id}">${display_name}</option>
+									{{/if}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
 					<div class="clearfix">
 						<label for="priv_level">${_t('user_privilege_level')}</label>
 						<div class="input">

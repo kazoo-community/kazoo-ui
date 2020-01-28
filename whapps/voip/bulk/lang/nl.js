@@ -15,6 +15,7 @@ window.translate['bulk'] = {
 	inherit: "Overnemen/ervan",
 	save: "Opslaan",
 	seat_type: 'Zitplaats',
+	location: 'Plaats',
 	bulk_edit_label: "Bulk bewerken",
 	name_stitle: "Naam",
 	endpoint_type_stitle: "Endpoint Type",

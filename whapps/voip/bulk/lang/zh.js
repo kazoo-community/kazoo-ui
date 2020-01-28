@@ -15,6 +15,7 @@ window.translate['bulk'] = {
 	inherit: "继承",
 	save: "保存",
 	seat_type: '座位類型',
+	location: '位置',
 	bulk_edit_label: "批量编辑",
 	name_stitle: "名称",
 	endpoint_type_stitle: "终端类型",

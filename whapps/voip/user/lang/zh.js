@@ -145,5 +145,6 @@ window.translate['user'] = {
 	dnd_status: '请勿打扰',
 	dnd_enabled: '启用',
 	dnd_disabled: '禁用',
-	seat_type: '座位類型'
+	seat_type: '座位類型',
+	location: '位置'
 };

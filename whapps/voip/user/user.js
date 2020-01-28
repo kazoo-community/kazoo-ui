@@ -291,7 +291,8 @@ function(args) {
 					call_restriction: {},
 					pin_pass_sync: false,
 					queues: {},
-					seat_types: []
+					seat_types: [],
+					locations: []
 				}
 			};
 
@@ -493,12 +494,12 @@ function(args) {
 				});
 			},
 			/**
-			 * Retrieves the seat types list and default seat type from account config
+			 * Retrieves the 'accounts' config and extracts whatever data we need from it
 			 *
 			 * @param {function(error: Error, results: Object)} callback - The function to call with errors and results
 			 * as the first and second arguments, respectively.
 			 */
-			get_seat_type_data: function(callback) {
+			get_account_config_data: function(callback) {
 				winkstart.request('account_config.get',
 					{
 						account_id: winkstart.apps.voip.account_id,
@@ -506,11 +507,14 @@ function(args) {
 					},
 					function(_data, status) {
 						if (_data.data) {
-							if (_data.data.default_seat_type) {
-								defaults.data.default_seat_type = _data.data.default_seat_type;
-							}
-							if (_data.data.seat_types_list) {
-								defaults.field_data.seat_types = _data.data.seat_types_list;
+							// Seat Types
+							defaults.data.default_seat_type = _data.data.default_seat_type;
+							defaults.field_data.seat_types = _data.data.seat_types_list;
+
+							// Locations
+							if (_data.data.locations) {
+								defaults.field_data.default_location = _data.data.locations.default_location;
+								defaults.field_data.locations = _data.data.locations.location_list;
 							}
 						}
 						callback(null, _data);
@@ -668,6 +672,10 @@ function(args) {
 
 		if (!data.data.seat_type) {
 			data.data.seat_type = data.data.default_seat_type || 'unknown';
+		}
+
+		if (!data.data.location) {
+			data.data.location = data.field_data.default_location.id;
 		}
 
 		$('.user-save', user_html).click(function(ev) {
@@ -1152,7 +1160,9 @@ function(args) {
 		if (!form_data.seat_type || form_data.seat_type === '') {
 			delete form_data.seat_type;
 		}
-
+		if (!form_data.location || form_data.location === '') {
+			delete form_data.location;
+		}
 		if(form_data.pwd_mngt_pwd1 != 'fakePassword') {
 			form_data.password = form_data.pwd_mngt_pwd1;
 		}

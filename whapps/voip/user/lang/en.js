@@ -161,5 +161,6 @@ window.translate['user'] = {
 	dnd_status: 'DND Status',
 	dnd_enabled: 'Enabled',
 	dnd_disabled: 'Disabled',
-	seat_type: 'Seat Type'
+	seat_type: 'Seat Type',
+	location: 'Location'
 };

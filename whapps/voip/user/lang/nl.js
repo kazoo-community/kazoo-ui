@@ -145,5 +145,6 @@ window.translate['user'] = {
 	dnd_status: 'Status niet-storen',
 	dnd_enabled: 'Ingeschakeld',
 	dnd_disabled: 'Uitgeschakeld',
-	seat_type: 'Zitplaats'
+	seat_type: 'Zitplaats',
+	location: 'Plaats'
 };

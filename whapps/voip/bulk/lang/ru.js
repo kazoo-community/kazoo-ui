@@ -15,6 +15,7 @@ window.translate['bulk'] = $.extend(true, {}, window.translate['bulk'], {
 	inherit: "Унаследовать",
 	save: "Сохранить",
 	seat_type: 'Тип сиденья',
+	location: 'Место расположения',
 	bulk_edit_label: "Массовое обновление",
 	name_stitle: "Имя",
 	endpoint_type_stitle: "Тип оконечного устройства",

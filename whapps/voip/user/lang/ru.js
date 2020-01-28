@@ -144,5 +144,6 @@ window.translate['user'] = $.extend(true, {}, window.translate['user'], {
 	dnd_status: 'Статус не беспокоить',
 	dnd_enabled: 'Включена',
 	dnd_disabled: 'Отключена',
-	seat_type: 'Тип сиденья'
+	seat_type: 'Тип сиденья',
+	location: 'Место расположения'
 });
