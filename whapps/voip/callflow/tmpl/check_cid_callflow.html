@@ -1,11 +1,29 @@
 <div>
-    <div class="dialog_popup">
+    <div class="dialog_popup check_cid_popup">
         <h1>${_t('check_cid')}</h1>
         <form name="form" method="post" action="#">
             <div class="form_content">
                 <div class="popup_field">
-                    <label for="check_cid_regex">${_t('check_cid_regex')} </label>
-                    <input type="text" id="regex" class="medium" value="${data_cid.regex}"/>
+                    <div>
+                        <label class="radio">
+                            {{if use_absolute_mode}}
+                                <input name="absolute" type="radio" value="false">
+                            {{else}}
+                                <input name="absolute" type="radio" value="false" checked="checked">
+                            {{/if}}
+                            ${_t('check_cid_regex_mode')}
+                            <input type="text" id="regex" class="show_if_checked" value="${regex}">
+                        </label>
+                        <div class="clearfix"></div>
+                    </div>
+                    <label class="radio">
+                        {{if use_absolute_mode}}
+                            <input name="absolute" type="radio" value="true" checked="checked">
+                        {{else}}
+                            <input name="absolute" type="radio" value="true">
+                        {{/if}}
+                        ${_t('check_cid_use_absolute_mode')}
+                    </label>
                 </div>
             </div>
         </form>

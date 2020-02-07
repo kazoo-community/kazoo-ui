@@ -1,23 +1,49 @@
 <div>
-    <div class="dialog_popup">
+    <div class="dialog_popup check_cid_popup">
         <form name="form" method="post" action="#">
             <div class="form_content">
-                <div class="popup_field">
-                    <label for="menu_key_selector">${_t('check_cid_smatchnomatch')}</label>
-                    <div class="select_wrapper">
-                        <select id="menu_key_selector">
-                            {{each(key, val) items}}
-                                {{if selected == key}}
-                                    <option value="${key}" SELECTED>${val}</option>
+                {{if use_absolute_mode}}
+                    <h1>${_t('check_cid')}</h1>
+                    <div class="popup_field">
+                        <div>
+                            <label class="radio">
+                                {{if selected === '_'}}
+                                    <input name="mode" type="radio" value="default" checked="checked">
                                 {{else}}
-                                    {{if val != '#'}}
-                                    <option value="${key}">${val}</option>
-                                    {{/if}}
+                                    <input name="mode" type="radio" value="default">
                                 {{/if}}
-                            {{/each}}
-                        </select>
+                                ${_t('default')}
+                            </label>
+                            <div class="clearfix"></div>
+                        </div>
+                        <label class="radio">
+                            {{if selected === '_'}}
+                                <input name="mode" type="radio" value="cid">
+                            {{else}}
+                                <input name="mode" type="radio" value="cid" checked="checked">
+                            {{/if}}
+                            ${_t('check_cid_custom')}
+                            <input type="text" id="cid_input" class="show_if_checked" value="${selected}">
+                        </label>
                     </div>
-                </div>
+                {{else}}
+                    <div class="popup_field">
+                        <label for="menu_key_selector">${_t('check_cid_smatchnomatch')}</label>
+                        <div class="select_wrapper">
+                            <select id="menu_key_selector">
+                                {{each(key, val) items}}
+                                    {{if selected == key}}
+                                        <option value="${key}" SELECTED>${val}</option>
+                                    {{else}}
+                                        {{if val != '#'}}
+                                        <option value="${key}">${val}</option>
+                                        {{/if}}
+                                    {{/if}}
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                {{/if}}
             </div>
         </form>
         <div class="buttons-center">

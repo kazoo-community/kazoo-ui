@@ -470,10 +470,10 @@ function (args) {
 		branch.caption = THIS.actions[branch.actionName].caption(branch, THIS.flow.caption_map);
 
 		if('key_caption' in THIS.actions[parent.actionName]) {
-			branch.key_caption = THIS.actions[parent.actionName].key_caption(branch, THIS.flow.caption_map);
+			branch.key_caption = THIS.actions[parent.actionName].key_caption(branch, THIS.flow.caption_map, parent);
 		}
 
-		$.each(json.children, function(key, child) {
+		$.each(json.children || [], function(key, child) {
 			branch = THIS.buildFlow(child, branch, id, key);
 		});
 
@@ -984,14 +984,13 @@ function (args) {
 						action;
 
 					if (ui.draggable.hasClass('action')) {
-						action = ui.draggable.attr('name'),
-
-						branch = THIS.branch(action);
+						var action = ui.draggable.attr('name'),
+							branch = THIS.branch(action);
 						branch.caption = THIS.actions[action].caption(branch, THIS.flow.caption_map);
 
 						if (target.addChild(branch)) {
 							if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
-								branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
+								branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map, branch.parent);
 
 								THIS.actions[branch.parent.actionName].key_edit(branch, function() {
 									THIS.actions[action].edit(branch, function() {
@@ -1018,7 +1017,7 @@ function (args) {
 							branch.key = '_';
 
 							if(branch.parent && ('key_caption' in THIS.actions[branch.parent.actionName])) {
-								branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map);
+								branch.key_caption = THIS.actions[branch.parent.actionName].key_caption(branch, THIS.flow.caption_map, branch.parent);
 							}
 
 							ui.draggable.remove();
@@ -2818,35 +2817,30 @@ function (args) {
 				tip: _t('callflow', 'check_cid_tip'),
 				data: {
 				},
-				rules: [
-					{
-						type: 'quantity',
-						maxSize: '2'
-					}
-				],
+				rules: [],
 				isUsable: 'true',
-				caption: function(node, caption_map) {
-					return node.getMetadata('use_absolute_mode') || '';
-				},
 				edit: function(node, callback) {
 					var popup, popup_html;
-
 					popup_html = THIS.templates.check_cid_callflow.tmpl({
-						_t: function(param){
-							return window.translate['callflow'][param];
+						_t: function(param) {
+							return window.translate.callflow[param];
 						},
-						data_cid: {
-							'regex': node.getMetadata('regex') || ''
-						}
+						regex: node.getMetadata('regex') || '',
+						use_absolute_mode: node.getMetadata('use_absolute_mode')
 					});
 
 					$('#add', popup_html).click(function() {
 
-						var regex_val = $('#regex', popup_html).val();
+						var use_absolute_mode = $('input:radio[name="absolute"]:checked').val() === 'true',
+							regex_val = use_absolute_mode
+								? '.*'
+								: $('#regex', popup_html).val() || '.*';
 
 						node.setMetadata('regex', regex_val);
-						node.setMetadata('use_absolute_mode', false);
-						node.caption = regex;
+						node.setMetadata('use_absolute_mode', use_absolute_mode);
+						node.caption = use_absolute_mode
+							? _t('callflow', 'check_cid_absolute_caption')
+							: _t('callflow', 'check_cid_regex_mode');
 
 						popup.dialog('close');
 					});
@@ -2860,45 +2854,66 @@ function (args) {
 						}
 					});
 				},
-				key_caption: function(child_node, caption_map) {
-					var key = child_node.key;
+				key_caption: function(child_node, caption_map, parent) {
+					var key = child_node.key,
+						absolute_mode = parent
+							&& parent.data
+							&& parent.data.data
+							&& parent.data.data.use_absolute_mode;
 
-					return (key != '_') ? key : _t('callflow', 'check_cid_match');
-				},
-				caption: function(node, caption_map) {
-					var id = node.getMetadata('id'),
-						returned_value = '';
-
-					if(id in caption_map) {
-						returned_value = caption_map[id].name;
+					if (absolute_mode) {
+						return (key !== '_') ? key : _t('callflow', 'default');
 					}
 
-					return returned_value;
+					return (key !== '_') ? key : _t('callflow', 'check_cid_match');
+				},
+				caption: function(node) {
+					return node.getMetadata('use_absolute_mode')
+						? _t('callflow', 'check_cid_absolute_caption')
+						: _t('callflow', 'check_cid_regex_mode');
 				},
 				key_edit: function(child_node, callback) {
+					var use_absolute_mode = child_node.parent
+						&& child_node.parent.getMetadata
+						&& child_node.parent.getMetadata('use_absolute_mode');
+
+					var title = use_absolute_mode ? _t('callflow', 'check_cid') : _t('callflow', 'check_cid_smatchnomatch');
+
 					var popup, popup_html;
 
 					popup_html = THIS.templates.check_cid_child_callflow.tmpl({
-						_t: function(param){
-							return window.translate['callflow'][param];
+						_t: function(param) {
+							return window.translate.callflow[param];
 						},
 						items: {
 							'match': _t('callflow', 'check_cid_match'),
 							'nomatch': _t('callflow', 'check_cid_nomatch')
 						},
-						selected: child_node.key
+						selected: child_node.key,
+						use_absolute_mode: use_absolute_mode
 					});
 
 					$('#add', popup_html).click(function() {
-						child_node.key = $('#menu_key_selector', popup).val();
+						if (use_absolute_mode) {
+							var chose_default = $('input:radio[name="mode"]:checked').val() === 'default';
 
-						child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
+							child_node.key = chose_default
+								? '_'
+								: $('#cid_input', popup).val();
+
+							child_node.key_caption = chose_default
+								? _t('callflow', 'default')
+								: child_node.key;
+						} else {
+							child_node.key = $('#menu_key_selector', popup).val();
+							child_node.key_caption = $('#menu_key_selector option:selected', popup).text();
+						}
 
 						popup.dialog('close');
 					});
 
 					popup = winkstart.dialog(popup_html, {
-						title: _t('callflow', 'check_cid_smatchnomatch'),
+						title: title,
 						minHeight: '0',
 						beforeClose: function() {
 							if(typeof callback == 'function') {
