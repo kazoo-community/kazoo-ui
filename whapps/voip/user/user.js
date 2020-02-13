@@ -1072,8 +1072,8 @@ function(args) {
 				queue_id = $(this).dataset('id');
 
 			winkstart.request('agent.update_queue_status', {
-				account_id: winkstart.apps['call_center'].account_id,
-				api_url: winkstart.apps['call_center'].api_url,
+				account_id: winkstart.apps.voip.account_id,
+				api_url: winkstart.apps.voip.api_url,
 				agent_id: data.data.id,
 				data: {
 					action: 'logout',
@@ -1110,8 +1110,8 @@ function(args) {
 				var queue_id = $('#queue_selector', add_queue_html).val();
 
 				winkstart.request('agent.update_queue_status', {
-					account_id: winkstart.apps['call_center'].account_id,
-					api_url: winkstart.apps['call_center'].api_url,
+					account_id: winkstart.apps.voip.account_id,
+					api_url: winkstart.apps.voip.api_url,
 					agent_id: data.data.id,
 					data: {
 						action: 'login',

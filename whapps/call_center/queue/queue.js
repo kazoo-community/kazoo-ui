@@ -1758,8 +1758,8 @@ function(args) {
 					var _this = this;
 
 					winkstart.request(true, 'queue.list',  {
-						account_id: winkstart.apps['voip'].account_id,
-						api_url: winkstart.apps['voip'].api_url
+						account_id: winkstart.apps.call_center.account_id,
+						api_url: winkstart.apps.call_center.api_url
 					},
 					function(data, status) {
 						var popup, popup_html;
@@ -2026,8 +2026,8 @@ function(args) {
 					var _this = this;
 
 					winkstart.request(true, 'queue.list',  {
-						account_id: winkstart.apps['voip'].account_id,
-						api_url: winkstart.apps['voip'].api_url
+						account_id: winkstart.apps.call_center.account_id,
+						api_url: winkstart.apps.call_center.api_url
 					},
 					function(data, status) {
 						var popup, popup_html,
