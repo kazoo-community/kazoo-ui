@@ -1156,7 +1156,7 @@ function(args) {
 
 			var tab_data = [];
 
-			if('phone_numbers' in results) {
+			if (results && 'phone_numbers' in results) {
 				$.each(results.phone_numbers.data.numbers, function(k, v) {
 					var inbound = $.inArray('inbound_cnam', v.features) >= 0 ? true : false,
 						outbound = $.inArray('outbound_cnam', v.features) >= 0 ? true : false;
