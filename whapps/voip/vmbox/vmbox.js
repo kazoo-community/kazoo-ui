@@ -599,6 +599,7 @@ function(args) {
 							_t: function(param){
 								return window.translate['vmbox'][param];
 							},
+							check_vm: false,
 							items: winkstart.sort(data.data),
 							selected: node.getMetadata('id') || '',
 							route_var: node.getMetadata('var') || ''
@@ -657,14 +658,17 @@ function(args) {
 				}
 			},
 
-			'voicemail[action=check]': {
+			'voicemail[id=*,action=check]': {
 				name: _t('vmbox', 'check_voicemail'),
 				icon: 'voicemail',
 				category: _t('config', 'advanced_cat'),
 				module: 'voicemail',
 				tip: _t('vmbox', 'check_voicemail_tip'),
 				data: {
-					action: 'check'
+					action: 'check',
+					callerid_match_login: false,
+					id: undefined,
+					single_mailbox_login: true
 				},
 				rules: [
 					{
@@ -674,20 +678,96 @@ function(args) {
 				],
 				isUsable: 'true',
 				caption: function(node, caption_map) {
-					return '';
+					var id = node.getMetadata('id');
+
+					return caption_map[id]
+						? caption_map[id].name
+						: '';
 				},
 				edit: function(node, callback) {
-					if(typeof callback == 'function') {
-						callback();
-					}
+					winkstart.request(true, 'vmbox.list', {
+						account_id: winkstart.apps.voip.account_id,
+						api_url: winkstart.apps.voip.api_url
+					},
+					function(data, status) {
+						var popup, popup_html;
+
+						popup_html = THIS.templates.vmbox_callflow.tmpl({
+							_t: function(param) {
+								return window.translate.vmbox[param];
+							},
+							check_vm: true,
+							items: winkstart.sort(data.data),
+							selected: node.getMetadata('id') || ''
+						});
+
+						if ($('#vmbox_selector option:selected', popup_html).val() === undefined) {
+							$('#edit_link', popup_html).hide();
+						}
+
+						$('.inline_action', popup_html).click(function(ev) {
+							var _data = ($(this).dataset('action') === 'edit')
+								? { id: $('#vmbox_selector', popup_html).val() }
+								: {};
+
+							ev.preventDefault();
+
+							winkstart.publish('vmbox.popup_edit', _data, function(_data) {
+								node.setMetadata('id', _data.data.id || 'null');
+								if ($('#route_var', popup_html).val().length > 0) {
+									node.setMetadata('var', $('#route_var', popup_html).val());
+								} else {
+									node.deleteMetadata('var');
+								}
+
+								node.caption = _data.data.name || '';
+
+								popup.dialog('close');
+							});
+						});
+
+						// Save
+						$('#add', popup_html).click(function() {
+							var selector = $('#vmbox_selector', popup_html),
+								selectedID = selector.val();
+
+							if (selectedID) {
+								// Accessing a specific mailbox
+								node.setMetadata('id', selectedID);
+								node.setMetadata('single_mailbox_login', true);
+								node.setMetadata('callerid_match_login', false);
+							} else {
+								// Route to mailbox based on caller's id
+								node.setMetadata('single_mailbox_login', false);
+								node.setMetadata('callerid_match_login', true);
+								node.deleteMetadata('id');
+							}
+
+							node.caption = selector[0][selector[0].selectedIndex].text;
+
+							popup.dialog('close');
+						});
+
+						popup = winkstart.dialog(popup_html, {
+							title: _t('vmbox', 'check_voicemail'),
+							minHeight: '0',
+							beforeClose: function() {
+								if (typeof callback === 'function') {
+									callback();
+								}
+							}
+						});
+					});
 				}
 			}
 		});
 
 		$.extend(callflow_nodes, {
-			'voicemail[id=*]': $.extend({}, callflow_nodes["voicemail[id=*,action=compose]"])
+			'voicemail[id=*]': $.extend({}, callflow_nodes['voicemail[id=*,action=compose]']),
+			'voicemail[action=check]': $.extend({}, callflow_nodes['voicemail[id=*,action=check]'])
 		});
 		delete callflow_nodes['voicemail[id=*]'].category;
+		delete callflow_nodes['voicemail[action=check]'].category;
 	}
 }
 );
