@@ -1127,8 +1127,8 @@ function(args) {
 	login: function(agent) {
 		var agentId = $(agent).attr('id');
 		winkstart.request(true, 'dashboard.agent.status', {
-			account_id: winkstart.apps['voip'].account_id,
-			api_url: winkstart.apps['voip'].api_url,
+			account_id: winkstart.apps.call_center.account_id,
+			api_url: winkstart.apps.call_center.api_url,
 			agent_id: agentId,
 			data: {status: 'login'}
 		},
@@ -1148,8 +1148,8 @@ function(args) {
 	logout: function(agent) {
 		var agentId = $(agent).attr('id');
 		winkstart.request(true, 'dashboard.agent.status', {
-			account_id: winkstart.apps['voip'].account_id,
-			api_url: winkstart.apps['voip'].api_url,
+			account_id: winkstart.apps.call_center.account_id,
+			api_url: winkstart.apps.call_center.api_url,
 			agent_id: agentId,
 			data: {status: 'logout'}
 		},

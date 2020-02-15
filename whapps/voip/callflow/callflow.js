@@ -2380,7 +2380,7 @@ function (args) {
 						var dataVars = {};
 						for(var i=0; i<formVars.length; i++) {
 							if(i%2 != 0) continue; // Collate object pairs
-							if(formVars[i].value.length > 0 && formVars[i+1].value.length > 0)
+							if (formVars[i] && formVars[i].value.length > 0 && formVars[i + 1] && formVars[i + 1].value.length > 0)
 								dataVars[formVars[i].value] = {
 									type: formVars[i+1].name,
 									value: formVars[i+1].value
