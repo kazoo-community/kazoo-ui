@@ -184,7 +184,7 @@ function (args) {
 					/*'<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +*/
 					'<a href="javascript:void(0);" data-cdr_id="' + cdr_id + '"  class="table_detail_link">' + _t('cdr', 'details') + '</a>',
 					cost,
-					humanFullDate,
+					{ display: humanFullDate, value: this.unix_timestamp_micro || this.timestamp },
 					cdr_id,
 					this.billing_seconds || ''
 				]);
@@ -327,7 +327,7 @@ function (args) {
 					/*'<a href="' + winkstart.config.logs_web_server_url + web_browser_id + '.log" target="_blank">Log</a>&nbsp;|&nbsp;' +*/
 					'<a href="javascript:void(0);" data-cdr_id="' + cdr_id + '"  class="table_detail_link">' + _t('cdr', 'details') + '</a>',
 					cost,
-					humanFullDate,
+					{ display: humanFullDate, value: this.unix_timestamp_micro || this.timestamp },
 					cdr_id,
 					this.billing_seconds || ''
 				]);
@@ -398,7 +398,12 @@ function (args) {
 					'sTitle': _t('cdr', 'cost_stitle')
 				},
 				{
-					'sTitle': _t('cdr', 'date_stitle')
+					'sTitle': _t('cdr', 'date_stitle'),
+					'sType': 'numeric-wrapper-obj',
+					'fnRender': function(oObj) {
+						return oObj.aData[oObj.iDataColumn].display;
+					},
+					'bUseRendered': false
 				},
 				{
 					'sTitle': _t('cdr', 'cdr_id_stitle'),
