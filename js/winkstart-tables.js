@@ -1,5 +1,39 @@
 (function(winkstart, amplify, undefined) {
 
+	/**
+	 * Type used for numeric datatables columns that are displayed as formatted text,
+	 * but should still be sorted by their original numeric values.
+	 * Example structure:
+	 * {
+	 *   display: 'text to display',
+	 *   value: 1234
+	 * }
+	 *
+	 * @typedef {Object} NumericWrapper
+	 * @property {string} display The formatted text representation of the value
+	 * @property {number} value The actual numeric value
+	 */
+
+	/**
+	 * Ascending sort function for NumericWrapper-typed datatables columns
+	 *
+	 * @param {NumericWrapper} a
+	 * @param {NumericWrapper} b
+	 */
+	$.fn.dataTableExt.oSort['numeric-wrapper-obj-asc'] = function(a, b) {
+		return a.value - b.value;
+	};
+
+	/**
+	 * Descending sort function for NumericWrapper-typed datatables columns
+	 *
+	 * @param {NumericWrapper} a
+	 * @param {NumericWrapper} b
+	 */
+	$.fn.dataTableExt.oSort['numeric-wrapper-obj-desc'] = function(a, b) {
+		return b.value - a.value;
+	};
+
 	winkstart.table = {
 		create: function(name, $element, columns, data, options) {
 			var THIS = this;
