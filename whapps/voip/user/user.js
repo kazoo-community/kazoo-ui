@@ -509,7 +509,7 @@ function(args) {
 						if (_data.data) {
 							// Seat Types
 							defaults.data.default_seat_type = _data.data.default_seat_type;
-							defaults.field_data.seat_types = _data.data.seat_types_list;
+							defaults.field_data.seat_types = _data.data.seat_types_list || [];
 
 							// Locations
 							if (_data.data.locations) {
@@ -674,7 +674,7 @@ function(args) {
 			data.data.seat_type = data.data.default_seat_type || 'unknown';
 		}
 
-		if (!data.data.location) {
+		if (!data.data.location && data.field_data.default_location) {
 			data.data.location = data.field_data.default_location.id;
 		}
 
