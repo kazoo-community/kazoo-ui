@@ -678,7 +678,15 @@ function(args) {
 			data.data.location = data.field_data.default_location.id;
 		}
 
-		$('.user-save', user_html).click(function(ev) {
+		$('#user-form', user_html).submit(submitUserForm);
+		$('.user-save', user_html).click(submitUserForm);
+
+		/**
+		 * Function to call to submit user form, perform validation
+		 *
+		 * @param {jquery.Event} ev - Event that triggered the form submission
+		 */
+		function submitUserForm(ev) {
 			ev.preventDefault();
 
 			if($('#pwd_mngt_pwd1', user_html).val() != $('#pwd_mngt_pwd2', user_html).val()) {
@@ -708,10 +716,6 @@ function(args) {
 				THIS.clean_form_data(form_data);
 
 				var validationType = (typeof data.field_data == 'object' && data.field_data.pin_pass_sync && !isNaN(data.data.username)) ? 'vm' : null;
-
-				if('field_data' in data) {
-					delete data.field_data;
-				}
 
 				if(form_data.password === undefined || winkstart.is_password_valid(form_data.password, validationType)) {
 
@@ -779,7 +783,7 @@ function(args) {
 				winkstart.alert(_t('user', 'there_were_errors_on_the_form'));
 			}
 			);
-		});
+		};
 
 		$('.user-delete', user_html).click(function(ev) {
 			ev.preventDefault();
@@ -1088,7 +1092,7 @@ function(args) {
 		}
 
 		// Add queue to user
-		$('#add_queue', parent).click(function(event) {
+		$('#add_queue').click(function(event) {
 			event.preventDefault();
 
 			var queueCount = Object.keys(otherQueues).length,
