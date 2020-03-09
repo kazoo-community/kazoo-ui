@@ -1002,7 +1002,7 @@ function(args) {
 						var column_data = obj.aData[obj.iDataColumn];
 						var msg_uri = column_data[0];
 						var transcribed = column_data[1];
-						return '<audio style="width: 130px; vertical-align: middle;" controls="" src="' + THIS.voicemail_uri(msg_uri) + '"></audio><a href="' + THIS.voicemail_uri(msg_uri) + '"><span class="icon medium download" alt="Download"/></a>' + (transcribed ? '<a href="javascript:void(0);" data-msg_uri="' + msg_uri + '" class="table_transcription_link"><span class="icon medium dot_chat" alt="Transcription"/></a>' : '');
+						return '<audio style="width: 130px; vertical-align: middle;" controls="" onplay="winkstart.mark_as_saved(\'' + msg_uri + '\', this.parentNode)" src="' + THIS.voicemail_uri(msg_uri) + '"></audio><a href="' + THIS.voicemail_uri(msg_uri) + '"><span class="icon medium download" alt="Download"/></a>' + (transcribed ? '<a href="javascript:void(0);" data-msg_uri="' + msg_uri + '" class="table_transcription_link"><span class="icon medium dot_chat" alt="Transcription"/></a>' : '');
 					}
 				},
 				{
@@ -1013,6 +1013,21 @@ function(args) {
 			];
 
 		var voicemail_grid = $('#voicemail-grid', parent);
+
+		winkstart.mark_as_saved = function(msg_uri, node) {
+			var row = winkstart.table.voicemail.fnGetPosition(node)[0];
+			var status = winkstart.table.voicemail.fnGetData(row, 5);
+
+			if (status === 'new') {
+				var msg_split = msg_uri.split('/');
+				var vmbox = msg_split[0];
+				var msg_id = msg_split[2];
+
+				THIS.update_vmbox_messages_folder(vmbox, [msg_id], 'saved', function() {
+					winkstart.table.voicemail.fnUpdate('saved', row, 5);
+				});
+			}
+		};
 
 		voicemail_grid.delegate('.table_transcription_link', 'click', function() {
 			var msg_uri = $(this).dataset('msg_uri').split('/');
