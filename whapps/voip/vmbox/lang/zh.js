@@ -62,5 +62,7 @@ window.translate['vmbox'] = {
 	blacklist_of_numbers: "号码黑名单",
 	blacklist_of_numbers_placeholder: "正则表达式",
 	blacklist_of_numbers_data_content: '用户不允许拨打的号码(例: ^[0-9]{0,11}$ 这个表达式禁止用户拨打0~11)',
-	max_message_length: '语音信箱留言的最大长度（秒'
+	max_message_length: '语音信箱留言的最大长度（秒',
+	operator_number: '操作员编号',
+	operator_number_data_content: '如果存在，则呼叫者可以在语音信箱提示过程中按0将其定向给话务员'
 };

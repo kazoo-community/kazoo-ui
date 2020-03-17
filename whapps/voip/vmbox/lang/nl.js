@@ -64,5 +64,7 @@ window.translate['vmbox'] = {
 	blacklist_of_numbers: "Blacklist of nummers",
 	blacklist_of_numbers_placeholder: "Regex",
 	blacklist_of_numbers_data_content: 'Lijst of nummers die bellers niet kunnen aankiezen (ex: ^[0-9]{0,11}$ is een simpele regex die geldig is vooreen groep of 0 tot en met 11 cijfers)',
-	max_message_length: 'Max voicemail berichtlengte (seconden)'
+	max_message_length: 'Max voicemail berichtlengte (seconden)',
+	operator_number: 'Operator Nummer',
+	operator_number_data_content: 'Indien aanwezig, kan de beller tijdens de voicemailprompt op 0 drukken om naar de telefoniste te worden geleid'
 };;

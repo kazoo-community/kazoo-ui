@@ -438,6 +438,10 @@ function(args) {
 			delete form_data.hunt_deny;
 		}
 
+		if (form_data.operator_number === '') {
+			delete form_data.operator_number;
+		}
+
 		form_data.not_configurable = !form_data.extra.allow_configuration;
 
 		delete form_data.extra;

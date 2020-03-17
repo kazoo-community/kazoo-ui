@@ -72,5 +72,7 @@ window.translate['vmbox'] = {
 	blacklist_of_numbers: "Blacklist of numbers",
 	blacklist_of_numbers_placeholder: "Regex",
 	blacklist_of_numbers_data_content: 'List of numbers that users are not allowed to dial when hunting (ex: ^[0-9]{0,11}$ is a simple regex catching a group of 0 to 11 numbers)',
-	max_message_length: 'Max Voicemail Message Length (seconds)'
+	max_message_length: 'Max Voicemail Message Length (seconds)',
+	operator_number: 'Operator Number',
+	operator_number_data_content: 'If present, caller can press 0 during voicemail prompt to be directed to the operator'
 };
