@@ -758,7 +758,12 @@ function(args) {
 				password: form_data.password,
 				timezone: form_data.timezone,
 				username: form_data.username,
-				seat_type: form_data.seat_type
+				seat_type: form_data.seat_type,
+				caller_id: {
+					internal: {
+						name: form_data.name_first + ' ' + form_data.name_last
+					}
+				}
 			};
 
 		// Default apps
@@ -776,10 +781,8 @@ function(args) {
 		if(form_data.use_phone_number_as_outbound_cid &&
 			!$('#use_phone_number_as_outbound_cid').prop('disabled')
 		) {
-			user_data.caller_id = {
-				external: {
-					number: form_data.phone_number
-				}
+			user_data.caller_id.external = {
+				number: form_data.phone_number
 			};
 		}
 
