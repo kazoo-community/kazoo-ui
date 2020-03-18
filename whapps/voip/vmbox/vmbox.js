@@ -19,6 +19,7 @@ winkstart.module('voip', 'vmbox', {
 	validation : [
 		{ name: '#name',    regex: _t('vmbox', 'name_regex') },
 		{ name: '#mailbox', regex: /^[0-9]+$/ },
+		{ name: '#mwi_number', regex: /^[0-9]*$/ },
 		{ name: '#pin',     regex: /^([0-9]{4,})?$/ },
 		{ name: '#notify_email_addresses', regex: /^(?:([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+(?:,\s*(?!$)|$))*$/ }
 	],
@@ -270,6 +271,10 @@ function(args) {
 		data._t = function(param){
 			return window.translate['vmbox'][param];
 		};
+
+		// Parse numbers into the editable mwi_number
+		data.data.mwi_number = data.data.numbers && data.data.numbers[0];
+
 		var THIS = this,
 			vmbox_html = THIS.templates.edit.tmpl(data);
 
@@ -453,6 +458,11 @@ function(args) {
 				form_data.notify_email_addresses[key] = $.trim(value);
 			});
 		}
+
+		if (form_data.mwi_number) {
+			form_data.numbers = [ parseInt(form_data.mwi_number) ];
+		}
+		delete form_data.mwi_number;
 
 		return form_data;
 	},
