@@ -19,7 +19,7 @@ winkstart.module('voip', 'vmbox', {
 	validation : [
 		{ name: '#name',    regex: _t('vmbox', 'name_regex') },
 		{ name: '#mailbox', regex: /^[0-9]+$/ },
-		{ name: '#mwi_number', regex: /^[0-9]*$/ },
+		{ name: '#mwi_number', regex: /^[+*0-9]*$/ },
 		{ name: '#pin',     regex: /^([0-9]{4,})?$/ },
 		{ name: '#notify_email_addresses', regex: /^(?:([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+(?:,\s*(?!$)|$))*$/ }
 	],
@@ -460,7 +460,7 @@ function(args) {
 		}
 
 		if (form_data.mwi_number) {
-			form_data.numbers = [ parseInt(form_data.mwi_number) ];
+			form_data.numbers = [form_data.mwi_number];
 		}
 		delete form_data.mwi_number;
 

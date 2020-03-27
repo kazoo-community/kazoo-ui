@@ -76,5 +76,5 @@ window.translate['vmbox'] = {
 	operator_number: 'Operator Number',
 	operator_number_data_content: 'If present, caller can press 0 during voicemail prompt to be directed to the operator',
 	mwi_number: 'MWI Notification Number',
-	mwi_number_data_content: 'Message Waiting Indicator Notifications will be sent to this number (only the digits 0-9 are allowed)'
+	mwi_number_data_content: 'Message Waiting Indicator Notifications will be sent to this number (only "+", "*" and the digits 0-9 are allowed)'
 };
