@@ -169,6 +169,18 @@ function(args) {
 					callback(null, _data.data);
 				}
 				);
+			},
+			seat_types_list: function(callback) {
+				winkstart.request('account_config.get',
+					{
+						account_id: winkstart.apps.voip.account_id,
+						api_url: winkstart.apps.voip.api_url
+					},
+					function(_data, status) {
+						var seat_types_list = _data.data ? _data.data.seat_types_list : [];
+						callback(null, seat_types_list);
+					}
+				);
 			}
 		},
 		function(err, results) {
@@ -186,6 +198,14 @@ function(args) {
 				if(isInteger(user.username)) {
 					extensions[user.id] = user;
 					extensionIDMap[user.username] = user.id;
+
+					// Get the display name of user.seat_type
+					extensions[user.id].seat_type_display_name = '';
+					$.each(results.seat_types_list, function(index, seat_type) {
+						if (seat_type.id === user.seat_type) {
+							extensions[user.id].seat_type_display_name = seat_type.display_name;
+						}
+					});
 				}
 			});
 
@@ -486,7 +506,7 @@ function(args) {
 						last_name: val.last_name,
 						priv_level: val.priv_level,
 						username: val.username,
-						seat_type: val.seat_type
+						seat_type: val.seat_type_display_name
 					});
 				});
 			}
