@@ -662,7 +662,7 @@
                     <h3>${_t('queue_membership')}</h3>
 
                     <div class="clearfix">
-                        <button class="btn primary" id="add_queue">${_t('add_queue')}</button>
+                        <button class="btn primary" type="button" id="add_queue">${_t('add_queue')}</button>
                         <table id="queues-grid" class="display"></table>
                     </div>
                 </div>
@@ -739,7 +739,7 @@
 			{{if data.id}}
                 <button class="btn danger user-delete">${_t('delete')}</button>
             {{/if}}
-              <button class="btn success user-save">${_t('save')}</button>
+              <button class="btn success user-save" form="user-form">${_t('save')}</button>
 		</div>
 	</div>
 </div>
