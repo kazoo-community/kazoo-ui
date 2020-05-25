@@ -884,7 +884,7 @@ function(args) {
 		}
 
 		// Add queue to user
-		$('#add_queue').click(function(event) {
+		$('#add_queue', parent).click(function(event) {
 			event.preventDefault();
 
 			var queueCount = Object.keys(otherQueues).length,
