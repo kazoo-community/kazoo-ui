@@ -1810,8 +1810,8 @@ function(args) {
 								if(error.message) { errorMsg = error.message; }
 								if(error.data) {
 									$.each(error.data, function(field, errors) {
-										$.each(errors, function(errType, errMsg) {
-											errorMsg += '<br>' + field + ': ' + errMsg + '.';
+										$.each(errors, function(errType, errData) {
+											errorMsg += '<br>' + field + ': ' + errData.message + '.';
 										});
 									});
 								}
