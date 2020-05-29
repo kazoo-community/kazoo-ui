@@ -359,6 +359,7 @@ function(args) {
 					amount: 0
 				},
 				field_data: {
+					account_type: '',
 					account_types_list: [],
 					billing_account: 'parent',
 					deregister: false,
@@ -713,6 +714,16 @@ function(args) {
 				});
 
 				var account_data = results.get_account.data;
+
+				// Get the display name of the account's type
+				for (var i = 0; i < defaults.field_data.account_types_list.length; i++) {
+					var account_type = defaults.field_data.account_types_list[i];
+					if (account_type.id === account_data.account_type) {
+						defaults.field_data.account_type = account_type.display_name;
+						break;
+					}
+				}
+
 				// Deregister enabled if sending to (specified recipients or admins) || account has send_to value in doc
 				if (
 					(

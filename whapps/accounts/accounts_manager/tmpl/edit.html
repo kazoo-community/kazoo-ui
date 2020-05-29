@@ -43,20 +43,27 @@
                              rel="popover" data-content="${_t('realm_data_content')}" />
                         </div>
                     </div>
-					<div class="clearfix">
-						<label for="account_type">${_t('account_type')}</label>
-						<div class="input">
-							<select name="account_type" id="account_type" class="medium">
-								{{each field_data.account_types_list}}
-									{{if id == data.account_type}}
-										<option id="${id}" value="${id}" selected>${display_name}</option>
-									{{else}}
-										<option id="${id}" value="${id}">${display_name}</option>
-									{{/if}}
-								{{/each}}
-							</select>
+					{{if isAdmin}}
+						<div class="clearfix">
+							<label for="account_type">${_t('account_type')}</label>
+							<div class="input">
+								<select name="account_type" id="account_type" class="medium">
+									{{each field_data.account_types_list}}
+										{{if id == data.account_type}}
+											<option id="${id}" value="${id}" selected>${display_name}</option>
+										{{else}}
+											<option id="${id}" value="${id}">${display_name}</option>
+										{{/if}}
+									{{/each}}
+								</select>
+							</div>
 						</div>
-					</div>
+					{{else}}
+						<div class="clearfix">
+							<label>${_t('account_type')}</label>
+							<div class="input"><label class="text-inline">${field_data.account_type}</label></div>
+						</div>
+					{{/if}}
                     {{if data.id}}
                     <div class="clearfix">
                         <label>${_t('account_id')}</label>
