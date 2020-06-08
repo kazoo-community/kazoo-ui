@@ -17,6 +17,7 @@ window.translate['bulk'] = {
 	save: "Save",
 	bulk_edit_label: "Bulk Edit",
 	name_stitle: "Name",
+	username_stitle: 'Username',
 	endpoint_type_stitle: "Endpoint Type",
 	bulk_id_stitle: "bulk_id",
 	default_music: "Default Music",
