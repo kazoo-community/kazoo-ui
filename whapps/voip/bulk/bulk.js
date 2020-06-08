@@ -58,6 +58,9 @@ function(args) {
 					'sTitle': _t('bulk', 'name_stitle')
 				},
 				{
+					'sTitle': _t('bulk', 'username_stitle')
+				},
+				{
 					'sTitle': _t('bulk', 'endpoint_type_stitle'),
 					'sWidth': '200px'
 				},
@@ -220,6 +223,7 @@ function(args) {
 				tab_data.push([
 					k,
 					v.name,
+					typeof v.username === 'string' ? v.username : '',
 					v.endpoint_type,
 					k
 				]);
