@@ -514,7 +514,9 @@ function(args) {
 							// Locations
 							if (_data.data.locations) {
 								defaults.field_data.default_location = _data.data.locations.default_location;
-								defaults.field_data.locations = _data.data.locations.location_list;
+								defaults.field_data.locations = _data.data.locations.location_list.sort(function(a, b) {
+									return a.display_name.trim().toLowerCase() < b.display_name.trim().toLowerCase() ? -1 : 1;
+								});
 							}
 						}
 						callback(null, _data);
