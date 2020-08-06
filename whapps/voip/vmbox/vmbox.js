@@ -447,6 +447,10 @@ function(args) {
 			delete form_data.operator_number;
 		}
 
+		if (typeof form_data.vm_message_forward_type === 'boolean') {
+			form_data.vm_message_forward_type = form_data.vm_message_forward_type ? 'prepend_forward' : 'only_forward';
+		}
+
 		form_data.not_configurable = !form_data.extra.allow_configuration;
 
 		delete form_data.extra;

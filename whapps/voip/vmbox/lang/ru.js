@@ -42,6 +42,8 @@ window.translate['vmbox'] = $.extend(true, {}, window.translate['vmbox'], {
 	skip_envelope_data_content: "Выберите, чтобы автоматически пропускать информацию о номере, дате и времени звонка",
 	delete_after_notification: "Удалить после уведомления",
 	delete_after_notification_data_content: "Удалять голосовое сообщение после отправки уведомления",
+	vm_message_forward_type: "Предварять сообщение на пересылку",
+	vm_message_forward_type_data_content: "Если этот флажок установлен, пользователю будет предложено записать дополнительное сообщение при пересылке сообщения голосовой почты",
 	delete: "Удалить",
 	save: "Сохранить",
 	voicemail_boxes_label: "Ящики голосовой почты",

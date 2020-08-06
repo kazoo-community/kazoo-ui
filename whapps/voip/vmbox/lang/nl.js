@@ -42,6 +42,8 @@ window.translate['vmbox'] = {
 	skip_envelope_data_content: "Vink aan om standaard de voicemail-envelop over te slaan",
 	delete_after_notification: "Verwijder na notificatie",
 	delete_after_notification_data_content: "verwijder het bericht nadat de notificatie is verstuurt",
+	vm_message_forward_type: "Bericht opnemen bij doorsturen",
+	vm_message_forward_type_data_content: "Indien aangevinkt, wordt de gebruiker gevraagd om een ​​extra bericht op te nemen bij het doorsturen van een voicemailbericht",
 	delete: "Verwijder",
 	save: "Opslaan",
 	voicemail_boxes_label: "Voicemail Boxes",

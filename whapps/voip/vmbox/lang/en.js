@@ -49,6 +49,8 @@ window.translate['vmbox'] = {
 	notifications: "Notifications",
 	notify_email_addresses: "Voicemail-to-Email Notifications",
 	notify_email_addresses_data_content: "Comma-separated extra email addresses that should receive voicemail-to-email notifications. Do not include the owning user's email address.",
+	vm_message_forward_type: "Prepend message on forward",
+	vm_message_forward_type_data_content: "If checked, the user will be prompted to record an additional message, when forwarding a voicemail message",
 	delete: "Delete",
 	save: "Save",
 	voicemail_boxes_label: "Voicemail Boxes",
