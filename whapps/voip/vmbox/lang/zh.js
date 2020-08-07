@@ -40,6 +40,8 @@ window.translate['vmbox'] = {
 	skip_instructions_data_content: "勾选后默认跳过语音指示",
 	delete_after_notification: "通知后删除",
 	delete_after_notification_data_content: "通知邮件发出后自动删除语音留言",
+	vm_message_forward_type: "在转发之前添加消息",
+	vm_message_forward_type_data_content: "如果选中，则在转发语音邮件时，将提示用户记录其他消息",
 	delete: "删除",
 	save: "保存",
 	voicemail_boxes_label: "语音邮箱",
