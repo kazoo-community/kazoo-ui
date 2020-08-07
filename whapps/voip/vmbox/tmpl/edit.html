@@ -263,6 +263,25 @@
                             </ul>
                         </div>
                     </div>
+
+					<div class="clearfix">
+						<div class="input">
+							<ul class="inputs-list">
+								<li>
+									<label>
+										<span rel="popover" data-content="${_t('vm_message_forward_type_data_content')}">
+											{{if data.vm_message_forward_type === "prepend_forward"}}
+												<input type="checkbox" id="vm_message_forward_type" name="vm_message_forward_type" checked="checked" />
+											{{else}}
+												<input type="checkbox" id="vm_message_forward_type" name="vm_message_forward_type" />
+											{{/if}}
+											<span>${_t('vm_message_forward_type')}</span>
+										</span>
+									</label>
+								</li>
+							</ul>
+						</div>
+					</div>	
 				</div>
 			</div>
 		 </form>
