@@ -30,8 +30,7 @@ winkstart.module('voip', 'user', {
 		{ name: '#advanced_caller_id_number_emergency',regex: /^[\+]?[0-9\s\-\.\(\)]*$/ },
 		{ name: '#advanced_caller_id_name_emergency',  regex: _t('user', 'caller_id_name_regex') },
 		{ name: '#hotdesk_id',                regex: /^[0-9\+\#\*]*$/ },
-		{ name: '#hotdesk_pin',               regex: /^[0-9]*$/ },
-		{ name: '#call_forward_number',       regex: /^[\+]?[0-9]*$/ }
+		{ name: '#hotdesk_pin',               regex: /^[0-9]*$/ }
 	],
 
 	resources: {
@@ -510,6 +509,50 @@ function(args) {
 		THIS.render_device_list(data, user_html);
 
 		winkstart.validate.set(THIS.config.validation, user_html);
+
+		// Field validation for call forward number
+		var call_forward_validation_regex_prefix = '^[+]?[0-9]';
+		var call_forward_number_validation_handler = null;
+		var call_forward_id = '#call_forward_number';
+		var $call_forward_number = $(call_forward_id, user_html);
+
+		/**
+		 * Update the validation regex that is used on the `call_forward_number` field depending on whether
+		 * call forward is enabled (require non-empty `call_forward_number`) or disabled (allow unspecified
+		 * `call_forward_number`)
+		 *
+		 * @param {jQuery} $call_forward_number - jQuery element of `call_forward_number` input
+		 * @param {boolean} call_forward_enabled - whether or not call forward is enabled
+		 */
+		var update_call_forward_number_validation = function($call_forward_number, call_forward_enabled) {
+			// Remove existing validation handler
+			THIS.config.validation = THIS.config.validation.filter(function(validation_item) {
+				return validation_item.name !== call_forward_id;
+			});
+			if (call_forward_number_validation_handler) {
+				winkstart.validate.remove(
+					$call_forward_number,
+					call_forward_number_validation_handler
+				);
+			}
+
+			// Add new validation regex
+			var call_forward_validation_regex_suffix = (call_forward_enabled ? '+' : '*') + '$';
+			var call_forward_validation_regex = new RegExp(call_forward_validation_regex_prefix + call_forward_validation_regex_suffix);
+			call_forward_number_validation_handler = winkstart.validate.add($call_forward_number, call_forward_validation_regex);
+			THIS.config.validation.push({
+				name: call_forward_id,
+				regex: call_forward_validation_regex
+			});
+		};
+
+		// Initial validation for call forward
+		update_call_forward_number_validation($call_forward_number, data.data.call_forward.enabled);
+
+		// Ongoing change to validation for call forward
+		$('#call_forward_enabled', user_html).change(function() {
+			update_call_forward_number_validation($call_forward_number, this.checked);
+		});
 
 		winkstart.timezone.populate_dropdown($('#timezone', user_html), data.data.timezone);
 

@@ -76,6 +76,16 @@
 		}
 	};
 
+	/**
+	 * Returns true if the parent element of `$element` is the span used for field validation errors
+	 *
+	 * @param {jQuery} $element - jQuery input element to check parent of
+	 * @returns {boolean} true if the parent element is the validation span
+	 */
+	function parent_is_validation_span($element) {
+		return $element.parent().is('span.validated');
+	}
+
 	winkstart.validate = {
 		set: function(items, _parent) {
 			var THIS = this,
@@ -154,21 +164,45 @@
 			}
 		},
 
-		/* Old functions */
+		/**
+		 * Add validation regex to an input field
+		 *
+		 * @param {jQuery} $element - jQuery element to add validation to
+		 * @param {RegExp} regex - regex of acceptable field value
+		 * @returns {function} regex check handler function provided for later removal with `remove`
+		 */
 		add: function($element, regex) {
-			$element.wrap('<span class="validated" />');
-			$element.keyup(function() {
-				if($element.val().match(regex) == null) {
+			if (!parent_is_validation_span($element)) {
+				$element.wrap('<span class="validated" />');
+			}
+
+			var keyupFunc = function() {
+				if ($element.val().match(regex) == null) {
 					$element.parents('.validated')
 						.removeClass('valid')
 						.addClass('invalid');
-				}
-				else {
+				} else {
 					$element.parents('.validated')
 						.removeClass('invalid')
 						.addClass('valid');
 				}
-			});
+			};
+			$element.keyup(keyupFunc);
+
+			return keyupFunc;
+		},
+
+		/**
+		 * Remove existing validation regex check handler from an input field
+		 *
+		 * @param {jQuery} $element - jQuery element to remove validation from
+		 * @param {function} handler - previously added regex check handler to remove
+		 */
+		remove: function($element, handler) {
+			if (parent_is_validation_span($element)) {
+				$element.unwrap();
+			}
+			$element.unbind('keyup', handler);
 		},
 
 		save: function($element, regex) {
