@@ -167,6 +167,7 @@
 			"America/Thule",
 			"America/Thunder_Bay",
 			"America/Tijuana",
+			"America/Toronto",
 			"America/Tortola",
 			"America/Vancouver",
 			"America/Whitehorse",
